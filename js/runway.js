@@ -30,11 +30,20 @@
       safe.classList.toggle('on', p >= LOW + 0.1);
     };
     set(0);
-    // Plays by itself in about 2 seconds when the section comes into view; scrolling back above it resets it to play again.
+    // Plays by itself (about 2 s) once the chart is centred on screen, after a short beat. It resets once it is fully
+    // off screen, in either direction, so it plays again each time you come back to it.
+    const card = root.querySelector('.rw-card');
     const state = {p: 0};
-    const tween = gsap.to(state, {p: 1, duration: 2.2, ease: 'power1.inOut', paused: true, onUpdate: () => set(state.p)});
-    const play = () => { tween.restart(); };
-    const reset = () => { tween.pause(0); set(0); };
-    ScrollTrigger.create({trigger: root, start: 'top 72%', end: 'bottom top', onEnter: play, onEnterBack: play, onLeaveBack: reset});
+    const tween = gsap.to(state, {p: 1, duration: 2.2, delay: 0.6, ease: 'power1.inOut', paused: true, onUpdate: () => set(state.p)});
+    let phase = 'idle'; // idle -> played
+    const check = () => {
+      const r = card.getBoundingClientRect(), vh = innerHeight, mid = r.top + r.height / 2;
+      if (r.bottom <= 0 || r.top >= vh) { if (phase !== 'idle') { tween.pause(0); set(0); phase = 'idle'; } return; }
+      if (phase === 'idle' && r.top >= 0 && r.bottom <= vh && mid <= vh * 0.62) { phase = 'played'; tween.restart(true); }
+    };
+    let queued = false;
+    const onScroll = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; check(); }); };
+    addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', onScroll);
+    check();
   }
 })();
