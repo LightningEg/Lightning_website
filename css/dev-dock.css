@@ -1,9 +1,9 @@
 /* Lightning testing panel · the same on every landing page and How It Works.
    Holds the page-version switch and the UX test button, out of the site header. Built by js/dev-dock.js. */
-.dev-dock{--dd-bg:#0A2442;--dd-ink:#fff;--dd-panel:#fff;--dd-text:#0D2233;--dd-muted:#5C7483;--dd-line:#DDE9E6;--dd-chip:#F2F7F5;--dd-active:#0A2442;--dd-active-ink:#fff;
+.dev-dock{--dd-bg:#0A2442;--dd-ink:#fff;--dd-panel:#fff;--dd-text:#0D2233;--dd-muted:#566E7E;--dd-line:#DDE9E6;--dd-chip:#F2F7F5;--dd-active:#0A2442;--dd-active-ink:#fff;
   position:fixed;right:0;bottom:88px;z-index:18;font-family:Manrope,"Segoe UI",system-ui,sans-serif}
 :root[data-theme="dark"] .dev-dock{--dd-bg:#E3F6EC;--dd-ink:#0A2442;--dd-panel:#15293B;--dd-text:#EAF4F1;--dd-muted:#8FA6B2;--dd-line:#243A4C;--dd-chip:#0F2233;--dd-active:#E3F6EC;--dd-active-ink:#0A2442}
-.dev-dock__tab{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 9px;border:0;border-radius:14px 0 0 14px;background:var(--dd-bg);color:var(--dd-ink);font-family:inherit;font-weight:800;font-size:11px;line-height:1;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:-6px 10px 24px -14px rgba(10,36,66,.8)}
+.dev-dock__tab{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 9px;border:0;border-radius:14px 0 0 14px;background:var(--dd-bg);color:var(--dd-ink);font-family:inherit;font-weight:800;font-size:12px;line-height:1;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:-6px 10px 24px -14px rgba(10,36,66,.8)}
 .dev-dock__tab span{writing-mode:vertical-rl;transform:rotate(180deg)}
 .dev-dock__tab svg{width:16px;height:16px}
 .dev-dock__tab:hover{padding-right:12px}
@@ -15,15 +15,15 @@
 .dev-dock__title{margin:0;font:800 15px/1.2 "Bricolage Grotesque","Segoe UI",system-ui,sans-serif;letter-spacing:-.01em}
 .dev-dock__close{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--dd-muted);font-family:inherit;font-weight:600;font-size:20px;line-height:1;cursor:pointer}
 .dev-dock__close:hover{background:var(--dd-chip);color:var(--dd-text)}
-.dev-dock__label{margin:14px 0 8px;color:var(--dd-muted);font-family:inherit;font-weight:800;font-size:10.5px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.dev-dock__label{margin:14px 0 8px;color:var(--dd-muted);font-family:inherit;font-weight:800;font-size:12px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
 .dev-dock__versions{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;padding:4px;border-radius:12px;background:var(--dd-chip)}
 .dev-dock__versions a{display:grid;place-items:center;height:34px;border-radius:9px;color:var(--dd-muted);font-family:inherit;font-weight:800;font-size:13px;line-height:1;text-decoration:none}
 .dev-dock__versions a:hover{color:var(--dd-text)}
 .dev-dock__versions a[aria-current="page"]{background:var(--dd-active);color:var(--dd-active-ink)}
-.dev-dock__release{display:flex;flex-direction:column;gap:3px;margin-top:10px;padding:10px 12px;border:1px solid var(--dd-line);border-radius:12px;background:var(--dd-chip);color:var(--dd-text);text-decoration:none}.dev-dock__release:hover{border-color:#14A874}.dev-dock__release span{color:var(--dd-muted);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.dev-dock__release b{font-size:12px;line-height:1.2}
+.dev-dock__release{display:flex;flex-direction:column;gap:3px;margin-top:10px;padding:10px 12px;border:1px solid var(--dd-line);border-radius:12px;background:var(--dd-chip);color:var(--dd-text);text-decoration:none}.dev-dock__release:hover{border-color:#14A874}.dev-dock__release span{color:var(--dd-muted);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.dev-dock__release b{font-size:12px;line-height:1.2}
 .dev-dock__ux{display:flex;align-items:center;justify-content:space-between;width:100%;height:42px;margin-top:12px;padding:0 12px 0 14px;border:1px solid var(--dd-line);border-radius:12px;background:var(--dd-chip);color:var(--dd-text);font-family:inherit;font-weight:700;font-size:13px;line-height:1;cursor:pointer}
 .dev-dock__ux:hover{border-color:#14A874}
-.dev-dock__ux span{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:var(--dd-active);color:var(--dd-active-ink);font-size:11px;font-weight:800}
+.dev-dock__ux span{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:var(--dd-active);color:var(--dd-active-ink);font-size:12px;font-weight:800}
 .dev-dock__app-feedback{display:grid;place-items:center;width:100%;height:42px;margin-top:8px;border-radius:12px;background:var(--dd-bg);color:var(--dd-ink);font-family:inherit;font-weight:800;font-size:13px;line-height:1;text-decoration:none}
 .dev-dock__app-feedback:hover{filter:brightness(1.08)}
 @media (max-width:640px){.dev-dock{bottom:76px}.dev-dock__tab{padding:12px 7px}}

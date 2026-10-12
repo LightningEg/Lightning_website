@@ -2,7 +2,7 @@
    Shared by version-c.html and how-it-works.html. Tokens follow brand-guidelines.html. */
 :root{
   color-scheme:light;
-  --ink:#0D2233;--ink2:#304A5C;--muted:#5C7483;
+  --ink:#0D2233;--ink2:#304A5C;--muted:#566E7E;
   --meadow:#14A874;--meadow-dark:#0B8A5F;--azure:#0B6DD6;--nile:#0A2442;--nile-2:#143A63;--rose:#C93D72;
   --bg1:#E3F6EC;--bg3:#E1EEFB;--paper:#F8FCFA;--border:#DDE9E6;
   --focal:linear-gradient(135deg,#0C9B63 0%,#0A9E96 52%,#0B6DD6 100%);

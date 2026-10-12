@@ -56,7 +56,7 @@
 /* what to evaluate */
 .status-checklist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .status-checklist .card{display:flex;flex-direction:column;gap:12px}
-.status-checklist .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--nile);color:var(--on-nile);font:800 18px/1 var(--display)}
+.status-checklist .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--nile);color:var(--on-nile);font:800 18px/1 var(--display)}
 .status-checklist h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
 .status-checklist p{color:var(--ink2);font-size:16px;line-height:1.5}
 

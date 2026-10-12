@@ -5,7 +5,7 @@
    money tiles, result (lead) card, breakdown, steps, quote and the signup band. */
 :root{
   color-scheme:light;
-  --ink:#0D2233;--ink2:#304A5C;--muted:#5C7483;
+  --ink:#0D2233;--ink2:#304A5C;--muted:#566E7E;
   --nile:#0A2442;--nile-2:#143A63;--on-nile:#FFFFFF;
   --green:#14A874;--green-text:#097852;--azure:#0B6DD6;--rose:#E68CA8;--rose-strong:#C93D72;
   --t-green:#EAF8F0;--t-azure:#EAF3FD;--t-rose:#FCEEF3;
@@ -138,11 +138,11 @@ button,input{font:inherit}
 .row span{color:var(--ink2)}
 .row span small{display:block;margin-top:2px;color:var(--muted);font-size:13px;font-weight:600}
 .row b{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.row.result{margin-top:6px;padding:11px 14px;border-top:0;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent)}
+.row.result{margin-top:6px;padding:11px 14px;border-top:0;border-radius:10px;background:color-mix(in srgb,var(--green) 10%,transparent)}
 .row.result span{color:var(--ink);font-weight:800}
 .row.result b{color:var(--green-text);font-weight:800}
 .row.result+.row{border-top:0}
-.row.total{margin-top:6px;padding:11px 14px;border-top:0;border-radius:12px;background:var(--t-rose)}
+.row.total{margin-top:6px;padding:11px 14px;border-top:0;border-radius:10px;background:var(--t-rose)}
 .row.total span{color:var(--ink);font-weight:800}
 .row.total+.row{border-top:0}
 
@@ -210,13 +210,13 @@ button,input{font:inherit}
 /* ---------- trust: four support cards, Lucide icons on a Nile tile ---------- */
 .d-trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .d-trust .card{display:flex;flex-direction:column;gap:12px}
-.d-trust .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--nile);color:var(--on-nile)}
+.d-trust .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--nile);color:var(--on-nile)}
 .d-trust h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
 .d-trust p{color:var(--ink2);font-size:16px;line-height:1.5}
 
 /* ---------- FAQ: white panels ---------- */
 .d-faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
-.d-faq details{padding:0 22px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+.d-faq details{padding:0 22px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
 .d-faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:62px;color:var(--ink);font:800 18px/1.3 var(--display);letter-spacing:-.01em;list-style:none;cursor:pointer}
 .d-faq summary::-webkit-details-marker{display:none}
 .d-faq summary::after{content:"";flex:none;width:9px;height:9px;margin-inline-end:4px;border-right:2px solid var(--ink2);border-bottom:2px solid var(--ink2);transform:translateY(-3px) rotate(45deg);transition:transform .2s}
@@ -239,7 +239,7 @@ button,input{font:inherit}
 /* ---------- lightbox ---------- */
 .lightbox{width:min(1440px,96vw);max-width:none;max-height:94vh;padding:0;border:0;background:transparent;overflow:visible}
 .lightbox::backdrop{background:rgba(10,36,66,.72)}
-.lightbox img{width:100%;max-height:86vh;object-fit:contain;border-radius:14px;background:#fff}
+.lightbox img{width:100%;max-height:86vh;object-fit:contain;border-radius:16px;background:#fff}
 .lightbox p{margin-top:12px;text-align:center;color:#fff;font-size:15px;font-weight:700}
 .lightbox button{position:absolute;top:-14px;inset-inline-end:-14px;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#0D2233;font:600 24px/1 var(--body);cursor:pointer}
 
@@ -274,7 +274,7 @@ button,input{font:inherit}
 /* ---------- B · three truths: numbered in order, one small drawing each ---------- */
 .l-truths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .l-truths .card{display:flex;flex-direction:column;gap:14px}
-.l-truths .art{height:96px;border-radius:14px;background:var(--white);display:grid;place-items:center}
+.l-truths .art{height:96px;border-radius:16px;background:var(--white);display:grid;place-items:center}
 :root[data-theme="dark"] .l-truths .art{background:var(--field)}
 .l-truths .art svg{width:100%;max-width:220px;height:80px}
 .l-truths .step-head{display:flex;align-items:center;gap:12px}
@@ -330,7 +330,7 @@ button,input{font:inherit}
 .l-game-line{max-width:32ch;font-size:17px;line-height:1.5;color:rgba(255,255,255,.95)}
 .l-game-line b{color:#fff}
 .l-game-chips{display:flex;justify-content:center}
-.l-game-chips div{min-width:180px;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28)}
+.l-game-chips div{min-width:180px;padding:12px 16px;border-radius:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28)}
 .l-game-chips div>span{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.85)}
 .l-game-chips b{display:block;margin-top:2px;font:800 18px/1.2 var(--display);font-variant-numeric:tabular-nums}
 :root[data-theme="dark"] .l-game-out{background:linear-gradient(135deg,#0A7A4C 0%,#0A5BB5 100%)}
