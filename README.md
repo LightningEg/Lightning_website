@@ -25,8 +25,8 @@ guides.html         Money Guides: the seven guides below, one card each; links t
                     the guides: one search question each, answered with Mohab's year (see Search below)
 ar/                  Egyptian Arabic home page, Features, How It Works, Current Status («التنزيل»), Money Guides, seven guides and Release Log: the English design system, written for Egypt; each language switch opens the matching page
 ar/blog.html         Blog library for five Egyptian Arabic personal-finance articles; every article has its own canonical URL and structured data
-css/arabic.css       loaded last on ar/ pages: the Arabic type system (B04) and the few x-axis movements that dir="rtl" can't flip
-assets/fonts/       Readex Pro and IBM Plex Sans Arabic (Arabic subset only) and their OFL licenses, for the Arabic pages
+css/arabic.css       loaded last on ar/ pages: the Arabic faces at the English sizes and weights (B04, A06.2), the right-to-left gradient and the few x-axis movements that dir="rtl" can't flip
+assets/fonts/       Readex Pro (variable, to 700) and IBM Plex Sans Arabic 400–700 (Arabic subset only) and their OFL licenses, for the Arabic pages
 robots.txt          crawl rules and the sitemap's address
 sitemap.xml         every page that should be in search, and nothing else
 css/styles.css      shared styles
@@ -64,7 +64,7 @@ guideline/            Lightning guideline 3.27 in three documents: app.html (A, 
 
 It's a static site with no build step and no dependencies. Fonts load from Google Fonts; the Arabic pages add Readex Pro and IBM Plex Sans Arabic, hosted here.
 
-**Arabic pages are built for Egypt, not translated.** An `ar/` page uses the English page's design system (the same stylesheets, components and class names, with `lang="ar-EG" dir="rtl"`, `../` paths and `css/arabic.css` last; no Testing panel), but its words, examples, order and number of sections are written for an Egyptian reader, in Egyptian Arabic, with the same facts and screens. The voice, fixed words and Arabic type are in `guideline/website-ar.html` B04 and B10. The shared stylesheets write left and right as logical properties (`margin-inline-start`, `inset-inline-end`, `text-align:start`), so the same CSS lays out both directions: keep it that way. When an English page's facts change, change its `ar/` page too. Visible numbers use Arabic-Indic digits (٢١٥٬٦٥٧ جنيه); the scripts read and write them on `lang="ar-EG"` pages. Keep URLs, IDs, attribute values and technical color codes unchanged.
+**Arabic pages are built for Egypt, not translated.** An `ar/` page uses the English page's design system (the same stylesheets, components and class names, with `lang="ar-EG" dir="rtl"`, `../` paths and `css/arabic.css` last; no Testing panel), but its words, examples, order and number of sections are written for an Egyptian reader, in Egyptian Arabic, with the same facts and screens. The voice, fixed words and Arabic type are in `guideline/website-ar.html` B04 and B10. The shared stylesheets write left and right as logical properties (`margin-inline-start`, `inset-inline-end`, `text-align:start`), so the same CSS lays out both directions: keep it that way. When an English page's facts change, change its `ar/` page too. Visible numbers use Arabic-Indic digits (٢١٥٬٦٥٧ جنيه); the scripts read and write them on `lang="ar-EG"` pages. Dates stay yyyy-mm-dd inside `<bdo dir="ltr">` (٢٠٢٦-١٠-٠٤), so the Arabic-Indic digits are not reversed. Keep URLs, IDs, attribute values and technical color codes unchanged.
 
 ## Run it locally
 

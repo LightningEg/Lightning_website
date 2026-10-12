@@ -1,40 +1,42 @@
 /* Arabic pages (ar/). The shared stylesheets write left/right as logical properties, so dir="rtl" flips the
-   layout by itself; this file adds the Arabic type system (guideline website-ar.html, B04) and the few
-   movements on the x-axis. Load it last. */
+   layout by itself; this file swaps in the Arabic faces (guideline website-ar.html B04, app-ar.html A06.2) and the
+   few movements on the x-axis. Load it last.
+   The rule is the English design, not a second one: the same sizes and the same weights. Readex Pro stands in for
+   Bricolage Grotesque (titles, figures), IBM Plex Sans Arabic for Manrope (everything else). Readex Pro stops at
+   700, so the English 800 renders at 700 on its own; Plex has 400–700, so 800 lands on 700 too. What changes for
+   Arabic is only what the script needs: taller lines, no letter spacing, no capitals, a gradient that starts
+   where the line starts. */
 @font-face{font-family:"Readex Pro";src:url('../assets/fonts/ReadexPro-Arabic.woff2') format('woff2');font-style:normal;font-weight:160 700;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
 @font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
 @font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-500.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
-@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-600.woff2') format('woff2');font-style:normal;font-weight:600 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-700.woff2') format('woff2');font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
 
-/* Two roles, as in English: Readex Pro shows (headings, big figures), IBM Plex Sans Arabic reads (everything
-   else). Latin words keep Bricolage Grotesque and Manrope. */
+/* Two roles, as in English. Latin words inside Arabic (CIB, THNDR) keep Bricolage Grotesque and Manrope. */
 html[dir=rtl]{--display:"Bricolage Grotesque","Readex Pro","Segoe UI",system-ui,sans-serif;--body:Manrope,"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;font-synthesis:none}
-html[dir=rtl] body{font-weight:400;font-size:17px;line-height:1.8}
 html[dir=rtl] .sb{font-family:var(--body)}
 html[dir=rtl] .sb h2{font-family:var(--display)}
 
-/* Arabic letters join: never space them out. */
+/* The hero punch line and every vivid fill start green where an Arabic line starts: on the right. */
+html[dir=rtl]{--punch:linear-gradient(270deg,#00995C 0%,#0B6DD6 100%);--vivid:linear-gradient(225deg,#00995C 0%,#0B6DD6 100%)}
+html[dir=rtl][data-theme="dark"]{--punch:linear-gradient(270deg,#3FE0A3 0%,#5AA9FF 100%)}
+
+/* Arabic letters join, and Arabic has no capitals: never space them out or uppercase them. */
 html[dir=rtl] *{letter-spacing:normal!important}
+html[dir=rtl] .label{text-transform:none;word-spacing:normal}
 
-/* Calm weights: Arabic at 800 fills its counters. Headings and big figures 600, labels 500-600, text 400. */
-html[dir=rtl] :is(h1,h2,h3,.lead-fig,.kpi .fig,.l-game-fig,.l-sign p,.d-faq summary,.sb h2,.c-motto,.d-panel .fig,.c-calc-result strong,.hw-num b){font-weight:600}
-html[dir=rtl] :is(.label,.sb-label,.eyebrow,.kpi .lbl,.field-label,.c-free,.h-notes li,.row span small,.mins,.c-steps .mins){font-weight:500}
-html[dir=rtl] :is(.btn,.sb-btn,.d-links a,.c-nav-links a,.choice button,.c-seg button,.d-tabs button){font-weight:600}
-html[dir=rtl] .row.result span,html[dir=rtl] .row.total span{font-weight:600}
+/* Taller lines for the dots and descenders; sizes and weights stay the English ones. */
+html[dir=rtl] body{line-height:1.75}
+html[dir=rtl] .d-hero h1{line-height:1.25}
+html[dir=rtl] .d-hero h1 span{padding-bottom:.12em}
+html[dir=rtl] :is(.d-hero-line,.d-head p,.card p,.c-steps p,.d-faq p){line-height:1.75}
+html[dir=rtl] .d-head h2{line-height:1.3}
+html[dir=rtl] :is(.chead h3,.card h3,.c-steps h3){line-height:1.4}
+html[dir=rtl] .l-sign p{line-height:1.3}
+html[dir=rtl] .d-faq summary{line-height:1.5}
 
-/* The Arabic scale: a step smaller than the English, with room above and below for the letters. */
-html[dir=rtl] .d-hero h1{white-space:normal;font-size:clamp(40px,6.4vw,74px);line-height:1.28}
-html[dir=rtl] .d-hero h1 span{padding-bottom:.1em}
-html[dir=rtl] .d-hero-line{font-size:19px;line-height:1.8;text-wrap:balance}
-html[dir=rtl] .d-head h2{font-size:clamp(28px,3.7vw,44px);line-height:1.35}
-html[dir=rtl] .d-head p{line-height:1.8;text-wrap:balance}
-html[dir=rtl] .chead h3{font-size:20px;line-height:1.4}
-html[dir=rtl] :is(.card h3,.c-steps h3){line-height:1.45}
-html[dir=rtl] :is(.card p,.c-steps p,.d-faq p){line-height:1.8}
-html[dir=rtl] .l-sign p{font-size:clamp(28px,4.2vw,46px);line-height:1.35}
-html[dir=rtl] .sb h2{line-height:1.35}
-html[dir=rtl] .d-faq summary{font-size:17px;line-height:1.5}
-html[dir=rtl] .label{font-size:13px}
+/* Dates read yyyy-mm-dd, left to right, inside the Arabic line (A06.2): <bdo dir="ltr">. */
+html[dir=rtl] bdo[dir=ltr]{unicode-bidi:isolate-override}
 
 /* A table header centres unless its table names a side. */
 html[dir=rtl] .status-table{text-align:right}
