@@ -7,7 +7,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 ## Key facts
 
 - Who it is for: salaried people in Egypt who want one clear picture of their money in EGP.
-- Platform: Windows. The current beta is 0.5.0 beta 1, a ZIP to unzip and open. The Android app is in testing: the phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review. It comes to beta testers next, then Google Play.
+- Platform: Windows and Android. The current beta is 1.0 beta (1.0.0-beta.1): a Windows ZIP to unzip and open and an Android APK (Google Play comes later). The phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review.
 - Price: free to download and use, and nothing is ever locked. After seven days, Lightning asks now and then for a one-time payment; you pay when it is worth it to you and own it forever.
 - Bank connection: none. Download a CSV from any bank or wallet, match its columns once, and review each row before it is saved.
 - Privacy: money data never goes online. It stays in an encrypted profile on your phone and computer, which talk to each other only over your own Wi-Fi. The only online lookup is the latest price of listed shares, by ticker symbol. No account is needed.
