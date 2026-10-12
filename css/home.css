@@ -120,3 +120,4 @@
   .h-notes li::before{align-self:flex-start;margin-top:.4em}
   .h-notes li{align-items:flex-start;padding-top:10px}
 }
+.t-sync~.c-steps{margin-top:40px}.c-steps+.t-phones{margin-top:56px}

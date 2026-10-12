@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Lightning · Release Log</title>
+<meta name="description" content="See what changed in Lightning 1.0 beta for Windows and Android, with completed features, fixes and remaining work.">
+<link rel="canonical" href="https://lightningeg.com/release-log.html">
+<link rel="alternate" hreflang="en" href="https://lightningeg.com/release-log.html">
+<link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/release-log.html">
+<link rel="alternate" hreflang="x-default" href="https://lightningeg.com/release-log.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lightning">
+<meta property="og:title" content="Lightning · Release Log">
+<meta property="og:description" content="What changed in Lightning, build by build: what is in the Windows beta you can download, what is built and in testing, and what is still open.">
+<meta property="og:url" content="https://lightningeg.com/release-log.html">
+<meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lightning: All Your Money. One Clear Picture. Free personal finance for Egypt, beside the Overview screen.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E3F6EC">
+<link rel="icon" href="assets/brand/lightning-app-icon.svg?v=20261003-1" type="image/svg+xml">
+<link rel="icon" href="assets/brand/lightning-icon-64.png?v=20261003-1" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/brand/lightning-icon-180.png?v=20261003-1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/landing.css?v=20261010-2">
+<link rel="stylesheet" href="css/home.css?v=20261010-2">
+<link rel="stylesheet" href="css/release-log.css?v=20261012-1">
+<link rel="stylesheet" href="css/theme.css?v=20260930-1">
+<script src="js/theme.js?v=20260930-1"></script>
+<link rel="stylesheet" href="css/ux-test.css?v=20260928-1">
+<link rel="stylesheet" href="css/dev-dock.css?v=20261004-1">
+<script src="js/dev-dock.js?v=20261005-1" defer></script>
+<script src="js/ux-test.js?v=20260928-1" defer></script>
+<script src="js/analytics.js?v=20261007-1" defer></script>
+<link rel="stylesheet" href="css/signup-band.css?v=20261004-1">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://lightningeg.com/release-log.html#page","url":"https://lightningeg.com/release-log.html","name":"Lightning · Release Log","description":"See what changed in Lightning 1.0 beta for Windows and Android, with completed features, fixes and remaining work.","inLanguage":"en","isPartOf":{"@id":"https://lightningeg.com/#website"},"about":{"@id":"https://lightningeg.com/#app"}}]}
+</script>
+</head>
+<body data-ux-version="UX-2026.10.12.03" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
+  <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol>
+  <symbol id="i-coins" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82"/></symbol>
+  <symbol id="i-house" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4M3 7l2 2 4-4M13 6h8M13 12h8M13 18h8"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18M3 9h18M3 15h18"/></symbol>
+
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
+</svg>
+
+<div class="d-bar">
+  <div class="wrap">
+    <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
+    <nav class="d-links" aria-label="Main">
+      <a href="index.html" data-home-link>Home</a>
+      <a href="features.html">Features</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="current-status.html" aria-current="page">Current Status</a>
+    </nav>
+    <div class="d-bar-end">
+      <button data-theme-toggle aria-label="Dark mode"></button>
+      <a class="lang-switch" href="ar/release-log.html" lang="ar-EG" dir="rtl">العربية</a>
+      <a class="btn btn-primary nav-cta" href="survey.html"><span class="cta-long">Take the survey</span><span class="cta-short">Survey</span></a>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" id="top">
+  <header class="d-hero">
+    <p class="label">Release log</p>
+    <h1 style="--fit:8.6">What Changed, <span>Build by Build.</span></h1>
+    <p class="d-hero-line">What’s in the Windows and Android beta, build by build, and what we’re still fixing.</p>
+    <div class="d-actions"><a class="btn btn-vivid" href="current-status.html#downloads">Download the beta</a><a class="btn btn-secondary" href="app-feedback.html">Send feedback</a></div>
+    <p class="log-meta"><span>In the download <span class="log-id">Lightning 1 Beta</span></span><span>Released <b>2026-10-07</b></span><span><a href="current-status.html#downloads">0.4.0 beta 1</a> is still available</span></p>
+  </header>
+
+  <section class="d-section" aria-labelledby="log-t">
+    <div class="d-head"><p class="label">Newest first</p><h2 id="log-t">Every Build</h2><p>Lightning 1 Beta is the current matched PC and phone download.</p></div>
+    <div class="log-days">
+    <article class="card card-support log-day" id="v1.0.0-beta.1">
+      <div class="chead"><h3>Lightning 1 Beta</h3><p>2026-10-07 · Windows and Android</p></div>
+      <h4 class="log-grp">Highlights</h4><ul class="log-list"><li><div><b>One ledger on your phone and PC.</b> Move the profile to your phone, lend it to your PC when you need a larger screen, then hand it back. Only one device writes at a time.</div></li><li><div><b>Both apps from one tested commit.</b> The Windows ZIP and signed Android APK share a build record and checksums.</div></li><li><div><b>Clearer money screens.</b> Registers use two-line rows; sparse Spending and Plan views show useful context without repeating a lone number.</div></li></ul><h4 class="log-grp">Fixed</h4><ul class="log-list"><li><div><b>Certificate values stay honest.</b> Purchase price remains principal until you enter a dated valuation; updating a price changes value without inventing cash.</div></li><li><div><b>Exchange rates have a working source.</b> Dated transfer-rate midpoints now come from Banque Misr after the former source stopped answering.</div></li></ul><h4 class="log-grp">Before you start</h4><ul class="log-list"><li><div>Install the matching phone and PC files from the same 1.0 release. They work together on the same Wi-Fi.</div></li><li><div>You can test with sample or real data. Keep an independent backup: legacy import and in-app backup restore are still being finished. The phone beta is debuggable and the Windows ZIP is not code-signed.</div></li></ul>
+    </article>
+    <article class="card card-support log-day" id="v0.5.0-beta.1">
+      <div class="chead"><h3>0.5.0 beta 1</h3><p>2026-10-03 · Development milestone; no public download</p></div>
+      <h4 class="log-grp">Highlights</h4><ul class="log-list"><li><div><b>Pages open almost instantly.</b> Budget now opens in under half a second instead of 7 seconds, and the Overview in a quarter of a second.</div></li><li><div><b>Your certificates, tracked properly.</b> One portfolio per bank, each certificate with its own terms. Interest and maturity cash appear in your forecast, marked as estimates.</div></li><li><div><b>Match your bank in one step.</b> Type the balance your bank shows. A small gap is settled with one adjustment, instead of ticking off every line.</div></li><li><div><b>Other people’s money stays out of yours.</b> Mark cash you hold for family or friends, and expenses someone else paid for you. Your net worth and spending stay accurate.</div></li></ul><h4 class="log-grp">New</h4><ul class="log-list"><li><div><b>Ask AI about your money.</b> Export for AI turns any period into one workbook and a ready-made prompt for the AI you use. Nothing leaves your computer unless you send it.</div></li><li><div><b>A guided start.</b> The Get set up card takes you through five steps, then gets out of the way.</div></li><li><div><b>Categorise many rows at once.</b> Search “Talabat”, select the rows, and set one category for all of them.</div></li><li><div><b>Start fresh without losing anything.</b> Open a new profile; the old one stays exactly as it was.</div></li><li><div><b>Export just the rows you need.</b> Tick them and save them as a CSV.</div></li></ul><h4 class="log-grp">Looks and feel</h4><ul class="log-list"><li><div><b>Lightning looks like Lightning.</b> Our own fonts and logo, cards coloured by what each number means, and a Back button on every detail page.</div></li><li><div><b>Your month at a glance.</b> A calendar shows spending and net cash flow by day and by month.</div></li><li><div><b>One date picker everywhere.</b> Weeks run Monday to Sunday, and it works from the keyboard.</div></li></ul><h4 class="log-grp">Fixed</h4><ul class="log-list"><li><div><b>Imports take minutes, not an evening.</b> You answer once per name, not once per row: 17 questions instead of 43 in the sample year.</div></li><li><div><b>Overview and Budget agree.</b> Both show the same amount left in your plan, and a small “!” marks any figure that’s an estimate.</div></li><li><div><b>Old prices are flagged.</b> Anything last priced more than about two months ago is marked.</div></li><li><div><b>Dropdowns inside pop-ups work again.</b></div></li></ul>
+    </article>
+    <article class="card card-support log-day" id="v0.4.0-beta.1">
+      <div class="chead"><h3>0.4.0 beta 1</h3><p>2026-10-01 · Still available</p></div>
+      <h4 class="log-grp">Highlights</h4><ul class="log-list"><li><div><b>Lightning on your Windows PC.</b> Your data stays on your computer, in a profile locked with your password and a recovery key.</div></li></ul><h4 class="log-grp">New</h4><ul class="log-list"><li><div><b>Import your bank statements.</b> CSV files up to 5 MB, and you review every row before anything is saved.</div></li><li><div><b>Safe upgrades.</b> Lightning makes a verified backup before every upgrade.</div></li><li><div><b>See which build you’re on.</b> The version shows in the title bar and in Settings.</div></li></ul><h4 class="log-grp">Looks and feel</h4><ul class="log-list"><li><div><b>The answer comes first.</b> Key figures lead with the number, then one line of context.</div></li><li><div><b>Faster edits.</b> Right-click a transaction for Save, History, Cancel and Delete.</div></li></ul>
+    </article>
+    <article class="card card-support log-day" id="still-open">
+      <div class="chead"><h3>Still Open</h3><p>What we’re fixing next</p></div>
+      <ul class="log-list is-gap"><li><div>A flat, or anything else under “Other”, can be counted twice in your holdings.</div></li><li><div>Adding something you already owned shows as a gain in your net worth.</div></li><li><div>Safe to spend doesn’t count bills due right after payday yet.</div></li><li><div>If you sell everything in a period, the Investments tab hides that period’s gain.</div></li><li><div>Bringing in your old data, and restoring a backup, aren’t in the app yet.</div></li></ul>
+    </article>
+    </div>
+  </section>
+
+  <!-- Signup band (guideline 3.20, B06): the same on every page -->
+  <section class="sb" id="join" aria-labelledby="sb-title">
+    <div class="sb-copy">
+      <p class="sb-label">Beta testers wanted</p>
+      <h2 id="sb-title">Help Us Shape the Future of Lightning.</h2>
+      <p>Your opinion decides what we build next. Take the 3–5 minute survey and we’ll invite you to the beta, and to our testers’ community on WhatsApp.</p>
+    </div>
+    <div class="sb-actions">
+      <a class="sb-btn sb-survey" href="survey.html">Take the survey · 3–5 min</a>
+      <p class="sb-or">or get news of each build</p>
+      <form id="email-signup" data-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec"><input type="hidden" name="form_type" value="signup"><input type="hidden" name="page_url" value=""><label for="signup-email" class="sr-only">Email</label><input id="signup-email" type="email" name="email" required autocomplete="email" placeholder="Email"><button class="sb-btn" type="submit">Get early access</button></form>
+      <p class="sb-status" id="signup-status" role="status"></p>
+    </div>
+  </section>
+
+  <section class="l-sign" aria-label="Lightning">
+    <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="40" height="56">
+    <p>Study Your Patterns. <span>Control Your Future.</span></p>
+  </section>
+</main>
+
+<div class="wrap">
+  <footer class="d-foot">
+    <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>Made in Egypt</span></div>
+    <nav aria-label="Footer"><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Current Status</a><a href="release-log.html">Release Log</a><a href="survey.html">Survey</a></nav>
+  </footer>
+</div>
+
+<script src="js/landing.js?v=20261005-1"></script>
+</body>
+</html>

@@ -13,29 +13,29 @@
       "id": "UX-2026.10.12.04",
       "name": "Sample Profiles · Landing system",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.04.html"
     },
     {
       "id": "UX-2026.10.12.03",
       "name": "Release Log · Landing system",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.03.html"
     },
     {
       "id": "UX-2026.10.12.02",
       "name": "Current Status · Landing system",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.02.html"
     },
     {
       "id": "UX-2026.10.12.01",
       "name": "How It Works · Landing system",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.01.html"
     },
     {
       "id": "UX-2026.10.10.14",
@@ -48,15 +48,15 @@
       "id": "UX-2026.10.10.13",
       "name": "Features · Navigation matches Current Status",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.10.13.html"
     },
     {
       "id": "UX-2026.10.10.12",
       "name": "Lightning · Home · Navigation matches Current Status",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.10.12.html"
     },
     {
       "id": "UX-2026.10.10.11",
@@ -1371,50 +1371,50 @@
       "id": "UX-2026.10.09.13",
       "name": "net-worth-tracker.html · Arabic language switch",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.13.html"
     },
     {
       "id": "UX-2026.10.09.14",
       "name": "budget-app-egypt.html · Arabic language switch",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.14.html"
     },
     {
       "id": "UX-2026.10.09.15",
       "name": "expense-tracker-egypt.html · Arabic language switch",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.15.html"
     },
     {
       "id": "UX-2026.10.09.16",
       "name": "investment-tracker-egypt.html · Arabic language switch",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.16.html"
     },
     {
       "id": "UX-2026.10.09.17",
       "name": "cash-flow-planner.html · Arabic language switch",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.17.html"
     },
     {
       "id": "UX-2026.10.09.18",
       "name": "bank-statement-budgeting.html · Arabic language switch",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.18.html"
     },
     {
       "id": "UX-2026.10.09.19",
       "name": "offline-personal-finance-app.html · Arabic language switch",
       "page": "offline-personal-finance-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.19.html"
     },
     {
       "id": "UX-2026.10.09.20",
@@ -1434,41 +1434,174 @@
       "id": "UX-2026.10.12.06",
       "name": "Guides · One library",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.06.html"
     },
     {
       "id": "UX-2026.10.12.07",
       "name": "Guides · Why the salary runs out",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.07.html"
     },
     {
       "id": "UX-2026.10.12.08",
       "name": "Guides · Budget a 20,000 EGP salary",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.08.html"
     },
     {
       "id": "UX-2026.10.12.09",
       "name": "Guides · Track your spending",
       "page": "blog-track-expenses.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.09.html"
     },
     {
       "id": "UX-2026.10.12.10",
       "name": "Guides · Emergency fund",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.10.html"
     },
     {
       "id": "UX-2026.10.12.11",
       "name": "Guides · Irregular income budget",
       "page": "blog-irregular-income-budget.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.11.html"
+    },
+    {
+      "id": "UX-2026.10.12.12",
+      "name": "bank-statement-budgeting.html · One look, what matters first",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.13",
+      "name": "Guides · One look, what matters first",
+      "page": "blog-budget-20000-egp.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.14",
+      "name": "Guides · One look, what matters first",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.15",
+      "name": "Guides · One look, what matters first",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.16",
+      "name": "Guides · One look, what matters first",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.17",
+      "name": "Guides · One look, what matters first",
+      "page": "blog-track-expenses.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.18",
+      "name": "budget-app-egypt.html · One look, what matters first",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.19",
+      "name": "cash-flow-planner.html · One look, what matters first",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.20",
+      "name": "Current Status · One look, what matters first",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.21",
+      "name": "expense-tracker-egypt.html · One look, what matters first",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.22",
+      "name": "Features · One look, what matters first",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.23",
+      "name": "Guides · One look, what matters first",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.24",
+      "name": "How It Works · One look, what matters first",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.25",
+      "name": "Lightning · One look, what matters first",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.26",
+      "name": "investment-tracker-egypt.html · One look, what matters first",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.27",
+      "name": "net-worth-tracker.html · One look, what matters first",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.28",
+      "name": "offline-personal-finance-app.html · One look, what matters first",
+      "page": "offline-personal-finance-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.29",
+      "name": "Release Log · One look, what matters first",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.30",
+      "name": "Sample Profiles · One look, what matters first",
+      "page": "sample-profiles.html",
       "status": "current",
       "archive_url": null
     }
