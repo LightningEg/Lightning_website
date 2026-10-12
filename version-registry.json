@@ -1364,8 +1364,8 @@
       "id": "UX-2026.10.09.12",
       "name": "guides.html · Arabic language switch",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.12.html"
     },
     {
       "id": "UX-2026.10.09.13",
@@ -1429,6 +1429,48 @@
       "page": "versions.html",
       "status": "archived",
       "archive_url": "archive/UX-2026.10.09.21.html"
+    },
+    {
+      "id": "UX-2026.10.12.06",
+      "name": "Guides · One library",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.07",
+      "name": "Guides · Why the salary runs out",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.08",
+      "name": "Guides · Budget a 20,000 EGP salary",
+      "page": "blog-budget-20000-egp.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.09",
+      "name": "Guides · Track your spending",
+      "page": "blog-track-expenses.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.10",
+      "name": "Guides · Emergency fund",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.11",
+      "name": "Guides · Irregular income budget",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
     }
   ]
 }

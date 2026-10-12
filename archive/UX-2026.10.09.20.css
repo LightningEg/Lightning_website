@@ -1,5 +1,6 @@
 /* Release log · built on css/version-d.css (guideline 3.8, Part B): same tokens, same building blocks.
    Only layout for the log itself lives here: a release header, a before/after table, card lists. */
+.log-hero .d-hero-line{max-width:38em}
 .log-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-top:22px;color:var(--muted);font-size:14px;font-weight:700}
 .log-meta b{color:var(--ink);font-weight:800}
 .log-id{display:inline-flex;align-items:center;height:30px;padding:0 12px;border:1px solid var(--line-ctl);border-radius:999px;color:var(--ink2);font:700 13px/1 var(--body);font-variant-numeric:tabular-nums}
@@ -30,7 +31,3 @@
 .log-grp{margin:22px 0 0;color:var(--muted);font:800 14px/1.2 var(--body)}
 .log-grp+.log-list{margin-top:10px}
 .chead+.log-grp{margin-top:0}
-/* the release header: landing.css has no .chead (Version D did) */
-.chead{padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line)}
-.chead h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
-.chead p{margin-top:4px;color:var(--ink2);font-size:15px;line-height:1.45}
