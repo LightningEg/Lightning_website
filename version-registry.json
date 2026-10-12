@@ -1546,8 +1546,8 @@
       "id": "UX-2026.10.12.22",
       "name": "Features · One look, what matters first",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.22.html"
     },
     {
       "id": "UX-2026.10.12.23",
@@ -1560,15 +1560,15 @@
       "id": "UX-2026.10.12.24",
       "name": "How It Works · One look, what matters first",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.24.html"
     },
     {
       "id": "UX-2026.10.12.25",
       "name": "Lightning · One look, what matters first",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.25.html"
     },
     {
       "id": "UX-2026.10.12.26",
@@ -1602,6 +1602,27 @@
       "id": "UX-2026.10.12.30",
       "name": "Sample Profiles · One look, what matters first",
       "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.31",
+      "name": "Lightning · Top three first",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.32",
+      "name": "Features · Top three first",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.33",
+      "name": "How It Works · Top three first",
+      "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
     }

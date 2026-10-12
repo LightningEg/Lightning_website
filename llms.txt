@@ -1,6 +1,6 @@
 # Lightning
 
-> Lightning (lightningeg.com) is a free personal finance app for salaried people in Egypt. It runs on Windows, counts everything you own and owe in EGP (bank accounts, mobile wallets, cash, gold, bank certificates, EGX shares and funds), tracks spending and a monthly budget, and shows how much is safe to spend until payday plus the next three months. It never asks for a bank login: you import CSV statements and review every row. Your money data stays in an encrypted profile on your own computer.
+> Lightning (lightningeg.com) is a free personal finance app for salaried people in Egypt. It runs on Windows, counts your accounts, savings, shares and gold in EGP (bank accounts, mobile wallets, cash, gold, bank certificates, EGX shares and funds), tracks spending and a monthly budget, and shows how much is safe to spend until payday plus the next three months. It never asks for a bank login: you import CSV statements and review every row. Your money data stays in an encrypted profile on your own computer.
 
 Lightning is a different product from anything else called "Lightning": it is the Egyptian personal finance app at lightningeg.com.
 

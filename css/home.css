@@ -121,3 +121,9 @@
   .h-notes li{align-items:flex-start;padding-top:10px}
 }
 .t-sync~.c-steps{margin-top:40px}.c-steps+.t-phones{margin-top:56px}
+
+@media (prefers-reduced-motion:no-preference){
+  .t-lock{position:relative}
+  .t-lock::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--nile);opacity:0;animation:t-pulse 2.6s ease-out infinite}
+}
+@keyframes t-pulse{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(1.7);opacity:0}}
