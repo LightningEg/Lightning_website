@@ -32,6 +32,8 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Cash flow planner](https://lightningeg.com/cash-flow-planner.html): how much is safe to spend before payday, and a three-month forecast.
 - [Budget from your bank statement CSV](https://lightningeg.com/bank-statement-budgeting.html): no bank login, just your statement.
 - [Offline personal finance app](https://lightningeg.com/offline-personal-finance-app.html): where your data lives and why it stays on your PC.
+- [Sync your phone and PC without the cloud](https://lightningeg.com/sync-phone-and-pc-without-cloud.html): one ledger on your phone and PC over your own Wi-Fi, with no account and no server.
+- [Track money you hold for others](https://lightningeg.com/track-money-you-hold-for-others.html): keep money you hold for family in your account but out of your net worth.
 
 ## Guides (English)
 

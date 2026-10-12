@@ -1625,6 +1625,20 @@
       "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.34",
+      "name": "Guides · Sync your phone and PC without the cloud",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.35",
+      "name": "Guides · Track money you hold for others",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
     }
   ]
 }
