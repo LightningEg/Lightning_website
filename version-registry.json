@@ -1553,8 +1553,8 @@
       "id": "UX-2026.10.12.23",
       "name": "Guides · One look, what matters first",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.23.html"
     },
     {
       "id": "UX-2026.10.12.24",
@@ -1609,15 +1609,15 @@
       "id": "UX-2026.10.12.31",
       "name": "Lightning · Top three first",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.31.html"
     },
     {
       "id": "UX-2026.10.12.32",
       "name": "Features · Top three first",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.32.html"
     },
     {
       "id": "UX-2026.10.12.33",
@@ -1637,6 +1637,27 @@
       "id": "UX-2026.10.12.35",
       "name": "Guides · Track money you hold for others",
       "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.36",
+      "name": "Guides · Top three first",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.37",
+      "name": "Lightning · Search copy tightened",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.38",
+      "name": "Features · Search copy tightened",
+      "page": "features.html",
       "status": "current",
       "archive_url": null
     }
