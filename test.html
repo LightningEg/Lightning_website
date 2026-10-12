@@ -14,13 +14,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/landing.css?v=20261005-6">
-<link rel="stylesheet" href="css/home.css?v=20261008-1">
+<link rel="stylesheet" href="css/landing.css?v=20261012-2">
+<link rel="stylesheet" href="css/home.css?v=20261012-2">
 <link rel="stylesheet" href="css/sync-demo.css?v=20261008-1">
 <link rel="stylesheet" href="css/motion.css?v=20261006-4">
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/wow.css?v=20261006-1">
+<link rel="stylesheet" href="css/runway.css?v=20261012-1">
 <script src="js/wow.js?v=20261006-2" defer></script>
+<script src="js/runway.js?v=20261012-1" defer></script>
 <script src="js/sync-demo.js?v=20261008-1" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
 <script src="js/theme.js?v=20260930-1"></script>
@@ -191,17 +193,35 @@
   </section>
 
   <!-- 6 · The next three months -->
-  <section class="d-section c-ahead" id="ahead">
+  <section class="d-section" id="ahead">
     <div class="d-head">
-      <p class="label">The next three months</p>
-      <h2>See Your Next Three Months Before You Live Them.</h2>
-      <p>Salary, bills, loan payments and your emergency fund top-up are already in the plan.</p>
+      <p class="label">Safe to spend</p>
+      <h2>Watch Your Cash Before It Moves.</h2>
+      <p>Salary, bills, loan payments and your emergency fund top-up are already in the plan. Scroll to ride it.</p>
     </div>
-    <figure><div class="d-frame free"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Cash planning</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-07/a-forecast-ahead.webp" data-caption="Cash planning: where Mohab’s cash is heading."><img src="assets/app/mohab-year-2026-10-07/a-forecast-ahead.webp" width="1644" height="842" loading="lazy" alt="Lightning Cash planning: free cash over the last five month ends, 184,976 EGP at the end of 2026-09, then a dashed forecast down to its lowest, 165,937 EGP in 2026-11, and up to 211,192 in 2026-12, beside money in and out for each month ahead: −41,144 for the rest of 2026-10, −12,485 in 2026-11 and +45,255 in 2026-12."></button></div><figcaption class="d-cap">Mohab’s cash, then his next three months</figcaption></figure>
-    <div class="l-ahead">
-      <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="lbl">Lowest point ahead</span></div><span class="fig">165,937<span class="unit">EGP</span></span><span class="foot">Cash at its lowest month end, 2026-11</span></div>
-      <div class="kpi out"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg></span><span class="lbl">Car loan</span></div><span class="fig">37,500<span class="unit">EGP</span></span><span class="foot">Still to pay · paid off 2027-12-05 · 9 of 24 paid</span></div>
-      <div class="kpi out"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg></span><span class="lbl">In 2026-11</span></div><span class="fig">−12,485<span class="unit">EGP</span></span><span class="foot">Expected money in, less money out</span></div>
+    <div class="rw" data-runway>
+      <div class="rw-stick">
+        <div class="rw-card">
+          <svg class="rw-svg" viewBox="0 0 800 300" role="img" aria-label="Cash planning: free cash falls from 184,976 EGP at the end of 2026-09 to its lowest, 165,937 EGP, in 2026-11, then recovers.">
+            <defs><linearGradient id="rw-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--azure)" stop-opacity=".22"/><stop offset="1" stop-color="var(--azure)" stop-opacity="0"/></linearGradient></defs>
+            <g class="rw-grid" aria-hidden="true"><line x1="40" x2="40" y1="20" y2="256"/><line x1="293" x2="293" y1="20" y2="256"/><line x1="546" x2="546" y1="20" y2="256"/><line x1="800" x2="800" y1="20" y2="256"/></g>
+            <g aria-hidden="true"><text class="rw-month" x="40" y="286">2026-09</text><text class="rw-month" x="293" y="286" text-anchor="middle">2026-10</text><text class="rw-month" x="546" y="286" text-anchor="middle">2026-11</text><text class="rw-month" x="800" y="286" text-anchor="end">2026-12</text></g>
+            <path class="rw-ghost" d="M40 60 C 170 70, 200 120, 293 140 S 450 218, 546 226 S 700 170, 800 150"/>
+            <path class="rw-area" d="M40 60 C 170 70, 200 120, 293 140 S 450 218, 546 226 S 700 170, 800 150 L800 256 L40 256 Z"/>
+            <path class="rw-line" d="M40 60 C 170 70, 200 120, 293 140 S 450 218, 546 226 S 700 170, 800 150"/>
+            <circle class="rw-low" cx="546" cy="226" r="16"/><circle class="rw-lowdot" cx="546" cy="226" r="6"/>
+            <circle class="rw-dot" cx="40" cy="60" r="9"/>
+          </svg>
+          <div class="rw-read"><div><div class="rw-fig"><b>165,937</b><small>EGP</small></div><div class="rw-cap">Cash at its lowest month end, 2026-11</div></div><span class="rw-safe">Safe to spend until payday</span></div>
+          <p class="rw-note">Illustrative path between two real month ends of Mohab’s plan: 184,976 EGP in 2026-09 and 165,937 EGP in 2026-11.</p>
+        </div>
+        <ul class="rw-events" aria-label="What is already in the plan">
+          <li class="in">Salary lands<span>Income in the plan</span></li>
+          <li class="out">Bills leave<span>Counted on their due dates</span></li>
+          <li class="out">Loan instalment<span>Car loan, month by month</span></li>
+          <li class="out">Emergency fund top-up<span>Set aside before spending</span></li>
+        </ul>
+      </div>
     </div>
   </section>
 

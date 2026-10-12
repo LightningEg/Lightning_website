@@ -22,5 +22,5 @@
 .f-jump a:hover{background:var(--white);border-color:var(--green)}
 .f-jump a:focus-visible{outline:3px solid var(--green);outline-offset:2px}
 .f-all{padding-bottom:0}
-@media (max-width:820px){.f-best-grid{grid-template-columns:minmax(0,1fr)}.f-best{padding:22px}.f-best h3{font-size:21px}}
+@media (max-width:820px){.f-best-grid{grid-template-columns:minmax(0,1fr)}.f-best{padding:20px}.f-best h3{font-size:21px}}
 @media (max-width:640px){.f-jump a{padding:0 14px;font-size:13px}}

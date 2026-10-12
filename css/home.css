@@ -105,8 +105,10 @@
 }
 @media (max-width:640px){
   .t-same{flex-direction:column;align-items:flex-start;width:fit-content;max-width:100%;margin-inline-start:auto;margin-inline-end:auto;gap:10px;text-align:start}
-  .t-phones{grid-template-columns:minmax(0,260px)}
-  .t-phones figure+figure{display:none}
+  /* phone: the three screens become a swipe strip, the next one peeking in */
+  .t-phones{display:flex;justify-content:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px;overscroll-behavior-x:contain}
+  .t-phones::-webkit-scrollbar{display:none}
+  .t-phones figure{flex:0 0 min(66%,250px);scroll-snap-align:start}
 }
 
 /* Hero notes (UX-2026.10.07.04): the four things only Lightning does, under the hero line */
@@ -120,6 +122,7 @@
   .h-notes li{align-items:flex-start;padding-top:10px}
 }
 .t-sync~.c-steps{margin-top:40px}.c-steps+.t-phones{margin-top:56px}
+@media (max-width:640px){.t-sync~.c-steps{margin-top:28px}.c-steps+.t-phones{margin-top:32px}}
 
 @media (prefers-reduced-motion:no-preference){
   .t-lock{position:relative}

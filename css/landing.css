@@ -395,6 +395,17 @@ button,input{font:inherit}
 }
 @media (max-width:380px){.d-tiles{grid-template-columns:1fr}.d-links a{padding:8px 6px;font-size:13px}}
 @media (max-width:340px){.d-links a{padding:8px 4px;font-size:12.5px;letter-spacing:-.01em}}
+/* Phone spacing pass (2026-10-12): one rhythm, 40 between sections, 20 under a header, 12 between cards */
+@media (max-width:640px){
+  .d-hero{padding-top:40px}
+  .d-section{padding-top:40px}
+  .d-head{margin-bottom:20px}
+  .c-steps,.c-promise,.f-best-grid,.l-ahead{gap:12px}
+  .card{padding:18px}
+  .t-same{margin-top:16px}
+  .d-foot{margin-top:40px}
+  .l-sign{padding-top:56px}
+}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 
 /* Language switch shared by the English pages. */

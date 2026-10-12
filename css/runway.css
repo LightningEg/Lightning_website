@@ -1,0 +1,44 @@
+/* The runway (test.html prototype). A dot rides the cash line across the next three months; salary, bills, the loan
+   and the emergency fund drop in as it passes, and the figure rolls down to the lowest point, then "safe to spend".
+   Without the script, or with reduced motion, the finished picture shows and nothing sticks. */
+.rw{position:relative}
+.rw-stick{display:grid;gap:18px}
+.rw-card{position:relative;padding:20px 20px 12px;border:1px solid var(--line);border-radius:24px;background:var(--paper);box-shadow:var(--shadow)}
+.rw-svg{display:block;width:100%;height:auto;overflow:visible}
+.rw-grid line{stroke:var(--line);stroke-width:1}
+.rw-month{fill:var(--ink2);font:700 13px var(--body)}
+.rw-area{fill:url(#rw-fill);opacity:.9}
+.rw-line{fill:none;stroke:var(--azure);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.rw-ghost{fill:none;stroke:var(--line);stroke-width:4;stroke-dasharray:2 10;stroke-linecap:round}
+.rw-dot{fill:var(--nile);stroke:var(--paper);stroke-width:4}
+.rw-low{fill:none;stroke:var(--rose-strong);stroke-width:3}
+.rw-lowdot{fill:var(--rose-strong)}
+.rw-read{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-top:6px}
+.rw-fig{font:800 clamp(34px,5vw,56px)/1 var(--display);letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums}
+.rw-fig small{font:700 15px var(--body);letter-spacing:0;color:var(--ink2);margin-inline-start:6px}
+.rw-cap{color:var(--ink2);font-weight:600;font-size:15px}
+.rw-safe{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;background:var(--nile);color:var(--on-nile);font:800 14px var(--body)}
+.rw-safe::before{content:"";width:8px;height:8px;border-radius:50%;background:#7CF0B0}
+.rw-events{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.rw-events li{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--paper);font:700 14px/1.25 var(--body);color:var(--ink)}
+.rw-events li span{font-weight:600;font-size:12.5px;color:var(--ink2)}
+.rw-events .in{border-inline-start:4px solid var(--green)}
+.rw-events .out{border-inline-start:4px solid var(--rose-strong)}
+.rw-note{margin-top:10px;color:var(--ink2);font-size:13px}
+@media (max-width:640px){
+  .rw-card{padding:14px 12px 8px;border-radius:20px}
+  .rw-events{grid-template-columns:1fr 1fr;gap:8px}
+  .rw-events li{padding:10px 12px;font-size:13.5px}
+  .rw-safe{width:100%;justify-content:center}
+}
+/* live: the section becomes a scroll scene; the stage sticks while the dot travels */
+.rw.is-live{height:230vh}
+.rw.is-live .rw-stick{position:sticky;top:76px}
+.rw.is-live .rw-events li{opacity:.28;transform:translateY(8px)}
+.rw.is-live .rw-events li.on{opacity:1;transform:none;transition:opacity .35s ease,transform .45s cubic-bezier(.25,.6,.3,1)}
+.rw.is-live .rw-safe{opacity:0;transform:translateY(8px)}
+.rw.is-live .rw-safe.on{opacity:1;transform:none;transition:opacity .4s ease,transform .5s cubic-bezier(.25,.6,.3,1)}
+.rw.is-live .rw-low,.rw.is-live .rw-lowdot{opacity:0}
+.rw.is-live .rw-low.on,.rw.is-live .rw-lowdot.on{opacity:1;transition:opacity .3s ease}
+@media (max-width:640px){.rw.is-live{height:200vh}.rw.is-live .rw-stick{top:68px}}
+@media (prefers-reduced-motion:reduce){.rw.is-live{height:auto}.rw.is-live .rw-stick{position:static}}
