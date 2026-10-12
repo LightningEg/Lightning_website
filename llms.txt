@@ -54,7 +54,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 
 ## Arabic pages (Egyptian Arabic)
 
-- [الرئيسية](https://lightningeg.com/ar/index.html): كل فلوسك في صورة واحدة واضحة، مع مزايا الهاتف والكمبيوتر والخصوصية.
+- [الرئيسية](https://lightningeg.com/ar/index.html): كل فلوسك في صورة واحدة واضحة، مع مزايا الموبايل والكمبيوتر والخصوصية.
 - [المزايا](https://lightningeg.com/ar/features.html)
 - [طريقة الاستخدام](https://lightningeg.com/ar/how-it-works.html)
 - [الحالة والتنزيلات](https://lightningeg.com/ar/current-status.html)
