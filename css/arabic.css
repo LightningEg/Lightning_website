@@ -49,3 +49,8 @@ html[dir=rtl] .t-wire i+i{animation-name:t-to-pc-rtl}
 @keyframes t-to-pc-rtl{0%{transform:translateX(-100px);opacity:0}15%,85%{opacity:1}100%{transform:translateX(0);opacity:0}}
 html[dir=rtl] .trio:hover .trio-left{transform:translate(10px,-40px)}
 html[dir=rtl] .trio:hover .trio-right{transform:translate(-10px,-40px)}
+
+/* How It Works: the setup list pads its start side (the English rule pads the left), and counts in Arabic-Indic digits. */
+html[dir=rtl] .hw-setup li{padding:16px 52px 16px 16px}
+html[dir=rtl] .hw-setup li::before{content:counter(s,arabic-indic)}
+html[dir=rtl] .status-setup li::before{content:counter(setup,arabic-indic)}

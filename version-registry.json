@@ -3,11 +3,46 @@
   "archive_rule": "Copy the live page to archive/<release-id>.html before changing it, add its direct archive URL here, then give the changed live page a new release ID.",
   "releases": [
     {
-      "id": "UX-2026.10.10.14",
-      "name": "Version Archive · Unified navigation tabs",
+      "id": "UX-2026.10.12.05",
+      "name": "Version Archive · Landing-system pages",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.04",
+      "name": "Sample Profiles · Landing system",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.03",
+      "name": "Release Log · Landing system",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.02",
+      "name": "Current Status · Landing system",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.01",
+      "name": "How It Works · Landing system",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.10.14",
+      "name": "Version Archive · Unified navigation tabs",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.10.14.html"
     },
     {
       "id": "UX-2026.10.10.13",
@@ -55,8 +90,8 @@
       "id": "UX-2026.10.10.07",
       "name": "Sample Profiles · Amr's business support work",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.10.07.html"
     },
     {
       "id": "UX-2026.10.10.04",
@@ -69,8 +104,8 @@
       "id": "UX-2026.10.10.05",
       "name": "Current Status · Abdelrahman sample profile",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.10.05.html"
     },
     {
       "id": "UX-2026.10.10.06",
@@ -1315,8 +1350,8 @@
       "id": "UX-2026.10.09.10",
       "name": "how-it-works.html · Arabic language switch",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.10.html"
     },
     {
       "id": "UX-2026.10.09.11",
@@ -1385,8 +1420,8 @@
       "id": "UX-2026.10.09.20",
       "name": "release-log.html · Arabic language switch",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.09.20.html"
     },
     {
       "id": "UX-2026.10.09.21",

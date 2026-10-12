@@ -1,5 +1,5 @@
 /* Motion (UX-2026.10.06.20): small, fast and only where it explains a number. Loads with js/motion.js on
-   the home page, Features, How It Works, Current Status, Money Guides and every guide.
+   the home page, Features, How It Works, Current Status, Guides and every guide.
    Only transform and opacity move, so nothing re-lays out. The script adds .mo-wait to parts below the fold
    and .mo-in when they scroll into view (taken off again once done, so each part's own hover effects return);
    without the script, nothing is hidden. Moves use translate, never transform, so no part's own transform is lost.
