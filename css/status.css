@@ -22,7 +22,7 @@
 .status-download-shortcuts .status-inline-link{font-size:14px}
 .status-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);box-shadow:var(--shadow)}
 .status-table{width:100%;min-width:760px;border-collapse:collapse;text-align:start}
-.status-table th,.status-table td{padding:20px 22px;border-bottom:1px solid var(--line);vertical-align:middle}
+.status-table th,.status-table td{text-align:start;padding:20px 22px;border-bottom:1px solid var(--line);vertical-align:middle}
 .status-table thead th{background:var(--field);color:var(--muted);font:800 13px/1.2 var(--body)}
 .status-table tbody tr:last-child>*{border-bottom:0}
 .status-table tbody th{width:18%;color:var(--ink);font:800 18px/1.2 var(--display);letter-spacing:-.02em}
