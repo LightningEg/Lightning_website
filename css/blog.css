@@ -23,6 +23,15 @@
 .blog-body strong{color:var(--ink);font-weight:600}
 .blog-body ul,.blog-body ol{margin:0 0 20px;padding-inline-start:24px;color:var(--ink2)}
 .blog-body li{margin:8px 0;padding-inline-start:4px}
+.blog-answer{margin:0 0 24px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:var(--paper);color:var(--ink2);font-size:18px;line-height:1.95}
+.blog-answer strong{display:block;margin-bottom:4px;color:var(--green-text);font-size:14px;font-weight:600}
+.blog-toc{margin:0 0 36px;padding:18px 22px;border-radius:18px;background:var(--t-green)}
+.blog-toc strong{display:block;margin-bottom:6px;color:var(--ink);font-size:14px;font-weight:600}
+.blog-toc ol{margin:0;padding:0;list-style:none;color:var(--ink2);font-size:16px;line-height:2}
+.blog-toc a{color:inherit;text-decoration:none}
+.blog-toc a:hover{color:var(--green-text)}
+.blog-body h2{scroll-margin-top:84px}
+.blog-body ol{list-style-type:arabic-indic}
 .blog-note{margin:24px 0;padding:20px 22px;border-inline-start:4px solid var(--green);border-radius:14px;background:var(--t-green);color:var(--ink2);line-height:1.9}
 .blog-example{margin:24px 0;padding:22px 24px;border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
 .blog-example h3{margin-top:0}
