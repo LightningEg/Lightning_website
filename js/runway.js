@@ -1,5 +1,5 @@
-// The runway (test.html prototype): scroll drives a dot along the cash line. GSAP + ScrollTrigger from js/vendor/.
-// Scroll-driven only (nothing moves on its own), so it plays with reduced motion on too, like the other small motion (README).
+// The runway: a dot rides along the cash line. GSAP + ScrollTrigger from js/vendor/.
+// Plays on its own in about 2 s when it scrolls into view and resets when you scroll back above it; small motion, so it also plays with reduced motion on (README).
 // Illustrative path between two real month ends (184,976 at 2026-09 and 165,937 at 2026-11); events carry no amounts.
 (() => {
   const root = document.querySelector('[data-runway]');
@@ -30,6 +30,11 @@
       safe.classList.toggle('on', p >= LOW + 0.1);
     };
     set(0);
-    ScrollTrigger.create({trigger: root, start: 'top 80px', end: 'bottom bottom', onUpdate: s => set(s.progress), onRefresh: s => set(s.progress)});
+    // Plays by itself in about 2 seconds when the section comes into view; scrolling back above it resets it to play again.
+    const state = {p: 0};
+    const tween = gsap.to(state, {p: 1, duration: 2.2, ease: 'power1.inOut', paused: true, onUpdate: () => set(state.p)});
+    const play = () => { tween.restart(); };
+    const reset = () => { tween.pause(0); set(0); };
+    ScrollTrigger.create({trigger: root, start: 'top 72%', end: 'bottom top', onEnter: play, onEnterBack: play, onLeaveBack: reset});
   }
 })();

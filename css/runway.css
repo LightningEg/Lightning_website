@@ -1,6 +1,6 @@
 /* The runway (test.html prototype). A dot rides the cash line across the next three months; salary, bills, the loan
    and the emergency fund drop in as it passes, and the figure rolls down to the lowest point, then "safe to spend".
-   Without the script the finished picture shows and nothing sticks. It is driven by scroll alone, so it also plays with reduced motion on. */
+   Without the script the finished picture shows and nothing sticks. It plays by itself in about two seconds when scrolled into view, and also with reduced motion on. */
 .rw{position:relative}
 .rw-stick{display:grid;gap:18px}
 .rw-card{position:relative;padding:20px 20px 12px;border:1px solid var(--line);border-radius:24px;background:var(--paper);box-shadow:var(--shadow)}
@@ -33,18 +33,23 @@
   .rw-events li{padding:10px 12px;font-size:13.5px}
   .rw-safe{width:100%;justify-content:center}
 }
-/* live: the section becomes a scroll scene; the stage sticks while the dot travels */
-.rw.is-live{height:230vh}
-.rw.is-live .rw-stick{position:sticky;top:76px}
+/* live: starts empty, then plays once in view */
 .rw.is-live .rw-events li{opacity:.28;transform:translateY(8px)}
 .rw.is-live .rw-events li.on{opacity:1;transform:none;transition:opacity .35s ease,transform .45s cubic-bezier(.25,.6,.3,1)}
 .rw.is-live .rw-safe{opacity:0;transform:translateY(8px)}
 .rw.is-live .rw-safe.on{opacity:1;transform:none;transition:opacity .4s ease,transform .5s cubic-bezier(.25,.6,.3,1)}
 .rw.is-live .rw-low,.rw.is-live .rw-lowdot{opacity:0}
 .rw.is-live .rw-low.on,.rw.is-live .rw-lowdot.on{opacity:1;transition:opacity .3s ease}
-@media (max-width:640px){.rw.is-live{height:200vh}.rw.is-live .rw-stick{top:68px}}
 /* desktop: the scene fits one screen, centred, instead of filling the page width */
 @media (min-width:901px){
-  .rw-stick{max-width:860px;margin-inline:auto}
-  .rw-svg{max-height:min(40vh,340px)}
+  .rw-stick{max-width:820px;margin-inline:auto;gap:12px}
+  .rw-svg{max-height:min(30vh,270px)}
+  .rw-card{padding:16px 20px 10px}
+  .rw-events li{padding:10px 14px}
 }
+@media (min-width:901px){
+  .rw-svg{max-height:min(24vh,230px)}
+  .rw-fig{font-size:clamp(32px,3.6vw,44px)}
+  #ahead .d-head,#runway .d-head{margin-bottom:16px}
+}
+@media (max-width:640px){.rw-events li span{display:none}.rw-events li{padding:9px 12px}}
