@@ -6,7 +6,9 @@
 .rw-card{position:relative;padding:20px 20px 12px;border:1px solid var(--line);border-radius:24px;background:var(--paper);box-shadow:var(--shadow)}
 .rw-svg{display:block;width:100%;height:auto;overflow:visible}
 .rw-grid line{stroke:var(--line);stroke-width:1}
-.rw-month{fill:var(--ink2);font:700 13px var(--body)}
+.rw-month{fill:var(--ink2);font:700 22px var(--body)}
+.rw-svg,.rw-grid{direction:ltr}
+[dir=rtl] .rw-fig,[dir=rtl] .rw-events{direction:rtl}
 .rw-area{fill:url(#rw-fill);opacity:.9}
 .rw-line{fill:none;stroke:var(--azure);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .rw-ghost{fill:none;stroke:var(--line);stroke-width:4;stroke-dasharray:2 10;stroke-linecap:round}

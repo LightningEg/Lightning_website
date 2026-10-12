@@ -14,7 +14,7 @@
     const len = line.getTotalLength(), LOW = 0.74, FROM = 184976, TO = 165937;
     root.classList.add('is-live');
     line.style.strokeDasharray = len;
-    const fmt = n => Math.round(n).toLocaleString('en-US');
+    const fmt = n => Math.round(n).toLocaleString(document.documentElement.lang.startsWith('ar') ? 'ar-EG' : 'en-US');
     const set = p => {
       const at = Math.min(p / LOW, 1), t = Math.min(p / LOW, 1);
       line.style.strokeDashoffset = len * (1 - Math.min(p / 0.95, 1));
@@ -24,7 +24,7 @@
       const e = 1 - Math.pow(1 - t, 2);
       fig.textContent = fmt(FROM + (TO - FROM) * e);
       items.forEach((li, i) => li.classList.toggle('on', p > 0.12 + i * 0.17));
-      cap.textContent = p >= LOW ? 'Cash at its lowest month end, 2026-11' : 'Cash heading to its lowest point';
+      cap.textContent = p >= LOW ? cap.dataset.low : cap.dataset.go;
       lows.forEach(n => n.classList.toggle('on', p >= LOW));
       safe.classList.toggle('on', p >= LOW + 0.1);
     };

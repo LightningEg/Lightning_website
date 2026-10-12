@@ -1651,13 +1651,20 @@
       "id": "UX-2026.10.12.37",
       "name": "Lightning · Search copy tightened",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.37.html"
     },
     {
       "id": "UX-2026.10.12.38",
       "name": "Features · Search copy tightened",
       "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.12.39",
+      "name": "Lightning · Runway",
+      "page": "index.html",
       "status": "current",
       "archive_url": null
     }
