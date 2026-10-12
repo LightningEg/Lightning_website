@@ -1,6 +1,6 @@
 /* The runway (test.html prototype). A dot rides the cash line across the next three months; salary, bills, the loan
    and the emergency fund drop in as it passes, and the figure rolls down to the lowest point, then "safe to spend".
-   Without the script, or with reduced motion, the finished picture shows and nothing sticks. */
+   Without the script the finished picture shows and nothing sticks. It is driven by scroll alone, so it also plays with reduced motion on. */
 .rw{position:relative}
 .rw-stick{display:grid;gap:18px}
 .rw-card{position:relative;padding:20px 20px 12px;border:1px solid var(--line);border-radius:24px;background:var(--paper);box-shadow:var(--shadow)}
@@ -43,4 +43,3 @@
 .rw.is-live .rw-low,.rw.is-live .rw-lowdot{opacity:0}
 .rw.is-live .rw-low.on,.rw.is-live .rw-lowdot.on{opacity:1;transition:opacity .3s ease}
 @media (max-width:640px){.rw.is-live{height:200vh}.rw.is-live .rw-stick{top:68px}}
-@media (prefers-reduced-motion:reduce){.rw.is-live{height:auto}.rw.is-live .rw-stick{position:static}}

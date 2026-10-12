@@ -1,8 +1,9 @@
 // The runway (test.html prototype): scroll drives a dot along the cash line. GSAP + ScrollTrigger from js/vendor/.
+// Scroll-driven only (nothing moves on its own), so it plays with reduced motion on too, like the other small motion (README).
 // Illustrative path between two real month ends (184,976 at 2026-09 and 165,937 at 2026-11); events carry no amounts.
 (() => {
   const root = document.querySelector('[data-runway]');
-  if (!root || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if (!root) return;
   const here = document.currentScript.src;
   const load = f => new Promise((ok, no) => { const s = document.createElement('script'); s.src = new URL('vendor/' + f, here).href; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   load('gsap.min.js?v=3.15.0').then(() => load('ScrollTrigger.min.js?v=3.15.0')).then(run, () => {});
