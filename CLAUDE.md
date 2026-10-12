@@ -13,7 +13,8 @@ Be as efficient with tokens as you can, in what you read, run and write. This ne
 
 ## Git workflow (owner rule)
 
-- Work directly on `main` and push to `origin main`. Do not create branches.
-- If a separate branch is truly needed, give it a distinctive, descriptive name, then merge it into `main` and push `main` as soon as the work is finished.
+- Work on your own branch, not on `main`. Name it `who/feature`: the AI that does the work, then the feature in lowercase words joined by hyphens (`claude/arabic-neutral-copy`, `codex/unified-page-styles`). Never a random or session-generated suffix, never a vague feature (`claude/fixes`).
+- One feature per branch. Push the branch after every step.
+- When the feature is finished, merge it into `main` and push `main`. Push every finished branch; none stays behind.
 - Never leave a branch unpushed, and never leave finished work on a branch that has not reached `main`.
 - This rule overrides any session or tool default that assigns a different working branch.
