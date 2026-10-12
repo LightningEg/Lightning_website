@@ -12,68 +12,104 @@
 <meta property="og:description" content="Explore four fictional Egyptian financial profiles and the money question each sample helps you understand.">
 <meta property="og:url" content="https://lightningeg.com/sample-profiles.html"><meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
 <meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#E3F6EC">
-<link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/brand/lightning-app-icon.svg?v=20261003-1" type="image/svg+xml">
+<link rel="icon" href="assets/brand/lightning-icon-64.png?v=20261003-1" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/brand/lightning-icon-180.png?v=20261003-1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/version-c.css?v=20261002-2"><link rel="stylesheet" href="css/sample-profiles.css?v=20261010-1">
-<link rel="stylesheet" href="css/theme.css?v=20260930-1"><link rel="stylesheet" href="css/signup-band.css?v=20261004-1">
-<script src="js/theme.js?v=20260930-1"></script><script src="js/analytics.js?v=20261007-1" defer></script><script src="js/signup.js?v=20261004-1" defer></script>
+<link rel="stylesheet" href="css/landing.css?v=20261010-2">
+<link rel="stylesheet" href="css/home.css?v=20261010-2">
+<link rel="stylesheet" href="css/sample-profiles.css?v=20261012-1">
+<link rel="stylesheet" href="css/theme.css?v=20260930-1">
+<script src="js/theme.js?v=20260930-1"></script>
+<link rel="stylesheet" href="css/ux-test.css?v=20260928-1">
+<link rel="stylesheet" href="css/dev-dock.css?v=20261004-1">
+<script src="js/dev-dock.js?v=20261005-1" defer></script>
+<script src="js/ux-test.js?v=20260928-1" defer></script>
+<script src="js/analytics.js?v=20261007-1" defer></script>
+<link rel="stylesheet" href="css/signup-band.css?v=20261004-1">
 </head>
-<body>
-<header class="c-nav">
+<body data-ux-version="UX-2026.10.12.04" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<div class="d-bar">
   <div class="wrap">
-    <a class="logo" href="index.html"><img src="assets/brand/lightning-mark.svg" alt="">Lightning</a>
-    <nav class="c-nav-links" aria-label="Main"><a href="index.html">Home</a><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Current Status</a></nav>
-    <button data-theme-toggle aria-label="Dark mode"></button><a class="lang-switch" href="ar/index.html" lang="ar-EG" dir="rtl">العربية</a>
-    <a class="btn btn-primary nav-cta" href="survey.html">Take the survey</a>
+    <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
+    <nav class="d-links" aria-label="Main">
+      <a href="index.html" data-home-link>Home</a>
+      <a href="features.html">Features</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="current-status.html">Current Status</a>
+    </nav>
+    <div class="d-bar-end">
+      <button data-theme-toggle aria-label="Dark mode"></button>
+      <a class="lang-switch" href="ar/index.html" lang="ar-EG" dir="rtl">العربية</a>
+      <a class="btn btn-primary nav-cta" href="survey.html"><span class="cta-long">Take the survey</span><span class="cta-short">Survey</span></a>
+    </div>
   </div>
-</header>
+</div>
 
-<main>
-  <header class="profiles-hero wrap">
-    <div class="eyebrow">Sample households</div>
-    <h1>Four Money Stories.<br><span class="grad-text">Four Better Questions.</span></h1>
-    <p>Fictional Egyptian households, built to show the choices behind a number—not to prescribe one right way to handle money.</p>
-    <a class="btn btn-primary" href="#stories">Choose a story <span aria-hidden="true">↓</span></a>
+
+<main class="wrap" id="top">
+  <header class="d-hero">
+    <p class="label">Sample households</p>
+    <h1 style="--fit:11.2">Four Money Stories. <span>Four Better Questions.</span></h1>
+    <p class="d-hero-line">Fictional Egyptian households, built to show the choices behind a number, not to prescribe one right way to handle money.</p>
+    <div class="d-actions">
+      <a class="btn btn-vivid" href="#stories">Choose a story</a>
+      <a class="btn btn-secondary" href="#load">How to load a profile</a>
+    </div>
+    <p class="c-free">Fictional data. Free to use. No bank login.</p>
   </header>
 
-  <nav class="profile-jump wrap" aria-label="Profile stories">
+  <nav class="profile-jump" aria-label="Profile stories">
     <a href="#amr"><span>01</span>Amr <small>Cash flow</small></a><a href="#abdelrahman"><span>02</span>Abdelrahman <small>Consistency</small></a><a href="#menna"><span>03</span>Menna <small>Safety</small></a><a href="#fatma"><span>04</span>Fatma <small>Reserve</small></a>
   </nav>
 
-  <section class="profile-load wrap" aria-labelledby="load-title">
-    <div class="sec-head"><div class="eyebrow">How to load a profile</div><h2 id="load-title">A Few Clicks in Lightning.</h2><p>Each built-in profile loads its accounts and sample activity into an empty Lightning profile.</p></div>
-    <ol><li><span>1</span><div><h3>Open an Empty Profile</h3><p>Create a profile for sample data, or select an existing empty one. Samples cannot be added to a ledger that already has accounts.</p></div></li><li><span>2</span><div><h3>Choose a Story</h3><p>Select a profile, then choose <b>Load sample</b>. Lightning creates the accounts and adds the fictional transactions.</p></div></li><li><span>3</span><div><h3>Explore the Numbers</h3><p>Open Overview, Expenses, Budget, Investments or Cash planning to see the pattern behind that profile.</p></div></li></ol>
+  <section class="d-section" id="load" aria-labelledby="load-title">
+    <div class="d-head"><p class="label">How to load a profile</p><h2 id="load-title">A Few Clicks in Lightning.</h2><p>Each built-in profile loads its accounts and sample activity into an empty Lightning profile.</p></div>
+    <ol class="profile-steps"><li class="card card-support"><span>1</span><div><h3>Open an Empty Profile</h3><p>Create a profile for sample data, or select an existing empty one. Samples cannot be added to a ledger that already has accounts.</p></div></li><li class="card card-support"><span>2</span><div><h3>Choose a Story</h3><p>Select a profile, then choose <b>Load sample</b>. Lightning creates the accounts and adds the fictional transactions.</p></div></li><li class="card card-support"><span>3</span><div><h3>Explore the Numbers</h3><p>Open Overview, Expenses, Budget, Investments or Cash planning to see the pattern behind that profile.</p></div></li></ol>
   </section>
 
-  <section class="profiles wrap" id="stories" aria-labelledby="stories-title">
-    <div class="sec-head"><div class="eyebrow">Pick a real question</div><h2 id="stories-title">The Number Only Matters in Context.</h2><p>Each story starts with a different financial reality, then names the question worth exploring.</p></div>
+  <section class="d-section profiles" id="stories" aria-labelledby="stories-title">
+    <div class="d-head"><p class="label">Pick a real question</p><h2 id="stories-title">The Number Only Matters in Context.</h2><p>Each story starts with a different financial reality, then names the question worth exploring.</p></div>
 
-    <article class="profile card cash" id="amr">
+    <article class="card card-support profile cash" id="amr">
       <div class="profile-number">01</div><div class="profile-copy"><p class="profile-label">Cash flow</p><h3>Amr · The Savvy Businessman</h3><p>Amr works an engineering job in Cairo and earns EGP 14,500 a month. Alongside it, he occasionally helps businesses with technical freelance and outsourced projects. Those payments are unpredictable: some months bring nothing, while others add EGP 7,000–22,000. Rent, food, family support and bills keep arriving, and a few project costs need to be paid before the client settles.</p></div>
       <aside class="profile-question"><span>Explore</span><b>Which months run short, how much cash to keep back, and what changes if a client payment arrives late.</b><small>Opening cash: <strong>28,000 EGP</strong> · No debt assumed</small></aside>
     </article>
 
-    <article class="profile card steady" id="abdelrahman">
+    <article class="card card-support profile steady" id="abdelrahman">
       <div class="profile-number">02</div><div class="profile-copy"><p class="profile-label">Consistency</p><h3>Abdelrahman · The Steady Engineer</h3><p>Abdelrahman is a salaried engineer in Giza. His pay rises from EGP 32,000 to EGP 36,000 over the year, with a performance bonus. He keeps daily spending measured and invests around EGP 6,000–8,500 a month in a fictional equity fund. In June, a new laptop and an unplanned weekend push spending well above his normal month.</p></div>
       <aside class="profile-question"><span>Explore</span><b>How a one-off overspend affects his savings rate and steady investment habit over time.</b><small>Opening cash: <strong>60,000 EGP</strong> · Equity prices are illustrative</small></aside>
     </article>
 
-    <article class="profile card safety" id="menna">
+    <article class="card card-support profile safety" id="menna">
       <div class="profile-number">03</div><div class="profile-copy"><p class="profile-label">Safety</p><h3>Menna · The Freelance Artist</h3><p>Menna lives in Alexandria and illustrates for agencies and small businesses. Her invoices range from EGP 8,000 to EGP 33,000, with a few months where no client payment arrives. Materials, rent, transport and everyday costs continue between projects, so she draws on a modest cash reserve during quiet stretches. By October, only EGP 4,000 is set aside against a EGP 60,000 emergency-fund target.</p></div>
       <aside class="profile-question"><span>Explore</span><b>How large a buffer helps bridge late invoices and how to pace spending after a good month.</b><small>Opening cash: <strong>60,000 EGP</strong> · Income is irregular by design</small></aside>
     </article>
 
-    <article class="profile card reserve" id="fatma">
+    <article class="card card-support profile reserve" id="fatma">
       <div class="profile-number">04</div><div class="profile-copy"><p class="profile-label">Emergency reserve</p><h3>Fatma · The Household Organiser</h3><p>Fatma works in Cairo and earns EGP 18,000 a month. She keeps track of groceries, rent, utilities, school costs and household supplies. Those planned costs average about EGP 17,300, leaving a small monthly margin. A refrigerator repair in June costs EGP 7,800 and comes from her savings; EGP 7,800 remains designated for the next unexpected cost, against a gradual EGP 54,000 target.</p></div>
       <aside class="profile-question"><span>Explore</span><b>How a gradual emergency fund absorbs an unexpected repair without making ordinary months feel impossible.</b><small>Opening cash: <strong>30,000 EGP</strong> · Salary and spending are fictional</small></aside>
     </article>
   </section>
 
-  <section class="profiles-note wrap" aria-labelledby="note-title"><div class="profiles-note__mark" aria-hidden="true">↗</div><div><div class="eyebrow">Made for learning</div><h2 id="note-title">Start with a Question, Not a Target.</h2><p>These profiles are fictional examples. Their amounts, income and goals are not advice or a benchmark for your household.</p></div><a class="btn btn-secondary" href="current-status.html#start">Try Mohab’s sample year</a></section>
+  <section class="d-section" aria-labelledby="note-title"><div class="card card-lead profiles-note"><div><p class="label">Made for learning</p><h2 id="note-title">Start with a Question, Not a Target.</h2><p>These profiles are fictional examples. Their amounts, income and goals are not advice or a benchmark for your household.</p></div><a class="btn btn-primary" href="current-status.html#start">Try Mohab’s sample year</a></div></section>
 
-  <div class="wrap"><section class="sb" id="join" aria-labelledby="sb-title"><div class="sb-copy"><p class="sb-label">Beta testers wanted</p><h2 id="sb-title">Help Us Shape the Future of Lightning.</h2><p>Your opinion decides what we build next. Take the 3–5 minute survey and we’ll invite you to the beta, and to our testers’ community on WhatsApp.</p></div><div class="sb-actions"><a class="sb-btn sb-survey" href="survey.html">Take the survey · 3–5 min</a><p class="sb-or">or get news of each build</p><form id="email-signup" data-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec"><input type="hidden" name="form_type" value="signup"><input type="hidden" name="page_url" value=""><label for="signup-email" class="sr-only">Email</label><input id="signup-email" type="email" name="email" required autocomplete="email" placeholder="Email"><button class="sb-btn" type="submit">Get early access</button></form><p class="sb-status" id="signup-status" role="status"></p></div></section></div>
+  <section class="sb" id="join" aria-labelledby="sb-title"><div class="sb-copy"><p class="sb-label">Beta testers wanted</p><h2 id="sb-title">Help Us Shape the Future of Lightning.</h2><p>Your opinion decides what we build next. Take the 3–5 minute survey and we’ll invite you to the beta, and to our testers’ community on WhatsApp.</p></div><div class="sb-actions"><a class="sb-btn sb-survey" href="survey.html">Take the survey · 3–5 min</a><p class="sb-or">or get news of each build</p><form id="email-signup" data-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec"><input type="hidden" name="form_type" value="signup"><input type="hidden" name="page_url" value=""><label for="signup-email" class="sr-only">Email</label><input id="signup-email" type="email" name="email" required autocomplete="email" placeholder="Email"><button class="sb-btn" type="submit">Get early access</button></form><p class="sb-status" id="signup-status" role="status"></p></div></section>
+
+  <section class="l-sign" aria-label="Lightning">
+    <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="40" height="56">
+    <p>Study Your Patterns. <span>Control Your Future.</span></p>
+  </section>
 </main>
-<div class="wrap"><div class="c-motto"><div class="c-motto-brand"><img src="assets/brand/lightning-mark.svg" alt="" aria-hidden="true"><span>Lightning</span></div><div>Study Your Patterns. <span class="grad-text">Control Your Future.</span></div></div><footer class="c-foot"><span>Lightning · Made in Egypt</span><nav aria-label="Footer"><a href="features.html">Features</a><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="survey.html">Survey</a></nav></footer></div>
+<div class="wrap">
+  <footer class="d-foot">
+    <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>Made in Egypt</span></div>
+    <nav aria-label="Footer"><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Current Status</a><a href="guides.html">Guides</a><a href="release-log.html">Release Log</a><a href="survey.html">Survey</a></nav>
+  </footer>
+</div>
+
+
+<script src="js/landing.js?v=20261005-1"></script>
 </body>
 </html>

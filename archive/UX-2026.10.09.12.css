@@ -1,0 +1,9 @@
+/* Money guides (guides.html and each guide page): only what css/landing.css and css/home.css lack. Loads after both. */
+/* a guide card is the whole link: the card header (B02), no underline */
+.g-link{color:inherit;text-decoration:none;transition:border-color .2s,transform .2s}
+.g-link:hover{border-color:var(--line-ctl);transform:translateY(-2px)}
+.g-link:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.g-link h3{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.g-link,.g-link:hover{transition:none;transform:none}}
+/* the trace on a guide stands alone, without the home page's tabs */
+.d-section > .c-trace{margin-top:0}
