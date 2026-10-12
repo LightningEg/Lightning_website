@@ -68,4 +68,6 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [التخطيط النقدي](https://lightningeg.com/ar/cash-flow-planner.html)
 - [استيراد كشف البنك](https://lightningeg.com/ar/bank-statement-budgeting.html)
 - [الخصوصية والعمل دون اتصال](https://lightningeg.com/ar/offline-personal-finance-app.html)
+- [سينك الموبايل والكمبيوتر من غير كلاود](https://lightningeg.com/ar/sync-phone-and-pc-without-cloud.html)
+- [متابعة فلوس شايلها لحد تاني](https://lightningeg.com/ar/track-money-you-hold-for-others.html)
 - [سجل التغييرات](https://lightningeg.com/ar/release-log.html)

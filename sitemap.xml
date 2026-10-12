@@ -105,10 +105,14 @@
   </url>
   <url>
     <loc>https://lightningeg.com/sync-phone-and-pc-without-cloud.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/sync-phone-and-pc-without-cloud.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/sync-phone-and-pc-without-cloud.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/track-money-you-hold-for-others.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/track-money-you-hold-for-others.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/track-money-you-hold-for-others.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
@@ -227,6 +231,18 @@
     <loc>https://lightningeg.com/ar/blog-irregular-income-budget.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-irregular-income-budget.html" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-irregular-income-budget.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/ar/sync-phone-and-pc-without-cloud.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/sync-phone-and-pc-without-cloud.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/sync-phone-and-pc-without-cloud.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/ar/track-money-you-hold-for-others.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/track-money-you-hold-for-others.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/track-money-you-hold-for-others.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
 </urlset>
