@@ -27,13 +27,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/version-d.css?v=20261004-1">
-<link rel="stylesheet" href="css/release-log.css?v=20261004-1">
+<link rel="stylesheet" href="css/landing.css?v=20261010-2">
+<link rel="stylesheet" href="css/home.css?v=20261010-2">
+<link rel="stylesheet" href="css/release-log.css?v=20261012-1">
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
 <script src="js/theme.js?v=20260930-1"></script>
 <link rel="stylesheet" href="css/ux-test.css?v=20260928-1">
 <link rel="stylesheet" href="css/dev-dock.css?v=20261004-1">
-<script src="js/dev-dock.js?v=20261004-3" defer></script>
+<script src="js/dev-dock.js?v=20261005-1" defer></script>
 <script src="js/ux-test.js?v=20260928-1" defer></script>
 <script src="js/analytics.js?v=20261007-1" defer></script>
 <link rel="stylesheet" href="css/signup-band.css?v=20261004-1">
@@ -63,25 +64,25 @@
   <div class="wrap">
     <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
     <nav class="d-links" aria-label="Main">
-      <a href="index.html" data-home-link >Home</a>
+      <a href="index.html" data-home-link>Home</a>
       <a href="features.html">Features</a>
       <a href="how-it-works.html">How It Works</a>
       <a href="current-status.html" aria-current="page">Current Status</a>
     </nav>
     <div class="d-bar-end">
-      <a class="lang-switch" href="ar/release-log.html" lang="ar-EG" dir="rtl">العربية</a>
       <button data-theme-toggle aria-label="Dark mode"></button>
-      <a class="btn btn-secondary btn-sm" href="survey.html"><span class="cta-long">Take the survey</span><span class="cta-short">Survey</span></a>
+      <a class="lang-switch" href="ar/release-log.html" lang="ar-EG" dir="rtl">العربية</a>
+      <a class="btn btn-primary nav-cta" href="survey.html"><span class="cta-long">Take the survey</span><span class="cta-short">Survey</span></a>
     </div>
   </div>
 </div>
 
 <main class="wrap" id="top">
-  <header class="d-hero log-hero">
+  <header class="d-hero">
     <p class="label">Release log</p>
-    <h1>What Changed, <span>Build by Build.</span></h1>
+    <h1 style="--fit:8.6">What Changed, <span>Build by Build.</span></h1>
     <p class="d-hero-line">What’s in the Windows and Android beta, build by build, and what we’re still fixing.</p>
-    <div class="d-actions"><a class="btn btn-primary" href="current-status.html#downloads">Download the beta</a><a class="btn btn-secondary" href="app-feedback.html">Send feedback</a></div>
+    <div class="d-actions"><a class="btn btn-vivid" href="current-status.html#downloads">Download the beta</a><a class="btn btn-secondary" href="app-feedback.html">Send feedback</a></div>
     <p class="log-meta"><span>In the download <span class="log-id">Lightning 1 Beta</span></span><span>Released <b>2026-10-07</b></span><span><a href="current-status.html#downloads">0.4.0 beta 1</a> is still available</span></p>
   </header>
 
@@ -121,15 +122,20 @@
       <p class="sb-status" id="signup-status" role="status"></p>
     </div>
   </section>
+
+  <section class="l-sign" aria-label="Lightning">
+    <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="40" height="56">
+    <p>Study Your Patterns. <span>Control Your Future.</span></p>
+  </section>
 </main>
 
 <div class="wrap">
   <footer class="d-foot">
-    <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>Study your patterns. Control your future.</span><span>Made in Egypt</span></div>
+    <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>Made in Egypt</span></div>
     <nav aria-label="Footer"><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Current Status</a><a href="release-log.html">Release Log</a><a href="survey.html">Survey</a></nav>
   </footer>
 </div>
 
-<script src="js/version-d.js?v=20261003-1"></script>
+<script src="js/landing.js?v=20261005-1"></script>
 </body>
 </html>
