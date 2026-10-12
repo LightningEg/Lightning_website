@@ -3,7 +3,7 @@
 .label,.l-game-k{text-transform:none;letter-spacing:.01em;word-spacing:0}
 .l-game-k{font-size:14px}
 .label{font-size:13px}
-/* the sign-off is ink: the hero punch line is the only gradient (B11) */
+/* the sign-off is ink: the hero punch line is the only gradient (B12) */
 .l-sign span{background:none;color:var(--ink)}
 .c-free{margin-top:14px;color:var(--muted);font:700 14px/1.4 var(--body)}
 
