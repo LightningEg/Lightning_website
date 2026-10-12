@@ -28,7 +28,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="../css/version-c.css?v=20261010-1">
+<link rel="stylesheet" href="../css/landing.css?v=20261010-2">
+<link rel="stylesheet" href="../css/home.css?v=20261010-2">
+<link rel="stylesheet" href="../css/how-it-works.css?v=20261012-1">
 <link rel="stylesheet" href="../css/motion.css?v=20261006-4">
 <script src="../js/motion.js?v=20261010-1" defer></script>
 <link rel="stylesheet" href="../css/theme.css?v=20261010-1">
@@ -47,30 +49,41 @@
 <link rel="stylesheet" href="../css/arabic.css?v=20261012-1">
 </head>
 <body>
-<div class="c-nav">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4M3 7l2 2 4-4M13 6h8M13 12h8M13 18h8"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18M3 9h18M3 15h18"/></symbol>
+</svg>
+
+<div class="d-bar">
   <div class="wrap">
-    <a class="logo" href="index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
-    <nav class="c-nav-links" aria-label="التنقل الرئيسي">
-      <a class="nav-home" href="index.html" data-home-link>الرئيسية</a><a href="features.html">المزايا</a>
+    <a class="d-lockup" href="index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
+    <nav class="d-links" aria-label="التنقل الرئيسي">
+      <a href="index.html" data-home-link>الرئيسية</a>
+      <a href="features.html">المزايا</a>
       <a href="how-it-works.html" aria-current="page">كيف يعمل</a>
       <a href="current-status.html">التنزيل</a>
     </nav>
-    <button data-theme-toggle aria-label="الوضع الداكن"></button>
-    <a class="lang-switch" href="../how-it-works.html" lang="en" dir="ltr">English</a>
-    <a class="btn btn-primary nav-cta" href="../survey.html"><span class="cta-long">أجب عن الاستبيان</span><span class="cta-short">الاستبيان</span></a>
+    <div class="d-bar-end">
+      <button data-theme-toggle aria-label="الوضع الداكن"></button>
+      <a class="lang-switch" href="../how-it-works.html" lang="en" dir="ltr">English</a>
+      <a class="btn btn-primary nav-cta" href="../survey.html"><span class="cta-long">أجب عن الاستبيان</span><span class="cta-short">الاستبيان</span></a>
+    </div>
   </div>
 </div>
 
 <main class="wrap" id="top">
   <!-- Hero: the half hour, and the three parts it splits into -->
-  <header class="hw-hero">
-    <div class="eyebrow">كيف يعمل</div>
-    <h1>نصف ساعة. <span class="grad-text">مرة في الشهر.</span></h1>
-    <p>في آخر الشهر، خذ كشف البنك، وعدّل بضعة صفوف، وراجع أرقامك. وطوال الشهر، تنتظر رسائل البنك على أندرويد مراجعتك.</p>
-    <div class="c-hero-actions">
-      <a class="btn btn-primary" href="#join">جرّبه مجانًا</a>
-      <a class="btn btn-secondary" href="current-status.html">نزّل التطبيق</a>
+  <header class="d-hero">
+    <p class="label">كيف يعمل</p>
+    <h1 style="--fit:7.6">نصف ساعة. <span>مرة في الشهر.</span></h1>
+    <p class="d-hero-line">في آخر الشهر، خذ كشف البنك، وعدّل بضعة صفوف، وراجع أرقامك. وطوال الشهر، تنتظر رسائل البنك على أندرويد مراجعتك.</p>
+    <div class="d-actions">
+      <a class="btn btn-vivid" href="current-status.html#downloads">نزّل التطبيق</a>
+      <a class="btn btn-secondary" href="features.html">المزايا</a>
     </div>
+    <p class="c-free">مجاني. لويندوز. بلا تسجيل دخول للبنك.</p>
     <nav class="hw-time" aria-label="نصف ساعتك كل شهر">
       <a href="#step-upload" style="--w:10"><b>١</b><span>ارفع الكشوف</span><small>١٠ دقائق</small></a>
       <a href="#step-adjust" style="--w:5"><b>٢</b><span>عدّل</span><small>٥ دقائق</small></a>
@@ -79,13 +92,16 @@
   </header>
 
   <!-- Once, before the first month -->
-  <section class="hw-setup card" aria-label="قبل أول شهر">
-    <div><span class="eyebrow">أول مرة فقط</span><h2>جهّزه في جلسة واحدة</h2></div>
-    <ol>
+  <section class="d-section" id="setup" aria-label="قبل أول شهر">
+    <div class="d-head">
+      <p class="label">أول مرة فقط</p>
+      <h2>جهّزه في جلسة واحدة</h2>
+    </div>
+    <div class="card card-support"><ol class="hw-setup">
       <li><b>أضف حساباتك</b><span>البنك، وفودافون كاش، والنقد، والشهادات، وTHNDR، والذهب، بأرصدة اليوم.</span></li>
       <li><b>أنشئ ميزانية</b><span>مبلغ ثابت، أو نسبة من المرتب، أو متوسط إنفاقك.</span></li>
       <li><b>سجّل ما هو قادم</b><span>الفواتير، والاشتراكات، والأقساط، والأموال التي تدّخرها.</span></li>
-    </ol>
+    </ol></div>
   </section>
 
   <!-- Steps 1 and 2: statements in, exceptions settled -->
@@ -106,7 +122,7 @@
         <p class="hw-tip"><span class="hw-tip-label">ملاحظة</span>لديك ملف PDF فقط؟ يعطيك لايتنينج تعليمات جاهزة لتحويله إلى ملف CSV بمساعد ذكاء اصطناعي.</p>
       </div>
       <div class="hw-media">
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · استيراد كشف حساب</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/import-upload.webp" data-caption="استيراد كشف حساب: ارفع ملف CSV الخاص بالحساب."><img src="../assets/app/mohab-year-2026-10-07/import-upload.webp" width="2000" height="1250" loading="lazy" alt="شاشة استيراد كشف الحساب في لايتنينج: رفع ملف CSV، واختيار تجهيز الملف بمساعد ذكاء اصطناعي."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · استيراد كشف حساب</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/import-upload.webp" data-caption="استيراد كشف حساب: ارفع ملف CSV الخاص بالحساب."><img src="../assets/app/mohab-year-2026-10-07/import-upload.webp" width="2000" height="1250" loading="lazy" alt="شاشة استيراد كشف الحساب في لايتنينج: رفع ملف CSV، واختيار تجهيز الملف بمساعد ذكاء اصطناعي."></button></div>
         <p class="hw-cap">ملف لكل حساب. ولم يُحفظ أي شيء بعد.</p>
       </div>
     </article>
@@ -127,61 +143,61 @@
         <p class="hw-tip"><span class="hw-tip-label">ملاحظة</span>فعّل «استخدم هذه الفئة المرة القادمة»، وسيُصنَّف كشف الشهر القادم تلقائيًا.</p>
       </div>
       <div class="hw-media has-pair">
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · مراجعة الاستيراد</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/import-review.webp" data-caption="مراجعة الاستيراد: الاسم في الكشف يبدو أنه طلبات، لذلك يسألك لايتنينج قبل أن يحفظ أي شيء."><img src="../assets/app/mohab-year-2026-10-07/import-review.webp" width="2000" height="1250" loading="lazy" alt="شاشة مراجعة الاستيراد لكشف مرتب CIB: صف طلبات بمبلغ −٣٨٥ جنيه محتاج قرار، وطلبات تطابق محتمل ولا توجد فئة بعد؛ وأوبر وكارفور وفودافون جاهزين."></button></div>
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · مرتب CIB</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/register.webp" data-caption="سجل الحساب: أضف مصروفًا نقديًا في صف واحد."><img src="../assets/app/mohab-year-2026-10-07/register.webp" width="2000" height="1250" loading="lazy" alt="سجل حساب مرتب CIB: عند كتابة أول حروف في صف جديد، يقترح عليك عيادة الأسنان وطلبات."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · مراجعة الاستيراد</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/import-review.webp" data-caption="مراجعة الاستيراد: الاسم في الكشف يبدو أنه طلبات، لذلك يسألك لايتنينج قبل أن يحفظ أي شيء."><img src="../assets/app/mohab-year-2026-10-07/import-review.webp" width="2000" height="1250" loading="lazy" alt="شاشة مراجعة الاستيراد لكشف مرتب CIB: صف طلبات بمبلغ −٣٨٥ جنيه محتاج قرار، وطلبات تطابق محتمل ولا توجد فئة بعد؛ وأوبر وكارفور وفودافون جاهزين."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · مرتب CIB</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/register.webp" data-caption="سجل الحساب: أضف مصروفًا نقديًا في صف واحد."><img src="../assets/app/mohab-year-2026-10-07/register.webp" width="2000" height="1250" loading="lazy" alt="سجل حساب مرتب CIB: عند كتابة أول حروف في صف جديد، يقترح عليك عيادة الأسنان وطلبات."></button></div>
         <p class="hw-cap">ما يحتاج إليك يأتي أولًا. والصفوف العادية لن تعطّلك.</p>
       </div>
     </article>
   </section>
 
   <!-- Step 3: three screens answer the questions of the month -->
-  <section class="hw-analysis" id="step-analyse" aria-labelledby="analyse-title">
-    <div class="hw-analysis-head">
+  <section class="d-section hw-analysis" id="step-analyse" aria-labelledby="analyse-title">
+    <div class="d-head">
       <div class="hw-num"><b>٣</b><span>حوالي ١٥ دقيقة</span></div>
       <h2 id="analyse-title">راجع أرقامك.</h2>
       <p>هذا أهم جزء. أعدّ كوب شاي، واختر الشهر الماضي. وفي النهاية، اختر تغييرًا واحدًا للشهر القادم.</p>
     </div>
     <div class="hw-bento">
-      <article class="hw-q wide">
+      <article class="card card-support hw-q wide">
         <div class="hw-q-copy"><span class="hw-min">دقيقتين</span><h3>كم يمكنك أن تنفق حتى المرتب؟</h3><p>التخطيط النقدي: المتاح للصرف حتى المرتب القادم، وما ستدفعه في الـ٣٠ يومًا القادمة.</p></div>
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>التخطيط النقدي</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-plan.webp" data-caption="التخطيط النقدي: المتاح للصرف، والـ٣٠ يومًا القادمة."><img src="../assets/app/mohab-year-2026-10-07/a-plan.webp" width="1800" height="1125" loading="lazy" alt="شاشة التخطيط النقدي: ١٧٨٬٤٢٣ جنيه متاح للصرف حتى ١ نوفمبر ٢٠٢٦، والنقد المتاح ٢١٩٬٥٦٦ جنيه، والمدفوعات في الـ٣٠ يومًا القادمة."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>التخطيط النقدي</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-plan.webp" data-caption="التخطيط النقدي: المتاح للصرف، والـ٣٠ يومًا القادمة."><img src="../assets/app/mohab-year-2026-10-07/a-plan.webp" width="1800" height="1125" loading="lazy" alt="شاشة التخطيط النقدي: ١٧٨٬٤٢٣ جنيه متاح للصرف حتى ١ نوفمبر ٢٠٢٦، والنقد المتاح ٢١٩٬٥٦٦ جنيه، والمدفوعات في الـ٣٠ يومًا القادمة."></button></div>
       </article>
-      <article class="hw-q">
+      <article class="card card-support hw-q">
         <div class="hw-q-copy"><span class="hw-min">٥ دقائق</span><h3>أين ذهبت أموالك؟</h3><p>تحليل المصاريف: أكبر الفئات، وهل زادت كل فئة أم قلّت، وهل هذا الشهر عادي أم لا.</p></div>
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>تحليل المصاريف</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-expenses.webp" data-caption="تحليل المصاريف: أين ذهبت الأموال، وكيف تحرّكت كل فئة."><img src="../assets/app/mohab-year-2026-10-07/a-expenses.webp" width="1800" height="1125" loading="lazy" alt="تحليل المصاريف لشهر سبتمبر ٢٠٢٦: ٢٨٬٨١٨ جنيه خرجت، وخريطة مربعات أولها السكن بنسبة ٤٢٪، ورسوم صغيرة لحركة كل فئة."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>تحليل المصاريف</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-expenses.webp" data-caption="تحليل المصاريف: أين ذهبت الأموال، وكيف تحرّكت كل فئة."><img src="../assets/app/mohab-year-2026-10-07/a-expenses.webp" width="1800" height="1125" loading="lazy" alt="تحليل المصاريف لشهر سبتمبر ٢٠٢٦: ٢٨٬٨١٨ جنيه خرجت، وخريطة مربعات أولها السكن بنسبة ٤٢٪، ورسوم صغيرة لحركة كل فئة."></button></div>
       </article>
-      <article class="hw-q">
+      <article class="card card-support hw-q">
         <div class="hw-q-copy"><span class="hw-min">٣ دقائق</span><h3>كيف حال صافي ثروتك؟</h3><p>النظرة العامة: كم تغيّر صافي ثروتك، وكم ادّخرت واستثمرت. أما الميزانية والاستثمارات فلكل منهما شاشتها.</p></div>
-        <div class="frame"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>النظرة العامة</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-overview.webp" data-caption="النظرة العامة: أين تقف، وكيف تغيّرت."><img src="../assets/app/mohab-year-2026-10-07/a-overview.webp" width="1800" height="1125" loading="lazy" alt="النظرة العامة من أول السنة: صافي الثروة زاد ٢٨٧٬٠٦٧ جنيه، ونسبة الادخار ٤٩٫٢٪، ونسبة الاستثمار ٣٧٫٣٪، وصافي الثروة ٤٣٢٬٤٦٧ جنيه."></button></div>
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>النظرة العامة</span></div><button class="zoom" type="button" data-zoom="../assets/app/mohab-year-2026-10-07/a-overview.webp" data-caption="النظرة العامة: أين تقف، وكيف تغيّرت."><img src="../assets/app/mohab-year-2026-10-07/a-overview.webp" width="1800" height="1125" loading="lazy" alt="النظرة العامة من أول السنة: صافي الثروة زاد ٢٨٧٬٠٦٧ جنيه، ونسبة الادخار ٤٩٫٢٪، ونسبة الاستثمار ٣٧٫٣٪، وصافي الثروة ٤٣٢٬٤٦٧ جنيه."></button></div>
       </article>
     </div>
   </section>
 
   <!-- Trust: no bank password, no server, nothing saved without you -->
-  <section class="c-section" id="trust">
-    <div class="sec-head">
-      <div class="eyebrow">يمكنك الوثوق به</div>
+  <section class="d-section" id="trust">
+    <div class="d-head">
+      <p class="label">يمكنك الوثوق به</p>
       <h2>أموالك عندك. والقرار لك.</h2>
       <p>من دون كلمة مرور البنك، ومن دون خادم في المنتصف.</p>
     </div>
-    <div class="hw-trust">
-      <article class="card"><span class="c-icon" aria-hidden="true">⌂</span><h3>على أجهزتك فقط</h3><p>بياناتك مشفّرة على هاتفك وحاسوبك، ولا تمرّ بأي خادم أبدًا. وفي كل مرة يُفتح فيها لايتنينج، يُنشئ نسخة احتياطية. <a href="offline-personal-finance-app.html">أين تُخزَّن بياناتك</a></p></article>
-      <article class="card"><span class="c-icon" aria-hidden="true">✓</span><h3>لا شيء من دون موافقتك</h3><p>الكشف ورسائل البنك تنتظر مراجعتك. ولا يُحفظ أي صف إلا بعد موافقتك.</p></article>
-      <article class="card"><span class="c-icon" aria-hidden="true">=</span><h3>كل رقم يوضّح مصدره</h3><p>كل رقم مهم يريك مما حُسب، ومع كل رسم جدول «اعرض الأرقام». والتقدير مكتوب عليه أنه تقدير.</p></article>
+    <div class="d-trust hw-trust">
+      <article class="card card-support"><span class="tile" aria-hidden="true"><svg class="icon"><use href="#i-lock"/></svg></span><h3>على أجهزتك فقط</h3><p>بياناتك مشفّرة على هاتفك وحاسوبك، ولا تمرّ بأي خادم أبدًا. وفي كل مرة يُفتح فيها لايتنينج، يُنشئ نسخة احتياطية. <a href="offline-personal-finance-app.html">أين تُخزَّن بياناتك</a></p></article>
+      <article class="card card-support"><span class="tile" aria-hidden="true"><svg class="icon"><use href="#i-checks"/></svg></span><h3>لا شيء من دون موافقتك</h3><p>الكشف ورسائل البنك تنتظر مراجعتك. ولا يُحفظ أي صف إلا بعد موافقتك.</p></article>
+      <article class="card card-support"><span class="tile" aria-hidden="true"><svg class="icon"><use href="#i-table"/></svg></span><h3>كل رقم يوضّح مصدره</h3><p>كل رقم مهم يريك مما حُسب، ومع كل رسم جدول «اعرض الأرقام». والتقدير مكتوب عليه أنه تقدير.</p></article>
     </div>
   </section>
 
   <!-- Go deeper: three guides, the rest one click away -->
-  <section class="c-section" id="guides" aria-labelledby="guides-title">
-    <div class="sec-head">
-      <div class="eyebrow">تعمّق أكثر</div>
+  <section class="d-section" id="guides" aria-labelledby="guides-title">
+    <div class="d-head">
+      <p class="label">تعمّق أكثر</p>
       <h2 id="guides-title">سؤال واحد. ودليل واحد.</h2>
       <p>كل دليل يتتبّع جزءًا من الشهر مع سنة مهاب، بجانب الشاشة الحقيقية.</p>
     </div>
     <div class="hw-guides">
-      <a class="card hw-guide" href="bank-statement-budgeting.html"><span class="eyebrow">كشف الحساب</span><h3>كيف أنشئ ميزانية من كشف البنك من دون كلمة المرور؟</h3><p>خذ ملف CSV، واضبط أعمدته مرة، وراجع كل صف.</p></a>
-      <a class="card hw-guide" href="expense-tracker-egypt.html"><span class="eyebrow">المصاريف</span><h3>أين ذهب المرتب؟</h3><p>كل جنيه خرج، حسب الفئة، من الكشوف ومن النقد.</p></a>
-      <a class="card hw-guide" href="investment-tracker-egypt.html"><span class="eyebrow">الاستثمار</span><h3>كيف أتابع الذهب والشهادات والأسهم معًا؟</h3><p>محفظة واحدة بالجنيه، وكم ربحت منها فعلًا هذه السنة.</p></a>
+      <a class="card card-support hw-guide" href="bank-statement-budgeting.html"><span class="label">كشف الحساب</span><h3>كيف أنشئ ميزانية من كشف البنك من دون كلمة المرور؟</h3><p>خذ ملف CSV، واضبط أعمدته مرة، وراجع كل صف.</p></a>
+      <a class="card card-support hw-guide" href="expense-tracker-egypt.html"><span class="label">المصاريف</span><h3>أين ذهب المرتب؟</h3><p>كل جنيه خرج، حسب الفئة، من الكشوف ومن النقد.</p></a>
+      <a class="card card-support hw-guide" href="investment-tracker-egypt.html"><span class="label">الاستثمار</span><h3>كيف أتابع الذهب والشهادات والأسهم معًا؟</h3><p>محفظة واحدة بالجنيه، وكم ربحت منها فعلًا هذه السنة.</p></a>
     </div>
     <div class="hw-guides-more"><a class="btn btn-secondary" href="guides.html">كل المقالات</a></div>
   </section>
@@ -200,20 +216,21 @@
       <p class="sb-status" id="signup-status" role="status"></p>
     </div>
   </section>
+
+  <section class="l-sign" aria-label="لايتنينج">
+    <img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="40" height="56">
+    <p>اعرف أين ذهبت أموالك. <span>وقرّر أين ستذهب.</span></p>
+  </section>
 </main>
 
 <div class="wrap">
-  <div class="c-motto" aria-label="شعار لايتنينج">
-    <div class="c-motto-brand"><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="" aria-hidden="true"><span>Lightning</span></div>
-    <div>اعرف أين ذهبت أموالك. <span class="grad-text">وقرّر أين ستذهب.</span></div>
-  </div>
-  <footer class="c-foot">
-    <span>لايتنينج · صُنع في مصر</span>
-    <nav aria-label="روابط آخر الصفحة"><a href="index.html" data-home-link>الرئيسية</a><a href="features.html">المزايا</a><a href="current-status.html">التنزيل</a><a href="guides.html">مقالات</a><a href="release-log.html">سجل التحديثات</a><a href="../survey.html">الاستبيان</a></nav>
+  <footer class="d-foot">
+    <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>صُنع في مصر</span></div>
+    <nav aria-label="روابط آخر الصفحة"><a href="features.html">المزايا</a><a href="how-it-works.html">كيف يعمل</a><a href="current-status.html">التنزيل</a><a href="guides.html">مقالات</a><a href="release-log.html">سجل التحديثات</a><a href="../survey.html">الاستبيان</a></nav>
   </footer>
 </div>
 
 <dialog class="lightbox" id="lightbox" aria-label="لقطة شاشة مكبّرة"><button type="button" aria-label="إغلاق" data-close>×</button><img alt=""><p></p></dialog>
-<script src="../js/version-c.js?v=20261010-1"></script>
+<script src="../js/landing.js?v=20261010-1"></script>
 </body>
 </html>

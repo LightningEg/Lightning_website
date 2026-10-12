@@ -42,3 +42,12 @@
 .blog-faq h2{margin-bottom:16px;font:600 30px/1.5 var(--display)}
 .blog-faq .d-faq{grid-template-columns:1fr}
 @media(max-width:760px){.blog-grid{grid-template-columns:1fr}.blog-hero{padding-top:48px}.blog-article{padding-top:40px}.blog-body{font-size:17px}}
+/* English editorial pages: Latin type scale and plain numbered lists. */
+html[lang="en"] .blog-body ol{list-style-type:decimal}
+html[lang="en"] .blog-body{font-size:17px;line-height:1.8}
+html[lang="en"] .blog-deck,html[lang="en"] .blog-answer,html[lang="en"] .blog-hero p{line-height:1.7}
+html[lang="en"] .blog-article h1,html[lang="en"] .blog-hero h1{line-height:1.15}
+html[lang="en"] .blog-body h2,html[lang="en"] .blog-faq h2,html[lang="en"] .blog-card h2{line-height:1.25}
+html[lang="en"] .blog-card p{line-height:1.6}
+html[lang="en"] .blog-toc ol{line-height:1.9}
+html[lang="en"] .blog-article .blog-links,html[lang="en"] .blog-article .blog-faq{margin-top:36px}

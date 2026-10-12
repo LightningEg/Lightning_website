@@ -34,6 +34,15 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Offline personal finance app](https://lightningeg.com/offline-personal-finance-app.html): where your data lives and why it stays on your PC.
 - [All guides](https://lightningeg.com/guides.html)
 
+## Blog (English)
+
+- [The Lightning Blog](https://lightningeg.com/blog.html): five practical articles about salary planning, expense tracking, emergency savings and irregular income.
+- [Why your salary runs out before the month ends](https://lightningeg.com/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
+- [How to split a 20,000 EGP salary in Egypt](https://lightningeg.com/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.
+- [How to see where your money goes each month](https://lightningeg.com/blog-track-expenses.html): track bank, cash and wallet spending without double-counting transfers.
+- [Emergency fund in EGP](https://lightningeg.com/blog-emergency-fund.html): calculate a reserve from essential household spending.
+- [How to budget when your income is irregular](https://lightningeg.com/blog-irregular-income-budget.html): plan around money received and seasonal changes.
+
 ## Blog (Egyptian Arabic)
 
 - [مدونة لايتنينج](https://lightningeg.com/ar/blog.html): five practical articles about salary planning, expense tracking, emergency savings and irregular income.

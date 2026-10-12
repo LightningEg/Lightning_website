@@ -13,18 +13,19 @@ index.html          the home page, the only live landing page: phone and PC conn
 version-b.html      redirect to index.html (Version B is archived)
 version-c.html      redirect to index.html (the old Version C address; its design is now the home page)
 how-it-works.html   the monthly 30-minute routine: upload, adjust, analyse
-release-log.html    release log: what changed build by build (Version D system; css/release-log.css)
+release-log.html    release log: what changed build by build (landing system; css/release-log.css)
 current-status.html shared beta hub: status, safe sample CSVs, builds and app feedback
 sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financial question each explores
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
 survey.html         optional personal finance survey
 features.html       Features: the five things it does best (each with a Mohab number), then all 94 features in eleven groups, the phone and PC last, with a jump to each (css/features.css)
-guides.html         Money Guides: the seven guides below, one card each; links to the Arabic blog library
+guides.html         Money Guides: the seven guides below, one card each; links to the blog library
 *-egypt.html, net-worth-tracker.html, cash-flow-planner.html, bank-statement-budgeting.html, offline-personal-finance-app.html
                     the guides: one search question each, answered with Mohab's year (see Search below)
 ar/                  Egyptian Arabic home page, Features, How It Works, Current Status («التنزيل»), Money Guides, seven guides and Release Log: the English design system, written for Egypt; each language switch opens the matching page
-ar/blog.html         Blog library for five Egyptian Arabic personal-finance articles; every article has its own canonical URL and structured data
+blog.html           Blog library for five English personal-finance articles (blog-*.html: salary-runs-out, budget-20000-egp, track-expenses, emergency-fund, irregular-income-budget); each has its own canonical URL, BlogPosting, BreadcrumbList and FAQPage data, and css/blog.css
+ar/blog.html         the same library and five articles in Egyptian Arabic (same file names under ar/); written for Egypt, not translated, with reciprocal hreflang and a language switch to the English page
 css/arabic.css       loaded last on ar/ pages: the Arabic faces at the English sizes and weights (B04, A06.2), the right-to-left gradient and the few x-axis movements that dir="rtl" can't flip
 assets/fonts/       Readex Pro (variable, to 700) and IBM Plex Sans Arabic 400–700 (Arabic subset only) and their OFL licenses, for the Arabic pages
 robots.txt          crawl rules and the sitemap's address
@@ -32,7 +33,7 @@ sitemap.xml         every page that should be in search, and nothing else
 css/styles.css      shared styles
 css/version-b.css   Version B's own sections (builds on css/version-c.css)
 js/version-b.js     Version B calculator with an adjustable return rate
-css/version-c.css   the old Version C system, still used by How It Works, Current Status, App Feedback and Versions
+css/version-c.css   the old Version C system, still used by App Feedback, Versions and the Arabic How It Works and Current Status
 js/version-c.js     the old Version C script, still used by How It Works
 css/landing.css     the landing pages: self-contained, guideline tokens and building blocks only
 css/home.css        the home page's own sections, loaded after css/landing.css
@@ -40,7 +41,9 @@ css/guides.css      the guide pages' few extras, loaded after css/home.css
 css/signup-band.css the signup band, the same on every page (guideline 3.20)
 js/signup.js        the signup form on pages whose own script doesn't handle it (Current Status)
 js/landing.js       the landing pages: calculator, tabs, lightbox and signup
-css/version-d.css   Version D's stylesheet, kept for the release log page
+css/version-d.css   Version D's stylesheet, kept for the Arabic release log page
+css/how-it-works.css, css/status.css (Current Status), css/sample-profiles.css, css/release-log.css
+                    the four English pages that now sit on the landing system (header, hero, headings, cards, signup band and footer are the home page's): only their own components live here
 js/analytics.js     GoatCounter page views and one event per download
 audit/              website audits against the guideline
 css/theme.css       light/dark switch
@@ -192,7 +195,7 @@ Lightning aims to be found first for **free personal finance for Egypt**, then f
 - **Every indexable page** has a title and description written for search, an absolute `<link rel="canonical" href="https://lightningeg.com/...">` (the home page is `https://lightningeg.com/`), Open Graph tags with `assets/brand/social-card.png`, and a line in `sitemap.xml`. Add all four to any new public page.
 - **Arabic pages** live under `/ar/`, use Egyptian Arabic (`lang="ar-EG"`, `dir="rtl"`), and have their own Arabic title, description, canonical, Open Graph metadata, structured data and sitemap entry. Add reciprocal `hreflang="ar-EG"` and `hreflang="en"` links on both language versions; each language switch opens the same page in the other language. Write for Egyptian search terms such as إدارة المصاريف في مصر and ميزانية شهرية, in natural Egyptian Arabic.
 - **Not in search:** survey, app feedback, the test page, the version archive, the brand guideline and every `archive/` snapshot carry `<meta name="robots" content="noindex,follow">` and stay out of the sitemap. Add the same line to each new snapshot (the one head change allowed on a snapshot besides brand-wide ones). `version-b.html` and `version-c.html` redirect to the home page and canonicalise to it. `robots.txt` blocks only files that are not pages (`audit/`, `analytics/`, `apps-script/`, the READMEs), because a blocked page can't show its noindex.
-- **Structured data:** the home page has `Organization`, `WebSite`, `SoftwareApplication` (free, Windows, FinanceApplication) and `FAQPage` (its seven visible questions); each guide has `WebPage` and `FAQPage` matching its visible questions; How It Works has `WebPage` and `HowTo` (its three steps); Features, Money Guides, Current Status and the Release Log have `WebPage`. Change the structured data whenever the visible text it repeats changes. Only true claims: no ratings, reviews or download counts until real ones exist. Update `softwareVersion` with each app release.
+- **Structured data:** the home page has `Organization`, `WebSite`, `SoftwareApplication` (free, Windows, FinanceApplication) and `FAQPage` (its seven visible questions); each guide has `WebPage` and `FAQPage` matching its visible questions; How It Works has `WebPage` and `HowTo` (its three steps); Features, Money Guides, Current Status and the Release Log have `WebPage`. Each blog article (English and Arabic) has `BlogPosting`, `BreadcrumbList` and `FAQPage` matching its visible questions; the blog libraries have `WebPage`, `BreadcrumbList` and `ItemList`. Change the structured data whenever the visible text it repeats changes. Only true claims: no ratings, reviews or download counts until real ones exist. Update `softwareVersion` with each app release.
 - **The guides** (`guides.html` lists them): net worth, budget, expenses, investments, safe to spend, bank statements, privacy. Each is built from the landing building blocks only (hero, a worked example beside its real screen, three cards or steps, good questions, keep reading, the signup band). Every figure comes from Mohab's year on 2026-10-04 and matches the screen beside it, as on the home page; recapture them together. They never mention other apps (B10, B11), so comparison pages are not built.
 - **Head-only changes** (title, description, canonical, social tags, structured data) don't change what a visitor sees, so they don't need a new release ID. Visible copy does.
 - **AI assistants:** `llms.txt` is a plain summary of what Lightning is, its key facts and every public page, for AI assistants and AI search. Update it when a fact on the site changes (price, platform, version, a new guide). `robots.txt` names the AI crawlers (Claude, ChatGPT, Perplexity, Gemini, Apple and others) to make the welcome explicit; they follow the same rules as everyone. Many AI crawlers do not run JavaScript, so every fact must be in the HTML as written; `js/motion.js` and `js/wow.js` stand down for crawlers, so a crawler that does run scripts also reads every figure as written.

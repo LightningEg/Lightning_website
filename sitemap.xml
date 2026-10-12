@@ -74,6 +74,42 @@
     <lastmod>2026-10-10</lastmod>
   </url>
   <url>
+    <loc>https://lightningeg.com/blog.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/blog-salary-runs-out.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-salary-runs-out.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-salary-runs-out.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/blog-budget-20000-egp.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-budget-20000-egp.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-budget-20000-egp.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/blog-track-expenses.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-track-expenses.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-track-expenses.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/blog-emergency-fund.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-emergency-fund.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-emergency-fund.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/blog-irregular-income-budget.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-irregular-income-budget.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-irregular-income-budget.html" />
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
     <loc>https://lightningeg.com/ar/index.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/index.html" />
@@ -163,26 +199,38 @@
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog-salary-runs-out.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-salary-runs-out.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-salary-runs-out.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog-budget-20000-egp.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-budget-20000-egp.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-budget-20000-egp.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog-track-expenses.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-track-expenses.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-track-expenses.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog-emergency-fund.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-emergency-fund.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-emergency-fund.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/ar/blog-irregular-income-budget.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/blog-irregular-income-budget.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/blog-irregular-income-budget.html" />
     <lastmod>2026-10-12</lastmod>
   </url>
 </urlset>
