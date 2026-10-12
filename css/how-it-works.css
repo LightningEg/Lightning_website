@@ -85,3 +85,11 @@
   .hw-media.has-pair .hw-cap{margin-top:14px;max-width:none}
   .hw-step{padding-top:40px}
 }
+
+/* Snapshots in "Sit Down for Analysis": every question gets the wide layout so its screen is shown large, not cropped small */
+@media (min-width:901px){
+  .hw-q{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.6fr);align-items:center;gap:32px}
+  .hw-q:nth-child(even){grid-template-columns:minmax(0,1.6fr) minmax(0,.7fr)}
+  .hw-q:nth-child(even) .hw-q-copy{order:2}
+  .hw-q h3{font-size:clamp(24px,3vw,28px)}
+}

@@ -410,3 +410,5 @@ button,input{font:inherit}
 
 /* Language switch shared by the English pages. */
 .lang-switch{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;border:1px solid var(--line,#dce8e1);border-radius:999px;color:inherit;text-decoration:none;font-weight:800;white-space:nowrap;font-size:.88rem}
+@media (min-width:641px) and (max-width:1000px){.d-links a{padding:8px 10px}.d-bar-end{gap:8px}.d-bar .cta-long{display:none}.d-bar .cta-short{display:inline}}
+@media (min-width:641px) and (max-width:800px){.d-links{display:none}}
