@@ -50,7 +50,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [المزايا](https://lightningeg.com/ar/features.html)
 - [طريقة الاستخدام](https://lightningeg.com/ar/how-it-works.html)
 - [الحالة والتنزيلات](https://lightningeg.com/ar/current-status.html)
-- [أدلة الفلوس](https://lightningeg.com/ar/guides.html)
+- [مقالات](https://lightningeg.com/ar/guides.html)
 - [صافي الثروة](https://lightningeg.com/ar/net-worth-tracker.html)
 - [الميزانية](https://lightningeg.com/ar/budget-app-egypt.html)
 - [تتبع المصاريف](https://lightningeg.com/ar/expense-tracker-egypt.html)
