@@ -58,13 +58,13 @@ button,input{font:inherit}
 .unit{margin-inline-start:5px;color:var(--muted);font:600 .3em/1 var(--body);letter-spacing:0}
 .tab{font-variant-numeric:tabular-nums;white-space:nowrap}
 /* section label: a short line above the heading that says what kind of section comes next (guideline 3.7, B02) */
-.label{display:inline-flex;align-items:center;gap:10px;color:var(--muted);font:800 12px/1.2 var(--body);letter-spacing:.1em;word-spacing:.15em;text-transform:uppercase}
+.label{display:inline-flex;align-items:center;gap:10px;color:var(--muted);font:800 13px/1.2 var(--body);letter-spacing:.01em;text-transform:none}
 .label::before{content:"";flex:none;width:19px;height:4px;border-radius:99px;background:var(--punch)}
 .label+h1,.label+h2{margin-top:16px}
 .icon{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- buttons (A10.1): 44 on the page, 36 in a card. Sentence case, no arrows ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;border:1px solid transparent;border-radius:999px;font:700 15px/1 var(--body);text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .2s,border-color .2s,filter .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 22px;border:1px solid transparent;border-radius:999px;font:700 15px/1 var(--body);text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .2s,border-color .2s,filter .2s}
 .btn-vivid{background:var(--vivid);color:#fff}
 .btn-vivid:hover{filter:brightness(1.06)}
 .btn-primary{background:var(--nile);color:var(--on-nile)}

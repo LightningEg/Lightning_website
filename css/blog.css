@@ -51,3 +51,7 @@ html[lang="en"] .blog-body h2,html[lang="en"] .blog-faq h2,html[lang="en"] .blog
 html[lang="en"] .blog-card p{line-height:1.6}
 html[lang="en"] .blog-toc ol{line-height:1.9}
 html[lang="en"] .blog-article .blog-links,html[lang="en"] .blog-article .blog-faq{margin-top:36px}
+
+/* one voice with the landing pages: English article titles and headings in the same weight and tracking (the Arabic sizes stay as css/arabic.css sets them) */
+html[lang="en"] .blog-article h1,html[lang="en"] .blog-hero h1{font-weight:800;letter-spacing:-.035em}
+html[lang="en"] .blog-body h2,html[lang="en"] .blog-faq h2,html[lang="en"] .blog-card h2{font-weight:800;letter-spacing:-.03em}

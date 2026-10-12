@@ -18,7 +18,7 @@ current-status.html shared beta hub: status, safe sample CSVs, builds and app fe
 sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financial question each explores
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
-survey.html         optional personal finance survey
+survey.html         optional personal finance survey (the landing system: the same top bar without the button, hero, card, tagline and footer; always light)
 features.html       Features: the five things it does best (each with a Mohab number), then all 94 features in eleven groups, the phone and PC last, with a jump to each (css/features.css)
 guides.html         Guides: the one library page, two cards (Using Lightning: the seven guides below; Budgeting basics: the five articles), each a list of the readers' questions linked to the page that answers it (css/guides.css `.g-lib`)
 *-egypt.html, net-worth-tracker.html, cash-flow-planner.html, bank-statement-budgeting.html, offline-personal-finance-app.html
@@ -38,7 +38,7 @@ js/version-c.js     the old Version C script, still used by How It Works
 css/landing.css     the landing pages: self-contained, guideline tokens and building blocks only
 css/home.css        the home page's own sections, loaded after css/landing.css
 css/guides.css      the guide pages' few extras, loaded after css/home.css
-css/signup-band.css the signup band, the same on every page (guideline 3.20)
+css/signup-band.css the signup band, the same on every page (guideline 3.20). It is the only gradient call-out card: any other closing prompt is a plain section (B06). Buttons: vivid only in the hero and for the band's survey, Nile primary elsewhere, 48px (top bar 40, inside tables 36)
 js/signup.js        the signup form on pages whose own script doesn't handle it (Current Status)
 js/landing.js       the landing pages: calculator, tabs, lightbox and signup
 css/version-d.css   Version D's stylesheet, kept for the Arabic release log page
@@ -62,7 +62,7 @@ js/current-status.js multi-ticket app feedback form behavior
 apps-script/        Apps Script receiver patches
 assets/samples/     fictional Mohab CSV files for safe beta imports
 assets/brand/       the two-leaf logo and icons (see Logo below); social-card.png is the 1200 × 630 link preview
-guideline/            Lightning guideline 3.27 in three documents: app.html (A, the PC app), website.html (B, this site) and phone.html (C, the phone); same folder as the app's guideline/
+guideline/            Lightning guideline 3.30 in three documents: app.html (A, the PC app), website.html (B, this site) and phone.html (C, the phone); same folder as the app's guideline/
 ```
 
 It's a static site with no build step and no dependencies. Fonts load from Google Fonts; the Arabic pages add Readex Pro and IBM Plex Sans Arabic, hosted here.

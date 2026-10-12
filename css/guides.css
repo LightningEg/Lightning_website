@@ -8,7 +8,7 @@
 /* the trace on a guide stands alone, without the home page's tabs */
 .d-section > .c-trace{margin-top:0}
 /* the Guides library: two cards, each a short title over a list of readers' questions, every question a link */
-.g-lib{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.g-lib{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
 .g-lib h2{font-size:clamp(24px,2.6vw,30px);line-height:1.1;letter-spacing:-.03em}
 .g-lib ul{list-style:none;margin:16px 0 0;padding:0}
 .g-lib li{border-top:1px solid var(--line)}

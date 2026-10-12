@@ -30,21 +30,14 @@
 .profile-question small{display:block;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink2);font:600 14px/1.45 var(--body)}
 .profile-question strong{color:var(--ink);font-weight:800}
 
-/* closing call-out: a lead card, like the signup band */
-.profiles-note{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:40px}
-.profiles-note h2{margin-top:12px;font-size:clamp(30px,3.6vw,40px);line-height:1.08;letter-spacing:-.035em}
-.profiles-note p:not(.label){max-width:44em;margin-top:12px;color:var(--ink2)}
-.profiles-note .btn{flex:none}
 
 @media (max-width:900px){
   .profile-steps{grid-template-columns:1fr}
   .profile{grid-template-columns:44px minmax(0,1fr);gap:20px}
   .profile-question{grid-column:1/-1}
-  .profiles-note{flex-direction:column;align-items:flex-start;padding:28px 22px}
 }
 @media (max-width:640px){
   .profile-jump a{padding-inline-end:14px;font-size:13px}
   .profile{grid-template-columns:1fr;gap:16px;padding:22px}
   .profile-question{grid-column:auto;padding:20px}
-  .profiles-note .btn{width:100%}
 }
