@@ -1476,8 +1476,8 @@
       "id": "UX-2026.10.12.12",
       "name": "bank-statement-budgeting.html · One look, what matters first",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.12.html"
     },
     {
       "id": "UX-2026.10.12.13",
@@ -1518,15 +1518,15 @@
       "id": "UX-2026.10.12.18",
       "name": "budget-app-egypt.html · One look, what matters first",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.18.html"
     },
     {
       "id": "UX-2026.10.12.19",
       "name": "cash-flow-planner.html · One look, what matters first",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.19.html"
     },
     {
       "id": "UX-2026.10.12.20",
@@ -1539,8 +1539,8 @@
       "id": "UX-2026.10.12.21",
       "name": "expense-tracker-egypt.html · One look, what matters first",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.21.html"
     },
     {
       "id": "UX-2026.10.12.22",
@@ -1581,8 +1581,8 @@
       "id": "UX-2026.10.12.27",
       "name": "net-worth-tracker.html · One look, what matters first",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.27.html"
     },
     {
       "id": "UX-2026.10.12.28",
@@ -1623,8 +1623,8 @@
       "id": "UX-2026.10.12.33",
       "name": "How It Works · Top three first",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.33.html"
     },
     {
       "id": "UX-2026.10.12.34",
@@ -1644,8 +1644,8 @@
       "id": "UX-2026.10.12.36",
       "name": "Guides · Top three first",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.36.html"
     },
     {
       "id": "UX-2026.10.12.37",
@@ -1658,13 +1658,76 @@
       "id": "UX-2026.10.12.38",
       "name": "Features · Search copy tightened",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.38.html"
     },
     {
       "id": "UX-2026.10.12.39",
       "name": "Lightning · Runway",
       "page": "index.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.39.html"
+    },
+    {
+      "id": "UX-2026.10.13.01",
+      "name": "Guides · Free expense tracker for Egypt",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.02",
+      "name": "Lightning · Free expense tracker wording",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.03",
+      "name": "features.html · Free expense tracker links",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.04",
+      "name": "guides.html · Free expense tracker links",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.05",
+      "name": "bank-statement-budgeting.html · Free expense tracker links",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.06",
+      "name": "budget-app-egypt.html · Free expense tracker links",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.07",
+      "name": "cash-flow-planner.html · Free expense tracker links",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.08",
+      "name": "how-it-works.html · Free expense tracker links",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.09",
+      "name": "net-worth-tracker.html · Free expense tracker links",
+      "page": "net-worth-tracker.html",
       "status": "current",
       "archive_url": null
     }
