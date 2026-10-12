@@ -43,3 +43,8 @@
 .rw.is-live .rw-low,.rw.is-live .rw-lowdot{opacity:0}
 .rw.is-live .rw-low.on,.rw.is-live .rw-lowdot.on{opacity:1;transition:opacity .3s ease}
 @media (max-width:640px){.rw.is-live{height:200vh}.rw.is-live .rw-stick{top:68px}}
+/* desktop: the scene fits one screen, centred, instead of filling the page width */
+@media (min-width:901px){
+  .rw-stick{max-width:860px;margin-inline:auto}
+  .rw-svg{max-height:min(40vh,340px)}
+}

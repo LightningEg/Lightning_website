@@ -54,3 +54,6 @@ html[dir=rtl] .trio:hover .trio-right{transform:translate(-10px,-40px)}
 html[dir=rtl] .hw-setup li{padding:16px 52px 16px 16px}
 html[dir=rtl] .hw-setup li::before{content:counter(s,arabic-indic)}
 html[dir=rtl] .status-setup li::before{content:counter(setup,arabic-indic)}
+/* Arabic tails (ي، ر، ة) reach below the line: give the gradient clip room so none are cut off */
+html[dir=rtl] .d-hero h1 span{padding-bottom:.32em;margin-bottom:-.2em}
+html[dir=rtl] .l-sign span{padding-bottom:.25em}
