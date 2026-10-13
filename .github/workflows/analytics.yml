@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/analytics.yml"
       - "analytics/goatcounter_daily.py"
+      - "analytics/journeys.py"
   schedule:
     - cron: "29 */8 * * *"
   workflow_dispatch:
@@ -36,14 +37,22 @@ jobs:
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
         run: python analytics/goatcounter_daily.py
 
+      # Visitors who chose Allow all: totals from the Apps Script receiver (README › Analytics).
+      # Skips itself until the ANALYTICS_JOURNEYS_KEY secret is set.
+      - name: Refresh journeys
+        continue-on-error: true
+        env:
+          ANALYTICS_JOURNEYS_KEY: ${{ secrets.ANALYTICS_JOURNEYS_KEY }}
+        run: python analytics/journeys.py
+
       - name: Commit refreshed CSV
         run: |
-          if git diff --quiet -- analytics/daily.csv; then
+          if [ -z "$(git status --porcelain -- analytics/)" ]; then
             echo "No analytics changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add analytics/daily.csv
+          git add analytics/*.csv
           git commit -m "Analytics: refresh daily data"
           git push origin HEAD:main

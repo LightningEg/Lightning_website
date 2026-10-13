@@ -1737,6 +1737,13 @@
       "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.11",
+      "name": "Privacy · Privacy Notice",
+      "page": "privacy.html",
+      "status": "current",
+      "archive_url": null
     }
   ]
 }
