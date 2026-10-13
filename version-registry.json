@@ -1721,13 +1721,20 @@
       "id": "UX-2026.10.13.08",
       "name": "how-it-works.html · Free expense tracker links",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.08.html"
     },
     {
       "id": "UX-2026.10.13.09",
       "name": "net-worth-tracker.html · Free expense tracker links",
       "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.10",
+      "name": "How It Works · Whole analysis screens",
+      "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
     }
