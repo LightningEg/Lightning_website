@@ -46,6 +46,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 
 ## Guides articles (Arabic)
 
+- [Sample profiles, Arabic](https://lightningeg.com/ar/sample-profiles.html): the four sample households in Egyptian Arabic.
 - [مقالات](https://lightningeg.com/ar/guides.html): the Arabic library of questions and answers; the five articles below sit under it.
 - [ليه المرتب بيخلص قبل آخر الشهر؟](https://lightningeg.com/ar/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
 - [إزاي تقسّم مرتب ٢٠٬٠٠٠ جنيه؟](https://lightningeg.com/ar/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.

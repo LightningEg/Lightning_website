@@ -7,6 +7,11 @@
   const endpoint = document.body.dataset.appFeedbackEndpoint;
   if (!form || !template || !list || !add || !endpoint) return;
 
+  const AR = document.documentElement.lang.startsWith('ar');
+  const AR_TEXT = {"Preparing image…": "بنجهّز الصورة…", "Remove": "احذف", "A ticket can have up to five images.": "البلاغ الواحد ممكن يحتوي على ٥ صور بالكتير.", "A submission can include up to ten images in total.": "الإرسال الواحد ممكن يحتوي على ١٠ صور بالكتير.", "Choose a PNG, JPEG or WebP image.": "اختار صورة PNG أو JPEG أو WebP.", "Still preparing; you can keep filling in the form.": "لسه بنجهّز الصورة، كمّل ملا النموذج عادي.", "This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.": "الصورة أكبر من ٥ ميجا ومينفعش نصغّرها من غير ما الجودة تقل. اقتطع الجزء المهم من الصورة وجرّب تاني.", "The images in one submission must total 12 MB or less.": "مجموع الصور في الإرسال الواحد لازم يكون ١٢ ميجا أو أقل.", "This image could not be prepared. Try another image.": "معرفناش نجهّز الصورة دي. جرّب صورة تانية.", "Wait for the images to finish preparing before you submit.": "استنى لحد ما الصور تخلّص تجهيز قبل ما تبعت.", "Remove or replace the image that could not be prepared before you submit.": "احذف الصورة اللي معرفناش نجهّزها أو بدّلها قبل ما تبعت.", "Sending your ticket and images…": "بنبعت البلاغ والصور…", "Thank you — your feedback and images have been sent.": "شكرًا ليك، ملاحظاتك وصورك وصلتنا.", "We could not send that just now. Your ticket and images are still here; please try again.": "معرفناش نبعت دلوقتي. البلاغ والصور لسه قدامك، جرّب تاني.", "ready to send": "جاهزة للإرسال"};
+  const t = text => (AR && AR_TEXT[text]) || text;
+  const arNum = n => AR ? new Intl.NumberFormat('ar-EG').format(n) : String(n);
+
   const MAX_PER_TICKET = 5;
   const MAX_TOTAL_ATTACHMENTS = 10;
   const MAX_SOURCE_BYTES = 10 * 1024 * 1024;
@@ -43,7 +48,7 @@
   }
   function numberTickets() {
     [...list.children].forEach((ticket, index) => {
-      ticket.querySelector('[data-ticket-number]').textContent = index + 1;
+      ticket.querySelector('[data-ticket-number]').textContent = AR ? new Intl.NumberFormat('ar-EG',{useGrouping:false}).format(index + 1) : index + 1;
       ticket.querySelector('[data-remove-ticket]').hidden = list.children.length === 1;
     });
   }
@@ -73,19 +78,19 @@
       const state = document.createElement('span');
       state.className = 'status-attachment__state';
       state.dataset.state = item.state;
-      state.textContent = item.message || (item.state === 'ready' ? `${formatSize(item.file.size)} · ready to send` : 'Preparing image…');
+      state.textContent = item.message || (item.state === 'ready' ? `${formatSize(item.file.size)} · ${t('ready to send')}` : t('Preparing image…'));
       meta.append(name, state);
       const remove = document.createElement('button');
       remove.type = 'button';
       remove.className = 'status-attachment__remove';
       remove.dataset.removeAttachment = String(index);
-      remove.setAttribute('aria-label', `Remove ${item.file.name}`);
-      remove.textContent = 'Remove';
+      remove.setAttribute('aria-label', `${t('Remove')} ${item.file.name}`);
+      remove.textContent = t('Remove');
       row.append(image, meta, remove);
       host.append(row);
     });
   }
-  function formatSize(bytes) { return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`; }
+  function formatSize(bytes) { return bytes < 1024 * 1024 ? `${arNum(Math.max(1, Math.round(bytes / 1024)))} ${AR ? 'ك.ب' : 'KB'}` : `${arNum(+(bytes / (1024 * 1024)).toFixed(1))} ${AR ? 'م.ب' : 'MB'}`; }
   function totalBytes() { return allAttachments().reduce((sum, item) => sum + (item.state !== 'error' ? item.preparedSize || 0 : 0), 0); }
   function pngChunk(type, data) {
     const typeBytes = new TextEncoder().encode(type);
@@ -175,11 +180,11 @@
     const picked = [...files].filter(Boolean);
     if (!picked.length) return;
     const items = ticketAttachments.get(ticket) || [];
-    if (items.length + picked.length > MAX_PER_TICKET) { status.textContent = 'A ticket can have up to five images.'; return; }
-    if (allAttachments().length + picked.length > MAX_TOTAL_ATTACHMENTS) { status.textContent = 'A submission can include up to ten images in total.'; return; }
+    if (items.length + picked.length > MAX_PER_TICKET) { status.textContent = t('A ticket can have up to five images.'); return; }
+    if (allAttachments().length + picked.length > MAX_TOTAL_ATTACHMENTS) { status.textContent = t('A submission can include up to ten images in total.'); return; }
     const pending = [];
     for (const file of picked) {
-      if (!allowedTypes.has(file.type)) { status.textContent = 'Choose a PNG, JPEG or WebP image.'; continue; }
+      if (!allowedTypes.has(file.type)) { status.textContent = t('Choose a PNG, JPEG or WebP image.'); continue; }
       if (file.size > MAX_SOURCE_BYTES) { status.textContent = `${file.name} is too large to process here. Choose an image under 10 MB.`; continue; }
       const item = { file, state: 'processing', previewUrl: URL.createObjectURL(file), message: '', payload: null, preparedSize: 0, slowTimer: 0, cancelled: false };
       items.push(item);
@@ -189,13 +194,13 @@
     renderAttachments(ticket);
     async function prepareItem(item) {
       if (item.cancelled) return;
-      item.slowTimer = setTimeout(() => { if (item.state === 'processing') { item.message = 'Still preparing; you can keep filling in the form.'; renderAttachments(ticket); } }, 10000);
+      item.slowTimer = setTimeout(() => { if (item.state === 'processing') { item.message = t('Still preparing; you can keep filling in the form.'); renderAttachments(ticket); } }, 10000);
       try {
         const optimized = await optimize(item.file);
         if (item.cancelled) return;
         item.preparedSize = optimized.size;
-        if (optimized.size > MAX_ATTACHMENT_BYTES) throw new Error('This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.');
-        if (totalBytes() > MAX_TOTAL_BYTES) throw new Error('The images in one submission must total 12 MB or less.');
+        if (optimized.size > MAX_ATTACHMENT_BYTES) throw new Error(t('This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.'));
+        if (totalBytes() > MAX_TOTAL_BYTES) throw new Error(t('The images in one submission must total 12 MB or less.'));
         item.file = optimized;
         item.payload = { name: optimized.name, mime: optimized.type, base64: await fileAsBase64(optimized) };
         if (item.cancelled) return;
@@ -203,7 +208,7 @@
       } catch (error) {
         if (item.cancelled) return;
         item.state = 'error';
-        item.message = error.message || 'This image could not be prepared. Try another image.';
+        item.message = error.message || t('This image could not be prepared. Try another image.');
       } finally {
         clearTimeout(item.slowTimer);
         if (!item.cancelled) renderAttachments(ticket);
@@ -252,13 +257,13 @@
     event.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const attachments = allAttachments();
-    if (attachments.some(item => item.state === 'processing')) { status.textContent = 'Wait for the images to finish preparing before you submit.'; return; }
-    if (attachments.some(item => item.state === 'error')) { status.textContent = 'Remove or replace the image that could not be prepared before you submit.'; return; }
-    if (totalBytes() > MAX_TOTAL_BYTES) { status.textContent = 'The images in one submission must total 12 MB or less.'; return; }
+    if (attachments.some(item => item.state === 'processing')) { status.textContent = t('Wait for the images to finish preparing before you submit.'); return; }
+    if (attachments.some(item => item.state === 'error')) { status.textContent = t('Remove or replace the image that could not be prepared before you submit.'); return; }
+    if (totalBytes() > MAX_TOTAL_BYTES) { status.textContent = t('The images in one submission must total 12 MB or less.'); return; }
     const submit = form.querySelector('[type="submit"]');
     const fields = new FormData(form);
     submit.disabled = true;
-    status.textContent = 'Sending your ticket and images…';
+    status.textContent = t('Sending your ticket and images…');
     try {
       const tickets = readTickets();
       const payload = new URLSearchParams({
@@ -278,8 +283,8 @@
       form.reset();
       list.replaceChildren();
       addTicket();
-      status.textContent = 'Thank you — your feedback and images have been sent.';
-    } catch (_) { status.textContent = 'We could not send that just now. Your ticket and images are still here; please try again.'; }
+      status.textContent = t('Thank you — your feedback and images have been sent.');
+    } catch (_) { status.textContent = t('We could not send that just now. Your ticket and images are still here; please try again.'); }
     finally { submit.disabled = false; }
   });
   addTicket();

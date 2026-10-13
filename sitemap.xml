@@ -123,6 +123,8 @@
   </url>
   <url>
     <loc>https://lightningeg.com/sample-profiles.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/sample-profiles.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/sample-profiles.html" />
     <lastmod>2026-10-10</lastmod>
   </url>
   <url>
@@ -244,5 +246,11 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/track-money-you-hold-for-others.html" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/track-money-you-hold-for-others.html" />
     <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/ar/sample-profiles.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/sample-profiles.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/sample-profiles.html" />
+    <lastmod>2026-10-13</lastmod>
   </url>
 </urlset>
