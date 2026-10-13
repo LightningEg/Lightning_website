@@ -27,11 +27,11 @@
   const random = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, '0')).join('');
 
   const WORDS = arabic ? {
-    text: 'الموقع بيستخدم إحصائيات أساسية مش بتحفظ حاجة على جهازك. لو وافقت، بيربط كمان صفحات الزيارة الواحدة ببعض. التفاصيل في',
+    text: 'بنستخدم الكوكيز عشان تساعدنا نحسّن الموقع. التفاصيل في',
     link: 'إشعار الخصوصية', essential: 'خليها الأساسي بس', all: 'اسمح بالكل', region: 'اختيارات الخصوصية', footer: 'الخصوصية',
     now: {essential: 'الإعداد الحالي: الإحصائيات الأساسية بس.', all: 'الإعداد الحالي: كل الإحصائيات.', gpc: 'الإعداد الحالي: الإحصائيات الأساسية بس، لأن متصفحك باعت Global Privacy Control.', none: 'ما اخترتش لسه. الإحصائيات الأساسية بس هي اللي شغالة.'},
   } : {
-    text: 'This site uses essential analytics that store nothing on your device. With your permission, it also links the pages of a single visit. Details are in the',
+    text: 'We use cookies to help us improve the site. Details are in our',
     link: 'Privacy Notice', essential: 'Keep essential only', all: 'Allow all', region: 'Privacy choices', footer: 'Privacy',
     now: {essential: 'Current setting: essential analytics only.', all: 'Current setting: all analytics.', gpc: 'Current setting: essential analytics only, because your browser sends Global Privacy Control.', none: 'No choice made. Essential analytics only apply.'},
   };
