@@ -44,7 +44,10 @@ js/landing.js       the landing pages: calculator, tabs, lightbox and signup
 css/version-d.css   Version D's stylesheet, kept for the Arabic release log page
 css/how-it-works.css, css/status.css (Current Status), css/sample-profiles.css, css/release-log.css
                     the four English pages that now sit on the landing system (header, hero, headings, cards, signup band and footer are the home page's): only their own components live here
-js/analytics.js     GoatCounter page views and one event per download
+js/analytics.js     analytics in two tiers and the consent bar (see Analytics and consent below)
+css/consent.css     the consent bar and the two choice buttons
+privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 2026-10-13): numbered sections, one point per bullet, the article layout (css/blog.css), no hero, cards or signup band; ar/privacy.html in Arabic
+analytics/          daily.csv, events.csv and journeys.csv, and the two scripts that refresh them
 audit/              website audits against the guideline
 css/theme.css       light/dark switch
 css/motion.css      small motion on the home page, Features, How It Works, Current Status and the guides (see Motion below)
@@ -177,16 +180,34 @@ The receiver expands the request into **one row per ticket** in the **App Feedba
 
 The included `assets/samples/mohab-2026-full-year.zip` is Mohab’s full fictional 2026 sample pack: eight CSVs for accounts, CIB payroll, Vodafone Cash, cash wallet, gold, certificate, THNDR and prices. It lets a tester explore the complete import and analysis flow without entering their own data.
 
-## Analytics (GoatCounter)
+## Analytics and consent
 
-`js/analytics.js` is loaded on every page (not the brand guideline). It sends page views to [GoatCounter](https://mohamedelfeki.goatcounter.com), which shows visits and unique visitors, and records one event per download:
+`js/analytics.js` is loaded on every page (not the brand guideline). It counts in two tiers; [privacy.html](privacy.html) and [ar/privacy.html](ar/privacy.html) tell visitors exactly what each one counts, so change them together with the script.
+
+**The consent bar.** Its words and the notice are neutral on purpose: they state what is collected and nothing else. On a first visit `js/analytics.js` adds a bar at the foot of the screen (`css/consent.css`, loaded only then) with two identical buttons, *Keep essential only* and *Allow all*. Neither is pushed: same style, same size, nothing pre-selected, and essential is what counts until a choice is made. The choice is saved as `localStorage['lightning-consent'] = {choice, policy, date}`. Raise `POLICY` in the script when what is counted changes, and everyone is asked again. A browser that sends Global Privacy Control gets essential only and no bar. The script also adds *Privacy* (Arabic «الخصوصية») to every footer; the privacy pages carry the same two buttons, so the bar stays off there. Like the testing panel, the bar is site chrome: adding it needs no new release IDs.
+
+**Essential, for everyone.** GoatCounter page views and events, with nothing stored on the device. GoatCounter shows referrers, screen sizes and languages itself.
 
 - `download-app-<version>-<platform>` for an app build, read from any link to the Lightning-downloads repository that ends in `.zip`, `.exe`, `.msi`, `.dmg` or `.AppImage`, or `.apk` (for example `download-app-v1.0.0-beta.1-android`). A new build is counted as soon as its link is on a page; nothing to tag.
 - `download-sample-<file>` for the sample pack.
+- Every other event is `<event>@<release>`, where the release is the page's `data-ux-version` (the page path on pages without one, such as `ar/index`), so releases can be compared: `reach-<section id>` (a `main section[id]` came into view), `calc-used`, `faq-<n>`, `screen-<image>` (a screenshot enlarged), `click-<target>` (a `.btn`, `.sb-btn` or `.nav-cta` link), `lang-switch`, `download` / `sample`, `<form_type>-start` and `<form_type>-submit` (that a form was started or sent, never what was typed). Nothing to tag: a new section with an `id` is counted as it ships.
+- `consent-all` / `consent-essential`: how many people choose each.
 
-"Unique visitors" counts browsing sessions, not people: one person who visits in the morning and again after GoatCounter's session window has passed counts twice, so five people can show as up to ten. Read it as visits from distinct sessions or devices.
+**Allow all, only if chosen.** The same, plus a random visit number (`sessionStorage`, gone with the tab) and a visitor number (`localStorage`, 90 days), so the pages of one visit can be linked. Each page sends its events once, as it is hidden or left (`sendBeacon`), to the Apps Script receiver as `form_type=event`. Never sent: field values, amounts, names, emails. Localhost and `file:` previews send nothing.
 
-Read them on the GoatCounter dashboard; events are listed with the pages, filter by `download`. GoatCounter ignores localhost, so local previews are not counted. Add `<script src="js/analytics.js?v=20261003-1" defer></script>` before `</head>` on any new page.
+**Where it lands.**
+
+```
+js/analytics.js ─ essential ─► GoatCounter ─► analytics/goatcounter_daily.py ─► analytics/daily.csv, analytics/events.csv
+                └ allow all ─► Apps Script (apps-script/AnalyticsEventsReceiverPatch.gs) ─► private Sheet "Events" (90 days)
+                                 └─► analytics/journeys.py (totals only) ─► analytics/journeys.csv
+```
+
+The `Refresh analytics` workflow runs both scripts every eight hours and commits the CSVs. This repository is public, so only totals land here: raw rows stay in the Sheet, and the receiver deletes them after 90 days. `journeys.csv` has one row per Cairo day, landing release (the first page of the visit), landing page, source (`utm_source`, else the referring site, else `direct`), device and language: visits, returning, multi-page, downloads, signups, surveys and the median seconds to a download. It is the release comparison: which first page leads to a download. Until the owner deploys the receiver patch and sets the `ANALYTICS_JOURNEYS_KEY` secret (steps at the top of the `.gs` file), `journeys.py` does nothing.
+
+"Unique visitors" in GoatCounter counts browsing sessions, not people: one person who visits in the morning and again after GoatCounter's session window has passed counts twice, so five people can show as up to ten. Read it as visits from distinct sessions or devices.
+
+Read them on the GoatCounter dashboard; events are listed with the pages, filter by `download` or by a release ID. Add `<script src="js/analytics.js?v=20261013-1" defer></script>` before `</head>` on any new page.
 
 ## Search (SEO)
 
@@ -194,7 +215,7 @@ Lightning aims to be found first for **free personal finance for Egypt**, then f
 
 - **Every indexable page** has a title and description written for search, an absolute `<link rel="canonical" href="https://lightningeg.com/...">` (the home page is `https://lightningeg.com/`), Open Graph tags with `assets/brand/social-card.png`, and a line in `sitemap.xml`. Add all four to any new public page.
 - **Arabic pages** live under `/ar/`, use Egyptian Arabic (`lang="ar-EG"`, `dir="rtl"`), and have their own Arabic title, description, canonical, Open Graph metadata, structured data and sitemap entry. Add reciprocal `hreflang="ar-EG"` and `hreflang="en"` links on both language versions; each language switch opens the same page in the other language. Write for Egyptian search terms such as إدارة المصاريف في مصر and ميزانية شهرية, in natural Egyptian Arabic.
-- **Not in search:** survey, app feedback, the test page, the version archive, the brand guideline and every `archive/` snapshot carry `<meta name="robots" content="noindex,follow">` and stay out of the sitemap. Add the same line to each new snapshot (the one head change allowed on a snapshot besides brand-wide ones). `version-b.html` and `version-c.html` redirect to the home page and canonicalise to it; `blog.html` and `ar/blog.html` redirect to the Guides pages the same way, and stay out of the sitemap. `robots.txt` blocks only files that are not pages (`audit/`, `analytics/`, `apps-script/`, the READMEs), because a blocked page can't show its noindex.
+- **Not in search:** survey, app feedback, the two privacy pages, the test page, the version archive, the brand guideline and every `archive/` snapshot carry `<meta name="robots" content="noindex,follow">` and stay out of the sitemap. Add the same line to each new snapshot (the one head change allowed on a snapshot besides brand-wide ones). `version-b.html` and `version-c.html` redirect to the home page and canonicalise to it; `blog.html` and `ar/blog.html` redirect to the Guides pages the same way, and stay out of the sitemap. `robots.txt` blocks only files that are not pages (`audit/`, `analytics/`, `apps-script/`, the READMEs), because a blocked page can't show its noindex.
 - **Structured data:** the home page has `Organization`, `WebSite`, `SoftwareApplication` (free, Windows, FinanceApplication) and `FAQPage` (its seven visible questions); each guide has `WebPage` and `FAQPage` matching its visible questions; How It Works has `WebPage` and `HowTo` (its three steps); Features, Current Status and the Release Log have `WebPage`; Guides has `CollectionPage`, `BreadcrumbList` and an `ItemList` of every page it links. Each blog article (English and Arabic) has `BlogPosting`, `BreadcrumbList` and `FAQPage` matching its visible questions; their breadcrumb reads Home > Guides > article. Change the structured data whenever the visible text it repeats changes. Only true claims: no ratings, reviews or download counts until real ones exist. Update `softwareVersion` with each app release.
 - **The guides** (`guides.html` lists them as questions): net worth, budget, expenses, investments, safe to spend, bank statements, privacy. Each is built from the landing building blocks only (hero, a worked example beside its real screen, three cards or steps, good questions, keep reading, the signup band). Every figure comes from Mohab's year on 2026-10-04 and matches the screen beside it, as on the home page; recapture them together. They never mention other apps (B10, B12), so comparison pages are not built.
 - **Head-only changes** (title, description, canonical, social tags, structured data) don't change what a visitor sees, so they don't need a new release ID. Visible copy does.

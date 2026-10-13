@@ -1,4 +1,8 @@
-"""Keep analytics/daily.csv up to date from GoatCounter: one row per Cairo day.
+"""Keep analytics/daily.csv and analytics/events.csv up to date from GoatCounter.
+
+daily.csv has one row per Cairo day. events.csv has one row per day, release and
+event for the events js/analytics.js names "<event>@<release>" (reach-trust,
+calc-used, click-..., signup-submit) and the consent choices (consent-all).
 
     python analytics/goatcounter_daily.py              # refresh the last four Cairo days
     python analytics/goatcounter_daily.py 2026-10-03   # refresh one specific day
@@ -20,6 +24,8 @@ from zoneinfo import ZoneInfo
 API = "https://mohamedelfeki.goatcounter.com/api/v0"
 CAIRO = ZoneInfo("Africa/Cairo")
 OUT = Path(__file__).with_name("daily.csv")
+EVENTS_OUT = Path(__file__).with_name("events.csv")
+EVENTS_HEADER = ["date", "release", "event", "count"]
 HEADER = [
     "date",
     "page_visits",
@@ -52,7 +58,7 @@ def utc(moment: datetime) -> str:
     return moment.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def day_row(d: date) -> list:
+def day_row(d: date) -> tuple[list, list]:
     start = datetime.combine(d, time(), CAIRO)
     end = min(
         start + timedelta(days=1),
@@ -63,6 +69,7 @@ def day_row(d: date) -> list:
     total = get(f"/stats/total?{span}")
 
     builds = {}
+    events = []
     sample = 0
     page_visits = 0
     excluded = []
@@ -87,6 +94,11 @@ def day_row(d: date) -> list:
                 builds[path.removeprefix("download-app-")] = count
             elif path.startswith("download-sample-"):
                 sample += count
+            elif "@" in path:
+                name, _, release = path.partition("@")
+                events.append([d.isoformat(), release, name, count])
+            elif path.startswith("consent-"):
+                events.append([d.isoformat(), "", path, count])
 
         if not page.get("more") or not hits:
             break
@@ -94,7 +106,7 @@ def day_row(d: date) -> list:
 
     by_build = "; ".join(f"{k}: {v}" for k, v in sorted(builds.items()))
     stamp = datetime.now(CAIRO).strftime("%Y-%m-%d %H:%M")
-    return [
+    row = [
         d.isoformat(),
         page_visits,
         sum(builds.values()),
@@ -102,6 +114,21 @@ def day_row(d: date) -> list:
         by_build,
         stamp,
     ]
+    return row, sorted(events)
+
+
+def write_rows(path: Path, header: list, new: list, keep: set) -> None:
+    """Replace the rows for the refreshed days and keep every other row."""
+    rows = []
+    if path.exists():
+        existing = list(csv.reader(path.open(encoding="utf-8")))
+        rows = existing[1:] if existing else []
+    rows = [r for r in rows if r and r[0] not in keep] + new
+    rows.sort(key=lambda r: r[0])
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(header)
+        w.writerows(rows)
 
 
 def main() -> None:
@@ -111,23 +138,11 @@ def main() -> None:
     else:
         days = [today - timedelta(days=n) for n in range(3, -1, -1)]
 
-    new = [day_row(d) for d in days]
+    results = [day_row(d) for d in days]
+    new = [row for row, _ in results]
     keep = {d.isoformat() for d in days}
-
-    rows = []
-    if OUT.exists():
-        existing = list(csv.reader(OUT.open(encoding="utf-8")))
-        rows = existing[1:] if existing else []
-
-    # Keep untouched older rows. Current deployment starts with only the rolling
-    # four-day window, so all existing rows are migrated to the new schema now.
-    rows = [r for r in rows if r and r[0] not in keep] + new
-    rows.sort(key=lambda r: r[0])
-
-    with OUT.open("w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(HEADER)
-        w.writerows(rows)
+    write_rows(OUT, HEADER, new, keep)
+    write_rows(EVENTS_OUT, EVENTS_HEADER, [e for _, events in results for e in events], keep)
 
     for r in new:
         print(",".join(map(str, r)))
