@@ -27,12 +27,12 @@
   const random = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, '0')).join('');
 
   const WORDS = arabic ? {
-    text: 'بنستخدم الكوكيز عشان تساعدنا نحسّن الموقع. التفاصيل في',
-    link: 'إشعار الخصوصية', essential: 'خليها الأساسي بس', all: 'اسمح بالكل', region: 'اختيارات الخصوصية', footer: 'الخصوصية',
+    text: 'بنستخدم كوكيز أساسية عشان الموقع يشتغل. وعايزين كمان نستخدم كوكيز إحصائيات عشان نعرف إيه اللي عاجب الناس ونظبّط اللي محتاج تظبيط. دي الوحيدة الاختيارية. هتختار مرة واحدة، ومش هنسألك تاني.',
+    link: 'سياسة الخصوصية', essential: 'خليها الأساسي بس', all: 'اسمح بالكل', region: 'اختيارات الخصوصية', footer: 'الخصوصية',
     now: {essential: 'الإعداد الحالي: الإحصائيات الأساسية بس.', all: 'الإعداد الحالي: كل الإحصائيات.', gpc: 'الإعداد الحالي: الإحصائيات الأساسية بس، لأن متصفحك باعت Global Privacy Control.', none: 'ما اخترتش لسه. الإحصائيات الأساسية بس هي اللي شغالة.'},
   } : {
-    text: 'We use cookies to help us improve the site. Details are in our',
-    link: 'Privacy Notice', essential: 'Keep essential only', all: 'Allow all', region: 'Privacy choices', footer: 'Privacy',
+    text: 'We use essential cookies to make the site work. We’d also like to use analytics cookies to see what’s popular and fix rough edges. That’s the only optional one. You decide once, and we won’t ask again.',
+    link: 'Privacy policy', essential: 'Keep essential only', all: 'Allow all', region: 'Privacy choices', footer: 'Privacy',
     now: {essential: 'Current setting: essential analytics only.', all: 'Current setting: all analytics.', gpc: 'Current setting: essential analytics only, because your browser sends Global Privacy Control.', none: 'No choice made. Essential analytics only apply.'},
   };
 
@@ -206,7 +206,7 @@
     const more = document.createElement('a');
     more.href = privacyUrl;
     more.textContent = WORDS.link;
-    text.append(WORDS.text + ' ', more, '.');
+    text.append(WORDS.text + ' ', more);
     bar.querySelector('[data-consent="essential"]').textContent = WORDS.essential;
     bar.querySelector('[data-consent="all"]').textContent = WORDS.all;
     // Hidden until the stylesheet is in, so it never flashes unstyled.
