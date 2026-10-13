@@ -1686,8 +1686,8 @@
       "id": "UX-2026.10.13.03",
       "name": "features.html · Free expense tracker links",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.03.html"
     },
     {
       "id": "UX-2026.10.13.04",
@@ -1742,6 +1742,13 @@
       "id": "UX-2026.10.13.11",
       "name": "Privacy · Privacy Notice",
       "page": "privacy.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.13.12",
+      "name": "Features \u00b7 Dollars, US stocks and Arabic",
+      "page": "features.html",
       "status": "current",
       "archive_url": null
     }
