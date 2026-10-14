@@ -56,18 +56,27 @@
   <header class="dash-head">
     <a class="d-lockup" href="../index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
     <h1>How the Site Is Doing</h1>
-    <p>Counts come from two files in this folder, which a scheduled job refreshes. Linked visits are not published anywhere: they load here, with your key, straight from your own script.</p>
-    <div class="dash-period" role="group" aria-label="Period" id="period">
-      <button type="button" data-days="7" aria-pressed="false">Last 7 days</button>
-      <button type="button" data-days="28" aria-pressed="true">Last 28 days</button>
-      <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
-    </div>
-    <p class="dash-note" id="sample" hidden></p>
+    <p>Every number on this page loads from your own script, behind your key. Nothing here is published.</p>
     <p class="dash-note" id="status">Loading…</p>
     <noscript><p class="dash-note">This page needs JavaScript.</p></noscript>
   </header>
 
-  <main>
+  <section class="dash-section" id="locked" hidden>
+    <div class="card card-support dash-card">
+      <p class="dash-empty" id="locked-text">Enter your key to see the numbers. It stays in this browser.</p>
+      <form class="dash-toolbar" id="key-form"><label for="key" class="sr-only">Key</label><input class="dash-select" id="key" type="password" autocomplete="off" placeholder="Key"><button class="dash-select" type="submit">Show the numbers</button></form>
+    </div>
+  </section>
+
+  <div id="content" hidden>
+    <div class="dash-period" role="group" aria-label="Period" id="period">
+      <button type="button" data-days="7" aria-pressed="false">Last 7 days</button>
+      <button type="button" data-days="28" aria-pressed="true">Last 28 days</button>
+      <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
+      <button type="button" id="lock">Lock</button>
+    </div>
+    <p class="dash-note" id="sample" hidden></p>
+
     <div class="dash-tiles" id="tiles"></div>
 
     <section class="dash-section" id="funnel">
@@ -91,8 +100,8 @@
       <p>Everything counted besides downloads and section views, for everyone.</p>
       <div class="card card-support dash-card" id="usage"></div>
     </section>
-  </main>
-  <p class="dash-foot" id="foot"></p>
+    <p class="dash-foot" id="foot"></p>
+  </div>
 </div>
 <script>
 (() => {
@@ -101,37 +110,34 @@
   const pct = v => `${Math.round(v)}%`;
   const el = (tag, text, cls) => { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; };
 
-  function parse(text) {
-    const rows = []; let row = [], cell = '', quoted = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (quoted) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else quoted = false; } else cell += c; }
-      else if (c === '"') quoted = true;
-      else if (c === ',') { row.push(cell); cell = ''; }
-      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
-      else if (c !== '\r') cell += c;
-    }
-    if (cell || row.length) { row.push(cell); rows.push(row); }
-    const [head, ...body] = rows.filter(r => r.length > 1 || r[0]);
-    return body.map(r => Object.fromEntries(head.map((h, i) => [h, r[i] ?? ''])));
-  }
-  const load = name => fetch(name, {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error(name); return r.text(); }).then(parse).catch(() => []);
-
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
   let daily = [], events = [], journeys = null, days = 28;
 
-  // Linked visits: totals from the Apps Script, read with the key. null = no key yet.
-  async function loadJourneys() {
-    const key = stored();
-    if (!key) { journeys = null; return; }
+  const show = which => { $('locked').hidden = which !== 'locked'; $('content').hidden = which !== 'content'; };
+  const ask = async what => {
+    const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(days, 88)});
+    const data = await (await fetch(`${RECEIVER}?${query}`)).json();
+    if (data.error) { const e = new Error('key'); e.code = 'key'; throw e; }
+    return data;
+  };
+  function locked(message) {
+    show('locked'); $('status').hidden = true;
+    $('locked-text').textContent = message || 'Enter your key to see the numbers. It stays in this browser.';
+  }
+  async function load() {
+    if (!stored()) return locked();
+    $('status').hidden = false; $('status').textContent = 'Loading…';
     try {
-      const query = new URLSearchParams({action: 'journeys', key, days: Math.min(days, 88)});
-      const data = await (await fetch(`${RECEIVER}?${query}`)).json();
-      if (data.error) { try { localStorage.removeItem(KEY); } catch (_) {} journeys = {error: 'key'}; }
-      else journeys = {rows: data.rows || [], dropped: data.dropped_total || 0};
-    } catch (_) { journeys = {error: 'network'}; }
+      const [c, j] = await Promise.all([ask('counts'), ask('journeys')]);
+      daily = c.daily || []; events = c.events || [];
+      journeys = {rows: j.rows || [], dropped: j.dropped_total || 0};
+      show('content'); $('status').hidden = true; render();
+    } catch (e) {
+      if (e.code === 'key') { try { localStorage.removeItem(KEY); } catch (_) {} locked('That key was refused. Check it and try again.'); }
+      else { show('locked'); $('status').hidden = false; $('status').textContent = 'Could not reach the script from this browser. Try again, or read the tabs of your spreadsheet.'; }
+    }
   }
 
   const latest = () => daily.reduce((m, r) => (r.date > m ? r.date : m), '');
@@ -194,25 +200,8 @@
     table.setAttribute('aria-label', 'Section views, as a table');
   }
 
-  function keyForm(box, message) {
-    if (message) box.append(el('p', message, 'dash-empty'));
-    const form = el('form', undefined, 'dash-toolbar'), input = el('input'), label = el('label', 'Key', 'sr-only'), button = el('button', 'Show linked visits', 'dash-select');
-    input.type = 'password'; input.id = 'key'; input.autocomplete = 'off'; input.placeholder = 'Key'; input.className = 'dash-select'; label.htmlFor = 'key';
-    button.type = 'submit';
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      if (!input.value.trim()) return;
-      try { localStorage.setItem(KEY, input.value.trim()); } catch (_) {}
-      await loadJourneys(); journeysTable();
-    });
-    form.append(label, input, button); box.append(form);
-  }
-
   function journeysTable() {
     const box = $('journeys'); box.replaceChildren();
-    if (!journeys) return keyForm(box, 'Enter your key to load linked visits. It stays in this browser.');
-    if (journeys.error === 'key') return keyForm(box, 'That key was refused. Check it and try again.');
-    if (journeys.error === 'network') { box.append(el('p', 'Could not reach the script from this browser. Try again, or read the Events tab of your Sheet.', 'dash-empty')); return; }
     const rows = journeys.rows.filter(inWindow), groups = {};
     rows.forEach(r => {
       const merged = r.landing_release === 'other';
@@ -258,17 +247,19 @@
   $('period').addEventListener('click', e => {
     const b = e.target.closest('button[data-days]'); if (!b) return;
     days = Number(b.dataset.days);
-    document.querySelectorAll('#period button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-    render();
-    loadJourneys().then(journeysTable);
+    document.querySelectorAll('#period button[data-days]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    load();
   });
+  $('lock').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch (_) {} locked(); });
   $('release').addEventListener('change', funnel);
-  // The key box shows at once, so it never waits on the counts below.
-  journeysTable();
+  $('key-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = $('key').value.trim(); if (!v) return;
+    try { localStorage.setItem(KEY, v); } catch (_) {}
+    $('key').value = ''; load();
+  });
   window.addEventListener('error', e => { $('status').hidden = false; $('status').textContent = `Something broke on this page: ${e.message}`; });
-  Promise.all([load('daily.csv'), load('events.csv'), loadJourneys()])
-    .then(([d, e]) => { daily = d; events = e; render(); $('status').hidden = true; })
-    .catch(e => { $('status').textContent = `Could not load the counts: ${e.message}`; });
+  load();
 })();
 </script>
 </body>

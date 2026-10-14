@@ -1,14 +1,15 @@
-"""Keep analytics/daily.csv and analytics/events.csv up to date from GoatCounter.
-
-daily.csv has one row per Cairo day. events.csv has one row per day, release and
-event for the events js/analytics.js names "<event>@<release>" (reach-trust,
-calc-used, click-..., signup-submit) and the consent choices (consent-all).
+"""Send GoatCounter's totals to the private Apps Script receiver: nothing is committed.
 
     python analytics/goatcounter_daily.py              # refresh the last four Cairo days
+    python analytics/goatcounter_daily.py 90           # refresh the last 90 days (at most 120)
     python analytics/goatcounter_daily.py 2026-10-03   # refresh one specific day
 
-The GitHub Actions workflow provides GOATCOUNTER_API_KEY. Existing dates are
-replaced, so reruns are safe.
+One row per Cairo day (visits, downloads) and one per day, release and event for
+the events js/analytics.js names "<event>@<release>" (reach-trust, calc-used,
+click-..., signup-submit) and the consent choices (consent-all). The receiver
+replaces the rows of the days sent, so reruns are safe, and the dashboard reads
+them behind the key. The workflow provides GOATCOUNTER_API_KEY and
+ANALYTICS_READ_KEY (the receiver's key).
 """
 import csv
 import json
@@ -23,9 +24,7 @@ from zoneinfo import ZoneInfo
 
 API = "https://mohamedelfeki.goatcounter.com/api/v0"
 CAIRO = ZoneInfo("Africa/Cairo")
-OUT = Path(__file__).with_name("daily.csv")
-EVENTS_OUT = Path(__file__).with_name("events.csv")
-EVENTS_HEADER = ["date", "release", "event", "count"]
+RECEIVER = "https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec"
 HEADER = [
     "date",
     "page_visits",
@@ -117,35 +116,37 @@ def day_row(d: date) -> tuple[list, list]:
     return row, sorted(events)
 
 
-def write_rows(path: Path, header: list, new: list, keep: set) -> None:
-    """Replace the rows for the refreshed days and keep every other row."""
-    rows = []
-    if path.exists():
-        existing = list(csv.reader(path.open(encoding="utf-8")))
-        rows = existing[1:] if existing else []
-    rows = [r for r in rows if r and r[0] not in keep] + new
-    rows.sort(key=lambda r: r[0])
-    with path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(header)
-        w.writerows(rows)
+def push(days: list, daily: list, events: list) -> bool:
+    """Send the rows to the receiver. False (with a warning) when its key isn't set up yet."""
+    key = os.environ.get("ANALYTICS_READ_KEY", "").strip()
+    if not key:
+        print("::warning::ANALYTICS_READ_KEY is not set, so nothing was saved. Add it as a repository secret.")
+        return False
+    payload = {"v": 1, "kind": "counts", "key": key, "days": days, "daily": daily, "events": events}
+    body = urllib.parse.urlencode({"form_type": "event", "payload": json.dumps(payload)}).encode()
+    # Apps Script answers a POST with a redirect to its result; urllib follows it.
+    with urllib.request.urlopen(urllib.request.Request(RECEIVER, data=body), timeout=120) as r:
+        answer = r.read().decode("utf-8", errors="replace").strip()
+    if answer != "ok":
+        raise RuntimeError(f"Receiver answered {answer[:80]!r}: check ANALYTICS_READ_KEY and that the latest script is deployed.")
+    return True
 
 
 def main() -> None:
     today = datetime.now(CAIRO).date()
-    if len(sys.argv) > 1:
-        days = [date.fromisoformat(sys.argv[1])]
-    else:
+    arg = sys.argv[1].strip() if len(sys.argv) > 1 else ""
+    if not arg:
         days = [today - timedelta(days=n) for n in range(3, -1, -1)]
+    elif arg.isdigit():
+        days = [today - timedelta(days=n) for n in range(min(int(arg), 120) - 1, -1, -1)]
+    else:
+        days = [date.fromisoformat(arg)]
 
     results = [day_row(d) for d in days]
-    new = [row for row, _ in results]
-    keep = {d.isoformat() for d in days}
-    write_rows(OUT, HEADER, new, keep)
-    write_rows(EVENTS_OUT, EVENTS_HEADER, [e for _, events in results for e in events], keep)
-
-    for r in new:
-        print(",".join(map(str, r)))
+    daily = [row for row, _ in results]
+    events = [e for _, rows in results for e in rows]
+    saved = push([d.isoformat() for d in days], daily, events)
+    print(f"{len(daily)} days, {len(events)} event rows" + (" saved." if saved else " not saved."))
 
 
 if __name__ == "__main__":

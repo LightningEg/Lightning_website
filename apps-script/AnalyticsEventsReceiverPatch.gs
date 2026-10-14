@@ -61,6 +61,12 @@ const ANALYTICS_HEADERS = [
   'Event', 'Seconds into visit', 'Visitor no.'
 ];
 const ANALYTICS_VISITOR_HEADERS = ['Visitor ID', 'Visitor no.', 'First seen', 'Last seen'];
+// GoatCounter totals, pushed here by the scheduled GitHub job and read by the dashboard, so no count is public.
+const ANALYTICS_DAILY_SHEET_NAME = 'Daily';
+const ANALYTICS_COUNTS_SHEET_NAME = 'Event counts';
+const ANALYTICS_DAILY_HEADERS = ['date', 'page_visits', 'app_downloads', 'sample_downloads', 'downloads_by_build', 'updated_at'];
+const ANALYTICS_COUNTS_HEADERS = ['date', 'release', 'event', 'count'];
+const ANALYTICS_MAX_COUNT_ROWS = 5000;
 
 function analyticsBook_() {
   return ANALYTICS_SPREADSHEET_ID
@@ -103,6 +109,61 @@ function analyticsFormatColumns_(sheet) {
   ['B:B', 'C:C', 'E:E'].forEach(a => sheet.getRange(a).setNumberFormat('@'));
   sheet.getRange(1, 1, 1, ANALYTICS_HEADERS.length).setValues([ANALYTICS_HEADERS]);
   sheet.setColumnWidth(1, 160);
+}
+
+function analyticsCountsSheet_(name, headers) {
+  const book = analyticsBook_();
+  let sheet = book.getSheetByName(name);
+  if (!sheet) {
+    sheet = book.insertSheet(name);
+    sheet.appendRow(headers);
+    sheet.setFrozenRows(1);
+    sheet.getRange('A:A').setNumberFormat('@'); // dates stay text: 2026-10-14 must not become a date value
+  }
+  return sheet;
+}
+
+// The GitHub job calls this (through the same form_type=event route) with the key. It replaces the rows
+// of the days it sends and keeps every other day, so rerunning is safe.
+function saveAnalyticsCounts_(data) {
+  const reply = text => ContentService.createTextOutput(text);
+  const key = PropertiesService.getScriptProperties().getProperty(ANALYTICS_KEY_PROPERTY);
+  if (!key || data.key !== key) return reply('forbidden');
+  const dates = (Array.isArray(data.days) ? data.days : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).slice(0, 120);
+  if (!dates.length) return reply('no days');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    [[ANALYTICS_DAILY_SHEET_NAME, ANALYTICS_DAILY_HEADERS, data.daily], [ANALYTICS_COUNTS_SHEET_NAME, ANALYTICS_COUNTS_HEADERS, data.events]].forEach(item => {
+      const sheet = analyticsCountsSheet_(item[0], item[1]);
+      const width = item[1].length;
+      const last = sheet.getLastRow();
+      const keep = last < 2 ? [] : sheet.getRange(2, 1, last - 1, width).getValues().filter(r => dates.indexOf(String(r[0])) < 0);
+      const fresh = (Array.isArray(item[2]) ? item[2] : []).slice(0, ANALYTICS_MAX_COUNT_ROWS)
+        .filter(r => Array.isArray(r) && r.length === width && dates.indexOf(String(r[0])) >= 0)
+        .map(r => r.map(v => typeof v === 'number' ? v : String(v).slice(0, 200)));
+      const all = keep.concat(fresh).sort((a, b) => (String(a[0]) < String(b[0]) ? -1 : String(a[0]) > String(b[0]) ? 1 : 0));
+      if (last >= 2) sheet.getRange(2, 1, last - 1, width).clearContent();
+      if (all.length) sheet.getRange(2, 1, all.length, width).setValues(all);
+    });
+  } finally {
+    lock.releaseLock();
+  }
+  return reply('ok');
+}
+
+// Read side of the above, behind the same key (called from analyticsJourneys_ with what=counts).
+function analyticsCounts_(json, params) {
+  const days = Math.max(1, Math.min(120, parseInt(params.days, 10) || 90));
+  const from = Utilities.formatDate(new Date(Date.now() - days * 864e5), ANALYTICS_TIMEZONE, 'yyyy-MM-dd');
+  const read = (name, headers) => {
+    const sheet = analyticsCountsSheet_(name, headers);
+    const last = sheet.getLastRow();
+    return (last < 2 ? [] : sheet.getRange(2, 1, last - 1, headers.length).getValues())
+      .filter(r => String(r[0]) >= from)
+      .map(r => { const o = {}; headers.forEach((h, i) => { o[h] = r[i]; }); return o; });
+  };
+  return json({daily: read(ANALYTICS_DAILY_SHEET_NAME, ANALYTICS_DAILY_HEADERS), events: read(ANALYTICS_COUNTS_SHEET_NAME, ANALYTICS_COUNTS_HEADERS)});
 }
 
 // The caller holds the script lock. What today has added so far, for the limits above.
@@ -190,6 +251,7 @@ function saveAnalyticsEvents_(params) {
   const ok = ContentService.createTextOutput('ok');
   let data;
   try { data = JSON.parse(params.payload || ''); } catch (err) { return ok; }
+  if (data && data.kind === 'counts') return saveAnalyticsCounts_(data);
   if (!data || data.v !== 1 || !Array.isArray(data.ev)) return ok;
 
   const id = /^[0-9a-f]{16}$/;
@@ -273,6 +335,7 @@ function analyticsJourneys_(params) {
   const json = obj => ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
   const key = PropertiesService.getScriptProperties().getProperty(ANALYTICS_KEY_PROPERTY);
   if (!key || params.key !== key) return json({error: 'forbidden'});
+  if (params.what === 'counts') return analyticsCounts_(json, params);
   const days = Math.max(1, Math.min(ANALYTICS_KEEP_DAYS - 2, parseInt(params.days, 10) || 28));
   const now = Date.now();
   const dates = [];

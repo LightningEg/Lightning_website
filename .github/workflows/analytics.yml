@@ -1,5 +1,7 @@
 name: Refresh analytics
 
+# Sends GoatCounter's totals to the private Apps Script receiver (nothing is committed:
+# this repository is public). See README > Analytics and consent.
 on:
   push:
     branches: [main]
@@ -9,9 +11,13 @@ on:
   schedule:
     - cron: "29 */8 * * *"
   workflow_dispatch:
+    inputs:
+      days:
+        description: "How many days to refresh (4 normally, 90 to fill in history)"
+        default: "4"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: lightning-analytics
@@ -31,19 +37,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Refresh GoatCounter analytics
+      - name: Send GoatCounter totals to the receiver
         env:
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
-        run: python analytics/goatcounter_daily.py
-
-      - name: Commit refreshed CSV
-        run: |
-          if [ -z "$(git status --porcelain -- analytics/)" ]; then
-            echo "No analytics changes."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add analytics/*.csv
-          git commit -m "Analytics: refresh daily data"
-          git push origin HEAD:main
+          ANALYTICS_READ_KEY: ${{ secrets.ANALYTICS_READ_KEY }}
+        run: python analytics/goatcounter_daily.py "${{ inputs.days || '4' }}"
