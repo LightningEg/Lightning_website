@@ -414,7 +414,7 @@ button,input{font:inherit}
 .d-menu-lang{display:none}
 .d-menu-btn{display:none;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:1px solid var(--line-ctl,var(--line));border-radius:99px;background:transparent;color:var(--ink);cursor:pointer}
 .d-menu-btn:hover{background:var(--field)}
-@media (max-width:800px){
+@media (max-width:980px){
   .d-menu-btn{display:inline-flex}
   .d-bar .wrap{position:relative}
   .d-links{display:none;position:absolute;top:100%;inset-inline:0;margin:0;padding:8px;flex-direction:column;gap:2px;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -22px rgba(10,36,66,.5)}
@@ -423,7 +423,7 @@ button,input{font:inherit}
   .d-bar .lang-switch{display:none}
   .d-links .d-menu-lang{display:block;margin-top:6px;padding:14px 16px;border-top:1px solid var(--line);color:var(--ink2);font:700 16px/1 var(--body);text-decoration:none}
 }
-@media (min-width:641px) and (max-width:800px){.d-bar .lang-switch{display:inline-flex}.d-links .d-menu-lang{display:none}}
+@media (min-width:641px) and (max-width:980px){.d-bar .lang-switch{display:inline-flex}.d-links .d-menu-lang{display:none}}
 .d-foot-links{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 32px;font-size:13px;font-weight:500}
 .d-foot-links nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 .d-foot-links a{text-decoration:none}.d-foot-links a:hover{color:var(--ink)}

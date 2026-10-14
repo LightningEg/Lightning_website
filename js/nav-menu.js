@@ -1,4 +1,4 @@
-// Phone menu: below 800px the top bar's page links fold into one Menu button, so the bar stays calm.
+// Phone menu: below 980px the top bar's page links fold into one Menu button, so the bar stays calm.
 (() => {
   const bar = document.querySelector('.d-bar');
   const links = bar && bar.querySelector('.d-links');
