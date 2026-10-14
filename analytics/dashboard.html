@@ -195,7 +195,7 @@
 
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   // The receiver script's version this page was written for (apps-script/AnalyticsEventsReceiverPatch.gs). A mismatch shows in the health strip.
-  const EXPECTED_SCRIPT_VERSION = '2026-10-14.1';
+  const EXPECTED_SCRIPT_VERSION = '2026-10-14.2';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
   let cur = null, wide = null, daily = [], events = [], journeys = {rows: [], dropped: 0}, downloads = [], period = 28, ctx = {order: {}, labels: {}};
@@ -210,13 +210,15 @@
   const show = which => { $('locked').hidden = which !== 'locked'; $('content').hidden = which !== 'content'; };
   const ask = async (what, d) => {
     const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(d, 88)});
-    const data = await (await fetch(`${RECEIVER}?${query}`)).json();
-    if (data.error) { const e = new Error('key'); e.code = 'key'; throw e; }
+    let data;
+    try { data = await (await fetch(`${RECEIVER}?${query}`)).json(); } catch (_) { const e = new Error('reach'); e.code = 'reach'; throw e; }
+    if (data.error === 'forbidden') { const e = new Error('key'); e.code = 'key'; throw e; }
+    if (data.error) { const e = new Error(data.message || data.error); e.code = 'script'; throw e; }
     return data;
   };
   function locked(message) {
     show('locked'); $('status').hidden = true;
-    $('locked-text').textContent = message || 'Enter your key to see the numbers. It stays in this browser.';
+    $('locked-text').textContent = message || 'Enter your key to see the numbers. It is in the Dashboard key tab of the analytics spreadsheet, and stays in this browser.';
   }
   async function load() {
     if (!stored()) return locked();
@@ -230,7 +232,8 @@
       await prepareContext();
       show('content'); $('status').hidden = true; render();
     } catch (e) {
-      if (e.code === 'key') { try { localStorage.removeItem(KEY); } catch (_) {} locked('That key was refused. Check it and try again.'); }
+      if (e.code === 'key') { try { localStorage.removeItem(KEY); } catch (_) {} locked('That key was refused. Copy it again from the Dashboard key tab of the analytics spreadsheet.'); }
+      else if (e.code === 'script') { show('locked'); $('status').hidden = false; $('status').textContent = `The script answered with an error: ${e.message}`; }
       else { show('locked'); $('status').hidden = false; $('status').textContent = 'Could not reach the script from this browser. Try again, or read the tabs of your spreadsheet.'; }
     }
   }

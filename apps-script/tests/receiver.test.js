@@ -17,11 +17,11 @@ const mkSheet = name => { const rows = []; const sh = { name, rows, fmt: {},
 global.SpreadsheetApp = { getActiveSpreadsheet: () => ({ setSpreadsheetTimeZone: z => { tabs.__tz = z; }, getSheetByName: n => tabs[n] || null, insertSheet: n => (tabs[n] = mkSheet(n)) }) };
 global.ContentService = { createTextOutput: t => ({ t, setMimeType() { return this; } }), MimeType: { JSON: 'json' } };
 global.LockService = { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) };
-global.PropertiesService = { getScriptProperties: () => ({ getProperty: k => props[k] ?? null, setProperty: (k, v) => props[k] = v }) };
+global.PropertiesService = { getScriptProperties: () => ({ getProperty: k => props[k] ?? null, setProperty: (k, v) => props[k] = v, deleteProperty: k => { delete props[k]; } }) };
 global.ScriptApp = { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyDays: () => ({ atHour: () => ({ create() {} }) }) }) }) };
 global.Utilities = { getUuid: () => 'aaaa-bbbb', formatDate: (d, tz, f) => new Date(d).toLocaleDateString('en-CA', { timeZone: tz }) };
 global.Logger = { log() {} };
-eval(fs.readFileSync((process.argv[2] || require('path').join(__dirname, '..', 'AnalyticsEventsReceiverPatch.gs')), 'utf8') + '\nObject.assign(global,{analyticsInsights_,savePageView_,analyticsCounts_,setupAnalyticsEvents,saveAnalyticsEvents_,analyticsJourneys_,purgeAnalyticsEvents,backfillVisitorNumbers,analyticsSheet_});');
+eval(fs.readFileSync((process.argv[2] || require('path').join(__dirname, '..', 'AnalyticsEventsReceiverPatch.gs')), 'utf8') + '\nObject.assign(global,{analyticsInsights_,savePageView_,analyticsCounts_,setupAnalyticsEvents,saveAnalyticsEvents_,analyticsJourneys_,purgeAnalyticsEvents,backfillVisitorNumbers,analyticsSheet_,analyticsAutoSetup_});');
 const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) process.exitCode = 1; };
 const H = { v: 1, ux: 'UX-2026.10.13.02', page: 'index', lang: 'en', device: 'phone', ref: '', us: '', um: '', uc: '' };
 const post = o => saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ ...H, ...o }) });
@@ -195,7 +195,7 @@ addX({ device: 'phone', os: 'android', page: 'current-status', from: 'index', lc
 addX({ device: 'desktop', os: 'windows', page: 'current-status', from: 'ar/index', lcp: 1 }, 'view:0 download-app-v1-android:8');
 addX({ device: 'desktop', os: 'windows', page: 'index', ux: 'UX-2026.10.14.01', from: 'x y' }, 'view:0');
 const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
-ok(i3.meta.script_version === '2026-10-14.1' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
+ok(i3.meta.script_version === '2026-10-14.2' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
 ok(new Date(i3.meta.last_row_at).getTime() > NOWISO - 60000 && typeof i3.meta.rows_today === 'number', 'meta: last row time and today count');
 ok(PV()[1][21] === 'outside' && PV()[2][21] === '' && PV()[3][21] === 'index' && PV()[4][21] === 'ar/index' && PV()[5][21] === '', 'from: stored in the last column; a bad value is blanked');
 ok(tabs['Page views'].rows[0][21] === 'From', 'from: header is the last column');
@@ -213,3 +213,22 @@ ok(i3.find.length === 2 && i3.downloaded === 2 && i3.downloads_page.views === 2,
 const nofrom = tabs['Page views'].rows.length;
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(7000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs['Page views'].rows.length === nofrom + 1 && tabs['Page views'].rows[nofrom][21] === '', 'old clients without from still store');
+
+// ---- a fresh paste sets itself up: no function has to be run by hand ----
+Object.keys(tabs).forEach(k => delete tabs[k]); Object.keys(props).forEach(k => delete props[k]);
+saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
+ok(tabs.__tz === 'Africa/Cairo', 'first request sets the spreadsheet to Cairo time');
+ok(props.ANALYTICS_SETUP_VERSION === '2026-10-14.2' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
+ok(tabs['Dashboard key'] && tabs['Dashboard key'].rows[0][1] === props.ANALYTICS_READ_KEY, 'the key is in the Dashboard key tab');
+ok(tabs.Visitors.fmt['C:D'] && tabs['Page views'].fmt['A:A'], 'existing tabs get their time formats');
+ok(tabs['Page views'].rows.length === 2, 'the page view of that first request is stored');
+tabs.__tz = 'UTC';
+saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8001), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
+ok(tabs.__tz === 'UTC', 'setup runs once per script version, not on every request');
+const fresh = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 5 }).t);
+ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-14.2', 'the dashboard reads them with the key from the tab');
+ok(JSON.parse(analyticsJourneys_({ key: 'wrong', what: 'insights' }).t).error === 'forbidden', 'a wrong key is refused');
+const realGet = tabs['Page views'].getLastRow; tabs['Page views'].getLastRow = () => { throw new Error('Sheet broke'); };
+const broke = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights' }).t);
+tabs['Page views'].getLastRow = realGet;
+ok(broke.error === 'script' && broke.message === 'Sheet broke', 'a failure answers in JSON with its reason, never an error page');

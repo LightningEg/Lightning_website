@@ -30,12 +30,15 @@
  *      return ContentService.createTextOutput('ok');
  *    }
  *
- * 4. Run setupAnalyticsEvents() once from the Apps Script editor as the
- *    deployment owner. It creates the Events sheet, the daily 90-day purge and
- *    the read key, and logs the key: save it as the GitHub repository secret
- *    ANALYTICS_JOURNEYS_KEY (Settings > Secrets and variables > Actions).
- * 5. Deploy a NEW VERSION of the existing web app deployment. Keep its /exec
+ * 4. Deploy a NEW VERSION of the existing web app deployment. Keep its /exec
  *    URL unchanged.
+ *
+ * That is all. The first request to a new version sets itself up (Cairo time,
+ * column formats, tabs, the daily 90-day purge, the read key), so nothing has
+ * to be run by hand. The read key is in the spreadsheet's "Dashboard key" tab:
+ * the dashboard asks for it, and the GitHub secret ANALYTICS_READ_KEY holds
+ * the same value. The spreadsheet ID, once set below, is remembered, so a fresh
+ * paste with it left empty keeps writing to the same spreadsheet.
  */
 const ANALYTICS_SPREADSHEET_ID = '';
 const ANALYTICS_SHEET_NAME = 'Events';
@@ -78,17 +81,28 @@ const ANALYTICS_PV_HEADERS = [
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 // Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
-const ANALYTICS_SCRIPT_VERSION = '2026-10-14.1';
+const ANALYTICS_SCRIPT_VERSION = '2026-10-14.2';
+// The version whose setup has run; a new version sets itself up on its first request (analyticsAutoSetup_).
+const ANALYTICS_SETUP_PROPERTY = 'ANALYTICS_SETUP_VERSION';
+const ANALYTICS_BOOK_PROPERTY = 'ANALYTICS_SPREADSHEET_ID';
+const ANALYTICS_KEY_SHEET_NAME = 'Dashboard key';
 const ANALYTICS_MAX_PV_PER_DAY = 3000;
 const ANALYTICS_MAX_PV_TOTAL = 100000;
 // GitHub's own download counts for each file, copied here daily by the GitHub job.
 const ANALYTICS_DOWNLOADS_SHEET_NAME = 'GitHub downloads';
 const ANALYTICS_DOWNLOADS_HEADERS = ['date', 'tag', 'asset', 'platform', 'count'];
 
+// The ID above, or the one remembered from an earlier paste; without either, the spreadsheet this script is bound to.
+let analyticsBookCache_ = null;
 function analyticsBook_() {
-  return ANALYTICS_SPREADSHEET_ID
-    ? SpreadsheetApp.openById(ANALYTICS_SPREADSHEET_ID)
-    : SpreadsheetApp.getActiveSpreadsheet();
+  if (analyticsBookCache_) return analyticsBookCache_;
+  const props = PropertiesService.getScriptProperties();
+  if (ANALYTICS_SPREADSHEET_ID && props.getProperty(ANALYTICS_BOOK_PROPERTY) !== ANALYTICS_SPREADSHEET_ID) {
+    props.setProperty(ANALYTICS_BOOK_PROPERTY, ANALYTICS_SPREADSHEET_ID);
+  }
+  const id = ANALYTICS_SPREADSHEET_ID || props.getProperty(ANALYTICS_BOOK_PROPERTY);
+  analyticsBookCache_ = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+  return analyticsBookCache_;
 }
 
 function analyticsSheet_() {
@@ -110,13 +124,17 @@ function analyticsVisitorsSheet_() {
     sheet = book.insertSheet(ANALYTICS_VISITORS_SHEET_NAME);
     sheet.appendRow(ANALYTICS_VISITOR_HEADERS);
     sheet.setFrozenRows(1);
-    sheet.getRange('A:A').setNumberFormat('@'); // plain text: an ID like 12e4... must not become a number
-    sheet.getRange('C:D').setNumberFormat(ANALYTICS_TIME_FORMAT);
-    sheet.setColumnWidth(1, 150);
-    sheet.setColumnWidth(3, 160);
-    sheet.setColumnWidth(4, 160);
+    analyticsFormatVisitors_(sheet);
   }
   return sheet;
+}
+
+function analyticsFormatVisitors_(sheet) {
+  sheet.getRange('A:A').setNumberFormat('@'); // plain text: an ID like 12e4... must not become a number
+  sheet.getRange('C:D').setNumberFormat(ANALYTICS_TIME_FORMAT);
+  sheet.setColumnWidth(1, 150);
+  sheet.setColumnWidth(3, 160);
+  sheet.setColumnWidth(4, 160);
 }
 
 // "Received at" is stored with the full time; this makes the sheet show it, for old and new rows.
@@ -537,8 +555,10 @@ function setupAnalyticsEvents() {
   // so a visit just after midnight in Cairo looks like the evening before.
   analyticsBook_().setSpreadsheetTimeZone(ANALYTICS_TIMEZONE);
   analyticsFormatColumns_(analyticsSheet_());
-  analyticsVisitorsSheet_();
-  analyticsPageViewsSheet_();
+  analyticsFormatVisitors_(analyticsVisitorsSheet_());
+  const pvs = analyticsPageViewsSheet_();
+  pvs.getRange('A:A').setNumberFormat(ANALYTICS_TIME_FORMAT);
+  ['B:B', 'N:N', 'U:U'].forEach(a => pvs.getRange(a).setNumberFormat('@'));
   ScriptApp.getProjectTriggers()
     .filter(t => t.getHandlerFunction() === 'purgeAnalyticsEvents')
     .forEach(t => ScriptApp.deleteTrigger(t));
@@ -549,8 +569,31 @@ function setupAnalyticsEvents() {
     key = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
     props.setProperty(ANALYTICS_KEY_PROPERTY, key);
   }
+  // The owner reads the key here instead of in a log. Anyone who can open this spreadsheet already sees more than it unlocks.
+  const book = analyticsBook_();
+  const keySheet = book.getSheetByName(ANALYTICS_KEY_SHEET_NAME) || book.insertSheet(ANALYTICS_KEY_SHEET_NAME);
+  keySheet.getRange(1, 1, 2, 2).setValues([
+    ['Dashboard key', key],
+    ['Where it goes', 'Paste it into analytics/dashboard.html when it asks, and save it as the GitHub secret ANALYTICS_READ_KEY.'],
+  ]);
   backfillVisitorNumbers();
-  Logger.log('ANALYTICS_JOURNEYS_KEY: ' + key);
+  Logger.log('ANALYTICS_READ_KEY (also in the Dashboard key tab): ' + key);
+  props.setProperty(ANALYTICS_SETUP_PROPERTY, ANALYTICS_SCRIPT_VERSION);
+}
+
+// The first request to a new script version runs the setup above, so pasting and deploying are the only steps.
+// The version is claimed first, so requests arriving together run it once; a failure is retried on the next request
+// and never stops the request itself.
+function analyticsAutoSetup_() {
+  const props = PropertiesService.getScriptProperties();
+  if (props.getProperty(ANALYTICS_SETUP_PROPERTY) === ANALYTICS_SCRIPT_VERSION) return;
+  props.setProperty(ANALYTICS_SETUP_PROPERTY, ANALYTICS_SCRIPT_VERSION);
+  try {
+    setupAnalyticsEvents();
+  } catch (err) {
+    props.deleteProperty(ANALYTICS_SETUP_PROPERTY);
+    console.error('Analytics setup failed: ' + err);
+  }
 }
 
 function analyticsClean_(value, pattern, max) {
@@ -560,6 +603,7 @@ function analyticsClean_(value, pattern, max) {
 
 function saveAnalyticsEvents_(params) {
   const ok = ContentService.createTextOutput('ok');
+  analyticsAutoSetup_();
   let data;
   try { data = JSON.parse(params.payload || ''); } catch (err) { return ok; }
   if (data && data.kind === 'counts') return saveAnalyticsCounts_(data);
@@ -651,9 +695,19 @@ function purgeAnalyticsEvents() {
   }
 }
 
-// Totals per Cairo day and landing page (the first page of each visit). No visit numbers leave here.
+// Every read answers in JSON, a failure included, so the dashboard can say what went wrong instead of going blank.
 function analyticsJourneys_(params) {
   const json = obj => ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+  try {
+    analyticsAutoSetup_();
+    return analyticsRead_(json, params || {});
+  } catch (err) {
+    return json({error: 'script', message: String(err && err.message || err).slice(0, 300), script_version: ANALYTICS_SCRIPT_VERSION});
+  }
+}
+
+// Totals per Cairo day and landing page (the first page of each visit). No visit numbers leave here.
+function analyticsRead_(json, params) {
   const key = PropertiesService.getScriptProperties().getProperty(ANALYTICS_KEY_PROPERTY);
   if (!key || params.key !== key) return json({error: 'forbidden'});
   if (params.what === 'counts') return analyticsCounts_(json, params);
