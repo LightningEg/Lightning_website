@@ -1,4 +1,4 @@
-/* Current Status (current-status.html): only what css/landing.css and css/home.css lack. Loads after both.
+/* Downloads (current-status.html): only what css/landing.css and css/home.css lack. Loads after both.
    The feedback form (app-feedback.html) still uses css/current-status.css. */
 /* why Lightning exists: one readable column, the first paragraph larger */
 .status-story__copy{display:grid;gap:18px;max-width:720px;margin-inline:auto}

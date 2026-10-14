@@ -19,7 +19,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Home](https://lightningeg.com/): all your money on your phone and PC: net worth across six kinds of places, one ledger kept in sync between phone and PC, phone screens, every number with its working, safe to spend, the next three months, what Lightning does for you (bank SMS, rules, weekend-aware bills, goals, financial health, search) and a calculator for what a small monthly saving is worth.
 - [Features](https://lightningeg.com/features.html): 101 features in twelve groups: the overview page, accounts and transactions, money held for others, bank statement CSV import, budget by category, safe to spend, bills and forecast, shares and funds, dollars and other currencies, gold and bank certificates, privacy, backups and recovery, typing shortcuts, and your phone and PC.
 - [How it works](https://lightningeg.com/how-it-works.html): a monthly routine of about 30 minutes: upload your statements (10 minutes), settle a few rows (5 minutes), then sit down with your numbers (15 minutes).
-- [Download and current status](https://lightningeg.com/current-status.html): the Windows beta downloads, a safe sample year of fictional CSV statements to learn on, and how to give feedback.
+- [Downloads](https://lightningeg.com/current-status.html): the Windows beta downloads, a safe sample year of fictional CSV statements to learn on, and how to give feedback.
 - [Sample profiles](https://lightningeg.com/sample-profiles.html): four fictional Egyptian 2026 profiles—Amr (irregular side income), Abdelrahman (steady salary and equity investing), Menna (freelance income), and Fatma (predictable household costs and an emergency reserve)—loadable in Lightning.
 - [Release log](https://lightningeg.com/release-log.html): what changed build by build.
 
@@ -60,7 +60,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [الرئيسية](https://lightningeg.com/ar/index.html): كل فلوسك في صورة واحدة واضحة، مع مزايا الموبايل والكمبيوتر والخصوصية.
 - [المزايا](https://lightningeg.com/ar/features.html)
 - [طريقة الاستخدام](https://lightningeg.com/ar/how-it-works.html)
-- [الحالة والتنزيلات](https://lightningeg.com/ar/current-status.html)
+- [التنزيل](https://lightningeg.com/ar/current-status.html)
 - [مقالات](https://lightningeg.com/ar/guides.html)
 - [صافي الثروة](https://lightningeg.com/ar/net-worth-tracker.html)
 - [الميزانية](https://lightningeg.com/ar/budget-app-egypt.html)

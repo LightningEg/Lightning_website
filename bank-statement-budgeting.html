@@ -34,6 +34,7 @@
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
 <script src="js/theme.js?v=20260930-1"></script>
+<script src="js/nav-menu.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="css/ux-test.css?v=20260928-1">
 <link rel="stylesheet" href="css/dev-dock.css?v=20261004-1">
 <script src="js/dev-dock.js?v=20261005-1" defer></script>
@@ -41,7 +42,7 @@
 <script src="js/analytics.js?v=20261003-1" defer></script>
 <link rel="stylesheet" href="css/signup-band.css?v=20261012-1">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://lightningeg.com/bank-statement-budgeting.html#page","url":"https://lightningeg.com/bank-statement-budgeting.html","name":"Budget From Your Bank Statement CSV, No Bank Login · Lightning","description":"Turn your bank or wallet statement into a budget without giving an app your bank login. Import the CSV, match its columns once, and review every row before it is saved.","inLanguage":"en","isPartOf":{"@id":"https://lightningeg.com/#website"},"about":{"@id":"https://lightningeg.com/#app"}},{"@type":"FAQPage","@id":"https://lightningeg.com/bank-statement-budgeting.html#faq","mainEntity":[{"@type":"Question","name":"Which banks and wallets work?","acceptedAnswer":{"@type":"Answer","text":"Any that give you a CSV file. Mohab’s sample year has CIB, Vodafone Cash, a cash wallet, an NBE certificate, THNDR and gold, so you can practise first."}},{"@type":"Question","name":"My bank only gives a PDF. What now?","acceptedAnswer":{"@type":"Answer","text":"Lightning gives you ready-made instructions to turn the PDF into a CSV with an AI assistant, then you import it the same way."}},{"@type":"Question","name":"Do I have to choose a category for every row?","acceptedAnswer":{"@type":"Answer","text":"No. Answer once for each name and every row with that name follows. Tick “Use this category next time” and next month’s statement sorts itself."}},{"@type":"Question","name":"What if I import the same month twice?","acceptedAnswer":{"@type":"Answer","text":"Rows that look like ones you already have are flagged as possible duplicates before anything is saved."}},{"@type":"Question","name":"Is it safe?","acceptedAnswer":{"@type":"Answer","text":"The file stays on your computer. Lightning never asks for your bank login, and your statements are never uploaded anywhere. Where your data lives."}},{"@type":"Question","name":"Can I try it without my own statements?","acceptedAnswer":{"@type":"Answer","text":"Yes. Download Mohab’s fictional 2026 sample pack from Current Status and import it into a sample profile."}}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://lightningeg.com/bank-statement-budgeting.html#page","url":"https://lightningeg.com/bank-statement-budgeting.html","name":"Budget From Your Bank Statement CSV, No Bank Login · Lightning","description":"Turn your bank or wallet statement into a budget without giving an app your bank login. Import the CSV, match its columns once, and review every row before it is saved.","inLanguage":"en","isPartOf":{"@id":"https://lightningeg.com/#website"},"about":{"@id":"https://lightningeg.com/#app"}},{"@type":"FAQPage","@id":"https://lightningeg.com/bank-statement-budgeting.html#faq","mainEntity":[{"@type":"Question","name":"Which banks and wallets work?","acceptedAnswer":{"@type":"Answer","text":"Any that give you a CSV file. Mohab’s sample year has CIB, Vodafone Cash, a cash wallet, an NBE certificate, THNDR and gold, so you can practise first."}},{"@type":"Question","name":"My bank only gives a PDF. What now?","acceptedAnswer":{"@type":"Answer","text":"Lightning gives you ready-made instructions to turn the PDF into a CSV with an AI assistant, then you import it the same way."}},{"@type":"Question","name":"Do I have to choose a category for every row?","acceptedAnswer":{"@type":"Answer","text":"No. Answer once for each name and every row with that name follows. Tick “Use this category next time” and next month’s statement sorts itself."}},{"@type":"Question","name":"What if I import the same month twice?","acceptedAnswer":{"@type":"Answer","text":"Rows that look like ones you already have are flagged as possible duplicates before anything is saved."}},{"@type":"Question","name":"Is it safe?","acceptedAnswer":{"@type":"Answer","text":"The file stays on your computer. Lightning never asks for your bank login, and your statements are never uploaded anywhere. Where your data lives."}},{"@type":"Question","name":"Can I try it without my own statements?","acceptedAnswer":{"@type":"Answer","text":"Yes. Download Mohab’s fictional 2026 sample pack from Downloads and import it into a sample profile."}}]}]}
 </script>
 </head>
 <body data-ux-version="UX-2026.10.13.05" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
@@ -59,7 +60,8 @@
       <a href="index.html" data-home-link>Home</a>
       <a href="features.html">Features</a>
       <a href="how-it-works.html">How It Works</a>
-      <a href="current-status.html">Current Status</a>
+      <a href="guides.html">Guides</a>
+      <a href="current-status.html">Downloads</a>
     </nav>
     <div class="d-bar-end">
         <button data-theme-toggle aria-label="Dark mode"></button>
@@ -115,7 +117,7 @@
       <details><summary>Do I have to choose a category for every row?</summary><p>No. Answer once for each name and every row with that name follows. Tick “Use this category next time” and next month’s statement sorts itself.</p></details>
       <details><summary>What if I import the same month twice?</summary><p>Rows that look like ones you already have are flagged as possible duplicates before anything is saved.</p></details>
       <details><summary>Is it safe?</summary><p>The file stays on your computer. Lightning never asks for your bank login, and your statements are never uploaded anywhere. <a href="offline-personal-finance-app.html">Where your data lives</a>.</p></details>
-      <details><summary>Can I try it without my own statements?</summary><p>Yes. Download Mohab’s fictional 2026 sample pack from <a href="current-status.html">Current Status</a> and import it into a sample profile.</p></details>
+      <details><summary>Can I try it without my own statements?</summary><p>Yes. Download Mohab’s fictional 2026 sample pack from <a href="current-status.html">Downloads</a> and import it into a sample profile.</p></details>
     </div>
   </section>
 
@@ -156,7 +158,7 @@
 <div class="wrap">
   <footer class="d-foot">
     <div class="d-foot-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><span>Made in Egypt</span></div>
-    <nav aria-label="Footer"><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Current Status</a><a href="guides.html">Guides</a><a href="release-log.html">Release Log</a><a href="survey.html">Survey</a></nav><div class="d-foot-links"><nav aria-label="Community"><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">Reddit</a><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></nav><nav aria-label="Contact"><a href="mailto:hello@lightning.com">hello@lightning.com</a><a href="mailto:feedback@lightning.com">feedback@lightning.com</a></nav></div>
+    <nav aria-label="Footer"><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Downloads</a><a href="guides.html">Guides</a><a href="release-log.html">Release Log</a><a href="survey.html">Survey</a></nav><div class="d-foot-links"><nav aria-label="Community"><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">Reddit</a><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></nav><nav aria-label="Contact"><a href="mailto:hello@lightning.com">hello@lightning.com</a><a href="mailto:feedback@lightning.com">feedback@lightning.com</a></nav></div>
   </footer>
 </div>
 

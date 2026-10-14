@@ -23,7 +23,7 @@ features.html       Features: the five things it does best (each with a Mohab nu
 guides.html         Guides: the one library page, two cards (Using Lightning: the seven guides below; Budgeting basics: the five articles), each a list of the readers' questions linked to the page that answers it (css/guides.css `.g-lib`)
 *-egypt.html, net-worth-tracker.html, cash-flow-planner.html, bank-statement-budgeting.html, offline-personal-finance-app.html
                     the guides: one search question each, answered with Mohab's year (see Search below)
-ar/                  Egyptian Arabic home page, Features, How It Works, Current Status («التنزيل»), Guides («مقالات»), seven guides, Release Log, Sample Profiles, Survey and App Feedback (the last two noindex; their scripts switch to Arabic on `lang="ar-EG"`; form values stay English so answers sort together): the English design system, written for Egypt; each language switch opens the matching page
+ar/                  Egyptian Arabic home page, Features, How It Works, Downloads («التنزيل»), Guides («مقالات»), seven guides, Release Log, Sample Profiles, Survey and App Feedback (the last two noindex; their scripts switch to Arabic on `lang="ar-EG"`; form values stay English so answers sort together): the English design system, written for Egypt; each language switch opens the matching page
 blog.html           redirect to guides.html (the blog index is retired; the library is Guides). The five English articles (blog-*.html: salary-runs-out, budget-20000-egp, track-expenses, emergency-fund, irregular-income-budget); each has its own canonical URL, BlogPosting, BreadcrumbList and FAQPage data, and css/blog.css
 ar/blog.html         redirect to ar/guides.html; the five articles in Egyptian Arabic (same file names under ar/); written for Egypt, not translated, with reciprocal hreflang and a language switch to the English page
 css/arabic.css       loaded last on ar/ pages: the Arabic faces at the English sizes and weights (B04, A06.2), the right-to-left gradient and the few x-axis movements that dir="rtl" can't flip
@@ -33,16 +33,16 @@ sitemap.xml         every page that should be in search, and nothing else
 css/styles.css      shared styles
 css/version-b.css   Version B's own sections (builds on css/version-c.css)
 js/version-b.js     Version B calculator with an adjustable return rate
-css/version-c.css   the old Version C system, still used by App Feedback, Versions and the Arabic How It Works and Current Status
+css/version-c.css   the old Version C system, still used by App Feedback, Versions and the Arabic How It Works and Downloads
 js/version-c.js     the old Version C script, still used by How It Works
 css/landing.css     the landing pages: self-contained, guideline tokens and building blocks only
 css/home.css        the home page's own sections, loaded after css/landing.css
 css/guides.css      the guide pages' few extras, loaded after css/home.css
 css/signup-band.css the signup band, the same on every page (guideline 3.20). It is the only gradient call-out card: any other closing prompt is a plain section (B06). Buttons: vivid only in the hero and for the band's survey, Nile primary elsewhere, 48px (top bar 40, inside tables 36)
-js/signup.js        the signup form on pages whose own script doesn't handle it (Current Status)
+js/signup.js        the signup form on pages whose own script doesn't handle it (Downloads)
 js/landing.js       the landing pages: calculator, tabs, lightbox and signup
 css/version-d.css   Version D's stylesheet, kept for the Arabic release log page
-css/how-it-works.css, css/status.css (Current Status), css/sample-profiles.css, css/release-log.css
+css/how-it-works.css, css/status.css (Downloads), css/sample-profiles.css, css/release-log.css
                     the four English pages that now sit on the landing system (header, hero, headings, cards, signup band and footer are the home page's): only their own components live here
 js/analytics.js     analytics in two tiers and the consent bar (see Analytics and consent below)
 css/consent.css     the consent bar and the two choice buttons
@@ -50,7 +50,7 @@ privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 
 analytics/          goatcounter_daily.py (sends GoatCounter's totals to the private receiver) and dashboard.html (reads everything behind the key; noindex). No data files: nothing analytical is committed
 audit/              website audits against the guideline
 css/theme.css       light/dark switch
-css/motion.css      small motion on the home page, Features, How It Works, Current Status and the guides (see Motion below)
+css/motion.css      small motion on the home page, Features, How It Works, Downloads and the guides (see Motion below)
 js/motion.js        count-up figures, the rolling calculator answer, lists arriving item by item and scroll reveal
 test.html           private test page, not indexed or linked: the two-screen ledger handoff follows the hero; its one-time animation has a Hand back control and a static reduced-motion state; the six-places wow still plays
 css/wow.css, js/wow.js the wow moment on the home page and test.html (see Motion below)
@@ -128,29 +128,29 @@ Every landing page includes the same scroll-aware UX feedback rail. It sends an 
 - `UX-2026.10.04.25` — `index.html` (A · beta, and ready to use)
 - `UX-2026.10.04.26` — `version-b.html` (B · beta, and ready to use)
 - `UX-2026.10.04.27` — `version-c.html` (C · beta, and ready to use)
-- `UX-2026.10.04.28` — `current-status.html` (Current Status · beta, and ready to use)
+- `UX-2026.10.04.28` — `current-status.html` (Downloads · beta, and ready to use)
 - `UX-2026.10.04.29` — `release-log.html` (Release Log · beta, and ready to use)
 - `UX-2026.10.04.30` — `release-log.html` (Release Log · one card per build)
 - `UX-2026.10.04.31` — `index.html` (A · beta testers wanted)
 - `UX-2026.10.04.32` — `version-b.html` (B · beta testers wanted)
 - `UX-2026.10.04.33` — `version-c.html` (C · beta testers wanted)
 - `UX-2026.10.04.34` — `how-it-works.html` (How It Works · beta testers wanted)
-- `UX-2026.10.04.35` — `current-status.html` (Current Status · beta testers wanted)
+- `UX-2026.10.04.35` — `current-status.html` (Downloads · beta testers wanted)
 - `UX-2026.10.04.36` — `release-log.html` (Release Log · beta testers wanted)
 - `UX-2026.10.04.37` — `index.html` (A · beta testers, in the signup)
 - `UX-2026.10.04.38` — `version-b.html` (B · beta testers, in the signup)
 - `UX-2026.10.04.39` — `version-c.html` (C · beta testers, in the signup)
 - `UX-2026.10.04.40` — `how-it-works.html` (How It Works · beta testers, in the signup)
-- `UX-2026.10.04.41` — `current-status.html` (Current Status · no strip)
+- `UX-2026.10.04.41` — `current-status.html` (Downloads · no strip)
 - `UX-2026.10.04.42` — `release-log.html` (Release Log · beta testers, in the signup)
 - `UX-2026.10.04.43` — `index.html` (A · one signup everywhere)
 - `UX-2026.10.04.44` — `version-b.html` (B · one signup everywhere)
 - `UX-2026.10.04.45` — `version-c.html` (C · one signup everywhere)
 - `UX-2026.10.04.46` — `how-it-works.html` (How It Works · one signup everywhere)
-- `UX-2026.10.04.47` — `current-status.html` (Current Status · one signup everywhere)
+- `UX-2026.10.04.47` — `current-status.html` (Downloads · one signup everywhere)
 - `UX-2026.10.04.48` — `release-log.html` (Release Log · one signup everywhere)
 - `UX-2026.10.04.49` — `version-c.html` (C · one clear picture)
-- `UX-2026.10.04.50` — `current-status.html` (Current Status · what my own numbers taught me)
+- `UX-2026.10.04.50` — `current-status.html` (Downloads · what my own numbers taught me)
 - `UX-2026.10.04.51` — `version-c.html` (C · six places, with a header)
 - `UX-2026.09.30.04` — `how-it-works.html` (six steps)
 - `UX-2026.10.01.07` — `how-it-works.html` (monthly routine)
@@ -170,9 +170,9 @@ UX responses go to the survey sheet until the Apps Script receiver routes them. 
 3. Deploy → Manage deployments → edit the existing deployment → New version → Deploy. Saving alone does not change the live web app.
 4. Run `testUxRoute` once from the editor and check that a row appears in the **UX Tests** tab (created automatically if missing).
 
-## Current Status and app feedback
+## Downloads and app feedback
 
-[Current Status](current-status.html) is the shared beta hub for both landing pages. It keeps beta orientation, harmless Mohab sample CSVs, release notes/download links and app feedback in one predictable place. The header and the **Testing** panel both link to it. Home on this shared page returns to the landing version a visitor most recently viewed.
+[Downloads](current-status.html) is the shared beta hub for both landing pages. It keeps beta orientation, harmless Mohab sample CSVs, release notes/download links and app feedback in one predictable place. The header and the **Testing** panel both link to it. Home on this shared page returns to the landing version a visitor most recently viewed.
 
 The app feedback form accepts multiple tickets at once, with up to five screenshots per ticket and ten per submission. Testers can choose PNG, JPEG or WebP images, or paste them into a ticket description. PNG screenshots are re-encoded losslessly at their original dimensions; the smaller encoding is kept only when it actually saves space. JPEG and WebP files are sent unchanged. The browser prepares each image as soon as it is attached, then sends the images with the tickets in one `form_type=app_feedback` request.
 
@@ -217,12 +217,12 @@ Lightning aims to be found first for **free personal finance for Egypt**, then f
 - **Every indexable page** has a title and description written for search, an absolute `<link rel="canonical" href="https://lightningeg.com/...">` (the home page is `https://lightningeg.com/`), Open Graph tags with `assets/brand/social-card.png`, and a line in `sitemap.xml`. Add all four to any new public page.
 - **Arabic pages** live under `/ar/`, use Egyptian Arabic (`lang="ar-EG"`, `dir="rtl"`), and have their own Arabic title, description, canonical, Open Graph metadata, structured data and sitemap entry. Add reciprocal `hreflang="ar-EG"` and `hreflang="en"` links on both language versions; each language switch opens the same page in the other language. Write for Egyptian search terms such as إدارة المصاريف في مصر and ميزانية شهرية, in natural Egyptian Arabic.
 - **Not in search:** survey, app feedback, the two privacy pages, the test page, the version archive, the brand guideline and every `archive/` snapshot carry `<meta name="robots" content="noindex,follow">` and stay out of the sitemap. Add the same line to each new snapshot (the one head change allowed on a snapshot besides brand-wide ones). `version-b.html` and `version-c.html` redirect to the home page and canonicalise to it; `blog.html` and `ar/blog.html` redirect to the Guides pages the same way, and stay out of the sitemap. `robots.txt` blocks only files that are not pages (`audit/`, `analytics/`, `apps-script/`, the READMEs), because a blocked page can't show its noindex.
-- **Structured data:** the home page has `Organization`, `WebSite`, `SoftwareApplication` (free, Windows, FinanceApplication) and `FAQPage` (its seven visible questions); each guide has `WebPage` and `FAQPage` matching its visible questions; How It Works has `WebPage` and `HowTo` (its three steps); Features, Current Status and the Release Log have `WebPage`; Guides has `CollectionPage`, `BreadcrumbList` and an `ItemList` of every page it links. Each blog article (English and Arabic) has `BlogPosting`, `BreadcrumbList` and `FAQPage` matching its visible questions; their breadcrumb reads Home > Guides > article. Change the structured data whenever the visible text it repeats changes. Only true claims: no ratings, reviews or download counts until real ones exist. Update `softwareVersion` with each app release.
+- **Structured data:** the home page has `Organization`, `WebSite`, `SoftwareApplication` (free, Windows, FinanceApplication) and `FAQPage` (its seven visible questions); each guide has `WebPage` and `FAQPage` matching its visible questions; How It Works has `WebPage` and `HowTo` (its three steps); Features, Downloads and the Release Log have `WebPage`; Guides has `CollectionPage`, `BreadcrumbList` and an `ItemList` of every page it links. Each blog article (English and Arabic) has `BlogPosting`, `BreadcrumbList` and `FAQPage` matching its visible questions; their breadcrumb reads Home > Guides > article. Change the structured data whenever the visible text it repeats changes. Only true claims: no ratings, reviews or download counts until real ones exist. Update `softwareVersion` with each app release.
 - **The guides** (`guides.html` lists them as questions): net worth, budget, expenses, investments, safe to spend, bank statements, privacy. Each is built from the landing building blocks only (hero, a worked example beside its real screen, three cards or steps, good questions, keep reading, the signup band). Every figure comes from Mohab's year on 2026-10-04 and matches the screen beside it, as on the home page; recapture them together. They never mention other apps (B10, B12), so comparison pages are not built.
 - **Head-only changes** (title, description, canonical, social tags, structured data) don't change what a visitor sees, so they don't need a new release ID. Visible copy does.
 - **AI assistants:** `llms.txt` is a plain summary of what Lightning is, its key facts and every public page, for AI assistants and AI search. Update it when a fact on the site changes (price, platform, version, a new guide). `robots.txt` names the AI crawlers (Claude, ChatGPT, Perplexity, Gemini, Apple and others) to make the welcome explicit; they follow the same rules as everyone. Many AI crawlers do not run JavaScript, so every fact must be in the HTML as written; `js/motion.js` and `js/wow.js` stand down for crawlers, so a crawler that does run scripts also reads every figure as written.
 - **IndexNow:** `.github/workflows/indexnow.yml` sends every sitemap address to IndexNow (Bing, which feeds ChatGPT and Copilot search, plus Yandex, Seznam and Naver) after each publish. The key file at the root (`7778af1015309ba6ad3ba3f379bb6811.txt`) must stay. Google reads `sitemap.xml` instead.
-- **After publishing:** the owner verifies `lightningeg.com` as a Domain property in Google Search Console (DNS) and in Bing Webmaster Tools, submits `https://lightningeg.com/sitemap.xml` and requests indexing for the home page, How It Works, Current Status and the guides. Then write the next guides from the queries Search Console reports.
+- **After publishing:** the owner verifies `lightningeg.com` as a Domain property in Google Search Console (DNS) and in Bing Webmaster Tools, submits `https://lightningeg.com/sitemap.xml` and requests indexing for the home page, How It Works, Downloads and the guides. Then write the next guides from the queries Search Console reports.
 
 ## Version identity and archive
 
@@ -232,7 +232,7 @@ Every testable web experience has one visible immutable release ID, in the form 
 
 Arabic localized counterparts do not use English UX test release IDs.
 
-Windows and Android app versions are separate from website experience IDs. The Current Status page and [Version Archive](versions.html) link to each app build independently. Keep at least the three newest app versions permanently, add a new row for every release, and never replace an older version's file or link. Published ZIPs, APKs and checksums live in the public [Lightning-downloads repository](https://github.com/elfekimuhammed/Lightning-downloads).
+Windows and Android app versions are separate from website experience IDs. The Downloads page and [Version Archive](versions.html) link to each app build independently. Keep at least the three newest app versions permanently, add a new row for every release, and never replace an older version's file or link. Published ZIPs, APKs and checksums live in the public [Lightning-downloads repository](https://github.com/elfekimuhammed/Lightning-downloads).
 
 ## Status
 
@@ -240,7 +240,7 @@ The website, survey, and Google Sheets receiver are connected. When changing the
 
 ## Motion
 
-The home page, Features, How It Works, Current Status, Guides and every guide load `css/motion.css` and `js/motion.js` (about 6 KB together, no library). Money figures count up from zero to their exact value as they scroll into view, the calculator answer rolls to each new figure, the items of a list (tiles, breakdown lines, steps, cards side by side, feature bullets) arrive one after another, sections rise in once, real screens lift under the pointer, and pages fade into each other where the browser supports it. Only the home page has a big animation, the wow moment below; secondary pages keep to this small motion (owner's choice, 2026-10-06).
+The home page, Features, How It Works, Downloads, Guides and every guide load `css/motion.css` and `js/motion.js` (about 6 KB together, no library). Money figures count up from zero to their exact value as they scroll into view, the calculator answer rolls to each new figure, the items of a list (tiles, breakdown lines, steps, cards side by side, feature bullets) arrive one after another, sections rise in once, real screens lift under the pointer, and pages fade into each other where the browser supports it. Only the home page has a big animation, the wow moment below; secondary pages keep to this small motion (owner's choice, 2026-10-06).
 
 - Only position (`translate`, `transform`) and `opacity` move; nothing on screen at load is hidden or animated, so the first paint is untouched.
 - Small motion (counts, the calculator roll, tiles, lines and steps arriving in order) always plays, also with *reduce motion* on (owner's choice, 2026-10-06). Big motion (sections rising, screens lifting, page fades) switches off then.
@@ -263,7 +263,7 @@ Both landing pages, How It Works and the brand guidelines support light and dark
 
 ## Header and testing panel
 
-- Every version uses the same header: the logo, **Home · Features · How It Works · Current Status**, and a dark **Take the survey** button (just "Survey" on phones). The header only links to pages, never to a section of the same page.
+- Every version uses the same header: the logo, **Home · Features · How It Works · Guides · Downloads**, and a dark **Take the survey** button (just "Survey" on phones). Below 800px the page links fold into one **Menu** button (`js/nav-menu.js`, styles in `css/landing.css`), which also holds the language switch on phones. The header only links to pages, never to a section of the same page. The Downloads page keeps its address `current-status.html`; only its name changed.
 - The release ID (linking to the version archive), **Submit UX Test**, and **Submit app feedback** live in the **Testing** tab on the right edge of the screen. `js/dev-dock.js` builds it the same way on every page; load it with `defer` before `js/ux-test.js`.
 - There is one live landing page, so **Home** always goes to `index.html`. Archived versions are on [Version Archive](versions.html).
 
@@ -285,7 +285,7 @@ There are three landing pages, both built only from [guideline 3.9](guideline/we
 - Screens are in `assets/app/mohab-year-2026-10-04/`, captured 2026-10-04 from Mohab's full 2026 in the app (`python -m lightning --sample`, port 8767). Overview, Investments and Budget show YTD; Expense analysis shows 2026-09 (every section filled); Cash planning shows today. Older folders (`mohab/`, `mohab-2026-10-04/`) stay for archived pages.
 - Every figure on A is on the screen beside it or adds up from Mohab's year on 2026-10-04 (487,967 in your accounts, 6,000 held for family, 49,500 owed: the car loan's 37,500 and October's rent due; 432,467 net worth, up 287,067 this year; free cash 199,566 less 4,460 payments and 25,017 budget left = 170,089 safe to spend until 2026-11-01; portfolio 250,401, +14,841 this year; next 30 days −28,460 out; +6,981 expected in 2026-11; car loan paid off 2027-12-05; September money out 28,818, 42% rent). B uses the same household. Recapture the screens and these figures together.
 - One quote per page at most (B has James Clear; A has none). No testimonials until there are real ones. No placeholders.
-- How It Works, Current Status and the release log are shared; Home on them returns to the landing page the visitor came from.
+- How It Works, Downloads and the release log are shared; Home on them returns to the landing page the visitor came from.
 
 ## Logo
 
