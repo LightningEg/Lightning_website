@@ -36,7 +36,7 @@ const pv = (o, line, ago) => {
 const day = k => new Date(Date.now() - k * 864e5).toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
 const NEW = 'UX-2026.10.14.99', OLD = 'UX-2026.10.01.99';
 const SECTIONS = ['picture', 'sync', 'trust', 'faq'];
-for (let k = 44; k >= 0; k--) {
+for (let k = 55; k >= 0; k--) {
   const release = k > 12 ? OLD : NEW, perDay = 14;
   for (let i = 0; i < perDay; i++) {
     const ago = k * 864e5 + (23 - (i * 23) / perDay) * 36e5 * 0.9, r = rnd();
@@ -62,8 +62,8 @@ for (let k = 44; k >= 0; k--) {
 }
 for (let i = 0; i < 8; i++) pv({ consent: i % 2 ? 'all' : 'essential', sid: hx(700 + i), vid: hx(800 + i), vn: 1 + (i % 3) }, 'view:0 reach-picture:3', 3 * 36e5);
 const dly = (d, k) => [d, 30 + (k % 7), k % 3, 0, k % 3 ? 'v1.0.0-beta.1-windows: ' + (k % 3) : '', 'x'];
-const dates = Array.from({ length: 45 }, (_, i) => day(44 - i));
-const daily = dates.map((d, i) => dly(d, 44 - i)), events = [];
+const dates = Array.from({ length: 56 }, (_, i) => day(55 - i));
+const daily = dates.map((d, i) => dly(d, 55 - i)), events = [];
 dates.slice(-7).forEach(d => events.push([d, '', 'consent-all', 1], [d, '', 'consent-essential', 2]));
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ kind: 'counts', key, days: dates, daily, events, downloads: [] }) });
 for (let k = 20; k >= 0; k -= 2) saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ kind: 'counts', key, days: [], downloads: [[day(k), 'v1.0.0-beta.1', 'Lightning-windows.zip', 'windows', 10 + (20 - k)], [day(k), 'v1.0.0-beta.1', 'Lightning-android.apk', 'android', 3 + (20 - k) / 2]] }) });

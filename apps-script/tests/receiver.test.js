@@ -195,7 +195,7 @@ addX({ device: 'phone', os: 'android', page: 'current-status', from: 'index', lc
 addX({ device: 'desktop', os: 'windows', page: 'current-status', from: 'ar/index', lcp: 1 }, 'view:0 download-app-v1-android:8');
 addX({ device: 'desktop', os: 'windows', page: 'index', ux: 'UX-2026.10.14.01', from: 'x y' }, 'view:0');
 const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
-ok(i3.meta.script_version === '2026-10-14.2' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
+ok(i3.meta.script_version === '2026-10-14.3' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
 ok(new Date(i3.meta.last_row_at).getTime() > NOWISO - 60000 && typeof i3.meta.rows_today === 'number', 'meta: last row time and today count');
 ok(PV()[1][21] === 'outside' && PV()[2][21] === '' && PV()[3][21] === 'index' && PV()[4][21] === 'ar/index' && PV()[5][21] === '', 'from: stored in the last column; a bad value is blanked');
 ok(tabs['Page views'].rows[0][21] === 'From', 'from: header is the last column');
@@ -218,7 +218,7 @@ ok(tabs['Page views'].rows.length === nofrom + 1 && tabs['Page views'].rows[nofr
 Object.keys(tabs).forEach(k => delete tabs[k]); Object.keys(props).forEach(k => delete props[k]);
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'Africa/Cairo', 'first request sets the spreadsheet to Cairo time');
-ok(props.ANALYTICS_SETUP_VERSION === '2026-10-14.2' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
+ok(props.ANALYTICS_SETUP_VERSION === '2026-10-14.3' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
 ok(tabs['Dashboard key'] && tabs['Dashboard key'].rows[0][1] === props.ANALYTICS_READ_KEY, 'the key is in the Dashboard key tab');
 ok(tabs.Visitors.fmt['C:D'] && tabs['Page views'].fmt['A:A'], 'existing tabs get their time formats');
 ok(tabs['Page views'].rows.length === 2, 'the page view of that first request is stored');
@@ -226,7 +226,7 @@ tabs.__tz = 'UTC';
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8001), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'UTC', 'setup runs once per script version, not on every request');
 const fresh = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 5 }).t);
-ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-14.2', 'the dashboard reads them with the key from the tab');
+ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-14.3', 'the dashboard reads them with the key from the tab');
 ok(JSON.parse(analyticsJourneys_({ key: 'wrong', what: 'insights' }).t).error === 'forbidden', 'a wrong key is refused');
 const realGet = tabs['Page views'].getLastRow; tabs['Page views'].getLastRow = () => { throw new Error('Sheet broke'); };
 const broke = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights' }).t);

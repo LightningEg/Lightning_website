@@ -195,7 +195,7 @@
 
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   // The receiver script's version this page was written for (apps-script/AnalyticsEventsReceiverPatch.gs). A mismatch shows in the health strip.
-  const EXPECTED_SCRIPT_VERSION = '2026-10-14.2';
+  const EXPECTED_SCRIPT_VERSION = '2026-10-14.3';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
   let cur = null, wide = null, daily = [], events = [], journeys = {rows: [], dropped: 0}, downloads = [], period = 28, ctx = {order: {}, labels: {}};
@@ -438,7 +438,9 @@
     const box = $('tiles'); box.replaceChildren();
     const rows = dailyRows(), real = realByDate(), hasDaily = rows.length > 0;
     const curRows = rows.filter(r => inCur(r.date)), prevRows = rows.filter(r => inPrev(r.date));
-    const hasPrev = prevRows.length > 0, s = metricSeries(), seven = a => a.slice(-7);
+    // Compare only with a whole earlier period: one that has only its last few days would always read as "Up".
+    const firstDay = rows.reduce((m, r) => (!m || r.date < m ? r.date : m), '');
+    const hasPrev = prevRows.length > 0 && firstDay <= win().prevFrom, s = metricSeries(), seven = a => a.slice(-7);
     const sumReal = f => Object.keys(real.out).filter(f).reduce((t, d) => t + real.out[d], 0);
     const cv = sumDaily(curRows, 'views'), pv = sumDaily(prevRows, 'views');
     const items = hasDaily ? [
@@ -456,7 +458,7 @@
       if (series.length) t.append(sparkline(series));
       box.append(t);
     });
-    $('numbers-note').textContent = hasDaily ? (hasPrev ? 'Each number is shown beside the period before it, with the last 7 days as a line.' : 'The period before has no data yet, so there is nothing to compare with.') : 'The receiver script is out of date, so only this period’s totals show.';
+    $('numbers-note').textContent = hasDaily ? (hasPrev ? 'Each number is shown beside the period before it, with the last 7 days as a line.' : 'Data does not yet cover the whole period before, so there is nothing fair to compare with.') : 'The receiver script is out of date, so only this period’s totals show.';
   }
 
   // ---- 4. the path to a download ----

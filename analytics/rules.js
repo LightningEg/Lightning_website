@@ -128,7 +128,8 @@
       let best = null;
       ((ins && ins.reach) || []).forEach(g => {
         if (g.views < 50) return;
-        const order = (ctx && ctx.order && ctx.order[g.page]) || Object.keys(g.sections);
+        const order = ctx && ctx.order && ctx.order[g.page];
+        if (!order) return; // without the page's real section order, a "drop" between two sections means nothing
         const names = order.filter(n => n in g.sections);
         for (let i = 1; i < names.length; i += 1) {
           const drop = (g.sections[names[i - 1]] - g.sections[names[i]]) / g.views * 100;

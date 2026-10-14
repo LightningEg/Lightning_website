@@ -81,7 +81,7 @@ const ANALYTICS_PV_HEADERS = [
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 // Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
-const ANALYTICS_SCRIPT_VERSION = '2026-10-14.2';
+const ANALYTICS_SCRIPT_VERSION = '2026-10-14.3';
 // The version whose setup has run; a new version sets itself up on its first request (analyticsAutoSetup_).
 const ANALYTICS_SETUP_PROPERTY = 'ANALYTICS_SETUP_VERSION';
 const ANALYTICS_BOOK_PROPERTY = 'ANALYTICS_SPREADSHEET_ID';
@@ -327,7 +327,10 @@ function analyticsParseTimeline_(text) {
 // what is broken, who visits. Small groups are merged where a long tail would only be noise.
 function analyticsInsights_(json, params) {
   const days = Math.max(1, Math.min(ANALYTICS_KEEP_DAYS - 2, parseInt(params.days, 10) || 28));
-  const cutoff = new Date(Date.now() - days * 864e5);
+  // The period is whole Cairo days ending today, the same days the dashboard labels; the instant cutoff only skips
+  // rows that are certainly older, and the day test below decides.
+  const fromDay = Utilities.formatDate(new Date(Date.now() - (days - 1) * 864e5), ANALYTICS_TIMEZONE, 'yyyy-MM-dd');
+  const cutoff = new Date(Date.now() - (days + 1) * 864e5);
   const sheet = analyticsPageViewsSheet_();
   const last = sheet.getLastRow();
   let rows = [];
@@ -335,7 +338,8 @@ function analyticsInsights_(json, params) {
     const times = sheet.getRange(2, 1, last - 1, 1).getValues();
     let first = 0;
     while (first < times.length && new Date(times[first][0]) < cutoff) first += 1;
-    if (first < times.length) rows = sheet.getRange(2 + first, 1, times.length - first, ANALYTICS_PV_HEADERS.length).getValues();
+    if (first < times.length) rows = sheet.getRange(2 + first, 1, times.length - first, ANALYTICS_PV_HEADERS.length).getValues()
+      .filter(r => Utilities.formatDate(new Date(r[0]), ANALYTICS_TIMEZONE, 'yyyy-MM-dd') >= fromDay);
   }
   const pct = (a, b) => (b ? Math.round(a / b * 100) : 0);
   const median = list => {

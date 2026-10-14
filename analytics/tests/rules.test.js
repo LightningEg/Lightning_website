@@ -54,9 +54,10 @@ ok(c[0].id === 'looks-clickable' && c[0].finding.includes('4%'), 'looks-clickabl
 ok(!ids(base({pages: [pg('index', 49, {dead: [{code: 'dead-img-picture', count: 40}]})]})).includes('looks-clickable') && !ids(base({pages: [pg('index', 100, {dead: [{code: 'dead-img-picture', count: 2}]})]})).includes('looks-clickable'), 'looks-clickable silent below 50 views and under 3%');
 // ---- drop-off ----
 const reach = (views, sections) => ({release: 'UX-1', page: 'index', views, sections});
-c = R.verdicts(base({reach: [reach(100, {hero: 100, picture: 90, trust: 40, faq: 35})]}), {labels: {trust: 'Trust'}});
+c = R.verdicts(base({reach: [reach(100, {hero: 100, picture: 90, trust: 40, faq: 35})]}), {labels: {trust: 'Trust'}, order: {index: ['hero', 'picture', 'trust', 'faq']}});
 ok(c[0].id === 'drop-off' && /50 points/.test(c[0].finding) && /“Trust”/.test(c[0].finding), 'drop-off fires: 50 points lost before Trust');
 ok(!ids(base({reach: [reach(49, {a: 49, b: 0})]})).includes('drop-off') && !ids(base({reach: [reach(100, {a: 100, b: 75})]})).includes('drop-off'), 'drop-off silent below 50 views and under 30 points');
+ok(!ids(base({reach: [reach(100, {hero: 100, trust: 40})]})).includes('drop-off'), 'drop-off silent when the page’s section order is unknown');
 ok(R.verdicts(base({reach: [reach(100, {b: 60, a: 100})]}), {order: {index: ['a', 'b']}})[0].finding.includes('“a” and “b”'), 'drop-off follows the page’s section order when given');
 // ---- arabic-gap ----
 const lang = (key, views, download_pct) => ({key, views, active_median: 1, download_pct, signup_pct: 0});
