@@ -81,11 +81,10 @@
 
     <section class="dash-section" id="funnel">
       <h2>Where Readers Stop</h2>
-      <p>Page views that reached each section, for one page version.</p>
+      <p>How many page views scrolled far enough to reach each section, in the order they appear on the page. The longest bar is the most-viewed section; the others show their share of it.</p>
       <div class="card card-support dash-card">
         <div class="dash-toolbar"><label for="release" class="sr-only">Page version</label><select class="dash-select" id="release"></select></div>
         <div class="dash-bars" id="bars"></div>
-        <table class="dash-table" id="funnel-table" hidden></table>
       </div>
     </section>
 
@@ -97,7 +96,7 @@
 
     <section class="dash-section" id="use">
       <h2>What People Use</h2>
-      <p>Everything counted besides downloads and section views, for everyone.</p>
+      <p>Everything visitors did besides downloads and scrolling, counted for everyone. The grey code is the short name the site records, in case you need it.</p>
       <div class="card card-support dash-card" id="usage"></div>
     </section>
     <p class="dash-foot" id="foot"></p>
@@ -115,6 +114,13 @@
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
   let daily = [], events = [], journeys = null, days = 28;
 
+  async function loadRegistry() {
+    if (Object.keys(registry).length) return;
+    try {
+      const list = (await (await fetch('../version-registry.json')).json()).releases || [];
+      registry = Object.fromEntries(list.map(r => [r.id, r]));
+    } catch (_) {}
+  }
   const show = which => { $('locked').hidden = which !== 'locked'; $('content').hidden = which !== 'content'; };
   const ask = async what => {
     const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(days, 88)});
@@ -130,7 +136,7 @@
     if (!stored()) return locked();
     $('status').hidden = false; $('status').textContent = 'Loading…';
     try {
-      const [c, j] = await Promise.all([ask('counts'), ask('journeys')]);
+      const [c, j] = await Promise.all([ask('counts'), ask('journeys'), loadRegistry()]);
       daily = c.daily || []; events = c.events || [];
       journeys = {rows: j.rows || [], dropped: j.dropped_total || 0};
       show('content'); $('status').hidden = true; render();
@@ -166,6 +172,63 @@
     note.textContent = views >= 300 ? '' : `Only ${n(views)} page views in this period. Too few to compare page versions: wait for a few hundred per page before choosing between them.`;
   }
 
+  // ---- plain-language names: the site sends short codes (click-index-join); these turn them into sentences ----
+  const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+  const human = slug => cap(String(slug).replace(/[-_]+/g, ' ').trim());
+  const PAGES = {index: 'Home page', features: 'Features', 'how-it-works': 'How It Works', 'current-status': 'Current Status', guides: 'Guides',
+    survey: 'Survey', 'sample-profiles': 'Sample profiles', 'release-log': 'Release log', privacy: 'Privacy Notice', versions: 'Version archive',
+    'app-feedback': 'App feedback', blog: 'Guides', 'budget-app-egypt': 'Budget guide', 'expense-tracker-egypt': 'Expense tracker guide',
+    'net-worth-tracker': 'Net worth guide', 'cash-flow-planner': 'Cash flow guide', 'investment-tracker-egypt': 'Investment guide',
+    'bank-statement-budgeting': 'Bank statement guide', 'offline-personal-finance-app': 'Privacy guide',
+    'sync-phone-and-pc-without-cloud': 'Phone and PC sync guide', 'track-money-you-hold-for-others': 'Money held for others guide'};
+  const HASHES = {join: 'sign-up band', downloads: 'downloads', top: 'top of the page', faq: 'questions', calculator: 'calculator'};
+  const HOST = /-(com|org|net|io|gg|me|app|dev|co|eg|ly|tv|us)$/;
+  const pageName = path => {
+    const arabic = path.startsWith('ar/'), base = path.replace(/^ar\//, '').replace(/\.html$/, '');
+    const name = PAGES[base] || human(base);
+    return arabic ? `${name} (Arabic)` : name;
+  };
+  let registry = {};
+  const releaseName = id => (registry[id] ? registry[id].name : /^UX-/.test(id) ? id : pageName(id));
+  const releasePage = id => (registry[id] ? registry[id].page : `${id}.html`);
+
+  function clickLabel(slug) {
+    if (HOST.test(slug)) return `Clicked a link to ${slug.replace(/^www-/, '').replace(/-/g, '.')}`;
+    const known = Object.keys(PAGES).sort((a, b) => b.length - a.length).find(p => slug === p || slug.startsWith(p + '-'));
+    if (!known) return `Clicked a button to ${human(slug)}`;
+    const hash = slug.slice(known.length + 1);
+    return hash ? `Clicked a button to ${PAGES[known]}, ${HASHES[hash] || human(hash).toLowerCase()} section` : `Clicked a button to ${PAGES[known]}`;
+  }
+  const FIXED = {'calc-used': 'Used the calculator', 'lang-switch': 'Switched language (English or Arabic)', download: 'Clicked an app download',
+    sample: 'Clicked a sample-pack download', 'signup-start': 'Started the email signup', 'signup-submit': 'Sent the email signup',
+    'survey-start': 'Started the survey', 'survey-submit': 'Sent the survey'};
+  function eventLabel(code) {
+    if (FIXED[code]) return FIXED[code];
+    let m;
+    if ((m = code.match(/^faq-(\d+)$/))) return `Opened question ${m[1]} in the questions list`;
+    if ((m = code.match(/^screen-(.+)$/))) return `Enlarged a screenshot (${human(m[1]).toLowerCase()})`;
+    if ((m = code.match(/^click-(.+)$/))) return clickLabel(m[1]);
+    if ((m = code.match(/^(.+)-(start|submit)$/))) return `${m[2] === 'start' ? 'Started' : 'Sent'} the ${human(m[1]).toLowerCase()} form`;
+    return human(code);
+  }
+
+  // Section names come from the live page itself (its headings), so they never go stale.
+  const sectionCache = {};
+  async function sectionNames(file) {
+    if (sectionCache[file]) return sectionCache[file];
+    const names = {}, order = [];
+    try {
+      const html = await (await fetch(`../${file}`)).text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('main section[id]').forEach(sec => {
+        const h = sec.querySelector('h2'); if (!h) return;
+        const text = h.textContent.replace(/\s+/g, ' ').trim();
+        names[sec.id] = text.length > 64 ? text.slice(0, 61) + '…' : text; order.push(sec.id);
+      });
+    } catch (_) {}
+    return (sectionCache[file] = {names, order});
+  }
+
   const sections = () => {
     const by = {};
     events.filter(r => r.event.startsWith('reach-') && inWindow(r)).forEach(r => {
@@ -174,30 +237,30 @@
     return by;
   };
 
-  function funnel() {
+  async function funnel() {
     const by = sections(), releases = Object.keys(by).sort().reverse();
     const select = $('release'), keep = select.value;
-    select.replaceChildren(...releases.map(r => { const o = el('option', r); o.value = r; return o; }));
+    select.replaceChildren(...releases.map(r => { const o = el('option', releaseName(r)); o.value = r; return o; }));
     select.hidden = !releases.length;
     if (releases.includes(keep)) select.value = keep;
-    const bars = $('bars'), table = $('funnel-table'); bars.replaceChildren(); table.replaceChildren();
-    if (!releases.length) { bars.append(el('p', 'No section views in this period yet.', 'dash-empty')); table.hidden = true; return; }
-    const rows = Object.entries(by[select.value]).sort((a, b) => b[1] - a[1]);
-    const top = rows[0][1];
-    rows.forEach(([name, v]) => {
-      const row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
+    const bars = $('bars'); bars.replaceChildren();
+    if (!releases.length) { bars.append(el('p', 'No section views in this period yet.', 'dash-empty')); return; }
+    const release = select.value, {names, order} = await sectionNames(releasePage(release));
+    if (select.value !== release) return; // another version was picked while the page loaded
+    // In the order the sections appear on the page, so it reads top to bottom; unknown ones last.
+    const rows = Object.entries(by[release]).sort((a, b) => {
+      const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]);
+      return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib) || b[1] - a[1];
+    });
+    const top = Math.max(...rows.map(r => r[1]));
+    bars.replaceChildren();
+    rows.forEach(([id, v]) => {
+      const label = names[id] || human(id), row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
       fill.style.width = `${v / top * 100}%`; track.append(fill);
-      row.title = `${name}: ${n(v)} page views (${pct(v / top * 100)} of the most-viewed section)`;
-      row.append(el('span', name), track, el('b', `${n(v)} · ${pct(v / top * 100)}`));
+      row.title = `${label}: ${n(v)} page views reached this section (code: reach-${id})`;
+      row.append(el('span', label), track, el('b', `${n(v)} · ${pct(v / top * 100)}`));
       bars.append(row);
     });
-    table.hidden = true; // the bars carry the labels; the table below is the same data for screen readers
-    table.innerHTML = '';
-    const head = el('tr'); ['Section', 'Page views', 'Share of most-viewed'].forEach(h => head.append(el('th', h)));
-    { const thead = el('thead'); thead.append(head); table.append(thead); }
-    const body = el('tbody'); rows.forEach(([name, v]) => { const r = el('tr'); r.append(el('td', name), el('td', n(v)), el('td', pct(v / top * 100))); body.append(r); });
-    table.append(body); table.hidden = false;
-    table.setAttribute('aria-label', 'Section views, as a table');
   }
 
   function journeysTable() {
@@ -205,8 +268,8 @@
     const rows = journeys.rows.filter(inWindow), groups = {};
     rows.forEach(r => {
       const merged = r.landing_release === 'other';
-      const key = merged ? 'Smaller groups' : `${r.landing_release} · ${r.landing_page}`;
-      const g = groups[key] ||= {visits: 0, downloads: 0, signups: 0, merged};
+      const key = merged ? 'Smaller groups' : `${r.landing_release}\u0001${r.landing_page}`;
+      const g = groups[key] ||= {visits: 0, downloads: 0, signups: 0, merged, release: r.landing_release, page: r.landing_page};
       g.visits += Number(r.visits) || 0; g.downloads += Number(r.downloads) || 0; g.signups += Number(r.signups) || 0;
     });
     const entries = Object.entries(groups).sort((a, b) => b[1].visits - a[1].visits);
@@ -219,7 +282,9 @@
     entries.forEach(([name, g]) => {
       const r = el('tr'), few = g.visits < 30;
       const rate = el('td', g.merged ? '' : few ? 'Too few to compare' : n(g.downloads / g.visits * 100), few || g.merged ? 'dash-dim' : '');
-      r.append(el('td', name), el('td', n(g.visits)), el('td', n(g.downloads)), el('td', n(g.signups)), rate);
+      const first = el('td', g.merged ? 'Smaller groups (under 5 visits each)' : pageName(g.page));
+      if (!g.merged && /^UX-/.test(g.release)) first.append(el('span', ` · ${releaseName(g.release)}`, 'dash-dim'));
+      r.append(first, el('td', n(g.visits)), el('td', n(g.downloads)), el('td', n(g.signups)), rate);
       body.append(r);
     });
     table.append(body); box.append(table);
@@ -232,10 +297,10 @@
     const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
     if (!entries.length) { box.append(el('p', 'Nothing counted in this period yet.', 'dash-empty')); return; }
     const table = el('table', undefined, 'dash-table'), head = el('tr');
-    ['Event', 'Times'].forEach(h => head.append(el('th', h)));
+    ['What visitors did', 'Times', 'Code'].forEach(h => head.append(el('th', h)));
     { const thead = el('thead'); thead.append(head); table.append(thead); }
     const body = el('tbody');
-    entries.forEach(([name, v]) => { const r = el('tr'); r.append(el('td', name), el('td', n(v))); body.append(r); });
+    entries.forEach(([code, v]) => { const r = el('tr'); r.append(el('td', eventLabel(code)), el('td', n(v)), el('td', code, 'dash-dim')); body.append(r); });
     table.append(body); box.append(table);
   }
 
