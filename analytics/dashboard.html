@@ -42,11 +42,18 @@
 .dash-bar>b{text-align:end;font-weight:700;white-space:nowrap}
 .dash-table{width:100%;border-collapse:collapse;font-size:14px}
 .dash-table th,.dash-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:end;white-space:nowrap}
-.dash-table th:first-child,.dash-table td:first-child{text-align:start;white-space:normal;overflow-wrap:anywhere}
+.dash-table th:first-child,.dash-table td:first-child{text-align:start;white-space:normal;overflow-wrap:break-word;min-width:150px}
 .dash-table th{color:var(--ink2);font-weight:700}
 .dash-table td.dash-dim{color:var(--muted)}
 .dash-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .dash-empty{margin:0;color:var(--ink2)}
+.dash-sub{margin:22px 0 8px;color:var(--ink);font:800 16px/1.3 var(--body)}
+.dash-sub:first-child{margin-top:0}
+.dash-card .dash-note{margin:0 0 14px}
+.dash-card ul.dash-list{margin:0 0 14px;padding-inline-start:20px;color:var(--ink2);font-size:15px}
+.dash-card ul.dash-list li{margin:4px 0}
+.dash-split{display:grid;grid-template-columns:1fr 1fr;gap:8px 32px}
+@media (max-width:760px){.dash-split{grid-template-columns:1fr}}
 .dash-foot{margin:48px 0 64px;color:var(--muted);font-size:14px}
 @media (max-width:760px){.dash-tiles{grid-template-columns:1fr 1fr}.dash-bar{grid-template-columns:1fr 70px;grid-template-areas:"l v" "t t"}.dash-bar>span:first-child{grid-area:l}.dash-bar>b{grid-area:v}.dash-bar .dash-track{grid-area:t}}
 </style>
@@ -79,13 +86,43 @@
 
     <div class="dash-tiles" id="tiles"></div>
 
+    <section class="dash-section" id="find-section">
+      <h2>Can People Find the Download?</h2>
+      <p>Every page view, one row each, with no visitor identity. "On screen" means the Downloads link was actually visible: on a phone it sits inside the menu until someone opens it. Pages other than Downloads only.</p>
+      <div class="card card-support dash-card" id="find"></div>
+    </section>
+
     <section class="dash-section" id="funnel">
       <h2>Where Readers Stop</h2>
-      <p>How many page views scrolled far enough to reach each section, in the order they appear on the page. The longest bar is the most-viewed section; the others show their share of it.</p>
+      <p>The share of this page version's page views that scrolled far enough to reach each section, in the order they appear on the page.</p>
       <div class="card card-support dash-card">
         <div class="dash-toolbar"><label for="release" class="sr-only">Page version</label><select class="dash-select" id="release"></select></div>
         <div class="dash-bars" id="bars"></div>
       </div>
+    </section>
+
+    <section class="dash-section" id="hesitate-section">
+      <h2>Where They Hesitate</h2>
+      <p>How far people scroll, how long they stay, and the signs that something is unclear: questions opened, taps on things that aren't buttons, repeated clicks.</p>
+      <div class="card card-support dash-card" id="hesitate"></div>
+    </section>
+
+    <section class="dash-section" id="who-section">
+      <h2>Who Visits</h2>
+      <p>Page views by device, language, where they came from and browser. "Pressed a download" counts the Downloads link and the download buttons.</p>
+      <div class="card card-support dash-card" id="who"></div>
+    </section>
+
+    <section class="dash-section" id="broken-section">
+      <h2>What's Broken or Slow</h2>
+      <p>Things that failed for a visitor, by code, and how fast the main content appeared.</p>
+      <div class="card card-support dash-card" id="broken"></div>
+    </section>
+
+    <section class="dash-section" id="real-section">
+      <h2>Button Clicks and Real Downloads</h2>
+      <p>Clicks on download buttons on this site, beside GitHub's own count of how often each file was downloaded.</p>
+      <div class="card card-support dash-card" id="real-downloads"></div>
     </section>
 
     <section class="dash-section" id="first-page">
@@ -112,7 +149,7 @@
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
-  let daily = [], events = [], journeys = null, days = 28;
+  let daily = [], events = [], journeys = null, insights = null, downloads = [], days = 28;
 
   async function loadRegistry() {
     if (Object.keys(registry).length) return;
@@ -136,8 +173,9 @@
     if (!stored()) return locked();
     $('status').hidden = false; $('status').textContent = 'Loading…';
     try {
-      const [c, j] = await Promise.all([ask('counts'), ask('journeys'), loadRegistry()]);
-      daily = c.daily || []; events = c.events || [];
+      const [c, j, i] = await Promise.all([ask('counts'), ask('journeys'), ask('insights'), loadRegistry(), sectionNames('index.html')]);
+      daily = c.daily || []; events = c.events || []; downloads = c.downloads || [];
+      insights = i && typeof i.views === 'number' ? i : null; // an older script answers with something else
       journeys = {rows: j.rows || [], dropped: j.dropped_total || 0};
       show('content'); $('status').hidden = true; render();
     } catch (e) {
@@ -192,13 +230,18 @@
   const releaseName = id => (registry[id] ? registry[id].name : /^UX-/.test(id) ? id : pageName(id));
   const releasePage = id => (registry[id] ? registry[id].page : `${id}.html`);
 
-  function clickLabel(slug) {
-    if (HOST.test(slug)) return `Clicked a link to ${slug.replace(/^www-/, '').replace(/-/g, '.')}`;
+  function targetName(slug) {
+    if (HOST.test(slug)) return slug.replace(/^www-/, '').replace(/-/g, '.');
     const known = Object.keys(PAGES).sort((a, b) => b.length - a.length).find(p => slug === p || slug.startsWith(p + '-'));
-    if (!known) return `Clicked a button to ${human(slug)}`;
+    if (!known) return human(slug);
     const hash = slug.slice(known.length + 1);
-    return hash ? `Clicked a button to ${PAGES[known]}, ${HASHES[hash] || human(hash).toLowerCase()} section` : `Clicked a button to ${PAGES[known]}`;
+    return hash ? `${PAGES[known]}, ${HASHES[hash] || human(hash).toLowerCase()} section` : PAGES[known];
   }
+  const clickLabel = slug => (HOST.test(slug) ? `Clicked a link to ${targetName(slug)}` : `Clicked a button to ${targetName(slug)}`);
+  const THING = {img: 'a picture', figure: 'a picture', h1: 'a heading', h2: 'a heading', h3: 'a heading', h4: 'a heading', p: 'a paragraph', span: 'some text', strong: 'some text',
+    b: 'some text', em: 'some text', svg: 'an icon', path: 'an icon', use: 'an icon', div: 'an empty area', section: 'an empty area', article: 'an empty area', main: 'an empty area',
+    li: 'a list item', ul: 'a list', header: 'an empty area', footer: 'an empty area', body: 'the page background', html: 'the page background'};
+  const FILE = {img: 'picture', script: 'script', link: 'stylesheet'};
   const FIXED = {'calc-used': 'Used the calculator', 'lang-switch': 'Switched language (English or Arabic)', download: 'Clicked an app download',
     sample: 'Clicked a sample-pack download', 'signup-start': 'Started the email signup', 'signup-submit': 'Sent the email signup',
     'survey-start': 'Started the survey', 'survey-submit': 'Sent the survey'};
@@ -208,6 +251,22 @@
     if ((m = code.match(/^faq-(\d+)$/))) return `Opened question ${m[1]} in the questions list`;
     if ((m = code.match(/^screen-(.+)$/))) return `Enlarged a screenshot (${human(m[1]).toLowerCase()})`;
     if ((m = code.match(/^click-(.+)$/))) return clickLabel(m[1]);
+    if (code === 'rage-click') return 'Clicked the same spot three times in a second';
+    if (code === 'menu-open') return 'Opened the phone menu';
+    if (code === 'theme-toggle') return 'Switched between light and dark';
+    if (code === 'res-error-script-count-js') return 'The visit counter was blocked (probably an ad blocker)';
+    if ((m = code.match(/^nav-(.+)$/))) return `Pressed ${targetName(m[1])} in the top bar`;
+    if ((m = code.match(/^foot-(.+)$/))) return `Pressed ${targetName(m[1])} in the footer`;
+    if ((m = code.match(/^link-(.+)$/))) return `Pressed a link to ${targetName(m[1])}`;
+    if ((m = code.match(/^seen-(.+)$/))) return `Had ${targetName(m[1])} on screen`;
+    if ((m = code.match(/^dead-([a-z0-9]+)-(.+)$/))) {
+      const heading = ((sectionCache['index.html'] || {}).names || {})[m[2]];
+      return `Tapped ${THING[m[1]] || 'something'} ${m[2] === 'page' ? 'on the page' : `in ${heading ? `"${heading}"` : `the ${human(m[2]).toLowerCase()} part`}`} that isn't a button`;
+    }
+    if ((m = code.match(/^js-error-(.+)$/))) return `A page script crashed (code ${m[1]})`;
+    if ((m = code.match(/^js-reject-(.+)$/))) return `A background request failed (code ${m[1]})`;
+    if ((m = code.match(/^res-error-(img|script|link)-(.+)$/))) return `A ${FILE[m[1]]} failed to load: ${m[2].replace(/-([a-z0-9]+)$/, '.$1')}`;
+    if ((m = code.match(/^invalid-(.+)$/))) return `The ${human(m[1]).toLowerCase()} box was refused by the form check`;
     if ((m = code.match(/^(.+)-(start|submit)$/))) return `${m[2] === 'start' ? 'Started' : 'Sent'} the ${human(m[1]).toLowerCase()} form`;
     return human(code);
   }
@@ -237,7 +296,7 @@
     return by;
   };
 
-  async function funnel() {
+  async function funnelFromCounts() {
     const by = sections(), releases = Object.keys(by).sort().reverse();
     const select = $('release'), keep = select.value;
     select.replaceChildren(...releases.map(r => { const o = el('option', releaseName(r)); o.value = r; return o; }));
@@ -261,6 +320,129 @@
       row.append(el('span', label), track, el('b', `${n(v)} · ${pct(v / top * 100)}`));
       bars.append(row);
     });
+  }
+
+  // The funnel from page views (live, with a true share of views); GoatCounter's counts only until those arrive.
+  async function funnel() {
+    if (!insights || !insights.reach.length) return funnelFromCounts();
+    const groups = insights.reach.filter(g => Object.keys(g.sections).length || g.views);
+    const select = $('release'), keep = select.value;
+    const idOf = g => `${g.release}|${g.page}`;
+    select.replaceChildren(...groups.map(g => { const o = el('option', `${pageName(g.page)}${/^UX-/.test(g.release) ? ` · ${releaseName(g.release)}` : ''} · ${n(g.views)} page views`); o.value = idOf(g); return o; }));
+    select.hidden = false;
+    if (groups.some(g => idOf(g) === keep)) select.value = keep;
+    const bars = $('bars'); bars.replaceChildren();
+    const group = groups.find(g => idOf(g) === select.value) || groups[0];
+    const {names, order} = await sectionNames(`${group.page}.html`);
+    if (idOf(group) !== select.value && select.value) return;
+    const rows = Object.entries(group.sections).sort((a, b) => {
+      const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]);
+      return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib) || b[1] - a[1];
+    });
+    if (!rows.length) { bars.append(el('p', `${n(group.views)} page views, none reached a section yet.`, 'dash-empty')); return; }
+    rows.forEach(([id, v]) => {
+      const label = names[id] || human(id), share = v / group.views * 100;
+      const row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
+      fill.style.width = `${Math.min(100, share)}%`; track.append(fill);
+      row.title = `${label}: ${n(v)} of ${n(group.views)} page views reached this section (code: reach-${id})`;
+      row.append(el('span', label), track, el('b', `${pct(share)} · ${n(v)}`));
+      bars.append(row);
+    });
+  }
+
+  // ---- the new sections, from the Page views tab ----
+  const devName = d => ({phone: 'Phone', tablet: 'Tablet', desktop: 'Computer'}[d] || human(d));
+  const share = (a, b) => (b ? `${n(a)} · ${pct(a / b * 100)}` : '0');
+  const empty = box => { box.replaceChildren(); if (!insights || !insights.views) { box.append(el('p', 'No page views recorded yet. They arrive once the latest script is deployed and someone visits.', 'dash-empty')); return false; } return true; };
+  function plainTable(headers, rows, dimFrom) {
+    const table = el('table', undefined, 'dash-table'), head = el('tr');
+    headers.forEach(h => head.append(el('th', h)));
+    const thead = el('thead'); thead.append(head); table.append(thead);
+    const body = el('tbody');
+    rows.forEach(cells => { const tr = el('tr'); cells.forEach((c, i) => tr.append(el('td', c, dimFrom !== undefined && i >= dimFrom ? 'dash-dim' : ''))); body.append(tr); });
+    table.append(body); return table;
+  }
+
+  function findability() {
+    const box = $('find'); if (!empty(box)) return;
+    const rows = insights.find, add = k => rows.reduce((t, f) => t + (f[k] || 0), 0);
+    const total = {views: add('views'), seen: add('seen'), clicked: add('clicked'), started: add('started'), submitted: add('submitted'), unseen: add('signup_unseen'), noclick: add('signup_noclick')};
+    const reading = [];
+    rows.filter(f => f.views >= 5).forEach(f => reading.push(`${devName(f.device)}: the Downloads link was on screen in ${pct(f.seen / f.views * 100)} of ${n(f.views)} page views and was pressed in ${pct(f.clicked / f.views * 100)}.`));
+    if (total.submitted) reading.push(`${n(total.unseen)} of ${n(total.submitted)} signups came from someone who never had the Downloads link on screen, and ${n(total.noclick)} never pressed a download or the Downloads link.`);
+    const dp = insights.downloads_page;
+    if (dp.views) reading.push(`Of ${n(dp.views)} visits to the Downloads page, ${n(dp.clicked)} (${pct(dp.clicked / dp.views * 100)}) pressed a download button.`);
+    if (total.views < 30) reading.push('Fewer than 30 page views so far: read these as hints, not conclusions.');
+    if (reading.length) { const ul = el('ul', undefined, 'dash-list'); reading.forEach(t => ul.append(el('li', t))); box.append(ul); }
+    const measures = [
+      ['Page views', f => n(f.views)],
+      ['Downloads link on screen', f => share(f.seen, f.views)],
+      ['Pressed it or a download', f => share(f.clicked, f.views)],
+      ['Opened the phone menu', f => share(f.menu, f.views)],
+      ['Started the signup', f => share(f.started, f.views)],
+      ['Sent the signup', f => share(f.submitted, f.views)],
+      ['Sent the signup without ever seeing Downloads', f => share(f.signup_unseen, f.views)],
+      ['Typical time to first action', f => (f.first_click_median === '' ? '–' : `${f.first_click_median} s`)],
+    ];
+    box.append(plainTable(['', ...rows.map(f => devName(f.device))], measures.map(([label, fn]) => [label, ...rows.map(fn)])));
+  }
+
+  function hesitation() {
+    const box = $('hesitate'); if (!empty(box)) return;
+    const h = insights.hesitate, sc = insights.scroll;
+    const ul = el('ul', undefined, 'dash-list');
+    [`Scrolled at least a quarter of the page: ${sc.p25}% of page views; half: ${sc.p50}%; three quarters: ${sc.p75}%; to the end: ${sc.p90}%.`,
+      `${n(insights.no_interaction)} page views (${pct(insights.no_interaction / insights.views * 100)}) ended without pressing, opening or tapping anything.`,
+      `Typical time actively on the page: ${insights.active_median === '' ? '–' : insights.active_median} seconds.`,
+      `${n(h.rage)} page view${h.rage === 1 ? '' : 's'} with a repeated click on the same spot.`].forEach(t => ul.append(el('li', t)));
+    box.append(ul);
+    const split = el('div', undefined, 'dash-split'), left = el('div'), right = el('div');
+    left.append(el('h3', 'Questions opened most', 'dash-sub'), h.faq.length ? plainTable(['Question', 'Page views'], h.faq.map(f => [eventLabel(f.code), n(f.count)])) : el('p', 'None opened yet.', 'dash-empty'));
+    right.append(el('h3', 'Taps on things that are not buttons', 'dash-sub'), h.dead.length ? plainTable(['What was tapped', 'Page views'], h.dead.map(f => [eventLabel(f.code), n(f.count)])) : el('p', 'None yet.', 'dash-empty'));
+    split.append(left, right); box.append(split);
+  }
+
+  function visitors() {
+    const box = $('who'); if (!empty(box)) return;
+    const consent = insights.consent, total = insights.views;
+    const ul = el('ul', undefined, 'dash-list');
+    ul.append(el('li', `Chose Allow all: ${pct(consent.all / total * 100)} · chose Keep essential only: ${pct(consent.essential / total * 100)} · never answered: ${pct(consent.undecided / total * 100)} · sent a Global Privacy Control signal: ${pct(consent.gpc / total * 100)}.`));
+    box.append(ul);
+    const names = {lang: {en: 'English', ar: 'Arabic'}, source: {direct: 'Direct or unknown'}};
+    [['device', 'Device'], ['lang', 'Language'], ['source', 'Where they came from'], ['browser', 'Browser'], ['os', 'Operating system']].forEach(([k, title]) => {
+      const rows = insights.who[k]; if (!rows.length) return;
+      box.append(el('h3', title, 'dash-sub'), plainTable([title, 'Page views', 'Typical seconds active', 'Pressed a download', 'Sent the signup'],
+        rows.map(r => [(names[k] && names[k][r.key]) || (k === 'device' ? devName(r.key) : k === 'source' ? r.key : human(r.key)), n(r.views), r.active_median === '' ? '–' : r.active_median, `${r.download_pct}%`, `${r.signup_pct}%`])));
+    });
+  }
+
+  function broken() {
+    const box = $('broken'); if (!empty(box)) return;
+    const errs = insights.broken.errors, blocked = errs.find(e => e.code === 'res-error-script-count-js');
+    const ul = el('ul', undefined, 'dash-list');
+    ul.append(el('li', blocked ? `The GoatCounter visit counter was blocked in ${pct(blocked.count / insights.views * 100)} of page views (${n(blocked.count)}): that share is invisible to GoatCounter, but counted here.` : 'No sign of the visit counter being blocked yet.'));
+    box.append(ul);
+    box.append(el('h3', 'Failures', 'dash-sub'), errs.length ? plainTable(['What happened', 'Page views', 'Code'], errs.map(e => [eventLabel(e.code), n(e.count), e.code]), 2) : el('p', 'Nothing failed in this period.', 'dash-empty'));
+    const speed = insights.broken.speed;
+    if (speed.length) box.append(el('h3', 'Speed of the main content (seconds)', 'dash-sub'), plainTable(['Device', 'Page views measured', 'Typical time', 'Slower than 4 seconds'], speed.map(r => [devName(r.device), n(r.n), r.median, `${r.slow_pct}%`])));
+  }
+
+  function realDownloadsTable() {
+    const box = $('real-downloads'); box.replaceChildren();
+    if (!downloads.length) { box.append(el('p', 'GitHub download counts appear after the next run of the Refresh analytics job.', 'dash-empty')); return; }
+    const dates = [...new Set(downloads.map(d => d.date))].sort(), end = dates[dates.length - 1];
+    const start = dates.find(d => d >= cutoff()) || dates[0];
+    const keyOf = d => `${d.tag}|${d.platform}`;
+    const at = date => { const m = {}; downloads.filter(d => d.date === date).forEach(d => { m[keyOf(d)] = (m[keyOf(d)] || 0) + Number(d.count); }); return m; };
+    const now = at(end), before = at(start), clicks = {};
+    daily.filter(inWindow).forEach(r => String(r.downloads_by_build || '').split(';').forEach(part => { const [k, v] = part.split(':'); if (k && v) clicks[k.trim()] = (clicks[k.trim()] || 0) + Number(v); }));
+    const rows = Object.keys(now).sort().reverse().map(k => {
+      const [tag, platform] = k.split('|'), clicked = clicks[`${tag}-${platform}`] || 0;
+      const period = start !== end ? now[k] - (before[k] || 0) : null;
+      return [`${tag} · ${human(platform)}`, n(clicked), period === null ? '–' : n(period), n(now[k])];
+    });
+    box.append(plainTable(['Build', 'Button clicks in the period', 'Real downloads in the period', 'Real downloads in total'], rows));
+    box.append(el('p', (start === end ? 'Period figures appear once there are two daily snapshots. ' : '') + 'GitHub also counts downloads that never started on this site, so real downloads can be higher than clicks.', 'dash-foot'));
   }
 
   function journeysTable() {
@@ -305,7 +487,7 @@
   }
 
   function render() {
-    tiles(); funnel(); journeysTable(); usage();
+    tiles(); findability(); funnel(); hesitation(); visitors(); broken(); realDownloadsTable(); journeysTable(); usage();
     $('foot').textContent = latest() ? `Data to ${latest()} (Cairo). Page views are not people: one person opening five pages is five.` : 'No data yet.';
   }
 

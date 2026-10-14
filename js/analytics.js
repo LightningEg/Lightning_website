@@ -1,12 +1,14 @@
-// Lightning analytics, in two tiers chosen in the consent bar or on privacy.html (README › Analytics).
-// Essential, for everyone: GoatCounter page views and counted events. Nothing is stored on the device.
-//   Downloads keep their names ("download-app-v1.0.0-beta.1-android", "download-sample-<file>"); every
-//   other event carries the page's UX release ID ("reach-trust@UX-2026.10.13.02") so releases compare.
-// All, only if the visitor allows it: also one random visit number, so the pages of one visit can be
-//   linked. Sent to the Apps Script receiver (form_type=event), which deletes rows after 90 days.
-// Never sent: what anyone types, amounts, names, emails or IP addresses. GoatCounter ignores localhost.
+// Lightning analytics, in two tiers chosen in the consent bar or on privacy.html (README › Analytics and consent).
+// Essential, for everyone: nothing is stored on the device.
+//   · GoatCounter page views and counted events (downloads keep their own names, every other event carries the
+//     page's release ID: "reach-trust@UX-2026.10.13.02").
+//   · One anonymous record per page view, sent to Lightning's own receiver: the page, device class, what was
+//     seen and pressed, how far it was scrolled, errors. Its random ID lives in memory only and links nothing.
+// All, only if the visitor allows it: also a visit ID (sessionStorage) and a visitor ID (localStorage, 90 days),
+//   so the pages of one visit and return visits can be linked.
+// Never sent: what anyone types, amounts, names, emails, IP addresses. GoatCounter ignores localhost.
 (() => {
-  const POLICY = 1; // raise when privacy.html changes what is counted: everyone is asked again
+  const POLICY = 2; // raise when privacy.html changes what is counted: everyone is asked again
   const KEY = 'lightning-consent';
   const VISIT = 'lightning-visit';
   const VISITOR = 'lightning-visitor';
@@ -60,10 +62,23 @@
   counter.addEventListener('load', () => waiting.splice(0).forEach(gc));
   document.head.append(counter);
 
-  // ---- all: one visit, linked page to page ----
-  let journey = null;
-  const startJourney = () => {
-    if (journey || !journeysOn()) return;
+  // ---- the page view: what happened on this one page. Anonymous, kept in memory, sent when the page is left ----
+  const ua = navigator.userAgent || '';
+  const osName = /android/i.test(ua) ? 'android' : /iphone|ipad|ipod/i.test(ua) ? 'ios' : /windows/i.test(ua) ? 'windows' : /cros/i.test(ua) ? 'chromeos' : /mac os x|macintosh/i.test(ua) ? 'mac' : /linux/i.test(ua) ? 'linux' : 'other';
+  const browserName = /edg\//i.test(ua) ? 'edge' : /opr\/|opera/i.test(ua) ? 'opera' : /samsungbrowser/i.test(ua) ? 'samsung' : /firefox|fxios/i.test(ua) ? 'firefox' : /chrome|crios/i.test(ua) ? 'chrome' : /safari/i.test(ua) ? 'safari' : 'other';
+  const device = window.innerWidth <= 640 ? 'phone' : window.innerWidth <= 1024 ? 'tablet' : 'desktop';
+  const params = new URLSearchParams(location.search);
+  let ref = '';
+  try { const from = new URL(document.referrer); if (from.hostname !== location.hostname) ref = from.hostname; } catch (_) {}
+  const pv = {id: random(), start: Date.now(), tl: new Map([['view', 0]]), scroll: 0, active: 0, lcp: 0};
+  const secs = () => Math.max(0, Math.round((Date.now() - pv.start) / 1000));
+  const consentState = () => choice || (gpc ? 'gpc' : 'undecided');
+
+  // ---- all: ids that link the pages of one visit (only with Allow all) ----
+  let link = null;
+  const pending = []; // linked events not yet sent
+  const startLink = () => {
+    if (link || !journeysOn()) return;
     const now = Date.now();
     let visit = null;
     try { visit = JSON.parse(store('sessionStorage', VISIT) || 'null'); } catch (_) {}
@@ -76,27 +91,32 @@
       store('sessionStorage', VISIT, JSON.stringify(visit));
       store('localStorage', VISITOR, JSON.stringify(visitor));
     }
-    const params = new URLSearchParams(location.search);
-    let ref = '';
-    try { const from = new URL(document.referrer); if (from.hostname !== location.hostname) ref = from.hostname; } catch (_) {}
-    const width = window.innerWidth;
-    journey = {
-      start: visit.start,
-      head: {v: 1, sid: visit.id, vid: visitor.id, vn: visitor.n, pv: random(), ux: release, page,
-        lang: arabic ? 'ar' : 'en', device: width <= 640 ? 'phone' : width <= 1024 ? 'tablet' : 'desktop', ref,
-        us: (params.get('utm_source') || '').slice(0, 60), um: (params.get('utm_medium') || '').slice(0, 60), uc: (params.get('utm_campaign') || '').slice(0, 60)},
-      events: [],
-    };
-    note('view');
+    link = {sid: visit.id, vid: visitor.id, vn: visitor.n};
+    pending.push({n: 'view', t: secs()});
   };
-  const note = name => {
-    if (!journey) return;
-    journey.events.push({n: name, t: Math.max(0, Math.round((Date.now() - journey.start) / 1000))});
-    if (journey.events.length >= 40) send();
+  const dropLink = () => { link = null; pending.length = 0; store('sessionStorage', VISIT, null); store('localStorage', VISITOR, null); };
+
+  // One thing happened on this page view. Only the first time of each is kept in the page record;
+  // with Allow all every time is kept as an event.
+  const note = code => {
+    code = String(code).slice(0, 80);
+    if (!pv.tl.has(code) && pv.tl.size < 80) pv.tl.set(code, secs());
+    if (link) { pending.push({n: code, t: secs()}); if (pending.length >= 40) send(); }
   };
+
+  let lastSent = '';
   const send = () => {
-    if (!journey || !journey.events.length) return;
-    const body = new URLSearchParams({form_type: 'event', payload: JSON.stringify({...journey.head, ev: journey.events.splice(0)})});
+    if (local) return;
+    const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    const payload = {v: 2, pv: pv.id, consent: consentState(), ux: release, page, lang: arabic ? 'ar' : 'en', device, os: osName, br: browserName, ref,
+      us: (params.get('utm_source') || '').slice(0, 60), um: (params.get('utm_medium') || '').slice(0, 60), uc: (params.get('utm_campaign') || '').slice(0, 60),
+      scroll: pv.scroll, act: pv.active, load: nav && nav.loadEventEnd > 0 ? Math.round(nav.loadEventEnd / 100) / 10 : 0, lcp: Math.round(pv.lcp / 100) / 10,
+      tl: [...pv.tl]};
+    if (link) Object.assign(payload, link, {ev: pending.splice(0)});
+    const snapshot = JSON.stringify({...payload, ev: undefined});
+    if (snapshot === lastSent && !(payload.ev && payload.ev.length)) return;
+    lastSent = snapshot;
+    const body = new URLSearchParams({form_type: 'event', payload: JSON.stringify(payload)});
     if (!(navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, body))) {
       fetch(ENDPOINT, {method: 'POST', mode: 'no-cors', keepalive: true, body}).catch(() => {});
     }
@@ -104,10 +124,22 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') send(); });
   window.addEventListener('pagehide', send);
 
-  // One event, both tiers. Downloads keep their own names in GoatCounter.
+  // One event, both tiers: GoatCounter gets it too (these are the ones whose names GoatCounter shows).
   const track = name => { gc(`${name}@${release}`); note(name); };
   const once = new Set();
   const trackOnce = name => { if (!once.has(name)) { once.add(name); track(name); } };
+
+  // ---- signals that need no click: scroll, time spent, speed ----
+  let lastActivity = Date.now();
+  ['pointerdown', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(type => addEventListener(type, () => { lastActivity = Date.now(); }, {passive: true, capture: true}));
+  setInterval(() => { if (document.visibilityState === 'visible' && Date.now() - lastActivity < 8000) pv.active += 1; }, 1000);
+  const measureScroll = () => {
+    const height = document.documentElement.scrollHeight;
+    if (height) pv.scroll = Math.max(pv.scroll, Math.min(100, Math.round((window.scrollY + window.innerHeight) / height * 100)));
+  };
+  addEventListener('scroll', () => requestAnimationFrame(measureScroll), {passive: true});
+  measureScroll();
+  try { new PerformanceObserver(list => { const last = list.getEntries().pop(); if (last) pv.lcp = last.startTime; }).observe({type: 'largest-contentful-paint', buffered: true}); } catch (_) {}
 
   // ---- what is counted ----
   const platform = url => ['windows', 'android', 'mac', 'linux'].find(p => url.toLowerCase().includes(p)) || 'other';
@@ -126,16 +158,37 @@
       return slug(url.pathname.replace(/^.*\//, '').replace(/\.html$/, '') || 'index') + (url.hash ? '-' + slug(url.hash) : '');
     } catch (_) { return 'link'; }
   };
+  const INTERACTIVE = 'a[href], button, input, select, textarea, label, summary, details, [role="button"], [data-zoom], [tabindex], form, dialog';
+  const recentClicks = [];
+  let deadClicks = 0;
 
   document.addEventListener('click', event => {
+    // Clicks on something that looks pressable but isn't, and repeated frustrated clicks: where the page misleads.
+    const now = Date.now();
+    recentClicks.push({t: now, x: event.clientX, y: event.clientY});
+    while (recentClicks.length && now - recentClicks[0].t > 1000) recentClicks.shift();
+    if (recentClicks.length >= 3 && recentClicks.every(c => Math.abs(c.x - event.clientX) < 40 && Math.abs(c.y - event.clientY) < 40)) note('rage-click');
+    if (!event.target.closest || !event.target.closest(INTERACTIVE)) {
+      if (deadClicks < 5) {
+        deadClicks += 1;
+        const section = event.target.closest && event.target.closest('section[id]');
+        note(`dead-${String(event.target.tagName || 'x').toLowerCase().replace(/[^a-z0-9]/g, '')}-${slug(section ? section.id : 'page') || 'page'}`);
+      }
+      return;
+    }
     const el = event.target.closest('a[href], button, [data-zoom]');
     if (!el) return;
     if (el.matches('a[href]')) {
       const download = downloadFor(el.href);
       if (download) { gc(download); track(download.startsWith('download-app-') ? 'download' : 'sample'); note(download); send(); return; }
-      if (el.matches('.lang-switch')) return track('lang-switch');
+      if (el.matches('.lang-switch, .d-menu-lang')) return track('lang-switch');
       if (el.matches('.btn, .sb-btn, .nav-cta')) return track(`click-${target(el.getAttribute('href'))}`);
+      if (el.closest('.d-links')) return note(`nav-${target(el.getAttribute('href'))}`);
+      if (el.closest('.sf')) return note(`foot-${target(el.getAttribute('href'))}`);
+      return note(`link-${target(el.getAttribute('href'))}`);
     }
+    if (el.matches('.d-menu-btn')) return note('menu-open');
+    if (el.matches('[data-theme-toggle]')) return note('theme-toggle');
     if (el.matches('[data-zoom]')) return track(`screen-${slug((el.dataset.zoom || '').replace(/^.*\//, '').replace(/\.[a-z0-9]+(\?.*)?$/i, ''))}`);
     if (el.matches('[data-d-amount], [data-d-rate]') || el.closest('#calculator, .d-calc')) trackOnce('calc-used');
   });
@@ -149,18 +202,46 @@
     const type = event.target.elements && event.target.elements.form_type && event.target.elements.form_type.value;
     if (type) { track(`${slug(type)}-submit`); send(); }
   });
+  // A field the browser refused: its name only (email, name…), never what was typed.
+  document.addEventListener('invalid', event => note(`invalid-${slug(event.target.name || event.target.type || 'field')}`), true);
   document.addEventListener('toggle', event => {
     const box = event.target;
     if (box.tagName !== 'DETAILS' || !box.open || !box.closest('.d-faq, #faq')) return;
     trackOnce(`faq-${[...box.parentElement.children].filter(el => el.tagName === 'DETAILS').indexOf(box) + 1}`);
   }, true);
+
+  // Errors: a code made from the message and file name, never the message itself.
+  let errorCount = 0;
+  const hash = text => { let h = 5381; for (const ch of String(text)) h = ((h << 5) + h + ch.charCodeAt(0)) >>> 0; return h.toString(16).slice(0, 6); };
+  const fileOf = url => String(url || '').split(/[?#]/)[0].replace(/^.*\//, '');
+  addEventListener('error', event => {
+    if (errorCount >= 4) return;
+    errorCount += 1;
+    const el = event.target;
+    if (el && el !== window && el.tagName) note(`res-error-${el.tagName.toLowerCase()}-${slug(fileOf(el.src || el.href))}`); // a file that failed to load, including a blocked counter
+    else note(`js-error-${hash((event.message || '') + fileOf(event.filename))}`);
+  }, true);
+  addEventListener('unhandledrejection', event => {
+    if (errorCount >= 4) return;
+    errorCount += 1;
+    note(`js-reject-${hash(String((event.reason && event.reason.message) || event.reason))}`);
+  });
+
   if ('IntersectionObserver' in window) {
-    const seen = new IntersectionObserver(entries => entries.forEach(entry => {
+    // Sections reached…
+    const reached = new IntersectionObserver(entries => entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      seen.unobserve(entry.target);
+      reached.unobserve(entry.target);
       trackOnce(`reach-${slug(entry.target.id)}`);
     }), {rootMargin: '0px 0px -40% 0px'});
-    document.querySelectorAll('main section[id]').forEach(section => seen.observe(section));
+    document.querySelectorAll('main section[id]').forEach(section => reached.observe(section));
+    // …and buttons and links that were actually on screen. A link folded into a closed menu isn't "seen" until it opens.
+    const shown = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      shown.unobserve(entry.target);
+      note(`seen-${target(entry.target.getAttribute('href'))}`);
+    }), {threshold: 0.6});
+    document.querySelectorAll('a.btn[href], a.sb-btn[href], a.nav-cta[href], .d-links a[href]').forEach(a => shown.observe(a));
   }
 
   // ---- the bar, the footer link and the choice on privacy.html ----
@@ -174,8 +255,9 @@
     choice = next;
     store('localStorage', KEY, JSON.stringify({choice, policy: POLICY, date: new Date().toISOString().slice(0, 10)}));
     gc(`consent-${choice}`);
-    if (choice === 'all') startJourney();
-    else { send(); journey = null; store('sessionStorage', VISIT, null); store('localStorage', VISITOR, null); }
+    if (choice === 'all') startLink();
+    else { send(); dropLink(); }
+    send();
     if (bar) bar.hidden = true;
     status();
   };
@@ -216,5 +298,5 @@
     document.body.append(bar);
   }
   status();
-  startJourney();
+  startLink();
 })();

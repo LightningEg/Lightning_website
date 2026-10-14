@@ -41,4 +41,5 @@ jobs:
         env:
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
           ANALYTICS_READ_KEY: ${{ secrets.ANALYTICS_READ_KEY }}
+          GH_TOKEN: ${{ github.token }}
         run: python analytics/goatcounter_daily.py "${{ inputs.days || '4' }}"

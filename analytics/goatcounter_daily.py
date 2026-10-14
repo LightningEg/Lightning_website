@@ -6,7 +6,9 @@
 
 One row per Cairo day (visits, downloads) and one per day, release and event for
 the events js/analytics.js names "<event>@<release>" (reach-trust, calc-used,
-click-..., signup-submit) and the consent choices (consent-all). The receiver
+click-..., signup-submit) and the consent choices (consent-all). It also copies GitHub's own download
+count of every file in the Lightning-downloads releases (one snapshot a day), so button clicks can be set
+beside real downloads. The receiver
 replaces the rows of the days sent, so reruns are safe, and the dashboard reads
 them behind the key. The workflow provides GOATCOUNTER_API_KEY and
 ANALYTICS_READ_KEY (the receiver's key).
@@ -24,6 +26,7 @@ from zoneinfo import ZoneInfo
 
 API = "https://mohamedelfeki.goatcounter.com/api/v0"
 CAIRO = ZoneInfo("Africa/Cairo")
+DOWNLOADS_REPO = "elfekimuhammed/Lightning-downloads"
 RECEIVER = "https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec"
 HEADER = [
     "date",
@@ -116,13 +119,54 @@ def day_row(d: date) -> tuple[list, list]:
     return row, sorted(events)
 
 
-def push(days: list, daily: list, events: list) -> bool:
+def github_get(url: str) -> list:
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "lightning-analytics"}
+    token = os.environ.get("GH_TOKEN", "").strip()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
+        return json.load(r)
+
+
+def platform_of(name: str) -> str:
+    n = name.lower()
+    if n.endswith(".apk"):
+        return "android"
+    if n.endswith((".exe", ".msi")):
+        return "windows"
+    if n.endswith(".dmg"):
+        return "mac"
+    if n.endswith(".appimage"):
+        return "linux"
+    return next((p for p in ("windows", "android", "mac", "linux") if p in n), "other")
+
+
+def fetch_downloads(today: date) -> list:
+    """GitHub's download count of each app file in every release: [date, tag, file, platform, count]."""
+    try:
+        releases = github_get(f"https://api.github.com/repos/{DOWNLOADS_REPO}/releases?per_page=30")
+    except Exception as e:  # GitHub being unreachable must not stop the GoatCounter totals
+        print(f"::warning::Could not read GitHub download counts: {e}")
+        return []
+    rows = []
+    for release in releases:
+        if release.get("draft"):
+            continue
+        for asset in release.get("assets", []):
+            name = asset.get("name", "")
+            if name.lower().endswith((".sha256", ".sha512", ".txt", ".md", ".sig", ".json", ".asc")):
+                continue  # checksums and notes are not downloads of the app
+            rows.append([today.isoformat(), release.get("tag_name", ""), name, platform_of(name), int(asset.get("download_count", 0))])
+    return rows
+
+
+def push(days: list, daily: list, events: list, downloads: list = ()) -> bool:
     """Send the rows to the receiver. False (with a warning) when its key isn't set up yet."""
     key = os.environ.get("ANALYTICS_READ_KEY", "").strip()
     if not key:
         print("::warning::ANALYTICS_READ_KEY is not set, so nothing was saved. Add it as a repository secret.")
         return False
-    payload = {"v": 1, "kind": "counts", "key": key, "days": days, "daily": daily, "events": events}
+    payload = {"v": 1, "kind": "counts", "key": key, "days": days, "daily": daily, "events": events, "downloads": list(downloads)}
     body = urllib.parse.urlencode({"form_type": "event", "payload": json.dumps(payload)}).encode()
     # Apps Script answers a POST with a redirect to its result; urllib follows it.
     with urllib.request.urlopen(urllib.request.Request(RECEIVER, data=body), timeout=120) as r:
@@ -145,8 +189,9 @@ def main() -> None:
     results = [day_row(d) for d in days]
     daily = [row for row, _ in results]
     events = [e for _, rows in results for e in rows]
-    saved = push([d.isoformat() for d in days], daily, events)
-    print(f"{len(daily)} days, {len(events)} event rows" + (" saved." if saved else " not saved."))
+    downloads = fetch_downloads(today)
+    saved = push([d.isoformat() for d in days], daily, events, downloads)
+    print(f"{len(daily)} days, {len(events)} event rows, {len(downloads)} download counts" + (" saved." if saved else " not saved."))
 
 
 if __name__ == "__main__":
