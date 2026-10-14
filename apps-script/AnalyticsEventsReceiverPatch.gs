@@ -43,6 +43,15 @@ const ANALYTICS_KEEP_DAYS = 90;
 const ANALYTICS_KEY_PROPERTY = 'ANALYTICS_READ_KEY';
 const ANALYTICS_TIMEZONE = 'Africa/Cairo';
 const ANALYTICS_MAX_EVENTS = 50;
+// Abuse limits: the endpoint is public and Apps Script can't see IP addresses, so cap what one day can add.
+// Events over a limit are dropped and counted (shown in the journeys totals), never stored.
+const ANALYTICS_MAX_ROWS_PER_DAY = 5000;
+const ANALYTICS_MAX_NEW_VISITORS_PER_DAY = 300;
+const ANALYTICS_MAX_ROWS_TOTAL = 150000;
+const ANALYTICS_DAY_PROPERTY = 'ANALYTICS_DAY_COUNTS';
+const ANALYTICS_DROPPED_PROPERTY = 'ANALYTICS_DROPPED_TOTAL';
+// Totals leaving the sheet never describe fewer visits than this: smaller groups are merged into "other".
+const ANALYTICS_MIN_GROUP = 5;
 const ANALYTICS_VISITORS_SHEET_NAME = 'Visitors';
 const ANALYTICS_COUNTER_PROPERTY = 'ANALYTICS_VISITOR_COUNTER';
 const ANALYTICS_TIME_FORMAT = 'yyyy-mm-dd hh:mm:ss'; // shown in the spreadsheet's time zone (File > Settings)
@@ -96,8 +105,25 @@ function analyticsFormatColumns_(sheet) {
   sheet.setColumnWidth(1, 160);
 }
 
+// The caller holds the script lock. What today has added so far, for the limits above.
+function analyticsDay_(today) {
+  let day = null;
+  try { day = JSON.parse(PropertiesService.getScriptProperties().getProperty(ANALYTICS_DAY_PROPERTY) || 'null'); } catch (err) {}
+  return day && day.date === today ? day : {date: today, rows: 0, visitors: 0};
+}
+
+function analyticsKeepDay_(day) {
+  PropertiesService.getScriptProperties().setProperty(ANALYTICS_DAY_PROPERTY, JSON.stringify(day));
+}
+
+function analyticsCountDropped_(n) {
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty(ANALYTICS_DROPPED_PROPERTY, String((parseInt(props.getProperty(ANALYTICS_DROPPED_PROPERTY), 10) || 0) + n));
+}
+
 // The caller holds the script lock. Same visitor ID, same number; a new ID gets the next one.
-function analyticsVisitorNumber_(vid, seen) {
+// With `day`, a new visitor over today's limit gets null (and nothing is stored).
+function analyticsVisitorNumber_(vid, seen, day) {
   if (!vid) return '';
   const sheet = analyticsVisitorsSheet_();
   const last = sheet.getLastRow();
@@ -108,6 +134,8 @@ function analyticsVisitorNumber_(vid, seen) {
       return rows[i][1];
     }
   }
+  if (day && day.visitors >= ANALYTICS_MAX_NEW_VISITORS_PER_DAY) return null;
+  if (day) day.visitors += 1;
   const props = PropertiesService.getScriptProperties();
   const stored = parseInt(props.getProperty(ANALYTICS_COUNTER_PROPERTY), 10) || 0;
   const highest = rows.reduce((m, r) => Math.max(m, +r[1] || 0), 0);
@@ -192,10 +220,19 @@ function saveAnalyticsEvents_(params) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    const visitor = analyticsVisitorNumber_(head[1], now);
-    rows.forEach(r => r.push(visitor));
+    const day = analyticsDay_(Utilities.formatDate(now, ANALYTICS_TIMEZONE, 'yyyy-MM-dd'));
     const sheet = analyticsSheet_();
+    const visitor = day.rows + rows.length > ANALYTICS_MAX_ROWS_PER_DAY || sheet.getLastRow() + rows.length > ANALYTICS_MAX_ROWS_TOTAL
+      ? null
+      : analyticsVisitorNumber_(head[1], now, day);
+    if (visitor === null) {
+      analyticsCountDropped_(rows.length);
+      return ok;
+    }
+    rows.forEach(r => r.push(visitor));
     sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, ANALYTICS_HEADERS.length).setValues(rows);
+    day.rows += rows.length;
+    analyticsKeepDay_(day);
   } finally {
     lock.releaseLock();
   }
@@ -277,12 +314,27 @@ function analyticsJourneys_(params) {
     if (v.events['survey-submit']) g.surveys += 1;
   });
 
+  // Groups under ANALYTICS_MIN_GROUP visits are merged, per day, into one "other" row.
+  const other = {};
+  Object.keys(groups).forEach(k => {
+    const g = groups[k];
+    if (g.visits >= ANALYTICS_MIN_GROUP) return;
+    delete groups[k];
+    const o = other[g.date] || (other[g.date] = {date: g.date, landing_release: 'other', landing_page: 'other', source: 'other',
+      device: 'other', lang: 'other', visits: 0, returning: 0, multi_page: 0, downloads: 0, signups: 0, surveys: 0, times: []});
+    ['visits', 'returning', 'multi_page', 'downloads', 'signups', 'surveys'].forEach(f => { o[f] += g[f]; });
+    o.times = o.times.concat(g.times);
+  });
+  Object.keys(other).forEach(d => { groups[d + '\u0001~other'] = other[d]; });
+
   const rows = Object.keys(groups).sort().map(k => {
     const g = groups[k];
     const t = g.times.sort((a, b) => a - b);
-    g.median_secs_to_download = t.length ? (t.length % 2 ? t[(t.length - 1) / 2] : Math.round((t[t.length / 2 - 1] + t[t.length / 2]) / 2)) : '';
+    const mid = t.length % 2 ? t[(t.length - 1) / 2] : Math.round((t[t.length / 2 - 1] + t[t.length / 2]) / 2);
+    g.median_secs_to_download = t.length && g.visits >= ANALYTICS_MIN_GROUP ? mid : ''; // a few visits are never described one by one
     delete g.times;
     return g;
   });
-  return json({days: dates, rows});
+  const dropped = parseInt(PropertiesService.getScriptProperties().getProperty(ANALYTICS_DROPPED_PROPERTY), 10) || 0;
+  return json({days: dates, rows, min_group: ANALYTICS_MIN_GROUP, dropped_total: dropped});
 }

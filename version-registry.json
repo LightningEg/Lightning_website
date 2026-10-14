@@ -1742,6 +1742,13 @@
       "id": "UX-2026.10.13.11",
       "name": "Privacy · Privacy Notice",
       "page": "privacy.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.11.html"
+    },
+    {
+      "id": "UX-2026.10.14.01",
+      "name": "Privacy · Storage wording",
+      "page": "privacy.html",
       "status": "current",
       "archive_url": null
     },

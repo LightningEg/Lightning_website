@@ -6,7 +6,6 @@ on:
     paths:
       - ".github/workflows/analytics.yml"
       - "analytics/goatcounter_daily.py"
-      - "analytics/journeys.py"
   schedule:
     - cron: "29 */8 * * *"
   workflow_dispatch:
@@ -36,14 +35,6 @@ jobs:
         env:
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
         run: python analytics/goatcounter_daily.py
-
-      # Visitors who chose Allow all: totals from the Apps Script receiver (README › Analytics).
-      # Skips itself until the ANALYTICS_JOURNEYS_KEY secret is set.
-      - name: Refresh journeys
-        continue-on-error: true
-        env:
-          ANALYTICS_JOURNEYS_KEY: ${{ secrets.ANALYTICS_JOURNEYS_KEY }}
-        run: python analytics/journeys.py
 
       - name: Commit refreshed CSV
         run: |

@@ -47,7 +47,7 @@ css/how-it-works.css, css/status.css (Current Status), css/sample-profiles.css, 
 js/analytics.js     analytics in two tiers and the consent bar (see Analytics and consent below)
 css/consent.css     the consent bar and the two choice buttons
 privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 2026-10-13): numbered sections, one point per bullet, the article layout (css/blog.css), no hero, cards or signup band; ar/privacy.html in Arabic
-analytics/          daily.csv, events.csv and journeys.csv, and the two scripts that refresh them
+analytics/          daily.csv and events.csv (public counts), the script that refreshes them, and dashboard.html (private-data viewer, noindex)
 audit/              website audits against the guideline
 css/theme.css       light/dark switch
 css/motion.css      small motion on the home page, Features, How It Works, Current Status and the guides (see Motion below)
@@ -200,10 +200,10 @@ The included `assets/samples/mohab-2026-full-year.zip` is Mohab’s full fiction
 ```
 js/analytics.js ─ essential ─► GoatCounter ─► analytics/goatcounter_daily.py ─► analytics/daily.csv, analytics/events.csv
                 └ allow all ─► Apps Script (apps-script/AnalyticsEventsReceiverPatch.gs) ─► private Sheet "Events" (90 days)
-                                 └─► analytics/journeys.py (totals only) ─► analytics/journeys.csv
+                                 └─► analytics/dashboard.html (you, with your key; nothing committed)
 ```
 
-The `Refresh analytics` workflow runs both scripts every eight hours and commits the CSVs. This repository is public, so only totals land here: raw rows stay in the Sheet, and the receiver deletes them after 90 days. `journeys.csv` has one row per Cairo day, landing release (the first page of the visit), landing page, source (`utm_source`, else the referring site, else `direct`), device and language: visits, returning, multi-page, downloads, signups, surveys and the median seconds to a download. It is the release comparison: which first page leads to a download. Until the owner deploys the receiver patch and sets the `ANALYTICS_JOURNEYS_KEY` secret (steps at the top of the `.gs` file), `journeys.py` does nothing.
+The `Refresh analytics` workflow runs the GoatCounter script every eight hours and commits `daily.csv` and `events.csv`: per-day counts, nothing about one visitor. **Linked visits are never committed.** This repository is public, so anything in it is readable by anyone; `journeys.csv` (per day, landing page, source, device and language) was therefore dropped. Open `analytics/dashboard.html` on the live site instead: it asks once for the key (the `ANALYTICS_READ_KEY` the setup logged; kept in that browser only) and loads the totals straight from the Apps Script. The script merges groups under 5 visits into *Smaller groups*, drops medians of fewer than 5, and stops storing events past 5,000 rows or 300 new visitors a day (counted, and shown on the dashboard). If the browser can't reach the script, read the Events tab. The `ANALYTICS_JOURNEYS_KEY` GitHub secret is no longer used. Two single-visit rows from the first runs are still in git history; removing them needs a history rewrite of `main`, which only the owner can approve. Past about a few thousand visits a day Apps Script slows and drops events: move the receiver to a Cloudflare Worker with a database (the account `OWNER.md` plans). With 2–13 visits a day, don't compare page versions yet: wait for a few hundred visits per page.
 
 "Unique visitors" in GoatCounter counts browsing sessions, not people: one person who visits in the morning and again after GoatCounter's session window has passed counts twice, so five people can show as up to ten. Read it as visits from distinct sessions or devices.
 
