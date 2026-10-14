@@ -56,14 +56,50 @@
 @media (max-width:760px){.dash-split{grid-template-columns:1fr}}
 .dash-foot{margin:48px 0 64px;color:var(--muted);font-size:14px}
 @media (max-width:760px){.dash-tiles{grid-template-columns:1fr 1fr}.dash-bar{grid-template-columns:1fr 70px;grid-template-areas:"l v" "t t"}.dash-bar>span:first-child{grid-area:l}.dash-bar>b{grid-area:v}.dash-bar .dash-track{grid-area:t}}
+
+.dash-health{margin-top:16px;padding:12px 18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);color:var(--ink2);font-size:15px;display:flex;gap:6px 18px;flex-wrap:wrap}
+.dash-health b{color:var(--green-text)}
+.dash-health.dash-bad{border-color:var(--rose-strong);background:var(--t-rose);color:var(--ink)}
+.dash-health.dash-bad b{color:var(--rose-strong)}
+.dash-verdicts{display:grid;gap:14px}
+.dash-verdict{padding:18px 22px}
+.dash-verdict p{margin:8px 0 0}
+.dash-verdict ul{margin:10px 0 0;padding-inline-start:20px;color:var(--ink2);font-size:15px}
+.dash-verdict a{display:inline-block;margin-top:12px;font-weight:700;color:var(--green-text)}
+.dash-chip{display:inline-block;padding:3px 10px;border-radius:99px;font:700 12px/1.4 var(--body);background:var(--t-azure);color:var(--ink);margin-inline-end:6px}
+.dash-chip.up{background:var(--t-green)}.dash-chip.down{background:var(--t-rose)}.dash-chip.clear{background:var(--t-green)}
+.dash-tile .dash-delta{margin-top:8px}
+.dash-tile svg{display:block;margin-top:10px;width:100%;height:30px}
+.dash-spark{fill:none;stroke:var(--nile);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dash-ci{color:var(--muted);font-size:12px;margin-inline-start:6px;font-weight:600}
+.dash-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dash-chart{position:relative;padding:16px 18px}
+.dash-chart h3{margin:0 0 8px;font:800 15px/1.3 var(--body)}
+.dash-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.dash-chart{overflow:hidden}
+.dash-chart .dash-table td,.dash-chart .dash-table th{white-space:normal}
+.dash-chart .dash-table[hidden]{display:none}
+.dash-chart .dash-table{display:block;overflow-x:auto;max-height:260px;overflow-y:auto}
+.dash-chart .ax{stroke:var(--line);stroke-width:1}
+.dash-chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.dash-chart .rel{stroke:var(--ink);stroke-opacity:.25;stroke-width:1}
+.dash-chart .hit{fill:transparent}
+.dash-chart text{fill:var(--muted);font:600 10px var(--body)}
+.dash-chart button{margin-top:8px;border:0;background:none;color:var(--green-text);font:700 13px var(--body);cursor:pointer;padding:6px 0}
+.dash-tip{position:absolute;z-index:3;pointer-events:none;padding:8px 10px;border-radius:10px;background:var(--nile);color:var(--on-nile);font:600 12px/1.4 var(--body);white-space:nowrap;display:none}
+.dash-details summary{cursor:pointer;font:800 clamp(24px,3vw,32px)/1.15 var(--display);letter-spacing:-.02em;margin:0 0 6px}
+@media (max-width:760px){.dash-grid2{grid-template-columns:1fr}}
+.dash-head p{margin-top:0}
+.dash-tiles{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:1000px){.dash-tiles{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="dash-wrap">
   <header class="dash-head">
     <a class="d-lockup" href="../index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
-    <h1>How the Site Is Doing</h1>
-    <p>Every number on this page loads from your own script, behind your key. Nothing here is published. Page views come from the records in your Sheet; GoatCounter is used only as a cross-check.</p>
+    <h1>What To Do Next</h1>
+    <p>What the site's own page-view records say, what to change, and how sure we are. Behind your key; nothing here is published. GoatCounter is only a cross-check at the bottom.</p>
     <p class="dash-note" id="status">Loading…</p>
     <noscript><p class="dash-note">This page needs JavaScript.</p></noscript>
   </header>
@@ -71,85 +107,98 @@
   <section class="dash-section" id="locked" hidden>
     <div class="card card-support dash-card">
       <p class="dash-empty" id="locked-text">Enter your key to see the numbers. It stays in this browser.</p>
-      <form class="dash-toolbar" id="key-form"><label for="key" class="sr-only">Key</label><input class="dash-select" id="key" type="password" autocomplete="off" placeholder="Key"><button class="dash-select" type="submit">Show the numbers</button></form>
+      <form class="dash-toolbar" id="key-form"><label for="key" class="sr-only">Key</label><input class="dash-select" id="key" type="password" autocomplete="off" placeholder="Key"><button class="dash-select" type="submit">Show numbers</button></form>
     </div>
   </section>
 
   <div id="content" hidden>
+    <div class="dash-health" id="health" role="status"></div>
     <div class="dash-period" role="group" aria-label="Period" id="period">
       <button type="button" data-days="7" aria-pressed="false">Last 7 days</button>
+      <button type="button" data-days="14" aria-pressed="false">Last 14 days</button>
       <button type="button" data-days="28" aria-pressed="true">Last 28 days</button>
-      <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
       <button type="button" id="lock">Lock</button>
     </div>
-    <p class="dash-note" id="sample" hidden></p>
 
-    <div class="dash-tiles" id="tiles"></div>
-
-    <section class="dash-section" id="find-section">
-      <h2>Can People Find the Download?</h2>
-      <p>Every page view, one row each, with no visitor identity. "On screen" means the Downloads link was actually visible: on a phone it sits inside the menu until someone opens it. Pages other than Downloads only.</p>
-      <div class="card card-support dash-card" id="find"></div>
+    <section class="dash-section" id="act">
+      <h2>What To Act On</h2>
+      <p>The clearest findings first, each with how sure we are and what you could do. These are suggestions, not actions.</p>
+      <div class="dash-verdicts" id="verdicts"></div>
     </section>
 
-    <section class="dash-section" id="funnel">
+    <section class="dash-section" id="numbers">
+      <h2>Key Numbers</h2>
+      <p id="numbers-note">Each number is shown beside the period before it, with the last 7 days as a line.</p>
+      <div class="dash-tiles" id="tiles"></div>
+    </section>
+
+    <section class="dash-section" id="path">
+      <h2>The Path to a Download</h2>
+      <p>Each step counts page views, not people: someone may see the link on one page and sign up on another.</p>
+      <div class="card card-support dash-card" id="path-box"></div>
+    </section>
+
+    <section class="dash-section" id="trends">
+      <h2>Trends</h2>
+      <p>One chart for each number. Thin lines mark releases of the home page and the Downloads page.</p>
+      <div class="dash-grid2" id="charts"></div>
+    </section>
+
+    <section class="dash-section" id="channels">
+      <h2>Channels</h2>
+      <p>Where visitors came from, and whether they go for a download more or less often than the site average. Sources under 5 page views are merged.</p>
+      <div class="card card-support dash-card" id="channels-box"></div>
+    </section>
+
+    <section class="dash-section" id="fix">
+      <h2>Fix List</h2>
+      <p>What failed, ran slowly or looked clickable and did nothing, most affected first.</p>
+      <div class="card card-support dash-card" id="fix-box"></div>
+    </section>
+
+    <section class="dash-section" id="readers">
       <h2>Where Readers Stop</h2>
-      <p>The share of this page version's page views that scrolled far enough to reach each section, in the order they appear on the page.</p>
+      <p>The share of page views that scrolled far enough to reach each section, and which questions people open.</p>
       <div class="card card-support dash-card">
         <div class="dash-toolbar"><label for="release" class="sr-only">Page version</label><select class="dash-select" id="release"></select></div>
+        <p class="dash-note" id="drop-note" hidden></p>
         <div class="dash-bars" id="bars"></div>
+        <h3 class="dash-sub">Questions Opened</h3>
+        <div id="faq-box"></div>
       </div>
     </section>
 
-    <section class="dash-section" id="hesitate-section">
-      <h2>Where They Hesitate</h2>
-      <p>How far people scroll, how long they stay, and the signs that something is unclear: questions opened, taps on things that aren't buttons, repeated clicks.</p>
-      <div class="card card-support dash-card" id="hesitate"></div>
+    <section class="dash-section" id="release-section">
+      <h2>Did the Last Release Help?</h2>
+      <p>A page's newest version against the one before it, on the same measures. Needs 30 page views on each.</p>
+      <div class="card card-support dash-card">
+        <div class="dash-toolbar"><label for="rel-page" class="sr-only">Page</label><select class="dash-select" id="rel-page"></select></div>
+        <div id="rel-box"></div>
+      </div>
     </section>
 
-    <section class="dash-section" id="who-section">
-      <h2>Who Visits</h2>
-      <p>Page views by device, language, where they came from and browser. "Pressed a download" counts the Downloads link and the download buttons.</p>
-      <div class="card card-support dash-card" id="who"></div>
-    </section>
-
-    <section class="dash-section" id="broken-section">
-      <h2>What's Broken or Slow</h2>
-      <p>Things that failed for a visitor, by code, and how fast the main content appeared.</p>
-      <div class="card card-support dash-card" id="broken"></div>
-    </section>
-
-    <section class="dash-section" id="real-section">
-      <h2>Button Clicks and Real Downloads</h2>
-      <p>Page views that pressed a download button on this site, beside GitHub's own count of how often each file was downloaded.</p>
-      <div class="card card-support dash-card" id="real-downloads"></div>
-    </section>
-
-    <section class="dash-section" id="first-page">
-      <h2>Which First Page Leads to a Download</h2>
-      <p>Visits from people who chose Allow all, by the page they landed on. Groups under 5 visits are merged into Smaller groups.</p>
-      <div class="card card-support dash-card" id="journeys"></div>
-    </section>
-
-    <section class="dash-section" id="use">
-      <h2>What People Use</h2>
-      <p>Everything visitors did besides scrolling, counted for everyone: each row is the number of page views in which it happened at least once. The grey code is the short name the site records, in case you need it.</p>
-      <div class="card card-support dash-card" id="usage"></div>
-    </section>
+    <details class="dash-section dash-details" id="details">
+      <summary>Details</summary>
+      <div class="card card-support dash-card" id="details-box"></div>
+    </details>
     <p class="dash-foot" id="foot"></p>
   </div>
 </div>
+<script src="rules.js?v=20261014-1"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
   const n = v => Math.round(v).toLocaleString('en');
   const pct = v => `${Math.round(v)}%`;
   const el = (tag, text, cls) => { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; };
+  const R = window.LightningRules;
 
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
+  // The receiver script's version this page was written for (apps-script/AnalyticsEventsReceiverPatch.gs). A mismatch shows in the health strip.
+  const EXPECTED_SCRIPT_VERSION = '2026-10-14.1';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
-  let daily = [], events = [], journeys = null, insights = null, downloads = [], days = 28;
+  let cur = null, wide = null, daily = [], events = [], journeys = {rows: [], dropped: 0}, downloads = [], period = 28, ctx = {order: {}, labels: {}};
 
   async function loadRegistry() {
     if (Object.keys(registry).length) return;
@@ -159,8 +208,8 @@
     } catch (_) {}
   }
   const show = which => { $('locked').hidden = which !== 'locked'; $('content').hidden = which !== 'content'; };
-  const ask = async what => {
-    const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(days, 88)});
+  const ask = async (what, d) => {
+    const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(d, 88)});
     const data = await (await fetch(`${RECEIVER}?${query}`)).json();
     if (data.error) { const e = new Error('key'); e.code = 'key'; throw e; }
     return data;
@@ -173,46 +222,18 @@
     if (!stored()) return locked();
     $('status').hidden = false; $('status').textContent = 'Loading…';
     try {
-      const [c, j, i] = await Promise.all([ask('counts'), ask('journeys'), ask('insights'), loadRegistry(), sectionNames('index.html')]);
+      const [c, j, i, w] = await Promise.all([ask('counts', period * 2), ask('journeys', period), ask('insights', period), ask('insights', period * 2), loadRegistry()]);
       daily = c.daily || []; events = c.events || []; downloads = c.downloads || [];
-      insights = i && typeof i.views === 'number' ? i : null; // an older script answers with something else
+      cur = i && typeof i.views === 'number' ? i : null; // an older script answers with something else
+      wide = w && typeof w.views === 'number' ? w : null;
       journeys = {rows: j.rows || [], dropped: j.dropped_total || 0};
+      await prepareContext();
       show('content'); $('status').hidden = true; render();
     } catch (e) {
       if (e.code === 'key') { try { localStorage.removeItem(KEY); } catch (_) {} locked('That key was refused. Check it and try again.'); }
       else { show('locked'); $('status').hidden = false; $('status').textContent = 'Could not reach the script from this browser. Try again, or read the tabs of your spreadsheet.'; }
     }
   }
-
-  const latest = () => daily.reduce((m, r) => (r.date > m ? r.date : m), '');
-  const cutoff = () => {
-    const end = latest(); if (!end) return '';
-    const d = new Date(end + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() - (days - 1));
-    return d.toISOString().slice(0, 10);
-  };
-  const inWindow = r => r.date >= cutoff();
-  const sum = (rows, f) => rows.reduce((t, r) => t + (Number(r[f]) || 0), 0);
-
-  const liveViews = () => insights && insights.views > 0;
-  function tiles() {
-    const live = liveViews(), gc = daily.filter(inWindow);
-    const views = live ? insights.views : sum(gc, 'page_visits');
-    const downloads = live ? insights.downloaded : sum(gc, 'app_downloads');
-    const all = live ? insights.consent.all : sum(events.filter(r => r.event === 'consent-all' && inWindow(r)), 'count');
-    const ess = live ? insights.consent.essential : sum(events.filter(r => r.event === 'consent-essential' && inWindow(r)), 'count');
-    const items = [
-      [n(views), 'Page views'],
-      [n(downloads), live ? 'Page views that pressed a download' : 'App downloads (GoatCounter)'],
-      [views ? n(downloads / views * 100) : '0', 'Downloads pressed per 100 page views'],
-      [all + ess ? pct(all / (all + ess) * 100) : 'No choices yet', 'Of those who chose, picked Allow all'],
-    ];
-    const box = $('tiles'); box.replaceChildren();
-    items.forEach(([v, l]) => { const t = el('div', undefined, 'card card-support dash-tile'); t.append(el('b', v), el('span', l)); box.append(t); });
-    const note = $('sample');
-    note.hidden = views >= 300;
-    note.textContent = views >= 300 ? '' : `Only ${n(views)} page views in this period. Too few to compare page versions: wait for a few hundred per page before choosing between them.`;
-  }
-
   // ---- plain-language names: the site sends short codes (click-index-join); these turn them into sentences ----
   const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
   const human = slug => cap(String(slug).replace(/[-_]+/g, ' ').trim());
@@ -291,220 +312,352 @@
     return (sectionCache[file] = {names, order});
   }
 
-  const sections = () => {
-    const by = {};
-    events.filter(r => r.event.startsWith('reach-') && inWindow(r)).forEach(r => {
-      (by[r.release] ||= {})[r.event.slice(6)] = (by[r.release]?.[r.event.slice(6)] || 0) + Number(r.count);
-    });
-    return by;
-  };
 
-  async function funnelFromCounts() {
-    const by = sections(), releases = Object.keys(by).sort().reverse();
-    const select = $('release'), keep = select.value;
-    select.replaceChildren(...releases.map(r => { const o = el('option', releaseName(r)); o.value = r; return o; }));
-    select.hidden = !releases.length;
-    if (releases.includes(keep)) select.value = keep;
-    const bars = $('bars'); bars.replaceChildren();
-    if (!releases.length) { bars.append(el('p', 'No section views in this period yet.', 'dash-empty')); return; }
-    const release = select.value, {names, order} = await sectionNames(releasePage(release));
-    if (select.value !== release) return; // another version was picked while the page loaded
-    // In the order the sections appear on the page, so it reads top to bottom; unknown ones last.
-    const rows = Object.entries(by[release]).sort((a, b) => {
-      const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]);
-      return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib) || b[1] - a[1];
+  // Section order and headings of every page we have numbers for, read from the live page, so rules can speak in words.
+  async function prepareContext() {
+    ctx = {order: {}, labels: {}};
+    if (!cur) return;
+    const pages = [...new Set([...(cur.reach || []).map(g => g.page), ...(cur.pages || []).map(g => g.page)])];
+    await Promise.all(pages.map(p => sectionNames(`${p}.html`)));
+    pages.sort((a, b) => /^ar\//.test(a) - /^ar\//.test(b)).forEach(p => { // English headings first, so an Arabic page never renames a section
+      const s = sectionCache[`${p}.html`]; if (!s) return;
+      ctx.order[p] = s.order;
+      Object.entries(s.names).forEach(([id, name]) => { if (!(id in ctx.labels)) ctx.labels[id] = name; });
     });
-    const top = Math.max(...rows.map(r => r[1]));
-    bars.replaceChildren();
-    rows.forEach(([id, v]) => {
-      const label = names[id] || human(id), row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
-      fill.style.width = `${v / top * 100}%`; track.append(fill);
-      row.title = `${label}: ${n(v)} page views reached this section (code: reach-${id})`;
-      row.append(el('span', label), track, el('b', `${n(v)} · ${pct(v / top * 100)}`));
-      bars.append(row);
+    (cur.pages || []).forEach(g => (g.dead || []).forEach(d => {
+      const m = d.code.match(/^dead-([a-z0-9]+)-(.+)$/); if (!m) return;
+      const heading = ((sectionCache[`${g.page}.html`] || {}).names || {})[m[2]];
+      ctx.labels[d.code] = `${THING[m[1]] || 'something'} ${m[2] === 'page' ? 'on the page' : `in ${heading ? `“${heading}”` : `the ${human(m[2]).toLowerCase()} part`}`}`;
+    }));
+  }
+
+  // ---- dates (Cairo days, as the receiver counts them) ----
+  const cairoToday = () => new Date().toLocaleDateString('en-CA', {timeZone: 'Africa/Cairo'});
+  const addDays = (d, k) => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + k); return x.toISOString().slice(0, 10); };
+  const win = () => { const t = cairoToday(), a = addDays(t, -(period - 1)), b = addDays(t, -(2 * period - 1)); return {today: t, curFrom: a, prevFrom: b}; };
+  const dateList = () => { const w = win(); return Array.from({length: period}, (_, i) => addDays(w.curFrom, i)); };
+  const inCur = d => d >= win().curFrom, inPrev = d => d >= win().prevFrom && d < win().curFrom;
+  const dailyRows = () => (wide && wide.daily) || [];
+  const sumDaily = (rows, f) => rows.reduce((t, r) => t + (Number(r[f]) || 0), 0);
+  const byDate = (rows, f) => { const m = {}; rows.forEach(r => { m[r.date] = (m[r.date] || 0) + (Number(r[f]) || 0); }); return m; };
+
+  // Real downloads from GitHub's daily snapshots: each day's value is the rise since the snapshot before it.
+  function realByDate() {
+    const totals = {};
+    downloads.forEach(d => { totals[d.date] = (totals[d.date] || 0) + Number(d.count); });
+    const dates = Object.keys(totals).sort(), out = {};
+    dates.forEach((d, i) => { if (i) out[d] = Math.max(0, totals[d] - totals[dates[i - 1]]); });
+    return {out, snapshots: dates.length};
+  }
+
+  // ---- certainty ----
+  const LABEL = {clear: 'Clear', early: 'Early sign', 'too-early': 'Too early'};
+  function rate(k, nn) {
+    const w = R.wilson(k, nn), box = el('span');
+    box.append(el('span', `${R.pc(k, nn)}%`), el('span', nn ? `${Math.round(w.lo * 100)}–${Math.round(w.hi * 100)}%` : '', 'dash-ci'));
+    const c = R.certainty(k, nn); box.append(el('span', LABEL[c], `dash-chip${c === 'clear' ? ' clear' : ''}`)); box.lastChild.style.marginInlineStart = '6px';
+    box.title = `${n(k)} of ${n(nn)} page views. 90% range ${Math.round(w.lo * 100)}–${Math.round(w.hi * 100)}%.`;
+    return box;
+  }
+  function table(headers, rows, dimFrom) {
+    const t = el('table', undefined, 'dash-table'), head = el('tr');
+    headers.forEach(h => head.append(el('th', h)));
+    const thead = el('thead'); thead.append(head); t.append(thead);
+    const body = el('tbody');
+    rows.forEach(cells => { const tr = el('tr'); cells.forEach((c, i) => { const td = el('td', c instanceof Node ? undefined : c, dimFrom !== undefined && i >= dimFrom ? 'dash-dim' : ''); if (c instanceof Node) td.append(c); tr.append(td); }); body.append(tr); });
+    t.append(body); return t;
+  }
+  const devName = d => ({phone: 'Phone', tablet: 'Tablet', desktop: 'Computer'}[d] || human(d));
+  const noData = box => { box.replaceChildren(); if (!cur || !cur.views) { box.append(el('p', 'No page views in this period yet.', 'dash-empty')); return true; } return false; };
+  const needsScript = (box, what) => { box.replaceChildren(el('p', `${what} needs the latest receiver script. Paste it and deploy a new version.`, 'dash-empty')); };
+
+  // ---- 1. data health ----
+  function health() {
+    const box = $('health'); box.replaceChildren(); box.classList.remove('dash-bad');
+    const bits = [], add = (label, text, bad) => { const s = el('span'); s.append(el('b', label + ' '), document.createTextNode(text)); box.append(s); if (bad) box.classList.add('dash-bad'); };
+    const m = cur && cur.meta;
+    if (!cur) add('No page-view data.', 'Paste the latest receiver script and deploy a new version.', true);
+    else if (!m) add('The receiver script is out of date.', 'Paste the latest receiver script and deploy a new version.', true);
+    else {
+      if (m.script_version !== EXPECTED_SCRIPT_VERSION) add('The receiver script is out of date.', 'Paste the latest receiver script and deploy a new version.', true);
+      else add('Script is current.', `Version ${m.script_version}.`);
+      if (m.last_row_at) {
+        const mins = Math.max(0, Math.round((Date.now() - new Date(m.last_row_at).getTime()) / 60000));
+        const ago = mins < 90 ? `${mins} minutes ago` : mins < 2880 ? `${Math.round(mins / 60)} hours ago` : `${Math.round(mins / 1440)} days ago`;
+        add('Last page view', ago + '.', mins > 72 * 60);
+        if (mins > 72 * 60) add('Nothing has arrived for 3 days.', 'Check the site and the script deployment.', true);
+      } else add('No page view in this period.', '', true);
+      add('Dropped at limits:', `${n(m.dropped_total)}.`);
+    }
+    const gc = sumDaily(daily.filter(r => r.date >= win().curFrom ? true : false).map(r => ({v: r.page_visits})), 'v');
+    if (cur && gc) add('GoatCounter cross-check:', `${n(gc)} counted, against ${n(cur.views)} here.`);
+    const span = new Set(dailyRows().map(r => r.date)).size;
+    add('Days of data:', `${n(span)}.`);
+  }
+
+  // ---- 2. verdicts ----
+  const ANCHOR = {path: 'path', channels: 'channels', fix: 'fix', content: 'readers', release: 'release-section', details: 'details', health: 'health'};
+  function verdicts() {
+    const box = $('verdicts'); box.replaceChildren();
+    let cards = cur ? R.verdicts(cur, ctx) : [];
+    if (!cards.length) cards = [R.nothingClear(cur || {})];
+    cards.forEach(c => {
+      const card = el('div', undefined, 'card card-support dash-verdict');
+      const top = el('div'); top.append(el('span', LABEL[c.certainty], `dash-chip${c.certainty === 'clear' ? ' clear' : ''}`));
+      if (c.n) top.append(el('span', `${n(c.n)} page views behind this`, 'dash-ci'));
+      card.append(top, el('p', c.finding));
+      const ul = el('ul'); c.options.forEach(o => ul.append(el('li', o))); card.append(ul);
+      if (c.certainty === 'too-early' && c.more && c.id !== 'quiet') card.append(el('p', `Needs about ${n(c.more)} more page views to be sure.`, 'dash-ci'));
+      const a = el('a', 'See the evidence'); a.href = '#' + (ANCHOR[c.evidence] || 'health'); card.append(a);
+      box.append(card);
     });
   }
 
-  // The funnel from page views (live, with a true share of views); GoatCounter's counts only until those arrive.
-  async function funnel() {
-    if (!insights || !insights.reach.length) return funnelFromCounts();
-    const groups = insights.reach.filter(g => Object.keys(g.sections).length || g.views);
-    const select = $('release'), keep = select.value;
-    const idOf = g => `${g.release}|${g.page}`;
+  // ---- 3. key numbers ----
+  function sparkline(values) {
+    const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 100 30'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
+    const max = Math.max(1, ...values), step = values.length > 1 ? 100 / (values.length - 1) : 100;
+    const line = document.createElementNS(ns, 'polyline'); line.setAttribute('class', 'dash-spark');
+    line.setAttribute('points', values.map((v, i) => `${(i * step).toFixed(1)},${(28 - v / max * 26).toFixed(1)}`).join(' '));
+    svg.append(line); return svg;
+  }
+  function change(a, b, hasPrev) {
+    if (!hasPrev) return ['No earlier period to compare yet.', ''];
+    const d = a - b; if (!d) return [`Same as before (${n(b)}).`, ''];
+    return d > 0 ? [`Up ${n(d)} from ${n(b)}.`, 'up'] : [`Down ${n(-d)} from ${n(b)}.`, 'down'];
+  }
+  function metricSeries() {
+    const dates = dateList(), rows = dailyRows(), real = realByDate();
+    const per = f => { const m = byDate(rows, f); return dates.map(d => m[d] || 0); };
+    return {dates, views: per('views'), pressed: per('pressed'), submitted: per('submitted'), real: dates.map(d => real.out[d] || 0), snapshots: real.snapshots};
+  }
+  function tiles() {
+    const box = $('tiles'); box.replaceChildren();
+    const rows = dailyRows(), real = realByDate(), hasDaily = rows.length > 0;
+    const curRows = rows.filter(r => inCur(r.date)), prevRows = rows.filter(r => inPrev(r.date));
+    const hasPrev = prevRows.length > 0, s = metricSeries(), seven = a => a.slice(-7);
+    const sumReal = f => Object.keys(real.out).filter(f).reduce((t, d) => t + real.out[d], 0);
+    const cv = sumDaily(curRows, 'views'), pv = sumDaily(prevRows, 'views');
+    const items = hasDaily ? [
+      ['Page views', cv, pv, seven(s.views), n],
+      ['Download presses', sumDaily(curRows, 'pressed'), sumDaily(prevRows, 'pressed'), seven(s.pressed), n],
+      ['Real downloads (GitHub)', sumReal(inCur), sumReal(inPrev), seven(s.real), n, real.snapshots < 2],
+      ['Signups sent', sumDaily(curRows, 'submitted'), sumDaily(prevRows, 'submitted'), seven(s.submitted), n],
+      ['Download presses per 100 page views', cv ? Math.round(sumDaily(curRows, 'pressed') / cv * 100) : 0, pv ? Math.round(sumDaily(prevRows, 'pressed') / pv * 100) : 0, seven(s.views.map((v, i) => (v ? s.pressed[i] / v * 100 : 0))), n],
+    ] : [['Page views', cur ? cur.views : 0, 0, [], n], ['Download presses', cur ? cur.downloaded : 0, 0, [], n]];
+    items.forEach(([label, a, b, series, fmt, pending]) => {
+      const t = el('div', undefined, 'card card-support dash-tile');
+      t.append(el('b', pending ? '–' : fmt(a)), el('span', label));
+      if (pending) t.append(el('span', 'Appears after two daily GitHub snapshots.'));
+      else { const [words, tone] = change(a, b, hasPrev); const d = el('span', undefined, 'dash-delta'); d.append(el('span', words, `dash-chip ${tone}`)); t.append(d); }
+      if (series.length) t.append(sparkline(series));
+      box.append(t);
+    });
+    $('numbers-note').textContent = hasDaily ? (hasPrev ? 'Each number is shown beside the period before it, with the last 7 days as a line.' : 'The period before has no data yet, so there is nothing to compare with.') : 'The receiver script is out of date, so only this period’s totals show.';
+  }
+
+  // ---- 4. the path to a download ----
+  function path() {
+    const box = $('path-box'); if (noData(box)) return;
+    if (!cur.daily) return needsScript(box, 'The path');
+    const t = R.totals(cur), cols = ['phone', 'tablet', 'desktop'].filter(d => t.by[d]).map(d => [devName(d), t.by[d]]);
+    cols.push(['All devices', t]);
+    const real = realByDate(), realTotal = Object.keys(real.out).filter(inCur).reduce((x, d) => x + real.out[d], 0);
+    const steps = [
+      ['Page views on pages other than Downloads', x => n(x.other)],
+      ['Downloads link on screen', x => rate(x.seen, x.other)],
+      ['Visited the Downloads page', x => rate(x.went, x.other)],
+      ['Pressed a download', x => rate(x.pressed, x.went || x.views)],
+      ['Pressed one for another device', x => (x.pressed ? rate(x.wrong, x.pressed) : '–')],
+      ['Real downloads from GitHub (all devices)', (x, i) => (i === cols.length - 1 ? (real.snapshots < 2 ? '–' : n(realTotal)) : '–')],
+      ['Sent the signup without ever seeing Downloads', x => (x.submitted ? rate(x.signup_unseen, x.submitted) : '–')],
+    ];
+    // The biggest drop: the weakest step-to-step share on the all-devices column, where there are enough page views.
+    const chain = [['Downloads link on screen', t.seen, t.other], ['Visited the Downloads page', t.went, t.seen], ['Pressed a download', t.pressed, t.went]].filter(c => c[2] >= 30);
+    const worst = chain.sort((a, b) => a[1] / a[2] - b[1] / b[2])[0];
+    box.append(table(['Step', ...cols.map(c => c[0])], steps.map(([label, f]) => [worst && label === worst[0] ? `${label} · biggest drop` : label, ...cols.map((c, i) => f(c[1], i))])));
+    const notes = el('ul', undefined, 'dash-list');
+    const arr = cur.arrivals || [];
+    if (arr.length) notes.append(el('li', 'Visits to Downloads arrived from: ' + arr.map(a => `${a.from === 'outside' ? 'another site' : a.from === 'unknown' ? 'no referrer' : pageName(a.from)} (${n(a.count)})`).join(', ') + '.'));
+    const w = cur.wrong_platform; if (w && w.wrong) notes.append(el('li', `${n(w.wrong)} of ${n(w.presses)} download presses were for another device, for example a phone pressing the Windows file.`));
+    if (notes.children.length) { notes.style.marginTop = '14px'; box.append(notes); }
+  }
+
+  // ---- 5. trends ----
+  function releaseMarkers() {
+    return Object.values(registry).filter(r => /^(index|current-status)\.html$/.test(r.page || '') && /^UX-\d{4}\.\d\d\.\d\d\./.test(r.id))
+      .map(r => ({date: r.id.slice(3, 13).replace(/\./g, '-'), name: r.name || r.id}));
+  }
+  const relWords = list => `${list.length} release${list.length === 1 ? '' : 's'}: ${list[0]}${list.length > 1 ? ` and ${list.length - 1} more` : ''}`;
+  function chart(title, dates, values, hue, markers) {
+    const wrap = el('div', undefined, 'card card-support dash-chart'), ns = 'http://www.w3.org/2000/svg';
+    wrap.append(el('h3', `${title} · ${n(values.reduce((a, b) => a + b, 0))} in total`));
+    const W = 320, H = 120, L = 30, B = 18, T = 8, Rr = 6, max = Math.max(1, ...values), top = max <= 4 ? 4 : Math.ceil(max / 5) * 5;
+    const x = i => L + (dates.length > 1 ? i * (W - L - Rr) / (dates.length - 1) : 0), y = v => T + (H - T - B) * (1 - v / top);
+    const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', `${title} by day`);
+    const mk = (tag, attrs) => { const e = document.createElementNS(ns, tag); Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v)); svg.append(e); return e; };
+    mk('line', {class: 'ax', x1: L, x2: W - Rr, y1: y(0), y2: y(0)}); mk('line', {class: 'ax', x1: L, x2: W - Rr, y1: y(top), y2: y(top)});
+    const t1 = mk('text', {x: 2, y: y(top) + 4}); t1.textContent = n(top); const t0 = mk('text', {x: 2, y: y(0) + 4}); t0.textContent = '0';
+    const a = mk('text', {x: L, y: H - 4}); a.textContent = dates[0].slice(5); const b = mk('text', {x: W - Rr, y: H - 4, 'text-anchor': 'end'}); b.textContent = dates[dates.length - 1].slice(5);
+    const today = {}; markers.forEach(m => { (today[m.date] = today[m.date] || []).push(m.name); const i = dates.indexOf(m.date); if (i >= 0) mk('line', {class: 'rel', x1: x(i), x2: x(i), y1: T, y2: y(0)}); });
+    const line = mk('polyline', {class: 'ln', stroke: hue, points: values.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')});
+    const dot = mk('circle', {r: 4, fill: hue, stroke: 'var(--white)', 'stroke-width': 2, visibility: 'hidden'});
+    const tip = el('div', undefined, 'dash-tip'), step = dates.length > 1 ? (W - L - Rr) / (dates.length - 1) : W;
+    values.forEach((v, i) => {
+      const hit = mk('rect', {class: 'hit', x: x(i) - step / 2, y: 0, width: Math.max(step, 12), height: H});
+      const on = () => { dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(v)); dot.setAttribute('visibility', 'visible'); tip.style.display = 'block';
+        tip.textContent = `${dates[i]}: ${n(v)}${today[dates[i]] ? ` · ${relWords(today[dates[i]])}` : ''}`;
+        const px = x(i) / W * svg.getBoundingClientRect().width; tip.style.left = `${Math.min(Math.max(px - 60, 0), Math.max(0, svg.getBoundingClientRect().width - 150))}px`; tip.style.top = '34px'; };
+      hit.addEventListener('mouseenter', on); hit.addEventListener('touchstart', on, {passive: true});
+      hit.addEventListener('mouseleave', () => { dot.setAttribute('visibility', 'hidden'); tip.style.display = 'none'; });
+    });
+    const tbl = table(['Day', title, 'Release'], dates.map((d, i) => [d, n(values[i]), today[d] ? relWords(today[d]) : ''])); tbl.hidden = true;
+    const toggle = el('button', 'Show as table'); toggle.type = 'button';
+    toggle.addEventListener('click', () => { tbl.hidden = !tbl.hidden; svg.style.display = tbl.hidden ? '' : 'none'; toggle.textContent = tbl.hidden ? 'Show as table' : 'Show as chart'; });
+    wrap.append(svg, tip, tbl, toggle); return wrap;
+  }
+  function trends() {
+    const box = $('charts'); box.replaceChildren();
+    if (!dailyRows().length) { const c = el('div', undefined, 'card card-support dash-card'); needsScript(c, 'Trends'); box.append(c); return; }
+    const s = metricSeries(), m = releaseMarkers();
+    box.append(chart('Page views', s.dates, s.views, 'var(--nile)', m), chart('Download presses', s.dates, s.pressed, 'var(--green)', m),
+      chart('Signups sent', s.dates, s.submitted, 'var(--green)', m), chart('Real downloads', s.dates, s.real, 'var(--green)', m));
+  }
+
+  // ---- 6. channels ----
+  function channels() {
+    const box = $('channels-box'); if (noData(box)) return;
+    const dev = (cur.who && cur.who.device) || [], rows = (cur.who && cur.who.source) || [];
+    const siteK = dev.reduce((x, d) => x + Math.round(d.download_pct * d.views / 100), 0), siteN = dev.reduce((x, d) => x + d.views, 0);
+    box.append(table(['Source', 'Page views', 'Went for a download', 'Against the site average'], rows.map(r => {
+      const k = Math.round(r.download_pct * r.views / 100), merged = r.key === 'Smaller groups';
+      const verdict = merged || r.views < 30 ? 'Too early' : ({above: 'Better', below: 'Worse', same: 'No clear difference'})[R.compare({k, n: r.views}, {k: siteK, n: siteN})];
+      return [r.key === 'direct' ? 'Direct or unknown' : r.key, n(r.views), r.views ? rate(k, r.views) : '–', verdict];
+    })));
+    box.append(el('p', `Site average: ${R.pc(siteK, siteN)}% of page views press a download or the Downloads link.`, 'dash-foot'));
+  }
+
+  // ---- 7. fix list ----
+  function fixList() {
+    const box = $('fix-box'); if (noData(box)) return;
+    if (!cur.pages) return needsScript(box, 'The fix list');
+    const rows = [];
+    cur.pages.forEach(g => {
+      (g.errors || []).forEach(e => rows.push({what: R.errorWords(e.code), page: g.page, k: e.count, n: g.views, kind: /script-count-js/.test(e.code) ? 'ad blocker, no action' : /^res-error-/.test(e.code) ? 'broken file' : 'broken script', dim: /script-count-js/.test(e.code)}));
+      (g.dead || []).forEach(d => rows.push({what: `Taps ${ctx.labels[d.code] || d.code}, which does nothing`, page: g.page, k: d.count, n: g.views, kind: 'looks clickable'}));
+      if (g.lcp_n >= 10 && g.lcp_slow) rows.push({what: `Main content takes over 4 seconds on phones (typical ${g.lcp_median} s)`, page: g.page, k: g.lcp_slow, n: g.views, kind: 'speed'});
+    });
+    if (cur.hesitate && cur.hesitate.rage) rows.push({what: 'Clicked the same spot three times in a second', page: '', k: cur.hesitate.rage, n: cur.views, kind: 'looks clickable'});
+    rows.sort((a, b) => (a.dim - b.dim) || b.k - a.k);
+    if (!rows.length) { box.append(el('p', 'Nothing failed, ran slowly or looked clickable in this period.', 'dash-empty')); return; }
+    box.append(table(['What happened', 'Page', 'Page views affected', 'Kind of fix'], rows.slice(0, 20).map(r => [r.what, r.page ? pageName(r.page) : 'All pages', `${n(r.k)} · ${R.pc(r.k, r.n)}%`, r.kind])));
+  }
+
+  // ---- 8. readers: sections and questions ----
+  const faqCache = {};
+  async function faqQuestions(page) {
+    if (faqCache[page]) return faqCache[page];
+    let list = [];
+    try {
+      const doc = new DOMParser().parseFromString(await (await fetch(`../${page}.html`)).text(), 'text/html');
+      list = [...doc.querySelectorAll('#faq details summary')].map(s => s.textContent.replace(/\s+/g, ' ').trim());
+    } catch (_) {}
+    return (faqCache[page] = list);
+  }
+  async function readers() {
+    const bars = $('bars'), faqBox = $('faq-box'), note = $('drop-note'), select = $('release');
+    bars.replaceChildren(); faqBox.replaceChildren(); note.hidden = true;
+    if (!cur || !cur.reach || !cur.reach.length) { select.hidden = true; bars.append(el('p', 'No section views in this period yet.', 'dash-empty')); return; }
+    const groups = cur.reach, keep = select.value, idOf = g => `${g.release}|${g.page}`;
     select.replaceChildren(...groups.map(g => { const o = el('option', `${pageName(g.page)}${/^UX-/.test(g.release) ? ` · ${releaseName(g.release)}` : ''} · ${n(g.views)} page views`); o.value = idOf(g); return o; }));
-    select.hidden = false;
-    if (groups.some(g => idOf(g) === keep)) select.value = keep;
-    const bars = $('bars'); bars.replaceChildren();
+    select.hidden = false; if (groups.some(g => idOf(g) === keep)) select.value = keep;
     const group = groups.find(g => idOf(g) === select.value) || groups[0];
     const {names, order} = await sectionNames(`${group.page}.html`);
-    if (idOf(group) !== select.value && select.value) return;
-    const rows = Object.entries(group.sections).sort((a, b) => {
-      const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]);
-      return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib) || b[1] - a[1];
-    });
-    if (!rows.length) { bars.append(el('p', `${n(group.views)} page views, none reached a section yet.`, 'dash-empty')); return; }
-    rows.forEach(([id, v]) => {
+    if (idOf(group) !== select.value) return;
+    const rows = Object.entries(group.sections).sort((a, b) => { const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib) || b[1] - a[1]; });
+    if (!rows.length) bars.append(el('p', `${n(group.views)} page views, none reached a section yet.`, 'dash-empty'));
+    let worst = null;
+    rows.forEach(([id, v], i) => {
       const label = names[id] || human(id), share = v / group.views * 100;
+      if (i && group.views >= 50) { const drop = (rows[i - 1][1] - v) / group.views * 100; if (!worst || drop > worst.drop) worst = {drop, a: names[rows[i - 1][0]] || human(rows[i - 1][0]), b: label}; }
       const row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
       fill.style.width = `${Math.min(100, share)}%`; track.append(fill);
       row.title = `${label}: ${n(v)} of ${n(group.views)} page views reached this section (code: reach-${id})`;
-      row.append(el('span', label), track, el('b', `${pct(share)} · ${n(v)}`));
-      bars.append(row);
+      row.append(el('span', label), track, el('b', `${pct(share)} · ${n(v)}`)); bars.append(row);
     });
+    if (worst && worst.drop > 0) { note.hidden = false; note.textContent = `The biggest drop: ${Math.round(worst.drop)} points of readers stop between “${worst.a}” and “${worst.b}”.`; }
+    const pg = ((cur.pages || []).find(p => p.page === group.page) || {}), faq = pg.faq || [], qs = await faqQuestions(group.page);
+    if (idOf(group) !== select.value) return;
+    faqBox.append(faq.length ? table(['Question', 'Page views'], faq.map(f => [qs[+f.code.slice(4) - 1] || eventLabel(f.code), n(f.count)])) : el('p', 'No question opened on this page yet.', 'dash-empty'));
   }
 
-  // ---- the new sections, from the Page views tab ----
-  const devName = d => ({phone: 'Phone', tablet: 'Tablet', desktop: 'Computer'}[d] || human(d));
-  const share = (a, b) => (b ? `${n(a)} · ${pct(a / b * 100)}` : '0');
-  const empty = box => { box.replaceChildren(); if (!insights || !insights.views) { box.append(el('p', 'No page views recorded yet. They arrive once the latest script is deployed and someone visits.', 'dash-empty')); return false; } return true; };
-  function plainTable(headers, rows, dimFrom) {
-    const table = el('table', undefined, 'dash-table'), head = el('tr');
-    headers.forEach(h => head.append(el('th', h)));
-    const thead = el('thead'); thead.append(head); table.append(thead);
-    const body = el('tbody');
-    rows.forEach(cells => { const tr = el('tr'); cells.forEach((c, i) => tr.append(el('td', c, dimFrom !== undefined && i >= dimFrom ? 'dash-dim' : ''))); body.append(tr); });
-    table.append(body); return table;
+  // ---- 9. did the last release help ----
+  function releaseEffect() {
+    const sel = $('rel-page'), box = $('rel-box'); box.replaceChildren();
+    const byPage = {}; ((cur && cur.by_release) || []).forEach(r => { (byPage[r.page] = byPage[r.page] || []).push(r); });
+    const pages = Object.keys(byPage).filter(p => byPage[p].length >= 2);
+    const keep = sel.value; sel.replaceChildren(...pages.map(p => { const o = el('option', pageName(p)); o.value = p; return o; })); sel.hidden = !pages.length;
+    if (!pages.length) { box.append(el('p', cur && cur.by_release ? 'No page has two versions with page views in this period yet.' : 'This needs the latest receiver script.', 'dash-empty')); return; }
+    if (pages.includes(keep)) sel.value = keep;
+    const list = byPage[sel.value].sort((a, b) => new Date(a.first) - new Date(b.first)), c = list[list.length - 1], p = list[list.length - 2];
+    const dl = /^(ar\/)?current-status$/.test(sel.value);
+    const metrics = dl ? [['Pressed a download', 'pressed']] : [['Downloads link on screen', 'seen'], ['Visited the Downloads page', 'went'], ['Pressed a download', 'pressed'], ['Sent the signup', 'submitted'], ['Signup without ever seeing Downloads', 'signup_unseen']];
+    box.append(table(['Measure', `Before · ${releaseName(p.release)} · ${n(p.views)} page views`, `Now · ${releaseName(c.release)} · ${n(c.views)} page views`, 'Verdict'], metrics.map(([label, f]) => {
+      const enough = c.views >= 30 && p.views >= 30;
+      const v = !enough ? 'Too early' : ({above: 'Higher', below: 'Lower', same: 'No clear difference'})[R.compare({k: c[f], n: c.views}, {k: p[f], n: p.views})];
+      return [label, rate(p[f], p.views), rate(c[f], c.views), v];
+    })));
   }
 
-  function findability() {
-    const box = $('find'); if (!empty(box)) return;
-    const rows = insights.find, add = k => rows.reduce((t, f) => t + (f[k] || 0), 0);
-    const total = {views: add('views'), seen: add('seen'), clicked: add('clicked'), started: add('started'), submitted: add('submitted'), unseen: add('signup_unseen'), noclick: add('signup_noclick')};
-    const reading = [];
-    rows.filter(f => f.views >= 5).forEach(f => reading.push(`${devName(f.device)}: the Downloads link was on screen in ${pct(f.seen / f.views * 100)} of ${n(f.views)} page views and was pressed in ${pct(f.clicked / f.views * 100)}.`));
-    if (total.submitted) reading.push(`${n(total.unseen)} of ${n(total.submitted)} signups came from someone who never had the Downloads link on screen, and ${n(total.noclick)} never pressed a download or the Downloads link.`);
-    const dp = insights.downloads_page;
-    if (dp.views) reading.push(`Of ${n(dp.views)} visits to the Downloads page, ${n(dp.clicked)} (${pct(dp.clicked / dp.views * 100)}) pressed a download button.`);
-    if (total.views < 30) reading.push('Fewer than 30 page views so far: read these as hints, not conclusions.');
-    if (reading.length) { const ul = el('ul', undefined, 'dash-list'); reading.forEach(t => ul.append(el('li', t))); box.append(ul); }
-    const measures = [
-      ['Page views', f => n(f.views)],
-      ['Downloads link on screen', f => share(f.seen, f.views)],
-      ['Pressed it or a download', f => share(f.clicked, f.views)],
-      ['Opened the phone menu', f => share(f.menu, f.views)],
-      ['Started the signup', f => share(f.started, f.views)],
-      ['Sent the signup', f => share(f.submitted, f.views)],
-      ['Sent the signup without ever seeing Downloads', f => share(f.signup_unseen, f.views)],
-      ['Typical time to first action', f => (f.first_click_median === '' ? '–' : `${f.first_click_median} s`)],
-    ];
-    box.append(plainTable(['', ...rows.map(f => devName(f.device))], measures.map(([label, fn]) => [label, ...rows.map(fn)])));
-  }
-
-  function hesitation() {
-    const box = $('hesitate'); if (!empty(box)) return;
-    const h = insights.hesitate, sc = insights.scroll;
-    const ul = el('ul', undefined, 'dash-list');
-    [`Scrolled at least a quarter of the page: ${sc.p25}% of page views; half: ${sc.p50}%; three quarters: ${sc.p75}%; to the end: ${sc.p90}%.`,
-      `${n(insights.no_interaction)} page views (${pct(insights.no_interaction / insights.views * 100)}) ended without pressing, opening or tapping anything.`,
-      `Typical time actively on the page: ${insights.active_median === '' ? '–' : insights.active_median} seconds.`,
-      `${n(h.rage)} page view${h.rage === 1 ? '' : 's'} with a repeated click on the same spot.`].forEach(t => ul.append(el('li', t)));
-    box.append(ul);
-    const split = el('div', undefined, 'dash-split'), left = el('div'), right = el('div');
-    left.append(el('h3', 'Questions opened most', 'dash-sub'), h.faq.length ? plainTable(['Question', 'Page views'], h.faq.map(f => [eventLabel(f.code), n(f.count)])) : el('p', 'None opened yet.', 'dash-empty'));
-    right.append(el('h3', 'Taps on things that are not buttons', 'dash-sub'), h.dead.length ? plainTable(['What was tapped', 'Page views'], h.dead.map(f => [eventLabel(f.code), n(f.count)])) : el('p', 'None yet.', 'dash-empty'));
-    split.append(left, right); box.append(split);
-  }
-
-  function visitors() {
-    const box = $('who'); if (!empty(box)) return;
-    const consent = insights.consent, total = insights.views;
-    const ul = el('ul', undefined, 'dash-list');
-    ul.append(el('li', `Chose Allow all: ${pct(consent.all / total * 100)} · chose Keep essential only: ${pct(consent.essential / total * 100)} · never answered: ${pct(consent.undecided / total * 100)} · sent a Global Privacy Control signal: ${pct(consent.gpc / total * 100)}.`));
-    box.append(ul);
-    const names = {lang: {en: 'English', ar: 'Arabic'}, source: {direct: 'Direct or unknown'}};
-    [['device', 'Device'], ['lang', 'Language'], ['source', 'Where they came from'], ['browser', 'Browser'], ['os', 'Operating system']].forEach(([k, title]) => {
-      const rows = insights.who[k]; if (!rows.length) return;
-      box.append(el('h3', title, 'dash-sub'), plainTable([title, 'Page views', 'Typical seconds active', 'Pressed a download', 'Sent the signup'],
-        rows.map(r => [(names[k] && names[k][r.key]) || (k === 'device' ? devName(r.key) : k === 'source' ? r.key : human(r.key)), n(r.views), r.active_median === '' ? '–' : r.active_median, `${r.download_pct}%`, `${r.signup_pct}%`])));
-    });
-  }
-
-  function broken() {
-    const box = $('broken'); if (!empty(box)) return;
-    const errs = insights.broken.errors, blocked = errs.find(e => e.code === 'res-error-script-count-js');
-    const ul = el('ul', undefined, 'dash-list');
-    ul.append(el('li', blocked ? `The GoatCounter visit counter was blocked in ${pct(blocked.count / insights.views * 100)} of page views (${n(blocked.count)}): that share is invisible to GoatCounter, but counted here.` : 'No sign of the visit counter being blocked yet.'));
-    box.append(ul);
-    box.append(el('h3', 'Failures', 'dash-sub'), errs.length ? plainTable(['What happened', 'Page views', 'Code'], errs.map(e => [eventLabel(e.code), n(e.count), e.code]), 2) : el('p', 'Nothing failed in this period.', 'dash-empty'));
-    const speed = insights.broken.speed;
-    if (speed.length) box.append(el('h3', 'Speed of the main content (seconds)', 'dash-sub'), plainTable(['Device', 'Page views measured', 'Typical time', 'Slower than 4 seconds'], speed.map(r => [devName(r.device), n(r.n), r.median, `${r.slow_pct}%`])));
-  }
-
-  function realDownloadsTable() {
-    const box = $('real-downloads'); box.replaceChildren();
-    if (!downloads.length) { box.append(el('p', 'GitHub download counts appear after the next run of the Refresh analytics job.', 'dash-empty')); return; }
-    const dates = [...new Set(downloads.map(d => d.date))].sort(), end = dates[dates.length - 1];
-    const start = dates.find(d => d >= cutoff()) || dates[0];
-    const keyOf = d => `${d.tag}|${d.platform}`;
-    const at = date => { const m = {}; downloads.filter(d => d.date === date).forEach(d => { m[keyOf(d)] = (m[keyOf(d)] || 0) + Number(d.count); }); return m; };
-    const now = at(end), before = at(start), clicks = {};
-    if (liveViews()) insights.download_builds.forEach(b => { clicks[b.code] = b.count; });
-    else daily.filter(inWindow).forEach(r => String(r.downloads_by_build || '').split(';').forEach(part => { const [k, v] = part.split(':'); if (k && v) clicks[k.trim()] = (clicks[k.trim()] || 0) + Number(v); }));
-    const rows = Object.keys(now).sort().reverse().map(k => {
-      const [tag, platform] = k.split('|'), clicked = clicks[`${tag}-${platform}`] || 0;
-      const period = start !== end ? now[k] - (before[k] || 0) : null;
-      return [`${tag} · ${human(platform)}`, n(clicked), period === null ? '–' : n(period), n(now[k])];
-    });
-    box.append(plainTable(['Build', 'Button clicks in the period', 'Real downloads in the period', 'Real downloads in total'], rows));
-    box.append(el('p', (start === end ? 'Period figures appear once there are two daily snapshots. ' : '') + 'GitHub also counts downloads that never started on this site, so real downloads can be higher than clicks.', 'dash-foot'));
-  }
-
-  function journeysTable() {
-    const box = $('journeys'); box.replaceChildren();
-    const rows = journeys.rows.filter(inWindow), groups = {};
-    rows.forEach(r => {
-      const merged = r.landing_release === 'other';
-      const key = merged ? 'Smaller groups' : `${r.landing_release}\u0001${r.landing_page}`;
-      const g = groups[key] ||= {visits: 0, downloads: 0, signups: 0, merged, release: r.landing_release, page: r.landing_page};
+  // ---- 10. details ----
+  function details() {
+    const box = $('details-box'); box.replaceChildren();
+    if (cur && cur.views) {
+      const names = {lang: {en: 'English', ar: 'Arabic'}, source: {direct: 'Direct or unknown'}};
+      [['browser', 'Browser'], ['os', 'Operating system'], ['lang', 'Language']].forEach(([k, title]) => {
+        const rows = (cur.who && cur.who[k]) || []; if (!rows.length) return;
+        box.append(el('h3', title, 'dash-sub'), table([title, 'Page views', 'Typical seconds active', 'Pressed a download', 'Sent the signup'],
+          rows.map(r => [(names[k] && names[k][r.key]) || human(r.key), n(r.views), r.active_median === '' ? '–' : r.active_median, `${r.download_pct}%`, `${r.signup_pct}%`])));
+      });
+      const c = cur.consent, tot = cur.views;
+      box.append(el('h3', 'Consent choices', 'dash-sub'), el('p', `Allow all: ${R.pc(c.all, tot)}% · essential only: ${R.pc(c.essential, tot)}% · no answer: ${R.pc(c.undecided, tot)}% · Global Privacy Control: ${R.pc(c.gpc, tot)}%.`, 'dash-empty'));
+      if (cur.usage && cur.usage.length) box.append(el('h3', 'Everything visitors did', 'dash-sub'), table(['What visitors did', 'Page views', 'Code'], cur.usage.map(u => [eventLabel(u.code), n(u.count), u.code]), 2));
+    }
+    // Allow-all journeys, by first page
+    const groups = {}; journeys.rows.filter(r => r.date >= win().curFrom).forEach(r => {
+      const merged = r.landing_release === 'other', key = merged ? 'Smaller groups' : `${r.landing_release}\u0001${r.landing_page}`;
+      const g = groups[key] || (groups[key] = {visits: 0, downloads: 0, signups: 0, merged, page: r.landing_page});
       g.visits += Number(r.visits) || 0; g.downloads += Number(r.downloads) || 0; g.signups += Number(r.signups) || 0;
     });
-    const entries = Object.entries(groups).sort((a, b) => b[1].visits - a[1].visits);
-    if (journeys.dropped) box.append(el('p', `The script dropped ${n(journeys.dropped)} events at its daily limits.`, 'dash-note'));
-    if (!entries.length) { box.append(el('p', 'No linked visits in this period yet.', 'dash-empty')); return; }
-    const table = el('table', undefined, 'dash-table'), head = el('tr');
-    ['First page', 'Visits', 'Downloads', 'Signups', 'Downloads per 100 visits'].forEach(h => head.append(el('th', h)));
-    { const thead = el('thead'); thead.append(head); table.append(thead); }
-    const body = el('tbody');
-    entries.forEach(([name, g]) => {
-      const r = el('tr'), few = g.visits < 30;
-      const rate = el('td', g.merged ? '' : few ? 'Too few to compare' : n(g.downloads / g.visits * 100), few || g.merged ? 'dash-dim' : '');
-      const first = el('td', g.merged ? 'Smaller groups (under 5 visits each)' : pageName(g.page));
-      if (!g.merged && /^UX-/.test(g.release)) first.append(el('span', ` · ${releaseName(g.release)}`, 'dash-dim'));
-      r.append(first, el('td', n(g.visits)), el('td', n(g.downloads)), el('td', n(g.signups)), rate);
-      body.append(r);
-    });
-    table.append(body); box.append(table);
-  }
-
-  function usage() {
-    const box = $('usage'); box.replaceChildren();
-    const live = insights && insights.usage && insights.usage.length;
-    let entries;
-    if (live) entries = insights.usage.map(u => [u.code, u.count]);
-    else {
-      const totals = {};
-      events.filter(r => inWindow(r) && !r.event.startsWith('reach-') && !r.event.startsWith('consent-') && r.release).forEach(r => { totals[r.event] = (totals[r.event] || 0) + Number(r.count); });
-      entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    const entries = Object.values(groups).sort((a, b) => b.visits - a.visits);
+    box.append(el('h3', 'Allow-all journeys, by first page', 'dash-sub'));
+    box.append(entries.length ? table(['First page', 'Visits', 'Downloads', 'Signups'], entries.map(g => [g.merged ? 'Smaller groups' : pageName(g.page), n(g.visits), n(g.downloads), n(g.signups)])) : el('p', 'No linked visits in this period yet.', 'dash-empty'));
+    // GitHub downloads by build
+    if (downloads.length) {
+      const dates = [...new Set(downloads.map(d => d.date))].sort(), end = dates[dates.length - 1], rows = downloads.filter(d => d.date === end);
+      box.append(el('h3', `GitHub downloads by file, total at ${end}`, 'dash-sub'), table(['Build', 'Real downloads in total'], rows.map(d => [`${d.tag} · ${human(d.platform)}`, n(d.count)])));
     }
-    if (!entries.length) { box.append(el('p', 'Nothing counted in this period yet.', 'dash-empty')); return; }
-    box.append(plainTable(['What visitors did', live ? 'Page views' : 'Times', 'Code'], entries.map(([code, v]) => [eventLabel(code), n(v), code]), 2));
+    // GoatCounter tables (the cross-check)
+    const gc = daily.filter(r => r.date >= win().curFrom).sort((a, b) => (a.date < b.date ? 1 : -1));
+    if (gc.length) box.append(el('h3', 'GoatCounter, day by day (cross-check)', 'dash-sub'), table(['Day', 'Page views counted', 'App downloads counted'], gc.slice(0, 14).map(r => [r.date, n(r.page_visits), n(r.app_downloads)])));
+    if (journeys.dropped) box.append(el('p', `The script dropped ${n(journeys.dropped)} events at its daily limits.`, 'dash-note'));
   }
 
   function render() {
-    tiles(); findability(); funnel(); hesitation(); visitors(); broken(); realDownloadsTable(); journeysTable(); usage();
-    const gcViews = sum(daily.filter(inWindow), 'page_visits');
-    const cross = liveViews() && gcViews ? ` GoatCounter counted ${n(gcViews)} page views in the same period against ${n(insights.views)} here: the gap is mostly visitors whose ad blocker stops GoatCounter, plus its own delay.` : '';
-    $('foot').textContent = (latest() ? `Data to ${latest()} (Cairo). Page views are not people: one person opening five pages is five.` : 'No data yet.') + cross;
+    health(); verdicts(); tiles(); path(); trends(); channels(); fixList(); readers(); releaseEffect(); details();
+    $('foot').textContent = 'Page views are not people: one person opening five pages is five. Percentages show a 90% range and a label: Clear (100 or more page views, narrow range), Early sign (30 or more), Too early.';
   }
 
   $('period').addEventListener('click', e => {
     const b = e.target.closest('button[data-days]'); if (!b) return;
-    days = Number(b.dataset.days);
+    period = Number(b.dataset.days);
     document.querySelectorAll('#period button[data-days]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     load();
   });
   $('lock').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch (_) {} locked(); });
-  $('release').addEventListener('change', funnel);
+  $('release').addEventListener('change', readers);
+  $('rel-page').addEventListener('change', releaseEffect);
+  document.addEventListener('click', e => { const a = e.target.closest('a[href="#details"]'); if (a) $('details').open = true; });
   $('key-form').addEventListener('submit', e => {
     e.preventDefault();
     const v = $('key').value.trim(); if (!v) return;

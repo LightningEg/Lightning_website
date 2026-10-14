@@ -74,7 +74,9 @@
         options: ['Show the build for the visitor’s device first', 'Label platforms with device words']};
     }},
     {id: 'channels', run(ins) {
-      const t = totals(ins), site = {k: t.pressed, n: t.views}; if (t.views < 30) return null;
+      const t = totals(ins), dev = (ins.who && ins.who.device) || [];
+      const site = dev.length ? {k: dev.reduce((x, d) => x + Math.round(d.download_pct * d.views / 100), 0), n: dev.reduce((x, d) => x + d.views, 0)} : {k: t.pressed, n: t.views};
+      if (site.n < 30) return null;
       const best = [];
       ((ins.who && ins.who.source) || []).forEach(s => {
         if (s.views < 30 || /^(Smaller groups|direct)$/.test(s.key)) return;
