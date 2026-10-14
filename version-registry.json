@@ -1791,6 +1791,13 @@
       "id": "UX-2026.10.13.15",
       "name": "app-feedback · Lightning 1.1 beta",
       "page": "app-feedback.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.15.html"
+    },
+    {
+      "id": "UX-2026.10.14.04",
+      "name": "app-feedback · Sends in the background",
+      "page": "app-feedback.html",
       "status": "current",
       "archive_url": null
     },
