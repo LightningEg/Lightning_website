@@ -1753,11 +1753,18 @@
       "archive_url": "archive/UX-2026.10.14.01.html"
     },
     {
-      "id": "UX-2026.10.14.02",
-      "name": "Privacy · Page-view records for everyone",
+      "id": "UX-2026.10.14.03",
+      "name": "Privacy · Referring page named in the record",
       "page": "privacy.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.14.02",
+      "name": "Privacy · Page-view records for everyone",
+      "page": "privacy.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.14.02.html"
     },
     {
       "id": "UX-2026.10.13.12",
