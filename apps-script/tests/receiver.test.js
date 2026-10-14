@@ -184,3 +184,32 @@ ok(ins.downloaded === 2, 'insights: 2 page views pressed a download (' + ins.dow
 ok(ins.download_builds.some(b => b.code === 'v1-android' && b.count === 1) && ins.download_builds.some(b => b.code === 'v1-windows' && b.count === 1), 'insights: downloads counted per build');
 ok(ins.usage.find(u => u.code === 'nav-current-status').count === 2 && ins.usage.some(u => u.code === 'signup-submit'), 'insights: usage counts page views per action');
 ok(!ins.usage.some(u => /^(seen|reach|view|dead|js-)/.test(u.code)), 'insights: usage leaves out sightings, sections and errors');
+
+// ================= decision dashboard fields =================
+const NOWISO = Date.now();
+tabs['Page views'].rows.length = 1; delete props.ANALYTICS_DAY_COUNTS;
+const addX = (o, line) => pv2({ pv: h(n++), consent: "essential", tl: tl(line), ...o });
+addX({ device: 'phone', os: 'android', page: 'index', from: 'outside' }, 'view:0 seen-current-status:2 js-error-abc123:3');
+addX({ device: 'phone', os: 'android', page: 'index', from: '' }, 'view:0 signup-start:5 signup-submit:9 dead-img-picture:4 faq-2:7');
+addX({ device: 'phone', os: 'android', page: 'current-status', from: 'index', lcp: 6 }, 'view:0 download-app-v1-windows:8');
+addX({ device: 'desktop', os: 'windows', page: 'current-status', from: 'ar/index', lcp: 1 }, 'view:0 download-app-v1-android:8');
+addX({ device: 'desktop', os: 'windows', page: 'index', ux: 'UX-2026.10.14.01', from: 'x y' }, 'view:0');
+const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
+ok(i3.meta.script_version === '2026-10-14.1' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
+ok(new Date(i3.meta.last_row_at).getTime() > NOWISO - 60000 && typeof i3.meta.rows_today === 'number', 'meta: last row time and today count');
+ok(PV()[1][21] === 'outside' && PV()[2][21] === '' && PV()[3][21] === 'index' && PV()[4][21] === 'ar/index' && PV()[5][21] === '', 'from: stored in the last column; a bad value is blanked');
+ok(tabs['Page views'].rows[0][21] === 'From', 'from: header is the last column');
+const dph = i3.daily.find(d => d.device === 'phone'), dde = i3.daily.find(d => d.device === 'desktop');
+ok(dph.views === 3 && dph.other === 2 && dph.seen === 1 && dph.went_downloads === 1 && dph.pressed === 1 && dph.started === 1 && dph.submitted === 1 && dph.signup_unseen === 1, 'daily: phone counts per day and device');
+ok(dph.wrong_platform === 1 && dde.wrong_platform === 1 && i3.wrong_platform.wrong === 2 && i3.wrong_platform.presses === 2, 'wrong platform: a phone pressing Windows and a computer pressing Android');
+const pgi = i3.pages.find(p => p.page === 'index');
+ok(pgi.views === 3 && pgi.errors[0].code === 'js-error-abc123' && pgi.dead[0].code === 'dead-img-picture' && pgi.faq[0].code === 'faq-2', 'pages: errors, dead taps and FAQ per page with the page view count');
+const pgd = i3.pages.find(p => p.page === 'current-status');
+ok(pgd.lcp_n === 1 && pgd.lcp_median === 6 && pgd.lcp_slow === 1, 'pages: phone LCP per page');
+ok(i3.arrivals.some(a => a.from === 'index' && a.count === 1) && i3.arrivals.some(a => a.from === 'ar/index'), 'arrivals: how Downloads-page views arrived');
+const rel = i3.by_release.find(r => r.release === 'UX-2026.10.14.01');
+ok(rel && rel.views === 1 && rel.page === 'index' && i3.by_release.length === 3, 'by_release: per page and release');
+ok(i3.find.length === 2 && i3.downloaded === 2 && i3.downloads_page.views === 2, 'old fields still there');
+const nofrom = tabs['Page views'].rows.length;
+saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(7000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
+ok(tabs['Page views'].rows.length === nofrom + 1 && tabs['Page views'].rows[nofrom][21] === '', 'old clients without from still store');

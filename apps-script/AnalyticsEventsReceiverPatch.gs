@@ -72,11 +72,13 @@ const ANALYTICS_PV_SHEET_NAME = 'Page views';
 const ANALYTICS_PV_HEADERS = [
   'Received at', 'Page view', 'Consent', 'Release', 'Page', 'Language', 'Device', 'OS', 'Browser', 'Referrer',
   'utm_source', 'utm_medium', 'utm_campaign', 'Visit', 'Visitor no.', 'Visit #', 'Scroll %', 'Active secs',
-  'Load secs', 'LCP secs', 'Timeline'
+  'Load secs', 'LCP secs', 'Timeline', 'From'
 ];
 // The page whose address the findability numbers watch (current-status.html, called Downloads in the menu).
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
+// Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
+const ANALYTICS_SCRIPT_VERSION = '2026-10-14.1';
 const ANALYTICS_MAX_PV_PER_DAY = 3000;
 const ANALYTICS_MAX_PV_TOTAL = 100000;
 // GitHub's own download counts for each file, copied here daily by the GitHub job.
@@ -197,6 +199,9 @@ function analyticsCounts_(json, params) {
 function analyticsPageViewsSheet_() {
   const book = analyticsBook_();
   let sheet = book.getSheetByName(ANALYTICS_PV_SHEET_NAME);
+  if (sheet && sheet.getLastRow() >= 1 && !sheet.getRange(1, ANALYTICS_PV_HEADERS.length).getValue()) {
+    sheet.getRange(1, ANALYTICS_PV_HEADERS.length).setValue('From'); // older tab: add the new last column's header
+  }
   if (!sheet) {
     sheet = book.insertSheet(ANALYTICS_PV_SHEET_NAME);
     sheet.appendRow(ANALYTICS_PV_HEADERS);
@@ -237,6 +242,7 @@ function savePageView_(data) {
   const us = analyticsClean_(data.us, /^[\w .-]+$/, 60);
   const um = analyticsClean_(data.um, /^[\w .-]+$/, 60);
   const uc = analyticsClean_(data.uc, /^[\w .-]+$/, 60);
+  const from = analyticsClean_(data.from, /^[A-Za-z0-9._\/-]+$/, 80); // a page of this site, or 'outside'; never a URL
   const sid = consent === 'all' ? analyticsClean_(data.sid, hex, 16) : '';
   const vid = consent === 'all' ? analyticsClean_(data.vid, hex, 16) : '';
   const vn = Math.max(1, Math.min(9999, parseInt(data.vn, 10) || 1));
@@ -270,7 +276,7 @@ function savePageView_(data) {
     const linked = visitor !== '';
     const row = [rowNum ? sheet.getRange(rowNum, 1).getValue() : now, pv, consent, ux, page, lang, device, os, br, ref, us, um, uc,
       linked ? sid : '', linked ? visitor : '', linked ? vn : '', Math.round(num(data.scroll, 100)), Math.round(num(data.act, 3600)),
-      num(data.load, 120, 1), num(data.lcp, 120, 1), timeline];
+      num(data.load, 120, 1), num(data.lcp, 120, 1), timeline, from];
     if (rowNum) sheet.getRange(rowNum, 1, 1, ANALYTICS_PV_HEADERS.length).setValues([row]);
     else { sheet.getRange(last + 1, 1, 1, ANALYTICS_PV_HEADERS.length).setValues([row]); day.pv += 1; }
 
@@ -327,6 +333,9 @@ function analyticsInsights_(json, params) {
   const DL_CLICK = new RegExp('^(click|nav|foot|link)-' + slug);
   const DL_PAGE = new RegExp('^(ar/)?' + slug + '$');
 
+  const day = t => Utilities.formatDate(new Date(t), ANALYTICS_TIMEZONE, 'yyyy-MM-dd');
+  const daily = {}, pages = {}, byRelease = {}, arrive = {};
+  let lastAt = 0, wrongTotal = 0, pressesTotal = 0;
   const consent = {all: 0, essential: 0, undecided: 0, gpc: 0};
   const deep = {25: 0, 50: 0, 75: 0, 90: 0};
   const find = {}, faq = {}, dead = {}, errors = {}, reach = {}, lcpBy = {};
@@ -346,6 +355,35 @@ function analyticsInsights_(json, params) {
     const started = 'signup-start' in t, submitted = 'signup-submit' in t;
     const interactions = codes.filter(c => INTERACTION.test(c)).map(c => t[c]);
     views += 1;
+    const at = new Date(r[0]).getTime();
+    if (at > lastAt) lastAt = at;
+    const isDl = DL_PAGE.test(page);
+    const pressedCodes = codes.filter(c => /^download-app-/.test(c));
+    const mobileOs = /^(android|ios)$/.test(r[7]), computerOs = /^(windows|mac|linux|chromeos)$/.test(r[7]);
+    const wrong = pressedCodes.some(c => (mobileOs && /-(windows|mac|linux)$/.test(c)) || (computerOs && /-android$/.test(c)));
+    const d = daily[day(at) + '|' + device] || (daily[day(at) + '|' + device] = {date: day(at), device, views: 0, other: 0, seen: 0, went_downloads: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong_platform: 0});
+    d.views += 1;
+    if (isDl) { d.went_downloads += 1; const f2 = String(r[21] || '') || 'unknown'; arrive[f2] = (arrive[f2] || 0) + 1; }
+    else { d.other += 1; if (seen) d.seen += 1; }
+    if (pressedCodes.length) d.pressed += 1;
+    if (started) d.started += 1;
+    if (submitted) { d.submitted += 1; if (!seen && !isDl) d.signup_unseen += 1; }
+    if (wrong) d.wrong_platform += 1;
+    pressesTotal += pressedCodes.length ? 1 : 0; wrongTotal += wrong ? 1 : 0;
+    const pg = pages[page] || (pages[page] = {page, views: 0, phone_views: 0, errors: {}, dead: {}, faq: {}, lcp: []});
+    pg.views += 1;
+    if (device === 'phone') pg.phone_views += 1;
+    if (lcp > 0 && device === 'phone') pg.lcp.push(lcp);
+    codes.forEach(c => {
+      const bucket = /^faq-/.test(c) ? pg.faq : /^dead-/.test(c) ? pg.dead : /^(js-error|js-reject|res-error)-/.test(c) ? pg.errors : null;
+      if (bucket) bucket[c] = (bucket[c] || 0) + 1;
+    });
+    const rk = page + '|' + release;
+    const br = byRelease[rk] || (byRelease[rk] = {page, release, first: at, last: at, views: 0, seen: 0, went: 0, pressed: 0, submitted: 0, signup_unseen: 0});
+    br.views += 1; br.first = Math.min(br.first, at); br.last = Math.max(br.last, at);
+    if (isDl) br.went += 1; else if (seen) br.seen += 1;
+    if (pressedCodes.length) br.pressed += 1;
+    if (submitted) { br.submitted += 1; if (!seen && !isDl) br.signup_unseen += 1; }
     consent[r[2]] = (consent[r[2]] || 0) + 1;
     activeAll.push(active);
     [25, 50, 75, 90].forEach(p => { if (scroll >= p) deep[p] += 1; });
@@ -403,7 +441,14 @@ function analyticsInsights_(json, params) {
     if (rest.views) out.push({key: 'Smaller groups', w: rest});
     return out.sort((a, b) => b.w.views - a.w.views).map(o => ({key: o.key, views: o.w.views, active_median: median(o.w.active), download_pct: pct(o.w.downloads, o.w.views), signup_pct: pct(o.w.signups, o.w.views)}));
   };
+  const listOf = m => Object.keys(m).map(k => ({code: k, count: m[k]})).sort((a, b) => b.count - a.count).slice(0, 15);
   return json({
+    meta: {script_version: ANALYTICS_SCRIPT_VERSION, last_row_at: lastAt ? new Date(lastAt).toISOString() : '', rows_today: (analyticsDayPeek_().pv || 0), dropped_total: +PropertiesService.getScriptProperties().getProperty(ANALYTICS_DROPPED_PROPERTY) || 0, sheet_rows: last >= 2 ? last - 1 : 0},
+    daily: Object.keys(daily).sort().map(k => daily[k]),
+    pages: Object.keys(pages).map(k => { const g = pages[k]; return {page: g.page, views: g.views, phone_views: g.phone_views, errors: listOf(g.errors), dead: listOf(g.dead), faq: listOf(g.faq), lcp_n: g.lcp.length, lcp_median: median(g.lcp), lcp_slow: g.lcp.filter(v => v > 4).length}; }).sort((a, b) => b.views - a.views).slice(0, 30),
+    by_release: Object.keys(byRelease).map(k => { const g = byRelease[k]; g.first = new Date(g.first).toISOString(); g.last = new Date(g.last).toISOString(); return g; }).sort((a, b) => b.views - a.views).slice(0, 40),
+    arrivals: listOf(arrive).map(a => ({from: a.code, count: a.count})),
+    wrong_platform: {presses: pressesTotal, wrong: wrongTotal},
     days, views, consent, min_group: ANALYTICS_MIN_GROUP,
     scroll: {p25: pct(deep[25], views), p50: pct(deep[50], views), p75: pct(deep[75], views), p90: pct(deep[90], views)},
     active_median: median(activeAll), no_interaction: still, downloaded,
@@ -421,6 +466,14 @@ function analyticsInsights_(json, params) {
 }
 
 // The caller holds the script lock. What today has added so far, for the limits above.
+// Read-only look at today's counters (the insights call holds no lock and never writes).
+function analyticsDayPeek_() {
+  try {
+    const d = JSON.parse(PropertiesService.getScriptProperties().getProperty(ANALYTICS_DAY_PROPERTY) || '{}');
+    return d.date === Utilities.formatDate(new Date(), ANALYTICS_TIMEZONE, 'yyyy-MM-dd') ? d : {};
+  } catch (_) { return {}; }
+}
+
 function analyticsDay_(today) {
   let day = null;
   try { day = JSON.parse(PropertiesService.getScriptProperties().getProperty(ANALYTICS_DAY_PROPERTY) || 'null'); } catch (err) {}
