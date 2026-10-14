@@ -16,83 +16,83 @@
 <script src="../js/theme.js?v=20260930-1"></script>
 <style>
 /* Internal page: guideline tokens only (B03), no tracking script on it, so looking at the numbers never adds to them. */
-.ad-wrap{max-width:1040px;margin:0 auto;padding:0 20px}
-.ad-head{padding:56px 0 8px}
-.ad-head h1{font:800 clamp(34px,5vw,52px)/1.05 var(--display);letter-spacing:-.03em;margin:8px 0 12px}
-.ad-head p{margin:0;color:var(--ink2);max-width:42em}
-.ad-period{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 8px}
-.ad-period button,.ad-select{height:36px;padding:0 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:700 14px/1 var(--body);cursor:pointer}
-.ad-period button[aria-pressed="true"]{background:var(--nile);border-color:var(--nile);color:var(--on-nile)}
-.ad-period button:hover,.ad-select:hover{border-color:var(--green)}
-.ad-select{appearance:none;padding-inline-end:16px}
-.ad-note{margin:16px 0 0;padding:14px 18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);color:var(--ink2);font-size:15px}
-.ad-section{margin-top:40px}
-.ad-section h2{font:800 clamp(24px,3vw,32px)/1.15 var(--display);letter-spacing:-.02em;margin:0 0 6px}
-.ad-section>p{margin:0 0 16px;color:var(--ink2);font-size:16px}
-.ad-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:24px}
-.ad-tile{padding:18px 20px}
-.ad-tile b{display:block;font:800 clamp(28px,3.4vw,38px)/1.1 var(--display);letter-spacing:-.02em}
-.ad-tile span{display:block;margin-top:6px;color:var(--ink2);font-size:14px;font-weight:600}
-.ad-card{padding:20px 22px;overflow-x:auto}
-.ad-bars{display:grid;gap:10px}
-.ad-bar{display:grid;grid-template-columns:minmax(110px,170px) 1fr 84px;align-items:center;gap:12px;font-size:14px}
-.ad-bar>span:first-child{color:var(--ink2);font-weight:600;overflow-wrap:anywhere}
-.ad-track{height:12px;border-radius:99px;background:var(--track)}
-.ad-fill{display:block;height:100%;min-width:3px;border-radius:99px;background:var(--green)}
-.ad-bar>b{text-align:end;font-weight:700;white-space:nowrap}
-.ad-table{width:100%;border-collapse:collapse;font-size:14px}
-.ad-table th,.ad-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:end;white-space:nowrap}
-.ad-table th:first-child,.ad-table td:first-child{text-align:start;white-space:normal;overflow-wrap:anywhere}
-.ad-table th{color:var(--ink2);font-weight:700}
-.ad-table td.ad-dim{color:var(--muted)}
-.ad-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.ad-empty{margin:0;color:var(--ink2)}
-.ad-foot{margin:48px 0 64px;color:var(--muted);font-size:14px}
-@media (max-width:760px){.ad-tiles{grid-template-columns:1fr 1fr}.ad-bar{grid-template-columns:1fr 70px;grid-template-areas:"l v" "t t"}.ad-bar>span:first-child{grid-area:l}.ad-bar>b{grid-area:v}.ad-bar .ad-track{grid-area:t}}
+.dash-wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.dash-head{padding:56px 0 8px}
+.dash-head h1{font:800 clamp(34px,5vw,52px)/1.05 var(--display);letter-spacing:-.03em;margin:8px 0 12px}
+.dash-head p{margin:0;color:var(--ink2);max-width:42em}
+.dash-period{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 8px}
+.dash-period button,.dash-select{height:36px;padding:0 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:700 14px/1 var(--body);cursor:pointer}
+.dash-period button[aria-pressed="true"]{background:var(--nile);border-color:var(--nile);color:var(--on-nile)}
+.dash-period button:hover,.dash-select:hover{border-color:var(--green)}
+.dash-select{appearance:none;padding-inline-end:16px}
+.dash-note{margin:16px 0 0;padding:14px 18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);color:var(--ink2);font-size:15px}
+.dash-section{margin-top:40px}
+.dash-section h2{font:800 clamp(24px,3vw,32px)/1.15 var(--display);letter-spacing:-.02em;margin:0 0 6px}
+.dash-section>p{margin:0 0 16px;color:var(--ink2);font-size:16px}
+.dash-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:24px}
+.dash-tile{padding:18px 20px}
+.dash-tile b{display:block;font:800 clamp(28px,3.4vw,38px)/1.1 var(--display);letter-spacing:-.02em}
+.dash-tile span{display:block;margin-top:6px;color:var(--ink2);font-size:14px;font-weight:600}
+.dash-card{padding:20px 22px;overflow-x:auto}
+.dash-bars{display:grid;gap:10px}
+.dash-bar{display:grid;grid-template-columns:minmax(110px,170px) 1fr 84px;align-items:center;gap:12px;font-size:14px}
+.dash-bar>span:first-child{color:var(--ink2);font-weight:600;overflow-wrap:anywhere}
+.dash-track{height:12px;border-radius:99px;background:var(--track)}
+.dash-fill{display:block;height:100%;min-width:3px;border-radius:99px;background:var(--green)}
+.dash-bar>b{text-align:end;font-weight:700;white-space:nowrap}
+.dash-table{width:100%;border-collapse:collapse;font-size:14px}
+.dash-table th,.dash-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:end;white-space:nowrap}
+.dash-table th:first-child,.dash-table td:first-child{text-align:start;white-space:normal;overflow-wrap:anywhere}
+.dash-table th{color:var(--ink2);font-weight:700}
+.dash-table td.dash-dim{color:var(--muted)}
+.dash-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.dash-empty{margin:0;color:var(--ink2)}
+.dash-foot{margin:48px 0 64px;color:var(--muted);font-size:14px}
+@media (max-width:760px){.dash-tiles{grid-template-columns:1fr 1fr}.dash-bar{grid-template-columns:1fr 70px;grid-template-areas:"l v" "t t"}.dash-bar>span:first-child{grid-area:l}.dash-bar>b{grid-area:v}.dash-bar .dash-track{grid-area:t}}
 </style>
 </head>
 <body>
-<div class="ad-wrap">
-  <header class="ad-head">
+<div class="dash-wrap">
+  <header class="dash-head">
     <a class="d-lockup" href="../index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
     <h1>How the Site Is Doing</h1>
     <p>Counts come from two files in this folder, which a scheduled job refreshes. Linked visits are not published anywhere: they load here, with your key, straight from your own script.</p>
-    <div class="ad-period" role="group" aria-label="Period" id="period">
+    <div class="dash-period" role="group" aria-label="Period" id="period">
       <button type="button" data-days="7" aria-pressed="false">Last 7 days</button>
       <button type="button" data-days="28" aria-pressed="true">Last 28 days</button>
       <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
     </div>
-    <p class="ad-note" id="sample" hidden></p>
-    <p class="ad-note" id="status">Loading…</p>
-    <noscript><p class="ad-note">This page needs JavaScript.</p></noscript>
+    <p class="dash-note" id="sample" hidden></p>
+    <p class="dash-note" id="status">Loading…</p>
+    <noscript><p class="dash-note">This page needs JavaScript.</p></noscript>
   </header>
 
   <main>
-    <div class="ad-tiles" id="tiles"></div>
+    <div class="dash-tiles" id="tiles"></div>
 
-    <section class="ad-section" id="funnel">
+    <section class="dash-section" id="funnel">
       <h2>Where Readers Stop</h2>
       <p>Page views that reached each section, for one page version.</p>
-      <div class="card card-support ad-card">
-        <div class="ad-toolbar"><label for="release" class="sr-only">Page version</label><select class="ad-select" id="release"></select></div>
-        <div class="ad-bars" id="bars"></div>
-        <table class="ad-table" id="funnel-table" hidden></table>
+      <div class="card card-support dash-card">
+        <div class="dash-toolbar"><label for="release" class="sr-only">Page version</label><select class="dash-select" id="release"></select></div>
+        <div class="dash-bars" id="bars"></div>
+        <table class="dash-table" id="funnel-table" hidden></table>
       </div>
     </section>
 
-    <section class="ad-section" id="first-page">
+    <section class="dash-section" id="first-page">
       <h2>Which First Page Leads to a Download</h2>
       <p>Visits from people who chose Allow all, by the page they landed on. Groups under 5 visits are merged into Smaller groups.</p>
-      <div class="card card-support ad-card" id="journeys"></div>
+      <div class="card card-support dash-card" id="journeys"></div>
     </section>
 
-    <section class="ad-section" id="use">
+    <section class="dash-section" id="use">
       <h2>What People Use</h2>
       <p>Everything counted besides downloads and section views, for everyone.</p>
-      <div class="card card-support ad-card" id="usage"></div>
+      <div class="card card-support dash-card" id="usage"></div>
     </section>
   </main>
-  <p class="ad-foot" id="foot"></p>
+  <p class="dash-foot" id="foot"></p>
 </div>
 <script>
 (() => {
@@ -154,7 +154,7 @@
       [all + ess ? pct(all / (all + ess) * 100) : 'No choices yet', 'Chose Allow all'],
     ];
     const box = $('tiles'); box.replaceChildren();
-    items.forEach(([v, l]) => { const t = el('div', undefined, 'card card-support ad-tile'); t.append(el('b', v), el('span', l)); box.append(t); });
+    items.forEach(([v, l]) => { const t = el('div', undefined, 'card card-support dash-tile'); t.append(el('b', v), el('span', l)); box.append(t); });
     const note = $('sample');
     note.hidden = views >= 300;
     note.textContent = views >= 300 ? '' : `Only ${n(views)} page views in this period. Too few to compare page versions: wait for a few hundred per page before choosing between them.`;
@@ -175,11 +175,11 @@
     select.hidden = !releases.length;
     if (releases.includes(keep)) select.value = keep;
     const bars = $('bars'), table = $('funnel-table'); bars.replaceChildren(); table.replaceChildren();
-    if (!releases.length) { bars.append(el('p', 'No section views in this period yet.', 'ad-empty')); table.hidden = true; return; }
+    if (!releases.length) { bars.append(el('p', 'No section views in this period yet.', 'dash-empty')); table.hidden = true; return; }
     const rows = Object.entries(by[select.value]).sort((a, b) => b[1] - a[1]);
     const top = rows[0][1];
     rows.forEach(([name, v]) => {
-      const row = el('div', undefined, 'ad-bar'), track = el('span', undefined, 'ad-track'), fill = el('span', undefined, 'ad-fill');
+      const row = el('div', undefined, 'dash-bar'), track = el('span', undefined, 'dash-track'), fill = el('span', undefined, 'dash-fill');
       fill.style.width = `${v / top * 100}%`; track.append(fill);
       row.title = `${name}: ${n(v)} page views (${pct(v / top * 100)} of the most-viewed section)`;
       row.append(el('span', name), track, el('b', `${n(v)} · ${pct(v / top * 100)}`));
@@ -195,9 +195,9 @@
   }
 
   function keyForm(box, message) {
-    if (message) box.append(el('p', message, 'ad-empty'));
-    const form = el('form', undefined, 'ad-toolbar'), input = el('input'), label = el('label', 'Key', 'sr-only'), button = el('button', 'Show linked visits', 'ad-select');
-    input.type = 'password'; input.id = 'key'; input.autocomplete = 'off'; input.placeholder = 'Key'; input.className = 'ad-select'; label.htmlFor = 'key';
+    if (message) box.append(el('p', message, 'dash-empty'));
+    const form = el('form', undefined, 'dash-toolbar'), input = el('input'), label = el('label', 'Key', 'sr-only'), button = el('button', 'Show linked visits', 'dash-select');
+    input.type = 'password'; input.id = 'key'; input.autocomplete = 'off'; input.placeholder = 'Key'; input.className = 'dash-select'; label.htmlFor = 'key';
     button.type = 'submit';
     form.addEventListener('submit', async e => {
       e.preventDefault();
@@ -212,7 +212,7 @@
     const box = $('journeys'); box.replaceChildren();
     if (!journeys) return keyForm(box, 'Enter your key to load linked visits. It stays in this browser.');
     if (journeys.error === 'key') return keyForm(box, 'That key was refused. Check it and try again.');
-    if (journeys.error === 'network') { box.append(el('p', 'Could not reach the script from this browser. Try again, or read the Events tab of your Sheet.', 'ad-empty')); return; }
+    if (journeys.error === 'network') { box.append(el('p', 'Could not reach the script from this browser. Try again, or read the Events tab of your Sheet.', 'dash-empty')); return; }
     const rows = journeys.rows.filter(inWindow), groups = {};
     rows.forEach(r => {
       const merged = r.landing_release === 'other';
@@ -221,15 +221,15 @@
       g.visits += Number(r.visits) || 0; g.downloads += Number(r.downloads) || 0; g.signups += Number(r.signups) || 0;
     });
     const entries = Object.entries(groups).sort((a, b) => b[1].visits - a[1].visits);
-    if (journeys.dropped) box.append(el('p', `The script dropped ${n(journeys.dropped)} events at its daily limits.`, 'ad-note'));
-    if (!entries.length) { box.append(el('p', 'No linked visits in this period yet.', 'ad-empty')); return; }
-    const table = el('table', undefined, 'ad-table'), head = el('tr');
+    if (journeys.dropped) box.append(el('p', `The script dropped ${n(journeys.dropped)} events at its daily limits.`, 'dash-note'));
+    if (!entries.length) { box.append(el('p', 'No linked visits in this period yet.', 'dash-empty')); return; }
+    const table = el('table', undefined, 'dash-table'), head = el('tr');
     ['First page', 'Visits', 'Downloads', 'Signups', 'Downloads per 100 visits'].forEach(h => head.append(el('th', h)));
     { const thead = el('thead'); thead.append(head); table.append(thead); }
     const body = el('tbody');
     entries.forEach(([name, g]) => {
       const r = el('tr'), few = g.visits < 30;
-      const rate = el('td', g.merged ? '' : few ? 'Too few to compare' : n(g.downloads / g.visits * 100), few || g.merged ? 'ad-dim' : '');
+      const rate = el('td', g.merged ? '' : few ? 'Too few to compare' : n(g.downloads / g.visits * 100), few || g.merged ? 'dash-dim' : '');
       r.append(el('td', name), el('td', n(g.visits)), el('td', n(g.downloads)), el('td', n(g.signups)), rate);
       body.append(r);
     });
@@ -241,8 +241,8 @@
     const totals = {};
     events.filter(r => inWindow(r) && !r.event.startsWith('reach-') && !r.event.startsWith('consent-') && r.release).forEach(r => { totals[r.event] = (totals[r.event] || 0) + Number(r.count); });
     const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
-    if (!entries.length) { box.append(el('p', 'Nothing counted in this period yet.', 'ad-empty')); return; }
-    const table = el('table', undefined, 'ad-table'), head = el('tr');
+    if (!entries.length) { box.append(el('p', 'Nothing counted in this period yet.', 'dash-empty')); return; }
+    const table = el('table', undefined, 'dash-table'), head = el('tr');
     ['Event', 'Times'].forEach(h => head.append(el('th', h)));
     { const thead = el('thead'); thead.append(head); table.append(thead); }
     const body = el('tbody');
