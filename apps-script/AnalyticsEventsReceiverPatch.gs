@@ -6,6 +6,11 @@
  * anything they typed. Rows older than 90 days are deleted every day; only
  * totals leave the sheet, read by analytics/journeys.py with a private key.
  *
+ * Each visitor ID also gets a sequential number (Visitor no. 1, 2, 3...), kept
+ * in the Visitors tab, so one person's rows are easy to follow and a return
+ * visit shows the same number. Numbers are never reused. It identifies a
+ * browser, not a person: another device or cleared storage is a new visitor.
+ *
  * Setup in the existing Apps Script receiver:
  *
  * 1. Add this as a new script file.
@@ -38,35 +43,102 @@ const ANALYTICS_KEEP_DAYS = 90;
 const ANALYTICS_KEY_PROPERTY = 'ANALYTICS_READ_KEY';
 const ANALYTICS_TIMEZONE = 'Africa/Cairo';
 const ANALYTICS_MAX_EVENTS = 50;
+const ANALYTICS_VISITORS_SHEET_NAME = 'Visitors';
+const ANALYTICS_COUNTER_PROPERTY = 'ANALYTICS_VISITOR_COUNTER';
 const ANALYTICS_TIME_FORMAT = 'yyyy-mm-dd hh:mm:ss'; // shown in the spreadsheet's time zone (File > Settings)
 const ANALYTICS_HEADERS = [
   'Received at', 'Visit', 'Visitor', 'Visit #', 'Page view', 'Release', 'Page',
   'Language', 'Device', 'Referrer', 'utm_source', 'utm_medium', 'utm_campaign',
-  'Event', 'Seconds into visit'
+  'Event', 'Seconds into visit', 'Visitor no.'
 ];
+const ANALYTICS_VISITOR_HEADERS = ['Visitor ID', 'Visitor no.', 'First seen', 'Last seen'];
 
-function analyticsSheet_() {
-  const book = ANALYTICS_SPREADSHEET_ID
+function analyticsBook_() {
+  return ANALYTICS_SPREADSHEET_ID
     ? SpreadsheetApp.openById(ANALYTICS_SPREADSHEET_ID)
     : SpreadsheetApp.getActiveSpreadsheet();
+}
+
+function analyticsSheet_() {
+  const book = analyticsBook_();
   let sheet = book.getSheetByName(ANALYTICS_SHEET_NAME);
   if (!sheet) {
     sheet = book.insertSheet(ANALYTICS_SHEET_NAME);
     sheet.appendRow(ANALYTICS_HEADERS);
     sheet.setFrozenRows(1);
-    analyticsFormatTime_(sheet);
+    analyticsFormatColumns_(sheet);
+  }
+  return sheet;
+}
+
+function analyticsVisitorsSheet_() {
+  const book = analyticsBook_();
+  let sheet = book.getSheetByName(ANALYTICS_VISITORS_SHEET_NAME);
+  if (!sheet) {
+    sheet = book.insertSheet(ANALYTICS_VISITORS_SHEET_NAME);
+    sheet.appendRow(ANALYTICS_VISITOR_HEADERS);
+    sheet.setFrozenRows(1);
+    sheet.getRange('A:A').setNumberFormat('@'); // plain text: an ID like 12e4... must not become a number
+    sheet.getRange('C:D').setNumberFormat(ANALYTICS_TIME_FORMAT);
+    sheet.setColumnWidth(1, 150);
+    sheet.setColumnWidth(3, 160);
+    sheet.setColumnWidth(4, 160);
   }
   return sheet;
 }
 
 // "Received at" is stored with the full time; this makes the sheet show it, for old and new rows.
-function analyticsFormatTime_(sheet) {
+// The IDs are plain text, so one that looks like a number is never turned into one.
+function analyticsFormatColumns_(sheet) {
   sheet.getRange('A:A').setNumberFormat(ANALYTICS_TIME_FORMAT);
+  ['B:B', 'C:C', 'E:E'].forEach(a => sheet.getRange(a).setNumberFormat('@'));
+  sheet.getRange(1, 1, 1, ANALYTICS_HEADERS.length).setValues([ANALYTICS_HEADERS]);
   sheet.setColumnWidth(1, 160);
 }
 
+// The caller holds the script lock. Same visitor ID, same number; a new ID gets the next one.
+function analyticsVisitorNumber_(vid, seen) {
+  if (!vid) return '';
+  const sheet = analyticsVisitorsSheet_();
+  const last = sheet.getLastRow();
+  const rows = last < 2 ? [] : sheet.getRange(2, 1, last - 1, 4).getValues();
+  for (let i = 0; i < rows.length; i += 1) {
+    if (String(rows[i][0]) === vid) {
+      if (!(new Date(rows[i][3]) >= seen)) sheet.getRange(i + 2, 4).setValue(seen);
+      return rows[i][1];
+    }
+  }
+  const props = PropertiesService.getScriptProperties();
+  const stored = parseInt(props.getProperty(ANALYTICS_COUNTER_PROPERTY), 10) || 0;
+  const highest = rows.reduce((m, r) => Math.max(m, +r[1] || 0), 0);
+  const number = Math.max(stored, highest) + 1;
+  sheet.appendRow([vid, number, seen, seen]);
+  props.setProperty(ANALYTICS_COUNTER_PROPERTY, String(number));
+  return number;
+}
+
+// Run once (setupAnalyticsEvents does): numbers the rows already in Events, oldest first.
+function backfillVisitorNumbers() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const sheet = analyticsSheet_();
+    const last = sheet.getLastRow();
+    if (last < 2) return;
+    const col = ANALYTICS_HEADERS.length;
+    const times = sheet.getRange(2, 1, last - 1, 1).getValues();
+    const vids = sheet.getRange(2, 3, last - 1, 1).getValues();
+    const have = sheet.getRange(2, col, last - 1, 1).getValues();
+    const out = have.map((h, i) => [h[0] !== '' ? h[0] : analyticsVisitorNumber_(String(vids[i][0]), new Date(times[i][0]))]);
+    sheet.getRange(2, col, last - 1, 1).setValues(out);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function setupAnalyticsEvents() {
-  analyticsFormatTime_(analyticsSheet_());
+  analyticsFormatColumns_(analyticsSheet_());
+  analyticsVisitorsSheet_();
   ScriptApp.getProjectTriggers()
     .filter(t => t.getHandlerFunction() === 'purgeAnalyticsEvents')
     .forEach(t => ScriptApp.deleteTrigger(t));
@@ -77,6 +149,7 @@ function setupAnalyticsEvents() {
     key = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
     props.setProperty(ANALYTICS_KEY_PROPERTY, key);
   }
+  backfillVisitorNumbers();
   Logger.log('ANALYTICS_JOURNEYS_KEY: ' + key);
 }
 
@@ -119,6 +192,8 @@ function saveAnalyticsEvents_(params) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    const visitor = analyticsVisitorNumber_(head[1], now);
+    rows.forEach(r => r.push(visitor));
     const sheet = analyticsSheet_();
     sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, ANALYTICS_HEADERS.length).setValues(rows);
   } finally {
@@ -129,14 +204,31 @@ function saveAnalyticsEvents_(params) {
 
 // Daily trigger: rows arrive in time order, so the old ones are the first rows.
 function purgeAnalyticsEvents() {
-  const sheet = analyticsSheet_();
-  const last = sheet.getLastRow();
-  if (last < 2) return;
-  const cutoff = new Date(Date.now() - ANALYTICS_KEEP_DAYS * 864e5);
-  const times = sheet.getRange(2, 1, last - 1, 1).getValues();
-  let old = 0;
-  while (old < times.length && new Date(times[old][0]) < cutoff) old += 1;
-  if (old) sheet.deleteRows(2, old);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const cutoff = new Date(Date.now() - ANALYTICS_KEEP_DAYS * 864e5);
+    const sheet = analyticsSheet_();
+    const last = sheet.getLastRow();
+    if (last >= 2) {
+      const times = sheet.getRange(2, 1, last - 1, 1).getValues();
+      let old = 0;
+      while (old < times.length && new Date(times[old][0]) < cutoff) old += 1;
+      if (old) sheet.deleteRows(2, old);
+    }
+
+    // Visitor numbers go the same way once the visitor has been silent for 90 days.
+    const visitors = analyticsVisitorsSheet_();
+    const vLast = visitors.getLastRow();
+    if (vLast >= 2) {
+      const seen = visitors.getRange(2, 4, vLast - 1, 1).getValues();
+      for (let i = seen.length - 1; i >= 0; i -= 1) {
+        if (new Date(seen[i][0]) < cutoff) visitors.deleteRow(i + 2);
+      }
+    }
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 // Totals per Cairo day and landing page (the first page of each visit). No visit numbers leave here.
