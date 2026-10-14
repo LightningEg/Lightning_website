@@ -65,7 +65,7 @@
 }
 @media (max-width:640px){
   .d-links a{display:inline-flex;align-items:center;min-height:44px}
-  .d-foot nav a{display:inline-flex;align-items:center;min-height:44px}
+  .d-foot nav a,.d-foot-links a{display:inline-flex;align-items:center;min-height:44px}
 }
 
 /* test page (UX-2026.10.07.02): phone and PC, connected. Real screens only (B07): the PC in its browser frame,

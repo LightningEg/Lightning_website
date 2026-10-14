@@ -449,3 +449,6 @@ button,input{font:inherit}
   .hw-media.has-pair{padding-bottom:0}.hw-media.has-pair .hw-cap{margin-top:14px;max-width:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.c-foot-links{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 32px;font-size:13px;font-weight:500}
+.c-foot-links nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+.c-foot-links a{text-decoration:none}.c-foot-links a:hover{color:var(--ink)}
