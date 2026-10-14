@@ -443,10 +443,11 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
 .pf-chips{display:flex;gap:8px}
 .pf-chips>span{height:40px;padding:0 14px;border-radius:999px;display:flex;align-items:center;gap:4px;background:var(--white);border:1px solid var(--line-ctl);font-weight:700;font-size:13px;color:var(--ink2);white-space:nowrap}
 .pf-chips>span.on{background:var(--nile);color:var(--on-nile);border-color:var(--nile)}
-.pf-list{border-radius:20px;background:var(--white);border:1px solid var(--line);padding:0 14px}
-.pf-day{font:800 12px/1 var(--body);color:var(--muted);padding:14px 0 6px;font-variant-numeric:tabular-nums}
-.pf-tx{display:flex;justify-content:space-between;gap:12px;min-height:60px;align-items:center;border-top:1px solid var(--line)}
-.pf-day+.pf-tx{border-top:0}
+.pf-list{padding:0}
+.pf-day{display:flex;justify-content:space-between;font:700 12.5px/1 var(--body);color:var(--muted);padding:20px 0 6px;font-variant-numeric:tabular-nums}
+.pf-who{display:flex;align-items:center;gap:12px;min-width:0}.pf-av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--t-azure);color:var(--azure);font:700 15px/1 var(--display);font-style:normal}.pf-av.in{background:var(--t-green);color:var(--green-text)}
+.pf-tx{display:flex;justify-content:space-between;gap:12px;min-height:64px;align-items:center;border-top:1px solid var(--line)}
+.pf-day+.pf-tx{border-top:0}.pf-more{display:flex;justify-content:space-between;align-items:center;min-height:48px;font-weight:700;font-size:14px;color:var(--ink);border-top:1px solid var(--line)}.pf-hero{padding:4px 0 0}.pf-hero .big{font-size:36px;line-height:1.05;margin:6px 0 2px}.pf-hero .big small{font:600 13px/1 var(--body);color:var(--muted);margin-left:5px;letter-spacing:0}.pf-hero p{margin:0;font-size:13px;color:var(--ink2)}
 .pf-tx b{display:block;font-size:15px}.pf-tx small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .pf-tx .a{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.pf-tx .a b.in{color:var(--green-text)}
 /* frame diagram */
@@ -571,6 +572,14 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
     <div class="rt"><div class="vis"><span class="chip up">Tap</span><span class="chip" style="text-decoration:line-through">Hover</span></div><b>No hover</b><span>What a tooltip says is on screen or one tap away.</span></div>
     <div class="rt"><div class="vis"><svg class="ic" style="width:24px;height:24px;color:var(--ink)"><use href="#i-cash"/></svg><span class="chip">Cash</span></div><b>A word beside every icon</b><span>An icon stands alone only when everyone knows it: search, back, add, more, settings, hide amounts.</span></div>
   </div>
+  <ul class="short">
+    <li><b>C01.1 Direction: a phone is not a small PC.</b> Banking and money apps people open daily (Monzo, Revolut, Wise, Copilot) open on the money that just moved, not on analysis. Each of their screens answers one question, with one figure as the lead and the rest quiet.</li>
+    <li><b>Money first.</b> Every page that has a ledger leads with the latest transactions; the analysis follows and is a tap away.</li>
+    <li><b>Flat, not boxed.</b> Rows sit on the page, divided by a hairline. A card is for one lead figure; a list is never inside a card.</li>
+    <li><b>One figure per row.</b> Name and category left, amount right. Anything more (balance after, account, notes) is in the row's sheet.</li>
+    <li><b>Quiet chrome.</b> One period control, one set of tabs, no icon boxes, no coloured edges. Colour appears only where it carries meaning (A03).</li>
+    <li><b>Recon, 2026-10-14:</b> web evidence on these apps is anecdotal (user forums, design critiques), so these rules rest on patterns repeated across them, not on measured studies. Revolut's crowded home with a single visible transaction is the one named failure: show at least five.</li>
+  </ul>
 </section>
 
 <section class="g" id="c-frame" data-part="c">
@@ -688,14 +697,14 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
   <div class="g-head"><div><h2><span class="secnum">C06</span>Cards and KPIs</h2><p>The four cards keep their jobs. They get shorter, and KPIs share a row.</p></div></div>
   <h3 class="sub"><span class="subnum">C06.1</span>KPI tiles, two by two</h3>
   <div style="max-width:360px" class="kt-grid">
-    <div class="kt"><div class="top"><span class="ico"><svg class="ic"><use href="#i-trend"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Change in net worth</div><div class="fig num">+37,884</div><div class="foot">Net worth <b>156,084</b></div></div>
-    <div class="kt"><div class="top"><span class="ico"><svg class="ic"><use href="#i-pie"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Savings rate</div><div class="fig num">49.1<small>%</small></div><div class="foot">Kept <b>69,013</b></div></div>
-    <div class="kt azure"><div class="top"><span class="ico"><svg class="ic"><use href="#i-chart"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Investing rate</div><div class="fig num">49.1<small>%</small></div><div class="meter"><i style="width:49%"></i></div></div>
-    <div class="kt rose"><div class="top"><span class="ico"><svg class="ic"><use href="#i-wallet"/></svg></span><span class="chip">2026-10</span></div><div class="lbl">Left in plan</div><div class="fig num">24,698</div><div class="meter"><i style="width:2%"></i></div></div>
+    <div class="kt"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Change in net worth</div><div class="fig num">+37,884</div><div class="foot">Net worth <b>156,084</b></div></div>
+    <div class="kt"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Savings rate</div><div class="fig num">49.1<small>%</small></div><div class="foot">Kept <b>69,013</b></div></div>
+    <div class="kt azure"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Investing rate</div><div class="fig num">49.1<small>%</small></div><div class="meter"><i style="width:49%"></i></div></div>
+    <div class="kt rose"><div class="top"><span class="chip">2026-10</span></div><div class="lbl">Left in plan</div><div class="fig num">24,698</div><div class="meter"><i style="width:2%"></i></div></div>
   </div>
   <ul class="short">
-    <li><b>Up to four, in a 2 × 2 grid,</b> at the top of the page. Same tones and chips as A08; the chip says the period short: YTD, Today, 2026-10, a date, or “3 months”. A chip that would be cut is left out.</li>
-    <li><b>Inside a tile:</b> icon and chip, the label (write it for two lines; it wraps, never “…”), the figure at 26px (22 when long), then one line or a meter. No sparkline: the trend lives in its own card below.</li>
+    <li><b>Up to four, in a 2 × 2 grid,</b> under the page's latest transactions (C11.1); on a page with no ledger, at the top. Same tones and chips as A08; the chip says the period short: YTD, Today, 2026-10, a date, or “3 months”. A chip that would be cut is left out.</li>
+    <li><b>Inside a tile:</b> the label (write it for two lines; it wraps, never “…”) with the chip beside it, the figure at 24px (22 when long), then one line or a meter. No icon box: the label says what it is. No sparkline: the trend lives in its own card below.</li>
     <li><b>Tap the tile</b> to open the page it sums up. The tile has no button.</li>
   </ul>
 
@@ -707,7 +716,8 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
       <li>16 inside, 20px corners, 12 between. The figure 40px, 34 when long.</li>
       <li>Rows 48 tall. A row with › opens its parts in place.</li>
       <li>“Show the numbers” opens a sheet of rows, never a table in the card.</li>
-    </ul>
+        <li><b>C06.3 Headline figures on a page with comparisons</b> (Expense analysis): the first figure large on the page, no card; its comparisons under it as rows (down in spending is green, up is rose); every other figure one 48-tall row with its note under it. No icon, no coloured edge, no tile for each.</li>
+  </ul>
   </div>
 </section>
 
@@ -804,18 +814,18 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
       <div class="pf-search"><svg class="ic"><use href="#i-search"/></svg>Search transactions</div>
       <div class="pf-chips"><span class="on">‹ 2026-06 ›</span><span>Category<svg class="ic" style="width:16px;height:16px"><use href="#i-down"/></svg></span></div>
       <div class="pf-list">
-        <div class="pf-day">2026-06-16</div>
-        <div class="pf-tx"><div><b>Kiosk</b><small>Groceries</small></div><div class="a"><b>−165.00</b><small>10,220.00</small></div></div>
-        <div class="pf-day">2026-06-12</div>
-        <div class="pf-tx"><div><b>Uber</b><small>Transport</small></div><div class="a"><b>−90.00</b><small>10,385.00</small></div></div>
-        <div class="pf-day">2026-06-05</div>
-        <div class="pf-tx"><div><b>From CIB current</b><small>Transfer</small></div><div class="a"><b>3,000.00</b><small>10,475.00</small></div></div>
-        <div class="pf-tx"><div><b>Refund</b><small>Personal</small></div><div class="a"><b class="in">+200.00</b><small>7,475.00</small></div></div>
+        <div class="pf-day"><span>2026-06-16</span></div>
+        <div class="pf-tx"><div class="pf-who"><i class="pf-av">K</i><div><b>Kiosk</b><small>Groceries</small></div></div><div class="a"><b>−165.00</b></div></div>
+        <div class="pf-day"><span>2026-06-12</span></div>
+        <div class="pf-tx"><div class="pf-who"><i class="pf-av">U</i><div><b>Uber</b><small>Transport</small></div></div><div class="a"><b>−90.00</b></div></div>
+        <div class="pf-day"><span>2026-06-05</span></div>
+        <div class="pf-tx"><div class="pf-who"><i class="pf-av">C</i><div><b>From CIB current</b><small>Transfer</small></div></div><div class="a"><b>3,000.00</b></div></div>
+        <div class="pf-tx"><div class="pf-who"><i class="pf-av in">R</i><div><b>Refund</b><small>Personal</small></div></div><div class="a"><b class="in">+200.00</b></div></div>
       </div>
     </div>
     <ul class="short" style="margin:0">
-      <li><b>C08.1 Day headers:</b> the date once, Muted, above that day's rows. Not repeated on each row.</li>
-      <li><b>C08.2 Row:</b> counterparty and category on the left, amount and balance after it on the right. 60 tall. In: green with +. Out: ink with −. Transfers: no sign (A11).</li>
+      <li><b>C08.1 Day headers:</b> Today, Yesterday, then the date (A06.1), once, Muted, 12.5px, above that day's rows. Not repeated on each row.</li>
+      <li><b>C08.2 Row:</b> flat on the page, a hairline between rows, never a card around the list. A 40px round initial (soft green for money in, a neutral well otherwise), the counterparty and its category, the amount on the right. 64 tall. In: green with +. Out: ink with −. Transfers: no sign (A11). The balance after the row shows only on an account's own list, Muted under the amount; never on Overview or the all-accounts list. The Overview names no account (category only); the all-accounts list adds it after the category.</li>
       <li><b>C08.3 Filters:</b> search full width (it takes a #tag too), then chips. The month is a chip with ‹ › and opens the month picker; it is never typed as yyyy-mm.</li>
       <li><b>C08.4 Adding:</b> the add button (C05.2) opens the entry sheet. No “New” row at the top of the list.</li>
       <li><b>C08.5 Selecting:</b> press and hold a row, or the Select chip after the month. Chosen rows turn soft green with a Meadow edge; a bar replaces the tab bar with the count, the category to give them, Change category and Delete. Done ends it.</li>
@@ -876,18 +886,28 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
         <div class="pf-status"><span>4:32</span><span>47%</span></div>
         <div class="pf-bar"><img class="pf-mark" alt="Lightning"><span class="pf-icon"><svg class="ic"><use href="#i-search"/></svg></span><span class="pf-icon"><svg class="ic"><use href="#i-eye"/></svg></span><span class="pf-icon"><svg class="ic"><use href="#i-gear"/></svg></span></div>
         <div class="pf-body">
-          <div class="pf-title"><h3>Overview</h3><p>2026-01-01 to 2026-10-06 <span>year to date</span></p></div>
-          <div class="pf-period"><span>All</span><span class="on">YTD</span><span class="step"><i>‹</i>2026-10<i>›</i></span><span>Custom</span></div>
+          <div class="pf-title"><h3>Overview</h3></div>
           <div class="pf-seg"><span class="on">Summary</span><span>Spending</span><span>Health</span></div>
+          <div class="pf-hero"><p>Net worth <span class="muted">As of 2026-10-06</span></p><div class="big num">156,084<small>EGP</small></div></div>
+          <div class="pf-sec"><h4>Latest</h4><span>See all transactions</span></div>
+          <div class="pf-list">
+            <div class="pf-day"><span>Today</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">C</i><div><b>Carrefour</b><small>Groceries</small></div></div><div class="a"><b>−3,410.00</b></div></div>
+            <div class="pf-day"><span>Yesterday</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av in">A</i><div><b>ACME Egypt</b><small>Salary</small></div></div><div class="a"><b class="in">+50,000.00</b></div></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">U</i><div><b>Uber</b><small>Transport</small></div></div><div class="a"><b>−524.00</b></div></div>
+          </div>
           <div class="pf-need">Needs you <em>18</em><svg class="ic"><use href="#i-down"/></svg></div>
+          <div class="pf-sec"><h4>This period</h4><span>2026-01-01 to 2026-10-06</span></div>
+          <div class="pf-period"><span>All</span><span class="on">YTD</span><span class="step"><i>‹</i>2026-10<i>›</i></span><span>Custom</span></div>
           <div class="kt-grid">
-            <div class="kt"><div class="top"><span class="ico"><svg class="ic"><use href="#i-trend"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Change in net worth</div><div class="fig num">+37,884</div><div class="foot">Net worth <b>156,084</b></div></div>
-            <div class="kt"><div class="top"><span class="ico"><svg class="ic"><use href="#i-pie"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Savings rate</div><div class="fig num">49.1<small>%</small></div><div class="foot">Kept <b>69,013</b></div></div>
-            <div class="kt azure"><div class="top"><span class="ico"><svg class="ic"><use href="#i-chart"/></svg></span><span class="chip up">↑ YTD</span></div><div class="lbl">Investing rate</div><div class="fig num">49.1<small>%</small></div><div class="meter"><i style="width:49%"></i></div></div>
-            <div class="kt rose"><div class="top"><span class="ico"><svg class="ic"><use href="#i-wallet"/></svg></span><span class="chip">2026-10</span></div><div class="lbl">Left in plan</div><div class="fig num">24,698</div><div class="meter"><i style="width:2%"></i></div></div>
+            <div class="kt"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Change in net worth</div><div class="fig num">+37,884</div><div class="foot">Net worth <b>156,084</b></div></div>
+            <div class="kt"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Savings rate</div><div class="fig num">49.1<small>%</small></div><div class="foot">Kept <b>69,013</b></div></div>
+            <div class="kt azure"><div class="top"><span class="chip up">↑ YTD</span></div><div class="lbl">Investing rate</div><div class="fig num">49.1<small>%</small></div><div class="meter"><i style="width:49%"></i></div></div>
+            <div class="kt rose"><div class="top"><span class="chip">2026-10</span></div><div class="lbl">Left in plan</div><div class="fig num">24,698</div><div class="meter"><i style="width:2%"></i></div></div>
           </div>
           <div class="pf-sec"><h4>Your position</h4><span>As of 2026-10-06</span></div>
-          <div class="pf-card lead"><h4>Net worth</h4><div class="big num">156,084<small>EGP</small></div><div class="pf-rows"><div><span>What you own</span><b>261,024</b></div><div><span>What you owe</span><b>−104,940</b></div></div></div>
+          <div class="pf-card lead"><div class="pf-rows"><div><span>What you own</span><b>261,024</b></div><div><span>What you owe</span><b>−104,940</b></div></div></div>
         </div>
         <div class="pf-nav"><span class="on"><i><svg class="ic"><use href="#i-home"/></svg></i>Overview</span><span><i><svg class="ic"><use href="#i-wallet"/></svg></i>Budget</span><span><i><svg class="ic"><use href="#i-cash"/></svg></i>Cash</span><span><i><svg class="ic"><use href="#i-chart"/></svg></i>Investments</span><span><i><svg class="ic"><use href="#i-bank"/></svg></i>Accounts</span></div>
         <div class="pf-gest"></div>
@@ -902,14 +922,14 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
           <div class="pf-search"><svg class="ic"><use href="#i-search"/></svg>Search transactions</div>
           <div class="pf-chips"><span class="on">‹ 2026-06 ›</span><span>Category<svg class="ic" style="width:16px;height:16px"><use href="#i-down"/></svg></span></div>
           <div class="pf-list">
-            <div class="pf-day">2026-06-16</div>
-            <div class="pf-tx"><div><b>Kiosk</b><small>Groceries</small></div><div class="a"><b>−165.00</b><small>10,220.00</small></div></div>
-            <div class="pf-day">2026-06-12</div>
-            <div class="pf-tx"><div><b>Uber</b><small>Transport</small></div><div class="a"><b>−90.00</b><small>10,385.00</small></div></div>
-            <div class="pf-day">2026-06-05</div>
-            <div class="pf-tx"><div><b>From CIB current</b><small>Transfer</small></div><div class="a"><b>3,000.00</b><small>10,475.00</small></div></div>
-            <div class="pf-day">2026-05-16</div>
-            <div class="pf-tx"><div><b>Kiosk</b><small>Groceries</small></div><div class="a"><b>−210.00</b><small>7,475.00</small></div></div>
+            <div class="pf-day"><span>2026-06-16</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">K</i><div><b>Kiosk</b><small>Groceries</small></div></div><div class="a"><b>−165.00</b></div></div>
+            <div class="pf-day"><span>2026-06-12</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">U</i><div><b>Uber</b><small>Transport</small></div></div><div class="a"><b>−90.00</b></div></div>
+            <div class="pf-day"><span>2026-06-05</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">C</i><div><b>From CIB current</b><small>Transfer</small></div></div><div class="a"><b>3,000.00</b></div></div>
+            <div class="pf-day"><span>2026-05-16</span></div>
+            <div class="pf-tx"><div class="pf-who"><i class="pf-av">K</i><div><b>Kiosk</b><small>Groceries</small></div></div><div class="a"><b>−210.00</b><small>7,475.00</small></div></div>
           </div>
         </div>
         <span class="pf-fab" title="Add transaction"><svg class="ic"><use href="#i-plus"/></svg></span>
@@ -919,7 +939,7 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
     </figure>
   </div>
   <ul class="short">
-    <li><b>C11.1 is the whole Overview:</b> Get set up while it is not done, Needs you, the four tiles and Your position. Under them, one row each for the rest (Over time, Free cash, What it is made of, If you sold today; then Net flow, Where money in went, Investments, and each month chart), with its figure; a row opens its card in place (C06.2). The Overview answers in one screen; the detail is one tap away. Bills due to pay stay open, as their own row.</li>
+    <li><b>C11.1 is the whole Overview, money first:</b> Get set up while it is not done; the net worth figure on the page (the lead, not in a card); Latest, the six newest transactions across every account with “See all transactions”; Needs you; then This period, with its period control and the four tiles; then Your position. Under them, one row each for the rest (Over time, Free cash, What it is made of, If you sold today; then Net flow, Where money in went, Investments, and each month chart), with its figure; a row opens its card in place (C06.2). Analysis is one tap away, never first. Bills due to pay stay open, as their own row.</li>
     <li><b>C11.2:</b> the account's one Secondary and ⋯ sit under its figure. On a brokerage, “Record an investment transaction” folds above the list for buy, sell and dividend.</li>
   </ul>
 </section>
@@ -942,6 +962,8 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
     <div><b>Two buttons side by side</b>One Secondary, then ⋯.</div>
     <div><b>Decimals on a big figure</b>Whole EGP, the Accounts total too.</div>
     <div><b>An icon alone that is not universal</b>Put its word beside it (C03.3).</div>
+    <div><b>A card around a list of rows</b>Rows sit flat on the page, a hairline between.</div>
+    <div><b>Analysis before the money</b>The latest transactions come first on a page that has a ledger.</div>
     <div><b>A button over content</b>The add button never covers the last row.</div>
     <div><b>A page with no way back</b>‹ and the page it returns to.</div>
     <div><b>A dead end</b>Everything the PC does with a ledger, the phone does too, or says where.</div>

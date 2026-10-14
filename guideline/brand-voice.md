@@ -1,6 +1,6 @@
 # Lightning · Brand voice
 
-Version 3.28 · 2026-10-12. It sits beside the guideline (B10 and A14 point here), and the copy in `lightning/guideline/` and `lightning_website/guideline/` is identical.
+Version 3.30 · 2026-10-12. It sits beside the guideline (B10 and A14 point here), and the copy in `lightning/guideline/` and `lightning_website/guideline/` is identical.
 
 This is read off the work, not invented: the guideline's word rules, the site, its FAQ, the Current Status story, the Arabic rules and the colours. Each trait below says where it shows. If a line you are writing would fit any other finance app, it is not Lightning yet.
 
