@@ -21,7 +21,7 @@ global.PropertiesService = { getScriptProperties: () => ({ getProperty: k => pro
 global.ScriptApp = { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyDays: () => ({ atHour: () => ({ create() {} }) }) }) }) };
 global.Utilities = { getUuid: () => 'aaaa-bbbb', formatDate: (d, tz, f) => new Date(d).toLocaleDateString('en-CA', { timeZone: tz }) };
 global.Logger = { log() {} };
-eval(fs.readFileSync((process.argv[2] || require('path').join(__dirname, '..', 'AnalyticsEventsReceiverPatch.gs')), 'utf8') + '\nObject.assign(global,{analyticsInsights_,savePageView_,analyticsCounts_,setupAnalyticsEvents,saveAnalyticsEvents_,analyticsJourneys_,purgeAnalyticsEvents,backfillVisitorNumbers,analyticsSheet_,analyticsAutoSetup_});');
+eval(fs.readFileSync((process.argv[2] || require('path').join(__dirname, '..', 'AnalyticsEventsReceiverPatch.gs')), 'utf8') + '\nObject.assign(global,{analyticsInsights_,savePageView_,analyticsCounts_,setupAnalyticsEvents,saveAnalyticsEvents_,analyticsJourneys_,purgeAnalyticsEvents,backfillVisitorNumbers,analyticsSheet_,analyticsAutoSetup_,backfillPageViews});');
 const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) process.exitCode = 1; };
 const H = { v: 1, ux: 'UX-2026.10.13.02', page: 'index', lang: 'en', device: 'phone', ref: '', us: '', um: '', uc: '' };
 const post = o => saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ ...H, ...o }) });
@@ -110,6 +110,7 @@ ok(tabs.__tz === 'Africa/Cairo', 'setup sets the spreadsheet time zone to Cairo'
 // ================= page views (v2): everyone gets an anonymous row =================
 const cairoToday = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
 delete props.ANALYTICS_DAY_COUNTS; delete props.ANALYTICS_DROPPED_TOTAL;
+tabs['Page views'].rows.length = 1; // setup above rebuilt page views from the old Events rows; tested at the end
 const pv2 = o => saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, ux: 'UX-2026.10.14.02', page: 'index', lang: 'en', device: 'phone', os: 'android', br: 'chrome', ref: 'www.google.com', us: '', um: '', uc: '', scroll: 40, act: 12, load: 1.4, lcp: 2.2, ...o }) }).t;
 const PV = () => tabs['Page views'].rows;
 const evBefore = tabs.Events.rows.length;
@@ -195,7 +196,7 @@ addX({ device: 'phone', os: 'android', page: 'current-status', from: 'index', lc
 addX({ device: 'desktop', os: 'windows', page: 'current-status', from: 'ar/index', lcp: 1 }, 'view:0 download-app-v1-android:8');
 addX({ device: 'desktop', os: 'windows', page: 'index', ux: 'UX-2026.10.14.01', from: 'x y' }, 'view:0');
 const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
-ok(i3.meta.script_version === '2026-10-14.3' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
+ok(i3.meta.script_version === '2026-10-14.4' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
 ok(new Date(i3.meta.last_row_at).getTime() > NOWISO - 60000 && typeof i3.meta.rows_today === 'number', 'meta: last row time and today count');
 ok(PV()[1][21] === 'outside' && PV()[2][21] === '' && PV()[3][21] === 'index' && PV()[4][21] === 'ar/index' && PV()[5][21] === '', 'from: stored in the last column; a bad value is blanked');
 ok(tabs['Page views'].rows[0][21] === 'From', 'from: header is the last column');
@@ -218,7 +219,7 @@ ok(tabs['Page views'].rows.length === nofrom + 1 && tabs['Page views'].rows[nofr
 Object.keys(tabs).forEach(k => delete tabs[k]); Object.keys(props).forEach(k => delete props[k]);
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'Africa/Cairo', 'first request sets the spreadsheet to Cairo time');
-ok(props.ANALYTICS_SETUP_VERSION === '2026-10-14.3' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
+ok(props.ANALYTICS_SETUP_VERSION === '2026-10-14.4' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
 ok(tabs['Dashboard key'] && tabs['Dashboard key'].rows[0][1] === props.ANALYTICS_READ_KEY, 'the key is in the Dashboard key tab');
 ok(tabs.Visitors.fmt['C:D'] && tabs['Page views'].fmt['A:A'], 'existing tabs get their time formats');
 ok(tabs['Page views'].rows.length === 2, 'the page view of that first request is stored');
@@ -226,9 +227,28 @@ tabs.__tz = 'UTC';
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8001), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'UTC', 'setup runs once per script version, not on every request');
 const fresh = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 5 }).t);
-ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-14.3', 'the dashboard reads them with the key from the tab');
+ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-14.4', 'the dashboard reads them with the key from the tab');
 ok(JSON.parse(analyticsJourneys_({ key: 'wrong', what: 'insights' }).t).error === 'forbidden', 'a wrong key is refused');
 const realGet = tabs['Page views'].getLastRow; tabs['Page views'].getLastRow = () => { throw new Error('Sheet broke'); };
 const broke = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights' }).t);
 tabs['Page views'].getLastRow = realGet;
 ok(broke.error === 'script' && broke.message === 'Sheet broke', 'a failure answers in JSON with its reason, never an error page');
+
+// ---- past Allow-all visits become page views ----
+Object.keys(tabs).forEach(k => delete tabs[k]); Object.keys(props).forEach(k => delete props[k]);
+const evs = analyticsSheet_(); const T = Date.now() - 3 * 864e5;
+evs.rows.push([new Date(T), hex('a'), hex('1'), 1, hex('b'), 'UX-OLD', 'index', 'en', 'phone', 'www.google.com', '', '', '', 'view', 40, 1]);
+evs.rows.push([new Date(T + 5000), hex('a'), hex('1'), 1, hex('b'), 'UX-OLD', 'index', 'en', 'phone', 'www.google.com', '', '', '', 'seen-current-status', 43, 1]);
+evs.rows.push([new Date(T + 9000), hex('a'), hex('1'), 1, hex('b'), 'UX-OLD', 'index', 'en', 'phone', 'www.google.com', '', '', '', 'seen-current-status', 50, 1]);
+evs.rows.push([new Date(T + 60000), hex('a'), hex('1'), 1, hex('c'), 'UX-OLD', 'current-status', 'en', 'phone', '', '', '', '', 'download-app-v1-android', 70, 1]);
+analyticsPageViewsSheet_().rows.push([new Date(T + 30000), hex('d'), 'essential', 'UX-NEW', 'index', 'en', 'desktop', 'windows', 'chrome', '', '', '', '', '', '', '', 80, 30, 1, 2, 'view:0', '']);
+ok(backfillPageViews() === 2, 'two old page views rebuilt from four Events rows');
+const P = tabs['Page views'].rows;
+ok(P.length === 4 && P[1][1] === hex('b') && P[2][1] === hex('d') && P[3][1] === hex('c'), 'rows stay in time order around the existing one');
+ok(P[1][2] === 'all' && P[1][20] === 'view:0 seen-current-status:3' && P[1][13] === hex('a') && P[1][14] === 1, 'timeline counts from the page view start, first time of each; visit and visitor no. kept');
+ok(P[1][16] === '' && P[1][17] === '', 'scroll and time on page stay empty: never recorded then');
+ok(backfillPageViews() === 0 && P.length === 4, 'rerunning adds nothing');
+analyticsAutoSetup_(); ok(P.length === 4, 'the setup run that follows adds nothing again');
+const back = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 10 }).t);
+ok(back.views === 3 && back.downloaded === 1 && back.daily.length >= 1, 'the dashboard counts the rebuilt page views');
+ok(back.scroll.p50 === 100 && back.active_median === 30, 'scroll and time on page come only from rows that measured them');

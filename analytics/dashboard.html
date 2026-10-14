@@ -195,7 +195,7 @@
 
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   // The receiver script's version this page was written for (apps-script/AnalyticsEventsReceiverPatch.gs). A mismatch shows in the health strip.
-  const EXPECTED_SCRIPT_VERSION = '2026-10-14.3';
+  const EXPECTED_SCRIPT_VERSION = '2026-10-14.4';
   const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
   const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
   let cur = null, wide = null, daily = [], events = [], journeys = {rows: [], dropped: 0}, downloads = [], period = 28, ctx = {order: {}, labels: {}};

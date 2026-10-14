@@ -81,7 +81,7 @@ const ANALYTICS_PV_HEADERS = [
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 // Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
-const ANALYTICS_SCRIPT_VERSION = '2026-10-14.3';
+const ANALYTICS_SCRIPT_VERSION = '2026-10-14.4';
 // The version whose setup has run; a new version sets itself up on its first request (analyticsAutoSetup_).
 const ANALYTICS_SETUP_PROPERTY = 'ANALYTICS_SETUP_VERSION';
 const ANALYTICS_BOOK_PROPERTY = 'ANALYTICS_SPREADSHEET_ID';
@@ -363,6 +363,7 @@ function analyticsInsights_(json, params) {
   const find = {}, faq = {}, dead = {}, errors = {}, reach = {}, lcpBy = {};
   const who = {device: {}, lang: {}, source: {}, browser: {}, os: {}};
   const activeAll = [];
+  let measuredViews = 0;
   const downloadsPage = {views: 0, clicked: 0};
   const usage = {}, builds = {};
   let views = 0, rage = 0, still = 0, downloaded = 0;
@@ -372,6 +373,7 @@ function analyticsInsights_(json, params) {
     const codes = Object.keys(t);
     const any = re => codes.some(c => re.test(c));
     const release = r[3], page = r[4], device = r[6], scroll = +r[16] || 0, active = +r[17] || 0, lcp = +r[19] || 0;
+    const measured = r[17] !== ''; // rows rebuilt from old Events rows have no scroll or time on page
     const seen = any(DL_SEEN);
     const clicked = any(DL_CLICK) || any(/^download-app-/);
     const started = 'signup-start' in t, submitted = 'signup-submit' in t;
@@ -407,8 +409,11 @@ function analyticsInsights_(json, params) {
     if (pressedCodes.length) br.pressed += 1;
     if (submitted) { br.submitted += 1; if (!seen && !isDl) br.signup_unseen += 1; }
     consent[r[2]] = (consent[r[2]] || 0) + 1;
-    activeAll.push(active);
-    [25, 50, 75, 90].forEach(p => { if (scroll >= p) deep[p] += 1; });
+    if (measured) {
+      measuredViews += 1;
+      activeAll.push(active);
+      [25, 50, 75, 90].forEach(p => { if (scroll >= p) deep[p] += 1; });
+    }
     if (!interactions.length) still += 1;
 
     if (DL_PAGE.test(page)) { // the downloads page itself: of those who got here, who downloads?
@@ -445,7 +450,7 @@ function analyticsInsights_(json, params) {
       const m = who[pair[0]];
       const w = m[pair[1] || 'unknown'] || (m[pair[1] || 'unknown'] = {views: 0, active: [], downloads: 0, signups: 0});
       w.views += 1;
-      w.active.push(active);
+      if (measured) w.active.push(active);
       if (clicked || any(/^download-app-/)) w.downloads += 1;
       if (submitted) w.signups += 1;
     });
@@ -472,7 +477,7 @@ function analyticsInsights_(json, params) {
     arrivals: listOf(arrive).map(a => ({from: a.code, count: a.count})),
     wrong_platform: {presses: pressesTotal, wrong: wrongTotal},
     days, views, consent, min_group: ANALYTICS_MIN_GROUP,
-    scroll: {p25: pct(deep[25], views), p50: pct(deep[50], views), p75: pct(deep[75], views), p90: pct(deep[90], views)},
+    scroll: {p25: pct(deep[25], measuredViews), p50: pct(deep[50], measuredViews), p75: pct(deep[75], measuredViews), p90: pct(deep[90], measuredViews)},
     active_median: median(activeAll), no_interaction: still, downloaded,
     usage: top(usage, 40), download_builds: top(builds, 20),
     find: Object.keys(find).sort().map(d => { const f = find[d]; f.first_click_median = median(f.first); delete f.first; return f; }),
@@ -554,6 +559,50 @@ function backfillVisitorNumbers() {
   }
 }
 
+// Run once (setup does): the Page views tab started on 2026-10-14, but Allow-all visits were kept before that as
+// one Events row per event. Each old page view becomes one Page views row, so the dashboard has the past too.
+// Scroll, time on page, speed, OS and browser were never recorded then, so those cells stay empty and the
+// dashboard leaves these rows out of those figures. Page views already in the tab are skipped: rerunning adds nothing.
+function backfillPageViews() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const events = analyticsSheet_();
+    const eLast = events.getLastRow();
+    if (eLast < 2) return 0;
+    const sheet = analyticsPageViewsSheet_();
+    const last = sheet.getLastRow();
+    const width = ANALYTICS_PV_HEADERS.length;
+    const have = last < 2 ? [] : sheet.getRange(2, 1, last - 1, width).getValues();
+    const known = {};
+    have.forEach(r => { known[String(r[1])] = true; });
+    const views = {}, order = [];
+    events.getRange(2, 1, eLast - 1, ANALYTICS_HEADERS.length).getValues().forEach(r => {
+      const pv = String(r[4]);
+      if (!/^[0-9a-f]{16}$/.test(pv) || known[pv]) return;
+      const at = new Date(r[0]), t = +r[14] || 0;
+      if (isNaN(at.getTime())) return;
+      let v = views[pv];
+      if (!v) { v = views[pv] = {at, row: r, base: t, codes: {}}; order.push(pv); }
+      if (at < v.at) v.at = at;
+      if (t < v.base) v.base = t;
+      const name = String(r[13]);
+      if (name && !(name in v.codes)) v.codes[name] = t;
+    });
+    if (!order.length) return 0;
+    const added = order.map(pv => {
+      const v = views[pv], r = v.row;
+      const timeline = Object.keys(v.codes).slice(0, 80).map(c => c + ':' + Math.max(0, v.codes[c] - v.base)).join(' ');
+      return [v.at, pv, 'all', r[5], r[6], r[7], r[8], '', '', r[9], r[10], r[11], r[12], r[1], r[15], r[3], '', '', '', '', timeline, ''];
+    });
+    const all = have.concat(added).sort((a, b) => new Date(a[0]) - new Date(b[0])); // rows stay in time order
+    sheet.getRange(2, 1, all.length, width).setValues(all);
+    return added.length;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function setupAnalyticsEvents() {
   // Times are stored exactly; this is how they are shown. Without it the sheet may show UTC or a US zone,
   // so a visit just after midnight in Cairo looks like the evening before.
@@ -581,6 +630,7 @@ function setupAnalyticsEvents() {
     ['Where it goes', 'Paste it into analytics/dashboard.html when it asks, and save it as the GitHub secret ANALYTICS_READ_KEY.'],
   ]);
   backfillVisitorNumbers();
+  backfillPageViews();
   Logger.log('ANALYTICS_READ_KEY (also in the Dashboard key tab): ' + key);
   props.setProperty(ANALYTICS_SETUP_PROPERTY, ANALYTICS_SCRIPT_VERSION);
 }
