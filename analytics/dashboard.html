@@ -63,6 +63,8 @@
       <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
     </div>
     <p class="ad-note" id="sample" hidden></p>
+    <p class="ad-note" id="status">Loading…</p>
+    <noscript><p class="ad-note">This page needs JavaScript.</p></noscript>
   </header>
 
   <main>
@@ -261,7 +263,12 @@
     loadJourneys().then(journeysTable);
   });
   $('release').addEventListener('change', funnel);
-  Promise.all([load('daily.csv'), load('events.csv'), loadJourneys()]).then(([d, e]) => { daily = d; events = e; render(); });
+  // The key box shows at once, so it never waits on the counts below.
+  journeysTable();
+  window.addEventListener('error', e => { $('status').hidden = false; $('status').textContent = `Something broke on this page: ${e.message}`; });
+  Promise.all([load('daily.csv'), load('events.csv'), loadJourneys()])
+    .then(([d, e]) => { daily = d; events = e; render(); $('status').hidden = true; })
+    .catch(e => { $('status').textContent = `Could not load the counts: ${e.message}`; });
 })();
 </script>
 </body>
