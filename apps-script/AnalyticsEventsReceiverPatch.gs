@@ -74,6 +74,9 @@ const ANALYTICS_PV_HEADERS = [
   'utm_source', 'utm_medium', 'utm_campaign', 'Visit', 'Visitor no.', 'Visit #', 'Scroll %', 'Active secs',
   'Load secs', 'LCP secs', 'Timeline'
 ];
+// The page whose address the findability numbers watch (current-status.html, called Downloads in the menu).
+// If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
+const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 const ANALYTICS_MAX_PV_PER_DAY = 3000;
 const ANALYTICS_MAX_PV_TOTAL = 100000;
 // GitHub's own download counts for each file, copied here daily by the GitHub job.
@@ -318,6 +321,11 @@ function analyticsInsights_(json, params) {
   };
   const top = (map, n) => Object.keys(map).map(k => ({code: k, count: map[k]})).sort((a, b) => b.count - a.count).slice(0, n);
   const INTERACTION = /^(click-|nav-|foot-|link-|menu-open|signup-start|survey-start|faq-|calc-used|screen-|lang-switch|theme-toggle|download)/;
+  const USAGE = /^(click-|nav-|foot-|link-|menu-open|calc-used|screen-|lang-switch|theme-toggle|signup-|survey-|download)/;
+  const slug = ANALYTICS_DOWNLOADS_PAGE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const DL_SEEN = new RegExp('^seen-' + slug);
+  const DL_CLICK = new RegExp('^(click|nav|foot|link)-' + slug);
+  const DL_PAGE = new RegExp('^(ar/)?' + slug + '$');
 
   const consent = {all: 0, essential: 0, undecided: 0, gpc: 0};
   const deep = {25: 0, 50: 0, 75: 0, 90: 0};
@@ -325,15 +333,16 @@ function analyticsInsights_(json, params) {
   const who = {device: {}, lang: {}, source: {}, browser: {}, os: {}};
   const activeAll = [];
   const downloadsPage = {views: 0, clicked: 0};
-  let views = 0, rage = 0, still = 0;
+  const usage = {}, builds = {};
+  let views = 0, rage = 0, still = 0, downloaded = 0;
 
   rows.forEach(r => {
     const t = analyticsParseTimeline_(r[20]);
     const codes = Object.keys(t);
     const any = re => codes.some(c => re.test(c));
     const release = r[3], page = r[4], device = r[6], scroll = +r[16] || 0, active = +r[17] || 0, lcp = +r[19] || 0;
-    const seen = any(/^seen-current-status/);
-    const clicked = any(/^(click|nav|foot|link)-current-status/) || any(/^download-app-/);
+    const seen = any(DL_SEEN);
+    const clicked = any(DL_CLICK) || any(/^download-app-/);
     const started = 'signup-start' in t, submitted = 'signup-submit' in t;
     const interactions = codes.filter(c => INTERACTION.test(c)).map(c => t[c]);
     views += 1;
@@ -342,7 +351,7 @@ function analyticsInsights_(json, params) {
     [25, 50, 75, 90].forEach(p => { if (scroll >= p) deep[p] += 1; });
     if (!interactions.length) still += 1;
 
-    if (/^(ar\/)?current-status$/.test(page)) { // the downloads page itself: of those who got here, who downloads?
+    if (DL_PAGE.test(page)) { // the downloads page itself: of those who got here, who downloads?
       downloadsPage.views += 1;
       if (any(/^download-app-/)) downloadsPage.clicked += 1;
     } else { // every other page: could they find it?
@@ -356,7 +365,10 @@ function analyticsInsights_(json, params) {
       if (interactions.length) f.first.push(Math.min.apply(null, interactions));
     }
 
+    if (any(/^download-app-/)) downloaded += 1;
     codes.forEach(c => {
+      if (USAGE.test(c)) usage[c] = (usage[c] || 0) + 1;
+      if (/^download-app-/.test(c)) builds[c.slice(13)] = (builds[c.slice(13)] || 0) + 1;
       if (/^faq-/.test(c)) faq[c] = (faq[c] || 0) + 1;
       else if (/^dead-/.test(c)) dead[c] = (dead[c] || 0) + 1;
       else if (/^(js-error|js-reject|res-error|invalid)-/.test(c)) errors[c] = (errors[c] || 0) + 1;
@@ -394,7 +406,8 @@ function analyticsInsights_(json, params) {
   return json({
     days, views, consent, min_group: ANALYTICS_MIN_GROUP,
     scroll: {p25: pct(deep[25], views), p50: pct(deep[50], views), p75: pct(deep[75], views), p90: pct(deep[90], views)},
-    active_median: median(activeAll), no_interaction: still,
+    active_median: median(activeAll), no_interaction: still, downloaded,
+    usage: top(usage, 40), download_builds: top(builds, 20),
     find: Object.keys(find).sort().map(d => { const f = find[d]; f.first_click_median = median(f.first); delete f.first; return f; }),
     downloads_page: downloadsPage,
     hesitate: {faq: top(faq, 10), dead: top(dead, 10), rage},

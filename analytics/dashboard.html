@@ -63,7 +63,7 @@
   <header class="dash-head">
     <a class="d-lockup" href="../index.html" data-home-link><img src="../assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
     <h1>How the Site Is Doing</h1>
-    <p>Every number on this page loads from your own script, behind your key. Nothing here is published.</p>
+    <p>Every number on this page loads from your own script, behind your key. Nothing here is published. Page views come from the records in your Sheet; GoatCounter is used only as a cross-check.</p>
     <p class="dash-note" id="status">Loading…</p>
     <noscript><p class="dash-note">This page needs JavaScript.</p></noscript>
   </header>
@@ -121,7 +121,7 @@
 
     <section class="dash-section" id="real-section">
       <h2>Button Clicks and Real Downloads</h2>
-      <p>Clicks on download buttons on this site, beside GitHub's own count of how often each file was downloaded.</p>
+      <p>Page views that pressed a download button on this site, beside GitHub's own count of how often each file was downloaded.</p>
       <div class="card card-support dash-card" id="real-downloads"></div>
     </section>
 
@@ -133,7 +133,7 @@
 
     <section class="dash-section" id="use">
       <h2>What People Use</h2>
-      <p>Everything visitors did besides downloads and scrolling, counted for everyone. The grey code is the short name the site records, in case you need it.</p>
+      <p>Everything visitors did besides scrolling, counted for everyone: each row is the number of page views in which it happened at least once. The grey code is the short name the site records, in case you need it.</p>
       <div class="card card-support dash-card" id="usage"></div>
     </section>
     <p class="dash-foot" id="foot"></p>
@@ -193,15 +193,18 @@
   const inWindow = r => r.date >= cutoff();
   const sum = (rows, f) => rows.reduce((t, r) => t + (Number(r[f]) || 0), 0);
 
+  const liveViews = () => insights && insights.views > 0;
   function tiles() {
-    const d = daily.filter(inWindow), views = sum(d, 'page_visits'), downloads = sum(d, 'app_downloads');
-    const all = sum(events.filter(r => r.event === 'consent-all' && inWindow(r)), 'count');
-    const ess = sum(events.filter(r => r.event === 'consent-essential' && inWindow(r)), 'count');
+    const live = liveViews(), gc = daily.filter(inWindow);
+    const views = live ? insights.views : sum(gc, 'page_visits');
+    const downloads = live ? insights.downloaded : sum(gc, 'app_downloads');
+    const all = live ? insights.consent.all : sum(events.filter(r => r.event === 'consent-all' && inWindow(r)), 'count');
+    const ess = live ? insights.consent.essential : sum(events.filter(r => r.event === 'consent-essential' && inWindow(r)), 'count');
     const items = [
       [n(views), 'Page views'],
-      [n(downloads), 'App downloads'],
-      [views ? n(downloads / views * 100) : '0', 'Downloads per 100 page views'],
-      [all + ess ? pct(all / (all + ess) * 100) : 'No choices yet', 'Chose Allow all'],
+      [n(downloads), live ? 'Page views that pressed a download' : 'App downloads (GoatCounter)'],
+      [views ? n(downloads / views * 100) : '0', 'Downloads pressed per 100 page views'],
+      [all + ess ? pct(all / (all + ess) * 100) : 'No choices yet', 'Of those who chose, picked Allow all'],
     ];
     const box = $('tiles'); box.replaceChildren();
     items.forEach(([v, l]) => { const t = el('div', undefined, 'card card-support dash-tile'); t.append(el('b', v), el('span', l)); box.append(t); });
@@ -435,7 +438,8 @@
     const keyOf = d => `${d.tag}|${d.platform}`;
     const at = date => { const m = {}; downloads.filter(d => d.date === date).forEach(d => { m[keyOf(d)] = (m[keyOf(d)] || 0) + Number(d.count); }); return m; };
     const now = at(end), before = at(start), clicks = {};
-    daily.filter(inWindow).forEach(r => String(r.downloads_by_build || '').split(';').forEach(part => { const [k, v] = part.split(':'); if (k && v) clicks[k.trim()] = (clicks[k.trim()] || 0) + Number(v); }));
+    if (liveViews()) insights.download_builds.forEach(b => { clicks[b.code] = b.count; });
+    else daily.filter(inWindow).forEach(r => String(r.downloads_by_build || '').split(';').forEach(part => { const [k, v] = part.split(':'); if (k && v) clicks[k.trim()] = (clicks[k.trim()] || 0) + Number(v); }));
     const rows = Object.keys(now).sort().reverse().map(k => {
       const [tag, platform] = k.split('|'), clicked = clicks[`${tag}-${platform}`] || 0;
       const period = start !== end ? now[k] - (before[k] || 0) : null;
@@ -474,21 +478,23 @@
 
   function usage() {
     const box = $('usage'); box.replaceChildren();
-    const totals = {};
-    events.filter(r => inWindow(r) && !r.event.startsWith('reach-') && !r.event.startsWith('consent-') && r.release).forEach(r => { totals[r.event] = (totals[r.event] || 0) + Number(r.count); });
-    const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    const live = insights && insights.usage && insights.usage.length;
+    let entries;
+    if (live) entries = insights.usage.map(u => [u.code, u.count]);
+    else {
+      const totals = {};
+      events.filter(r => inWindow(r) && !r.event.startsWith('reach-') && !r.event.startsWith('consent-') && r.release).forEach(r => { totals[r.event] = (totals[r.event] || 0) + Number(r.count); });
+      entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    }
     if (!entries.length) { box.append(el('p', 'Nothing counted in this period yet.', 'dash-empty')); return; }
-    const table = el('table', undefined, 'dash-table'), head = el('tr');
-    ['What visitors did', 'Times', 'Code'].forEach(h => head.append(el('th', h)));
-    { const thead = el('thead'); thead.append(head); table.append(thead); }
-    const body = el('tbody');
-    entries.forEach(([code, v]) => { const r = el('tr'); r.append(el('td', eventLabel(code)), el('td', n(v)), el('td', code, 'dash-dim')); body.append(r); });
-    table.append(body); box.append(table);
+    box.append(plainTable(['What visitors did', live ? 'Page views' : 'Times', 'Code'], entries.map(([code, v]) => [eventLabel(code), n(v), code]), 2));
   }
 
   function render() {
     tiles(); findability(); funnel(); hesitation(); visitors(); broken(); realDownloadsTable(); journeysTable(); usage();
-    $('foot').textContent = latest() ? `Data to ${latest()} (Cairo). Page views are not people: one person opening five pages is five.` : 'No data yet.';
+    const gcViews = sum(daily.filter(inWindow), 'page_visits');
+    const cross = liveViews() && gcViews ? ` GoatCounter counted ${n(gcViews)} page views in the same period against ${n(insights.views)} here: the gap is mostly visitors whose ad blocker stops GoatCounter, plus its own delay.` : '';
+    $('foot').textContent = (latest() ? `Data to ${latest()} (Cairo). Page views are not people: one person opening five pages is five.` : 'No data yet.') + cross;
   }
 
   $('period').addEventListener('click', e => {
