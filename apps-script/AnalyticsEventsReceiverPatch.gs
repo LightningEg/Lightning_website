@@ -226,6 +226,9 @@ function backfillVisitorNumbers() {
 }
 
 function setupAnalyticsEvents() {
+  // Times are stored exactly; this is how they are shown. Without it the sheet may show UTC or a US zone,
+  // so a visit just after midnight in Cairo looks like the evening before.
+  analyticsBook_().setSpreadsheetTimeZone(ANALYTICS_TIMEZONE);
   analyticsFormatColumns_(analyticsSheet_());
   analyticsVisitorsSheet_();
   ScriptApp.getProjectTriggers()
