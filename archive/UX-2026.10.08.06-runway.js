@@ -4,7 +4,7 @@
 (() => {
   const root = document.querySelector('[data-runway]');
   if (!root) return;
-  const here = document.currentScript.src;
+  const here = new URL('js/', document.baseURI).href;
   const load = f => new Promise((ok, no) => { const s = document.createElement('script'); s.src = new URL('vendor/' + f, here).href; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   load('gsap.min.js?v=3.15.0').then(() => load('ScrollTrigger.min.js?v=3.15.0')).then(run, () => {});
   function run() {

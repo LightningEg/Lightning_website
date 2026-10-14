@@ -5,7 +5,7 @@
 // test.html) plays it even with reduce motion on; any other page skips it then and downloads nothing.
 // Without it, the card shows the total and the tiles stay still.
 (() => {
-  const here = document.currentScript.src; // vendor/ sits beside this file, also for ar/ pages
+  const here = new URL('js/', document.baseURI).href; // vendor/ sits beside this file, also for ar/ pages
   const ar = document.documentElement.lang.startsWith('ar');
   const stage = document.querySelector('.t-stage');
   // Search and AI crawlers read the page as written: no counting from zero, nothing hidden, no library.
