@@ -38,6 +38,7 @@ const ANALYTICS_KEEP_DAYS = 90;
 const ANALYTICS_KEY_PROPERTY = 'ANALYTICS_READ_KEY';
 const ANALYTICS_TIMEZONE = 'Africa/Cairo';
 const ANALYTICS_MAX_EVENTS = 50;
+const ANALYTICS_TIME_FORMAT = 'yyyy-mm-dd hh:mm:ss'; // shown in the spreadsheet's time zone (File > Settings)
 const ANALYTICS_HEADERS = [
   'Received at', 'Visit', 'Visitor', 'Visit #', 'Page view', 'Release', 'Page',
   'Language', 'Device', 'Referrer', 'utm_source', 'utm_medium', 'utm_campaign',
@@ -53,12 +54,19 @@ function analyticsSheet_() {
     sheet = book.insertSheet(ANALYTICS_SHEET_NAME);
     sheet.appendRow(ANALYTICS_HEADERS);
     sheet.setFrozenRows(1);
+    analyticsFormatTime_(sheet);
   }
   return sheet;
 }
 
+// "Received at" is stored with the full time; this makes the sheet show it, for old and new rows.
+function analyticsFormatTime_(sheet) {
+  sheet.getRange('A:A').setNumberFormat(ANALYTICS_TIME_FORMAT);
+  sheet.setColumnWidth(1, 160);
+}
+
 function setupAnalyticsEvents() {
-  analyticsSheet_();
+  analyticsFormatTime_(analyticsSheet_());
   ScriptApp.getProjectTriggers()
     .filter(t => t.getHandlerFunction() === 'purgeAnalyticsEvents')
     .forEach(t => ScriptApp.deleteTrigger(t));
