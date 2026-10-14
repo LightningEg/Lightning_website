@@ -29,12 +29,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/landing.css?v=20261014-1">
 <link rel="stylesheet" href="css/home.css?v=20261012-2">
+<link rel="stylesheet" href="css/sync-demo.css?v=20261014-1">
+<script src="js/sync-demo.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="css/motion.css?v=20261006-4">
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/wow.css?v=20261006-1">
 <link rel="stylesheet" href="css/runway.css?v=20261012-5">
 <script src="js/wow.js?v=20261006-2" defer></script>
-<script src="js/runway.js?v=20261012-6" defer></script>
+<script src="js/runway.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
 <script src="js/theme.js?v=20260930-1"></script>
 <script src="js/nav-menu.js?v=20261014-1" defer></script>
@@ -49,7 +51,7 @@
 </script>
 <link rel="stylesheet" href="css/footer.css?v=20261014-1">
 </head>
-<body data-wow-always data-ux-version="UX-2026.10.13.02" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<body data-wow-always data-ux-version="UX-2026.10.14.05" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
   <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z"/></symbol>
@@ -137,17 +139,18 @@
   </section>
 
   <!-- 2 · Phone and PC, connected: both screens, then pair, borrow, hand back, then the phone (top selling point 1) -->
-  <section class="d-section" id="sync">
+  <section class="d-section sync-demo" id="sync">
     <div class="d-head">
       <p class="label">Phone and PC</p>
       <h2>One Ledger. Two Screens. Pair Once.</h2>
       <p>Your phone holds the ledger. Your PC borrows it when you sit down, then hands it back, over your own Wi-Fi, with no account and no server.</p>
     </div>
-    <div class="t-sync">
-      <figure><div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Overview on the PC</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-07/sync-pc.webp" data-caption="The PC while it borrows the ledger: Borrowed from Mohab’s phone, with Hand back."><img src="assets/app/mohab-year-2026-10-07/sync-pc.webp" width="2000" height="1250" loading="lazy" alt="Lightning on the PC, Overview year to date, with the line Borrowed from Mohab’s phone and a Hand back button: change in net worth +287,067 EGP, a 49.2% savings rate and net worth 432,467."></button></div><figcaption class="d-cap">On the PC: <b>Borrowed from Mohab’s phone</b> · Hand back</figcaption></figure>
-      <div class="t-link" aria-hidden="true"><div class="t-wire"><i></i><i></i></div><span class="t-lock"><svg class="icon"><use href="#i-lock"/></svg></span><p>Your Wi-Fi · encrypted · no server</p></div>
-      <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-07/sync-phone.webp" data-caption="The phone while the PC borrows: Lent to Office PC, read only."><img src="assets/app/mohab-year-2026-10-07/sync-phone.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone at the same moment: Lent to Office PC, read only, above the same Overview: change in net worth +287,067 EGP and a 49.2% savings rate."></button></div><figcaption class="d-cap">On the phone: <b>Lent to Office PC</b> · read only</figcaption></figure>
+    <div class="t-sync sync-stage">
+      <figure class="sync-pc"><div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Overview on the PC</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-07/sync-pc.webp" data-caption="The PC while it borrows the ledger: Borrowed from Mohab’s phone, with Hand back."><img src="assets/app/mohab-year-2026-10-07/sync-pc.webp" width="2000" height="1250" loading="lazy" alt="Lightning on the PC, Overview year to date, with the line Borrowed from Mohab’s phone and a Hand back button: change in net worth +287,067 EGP, a 49.2% savings rate and net worth 432,467."></button><div class="sync-pc-veil" aria-hidden="true"><svg class="icon"><use href="#i-lock"/></svg><span>Ready to borrow</span></div></div><figcaption class="d-cap">On the PC: <b>Borrowed from Mohab’s phone</b> · Hand back</figcaption></figure>
+      <div class="t-link sync-link" aria-hidden="true"><div class="sync-line"></div><div class="sync-packet"><svg class="icon"><use href="#i-lock"/></svg><span>Ledger</span></div><p>Your Wi-Fi · encrypted · no server</p></div>
+      <figure class="sync-phone"><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-07/sync-phone.webp" data-caption="The phone while the PC borrows: Lent to Office PC, read only."><img src="assets/app/mohab-year-2026-10-07/sync-phone.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone at the same moment: Lent to Office PC, read only, above the same Overview: change in net worth +287,067 EGP and a 49.2% savings rate."><img class="sync-phone-home" src="assets/app/mohab-year-2026-10-07/phone-overview.webp" width="720" height="1520" loading="lazy" alt=""></button></div><figcaption class="d-cap">On the phone: <b>Lent to Office PC</b> · read only</figcaption></figure>
     </div>
+    <div class="sync-controls"><p class="sync-state" role="status" aria-live="polite">The PC has the ledger. Your phone can read it.</p><button class="btn btn-secondary sync-action" type="button" hidden>Hand back to phone</button></div>
     <p class="t-same"><span>Same ledger, same figures: <b>+287,067</b> this year on both</span><span>One edits, the other reads</span></p>
 
     <ol class="c-steps" aria-label="How they stay in sync">

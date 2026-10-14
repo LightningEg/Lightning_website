@@ -1,4 +1,4 @@
-// Test page only. Show the phone lending its ledger to the PC once on entry;
+// Show the phone lending its ledger to the PC once on entry;
 // the button runs the real reverse action. Without JS the captured lent state remains visible.
 (() => {
   const section = document.querySelector('.sync-demo');

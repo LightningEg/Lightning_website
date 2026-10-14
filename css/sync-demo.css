@@ -1,4 +1,4 @@
-/* Test page only: a single encrypted ledger handoff, with a reversible return. */
+/* Home and test page: a single encrypted ledger handoff, with a reversible return. */
 .sync-demo .sync-pc .d-frame,
 .sync-demo .sync-phone .t-phone-shot{position:relative;transition:box-shadow .5s ease,transform .5s ease}
 .sync-demo .sync-pc-veil{position:absolute;inset:32px 0 0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--paper);color:var(--ink);font:800 16px/1.3 var(--body);opacity:0;pointer-events:none;transition:opacity .55s ease}

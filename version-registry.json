@@ -1322,8 +1322,8 @@
       "id": "UX-2026.10.08.06",
       "name": "Test · Tidier notes on phones",
       "page": "test.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.08.06.html"
     },
     {
       "id": "UX-2026.10.08.07",
@@ -1679,8 +1679,8 @@
       "id": "UX-2026.10.13.02",
       "name": "Lightning · Free expense tracker wording",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.02.html"
     },
     {
       "id": "UX-2026.10.13.03",
@@ -1804,6 +1804,27 @@
     {
       "id": "UX-2026.10.13.16",
       "name": "versions · Lightning 1.1 beta",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.16.html"
+    },
+    {
+      "id": "UX-2026.10.14.05",
+      "name": "Lightning · Restored handoff and smooth cash animation",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.14.06",
+      "name": "Test · Smooth cash animation",
+      "page": "test.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.14.07",
+      "name": "Version Archive · Animation repairs",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

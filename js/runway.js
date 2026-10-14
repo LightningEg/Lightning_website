@@ -1,49 +1,72 @@
-// The runway: a dot rides along the cash line. GSAP + ScrollTrigger from js/vendor/.
-// Plays on its own in about 2 s when it scrolls into view and resets when you scroll back above it; small motion, so it also plays with reduced motion on (README).
-// Illustrative path between two real month ends (184,976 at 2026-09 and 165,937 at 2026-11); events carry no amounts.
+// The runway: a dot rides the cash line in 2.2 s once the chart is in view.
+// Keep one clock for the line, dot, figure and highlights; no animation-library loading race.
+// Illustrative path between real month ends (184,976 in September and 165,937 in November).
 (() => {
   const root = document.querySelector('[data-runway]');
-  if (!root) return;
-  const here = document.currentScript.src;
-  const load = f => new Promise((ok, no) => { const s = document.createElement('script'); s.src = new URL('vendor/' + f, here).href; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
-  load('gsap.min.js?v=3.15.0').then(() => load('ScrollTrigger.min.js?v=3.15.0')).then(run, () => {});
-  function run() {
-    const {gsap, ScrollTrigger} = window; gsap.registerPlugin(ScrollTrigger);
-    const line = root.querySelector('.rw-line'), area = root.querySelector('.rw-area'), dot = root.querySelector('.rw-dot');
-    const fig = root.querySelector('.rw-fig b'), cap = root.querySelector('.rw-cap'), safe = root.querySelector('.rw-safe');
-    const lows = root.querySelectorAll('.rw-low,.rw-lowdot'), items = [...root.querySelectorAll('.rw-events li')];
-    const len = line.getTotalLength(), LOW = 0.74, FROM = 184976, TO = 165937;
-    root.classList.add('is-live');
-    line.style.strokeDasharray = len;
-    const fmt = n => Math.round(n).toLocaleString(document.documentElement.lang.startsWith('ar') ? 'ar-EG' : 'en-US');
-    const set = p => {
-      const at = Math.min(p / LOW, 1), t = Math.min(p / LOW, 1);
-      line.style.strokeDashoffset = len * (1 - Math.min(p / 0.95, 1));
-      const pt = line.getPointAtLength(len * Math.min(p / 0.95, 1));
-      dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
-      area.style.clipPath = `inset(0 ${100 - (pt.x / 800) * 100}% 0 0)`;
-      const e = 1 - Math.pow(1 - t, 2);
-      fig.textContent = fmt(FROM + (TO - FROM) * e);
-      items.forEach((li, i) => li.classList.toggle('on', p > 0.12 + i * 0.17));
-      cap.textContent = p >= LOW ? cap.dataset.low : cap.dataset.go;
-      lows.forEach(n => n.classList.toggle('on', p >= LOW));
-      safe.classList.toggle('on', p >= LOW + 0.1);
-    };
-    set(0);
-    // Plays by itself (about 2 s) once the chart is centred on screen, after a short beat. It resets once it is fully
-    // off screen, in either direction, so it plays again each time you come back to it.
-    const card = root.querySelector('.rw-card');
-    const state = {p: 0};
-    const tween = gsap.to(state, {p: 1, duration: 2.2, delay: 0.6, ease: 'power1.inOut', paused: true, onUpdate: () => set(state.p)});
-    let phase = 'idle'; // idle -> played
-    const check = () => {
-      const r = card.getBoundingClientRect(), vh = innerHeight, mid = r.top + r.height / 2;
-      if (r.bottom <= 0 || r.top >= vh) { if (phase !== 'idle') { tween.pause(0); set(0); phase = 'idle'; } return; }
-      if (phase === 'idle' && r.top >= 0 && r.bottom <= vh && mid <= vh * 0.62) { phase = 'played'; tween.restart(true); }
-    };
-    let queued = false;
-    const onScroll = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; check(); }); };
-    addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', onScroll);
-    check();
+  if (!root || !('IntersectionObserver' in window)) return;
+  const line = root.querySelector('.rw-line'), area = root.querySelector('.rw-area'), dot = root.querySelector('.rw-dot');
+  const fig = root.querySelector('.rw-fig b'), cap = root.querySelector('.rw-cap'), safe = root.querySelector('.rw-safe');
+  const lows = root.querySelectorAll('.rw-low,.rw-lowdot'), items = [...root.querySelectorAll('.rw-events li')];
+  const card = root.querySelector('.rw-card');
+  const len = line.getTotalLength(), FROM = 184976, TO = 165937;
+  // Locate November on the actual SVG path instead of guessing a fraction of the animation.
+  const lowX = Number(root.querySelector('.rw-lowdot').getAttribute('cx'));
+  let left = 0, right = len;
+  for (let i = 0; i < 24; i++) {
+    const mid = (left + right) / 2;
+    if (line.getPointAtLength(mid).x < lowX) left = mid;
+    else right = mid;
   }
+  const lowProgress = (left + right) / (2 * len);
+  const fmt = new Intl.NumberFormat(document.documentElement.lang.startsWith('ar') ? 'ar-EG' : 'en-US');
+  function render(p) {
+    const pt = line.getPointAtLength(len * p);
+    line.style.strokeDashoffset = len * (1 - p);
+    dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
+    area.style.clipPath = `inset(0 ${Math.max(0, 100 - pt.x / 8)}% 0 0)`;
+    const t = Math.min(p / lowProgress, 1);
+    fig.textContent = fmt.format(Math.round(FROM + (TO - FROM) * t));
+    items.forEach((li, i) => li.classList.toggle('on', p >= 0.12 + i * 0.17));
+    cap.textContent = p >= lowProgress ? cap.dataset.low : cap.dataset.go;
+    lows.forEach(n => n.classList.toggle('on', p >= lowProgress));
+    safe.classList.toggle('on', p >= lowProgress + 0.1);
+  }
+  let phase = 'idle', frame = 0, began = 0;
+  function play(now) {
+    if (!began) began = now;
+    const t = Math.max(0, Math.min(1, (now - began - 600) / 2200));
+    // Smooth acceleration and deceleration, with exactly one progress value for every element.
+    render(t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+    if (t < 1) frame = requestAnimationFrame(play);
+    else { frame = 0; phase = 'played'; }
+  }
+  function check() {
+    const scene = root.getBoundingClientRect(), r = card.getBoundingClientRect(), vh = innerHeight;
+    // Reset only after the whole scene leaves, so its event cards never flicker while still visible.
+    if (scene.bottom <= 0 || scene.top >= vh) {
+      cancelAnimationFrame(frame); frame = 0; began = 0; phase = 'idle';
+      root.classList.remove('is-live');
+      line.style.strokeDasharray = ''; line.style.strokeDashoffset = '';
+      area.style.clipPath = '';
+      return;
+    }
+    const visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+    // A tall chart can play on a short or landscape screen without fitting entirely inside it.
+    if (phase === 'idle' && visible >= Math.min(r.height, vh) * 0.6) {
+      phase = 'playing'; began = 0;
+      root.classList.add('is-live'); line.style.strokeDasharray = len;
+      render(0); frame = requestAnimationFrame(play);
+    }
+  }
+  let queued = false;
+  function scheduleCheck() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; check(); });
+  }
+  const observer = new IntersectionObserver(scheduleCheck, {threshold: [0, 0.25, 0.5, 0.75, 1]});
+  observer.observe(root);
+  addEventListener('scroll', scheduleCheck, {passive: true});
+  addEventListener('resize', scheduleCheck);
+  check();
 })();
