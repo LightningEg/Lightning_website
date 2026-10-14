@@ -73,6 +73,8 @@ async function open(b, scenario, vp, dark) {
     const cards = await p.$$eval('.dash-verdict', c => c.map(x => x.innerText));
     ok(errs.length === 0 && cards.length === 1 && /No page views yet|Nothing is clear yet/.test(cards[0]), 'no data: one honest card');
     ok((await p.$$('#path-box table, #channels-box table, #fix-box table')).length === 0, 'no data: no empty tables');
+    const all = await p.innerText('body');
+    ok(!/out of date|needs the latest receiver/.test(all) && /No page views recorded yet/.test(all) && !(await p.$eval('#health', e => e.classList.contains('dash-bad'))), 'no data from a current script: says none recorded yet, never "out of date"');
     await ctx.close();
   }
   await b.close(); process.exitCode = bad;

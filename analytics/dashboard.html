@@ -372,7 +372,10 @@
   }
   const devName = d => ({phone: 'Phone', tablet: 'Tablet', desktop: 'Computer'}[d] || human(d));
   const noData = box => { box.replaceChildren(); if (!cur || !cur.views) { box.append(el('p', 'No page views in this period yet.', 'dash-empty')); return true; } return false; };
-  const needsScript = (box, what) => { box.replaceChildren(el('p', `${what} needs the latest receiver script. Paste it and deploy a new version.`, 'dash-empty')); };
+  // An empty answer from the current script means no page views yet, not an old script.
+  const scriptCurrent = () => !!(cur && cur.meta && cur.meta.script_version === EXPECTED_SCRIPT_VERSION);
+  const EMPTY_YET = 'No page views recorded yet. They appear here a few minutes after people visit the site.';
+  const needsScript = (box, what) => { box.replaceChildren(el('p', scriptCurrent() ? EMPTY_YET : `${what} needs the latest receiver script. Paste it and deploy a new version.`, 'dash-empty')); };
 
   // ---- 1. data health ----
   function health() {
@@ -389,7 +392,7 @@
         const ago = mins < 90 ? `${mins} minutes ago` : mins < 2880 ? `${Math.round(mins / 60)} hours ago` : `${Math.round(mins / 1440)} days ago`;
         add('Last page view', ago + '.', mins > 72 * 60);
         if (mins > 72 * 60) add('Nothing has arrived for 3 days.', 'Check the site and the script deployment.', true);
-      } else add('No page view in this period.', '', true);
+      } else add('No page view recorded yet.', 'Visit the site once, close the tab, and reload this page.', m.sheet_rows === 0 ? false : true);
       add('Dropped at limits:', `${n(m.dropped_total)}.`);
     }
     const gc = sumDaily(daily.filter(r => r.date >= win().curFrom ? true : false).map(r => ({v: r.page_visits})), 'v');
@@ -458,7 +461,7 @@
       if (series.length) t.append(sparkline(series));
       box.append(t);
     });
-    $('numbers-note').textContent = hasDaily ? (hasPrev ? 'Each number is shown beside the period before it, with the last 7 days as a line.' : 'Data does not yet cover the whole period before, so there is nothing fair to compare with.') : 'The receiver script is out of date, so only this period’s totals show.';
+    $('numbers-note').textContent = hasDaily ? (hasPrev ? 'Each number is shown beside the period before it, with the last 7 days as a line.' : 'Data does not yet cover the whole period before, so there is nothing fair to compare with.') : scriptCurrent() ? EMPTY_YET : 'The receiver script is out of date, so only this period’s totals show.';
   }
 
   // ---- 4. the path to a download ----
