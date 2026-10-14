@@ -8,7 +8,8 @@
   if (!form || !template || !list || !add || !endpoint) return;
 
   const AR = document.documentElement.lang.startsWith('ar');
-  const AR_TEXT = {"Preparing image…": "بنجهّز الصورة…", "Remove": "احذف", "A ticket can have up to five images.": "البلاغ الواحد ممكن يحتوي على ٥ صور بالكتير.", "A submission can include up to ten images in total.": "الإرسال الواحد ممكن يحتوي على ١٠ صور بالكتير.", "Choose a PNG, JPEG or WebP image.": "اختار صورة PNG أو JPEG أو WebP.", "Still preparing; you can keep filling in the form.": "لسه بنجهّز الصورة، كمّل ملا النموذج عادي.", "This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.": "الصورة أكبر من ٥ ميجا ومينفعش نصغّرها من غير ما الجودة تقل. اقتطع الجزء المهم من الصورة وجرّب تاني.", "The images in one submission must total 12 MB or less.": "مجموع الصور في الإرسال الواحد لازم يكون ١٢ ميجا أو أقل.", "This image could not be prepared. Try another image.": "معرفناش نجهّز الصورة دي. جرّب صورة تانية.", "Wait for the images to finish preparing before you submit.": "استنى لحد ما الصور تخلّص تجهيز قبل ما تبعت.", "Remove or replace the image that could not be prepared before you submit.": "احذف الصورة اللي معرفناش نجهّزها أو بدّلها قبل ما تبعت.", "Sending your ticket and images…": "بنبعت البلاغ والصور…", "Thank you — your feedback and images have been sent.": "شكرًا ليك، ملاحظاتك وصورك وصلتنا.", "We could not send that just now. Your ticket and images are still here; please try again.": "معرفناش نبعت دلوقتي. البلاغ والصور لسه قدامك، جرّب تاني.", "ready to send": "جاهزة للإرسال"};
+  let sending = 0;
+  const AR_TEXT = {"Preparing image…": "بنجهّز الصورة…", "Remove": "احذف", "A ticket can have up to five images.": "البلاغ الواحد ممكن يحتوي على ٥ صور بالكتير.", "A submission can include up to ten images in total.": "الإرسال الواحد ممكن يحتوي على ١٠ صور بالكتير.", "Choose a PNG, JPEG or WebP image.": "اختار صورة PNG أو JPEG أو WebP.", "Still preparing; you can keep filling in the form.": "لسه بنجهّز الصورة، كمّل ملا النموذج عادي.", "This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.": "الصورة أكبر من ٥ ميجا ومينفعش نصغّرها من غير ما الجودة تقل. اقتطع الجزء المهم من الصورة وجرّب تاني.", "The images in one submission must total 12 MB or less.": "مجموع الصور في الإرسال الواحد لازم يكون ١٢ ميجا أو أقل.", "This image could not be prepared. Try another image.": "معرفناش نجهّز الصورة دي. جرّب صورة تانية.", "Wait for the images to finish preparing before you submit.": "استنى لحد ما الصور تخلّص تجهيز قبل ما تبعت.", "Remove or replace the image that could not be prepared before you submit.": "احذف الصورة اللي معرفناش نجهّزها أو بدّلها قبل ما تبعت.", "Sending your ticket and images…": "بنبعت البلاغ والصور…", "Thank you — your feedback and images have been sent.": "شكرًا ليك، ملاحظاتك وصورك وصلتنا.", "We could not send that just now. Your ticket and images are still here; please try again.": "معرفناش نبعت دلوقتي. البلاغ والصور لسه قدامك، جرّب تاني.", "ready to send": "جاهزة للإرسال", "Sending in the background. You can write the next ticket; keep this page open until it says sent.": "بنبعت في الخلفية. تقدر تكتب البلاغ اللي بعده؛ سيب الصفحة مفتوحة لحد ما تقول إنه اتبعت.", "Sending your ticket…": "بنبعت البلاغ…"};
   const t = text => (AR && AR_TEXT[text]) || text;
   const arNum = n => AR ? new Intl.NumberFormat('ar-EG').format(n) : String(n);
 
@@ -262,30 +263,40 @@
     if (totalBytes() > MAX_TOTAL_BYTES) { status.textContent = t('The images in one submission must total 12 MB or less.'); return; }
     const submit = form.querySelector('[type="submit"]');
     const fields = new FormData(form);
-    submit.disabled = true;
-    status.textContent = t('Sending your ticket and images…');
+    // Feedback ticket 88 (2026-10-14): images are prepared as they are attached, so the only wait left is the
+    // receiver writing them to Drive. Send in the background and give the form back at once; the tickets and
+    // images are kept aside and come back if the request fails.
+    const tickets = readTickets();
+    const payload = new URLSearchParams({
+      form_type: 'app_feedback',
+      experience_version: document.body.dataset.uxVersion || experiences[sourcePage] || experiences['index.html'],
+      source_page: sourcePage,
+      app_build: fields.get('app_build'),
+      reporter_name: fields.get('reporter_name')?.trim() || '',
+      reporter_email: fields.get('reporter_email')?.trim() || '',
+      page_url: location.href,
+      session_id: sessionId,
+      device: matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop',
+      tickets_json: JSON.stringify(tickets)
+    });
+    const kept = [...list.children];
+    list.replaceChildren();
+    addTicket();
+    sending += 1;
+    status.textContent = t(attachments.length ? 'Sending in the background. You can write the next ticket; keep this page open until it says sent.' : 'Sending your ticket…');
     try {
-      const tickets = readTickets();
-      const payload = new URLSearchParams({
-        form_type: 'app_feedback',
-        experience_version: document.body.dataset.uxVersion || experiences[sourcePage] || experiences['index.html'],
-        source_page: sourcePage,
-        app_build: fields.get('app_build'),
-        reporter_name: fields.get('reporter_name')?.trim() || '',
-        reporter_email: fields.get('reporter_email')?.trim() || '',
-        page_url: location.href,
-        session_id: sessionId,
-        device: matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop',
-        tickets_json: JSON.stringify(tickets)
-      });
       await fetch(endpoint, { method: 'POST', mode: 'no-cors', body: payload });
       attachments.forEach(item => URL.revokeObjectURL(item.previewUrl));
-      form.reset();
-      list.replaceChildren();
-      addTicket();
       status.textContent = t('Thank you — your feedback and images have been sent.');
-    } catch (_) { status.textContent = t('We could not send that just now. Your ticket and images are still here; please try again.'); }
-    finally { submit.disabled = false; }
+    } catch (_) {
+      const fresh = [...list.children].filter(ticket => !ticket.querySelector('[name="description"]').value.trim()
+        && !(ticketAttachments.get(ticket) || []).length);
+      fresh.forEach(ticket => ticket.remove());
+      list.prepend(...kept);
+      numberTickets();
+      status.textContent = t('We could not send that just now. Your ticket and images are still here; please try again.');
+    } finally { sending -= 1; submit.disabled = false; }
   });
+  window.addEventListener('beforeunload', event => { if (sending) { event.preventDefault(); event.returnValue = ''; } });
   addTicket();
 })();
