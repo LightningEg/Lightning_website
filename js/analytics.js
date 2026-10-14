@@ -69,7 +69,13 @@
   const device = window.innerWidth <= 640 ? 'phone' : window.innerWidth <= 1024 ? 'tablet' : 'desktop';
   const params = new URLSearchParams(location.search);
   let ref = '';
-  try { const from = new URL(document.referrer); if (from.hostname !== location.hostname) ref = from.hostname; } catch (_) {}
+  let from = ''; // the page of this site that led here (named like `page`), 'outside' for another site, '' for none. Never a URL.
+  try {
+    const prev = new URL(document.referrer);
+    if (prev.hostname !== location.hostname) { ref = prev.hostname; from = 'outside'; }
+    else from = prev.pathname.replace(/^\/+/, '').replace(/\/$/, '/index').replace(/\.html$/, '') || 'index';
+  } catch (_) {}
+  from = /^[A-Za-z0-9._\/-]{0,80}$/.test(from) ? from : '';
   const pv = {id: random(), start: Date.now(), tl: new Map([['view', 0]]), scroll: 0, active: 0, lcp: 0};
   const secs = () => Math.max(0, Math.round((Date.now() - pv.start) / 1000));
   const consentState = () => choice || (gpc ? 'gpc' : 'undecided');
@@ -108,7 +114,7 @@
   const send = () => {
     if (local) return;
     const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-    const payload = {v: 2, pv: pv.id, consent: consentState(), ux: release, page, lang: arabic ? 'ar' : 'en', device, os: osName, br: browserName, ref,
+    const payload = {v: 2, pv: pv.id, consent: consentState(), ux: release, page, lang: arabic ? 'ar' : 'en', device, os: osName, br: browserName, ref, from,
       us: (params.get('utm_source') || '').slice(0, 60), um: (params.get('utm_medium') || '').slice(0, 60), uc: (params.get('utm_campaign') || '').slice(0, 60),
       scroll: pv.scroll, act: pv.active, load: nav && nav.loadEventEnd > 0 ? Math.round(nav.loadEventEnd / 100) / 10 : 0, lcp: Math.round(pv.lcp / 100) / 10,
       tl: [...pv.tl]};
