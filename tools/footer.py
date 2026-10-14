@@ -15,8 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CSS_VERSION = "20261014-1"
 
-EMAIL_GENERAL = "hello@lightning.com"
-EMAIL_FEEDBACK = "feedback@lightning.com"
+EMAIL_GENERAL = "hello@lightningeg.com"
+EMAIL_FEEDBACK = "feedback@lightningeg.com"
 REDDIT = "https://www.reddit.com/r/LightningEg/"
 DISCORD = "https://discord.gg/fukkUs263W"
 
