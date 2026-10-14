@@ -25,6 +25,7 @@ Allow: /
 Disallow: /audit/
 Disallow: /analytics/
 Disallow: /apps-script/
+Disallow: /tools/
 Disallow: /README
 Disallow: /CLAUDE
 Disallow: /archive/README

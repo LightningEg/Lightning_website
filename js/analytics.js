@@ -184,8 +184,9 @@
     if (button && (button.dataset.consent === 'essential' || button.dataset.consent === 'all')) choose(button.dataset.consent);
   });
 
+  // Pages built by tools/footer.py already link Privacy; this covers any page with an older footer.
   const footer = document.querySelector('footer nav');
-  if (footer && !footer.querySelector('a[href$="privacy.html"]')) {
+  if (footer && !document.querySelector('footer a[href$="privacy.html"]')) {
     const link = document.createElement('a');
     link.href = privacyUrl;
     link.textContent = WORDS.footer;
