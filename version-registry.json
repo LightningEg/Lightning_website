@@ -1574,8 +1574,8 @@
       "id": "UX-2026.10.12.26",
       "name": "investment-tracker-egypt.html · One look, what matters first",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.12.26.html"
     },
     {
       "id": "UX-2026.10.12.27",
@@ -1672,8 +1672,8 @@
       "id": "UX-2026.10.13.01",
       "name": "Guides · Free expense tracker for Egypt",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.01.html"
     },
     {
       "id": "UX-2026.10.13.02",
@@ -1700,22 +1700,22 @@
       "id": "UX-2026.10.13.05",
       "name": "bank-statement-budgeting.html · Free expense tracker links",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.05.html"
     },
     {
       "id": "UX-2026.10.13.06",
       "name": "budget-app-egypt.html · Free expense tracker links",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.06.html"
     },
     {
       "id": "UX-2026.10.13.07",
       "name": "cash-flow-planner.html · Free expense tracker links",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.07.html"
     },
     {
       "id": "UX-2026.10.13.08",
@@ -1728,15 +1728,15 @@
       "id": "UX-2026.10.13.09",
       "name": "net-worth-tracker.html · Free expense tracker links",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.09.html"
     },
     {
       "id": "UX-2026.10.13.10",
       "name": "How It Works · Whole analysis screens",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.10.html"
     },
     {
       "id": "UX-2026.10.13.11",
@@ -1770,8 +1770,8 @@
       "id": "UX-2026.10.13.12",
       "name": "Features · Dollars, US stocks and Arabic",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.13.12.html"
     },
     {
       "id": "UX-2026.10.13.13",
@@ -1833,8 +1833,8 @@
       "id": "UX-2026.10.15.01",
       "name": "Lightning · Wire dots and pulsing lock restored",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.01.html"
     },
     {
       "id": "UX-2026.10.15.02",
@@ -1846,6 +1846,76 @@
     {
       "id": "UX-2026.10.15.03",
       "name": "Version Archive · Wire animation restored",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.03.html"
+    },
+    {
+      "id": "UX-2026.10.15.04",
+      "name": "Lightning · Seven places, two currencies",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.05",
+      "name": "How It Works · Screens of 2026-10-15",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.06",
+      "name": "Features · Screens of 2026-10-15",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.07",
+      "name": "Net Worth Tracker · Seven places",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.08",
+      "name": "Budget App · Screens of 2026-10-15",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.09",
+      "name": "Expense Tracker · Screens of 2026-10-15",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.10",
+      "name": "Investment Tracker · Dollars and the investing rate",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.11",
+      "name": "Cash Flow Planner · Screens of 2026-10-15",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.12",
+      "name": "Bank Statement Budgeting · Screens of 2026-10-15",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.13",
+      "name": "Version Archive · Recapture of 2026-10-15",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

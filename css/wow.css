@@ -9,3 +9,5 @@
 .t-stage.is-live .t-count{position:sticky;top:var(--t-top,86px);z-index:5}
 .t-stage.is-live .kpi{will-change:transform,opacity}
 @media (min-width:1001px){.t-stage .d-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* The seventh place (the dollar brokerage) takes the whole last row, in every layout */
+.t-stage .d-tiles .t-wide{grid-column:1/-1}

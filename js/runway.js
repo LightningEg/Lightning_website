@@ -1,6 +1,7 @@
 // The runway: a dot rides the cash line in 2.2 s once the chart is in view.
 // Keep one clock for the line, dot, figure and highlights; no animation-library loading race.
-// Illustrative path between real month ends (184,976 in September and 165,937 in November).
+// Illustrative path between real month ends: the chart's data-from (September) and data-to (November),
+// so the figure always ends on the page's own text; pages without them keep 184,976 and 165,937.
 (() => {
   const root = document.querySelector('[data-runway]');
   if (!root || !('IntersectionObserver' in window)) return;
@@ -8,7 +9,7 @@
   const fig = root.querySelector('.rw-fig b'), cap = root.querySelector('.rw-cap'), safe = root.querySelector('.rw-safe');
   const lows = root.querySelectorAll('.rw-low,.rw-lowdot'), items = [...root.querySelectorAll('.rw-events li')];
   const card = root.querySelector('.rw-card');
-  const len = line.getTotalLength(), FROM = 184976, TO = 165937;
+  const len = line.getTotalLength(), FROM = Number(root.dataset.from) || 184976, TO = Number(root.dataset.to) || 165937;
   // Locate November on the actual SVG path instead of guessing a fraction of the animation.
   const lowX = Number(root.querySelector('.rw-lowdot').getAttribute('cx'));
   let left = 0, right = len;
