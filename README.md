@@ -6,6 +6,13 @@ The marketing site for **Lightning**, a personal wealth app made in Egypt.
 
 Built in the **Meadow** identity: meadow green for growth, azure for clarity, and a deep Nile anchor for actions. Headings and big numbers use Bricolage Grotesque; text and figures use Manrope; on Arabic pages Readex Pro shows and IBM Plex Sans Arabic reads. Open the [Lightning guideline](guideline/) (3.27, three documents in `guideline/`) for the complete system: [app.html](guideline/app.html) is Part A, the app, [website.html](guideline/website.html) is Part B, this site, and [phone.html](guideline/phone.html) is Part C, the app on a phone. `app-ar.html`, `website-ar.html` and `phone-ar.html` are the same three documents in Egyptian Arabic: same sections, layout and drawings, mirrored right to left. The English documents stay the authority, except the Arabic type (B04) and words (B10) in `website-ar.html`, which govern the Arabic pages; change both copies, here and in the app repository.
 
+## Licence
+
+Source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE): free to read, run and change for
+personal and other non-commercial use. Commercial use needs the owner's written permission: ask in a
+[GitHub issue](https://github.com/elfekimuhammed/Lightning_website/issues). Contributions are welcome by pull request;
+by sending one you grant the owner the right to use and relicense it as part of the site. Fonts keep their own licences.
+
 ## Structure
 
 ```
