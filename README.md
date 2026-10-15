@@ -45,7 +45,7 @@ js/version-c.js     the old Version C script, archived snapshots only
 css/landing.css     the landing pages: self-contained, guideline tokens and building blocks only
 css/home.css        the home page's own sections, loaded after css/landing.css
 css/guides.css      the guide pages' few extras, loaded after css/home.css
-css/signup-band.css the signup band, the same on every page (guideline 3.20). It is the only gradient call-out card: any other closing prompt is a plain section (B06). Buttons: vivid only in the hero and for the band's survey, Nile primary elsewhere, 48px (top bar 40, inside tables 36)
+css/signup-band.css the signup band, the same on every page (guideline 3.20): Take the survey, or an email with **Get build news** («ابعتلي أخبار النسخ»; owner, 2026-10-15, the beta being public). It is the only gradient call-out card: any other closing prompt is a plain section (B06). Buttons: vivid only in the hero and for the band's survey, Nile primary elsewhere, 48px (top bar 40, inside tables 36)
 js/signup.js        the old standalone signup form, archived snapshots only
 js/landing.js       the landing pages: calculator, tabs, lightbox and signup
 css/version-d.css   Version D's stylesheet, archived snapshots only
@@ -55,7 +55,7 @@ js/analytics.js     analytics in two tiers and the consent bar (see Analytics an
 css/consent.css     the consent bar and the two choice buttons
 privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 2026-10-13): numbered sections, one point per bullet, the article layout (css/blog.css), no hero, cards or signup band; ar/privacy.html in Arabic
 css/footer.css       the site footer (Contact Us, then brand and links): self-contained tokens, light and dark, English and Arabic
-tools/footer.py     writes the footer into every page from one source: contact details, links and words in one place. Run `python tools/footer.py` after changing them (`--check` lists pages that are out of date). The footer is shared site chrome, so a footer change needs no new release IDs
+tools/footer.py     writes the footer into every page from one source: contact details, links and words in one place (the testers' chat row links WhatsApp and Discord, owner 2026-10-15). Run `python tools/footer.py` after changing them (`--check` lists pages that are out of date). The footer is shared site chrome, so a footer change needs no new release IDs
 tools/release.py    archives pages and gives them new release IDs before you change them (see Version identity and archive)
 tools/site_check.py checks links, JSON-LD, snapshots, the Version Archive against the registry, and title and description lengths; run it before every push
 analytics/          goatcounter_daily.py (sends GoatCounter's totals to the private receiver) and dashboard.html (reads everything behind the key; noindex). No data files: nothing analytical is committed

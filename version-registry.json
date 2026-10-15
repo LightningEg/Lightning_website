@@ -1924,120 +1924,120 @@
       "id": "UX-2026.10.15.14",
       "name": "Bank Statement Budgeting · Download in the header",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.14.html"
     },
     {
       "id": "UX-2026.10.15.15",
       "name": "Article · 20,000 EGP budget · Download in the header",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.15.html"
     },
     {
       "id": "UX-2026.10.15.16",
       "name": "Article · Emergency fund · Download in the header",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.16.html"
     },
     {
       "id": "UX-2026.10.15.17",
       "name": "Article · Irregular income · Download in the header",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.17.html"
     },
     {
       "id": "UX-2026.10.15.18",
       "name": "Article · Salary runs out · Download in the header",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.18.html"
     },
     {
       "id": "UX-2026.10.15.19",
       "name": "Article · Track expenses · Download in the header",
       "page": "blog-track-expenses.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.19.html"
     },
     {
       "id": "UX-2026.10.15.20",
       "name": "Budget App · Download in the header",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.20.html"
     },
     {
       "id": "UX-2026.10.15.21",
       "name": "Cash Flow Planner · Download in the header",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.21.html"
     },
     {
       "id": "UX-2026.10.15.22",
       "name": "Downloads · The two downloads in the hero",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.22.html"
     },
     {
       "id": "UX-2026.10.15.23",
       "name": "Expense Tracker · Download in the header",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.23.html"
     },
     {
       "id": "UX-2026.10.15.24",
       "name": "Features · Download in the header",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.24.html"
     },
     {
       "id": "UX-2026.10.15.25",
       "name": "Guides · Download in the header",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.25.html"
     },
     {
       "id": "UX-2026.10.15.26",
       "name": "How It Works · Download in the header",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.26.html"
     },
     {
       "id": "UX-2026.10.15.27",
       "name": "Lightning · Download first",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.27.html"
     },
     {
       "id": "UX-2026.10.15.28",
       "name": "Investment Tracker · Download in the header",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.28.html"
     },
     {
       "id": "UX-2026.10.15.29",
       "name": "Net Worth Tracker · Download in the header",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.29.html"
     },
     {
       "id": "UX-2026.10.15.30",
       "name": "Offline Finance App · Download in the header",
       "page": "offline-personal-finance-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.30.html"
     },
     {
       "id": "UX-2026.10.15.31",
@@ -2050,33 +2050,187 @@
       "id": "UX-2026.10.15.32",
       "name": "Release Log · Download in the header",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.32.html"
     },
     {
       "id": "UX-2026.10.15.33",
       "name": "Sample Profiles · Download in the header",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.33.html"
     },
     {
       "id": "UX-2026.10.15.34",
       "name": "Sync Phone and PC · Download in the header",
       "page": "sync-phone-and-pc-without-cloud.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.34.html"
     },
     {
       "id": "UX-2026.10.15.35",
       "name": "Money Held for Others · Download in the header",
       "page": "track-money-you-hold-for-others.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.35.html"
     },
     {
       "id": "UX-2026.10.15.36",
       "name": "Version Archive · Download first",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.36.html"
+    },
+    {
+      "id": "UX-2026.10.15.37",
+      "name": "Bank Statement Budgeting · Get build news",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.38",
+      "name": "Article · 20,000 EGP budget · Get build news",
+      "page": "blog-budget-20000-egp.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.39",
+      "name": "Article · Emergency fund · Get build news",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.40",
+      "name": "Article · Irregular income · Get build news",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.41",
+      "name": "Article · Salary runs out · Get build news",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.42",
+      "name": "Article · Track expenses · Get build news",
+      "page": "blog-track-expenses.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.43",
+      "name": "Budget App · Get build news",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.44",
+      "name": "Cash Flow Planner · Get build news",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.45",
+      "name": "Downloads · Get build news",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.46",
+      "name": "Expense Tracker · Get build news",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.47",
+      "name": "Features · Get build news",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.48",
+      "name": "Guides · Get build news",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.49",
+      "name": "How It Works · Get build news",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.50",
+      "name": "Lightning · Get build news",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.51",
+      "name": "Investment Tracker · Get build news",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.52",
+      "name": "Net Worth Tracker · Get build news",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.53",
+      "name": "Offline Finance App · Get build news",
+      "page": "offline-personal-finance-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.54",
+      "name": "Release Log · Get build news",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.55",
+      "name": "Sample Profiles · Get build news",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.56",
+      "name": "Sync Phone and PC · Get build news",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.57",
+      "name": "Money Held for Others · Get build news",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.58",
+      "name": "Version Archive · Get build news",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
