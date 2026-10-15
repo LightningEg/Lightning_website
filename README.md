@@ -37,18 +37,18 @@ css/arabic.css       loaded last on ar/ pages: the Arabic faces at the English s
 assets/fonts/       Readex Pro (variable, to 700) and IBM Plex Sans Arabic 400–700 (Arabic subset only) and their OFL licenses, for the Arabic pages
 robots.txt          crawl rules and the sitemap's address
 sitemap.xml         every page that should be in search, and nothing else
-css/styles.css      shared styles
-css/version-b.css   Version B's own sections (builds on css/version-c.css)
-js/version-b.js     Version B calculator with an adjustable return rate
-css/version-c.css   the old Version C system, still used by App Feedback, Versions and the Arabic How It Works and Downloads
-js/version-c.js     the old Version C script, still used by How It Works
+css/styles.css      old shared styles, kept for archived snapshots only (no live page loads it)
+css/version-b.css   Version B's own sections, archived snapshots only
+js/version-b.js     Version B calculator, archived snapshots only
+css/version-c.css   the old Version C system, still used by App Feedback (English and Arabic) and Versions
+js/version-c.js     the old Version C script, archived snapshots only
 css/landing.css     the landing pages: self-contained, guideline tokens and building blocks only
 css/home.css        the home page's own sections, loaded after css/landing.css
 css/guides.css      the guide pages' few extras, loaded after css/home.css
 css/signup-band.css the signup band, the same on every page (guideline 3.20). It is the only gradient call-out card: any other closing prompt is a plain section (B06). Buttons: vivid only in the hero and for the band's survey, Nile primary elsewhere, 48px (top bar 40, inside tables 36)
-js/signup.js        the signup form on pages whose own script doesn't handle it (Downloads)
+js/signup.js        the old standalone signup form, archived snapshots only
 js/landing.js       the landing pages: calculator, tabs, lightbox and signup
-css/version-d.css   Version D's stylesheet, kept for the Arabic release log page
+css/version-d.css   Version D's stylesheet, archived snapshots only
 css/how-it-works.css, css/status.css (Downloads), css/sample-profiles.css, css/release-log.css
                     the four English pages that now sit on the landing system (header, hero, headings, cards, signup band and footer are the home page's): only their own components live here
 js/analytics.js     analytics in two tiers and the consent bar (see Analytics and consent below)
