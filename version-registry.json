@@ -2085,8 +2085,8 @@
       "id": "UX-2026.10.15.37",
       "name": "Bank Statement Budgeting · Get build news",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.37.html"
     },
     {
       "id": "UX-2026.10.15.38",
@@ -2127,15 +2127,15 @@
       "id": "UX-2026.10.15.43",
       "name": "Budget App · Get build news",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.43.html"
     },
     {
       "id": "UX-2026.10.15.44",
       "name": "Cash Flow Planner · Get build news",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.44.html"
     },
     {
       "id": "UX-2026.10.15.45",
@@ -2148,15 +2148,15 @@
       "id": "UX-2026.10.15.46",
       "name": "Expense Tracker · Get build news",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.46.html"
     },
     {
       "id": "UX-2026.10.15.47",
       "name": "Features · Get build news",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.47.html"
     },
     {
       "id": "UX-2026.10.15.48",
@@ -2169,8 +2169,8 @@
       "id": "UX-2026.10.15.49",
       "name": "How It Works · Get build news",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.49.html"
     },
     {
       "id": "UX-2026.10.15.50",
@@ -2190,15 +2190,15 @@
       "id": "UX-2026.10.15.52",
       "name": "Net Worth Tracker · Get build news",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.52.html"
     },
     {
       "id": "UX-2026.10.15.53",
       "name": "Offline Finance App · Get build news",
       "page": "offline-personal-finance-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.53.html"
     },
     {
       "id": "UX-2026.10.15.54",
@@ -2218,15 +2218,15 @@
       "id": "UX-2026.10.15.56",
       "name": "Sync Phone and PC · Get build news",
       "page": "sync-phone-and-pc-without-cloud.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.56.html"
     },
     {
       "id": "UX-2026.10.15.57",
       "name": "Money Held for Others · Get build news",
       "page": "track-money-you-hold-for-others.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.57.html"
     },
     {
       "id": "UX-2026.10.15.58",
@@ -2239,8 +2239,8 @@
       "id": "UX-2026.10.15.59",
       "name": "Guides · Dollar savings and US shares",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.59.html"
     },
     {
       "id": "UX-2026.10.15.60",
@@ -2253,20 +2253,111 @@
       "id": "UX-2026.10.15.61",
       "name": "Investment Tracker · Dollars guide linked",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.61.html"
     },
     {
       "id": "UX-2026.10.15.62",
       "name": "Version Archive · Dollar savings guide",
       "page": "versions.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.62.html"
     },
     {
       "id": "UX-2026.10.15.63",
       "name": "Dollar Savings Tracker · New guide",
       "page": "dollar-savings-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.64",
+      "name": "Bank Statement Budgeting · Windows and Android",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.65",
+      "name": "Budget App · Windows and Android",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.66",
+      "name": "Cash Flow Planner · Windows and Android",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.67",
+      "name": "Expense Tracker · Windows and Android",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.68",
+      "name": "Features · Windows and Android",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.69",
+      "name": "Guides · Windows and Android",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.70",
+      "name": "How It Works · Windows and Android",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.71",
+      "name": "Investment Tracker · Windows and Android",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.72",
+      "name": "Net Worth Tracker · Windows and Android",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.73",
+      "name": "Offline Finance App · Windows and Android",
+      "page": "offline-personal-finance-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.74",
+      "name": "Sync Phone and PC · Windows and Android",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.75",
+      "name": "Money Held for Others · Windows and Android",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.76",
+      "name": "Version Archive · Android in the hero note",
+      "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
