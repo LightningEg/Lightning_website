@@ -81,7 +81,7 @@ const ANALYTICS_PV_HEADERS = [
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 // Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
-const ANALYTICS_SCRIPT_VERSION = '2026-10-14.4';
+const ANALYTICS_SCRIPT_VERSION = '2026-10-15.1';
 // The version whose setup has run; a new version sets itself up on its first request (analyticsAutoSetup_).
 const ANALYTICS_SETUP_PROPERTY = 'ANALYTICS_SETUP_VERSION';
 const ANALYTICS_BOOK_PROPERTY = 'ANALYTICS_SPREADSHEET_ID';
@@ -91,6 +91,38 @@ const ANALYTICS_MAX_PV_TOTAL = 100000;
 // GitHub's own download counts for each file, copied here daily by the GitHub job.
 const ANALYTICS_DOWNLOADS_SHEET_NAME = 'GitHub downloads';
 const ANALYTICS_DOWNLOADS_HEADERS = ['date', 'tag', 'asset', 'platform', 'count'];
+// The first Cairo day the Page views tab was filled by the site itself (scroll and time on page measured). Days before
+// it hold only Allow-all page views rebuilt from the Events tab, so the dashboard never compares across it.
+const ANALYTICS_LIVE_FROM_PROPERTY = 'ANALYTICS_LIVE_FROM';
+
+// Where a visit came from, in one name per place: utm_source when the link carried one, else the referring site with
+// its www./m./l. prefix and app wrappers folded together (www.google.com, google.com.eg and the Google app are all google).
+function analyticsSource_(utm, ref) {
+  if (utm) return String(utm).toLowerCase();
+  const host = String(ref || '').toLowerCase().replace(/^(www|m|l|lm|mobile|out)\./, '');
+  if (!host) return 'direct';
+  const known = [[/^com\.google\.android\.gm$/, 'gmail'], [/(^|\.)google\./, 'google'], [/(^|\.)(facebook|fb)\.(com|me)$|^com\.facebook\./, 'facebook'],
+    [/^(t\.co|x\.com|twitter\.com)$/, 'x'], [/(^|\.)instagram\.com$/, 'instagram'], [/(^|\.)linkedin\.com$|^lnkd\.in$/, 'linkedin'],
+    [/(^|\.)reddit\.com$/, 'reddit'], [/whatsapp/, 'whatsapp'], [/(^|\.)bing\.com$/, 'bing'], [/duckduckgo/, 'duckduckgo'],
+    [/(^|\.)(chatgpt\.com|openai\.com)$/, 'chatgpt'], [/(^|\.)(youtube\.com|youtu\.be)$/, 'youtube'], [/(^|\.)github\.com$/, 'github'], [/(^|\.)yahoo\./, 'yahoo']];
+  const hit = known.filter(k => k[0].test(host))[0];
+  return hit ? hit[1] : host;
+}
+
+// The live-from day above: found once by scanning for the first measured row, then remembered.
+function analyticsLiveFrom_(sheet, last) {
+  const props = PropertiesService.getScriptProperties();
+  const known = props.getProperty(ANALYTICS_LIVE_FROM_PROPERTY);
+  if (known) return known;
+  if (last < 2) return '';
+  const cells = sheet.getRange(2, 1, last - 1, 18).getValues();
+  let first = null;
+  cells.forEach(r => { if (r[17] !== '' && r[17] !== null) { const t = new Date(r[0]); if (!isNaN(t.getTime()) && (!first || t < first)) first = t; } });
+  if (!first) return '';
+  const day = Utilities.formatDate(first, ANALYTICS_TIMEZONE, 'yyyy-MM-dd');
+  props.setProperty(ANALYTICS_LIVE_FROM_PROPERTY, day);
+  return day;
+}
 
 // The ID above, or the one remembered from an earlier paste; without either, the spreadsheet this script is bound to.
 let analyticsBookCache_ = null;
@@ -373,9 +405,10 @@ function analyticsInsights_(json, params) {
     const codes = Object.keys(t);
     const any = re => codes.some(c => re.test(c));
     const release = r[3], page = r[4], device = r[6], scroll = +r[16] || 0, active = +r[17] || 0, lcp = +r[19] || 0;
-    const measured = r[17] !== ''; // rows rebuilt from old Events rows have no scroll or time on page
+    const measured = r[17] !== '' && r[17] !== null; // rows rebuilt from old Events rows have no scroll or time on page
     const seen = any(DL_SEEN);
-    const clicked = any(DL_CLICK) || any(/^download-app-/);
+    const linkClicked = any(DL_CLICK); // pressed a button or link that leads to the Downloads page
+    const clicked = linkClicked || any(/^download-app-/); // headed for a download: that link, or a download itself
     const started = 'signup-start' in t, submitted = 'signup-submit' in t;
     const interactions = codes.filter(c => INTERACTION.test(c)).map(c => t[c]);
     views += 1;
@@ -385,10 +418,10 @@ function analyticsInsights_(json, params) {
     const pressedCodes = codes.filter(c => /^download-app-/.test(c));
     const mobileOs = /^(android|ios)$/.test(r[7]), computerOs = /^(windows|mac|linux|chromeos)$/.test(r[7]);
     const wrong = pressedCodes.some(c => (mobileOs && /-(windows|mac|linux)$/.test(c)) || (computerOs && /-android$/.test(c)));
-    const d = daily[day(at) + '|' + device] || (daily[day(at) + '|' + device] = {date: day(at), device, views: 0, other: 0, seen: 0, went_downloads: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong_platform: 0});
+    const d = daily[day(at) + '|' + device] || (daily[day(at) + '|' + device] = {date: day(at), device, views: 0, other: 0, seen: 0, link: 0, went_downloads: 0, dl_pressed: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong_platform: 0});
     d.views += 1;
-    if (isDl) { d.went_downloads += 1; const f2 = String(r[21] || '') || 'unknown'; arrive[f2] = (arrive[f2] || 0) + 1; }
-    else { d.other += 1; if (seen) d.seen += 1; }
+    if (isDl) { d.went_downloads += 1; if (pressedCodes.length) d.dl_pressed += 1; if (measured) { const f2 = String(r[21] || '') || 'none'; arrive[f2] = (arrive[f2] || 0) + 1; } }
+    else { d.other += 1; if (seen) d.seen += 1; if (linkClicked) d.link += 1; }
     if (pressedCodes.length) d.pressed += 1;
     if (started) d.started += 1;
     if (submitted) { d.submitted += 1; if (!seen && !isDl) d.signup_unseen += 1; }
@@ -403,9 +436,9 @@ function analyticsInsights_(json, params) {
       if (bucket) bucket[c] = (bucket[c] || 0) + 1;
     });
     const rk = page + '|' + release;
-    const br = byRelease[rk] || (byRelease[rk] = {page, release, first: at, last: at, views: 0, seen: 0, went: 0, pressed: 0, submitted: 0, signup_unseen: 0});
+    const br = byRelease[rk] || (byRelease[rk] = {page, release, first: at, last: at, views: 0, seen: 0, link: 0, went: 0, pressed: 0, submitted: 0, signup_unseen: 0});
     br.views += 1; br.first = Math.min(br.first, at); br.last = Math.max(br.last, at);
-    if (isDl) br.went += 1; else if (seen) br.seen += 1;
+    if (isDl) br.went += 1; else { if (seen) br.seen += 1; if (linkClicked) br.link += 1; }
     if (pressedCodes.length) br.pressed += 1;
     if (submitted) { br.submitted += 1; if (!seen && !isDl) br.signup_unseen += 1; }
     consent[r[2]] = (consent[r[2]] || 0) + 1;
@@ -445,32 +478,39 @@ function analyticsInsights_(json, params) {
     g.views += 1;
     codes.forEach(c => { if (/^reach-/.test(c)) g.sections[c.slice(6)] = (g.sections[c.slice(6)] || 0) + 1; });
 
-    const source = r[10] || r[9] || 'direct';
-    [['device', device], ['lang', r[5]], ['source', source], ['browser', r[8]], ['os', r[7]]].forEach(pair => {
+    // Sources count arrivals only: a page view opened from another page of this site came from here, not from
+    // Google, so it is left out instead of being called direct. Rows rebuilt from old Events rows cannot tell.
+    const fromField = String(r[21] || '');
+    const arrival = measured && (fromField === '' || fromField === 'outside');
+    const pairs = [['device', device], ['lang', r[5]], ['browser', r[8]], ['os', r[7]]];
+    if (arrival) pairs.push(['source', analyticsSource_(r[10], r[9])]);
+    pairs.forEach(pair => {
       const m = who[pair[0]];
-      const w = m[pair[1] || 'unknown'] || (m[pair[1] || 'unknown'] = {views: 0, active: [], downloads: 0, signups: 0});
+      const w = m[pair[1] || 'unknown'] || (m[pair[1] || 'unknown'] = {views: 0, active: [], downloads: 0, pressed: 0, signups: 0});
       w.views += 1;
       if (measured) w.active.push(active);
-      if (clicked || any(/^download-app-/)) w.downloads += 1;
+      if (clicked) w.downloads += 1;
+      if (pressedCodes.length) w.pressed += 1;
       if (submitted) w.signups += 1;
     });
     if (lcp > 0) (lcpBy[device] = lcpBy[device] || []).push(lcp);
   });
 
   const groupRows = (map, merge) => {
-    const out = [], rest = {views: 0, active: [], downloads: 0, signups: 0};
+    const out = [], rest = {views: 0, active: [], downloads: 0, pressed: 0, signups: 0};
     Object.keys(map).forEach(k => {
       const w = map[k];
       if (merge && w.views < ANALYTICS_MIN_GROUP) {
-        rest.views += w.views; rest.downloads += w.downloads; rest.signups += w.signups; rest.active = rest.active.concat(w.active);
+        rest.views += w.views; rest.downloads += w.downloads; rest.pressed += w.pressed; rest.signups += w.signups; rest.active = rest.active.concat(w.active);
       } else out.push({key: k, w});
     });
     if (rest.views) out.push({key: 'Smaller groups', w: rest});
-    return out.sort((a, b) => b.w.views - a.w.views).map(o => ({key: o.key, views: o.w.views, active_median: median(o.w.active), download_pct: pct(o.w.downloads, o.w.views), signup_pct: pct(o.w.signups, o.w.views)}));
+    return out.sort((a, b) => b.w.views - a.w.views).map(o => ({key: o.key, views: o.w.views, active_median: median(o.w.active),
+      toward: o.w.downloads, pressed: o.w.pressed, signups: o.w.signups, download_pct: pct(o.w.downloads, o.w.views), signup_pct: pct(o.w.signups, o.w.views)}));
   };
   const listOf = m => Object.keys(m).map(k => ({code: k, count: m[k]})).sort((a, b) => b.count - a.count).slice(0, 15);
   return json({
-    meta: {script_version: ANALYTICS_SCRIPT_VERSION, last_row_at: lastAt ? new Date(lastAt).toISOString() : '', rows_today: (analyticsDayPeek_().pv || 0), dropped_total: +PropertiesService.getScriptProperties().getProperty(ANALYTICS_DROPPED_PROPERTY) || 0, sheet_rows: last >= 2 ? last - 1 : 0},
+    meta: {script_version: ANALYTICS_SCRIPT_VERSION, live_from: analyticsLiveFrom_(sheet, last), last_row_at: lastAt ? new Date(lastAt).toISOString() : '', rows_today: (analyticsDayPeek_().pv || 0), dropped_total: +PropertiesService.getScriptProperties().getProperty(ANALYTICS_DROPPED_PROPERTY) || 0, sheet_rows: last >= 2 ? last - 1 : 0},
     daily: Object.keys(daily).sort().map(k => daily[k]),
     pages: Object.keys(pages).map(k => { const g = pages[k]; return {page: g.page, views: g.views, phone_views: g.phone_views, errors: listOf(g.errors), dead: listOf(g.dead), faq: listOf(g.faq), lcp_n: g.lcp.length, lcp_median: median(g.lcp), lcp_slow: g.lcp.filter(v => v > 4).length}; }).sort((a, b) => b.views - a.views).slice(0, 30),
     by_release: Object.keys(byRelease).map(k => { const g = byRelease[k]; g.first = new Date(g.first).toISOString(); g.last = new Date(g.last).toISOString(); return g; }).sort((a, b) => b.views - a.views).slice(0, 40),

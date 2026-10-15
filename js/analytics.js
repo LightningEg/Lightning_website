@@ -6,7 +6,8 @@
 //     seen and pressed, how far it was scrolled, errors. Its random ID lives in memory only and links nothing.
 // All, only if the visitor allows it: also a visit ID (sessionStorage) and a visitor ID (localStorage, 90 days),
 //   so the pages of one visit and return visits can be linked.
-// Never sent: what anyone types, amounts, names, emails, IP addresses. GoatCounter ignores localhost.
+// Never sent: what anyone types, amounts, names, emails, IP addresses. Nothing at all is sent from localhost, automated
+// browsers, or a browser marked as the owner's (README › Analytics and consent).
 (() => {
   const POLICY = 2; // raise when privacy.html changes what is counted: everyone is asked again
   const KEY = 'lightning-consent';
@@ -19,13 +20,20 @@
   const root = new URL('..', me ? me.src : location.href);
   const arabic = (document.documentElement.lang || '').startsWith('ar');
   const privacyUrl = new URL(arabic ? 'ar/privacy.html' : 'privacy.html', root).href;
-  const local = location.protocol === 'file:' || /^(localhost|127\.|\[::1\])/.test(location.hostname);
   const gpc = navigator.globalPrivacyControl === true;
 
   const page = (location.pathname.replace(/^\/+/, '').replace(/\/$/, '/index').replace(/\.html$/, '') || 'index');
   const release = (document.body && document.body.dataset.uxVersion) || page;
   const slug = text => String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
   const store = (area, key, value) => { try { if (value === undefined) return window[area].getItem(key); if (value === null) window[area].removeItem(key); else window[area].setItem(key, value); } catch (_) {} return null; };
+  // Not counted at all: previews, automated browsers (crawlers, test robots) and the owner's own browsers. The dashboard
+  // marks a browser as the owner's; so does opening any page with ?notrack (?track undoes it).
+  const NOTRACK = 'lightning-notrack';
+  const query = new URLSearchParams(location.search);
+  if (query.has('notrack')) store('localStorage', NOTRACK, '1');
+  else if (query.has('track')) store('localStorage', NOTRACK, null);
+  const local = location.protocol === 'file:' || /^(localhost|127\.|\[::1\])/.test(location.hostname)
+    || navigator.webdriver === true || store('localStorage', NOTRACK) === '1';
   const random = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, '0')).join('');
 
   const WORDS = arabic ? {
@@ -60,7 +68,7 @@
   counter.src = 'https://gc.zgo.at/count.js';
   counter.dataset.goatcounter = 'https://mohamedelfeki.goatcounter.com/count';
   counter.addEventListener('load', () => waiting.splice(0).forEach(gc));
-  document.head.append(counter);
+  if (!local) document.head.append(counter);
 
   // ---- the page view: what happened on this one page. Anonymous, kept in memory, sent when the page is left ----
   const ua = navigator.userAgent || '';

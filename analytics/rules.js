@@ -27,14 +27,17 @@
     return x.lo > y.hi ? 'above' : x.hi < y.lo ? 'below' : 'same';
   }
   const pc = (k, n) => (n ? Math.round(k / n * 100) : 0);
+  // Page views of a group that headed for a download (pressed the Downloads link or a download). Receivers from
+  // 2026-10-15 send the count; older ones only a rounded percentage.
+  const toward = r => (typeof r.toward === 'number' ? r.toward : Math.round((r.download_pct || 0) * r.views / 100));
 
   // ---- reading the insights answer ----
   function totals(ins) {
-    const t = {views: 0, other: 0, seen: 0, went: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong: 0, by: {}};
+    const t = {views: 0, other: 0, seen: 0, link: 0, went: 0, dl_pressed: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong: 0, by: {}};
     ((ins && ins.daily) || []).forEach(d => {
-      const b = t.by[d.device] || (t.by[d.device] = {views: 0, other: 0, seen: 0, went: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong: 0});
+      const b = t.by[d.device] || (t.by[d.device] = {views: 0, other: 0, seen: 0, link: 0, went: 0, dl_pressed: 0, pressed: 0, started: 0, submitted: 0, signup_unseen: 0, wrong: 0});
       [t, b].forEach(x => {
-        x.views += d.views; x.other += d.other; x.seen += d.seen; x.went += d.went_downloads; x.pressed += d.pressed;
+        x.views += d.views; x.other += d.other; x.seen += d.seen; x.link += d.link || 0; x.went += d.went_downloads; x.dl_pressed += d.dl_pressed || 0; x.pressed += d.pressed;
         x.started += d.started; x.submitted += d.submitted; x.signup_unseen += d.signup_unseen; x.wrong += d.wrong_platform;
       });
     });
@@ -75,12 +78,15 @@
     }},
     {id: 'channels', run(ins) {
       const t = totals(ins), dev = (ins.who && ins.who.device) || [];
-      const site = dev.length ? {k: dev.reduce((x, d) => x + Math.round(d.download_pct * d.views / 100), 0), n: dev.reduce((x, d) => x + d.views, 0)} : {k: t.pressed, n: t.views};
+      // Sources count arrivals, so the site average is over arrivals too.
+      const src = (ins.who && ins.who.source) || [];
+      const site = src.length ? {k: src.reduce((x, s) => x + toward(s), 0), n: src.reduce((x, s) => x + s.views, 0)}
+        : dev.length ? {k: dev.reduce((x, d) => x + toward(d), 0), n: dev.reduce((x, d) => x + d.views, 0)} : {k: t.pressed, n: t.views};
       if (site.n < 30) return null;
       const best = [];
-      ((ins.who && ins.who.source) || []).forEach(s => {
+      src.forEach(s => {
         if (s.views < 30 || /^(Smaller groups|direct)$/.test(s.key)) return;
-        const k = Math.round(s.download_pct * s.views / 100), c = compare({k, n: s.views}, site);
+        const k = toward(s), c = compare({k, n: s.views}, site);
         if (c === 'same') return;
         const times = Math.round((k / s.views) / Math.max(site.k / site.n, 0.005) * 10) / 10;
         best.push({s, c, k, times});
@@ -89,9 +95,9 @@
       const x = best[0]; if (!x) return null;
       return x.c === 'above'
         ? {id: 'good-channel', evidence: 'channels', n: x.s.views, k: x.k, impact: x.s.views,
-            finding: `Visitors from ${x.s.key} go for a download ${x.times}× as often as the site average.`, options: ['Post more there']}
+            finding: `Visitors arriving from ${x.s.key} head for a download ${x.times}× as often as the site average.`, options: ['Post more there']}
         : {id: 'weak-channel', evidence: 'channels', n: x.s.views, k: x.k, impact: x.s.views,
-            finding: `Visitors from ${x.s.key} go for a download less often than the site average (${pc(x.k, x.s.views)}% against ${pc(site.k, site.n)}%).`, options: ['Change what you post there', 'Or stop posting there']};
+            finding: `Visitors arriving from ${x.s.key} head for a download less often than the site average (${pc(x.k, x.s.views)}% against ${pc(site.k, site.n)}%).`, options: ['Change what you post there', 'Or stop posting there']};
     }},
     {id: 'broken', run(ins) {
       let best = null;
@@ -145,7 +151,7 @@
     {id: 'arabic-gap', run(ins) {
       const by = {}; ((ins.who && ins.who.lang) || []).forEach(l => { by[l.key] = l; });
       const ar = by.ar, en = by.en; if (!ar || !en || ar.views < 30) return null;
-      const a = {k: Math.round(ar.download_pct * ar.views / 100), n: ar.views}, e = {k: Math.round(en.download_pct * en.views / 100), n: en.views};
+      const a = {k: toward(ar), n: ar.views}, e = {k: toward(en), n: en.views};
       if (compare(a, e) !== 'below') return null;
       return {id: this.id, evidence: 'details', n: ar.views, k: a.k, impact: ar.views,
         finding: `Arabic visitors go for a download less often (${pc(a.k, a.n)}% against ${pc(e.k, e.n)}%).`,
@@ -160,7 +166,7 @@
         if (list.length < 2) return;
         const cur = list[list.length - 1], prev = list[list.length - 2];
         if (cur.views < 30 || prev.views < 30) return;
-        const metrics = DOWNLOADS_PAGE.test(page) ? [['pressed', 'download presses']] : [['seen', 'the Downloads link on screen'], ['pressed', 'download presses'], ['submitted', 'signups']];
+        const metrics = DOWNLOADS_PAGE.test(page) ? [['pressed', 'download presses']] : [['seen', 'the Downloads link on screen'], ['link', 'presses of the Downloads link'], ['submitted', 'signups']];
         metrics.forEach(m => {
           const c = compare({k: cur[m[0]], n: cur.views}, {k: prev[m[0]], n: prev.views});
           if (c === 'same') return;
@@ -195,6 +201,6 @@
       options: [need && perDay ? `About ${need} more page views on phones, about ${Math.max(1, Math.ceil(need / perDay))} days at the current pace.` : 'Keep collecting.']};
   }
 
-  const api = {Z, wilson, certainty, needMore, compare, pc, totals, rules, verdicts, nothingClear, errorWords, pageName};
+  const api = {Z, wilson, certainty, needMore, compare, pc, toward, totals, rules, verdicts, nothingClear, errorWords, pageName};
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.LightningRules = api;
 })(typeof window !== 'undefined' ? window : globalThis);
