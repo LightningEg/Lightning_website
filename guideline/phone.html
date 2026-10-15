@@ -570,7 +570,7 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
     <div class="rt"><div class="vis" style="flex-direction:column;gap:4px;justify-content:center"><i style="display:block;width:100%;height:10px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--t-rose) 0 5px,transparent 5px 10px)"></i><i style="display:block;width:100%;height:22px;border-radius:6px;background:var(--white);border:1px solid var(--line)"></i></div><b>Clear of the bars</b><span>Nothing under the clock, the notch or the gesture bar.</span></div>
     <div class="rt"><div class="vis"><svg viewBox="0 0 120 40" width="120" height="40"><path d="M4 34 L40 18 L64 10 L116 22" fill="none" stroke="var(--azure)" stroke-width="2.5"/><circle cx="116" cy="22" r="4" fill="var(--azure)"/></svg></div><b>Redraw, don't shrink</b><span>A desktop chart is rebuilt for the phone, never scaled down.</span></div>
     <div class="rt"><div class="vis"><span class="chip up">Tap</span><span class="chip" style="text-decoration:line-through">Hover</span></div><b>No hover</b><span>What a tooltip says is on screen or one tap away.</span></div>
-    <div class="rt"><div class="vis"><svg class="ic" style="width:24px;height:24px;color:var(--ink)"><use href="#i-cash"/></svg><span class="chip">Cash</span></div><b>A word beside every icon</b><span>An icon stands alone only when everyone knows it: search, back, add, more, settings, hide amounts.</span></div>
+    <div class="rt"><div class="vis"><svg class="ic" style="width:24px;height:24px;color:var(--ink)"><use href="#i-cash"/></svg><span class="chip">Cash</span></div><b>Tabs are icons</b><span>The tab bar and a section's tabs show an icon only; the name is its accessible label and long-press title. Any other icon stands alone only when everyone knows it: search, back, add, more, settings, hide amounts.</span></div>
   </div>
   <ul class="short">
     <li><b>C01.1 Direction: a phone is not a small PC.</b> Banking and money apps people open daily (Monzo, Revolut, Wise, Copilot) open on the money that just moved, not on analysis. Each of their screens answers one question, with one figure as the lead and the rest quiet.</li>
@@ -617,7 +617,7 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
   </div>
   <ul class="short">
     <li><b>Five slots:</b> Overview, Budget, Cash (Cash planning), Investments, Accounts. A sixth section never gets a slot; it opens from Settings.</li>
-    <li><b>Each slot:</b> a 24px Lucide icon over an 11px name, always both. Chosen: a Nile pill behind the icon and an Ink name. Others: Muted.</li>
+    <li><b>Each slot:</b> a 24px Lucide icon alone; the name is its accessible label and long-press title. Chosen: a Nile pill behind the icon. Others: Muted.</li>
     <li><b>Icons say the section:</b> house, wallet, banknote for Cash, chart, bank. The shield belongs to Reserves and the emergency fund, never to a section.</li>
     <li><b>Accounts is a section:</b> the desktop's Accounts bar under the menu leaves the top of every page. Its total opens the Accounts tab, in whole EGP.</li>
   </ul>
@@ -632,11 +632,11 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
 
   <h3 class="sub"><span class="subnum">C03.3</span>Tabs inside a section</h3>
   <div class="grid2" style="max-width:740px">
-    <div><div class="pf-seg"><span class="on">Summary</span><span>Spending</span><span>Health</span></div><p class="cap">Up to three tabs: one row of words, equal widths</p></div>
-    <div><div class="pf-seg two"><span class="on">Plan</span><span>Recurring</span><span>Loans</span><span>Reserves</span></div><p class="cap">Four tabs: two rows of two, still words</p></div>
+    <div><div class="pf-seg"><span class="on">Summary</span><span>Spending</span><span>Health</span></div><p class="cap">Up to three tabs: one row of icons, equal widths</p></div>
+    <div><div class="pf-seg two"><span class="on">Plan</span><span>Recurring</span><span>Loans</span><span>Reserves</span></div><p class="cap">Four tabs: one row of four icons</p></div>
   </div>
   <ul class="short">
-    <li><b>Words, never icons alone:</b> a section's own icons (a bank for Loans, a shield for Reserves) are not universal, so the name is the tab. A name may wrap to two lines; it is never cut.</li>
+    <li><b>Icons, the name behind them:</b> every tab is an icon (owner decision 2026-10-15). Its name is the accessible label and the long-press title, and no two tabs in a section share an icon.</li>
     <li>Full width under the period control, each tab 48 tall. The track never scrolls. Five tabs: split the section.</li>
     <li>Swiping the content left or right does not change tabs: charts and rows need the swipe.</li>
   </ul>
@@ -961,7 +961,7 @@ nav.side .grp{margin:14px 10px 6px;font:800 12px/1 var(--body);color:var(--muted
     <div><b>Desktop words</b>“Computer”, “click”, “right-click”.</div>
     <div><b>Two buttons side by side</b>One Secondary, then ⋯.</div>
     <div><b>Decimals on a big figure</b>Whole EGP, the Accounts total too.</div>
-    <div><b>An icon alone that is not universal</b>Put its word beside it (C03.3).</div>
+    <div><b>A tab icon with no name</b>Every icon tab carries its name as label and title (C03.3).</div>
     <div><b>A card around a list of rows</b>Rows sit flat on the page, a hairline between.</div>
     <div><b>Analysis before the money</b>The latest transactions come first on a page that has a ledger.</div>
     <div><b>A button over content</b>The add button never covers the last row.</div>
