@@ -40,17 +40,21 @@ async function open(b, scenario, vp, dark) {
     if (name === 'desktop-light') {
       const t = s => p.innerText(s);
       const health = await t('#health');
-      ok(/Script is current/.test(health) && /Last page view/.test(health) && /Days of data/.test(health), 'health strip: script current, last page view, days of data');
+      ok(/Script is current/.test(health) && /Last page view/.test(health) && /Full records since/.test(health) && /This browser is not counted/.test(health), 'health strip: script current, last page view, full records since, this browser not counted');
       const cards = await p.$$('.dash-verdict'); ok(cards.length >= 1 && cards.length <= 5, `verdicts: ${cards.length} cards`);
       ok(await p.$$eval('.dash-verdict', c => c.every(x => /^(Clear|Early sign|Too early)/.test(x.innerText) && x.querySelector('a[href^="#"]') && x.querySelectorAll('li').length)), 'every verdict has a certainty label, options and an evidence link');
       ok(await p.$$eval('.dash-verdict a', a => a.every(x => document.getElementById(x.getAttribute('href').slice(1)))), 'every evidence link points at a block on the page');
       const tiles = await p.$$eval('.dash-tile', x => x.map(e => e.innerText));
-      ok(tiles.length === 5 && tiles.every(x => /(Up|Down|Same as before)/.test(x) || /Appears after/.test(x)) && (await p.$$('.dash-tile svg')).length >= 4, 'five key numbers with previous-period words and sparklines');
-      const path_ = await t('#path-box'); ok(/Downloads link on screen/.test(path_) && /biggest drop/.test(path_) && /Phone/.test(path_) && /Computer/.test(path_) && /another device/.test(path_), 'path: per device, biggest drop, wrong platform');
-      ok((await p.$$('#charts svg')).length === 4 && (await p.$$('#charts .rel')).length >= 1, 'four trend charts with release markers');
+      ok(tiles.length === 5 && tiles.every(x => /(Up|Down|Same as before|No earlier period)/.test(x) || /Appears after|Snapshots start/.test(x)) && (await p.$$('.dash-tile svg')).length >= 4, 'five key numbers with previous-period words and sparklines');
+      const path_ = await t('#path-box'); ok(/Downloads link was on screen/.test(path_) && /Pressed the Downloads link/.test(path_) && /On the Downloads page/.test(path_) && /Phone/.test(path_) && /Computer/.test(path_) && /another device/.test(path_), 'path: two places, per device, wrong platform');
+      ok((path_.match(/\b(\d+)%/g) || []).every(x => parseInt(x, 10) <= 100), 'path: no share passes 100%');
+      ok(/Allow-all visitors/.test(await t('#numbers-note')) && /fair comparison/.test(await t('#numbers-note')), 'key numbers: says the period is partly before full records and when a fair comparison starts');
+      ok((await p.$$('#check-box code')).length >= 4 && /COUNTIFS\('Page views'!A:A|COUNTIFS\(/.test(await p.$eval('#check-box', e => e.textContent)), 'check: spreadsheet formulas for the key numbers');
+      ok(await p.$eval('#check-box', e => /848|\d/.test(e.textContent)) && await p.$$eval('#check-box tbody tr', r => r[0].children[1].textContent) === await p.$eval('#tiles .dash-tile b', e => e.textContent), 'check: the page-view count beside its formula is the tile number');
+      ok((await p.$$('#charts svg')).length === 4 && (await p.$$('#charts .tick')).length >= 1 && (await p.$$('#charts rect.bar')).length >= 100 && (await p.$$('#charts rect.bar.pre')).length >= 1, 'four bar charts, release ticks, grey days before full records');
       await p.hover('#charts svg rect.hit >> nth=5'); ok(await p.$eval('#charts .dash-tip', e => e.style.display === 'block' && /: \d+/.test(e.textContent)), 'chart hover shows a tooltip');
       await p.click('#charts button >> nth=0'); ok(await p.$eval('#charts table', e => !e.hidden), 'chart can be shown as a table');
-      ok(/reddit/.test(await t('#channels-box')) && /Better|Worse|No clear difference/.test(await t('#channels-box')), 'channels list with a verdict');
+      ok(/Reddit/.test(await t('#channels-box')) && /Arrivals/.test(await t('#channels-box')) && /Better|Worse|No clear difference/.test(await t('#channels-box')), 'channels list with a verdict');
       ok(/broken file|looks clickable|speed/.test(await t('#fix-box')), 'fix list has kinds of fix');
       ok(/biggest drop/i.test(await t('#drop-note')) && /\w+\?/.test(await t('#faq-box')), 'content: biggest drop in words, FAQ by question text');
       const rel = await t('#rel-box'); ok(/Before/.test(rel) && /Now/.test(rel) && /Higher|Lower|No clear difference/.test(rel), 'release comparison with verdicts');

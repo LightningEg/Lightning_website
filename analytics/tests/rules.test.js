@@ -33,12 +33,15 @@ ok(ids(base({wrong_platform: {presses: 20, wrong: 3}})).includes('wrong-platform
 // ---- channels ----
 const src = (key, views, download_pct) => ({key, views, active_median: 5, download_pct, signup_pct: 0});
 const chan = o => base(Object.assign({daily: [day('desktop', {views: 200, pressed: 20})], who: {source: [], lang: []}}, o));
-let c = R.verdicts(chan({who: {source: [src('reddit.com', 40, 60)], lang: []}}));
-ok(c.some(x => x.id === 'good-channel' && /reddit\.com/.test(x.finding)), 'good-channel fires: Reddit 60% against a 10% site');
-c = R.verdicts(chan({daily: [day('desktop', {views: 200, pressed: 100})], who: {source: [src('facebook.com', 40, 5)], lang: []}}));
-ok(c.some(x => x.id === 'weak-channel'), 'weak-channel fires: 5% against a 50% site');
-ok(!ids(chan({who: {source: [src('reddit.com', 29, 90)], lang: []}})).some(i => /channel/.test(i)), 'channels silent below 30 views from the source');
-ok(!ids(chan({who: {source: [src('x.com', 40, 12)], lang: []}})).some(i => /channel/.test(i)), 'channels silent when intervals overlap');
+// The site average is over all arrivals: a large direct group sets it.
+const site = pct => src('direct', 200, pct);
+let c = R.verdicts(chan({who: {source: [site(5), src('reddit.com', 40, 60)], lang: []}}));
+ok(c.some(x => x.id === 'good-channel' && /reddit\.com/.test(x.finding)), 'good-channel fires: Reddit 60% against a mostly 5% site');
+c = R.verdicts(chan({who: {source: [site(55), src('facebook.com', 40, 5)], lang: []}}));
+ok(c.some(x => x.id === 'weak-channel'), 'weak-channel fires: 5% against a mostly 55% site');
+ok(!ids(chan({who: {source: [site(5), src('reddit.com', 29, 90)], lang: []}})).some(i => /channel/.test(i)), 'channels silent below 30 views from the source');
+ok(!ids(chan({who: {source: [site(10), src('x.com', 40, 12)], lang: []}})).some(i => /channel/.test(i)), 'channels silent when intervals overlap');
+ok(R.toward({views: 7, toward: 3, download_pct: 43}) === 3 && R.toward({views: 7, download_pct: 43}) === 3, 'toward: the count when sent, else from the percentage');
 // ---- broken ----
 const pg = (page, views, o) => Object.assign({page, views, phone_views: 0, errors: [], dead: [], faq: [], lcp_n: 0, lcp_median: '', lcp_slow: 0}, o);
 c = R.verdicts(base({pages: [pg('index', 100, {errors: [{code: 'res-error-img-hero-png', count: 5}]})]}));

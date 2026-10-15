@@ -31,8 +31,12 @@ let n = 1;
 const PVT = () => tabs['Page views'].rows;
 const pv = (o, line, ago) => {
   saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: hx(n++), ux: 'UX-2026.10.14.99', page: 'index', lang: 'en', device: 'phone', os: 'android', br: 'chrome', ref: '', from: '', us: '', um: '', uc: '', scroll: 30, act: 14, load: 1.6, lcp: 2.4, consent: 'essential', tl: line.split(' ').map(x => [x.split(':')[0], +x.split(':')[1]]), ...o }) });
-  PVT()[PVT().length - 1][0] = new Date(Date.now() - ago); // the mock stamps "now"; spread the rows over the past weeks, oldest first
+  const row = PVT()[PVT().length - 1];
+  row[0] = new Date(Date.now() - ago); // the mock stamps "now"; spread the rows over the past weeks, oldest first
+  // Full records began 20 days ago: older rows look like those rebuilt from the Events tab (Allow all, nothing measured).
+  if (ago > LIVE_DAYS * 864e5) { row[2] = 'all'; row[7] = row[8] = row[16] = row[17] = row[18] = row[19] = row[21] = ''; }
 };
+const LIVE_DAYS = 20;
 const day = k => new Date(Date.now() - k * 864e5).toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
 const NEW = 'UX-2026.10.14.99', OLD = 'UX-2026.10.01.99';
 const SECTIONS = ['picture', 'sync', 'trust', 'faq'];
@@ -58,6 +62,7 @@ for (let k = 55; k >= 0; k--) {
     pv({ ux: 'UX-2026.10.13.16', page: 'current-status', device: phone ? 'phone' : 'desktop', os: phone ? 'android' : 'windows', ref: '', from: i % 3 ? 'index' : 'outside', lcp: 2 },
       `view:0 ${press ? `download-app-v1.0.0-beta.1-${wrong ? 'windows' : phone ? 'android' : 'windows'}:11` : ''}`.trim(), k * 864e5 + (5 + i) * 36e5);
   }
+  for (let i = 0; i < 3; i++) pv({ page: 'features', ux: 'features', ref: '', from: 'index', device: i ? 'phone' : 'desktop' }, `view:0 ${i ? '' : 'seen-current-status:0 nav-current-status:7'}`.trim(), k * 864e5 + (12 + i) * 36e5);
   for (let i = 0; i < 4; i++) pv({ lang: 'ar', page: 'ar/index', ux: 'ar/index', device: 'phone', ref: '', from: '' }, 'view:0 reach-picture:3', k * 864e5 + 2 * 36e5);
 }
 for (let i = 0; i < 8; i++) pv({ consent: i % 2 ? 'all' : 'essential', sid: hx(700 + i), vid: hx(800 + i), vn: 1 + (i % 3) }, 'view:0 reach-picture:3', 3 * 36e5);
