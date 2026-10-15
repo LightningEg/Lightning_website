@@ -1,9 +1,10 @@
-// The wow moment (home UX-2026.10.06.05, test.html): the six places pour into one figure.
+// The wow moment (home UX-2026.10.06.05, test.html): the places Mohab keeps money pour into one figure.
 // Each money tile, as it scrolls up to the sticky "In your accounts" card, shrinks into it and its amount
 // is added; scrolling back takes it out again. GSAP + ScrollTrigger, hosted here in js/vendor/ and fetched
 // only once the page has loaded. <body data-wow-always> (the home page, owner's choice 2026-10-06, and
 // test.html) plays it even with reduce motion on; any other page skips it then and downloads nothing.
-// Without it, the card shows the total and the tiles stay still.
+// Without it, the card shows the total and the tiles stay still. The line shown once every tile has landed is the
+// counter's data-t-done (home: seven places since UX-2026.10.15.04); pages without it keep the six-places line.
 (() => {
   const here = document.currentScript.src; // vendor/ sits beside this file, also for ar/ pages
   const ar = document.documentElement.lang.startsWith('ar');
@@ -38,7 +39,8 @@
   setTop();
   ScrollTrigger.addEventListener('refreshInit', setTop);
 
-  const first = line.textContent; // 'The six places, in EGP', as the page wrote it
+  const first = line.textContent; // 'The seven places, in EGP', as the page wrote it
+  const all = counter.dataset.tDone || (ar ? 'الست أماكن، محسوبين كأنهم واحد' : 'All six places, counted as one');
   let landed = -1;
   const paint = () => {
     sumEl.textContent = format.format(Math.round(tiles.reduce((sum, t) => sum + t.value * t.p, 0)));
@@ -46,7 +48,7 @@
     if (done.length === landed) return;
     const last = done[done.length - 1];
     line.textContent = !last ? first
-      : done.length === tiles.length ? (ar ? 'الست أماكن، محسوبين كأنهم واحد' : 'All six places, counted as one')
+      : done.length === tiles.length ? all
       : `+${format.format(last.value)} · ${last.name}`;
     if (done.length > landed && landed >= 0) gsap.fromTo(counter, {scale: 1.03}, {scale: 1, duration: .4, ease: 'back.out(3)'});
     landed = done.length;
