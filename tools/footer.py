@@ -13,12 +13,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CSS_VERSION = "20261014-1"
+CSS_VERSION = "20261015-1"
 
 EMAIL_GENERAL = "hello@lightningeg.com"
 EMAIL_FEEDBACK = "feedback@lightningeg.com"
 REDDIT = "https://www.reddit.com/r/LightningEg/"
 DISCORD = "https://discord.gg/fukkUs263W"
+WHATSAPP = "https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET"  # owner, 2026-10-15
 
 # Lucide icons (A15): drawn at 22px with a 1.75 stroke by css/footer.css
 ICONS = {
@@ -36,7 +37,7 @@ WORDS = {
             ("mail", "General questions", f"mailto:{EMAIL_GENERAL}", EMAIL_GENERAL, False),
             ("feedback", "Feedback on the app", f"mailto:{EMAIL_FEEDBACK}", EMAIL_FEEDBACK, False),
             ("community", "Community", REDDIT, "r/LightningEg on Reddit", True),
-            ("chat", "Chat with other testers", DISCORD, "Join the Discord", True),
+            ("chat", "Chat with other testers", [(WHATSAPP, "WhatsApp"), (DISCORD, "Discord")], None, True),
         ],
         "about": "Made in Egypt. Your money stays on your devices.",
         "explore": "Explore",
@@ -52,7 +53,7 @@ WORDS = {
             ("mail", "أسئلة عامة", f"mailto:{EMAIL_GENERAL}", EMAIL_GENERAL, False),
             ("feedback", "رأيك في التطبيق", f"mailto:{EMAIL_FEEDBACK}", EMAIL_FEEDBACK, False),
             ("community", "المجتمع", REDDIT, "r/LightningEg على Reddit", True),
-            ("chat", "دردشة مع المجرّبين التانيين", DISCORD, "ادخل على Discord", True),
+            ("chat", "دردشة مع المجرّبين التانيين", [(WHATSAPP, "واتساب"), (DISCORD, "Discord")], None, True),
         ],
         "about": "اتعمل في مصر. وفلوسك بتفضل على أجهزتك.",
         "explore": "استكشف",
@@ -80,11 +81,9 @@ def build(path: Path) -> str:
     items = []
     for icon, label, href, text, external in w["items"]:
         target = ' target="_blank" rel="noopener"' if external else ""
-        shown = f"<bdi>{text}</bdi>" if "@" in text or "/" in text else text
-        items.append(
-            f'<li><svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[icon]}</svg><small>{label}</small>'
-            f'<a href="{href}"{target}>{shown}</a></li>'
-        )
+        links = href if isinstance(href, list) else [(href, text)]  # one row may hold several places, " · " between
+        anchors = " · ".join(f'<a href="{h}"{target}>{f"<bdi>{t}</bdi>" if "@" in t or "/" in t else t}</a>' for h, t in links)
+        items.append(f'<li><svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[icon]}</svg><small>{label}</small><span>{anchors}</span></li>')
     def column(title, links, name):
         anchors = "".join(f'<li><a href="{p}.html">{t}</a></li>' for p, t in links)
         return f'<nav class="sf-col" aria-label="{name}"><h3>{title}</h3><ul>{anchors}</ul></nav>'
