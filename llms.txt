@@ -30,6 +30,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Budget app for Egypt](https://lightningeg.com/budget-app-egypt.html): plan a monthly budget in EGP around your salary.
 - [Expense tracker for Egypt](https://lightningeg.com/expense-tracker-egypt.html): see where your salary went, by category and month.
 - [Investment tracker for Egypt](https://lightningeg.com/investment-tracker-egypt.html): gold, bank certificates, EGX and US shares and funds in one EGP portfolio, with what the dollar rate earned you.
+- [Dollar savings and US shares tracker](https://lightningeg.com/dollar-savings-tracker-egypt.html): dollar cash and US shares kept in their own currency and counted in EGP at the day's rate, with a holding's gain split into the price part and the exchange-rate part.
 - [Cash flow planner](https://lightningeg.com/cash-flow-planner.html): how much is safe to spend before payday, and a three-month forecast.
 - [Budget from your bank statement CSV](https://lightningeg.com/bank-statement-budgeting.html): no bank login, just your statement.
 - [Offline personal finance app](https://lightningeg.com/offline-personal-finance-app.html): where your data lives and why it stays on your phone and PC.
@@ -67,6 +68,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [الميزانية](https://lightningeg.com/ar/budget-app-egypt.html)
 - [تتبع المصاريف](https://lightningeg.com/ar/expense-tracker-egypt.html)
 - [متابعة الاستثمارات](https://lightningeg.com/ar/investment-tracker-egypt.html)
+- [مدخراتك بالدولار](https://lightningeg.com/ar/dollar-savings-tracker-egypt.html)
 - [التخطيط النقدي](https://lightningeg.com/ar/cash-flow-planner.html)
 - [استيراد كشف البنك](https://lightningeg.com/ar/bank-statement-budgeting.html)
 - [الخصوصية والعمل دون اتصال](https://lightningeg.com/ar/offline-personal-finance-app.html)
