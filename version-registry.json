@@ -2162,8 +2162,8 @@
       "id": "UX-2026.10.15.48",
       "name": "Guides · Get build news",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.48.html"
     },
     {
       "id": "UX-2026.10.15.49",
@@ -2176,15 +2176,15 @@
       "id": "UX-2026.10.15.50",
       "name": "Lightning · Get build news",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.50.html"
     },
     {
       "id": "UX-2026.10.15.51",
       "name": "Investment Tracker · Get build news",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.51.html"
     },
     {
       "id": "UX-2026.10.15.52",
@@ -2232,6 +2232,41 @@
       "id": "UX-2026.10.15.58",
       "name": "Version Archive · Get build news",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.58.html"
+    },
+    {
+      "id": "UX-2026.10.15.59",
+      "name": "Guides · Dollar savings and US shares",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.60",
+      "name": "Lightning · Dollars guide linked",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.61",
+      "name": "Investment Tracker · Dollars guide linked",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.62",
+      "name": "Version Archive · Dollar savings guide",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.15.63",
+      "name": "Dollar Savings Tracker · New guide",
+      "page": "dollar-savings-tracker-egypt.html",
       "status": "current",
       "archive_url": null
     }
