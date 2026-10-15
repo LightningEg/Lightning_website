@@ -21,7 +21,7 @@ version-b.html      redirect to index.html (Version B is archived)
 version-c.html      redirect to index.html (the old Version C address; its design is now the home page)
 how-it-works.html   the monthly 30-minute routine: upload, adjust, analyse
 release-log.html    release log: what changed build by build (landing system; css/release-log.css)
-current-status.html shared beta hub: status, safe sample CSVs, builds and app feedback
+current-status.html Downloads («التنزيل»): Download Lightning. Free., with the Windows and Android files straight in the hero, then the builds table, safe sample CSVs and app feedback
 sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financial question each explores
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
@@ -290,7 +290,7 @@ Both landing pages, How It Works and the brand guidelines support light and dark
 
 ## Header and testing panel
 
-- Every version uses the same header: the logo, **Home · Features · How It Works · Guides · Downloads**, and a dark **Take the survey** button (just "Survey" on phones). Below 800px the page links fold into one **Menu** button (`js/nav-menu.js`, styles in `css/landing.css`), which also holds the language switch on phones. The header only links to pages, never to a section of the same page. The Downloads page keeps its address `current-status.html`; only its name changed.
+- Every version uses the same header: the logo, **Home · Features · How It Works · Guides · Downloads**, and a dark **Download free** button to Downloads (just "Download" on phones, «نزّل ببلاش» in Arabic; owner's request 2026-10-15, after visitors could not find the downloads). The Downloads page keeps **Take the survey** there, so no page links to itself; the survey is also in the signup band on every page. Below 980px the page links fold into one **Menu** button (`js/nav-menu.js`, styles in `css/landing.css`), which also holds the language switch on phones. The header only links to pages, never to a section of the same page. The Downloads page keeps its address `current-status.html`; only its name changed.
 - The release ID (linking to the version archive), **Submit UX Test**, and **Submit app feedback** live in the **Testing** tab on the right edge of the screen. `js/dev-dock.js` builds it the same way on every page; load it with `defer` before `js/ux-test.js`.
 - There is one live landing page, so **Home** always goes to `index.html`. Archived versions are on [Version Archive](versions.html).
 
