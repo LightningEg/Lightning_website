@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · page 4.2 · 2026-10-17 · its own section with its own design: fixed particle terrain with lightning, current in the pixel grid, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
+<!-- For Geeks · page 4.4 · 2026-10-17 · its own section with its own design: fixed particle terrain with lightning, current in the pixel grid, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -40,7 +40,7 @@
     .skip:focus{top:12px}
 
     /* ---------- the field: canvas, pixel grid, vignette ---------- */
-    #field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    #field{position:fixed;left:0;top:0;width:100%;height:100vh;height:100lvh;z-index:0;pointer-events:none}
     .grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(var(--particle),.09) 1px,transparent 1.2px);background-size:24px 24px;mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%)}
     .scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.06) 0 1px,transparent 1px 3px);opacity:.5}
     :root[data-theme="paper"] .scan{opacity:.15}
@@ -95,11 +95,11 @@
     /* ---------- hero ---------- */
     .hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 48px}
     /* a soft floor under the hero text, so the terrain never runs behind a word */
-    .hero::before{content:"";position:absolute;inset:auto 0 0;height:58%;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 88%,transparent) 38%)}
+    .hero::before{content:"";position:absolute;inset:auto 0 0;height:70%;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 88%,transparent) 38%)}
     .hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-top:26px}
-    h1{font:300 clamp(34px,5.1vw,70px)/1.1 var(--mono);letter-spacing:-.035em;margin:0;color:var(--dim);transition:text-shadow .5s}
-    .flash h1 .hi,.flash h1 .word{text-shadow:0 0 28px rgba(var(--glow),.55);transition:text-shadow .04s}
-    h1 .hi{color:var(--ink);font-weight:400}
+    h1{font:400 clamp(34px,5.1vw,70px)/1.1 var(--mono);letter-spacing:-.035em;margin:0;color:var(--dim);transition:text-shadow .5s}
+    .flash h1 .hi,.flash h1 .word{text-shadow:0 0 4px var(--bg),0 0 28px rgba(var(--glow),.55);transition:text-shadow .04s}
+    h1 .hi{color:var(--ink);font-weight:500}
     .word{display:inline-block;color:var(--accent);font-weight:400;white-space:nowrap;transition:width .45s cubic-bezier(.2,.8,.2,1);text-align:left;vertical-align:bottom}
     .lede{max-width:560px;margin:0;color:var(--dim);font-size:17px}
     .hint{font:400 12px var(--mono);color:var(--dim)}
@@ -124,13 +124,15 @@
     .s-head{display:grid;grid-template-columns:220px 1fr;gap:32px;margin-bottom:56px}
     .s-num{font:400 12.5px var(--mono);color:var(--dim)}
     .s-num b{color:var(--accent);font-weight:500}
-    h2{font:300 clamp(30px,4.2vw,54px)/1.12 var(--mono);letter-spacing:-.03em;margin:0;color:var(--dim)}
-    h2 .hi{color:var(--ink);font-weight:400}
+    h2{font:400 clamp(30px,4.2vw,54px)/1.12 var(--mono);letter-spacing:-.03em;margin:0;color:var(--dim)}
+    h2 .hi{color:var(--ink);font-weight:500}
     .s-sub{max-width:640px;margin:18px 0 0;color:var(--dim)}
     @media (max-width:820px){section.s{padding:96px 0}.s-head{grid-template-columns:1fr;gap:12px;margin-bottom:36px}}
 
     /* grid children may shrink below their content, so a long code line scrolls inside its box instead of widening the page */
     .hero-grid>*,.mission>*,.proof-grid>*,.stack-grid>*,.closing-grid>*{min-width:0}
+    /* a soft halo in the page colour behind every line of text, so the dots never cut through a letter */
+    h1,h2,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.closing h2{text-shadow:0 0 4px var(--bg),0 0 12px var(--bg),0 0 22px var(--bg)}
     .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
     .reveal.in{opacity:1;transform:none}
     .no-js .reveal{opacity:1;transform:none}
@@ -153,7 +155,7 @@
     .card:hover::before{opacity:1}
     .card h3{font:500 13px var(--mono);margin:0 0 40px;color:var(--ink);display:flex;justify-content:space-between}
     .card h3 span{color:var(--dim);font-weight:400}
-    .big{font:300 clamp(48px,6vw,76px)/1 var(--mono);letter-spacing:-.04em;color:var(--ink)}
+    .big{font:400 clamp(48px,6vw,76px)/1 var(--mono);letter-spacing:-.04em;color:var(--ink)}
     .big small{font-size:.32em;letter-spacing:0;color:var(--dim);margin-left:6px}
     .card p{margin:14px 0 26px;color:var(--dim);font-size:15px;min-height:4.9em}
     .card p b{color:var(--ink);font-weight:500}
@@ -185,7 +187,7 @@
     .term-in input{flex:1;min-width:0;background:none;border:0;outline:0;padding:0;font:inherit;color:var(--ink);caret-color:var(--accent)}
     .stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
     .stat{padding:20px 18px;background:color-mix(in srgb,var(--bg) 86%,transparent)}
-    .stat b{display:block;font:300 34px/1.1 var(--mono);letter-spacing:-.03em;color:var(--ink)}
+    .stat b{display:block;font:400 34px/1.1 var(--mono);letter-spacing:-.03em;color:var(--ink)}
     .stat span{font:400 12px var(--mono);color:var(--dim)}
     .stats-note{margin:14px 0 0;font:400 12px/1.7 var(--mono);color:var(--dim)}
     @media (max-width:900px){.proof-grid{grid-template-columns:1fr}.term-body{height:380px;font-size:12.5px}}
@@ -315,7 +317,7 @@
         <span>python · sqlite · no frontend build</span>
         <span>source-available</span>
         <span>built in Egypt</span>
-        <span class="hint" aria-hidden="true">⚡ click the sky</span>
+        <span class="hint" aria-hidden="true">⚡ click anywhere empty</span>
         <a class="scroll" href="#mission">scroll</a>
       </div>
     </div>
@@ -780,7 +782,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
   function build(){
     small=innerWidth<760;
-    W=innerWidth;H=innerHeight;
+    W=innerWidth;H=Math.max(innerHeight,cv.getBoundingClientRect().height||0);BW=W;
     /* on a 1x PC screen, sub-pixel dots crawl and flicker as they move: draw at 1.5x at least, within about 4.5 million pixels */
     DPR=Math.max(1,Math.min(small?2:1.75,Math.max(devicePixelRatio||1,1.5),Math.sqrt(4.5e6/(W*H))));
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
@@ -793,11 +795,11 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   }
 
   /* the terrain stays put behind the page as you scroll: full in the hero and the closing, faint in between */
-  function anchor(){return {top:0,hz:H*(small?.13:.17),fa:H*(small?.27:.33),fb:H*(small?.4:.5)}}
+  function anchor(){return {top:0,hz:H*(small?.1:.17),fa:H*(small?.2:.33),fb:H*(small?.3:.5)}}
   var TA=1;
   function targetTA(){
     var hr=hero.getBoundingClientRect(),cr=closing.getBoundingClientRect();
-    return Math.max(.1,Math.min(1,Math.max(0,hr.bottom/H-.25)/.5),cr.top<H*.9?1:0);
+    return Math.max(.16,Math.min(1,Math.max(0,hr.bottom/H-.25)/.5),cr.top<H*.9?1:0);
   }
 
   /* ---- current in the grid: short pulses that run along the dots and turn at right angles ---- */
@@ -913,21 +915,21 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     var t=(now-t0)/1000,dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;
     ctx.clearRect(0,0,W,H);
     var a=anchor(),tt=targetTA();
-    TA=reduce?tt:TA+(tt-TA)*(1-Math.exp(-dt*5));
+    TA=reduce?tt:TA+(tt-TA)*(1-Math.exp(-dt*1.6));
     if(!reduce){
       intro=Math.min(1,intro+dt*.7);
       if(t>nextPulse){if(PULSES.length<5)pulse(rnd()*W,rnd()*H,false);nextPulse=t+.9+rnd()*1.1}
-      if(t>nextStrike&&TA>.6){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
+      if(t>nextStrike){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
       drawPulses(dt);
     }
     drawTerrain(a,reduce?4:t);
     if(!reduce)drawBolts(dt);
   }
 
-  /* click the sky for a strike */
-  if(!reduce)[hero,closing].forEach(function(sec){
+  /* click any empty space for a strike */
+  if(!reduce)[$('#main')].forEach(function(sec){
     sec.addEventListener('click',function(e){
-      if(e.target.closest('a,button,input,h1,h2,p,.meta')||String(getSelection()))return;
+      if(e.target.closest('a,button,input,label,h1,h2,h3,p,li,pre,code,.meta,.term,.card,.stats,.steps,.clone,.tags')||String(getSelection()))return;
       var a=anchor();strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa));nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
     });
   });
@@ -935,7 +937,9 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   var raf=0;
   function loop(now){frame(now);raf=requestAnimationFrame(loop)}
   function start(){readColors();build();if(reduce){frame(performance.now())}else{cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
-  var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(start,150)});
+  /* rebuild only when the width changes: on phones the address bar showing or hiding changes the height while you scroll,
+     and rebuilding then threw new dots on screen mid-scroll */
+  var rt,BW=0;addEventListener('resize',function(){if(innerWidth===BW)return;clearTimeout(rt);rt=setTimeout(start,150)});
   if(reduce)addEventListener('scroll',function(){requestAnimationFrame(frame)},{passive:true});
   start();
 })();
