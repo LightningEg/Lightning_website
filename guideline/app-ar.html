@@ -23,7 +23,7 @@
   --wide:linear-gradient(100deg,#E0F5E9 0%,#E3F4EF 26%,#F7FCF9 52%,#FFF 72%);
   --vivid:linear-gradient(135deg,#00995C 0%,#0B6DD6 100%);
   --paper:#F8FCFA;--white:#FFFFFF;--rowfield:#F2F8F6;
-  --line:#DDE9E6;--line-ctl:#7E96A0;--track:#E6EFEC;--neutral:#C5D3D0;--field:#EEF6F3;--field-focus:#E6F2EC;
+  --line:#DDE9E6;--line-ctl:#7E96A0;--track:#E6EFEC;--neutral:#C5D3D0;--field:#E8F1FA;--field-focus:#E3EEF9;
   --shadow:0 14px 34px -24px rgba(10,36,66,.42);
   --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --body:Manrope,"Segoe UI",system-ui,sans-serif;
@@ -676,6 +676,11 @@ html[dir=rtl] svg{direction:ltr}
         <div class="phx-end"><span class="period" role="group" aria-label="Period"><span>كل الوقت</span><span>من بداية السنة</span><span class="on step"><i>‹</i><b>⁦‭٢٠٢٦-٠٩‬⁩</b><i>›</i></span><span>مخصص</span></span><span class="btn secondary sm">استكمال الشهر</span></div></div>
       <p class="spec">العنوان 28px وتحته التواريخ اللي الأرقام مبنية عليها. في آخر السطر (الشمال) اختيار الفترة وبعده إجراء واحد للصفحة، وخط رفيع بالأسفل.</p>
     </div></div>
+    <div class="hs"><b>عنوان الحساب</b><div>
+      <div class="phx"><div style="display:flex;gap:14px;align-items:center"><span style="display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--track);color:var(--ink2);font:700 15px var(--display)">CI</span><div><h3>CIB Payroll</h3><p class="phx-range">حساب بنكي · CIB · EGP</p></div></div>
+        <div class="phx-end"><span style="display:flex;gap:28px"><span style="display:flex;flex-direction:column;align-items:flex-end"><small style="font:600 13px var(--body);color:var(--muted)">الرصيد</small><b class="tab" style="font:800 28px var(--display);color:var(--ink)">138,500</b></span><span style="display:flex;flex-direction:column;align-items:flex-end"><small style="font:600 13px var(--body);color:var(--muted)">اللي بتملكه</small><b class="tab" style="font:800 28px var(--display);color:var(--ink)">120,000</b></span></span><span class="btn secondary sm">استورد كشف الحساب</span><span class="btn secondary sm" aria-label="إجراءات أكتر">⋯</span></div></div>
+      <p class="spec">مربع 40px (شعار البنك، وإلا حروفه الأولى) · العنوان 28px وتحته النوع والبنك والعملة · على اليمين: شريط الأرقام (تسمية Muted مقاس 13px فوق رقم Ink مقاس 28px بالجنيه الكامل؛ "اللي بتملكه" بس لو بيختلف)، وزر Secondary واحد، وبعده ⋯</p>
+    </div></div>
     <div class="hs"><b>عنوان القسم</b><div><div class="sec-line" style="margin:0"><h4>مركزك المالي</h4><span>كما في ⁦‭٢٠٢٦-٠٩-٣٠‬⁩</span></div><p class="spec">العنوان 20px يمين والتاريخ شمال، وتحته خط رفيع.</p></div></div>
     <div class="hs"><b>عنوان البطاقة</b><div><div class="chead" style="margin:0"><div><h4>راحت فين؟</h4><p>حسب الفئة · ⁦‭٢٠٢٦-٠٩‬⁩</p></div><button class="quiet">عرض الكل</button></div><p class="spec">العنوان 17px وتحته سطر 13px واحد وإجراء هادي على الشمال، مع خط رفيع بالأسفل.</p></div></div>
     <div class="hs"><b>شريط التبويبات</b><div><div class="demo-row"><span class="seg"><span class="on">الملخص</span><span>الإنفاق</span><span>الصحة</span></span> <span class="ico2" title="Financial health limits" aria-label="Financial health limits"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></span></div><p class="spec">شريط اختيار واحد تحت رأس الصفحة. إعدادات التبويب خلف علامة الترس في آخر الشريط، من غير سطر وصف للتبويب.</p></div></div>
@@ -849,6 +854,7 @@ html[dir=rtl] svg{direction:ltr}
   <ul class="short">
     <li>حقل بخلفية ملونة خفيفة، من غير إطار، ومش أبيض. وقت التركيز تبقى الخلفية أغمق بإطار أخضر. الخطأ يظهر بخلفية وردية وسطر يوضح المطلوب.</li>
     <li>اختيار بياناتك يكون بالكتابة والاختيار، مش بقائمة منسدلة. حقول صفوف السجل 30px؛ يظهر زر الحفظ بس، وباقي الخيارات بزر الفأرة اليمين.</li>
+    <li>الحقول القصيرة بتتجاور، لحد أربعة في الصف؛ والحقل بياخد الصف كله للنص الطويل بس (الملاحظات). على الموبايل: عمود واحد. منتقي التاريخ: الشهر بيفتح الشهور، والسنة بتفتح السنين.</li>
   </ul>
   <h3 class="sub"><span class="subnum">A10.4</span>التبويبات الفرعية</h3>
   <div class="demo-row"><span class="seg"><span class="on">الخطة</span><span>المتكرر</span><span>القروض</span><span>المبالغ المحجوزة</span></span></div>
