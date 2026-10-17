@@ -1,58 +1,55 @@
 <!doctype html>
-<!-- For Geeks · page 2.0 · 2026-10-17 · rebuilt for readability: guideline type scale (B04), AA contrast on every palette, one calm background -->
+<!-- For Geeks · page 3.0 · 2026-10-17 · deliberately its own design for coders: mono-first, not the consumer brand look. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#071522">
-  <meta name="description" content="How Lightning is built, why the source is public, and how to run it, read it and help build it.">
+  <meta name="description" content="Lightning is efficient, insightful and secure. Read how it is built, trace a real figure, and see how to run it and help build it.">
   <title>For Geeks · Lightning</title>
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
   <script>try{var p=localStorage.getItem('lightning-geeks-palette');if(['meadow','volt','amber','blue','rose','minimal'].indexOf(p)>-1)document.documentElement.dataset.palette=p;}catch(_){}</script>
   <style>
     /* ---------- palettes: every text pair checked at 4.5:1 or better ---------- */
-    :root{color-scheme:dark;--bg:#071522;--panel:#0c1f2e;--well:#0a1a27;--ink:#ecf5f3;--muted:#b4c6c9;--subtle:#8ca4ad;--edge:rgba(186,231,220,.24);--edge-strong:rgba(186,231,220,.5);--accent:#7be6b5;--accent-2:#88cffa;--on-accent:#06201b;--glow:rgba(123,230,181,.55);--grid:rgba(133,221,194,.34);--head:'Bricolage Grotesque','Segoe UI',sans-serif;--body:Manrope,'Segoe UI',sans-serif;--mono:'DM Mono',ui-monospace,Consolas,monospace}
-    :root[data-palette="volt"]{--bg:#0c0d0a;--panel:#141510;--well:#10110d;--ink:#f2f3ea;--muted:#bcbfae;--subtle:#939785;--edge:rgba(226,240,170,.22);--edge-strong:rgba(226,240,170,.5);--accent:#d9ff3f;--accent-2:#8cf0c8;--on-accent:#151800;--glow:rgba(217,255,63,.5);--grid:rgba(217,255,63,.26)}
-    :root[data-palette="amber"]{--bg:#120d05;--panel:#1b140a;--well:#161008;--ink:#ffe9c4;--muted:#d2b88c;--subtle:#a38d66;--edge:rgba(255,200,120,.24);--edge-strong:rgba(255,200,120,.5);--accent:#ffb000;--accent-2:#ff9a52;--on-accent:#1d1200;--glow:rgba(255,176,0,.5);--grid:rgba(255,176,0,.28)}
-    :root[data-palette="blue"]{--bg:#071324;--panel:#0b1c33;--well:#09172b;--ink:#eef6ff;--muted:#b0c7de;--subtle:#86a3c1;--edge:rgba(153,210,252,.26);--edge-strong:rgba(153,210,252,.5);--accent:#80cfff;--accent-2:#b0eaff;--on-accent:#061d30;--glow:rgba(128,207,255,.55);--grid:rgba(129,202,253,.32)}
-    :root[data-palette="rose"]{--bg:#160d15;--panel:#20121e;--well:#1b101a;--ink:#fff1f3;--muted:#d6b4c3;--subtle:#ae8a9c;--edge:rgba(255,192,218,.24);--edge-strong:rgba(255,192,218,.5);--accent:#ffa0c3;--accent-2:#ffcbdc;--on-accent:#2b0b1c;--glow:rgba(255,160,195,.5);--grid:rgba(248,153,191,.3)}
-    :root[data-palette="minimal"]{color-scheme:light;--bg:#f4f3ed;--panel:#fbfaf6;--well:#ecebe3;--ink:#151d1b;--muted:#44544f;--subtle:#5a6863;--edge:rgba(34,53,46,.26);--edge-strong:rgba(34,53,46,.6);--accent:#1f5f46;--accent-2:#2a4d8f;--on-accent:#ffffff;--glow:rgba(31,95,70,.35);--grid:rgba(42,60,54,.3)}
+    :root{color-scheme:dark;--bg:#071522;--panel:#0c1f2e;--well:#0a1a27;--ink:#ecf5f3;--muted:#b4c6c9;--subtle:#8ca4ad;--edge:rgba(186,231,220,.24);--edge-strong:rgba(186,231,220,.5);--accent:#7be6b5;--accent-2:#88cffa;--on-accent:#06201b;--glow:rgba(123,230,181,.55);--head:'JetBrains Mono',ui-monospace,Consolas,monospace;--body:'IBM Plex Sans','Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
+    :root[data-palette="volt"]{--bg:#0c0d0a;--panel:#141510;--well:#10110d;--ink:#f2f3ea;--muted:#bcbfae;--subtle:#939785;--edge:rgba(226,240,170,.22);--edge-strong:rgba(226,240,170,.5);--accent:#d9ff3f;--accent-2:#8cf0c8;--on-accent:#151800;--glow:rgba(217,255,63,.5)}
+    :root[data-palette="amber"]{--bg:#120d05;--panel:#1b140a;--well:#161008;--ink:#ffe9c4;--muted:#d2b88c;--subtle:#a38d66;--edge:rgba(255,200,120,.24);--edge-strong:rgba(255,200,120,.5);--accent:#ffb000;--accent-2:#ff9a52;--on-accent:#1d1200;--glow:rgba(255,176,0,.5)}
+    :root[data-palette="blue"]{--bg:#071324;--panel:#0b1c33;--well:#09172b;--ink:#eef6ff;--muted:#b0c7de;--subtle:#86a3c1;--edge:rgba(153,210,252,.26);--edge-strong:rgba(153,210,252,.5);--accent:#80cfff;--accent-2:#b0eaff;--on-accent:#061d30;--glow:rgba(128,207,255,.55)}
+    :root[data-palette="rose"]{--bg:#160d15;--panel:#20121e;--well:#1b101a;--ink:#fff1f3;--muted:#d6b4c3;--subtle:#ae8a9c;--edge:rgba(255,192,218,.24);--edge-strong:rgba(255,192,218,.5);--accent:#ffa0c3;--accent-2:#ffcbdc;--on-accent:#2b0b1c;--glow:rgba(255,160,195,.5)}
+    :root[data-palette="minimal"]{color-scheme:light;--bg:#f4f3ed;--panel:#fbfaf6;--well:#ecebe3;--ink:#151d1b;--muted:#44544f;--subtle:#5a6863;--edge:rgba(34,53,46,.26);--edge-strong:rgba(34,53,46,.6);--accent:#1f5f46;--accent-2:#2a4d8f;--on-accent:#ffffff;--glow:rgba(31,95,70,.35)}
 
     /* ---------- base ---------- */
     *,*::before,*::after{box-sizing:border-box}
     html{scroll-behavior:smooth;scroll-padding-top:132px;-webkit-text-size-adjust:100%}
     body{margin:0;background:var(--bg);color:var(--ink);font:500 18px/1.65 var(--body);-webkit-font-smoothing:antialiased;transition:background-color .4s,color .4s}
-    a{color:inherit}button,select{font:inherit;color:inherit}
+    a{color:inherit}button,select,input{font:inherit;color:inherit}
     :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
     ::selection{background:var(--accent);color:var(--on-accent)}
     .skip{position:absolute;left:16px;top:-80px;z-index:100;padding:10px 14px;background:var(--accent);color:var(--on-accent);font:600 14px var(--body)}.skip:focus{top:10px}
     .frame{width:min(1120px,calc(100% - 48px));margin-inline:auto}
     code,pre,.mono{font-family:var(--mono)}
     code{font-size:.88em;padding:1px 6px;background:var(--well);border:1px solid var(--edge)}
+    kbd{font:500 12px var(--mono);padding:2px 6px;border:1px solid var(--edge-strong);background:var(--well);color:var(--muted)}
 
-    /* ---------- background: one calm layer, fixed, never stretched ---------- */
-    .bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-    .bg .dots{position:absolute;background-image:radial-gradient(circle,var(--grid) 1px,transparent 1.4px);background-size:22px 22px;opacity:.5;-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%)}
-    .bg .d1{width:46vw;height:46vh;right:-6vw;top:8vh}.bg .d2{width:38vw;height:40vh;left:-8vw;bottom:6vh;opacity:.38}
-    .bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 46% 30% at 82% 10%,var(--glow),transparent 72%);opacity:.14}
-    .bg svg{position:absolute;inset:0;width:100%;height:100%}
-    .trace{fill:none;stroke:var(--accent);stroke-width:1.3;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;opacity:.2}
-    .trace.branch{opacity:.12}
-    .pulse{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:55 1000;stroke-dashoffset:55;opacity:.55;filter:drop-shadow(0 0 4px var(--glow));animation:travel 13s linear infinite}
-    @keyframes travel{0%{stroke-dashoffset:55}38%{stroke-dashoffset:-1000}100%{stroke-dashoffset:-1000}}
+    /* ---------- background: a ledger grid that answers you ---------- */
+    #grid{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block}
+    .glow{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 50% 32% at 80% 6%,var(--glow),transparent 72%);opacity:.12}
+    h1.struck{animation:struck 1.4s ease-out}
+    @keyframes struck{0%{text-shadow:0 0 0 transparent}18%{text-shadow:0 0 38px var(--glow),0 0 8px var(--glow)}100%{text-shadow:0 0 0 transparent}}
 
     /* ---------- header ---------- */
     .bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--edge)}
     .bar-in{height:64px;display:flex;align-items:center;gap:16px}
-    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 20px/1 var(--head);letter-spacing:-.02em;white-space:nowrap}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 17px/1 var(--head);letter-spacing:-.04em;white-space:nowrap}
     .logo img{width:24px;height:24px}
     .logo .tag{font:500 13px/1 var(--mono);color:var(--subtle);letter-spacing:0;padding-left:10px;border-left:1px solid var(--edge)}
-    .bar-tools{margin-left:auto;display:flex;align-items:center;gap:14px}
-    .bar-link{font:500 13px/1 var(--mono);color:var(--muted);text-decoration:none;padding:10px 0}.bar-link:hover{color:var(--accent)}
+    .bar-tools{margin-left:auto;display:flex;align-items:center;gap:12px}
+    .jump{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:6px 12px;background:var(--well);border:1px solid var(--edge-strong);font:500 13px var(--mono);color:var(--muted);cursor:pointer}
+    .jump:hover{color:var(--accent);border-color:var(--accent)}
     .pal{display:flex;align-items:center;gap:8px;font:500 13px var(--mono);color:var(--subtle)}
     .pal select{appearance:none;-webkit-appearance:none;min-height:40px;padding:8px 32px 8px 12px;background:var(--well);color:var(--ink);border:1px solid var(--edge-strong);border-radius:0;font:500 13px var(--mono);cursor:pointer}
     .pal select option{background:var(--panel);color:var(--ink)}
@@ -60,23 +57,50 @@
     .swatches{display:flex;gap:4px}.swatches i{width:10px;height:10px;background:var(--accent);display:block}.swatches i+i{background:var(--accent-2)}.swatches i+i+i{background:var(--panel);outline:1px solid var(--edge-strong);outline-offset:-1px}
 
     /* ---------- hero ---------- */
-    .hero{position:relative;padding:72px 0 56px}
-    .hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center}
-    .kicker{font:500 13px/1.5 var(--mono);color:var(--accent);margin:0 0 20px}
-    .kicker .sep{color:var(--subtle);margin:0 8px}
-    h1{font:800 clamp(42px,6.4vw,78px)/1.05 var(--head);letter-spacing:-.02em;margin:0 0 24px;text-wrap:balance}
-    h1 em{font-style:normal;color:var(--accent)}
-    .lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:60ch;margin:0}
+    .hero{position:relative;padding:72px 0 48px}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
+    .kicker{font:500 13px/1.5 var(--mono);color:var(--accent);margin:0 0 20px}.kicker .sep{color:var(--subtle);margin:0 8px}
+    h1{font:800 clamp(36px,5.6vw,70px)/1.06 var(--head);letter-spacing:-.045em;margin:0 0 24px}
+    h1 span{display:block}h1 span:last-child{color:var(--accent)}
+    .lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:56ch;margin:0}
     .lead strong{color:var(--ink);font-weight:700}
     .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
     .btn{display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:12px 20px;border:1px solid var(--edge-strong);background:transparent;text-decoration:none;font:500 14px/1.3 var(--mono);cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s,color .12s}
     .btn:hover{border-color:var(--accent);color:var(--accent);box-shadow:4px 4px 0 var(--edge);transform:translate(-2px,-2px)}
-    .btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:500}
+    .btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
     .btn.main:hover{color:var(--on-accent);box-shadow:4px 4px 0 var(--glow)}
-    .bolt{position:relative;aspect-ratio:1/1.05;width:100%;max-width:440px;justify-self:end}
-    .bolt canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-    /* ---------- terminal block ---------- */
+    /* live ledger replay */
+    .ledger{border:1px solid var(--edge-strong);background:var(--panel);box-shadow:6px 6px 0 var(--edge);max-width:470px;justify-self:end;width:100%}
+    .ledger-top{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--edge);font:500 12px var(--mono);color:var(--subtle)}
+    .ledger-top .dot{width:7px;height:7px;background:var(--accent);box-shadow:0 0 8px var(--glow);animation:beat 2.2s ease-in-out infinite}
+    @keyframes beat{50%{opacity:.35}}
+    .ledger-top span:last-child{margin-left:auto}
+    .fig{padding:18px 18px 12px;border-bottom:1px solid var(--edge)}
+    .fig small{display:block;font:500 12px var(--mono);color:var(--subtle)}
+    .fig .num{display:flex;align-items:baseline;gap:10px;margin-top:4px;font:800 40px/1.1 var(--head);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+    .fig .num i{font:500 14px var(--mono);font-style:normal;color:var(--subtle)}
+    .fig .delta{margin-left:auto;font:500 14px var(--mono);color:var(--accent);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}.fig .delta.show{opacity:1;transform:none}.fig .delta.neg{color:var(--accent-2)}
+    .rows{list-style:none;margin:0;padding:0;min-height:258px}
+    .rows li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 18px;border-bottom:1px solid var(--edge);animation:drop .45s cubic-bezier(.2,.7,.2,1) both}
+    .rows li.bad{background:var(--well)}
+    .rows b{font:700 15px/1.3 var(--body);color:var(--ink)}.rows .am{font:500 14px/1.4 var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+    .rows small{font:400 12px/1.4 var(--mono);color:var(--subtle)}.rows .st{font:500 12px/1.4 var(--mono);text-align:right;color:var(--accent)}.rows li.bad .st{color:var(--accent-2)}
+    @keyframes drop{from{opacity:0;transform:translateY(-14px);background:var(--glow)}to{opacity:1;transform:none}}
+    .ledger-foot{padding:11px 18px;font:500 12px/1.5 var(--mono);color:var(--subtle)}.ledger-foot b{color:var(--accent);font-weight:500}
+    .ledger-foot .ill{display:block;margin-top:2px;color:var(--subtle)}
+
+    /* three pillars */
+    .pillars{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--edge-strong);background:var(--panel);margin-top:56px;box-shadow:6px 6px 0 var(--edge)}
+    .pillar{display:block;padding:26px 26px 24px;text-decoration:none;border-left:1px solid var(--edge);transition:background-color .15s}.pillar:first-child{border-left:0}
+    .pillar:hover{background:var(--well)}
+    .pillar .no{font:500 13px var(--mono);color:var(--accent)}
+    .pillar b{display:block;margin:10px 0 2px;font:800 clamp(28px,3.4vw,42px)/1.1 var(--head);letter-spacing:-.05em}
+    .pillar .u{font:500 14px var(--mono);color:var(--subtle)}
+    .pillar p{margin:14px 0 14px;font-size:16px;line-height:1.55;color:var(--muted)}
+    .pillar .go{font:500 13px var(--mono);color:var(--accent)}.pillar:hover .go{text-decoration:underline;text-underline-offset:4px}
+
+    /* terminal */
     .term{border:1px solid var(--edge-strong);background:var(--panel);box-shadow:6px 6px 0 var(--edge)}
     .term-top{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--edge);font:500 12px var(--mono);color:var(--subtle)}
     .term-top i{width:9px;height:9px;border:1px solid var(--edge-strong);display:block}.term-top span{margin-left:auto}
@@ -84,32 +108,41 @@
     .term-body .p{color:var(--accent)}.term-body .k{color:var(--subtle);display:inline-block;min-width:11ch}.term-body .v{color:var(--ink)}
     .caret{display:inline-block;width:.6em;height:1.1em;background:var(--accent);vertical-align:text-bottom;animation:blink 1.1s steps(1) 8}
     @keyframes blink{50%{opacity:0}}
-    .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--edge);margin-top:32px;background:var(--panel)}
-    .fact{padding:18px 20px;border-left:1px solid var(--edge)}.fact:first-child{border-left:0}
-    .fact b{display:block;font:800 22px/1.2 var(--head);letter-spacing:-.01em}.fact span{font:500 13px/1.5 var(--mono);color:var(--subtle)}
 
-    /* ---------- docs shell ---------- */
-    .shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:56px;padding-top:24px;align-items:start}
+    /* ---------- docs shell and index rail ---------- */
+    .shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:56px;padding-top:48px;align-items:start}
     .toc{position:sticky;top:96px;font:500 13px/1.4 var(--mono)}
     .toc h2{font:500 12px/1 var(--mono);color:var(--subtle);margin:0 0 14px;letter-spacing:0}
-    .toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--edge)}
-    .toc a{display:flex;gap:10px;padding:8px 0 8px 14px;margin-left:-1px;border-left:2px solid transparent;color:var(--muted);text-decoration:none}
+    .rail{position:relative}
+    .rail ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--edge);position:relative}
+    .wire{position:absolute;left:-1px;top:0;width:2px;height:0;background:var(--accent);box-shadow:0 0 10px var(--glow);transition:height .25s ease-out}
+    .toc li{position:relative}
+    .toc a{display:flex;gap:10px;padding:8px 0 8px 18px;color:var(--muted);text-decoration:none}
+    .toc a::before{content:"";position:absolute;left:-4px;top:50%;width:7px;height:7px;background:var(--bg);border:1px solid var(--edge-strong);transform:translateY(-50%);transition:background-color .2s,border-color .2s}
     .toc a b{font-weight:500;color:var(--subtle)}
-    .toc a:hover{color:var(--ink)}.toc a[aria-current="true"]{color:var(--accent);border-left-color:var(--accent)}.toc a[aria-current="true"] b{color:var(--accent)}
-    .toc .ver{margin-top:20px;padding-left:14px;font-size:12px;color:var(--subtle);line-height:1.7}
-    .doc>section{padding:64px 0 8px;border-top:1px solid var(--edge)}.doc>section:first-child{border-top:0;padding-top:24px}
+    .toc a:hover{color:var(--ink)}
+    .toc a[data-pass]::before{background:var(--accent);border-color:var(--accent)}
+    .toc a.pop::before{animation:pop .7s ease-out}
+    @keyframes pop{0%{box-shadow:0 0 0 0 var(--glow)}100%{box-shadow:0 0 0 12px transparent}}
+    .toc a[aria-current="true"]{color:var(--accent)}.toc a[aria-current="true"] b{color:var(--accent)}
+    .toc .ver{margin-top:20px;font-size:12px;color:var(--subtle);line-height:1.7}
+    .prog{display:none}
+    .doc>section{padding:72px 0 8px;border-top:1px solid var(--edge)}.doc>section:first-child{border-top:0;padding-top:24px}
     .label{font:500 13px/1.5 var(--mono);color:var(--accent);margin:0 0 12px}
-    h2{font:800 clamp(30px,4vw,48px)/1.1 var(--head);letter-spacing:-.02em;margin:0 0 20px;text-wrap:balance}
-    h3{font:800 22px/1.25 var(--head);letter-spacing:-.01em;margin:40px 0 12px}
+    h2{font:800 clamp(26px,3.4vw,40px)/1.15 var(--head);letter-spacing:-.04em;margin:0 0 20px;text-wrap:balance}
+    h2::before{content:"## ";color:var(--accent)}
+    h3::before{content:"### ";color:var(--subtle);font-weight:500}
+    h3{font:700 19px/1.3 var(--head);letter-spacing:-.03em;margin:44px 0 12px}
     h3 .n{font:500 13px var(--mono);color:var(--accent);margin-right:10px;letter-spacing:0}
     .doc p{margin:0 0 18px;max-width:68ch;color:var(--muted)}.doc p strong,.doc li strong{color:var(--ink);font-weight:700}
     .doc a.in{color:var(--accent);text-underline-offset:4px}.doc a.in:hover{text-decoration-thickness:2px}
+    .claim{font:700 clamp(18px,2.1vw,23px)/1.4 var(--head);letter-spacing:-.03em;color:var(--ink)!important;max-width:40ch!important;margin:0 0 20px!important}
 
-    /* lists and tables */
+    /* lists, tables, chips */
     .rules{list-style:none;margin:24px 0 0;padding:0;border:1px solid var(--edge);background:var(--panel)}
-    .rules li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 0;padding:18px 20px 18px 0;border-top:1px solid var(--edge)}.rules li:first-child{border-top:0}
+    .rules li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:4px 0;padding:18px 20px 18px 0;border-top:1px solid var(--edge)}.rules li:first-child{border-top:0}
     .rules .no{font:500 13px/2 var(--mono);color:var(--accent);padding-left:20px}
-    .rules h4{font:800 18px/1.3 var(--head);margin:0}.rules p{margin:4px 0 0;font-size:16px;line-height:1.6}
+    .rules h4{font:700 16px/1.4 var(--head);letter-spacing:-.02em;margin:0}.rules p{margin:4px 0 0;font-size:16px;line-height:1.6}
     .rules .by{display:inline-block;margin-top:8px;font:500 12px/1.4 var(--mono);color:var(--subtle)}.rules .by::before{content:"backed by ";color:var(--subtle)}.rules .by code{color:var(--ink)}
     .tbl{width:100%;border-collapse:collapse;font-size:16px;margin:20px 0 8px;border:1px solid var(--edge);background:var(--panel)}
     .tbl th,.tbl td{text-align:left;vertical-align:top;padding:12px 16px;border-top:1px solid var(--edge)}.tbl tr:first-child th{border-top:0}
@@ -118,6 +151,61 @@
     .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -2px}
     .chip{display:inline-block;font:500 12px/1 var(--mono);padding:5px 8px;border:1px solid var(--edge-strong);color:var(--ink);white-space:nowrap}
     .chip.ok::before{content:"✓ ";color:var(--accent)}.chip.part::before{content:"◐ ";color:var(--accent-2)}.chip.plan::before{content:"○ ";color:var(--subtle)}
+
+    /* widget frame */
+    .w{margin:24px 0 0;border:1px solid var(--edge-strong);background:var(--panel);box-shadow:6px 6px 0 var(--edge)}
+    .w-top{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-bottom:1px solid var(--edge)}
+    .w-top button,.w-btn{min-height:40px;padding:8px 14px;background:transparent;border:1px solid var(--edge-strong);font:500 13px var(--mono);color:var(--muted);cursor:pointer}
+    .w-top button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+    .w-top button:not([aria-pressed="true"]):hover,.w-btn:hover{color:var(--accent);border-color:var(--accent)}
+    .w-body{padding:18px 18px 20px}
+    .w-note{padding:12px 16px;border-top:1px solid var(--edge);font:400 12px/1.6 var(--mono);color:var(--subtle)}
+
+    /* monthly clock */
+    .clock{display:flex;gap:4px;margin:0}
+    .seg{position:relative;min-width:0}.seg .bx{position:relative;height:56px;border:1px solid var(--edge-strong);background:var(--well);overflow:hidden}
+    .seg .bx i{position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left}
+    .seg .bx b{position:absolute;left:12px;top:50%;transform:translateY(-50%);font:500 14px var(--mono);color:var(--ink);mix-blend-mode:normal;z-index:1}
+    .seg:nth-child(2) .bx i{background:var(--accent-2)}
+    .seg:nth-child(3) .bx i{background:var(--accent)}
+    .go .seg .bx i{transform:scaleX(1);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+    .go .seg:nth-child(2) .bx i{transition-delay:.7s}.go .seg:nth-child(3) .bx i{transition-delay:1.3s}
+    .seg .bx b{color:var(--ink)}.go .seg .bx b{color:var(--on-accent);transition:color .2s .35s}.go .seg:nth-child(2) .bx b{transition-delay:1s}.go .seg:nth-child(3) .bx b{transition-delay:1.6s}
+    .seg small{display:block;margin-top:8px;font:500 12px/1.4 var(--mono);color:var(--muted)}
+    .clock-sum{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font:500 13px var(--mono);color:var(--subtle)}.clock-sum b{color:var(--accent);font-weight:500}
+
+    /* type-less entry */
+    .qe{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .qe label{display:block;font:500 12px var(--mono);color:var(--subtle);margin-bottom:8px}
+    .qe input{width:100%;min-height:52px;padding:12px 14px;background:var(--well);border:1px solid var(--edge-strong);border-radius:0;font:500 18px var(--mono);color:var(--ink)}
+    .qe input::placeholder{color:var(--subtle)}
+    .qe .out{margin-top:10px;min-height:34px;font:800 24px/1.2 var(--head);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--accent)}.qe .out.err{font:500 14px var(--mono);color:var(--accent-2);padding-top:8px}.qe .out small{font:500 13px var(--mono);color:var(--subtle);margin-left:8px;letter-spacing:0}
+    .qe .try{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .qe .try button{min-height:36px;padding:6px 10px;background:transparent;border:1px solid var(--edge-strong);font:500 13px var(--mono);color:var(--muted);cursor:pointer}.qe .try button:hover{color:var(--accent);border-color:var(--accent)}
+
+    /* speed bars */
+    .speed{display:grid;gap:26px}
+    .sp h4{font:500 13px var(--mono);color:var(--ink);margin:0 0 10px}
+    .sp .b{display:flex;align-items:center;gap:12px;margin-top:8px;font:500 13px var(--mono);color:var(--muted)}
+    .sp .b i{display:block;height:16px;width:0;background:var(--subtle);transition:width 1s cubic-bezier(.2,.7,.2,1)}
+    .sp .b.after i{background:var(--accent);transition-delay:.5s}
+    .go .sp .b i{width:var(--w)}
+    .sp .b em{font-style:normal;white-space:nowrap}.sp .b.after em{color:var(--accent)}
+    .sp .b span{min-width:54px;color:var(--subtle)}
+
+    /* trace a number */
+    .tr-body{padding:6px 18px 20px}
+    .tree,.tree ul{list-style:none;margin:0;padding:0}
+    .tree ul{margin-left:12px;padding-left:20px;border-left:1px solid var(--edge-strong)}
+    .tree li{position:relative;padding-top:10px;animation:growin .45s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0ms)}
+    .tree ul>li::before{content:"";position:absolute;left:-20px;top:28px;width:16px;height:1px;background:var(--edge-strong)}
+    @keyframes growin{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+    .node{display:block;width:100%;text-align:left;padding:8px 12px;background:var(--well);border:1px solid var(--edge);cursor:pointer;color:var(--ink);font:700 16px/1.35 var(--body)}
+    .node:hover{border-color:var(--accent)}.node[aria-expanded="true"]{border-color:var(--accent)}
+    .node .eq{display:block;margin-top:2px;font:400 13px/1.5 var(--mono);color:var(--muted)}
+    .node .base{display:inline-block;margin-left:8px;font:500 11px var(--mono);color:var(--subtle);border:1px solid var(--edge);padding:1px 6px;vertical-align:2px}
+    .mean{margin:0;padding:10px 12px 4px;font-size:15px;line-height:1.55;color:var(--muted);max-width:62ch}
+    .mean[hidden]{display:none}
 
     /* tabs and stack */
     .tabs{margin:24px 0 0;border:1px solid var(--edge);background:var(--panel)}
@@ -132,29 +220,41 @@
     .stack div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:11px 16px;border-top:1px solid var(--edge)}.stack div:first-child{border-top:0}
     .stack b{font-weight:500;color:var(--accent)}.stack span{color:var(--muted)}
     .stack div:nth-child(2){padding-left:32px}.stack div:nth-child(3){padding-left:48px}.stack div:nth-child(4){padding-left:64px}.stack div:nth-child(5){padding-left:80px}.stack div:nth-child(6){padding-left:96px}.stack div:nth-child(7){padding-left:112px}
-    .stack div:nth-child(n+2) b{font-weight:500}
 
-    /* code blocks */
+    /* code */
     pre.code{position:relative;margin:20px 0;padding:18px 20px;background:var(--well);border:1px solid var(--edge-strong);overflow-x:auto;font:400 14px/1.75 var(--mono);color:var(--ink);box-shadow:5px 5px 0 var(--edge);-webkit-overflow-scrolling:touch}
-    pre.code .c{color:var(--subtle)}pre.code .p{color:var(--accent);user-select:none}
+    pre.code .c{color:var(--subtle)}pre.code .p{color:var(--accent);user-select:none}pre.code .kw{color:var(--accent)}pre.code .s{color:var(--accent-2)}pre.code .f{color:var(--ink);font-weight:500}
     .cp{position:absolute;right:8px;top:8px;min-height:32px;padding:4px 10px;background:var(--panel);border:1px solid var(--edge-strong);font:500 12px var(--mono);color:var(--muted);cursor:pointer}.cp:hover{color:var(--accent);border-color:var(--accent)}
     pre.code.has-cp{padding-top:44px}
-    pre.tree{margin:20px 0;padding:18px 20px;background:var(--panel);border:1px solid var(--edge);overflow-x:auto;font:400 14px/1.8 var(--mono);color:var(--muted)}
-    pre.tree b{color:var(--ink);font-weight:500}pre.tree .d{color:var(--subtle)}
+    .src{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 -8px;font:500 12px var(--mono);color:var(--subtle)}.src a{color:var(--accent);text-underline-offset:4px}
+    pre.tree-txt{margin:20px 0;padding:18px 20px;background:var(--panel);border:1px solid var(--edge);overflow-x:auto;font:400 14px/1.8 var(--mono);color:var(--muted)}
+    pre.tree-txt b{color:var(--ink);font-weight:500}pre.tree-txt .d{color:var(--subtle)}
 
-    /* posting lab */
-    .lab{margin:24px 0 0;border:1px solid var(--edge-strong);background:var(--panel);box-shadow:6px 6px 0 var(--edge)}
-    .lab-top{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-bottom:1px solid var(--edge)}
-    .lab-top button{min-height:40px;padding:8px 14px;background:transparent;border:1px solid var(--edge-strong);font:500 13px var(--mono);color:var(--muted);cursor:pointer}
-    .lab-top button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-    .lab-top button:not([aria-pressed="true"]):hover{color:var(--accent);border-color:var(--accent)}
-    .lab-body{padding:6px 16px 18px}.lab table{width:100%;border-collapse:collapse;font:400 14px/1.5 var(--mono)}
+    /* posting lab table */
+    .lab table{width:100%;border-collapse:collapse;font:400 14px/1.5 var(--mono)}
     .lab th{font-weight:500;color:var(--subtle);text-align:left;padding:12px 8px 8px 0;font-size:12px}.lab td{padding:9px 8px 9px 0;border-top:1px solid var(--edge);color:var(--ink)}.lab td.num{text-align:right;white-space:nowrap}.lab th.num{text-align:right}
     .lab .checks{margin:14px 0 0;padding:0;list-style:none;font:500 13px/1.7 var(--mono);color:var(--muted)}
     .lab .checks li::before{content:"✓ ";color:var(--accent)}.lab .checks li.bad::before{content:"✕ ";color:var(--accent-2);font-weight:700}.lab .checks li.bad{color:var(--ink)}
-    .lab .note{padding:12px 16px;border-top:1px solid var(--edge);font:400 12px/1.6 var(--mono);color:var(--subtle)}
 
-    /* callouts and steps */
+    /* screens grid */
+    .screens{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--edge);background:var(--panel);margin-top:20px}
+    .screens div{padding:18px 20px;border-top:1px solid var(--edge);border-left:1px solid var(--edge)}
+    .screens div:nth-child(-n+3){border-top:0}.screens div:nth-child(3n+1){border-left:0}
+    .screens b{display:block;font:500 12px var(--mono);color:var(--accent);margin-bottom:6px}.screens span{font:600 15px/1.45 var(--body);color:var(--ink)}
+
+    /* unlock sequence */
+    .ul{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,.9fr);gap:0;align-items:center;font:500 13px/1.4 var(--mono)}
+    .ul .st{padding:12px 12px;border:1px solid var(--edge);background:var(--well);color:var(--muted);transition:border-color .25s,color .25s,background-color .25s,box-shadow .25s;min-height:68px;display:flex;flex-direction:column;justify-content:center}
+    .ul .st small{display:block;margin-top:3px;font:400 11px/1.4 var(--mono);color:var(--subtle)}
+    .ul .ar{text-align:center;color:var(--subtle);transition:color .25s}
+    .ul .lit{border-color:var(--accent);color:var(--ink);box-shadow:0 0 0 3px var(--glow)}.ul .lit small{color:var(--muted)}
+    .ul .arl{color:var(--accent)}
+    .ul .keycell{grid-row:span 2;display:grid;gap:8px;align-content:center}
+    .ul .keycell .st{min-height:0}
+    .ul .shared{grid-column:5/6;grid-row:1/3}
+    .ul-row2{margin-top:14px}
+    .ulog{margin:16px 0 0;padding:12px 14px;background:var(--well);border:1px solid var(--edge);font:400 13px/1.6 var(--mono);color:var(--muted);min-height:48px}.ulog b{color:var(--accent);font-weight:500}
+
     .box{border:1px solid var(--edge-strong);background:var(--panel);padding:22px 24px;margin:24px 0;box-shadow:6px 6px 0 var(--edge)}
     .box h3{margin:0 0 10px;font-size:20px}.box p:last-child{margin-bottom:0}.box p{font-size:16px}
     .steps{list-style:none;counter-reset:s;margin:20px 0;padding:0;border-left:1px solid var(--edge-strong)}
@@ -166,78 +266,86 @@
     .links a{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 24px;gap:16px;padding:16px 18px;text-decoration:none;align-items:baseline}
     .links a b{font:500 14px var(--mono);color:var(--ink)}.links a span{font-size:16px;color:var(--muted)}.links a i{font-style:normal;color:var(--accent);text-align:right}
     .links a:hover{background:var(--well)}.links a:hover b{color:var(--accent)}
-
     .contact{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--edge-strong);background:var(--panel);margin:20px 0 0;box-shadow:6px 6px 0 var(--edge)}
     .contact a{display:block;padding:20px 22px;text-decoration:none;border-left:1px solid var(--edge)}.contact a:first-child{border-left:0}
     .contact b{display:block;font:500 15px/1.4 var(--mono);color:var(--accent);overflow-wrap:anywhere}.contact span{display:block;margin-top:6px;font-size:16px;line-height:1.55;color:var(--muted)}
     .contact a:hover{background:var(--well)}.contact a:hover b{text-decoration:underline;text-underline-offset:4px}
 
-    /* footer */
+    /* command palette */
+    .cmd{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:flex-start;padding:12vh 16px 16px}.cmd[hidden]{display:none}
+    .cmd-box{width:min(600px,100%);background:var(--panel);border:1px solid var(--edge-strong);box-shadow:8px 8px 0 var(--edge)}
+    .cmd input{width:100%;min-height:56px;padding:14px 18px;background:transparent;border:0;border-bottom:1px solid var(--edge-strong);font:500 16px var(--mono);color:var(--ink);outline:0}
+    .cmd input::placeholder{color:var(--subtle)}
+    .cmd ul{list-style:none;margin:0;padding:6px;max-height:min(52vh,420px);overflow-y:auto}
+    .cmd li button{display:flex;justify-content:space-between;gap:16px;width:100%;text-align:left;padding:11px 12px;background:transparent;border:0;cursor:pointer;font:500 14px var(--mono);color:var(--muted)}
+    .cmd li button small{color:var(--subtle);font:400 12px var(--mono);white-space:nowrap}
+    .cmd li button[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}.cmd li button[aria-selected="true"] small{color:var(--on-accent)}
+    .cmd-foot{padding:9px 14px;border-top:1px solid var(--edge);font:400 12px var(--mono);color:var(--subtle)}
+
     .foot{margin-top:96px;border-top:1px solid var(--edge-strong);background:var(--panel)}
     .foot-in{display:flex;flex-wrap:wrap;gap:24px 48px;justify-content:space-between;align-items:flex-start;padding:36px 0 44px}
-    .foot img{width:28px;height:28px}.foot .sign{font:800 22px/1.25 var(--head);letter-spacing:-.01em;margin:12px 0 0;max-width:20ch}
-    .foot p{font:500 13px/1.8 var(--mono);color:var(--subtle);margin:0}.foot a{color:var(--muted);text-underline-offset:4px}.foot a:hover{color:var(--accent)}
+    .foot img{width:28px;height:28px}.foot .sign{font:500 14px/1.6 var(--mono);margin:12px 0 0;max-width:34ch;color:var(--muted)}
+    .foot p{font:500 13px/1.8 var(--mono);color:var(--subtle);margin:0}.foot a,.foot button.lk{color:var(--muted);text-underline-offset:4px}.foot a:hover,.foot button.lk:hover{color:var(--accent)}
+    .foot button.lk{background:none;border:0;padding:0;font:inherit;text-decoration:underline;cursor:pointer}
 
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}.reveal.in{opacity:1;transform:none}
     .no-js .reveal{opacity:1;transform:none}
 
     /* ---------- tablet and phone ---------- */
     @media(max-width:1020px){
-      .shell{grid-template-columns:minmax(0,1fr);gap:0}
+      .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-top:32px}
       .toc{min-width:0;position:sticky;top:64px;z-index:20;margin:0 -24px;padding:0 24px;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--edge)}
-      .toc h2,.toc .ver{display:none}
-      .toc ol{display:flex;overflow-x:auto;border-left:0;gap:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.toc ol::-webkit-scrollbar{display:none}
-      .toc a{white-space:nowrap;border-left:0;border-bottom:2px solid transparent;margin:0;padding:14px 10px}
-      .toc a[aria-current="true"]{border-bottom-color:var(--accent)}
+      .toc h2,.toc .ver,.wire{display:none}
+      .rail ol{display:flex;overflow-x:auto;border-left:0;gap:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.rail ol::-webkit-scrollbar{display:none}
+      .toc a{white-space:nowrap;padding:14px 10px}.toc a::before{display:none}
+      .toc a[aria-current="true"]{box-shadow:inset 0 -2px 0 var(--accent)}
+      .prog{display:block;height:2px;width:var(--pct,0%);background:var(--accent);box-shadow:0 0 8px var(--glow);margin:0 -24px}
       html{scroll-padding-top:128px}
       .doc>section:first-child{padding-top:48px}
     }
-    @media(max-width:860px){
-      .hero{padding:48px 0 40px}.hero-grid{grid-template-columns:1fr;gap:28px}.bolt{justify-self:center;max-width:300px}
-      .facts{grid-template-columns:repeat(2,1fr)}.fact:nth-child(3){border-left:0}.fact:nth-child(n+3){border-top:1px solid var(--edge)}
-      .contact{grid-template-columns:1fr}.contact a{border-left:0;border-top:1px solid var(--edge)}.contact a:first-child{border-top:0}
+    @media(max-width:900px){
+      .hero{padding:48px 0 36px}.hero-grid{grid-template-columns:1fr;gap:36px}.ledger{justify-self:stretch;max-width:none}
+      .pillars{grid-template-columns:1fr;margin-top:40px}.pillar{border-left:0;border-top:1px solid var(--edge)}.pillar:first-child{border-top:0}
+      .screens{grid-template-columns:1fr 1fr}.screens div:nth-child(-n+3){border-top:1px solid var(--edge)}.screens div:nth-child(-n+2){border-top:0}.screens div:nth-child(3n+1){border-left:1px solid var(--edge)}.screens div:nth-child(2n+1){border-left:0}
       .links a{grid-template-columns:minmax(0,1fr) 20px}.links a span{grid-column:1/2;grid-row:2}.links a i{grid-row:1;grid-column:2}
+      .ul{grid-template-columns:1fr;gap:6px}.ul .ar{transform:rotate(90deg);min-height:14px;line-height:14px}.ul .shared,.ul .keycell{grid-column:auto;grid-row:auto}
+    }
+    @media(max-width:700px){
+      .qe{grid-template-columns:1fr}.contact{grid-template-columns:1fr}.contact a{border-left:0;border-top:1px solid var(--edge)}.contact a:first-child{border-top:0}
     }
     @media(max-width:600px){
-      body{font-size:16px}.frame{width:calc(100% - 32px)}.toc{margin:0 -16px;padding:0 16px}
-      h1{font-size:clamp(40px,11.5vw,46px)}.lead{font-size:16px}
-      .bar-in{height:60px;gap:10px}.logo{font-size:18px}.logo .tag{display:none}.bar-link{display:none}.pal .t{display:none}.swatches{display:none}.pal select{min-height:44px;min-width:104px}
+      body{font-size:16px}.frame{width:calc(100% - 32px)}.toc{margin:0 -16px;padding:0 16px;top:60px}.prog{margin:0 -16px}
+      h1{font-size:clamp(34px,10.5vw,46px)}.lead{font-size:16px}
+      .bar-in{height:60px;gap:10px}.logo{font-size:18px}.logo .tag{display:none}.pal .t,.swatches,.jump kbd{display:none}.pal select{min-height:44px;min-width:104px}.jump{min-height:44px}
       .actions .btn{width:100%;justify-content:space-between;min-height:52px}
-      .doc>section{padding-top:48px}h2{font-size:30px}h3{font-size:20px;margin-top:32px}
-      .term-body{font-size:13px;min-height:318px;padding:16px}.term-body .k{min-width:9ch}
-      .rules li{grid-template-columns:44px minmax(0,1fr);padding-right:14px}.rules .no{padding-left:14px}
+      .doc>section{padding-top:56px}h2{font-size:26px}h3{font-size:18px;margin-top:36px}
+      .term-body{font-size:13px;min-height:340px;padding:16px}.term-body .k{min-width:9ch}
+      .rules li{grid-template-columns:48px minmax(0,1fr);padding-right:14px}.rules .no{padding-left:14px}
       .tablist{flex-direction:column}.tab{border-left:0;border-top:1px solid var(--edge);min-height:48px}.tab:first-child{border-top:0}
-      .stack div{grid-template-columns:1fr;gap:2px}
-      .stack div:nth-child(n){padding-left:16px}
-      .toc{top:60px}
-      .box{padding:18px 16px}.tabpanel{padding:18px 16px}
-      pre.code,pre.tree{font-size:13px;padding:16px}pre.code.has-cp{padding-top:44px}
-      .lab-body{padding:4px 12px 14px}.lab table{font-size:13px}
-      .facts{margin-top:24px}.fact{padding:14px 14px}.fact b{font-size:19px}
-      .foot-in{padding:28px 0 36px}
+      .stack div{grid-template-columns:1fr;gap:2px}.stack div:nth-child(n){padding-left:16px}
+      .box{padding:18px 16px}.tabpanel{padding:18px 16px}.w-body,.tr-body{padding-left:14px;padding-right:14px}
+      pre.code,pre.tree-txt{font-size:13px;padding:16px}pre.code.has-cp{padding-top:44px}
+      .lab table{font-size:13px}.screens{grid-template-columns:1fr}.screens div{border-left:0!important;border-top:1px solid var(--edge)!important}.screens div:first-child{border-top:0!important}
+      .fig .num{font-size:36px}.rows{min-height:244px}.clock{flex-direction:column}.seg{flex:none!important}.seg .bx{height:46px}
+      .tree ul{margin-left:6px;padding-left:14px}.tree ul>li::before{left:-14px;width:12px}
+      .foot-in{padding:28px 0 36px}.cmd{padding-top:8vh}
     }
     @media(prefers-reduced-motion:reduce){
-      html{scroll-behavior:auto}body{transition:none}.pulse{animation:none;opacity:0}.caret{animation:none}.reveal{opacity:1;transform:none;transition:none}.btn:hover{transform:none}
+      html{scroll-behavior:auto}body{transition:none}.caret,.ledger-top .dot{animation:none}.reveal{opacity:1;transform:none;transition:none}.btn:hover{transform:none}
+      .go .seg .bx i,.go .sp .b i{transition:none}.tree li,.rows li{animation:none}h1.struck{animation:none}.wire{transition:none}
     }
   </style>
 </head>
 <body class="no-js">
 <a class="skip" href="#doc">Skip to the docs</a>
-
-<div class="bg" aria-hidden="true">
-  <div class="dots d1"></div><div class="dots d2"></div>
-  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" focusable="false">
-    <path class="trace" d="M1380 0 L1290 120 L1330 190 L1210 330 L1250 400 L1100 560 L1140 620 L960 780 L990 840 L880 900"/>
-    <path class="trace branch" d="M1210 330 L1120 300 L1070 340 M1100 560 L990 530 L940 570 M960 780 L860 760 L820 790"/>
-    <path class="pulse" pathLength="1000" d="M1380 0 L1290 120 L1330 190 L1210 330 L1250 400 L1100 560 L1140 620 L960 780 L990 840 L880 900"/>
-  </svg>
-</div>
+<canvas id="grid" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
 
 <header class="bar">
   <div class="frame bar-in">
-    <a class="logo" href="index.html" aria-label="Lightning main website"><img src="assets/brand/lightning-mark.svg" width="24" height="24" alt="">Lightning<span class="tag">for geeks</span></a>
+    <a class="logo" href="index.html" aria-label="Lightning main website"><img src="assets/brand/lightning-mark.svg" width="24" height="24" alt="">lightning<span class="tag">/for-geeks</span></a>
     <div class="bar-tools">
-      <a class="bar-link" href="https://github.com/elfekimuhammed/Lightning" target="_blank" rel="noopener noreferrer">source ↗</a>
+      <button class="jump" id="open-cmd" type="button" aria-label="Open jump menu" aria-haspopup="dialog"><span>jump</span><kbd id="kbd">Ctrl K</kbd></button>
       <div class="pal">
         <span class="swatches" aria-hidden="true"><i></i><i></i><i></i></span>
         <label for="palette" class="t">palette</label>
@@ -259,56 +367,66 @@
     <div class="hero-grid">
       <div>
         <p class="kicker">// for geeks<span class="sep">·</span>v1.1.0-beta.1</p>
-        <h1 id="h1">Money Software <em>You Can Audit.</em></h1>
-        <p class="lead">Lightning shows people in Egypt where their money is, what is coming, and why. It runs on their own machine and their data never leaves it. <strong>The source is public so you can check every number.</strong></p>
+        <h1 id="h1"><span>Efficient.</span><span>Insightful.</span><span>Secure.</span></h1>
+        <p class="lead">Money software for people in Egypt, built so you can audit it. <strong>Thirty minutes a month, every number traceable, and your data never leaves your machine.</strong></p>
         <div class="actions">
-          <a class="btn main" href="#architecture">Read the architecture <span aria-hidden="true">↓</span></a>
+          <a class="btn main" href="#efficiency">See the proof <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#run">Run it locally <span aria-hidden="true">↓</span></a>
-          <a class="btn" href="mailto:geeks@lightningeg.com">Email the team <span aria-hidden="true">↗</span></a>
           <a class="btn" href="https://github.com/elfekimuhammed/Lightning" target="_blank" rel="noopener noreferrer">Open the source <span aria-hidden="true">↗</span></a>
         </div>
       </div>
-      <div class="bolt" aria-hidden="true"><canvas id="bolt"></canvas></div>
+
+      <div class="ledger" id="ledger" role="group" aria-label="A replay of the posting rules: transactions post, internal transfers keep the total, a broken transfer is refused">
+        <div class="ledger-top"><span class="dot" aria-hidden="true"></span><span>ledger · replay</span><span>2026-10</span></div>
+        <div class="fig"><small>what you own</small><div class="num"><span id="fig">48,000</span><i>EGP</i><span class="delta" id="delta"></span></div></div>
+        <ul class="rows" id="rows" aria-live="off"></ul>
+        <div class="ledger-foot"><b>✓</b> integrity: owned + held for others = gross<span class="ill">An illustration of the posting rules, not live data.</span></div>
+      </div>
+    </div>
+
+    <div class="pillars reveal" aria-label="Three promises">
+      <a class="pillar" href="#efficiency"><span class="no">01 / efficient</span><b>30 min</b><span class="u">a month, once</span><p>Import, tidy, read. Pages open in 163 ms on 2,239 transactions, down from 507 ms.</p><span class="go">see the proof ↓</span></a>
+      <a class="pillar" href="#insights"><span class="no">02 / insightful</span><b>1 formula</b><span class="u">behind every figure</span><p>One name, one formula, one function. Trace any number down to the records.</p><span class="go">trace a number ↓</span></a>
+      <a class="pillar" href="#security"><span class="no">03 / secure</span><b>256-bit</b><span class="u">encrypted, local only</span><p>SQLCipher profiles and Argon2id locks. Served on 127.0.0.1, with no account.</p><span class="go">open the lock ↓</span></a>
     </div>
 
     <div class="term reveal" style="margin-top:48px" id="termwrap">
       <div class="term-top"><i></i><i></i><i></i><span>lightning · about</span></div>
       <div class="term-body" id="term"><span class="p">$</span> lightning --about
 <span class="k">version</span><span class="v">1.1.0-beta.1</span>
+<span class="k">pillars</span><span class="v">efficient · insightful · secure</span>
 <span class="k">for</span><span class="v">salaried people in Egypt, phone first, counting in EGP</span>
 <span class="k">stack</span><span class="v">Python 3.11+ · FastAPI · Jinja · SQLite (SQLCipher)</span>
 <span class="k">ledger</span><span class="v">one source of truth</span>
 <span class="k">network</span><span class="v">serves on 127.0.0.1 only. Your data never leaves the machine.</span>
 <span class="k">licence</span><span class="v">PolyForm Noncommercial 1.0.0 (source-available)</span>
 <span class="p">$</span> lightning --help-wanted
-<span class="v">see section 09 · where help lands</span>
+<span class="v">see section 10 · where help lands</span>
 <span class="p">$</span> <span class="caret"></span></div>
-    </div>
-
-    <div class="facts reveal" aria-label="Lightning in four numbers">
-      <div class="fact"><b>1 ledger</b><span>the only source of truth</span></div>
-      <div class="fact"><b>1,600+</b><span>test functions</span></div>
-      <div class="fact"><b>PC + phone</b><span>one codebase</span></div>
-      <div class="fact"><b>127.0.0.1</b><span>the only address it listens on</span></div>
     </div>
   </section>
 
   <div class="frame shell">
     <nav class="toc" aria-label="Documentation index">
       <h2>// docs index</h2>
-      <ol>
-        <li><a href="#mission"><b>01</b>Mission</a></li>
-        <li><a href="#principles"><b>02</b>Principles</a></li>
-        <li><a href="#architecture"><b>03</b>Architecture</a></li>
-        <li><a href="#data"><b>04</b>Data Model</a></li>
-        <li><a href="#security"><b>05</b>Security</a></li>
-        <li><a href="#run"><b>06</b>Run It</a></li>
-        <li><a href="#map"><b>07</b>Repo Map</a></li>
-        <li><a href="#contribute"><b>08</b>Contribute</a></li>
-        <li><a href="#help"><b>09</b>Where Help Lands</a></li>
-        <li><a href="#docs"><b>10</b>All the Docs</a></li>
-      </ol>
-      <div class="ver">page 2.0<br>2026-10-17</div>
+      <div class="rail">
+        <i class="wire" id="wire" aria-hidden="true"></i>
+        <ol>
+          <li><a href="#mission"><b>01</b>Mission</a></li>
+          <li><a href="#efficiency"><b>02</b>Efficiency</a></li>
+          <li><a href="#insights"><b>03</b>Insights</a></li>
+          <li><a href="#security"><b>04</b>Security</a></li>
+          <li><a href="#principles"><b>05</b>Principles</a></li>
+          <li><a href="#architecture"><b>06</b>Architecture</a></li>
+          <li><a href="#data"><b>07</b>Data Model</a></li>
+          <li><a href="#run"><b>08</b>Run It</a></li>
+          <li><a href="#contribute"><b>09</b>Contribute</a></li>
+          <li><a href="#help"><b>10</b>Where Help Lands</a></li>
+          <li><a href="#docs"><b>11</b>All the Docs</a></li>
+        </ol>
+      </div>
+      <div class="prog" id="prog" aria-hidden="true"></div>
+      <div class="ver">page 3.0<br>2026-10-17</div>
     </nav>
 
     <div class="doc" id="doc">
@@ -316,40 +434,184 @@
       <section id="mission" aria-labelledby="t-mission">
         <p class="label">01 / mission</p>
         <h2 id="t-mission">One Clear Picture of Your Money</h2>
-        <p>Most people in Egypt keep money in a bank, a wallet, cash at home, a certificate, THNDR and gold. Most apps show one balance. Lightning puts all of it in <strong>one ledger</strong> and answers three questions.</p>
-        <ol class="rules" style="margin-top:20px">
-          <li><span class="no">1.1</span><div><h4>Where You Stand</h4><p>Net worth, free cash and holdings, with each figure's source named on the screen.</p></div></li>
-          <li><span class="no">1.2</span><div><h4>What Is Next</h4><p>Bills, loans and a cash forecast, so today's cash meets tomorrow's commitments.</p></div></li>
-          <li><span class="no">1.3</span><div><h4>Why</h4><p>Every number shows its working. A figure you cannot trace is a bug.</p></div></li>
-        </ol>
-        <h3><span class="n">1.4</span>The Test User</h3>
+        <p>Most people in Egypt keep money in a bank, a wallet, cash at home, a certificate, THNDR and gold. Most apps show one balance. Lightning puts all of it in <strong>one ledger</strong>, then answers where you stand, what is coming and why.</p>
+        <p>Three things come first, in this order of effort: it must be <strong>efficient</strong> to use, <strong>insightful</strong> in what it says, and <strong>secure</strong> by default. Everything below is the proof.</p>
+        <h3><span class="n">1.1</span>The Test User</h3>
         <p>Mohab is 31, salaried, lives in Cairo and counts in EGP. A full year of his money runs through the real screens as the acceptance test (<code>tests/test_mohab_year.py</code>). If a screen gets his year wrong, the build is not done.</p>
-        <h3><span class="n">1.5</span>Source-Available, Not Open Source</h3>
-        <p>We publish the code so developers can inspect the calculations and question our decisions. The licence is <strong>PolyForm Noncommercial 1.0.0</strong>: you may read, run and change it for non-commercial use. Commercial use needs written permission. Section 08 spells out the terms for contributors.</p>
+        <h3><span class="n">1.2</span>Source-Available, Not Open Source</h3>
+        <p>We publish the code so developers can inspect the calculations and question our decisions. The licence is <strong>PolyForm Noncommercial 1.0.0</strong>: you may read, run and change it for non-commercial use. Commercial use needs written permission. Section 09 spells out the terms for contributors.</p>
+      </section>
+
+      <section id="efficiency" aria-labelledby="t-eff">
+        <p class="label">02 / efficiency</p>
+        <h2 id="t-eff">Thirty Minutes a Month</h2>
+        <p class="claim">The whole routine fits in half an hour, and each step is built to cost as few clicks as possible.</p>
+
+        <h3><span class="n">2.1</span>The Monthly Clock</h3>
+        <div class="w reveal" id="clockw">
+          <div class="w-body">
+            <div class="clock" role="img" aria-label="Ten minutes uploading, five minutes adjusting, fifteen minutes analysing">
+              <div class="seg" style="flex:10"><div class="bx"><i></i><b>10 min</b></div><small>upload your CSVs</small></div>
+              <div class="seg" style="flex:5"><div class="bx"><i></i><b>5</b></div><small>adjust</small></div>
+              <div class="seg" style="flex:15"><div class="bx"><i></i><b>15 min</b></div><small>sit down for analysis</small></div>
+            </div>
+            <div class="clock-sum"><span>once a month</span><b>= 30 min</b></div>
+          </div>
+          <div class="w-note">Download last month's CSV from each bank and wallet. Lightning only asks about what needs you: a new name, a possible duplicate, a row it can't place. One answer fills every row with that name. Between sit-downs, the Android beta catches spending as you go and bank SMS waits for your review.</div>
+        </div>
+
+        <h3><span class="n">2.2</span>Type Less</h3>
+        <p>Amount fields take sums, and date fields take shortcuts. Digits typed on an Arabic keyboard work too. Try it.</p>
+        <div class="w reveal">
+          <div class="w-body">
+            <div class="qe">
+              <div>
+                <label for="qa">amount</label>
+                <input id="qa" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="120+35*2" value="120+35*2">
+                <div class="out" id="qa-out" aria-live="polite"></div>
+                <div class="try"><button type="button" data-qa="120+35*2">120+35*2</button><button type="button" data-qa="١٢٠+٣٥*٢">١٢٠+٣٥*٢</button><button type="button" data-qa="=1,200/4">=1,200/4</button></div>
+              </div>
+              <div>
+                <label for="qd">date</label>
+                <input id="qd" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="31/1" value="31/1">
+                <div class="out" id="qd-out" aria-live="polite"></div>
+                <div class="try"><button type="button" data-qd="31/1">31/1</button><button type="button" data-qd="5/10/2026">5/10/2026</button><button type="button" data-qd="2026-10-17">2026-10-17</button></div>
+              </div>
+            </div>
+          </div>
+          <div class="w-note">A small reimplementation of the app's entry rules in <code>lightning/core/money.py</code> and the date parser, so you can feel them. The app is the reference.</div>
+        </div>
+
+        <h3><span class="n">2.3</span>Measured, Not Claimed</h3>
+        <div class="w reveal" id="speedw">
+          <div class="w-body">
+            <div class="speed">
+              <div class="sp"><h4>Overview</h4>
+                <div class="b before"><span>before</span><i style="--w:100%"></i><em>507 ms</em></div>
+                <div class="b after"><span>after</span><i style="--w:32%"></i><em>163 ms</em></div></div>
+              <div class="sp"><h4>Budget › All time</h4>
+                <div class="b before"><span>before</span><i style="--w:100%"></i><em>4.6 s</em></div>
+                <div class="b after"><span>after</span><i style="--w:7.2%"></i><em>0.33 s</em></div></div>
+            </div>
+          </div>
+          <div class="w-note">Measured 2026-10-03 with 2,239 transactions. The fixes were a request cache, registers that read one page of 50 rows, and bundled fonts. Still open: routes are <code>async def</code> with synchronous database work.</div>
+        </div>
+
+        <h3><span class="n">2.4</span>Lean by Design</h3>
+        <ol class="rules">
+          <li><span class="no">2.4.1</span><div><h4>No Frontend Build</h4><p>Server-rendered Jinja and vanilla JS. Nothing to compile, bundle or break.</p></div></li>
+          <li><span class="no">2.4.2</span><div><h4>One Process, One File</h4><p>A single Python process and a single SQLite file. A backup is a copy.</p></div></li>
+          <li><span class="no">2.4.3</span><div><h4>Rules Do the Repeating</h4><p>Tick "Use this category next time" and next month's statement sorts itself. A rule can be applied to the past, with one undo.</p></div></li>
+          <li><span class="no">2.4.4</span><div><h4>Read One Section</h4><p>Contributors are not asked to read the whole architecture. The docs list which section a task needs.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="insights" aria-labelledby="t-ins">
+        <p class="label">03 / insights</p>
+        <h2 id="t-ins">Every Number Shows Its Working</h2>
+        <p class="claim">A figure you can't trace is a bug. Each one has one name, one formula and one function.</p>
+        <p>The registry lives in <code>lightning/core/figures.py</code>. Screens read their labels and formulas from it, the glossary is generated from it, and tests check that every function it names exists.</p>
+
+        <h3><span class="n">3.1</span>Trace a Number</h3>
+        <p>Pick a figure and follow it down to the base figures. Select any row for its meaning. These are the registry's real formulas.</p>
+        <div class="w reveal" id="trace">
+          <div class="w-top" role="group" aria-label="Choose a figure to trace">
+            <button type="button" aria-pressed="true" data-root="free_cash">Free cash</button>
+            <button type="button" aria-pressed="false" data-root="net_worth">Net worth</button>
+            <button type="button" aria-pressed="false" data-root="sold">If you sold today</button>
+          </div>
+          <div class="tr-body"><ul class="tree" id="tree"></ul></div>
+          <div class="w-note">Source: <code>lightning/core/figures.py</code>. Meanings are shortened from the registry.</div>
+        </div>
+
+        <h3><span class="n">3.2</span>One Screen, One Question</h3>
+        <div class="screens reveal">
+          <div><b>Overview</b><span>Where do I stand, and what needs me?</span></div>
+          <div><b>Expense analysis</b><span>Where did my money go?</span></div>
+          <div><b>Budget</b><span>Am I on plan?</span></div>
+          <div><b>Cash planning</b><span>How much can I actually spend?</span></div>
+          <div><b>Financial health</b><span>How do my figures compare with my limits?</span></div>
+          <div><b>Settings · Checks</b><span>Is my data right?</span></div>
+        </div>
+
+        <h3><span class="n">3.3</span>Honest About Gaps</h3>
+        <ol class="rules">
+          <li><span class="no">3.3.1</span><div><h4>Estimates Say So</h4><p>"If you sold today" is labelled an estimate. Zakat is an estimate by the common rule, for a scholar to confirm.</p></div></li>
+          <li><span class="no">3.3.2</span><div><h4>Missing Is Never Zero</h4><p>A missing exchange rate makes a figure unavailable. A missing valuation gives no estimate and says why.</p></div></li>
+          <li><span class="no">3.3.3</span><div><h4>Checks Never Go Green by Default</h4><p>Missing valuations make an integrity comparison incomplete, never green. The checks read only and never adjust entries.</p></div></li>
+          <li><span class="no">3.3.4</span><div><h4>It Suggests, You Confirm</h4><p>An early payment, a raise or a rent change needs your explicit confirmation. Neither plan nor reserve changes silently.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="security" aria-labelledby="t-sec">
+        <p class="label">04 / security</p>
+        <h2 id="t-sec">Locked by Default</h2>
+        <p class="claim">Your ledger is an encrypted file on your own computer. No account is needed, and the app serves only on 127.0.0.1.</p>
+
+        <h3><span class="n">4.1</span>Unlock Sequence</h3>
+        <p>One random data key opens the database. Two separate locks hold that key, so you can change a secret without re-encrypting anything. Run each path.</p>
+        <div class="w reveal" id="ulw">
+          <div class="w-top" role="group" aria-label="Choose an unlock path">
+            <button type="button" class="w-btn" data-u="open">Open with password</button>
+            <button type="button" class="w-btn" data-u="reset">Reset with recovery key + answer</button>
+            <button type="button" class="w-btn" data-u="wrong">Guess wrong</button>
+          </div>
+          <div class="w-body">
+            <div class="ul" aria-label="Unlock paths">
+              <div class="st" data-a="1">password</div><div class="ar" data-a="1">→</div>
+              <div class="st" data-a="2">Argon2id<small>128 MiB · 4 passes</small></div><div class="ar" data-a="2">→</div>
+              <div class="st" data-a="3">lock A<small>AES-256-GCM</small></div><div class="ar" data-a="3">→</div>
+              <div class="st shared" id="key">data key<small>32 bytes · never typed</small><span style="display:block;margin-top:10px;color:var(--subtle);font-size:11px">↓</span><span id="db" style="display:block;margin-top:4px" class="">SQLCipher database</span></div>
+            </div>
+            <div class="ul ul-row2">
+              <div class="st" data-b="1">recovery key + answer</div><div class="ar" data-b="1">→</div>
+              <div class="st" data-b="2">Argon2id<small>256 MiB · 8 passes</small></div><div class="ar" data-b="2">→</div>
+              <div class="st" data-b="3">lock B<small>AES-256-GCM</small></div><div class="ar" data-b="3">→</div>
+              <div></div>
+            </div>
+            <div class="ulog" id="ulog" aria-live="polite">Choose a path. Nothing here touches a real profile.</div>
+          </div>
+          <div class="w-note">An illustration of <code>keys.json</code> v2 as documented in the architecture. The password opens; the recovery key and answer together set a new password.</div>
+        </div>
+
+        <h3><span class="n">4.2</span>Defence in Depth</h3>
+        <ol class="rules">
+          <li><span class="no">4.2.1</span><div><h4>Encrypted at Rest</h4><p>SQLCipher, keyed with a random 32-byte data key made once per profile. Backups use the same key.</p></div></li>
+          <li><span class="no">4.2.2</span><div><h4>Three Secrets, Any Two Restore the Third</h4><p>A password of any length, a 12-digit recovery key shown once, and a security question. Lose the password and one other, and the data is gone. We say so up front.</p></div></li>
+          <li><span class="no">4.2.3</span><div><h4>Slow Guesses</h4><p>Argon2id on both locks. Five free wrong tries, then waits of 1, 5, 15 minutes and 1 hour. Never a permanent lockout.</p></div></li>
+          <li><span class="no">4.2.4</span><div><h4>Safe Changes</h4><p>A verified encrypted backup is written before any migration, and the migration aborts if that fails. The audit log is append-only. Deletes are recoverable.</p></div></li>
+          <li><span class="no">4.2.5</span><div><h4>Optional Fingerprint on the Phone</h4><p>A third wrapping of the same key under an Android Keystore key that needs a strong biometric. The password and recovery key always still work.</p></div></li>
+        </ol>
+        <div class="box">
+          <h3>What It Does Not Protect</h3>
+          <p>Nothing protects an unlocked PC from malware. Freed memory is not wiped: decrypted fragments may persist in freed memory, crash dumps, the page file or the hibernation file. Wiping made encrypted reads about three times slower, so the owner chose speed. A copied database without its key file is a 256-bit problem; with the key file, an attacker can guess offline, and Argon2 slows each guess.</p>
+          <p>Found a flaw? Write to <a class="in" href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a>.</p>
+        </div>
+        <p>Details: <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" target="_blank" rel="noopener noreferrer">Desktop app and encrypted profiles ↗</a></p>
       </section>
 
       <section id="principles" aria-labelledby="t-principles">
-        <p class="label">02 / principles</p>
+        <p class="label">05 / principles</p>
         <h2 id="t-principles">Eight Rules the Code Holds</h2>
         <p>These are decisions, not wishes. Each one is checked by a test, a contract or a migration rule.</p>
         <ol class="rules">
-          <li><span class="no">2.1</span><div><h4>One Ledger</h4><p>Real money is only what the ledger says. Registers, budget actuals, investments and reports are views of it.</p><span class="by"><code>TransactionService</code>, the only writer of postings</span></div></li>
-          <li><span class="no">2.2</span><div><h4>Plans Move No Money</h4><p>A budget, reserve, scheduled bill or forecast never appears in a ledger figure. A plan figure is always labelled as one.</p><span class="by">the three-layer split, section 03</span></div></li>
-          <li><span class="no">2.3</span><div><h4>One Figure, One Name, One Function</h4><p>Every figure has one name and one formula. Screens call the function the registry names; routes never compute.</p><span class="by"><code>lightning/core/figures.py</code>, <code>tests/test_figures.py</code></span></div></li>
-          <li><span class="no">2.4</span><div><h4>Plain Code Does the Maths</h4><p>Calculations, matching, prices and categories are ordinary code, never AI calls. You can read them and re-run them.</p><span class="by"><code>AGENTS.md</code> product rules, and the services themselves</span></div></li>
-          <li><span class="no">2.5</span><div><h4>Decimal, Never Float</h4><p>Money is <code>Decimal</code> in Python and scaled integers (<code>_e6</code>) in SQLite. No binary floats in financial logic.</p><span class="by">the persistence contract</span></div></li>
-          <li><span class="no">2.6</span><div><h4>Local Only</h4><p>Your data stays on your computer and never enters Git. The server listens on <code>127.0.0.1</code>.</p><span class="by">encrypted profiles, section 05</span></div></li>
-          <li><span class="no">2.7</span><div><h4>Names Stay Canonical</h4><p>Similar spellings are suggestions you pick. Nothing is silently merged and no counterparty is created behind your back.</p><span class="by">the search and identity contract</span></div></li>
-          <li><span class="no">2.8</span><div><h4>Wrong Is Worse Than Slow</h4><p>A silent wrong result costs more than an extra click. Missing prices stay pending; cost is never quietly used as a quote.</p><span class="by">the reevaluation ledger</span></div></li>
+          <li><span class="no">5.1</span><div><h4>One Ledger</h4><p>Real money is only what the ledger says. Registers, budget actuals, investments and reports are views of it.</p><span class="by"><code>TransactionService</code>, the only writer of postings</span></div></li>
+          <li><span class="no">5.2</span><div><h4>Plans Move No Money</h4><p>A budget, reserve, scheduled bill or forecast never appears in a ledger figure. A plan figure is always labelled as one.</p><span class="by">the three-layer split, section 06</span></div></li>
+          <li><span class="no">5.3</span><div><h4>One Figure, One Name, One Function</h4><p>Every figure has one name and one formula. Screens call the function the registry names; routes never compute.</p><span class="by"><code>lightning/core/figures.py</code>, <code>tests/test_figures.py</code></span></div></li>
+          <li><span class="no">5.4</span><div><h4>Plain Code Does the Maths</h4><p>Calculations, matching, prices and categories are ordinary code, never AI calls. You can read them and re-run them.</p><span class="by"><code>AGENTS.md</code> product rules, and the services themselves</span></div></li>
+          <li><span class="no">5.5</span><div><h4>Decimal, Never Float</h4><p>Money is <code>Decimal</code> in Python and scaled integers (<code>_e6</code>) in SQLite. No binary floats in financial logic.</p><span class="by">the persistence contract</span></div></li>
+          <li><span class="no">5.6</span><div><h4>Local Only</h4><p>Your data stays on your computer and never enters Git. The server listens on <code>127.0.0.1</code>.</p><span class="by">encrypted profiles, section 04</span></div></li>
+          <li><span class="no">5.7</span><div><h4>Names Stay Canonical</h4><p>Similar spellings are suggestions you pick. Nothing is silently merged and no counterparty is created behind your back.</p><span class="by">the search and identity contract</span></div></li>
+          <li><span class="no">5.8</span><div><h4>Wrong Is Worse Than Slow</h4><p>A silent wrong result costs more than an extra click. Missing prices stay pending; cost is never quietly used as a quote.</p><span class="by">the reevaluation ledger</span></div></li>
         </ol>
       </section>
 
       <section id="architecture" aria-labelledby="t-arch">
-        <p class="label">03 / architecture</p>
+        <p class="label">06 / architecture</p>
         <h2 id="t-arch">Ledger, Plan, Report</h2>
         <p>Lightning is a local-first, single-user <strong>modular monolith</strong>: one Python process, one SQLite database, a server-rendered browser UI. Correctness first, then clear ownership of data, then new asset types without duplicated transaction logic.</p>
 
-        <h3><span class="n">3.1</span>Three Layers</h3>
+        <h3><span class="n">6.1</span>Three Layers</h3>
         <p>These describe what data <em>is</em>, not which package may import which. Pick a layer.</p>
         <div class="tabs reveal">
           <div class="tablist" role="tablist" aria-label="Data layers">
@@ -374,7 +636,7 @@
           </div>
         </div>
 
-        <h3><span class="n">3.2</span>Dependency Direction</h3>
+        <h3><span class="n">6.2</span>Dependency Direction</h3>
         <p>Dependencies point down. <code>import-linter</code> checks the contracts on every test run, and <code>bootstrap.py</code> is the composition root. Cross-module work calls public services, never another module's repository.</p>
         <div class="stack reveal" role="group" aria-label="Runtime layers, top to bottom">
           <div><b>ui/</b><span>FastAPI routes, Jinja templates, small vanilla JS. No SQL, no calculations.</span></div>
@@ -386,7 +648,7 @@
           <div><b>core/</b><span>dates, money, identifiers, posting rules. No app dependencies.</span></div>
         </div>
 
-        <h3><span class="n">3.3</span>Stack</h3>
+        <h3><span class="n">6.3</span>Stack</h3>
         <div class="scroll"><table class="tbl">
           <tr><th>area</th><th>choice</th></tr>
           <tr><td>Runtime</td><td>Python 3.11+, FastAPI, Uvicorn</td></tr>
@@ -398,11 +660,28 @@
           <tr><td>Desktop</td><td>Windows: pywebview + WebView2 shell in a PyInstaller ZIP</td></tr>
           <tr><td>Phone</td><td>Android app from the same codebase</td></tr>
         </table></div>
-        <p>Full contracts: <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#three-layers-ledger-plan-report" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md ↗</a></p>
+
+        <h3><span class="n">6.4</span>Repo Map</h3>
+        <pre class="tree-txt" aria-label="Repository layout"><b>lightning/</b>          <span class="d">the app</span>
+  core/ database/      <span class="d">money, dates, posting rules · SQLite, migrations</span>
+  accounts/ assets/    <span class="d">where value is held · what is held</span>
+  transactions/        <span class="d">the only writer of postings</span>
+  planning/ budgeting/ <span class="d">forecast, bills, loans · plans and reserves</span>
+  reporting/ ui/       <span class="d">read-only views · routes and templates</span>
+  security/ runtime/   <span class="d">encryption · profiles and sessions</span>
+<b>tests/</b>              <span class="d">200+ files, including Mohab's year</span>
+<b>docs/</b>               <span class="d">overview, architecture, glossary</span>
+<b>report/</b>             <span class="d">known bugs and improvements, one file each</span>
+<b>guideline/</b>          <span class="d">the brand and UI rules</span>
+<b>android/</b>            <span class="d">the phone app</span>
+<b>packaging/</b>          <span class="d">the Windows build</span>
+<b>tools/</b>              <span class="d">market data, guideline and release helpers</span>
+<b>skills/</b>             <span class="d">checklists for bug hunts, number audits, releases</span></pre>
+        <p>The full module table is in <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#modules" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md › Modules ↗</a>.</p>
       </section>
 
       <section id="data" aria-labelledby="t-data">
-        <p class="label">04 / data model</p>
+        <p class="label">07 / data model</p>
         <h2 id="t-data">One Main Ledger</h2>
         <p>Registers, budgets, net worth, positions and analysis are views over the ledger, never competing stores.</p>
         <pre class="code" aria-label="Ledger structure"><span class="c">// documents become lines; valuations link back to the main ledger</span>
@@ -410,54 +689,46 @@ transactions ──1:n──▶ ledger_entries (account + asset effects)
                               ▲
 reevaluation_entries ──many:one── reevaluation period ──1:1 per account──▶ VAL journal</pre>
 
-        <h3><span class="n">4.1</span>Try a Posting</h3>
+        <h3><span class="n">7.1</span>Try a Posting</h3>
         <p>Pick an activity to see the lines it writes. The last one breaks a rule on purpose.</p>
-        <div class="lab reveal" id="lab">
-          <div class="lab-top" role="group" aria-label="Choose a posting">
+        <div class="w lab reveal" id="lab">
+          <div class="w-top" role="group" aria-label="Choose a posting">
             <button type="button" aria-pressed="true" data-k="expense">Expense 450</button>
             <button type="button" aria-pressed="false" data-k="transfer">CIB → THNDR 10,000</button>
             <button type="button" aria-pressed="false" data-k="buy">Buy COMI 5,000</button>
             <button type="button" aria-pressed="false" data-k="broken">Break it</button>
           </div>
-          <div class="lab-body" aria-live="polite">
+          <div class="w-body" aria-live="polite">
             <table><thead><tr><th>account</th><th class="num">amount (EGP)</th><th>kind</th></tr></thead><tbody id="lab-rows"></tbody></table>
             <ul class="checks" id="lab-checks"></ul>
           </div>
-          <div class="note">An illustration of the posting rules, not the app's own output.</div>
+          <div class="w-note">An illustration of the posting rules, not the app's own output.</div>
         </div>
 
-        <h3><span class="n">4.2</span>Posting Invariants</h3>
-        <ol class="rules">
-          <li><span class="no">4.2.1</span><div><h4>Internal Lines Net to Zero</h4><p>A transfer moves value between your accounts. It never creates or destroys any.</p></div></li>
-          <li><span class="no">4.2.2</span><div><h4>External Lines Need a Category</h4><p>Money in or out of your world always says what it was for.</p></div></li>
-          <li><span class="no">4.2.3</span><div><h4>No Selling What You Don't Hold</h4><p>A sale cannot take an owner's position below zero.</p></div></li>
-          <li><span class="no">4.2.4</span><div><h4>Voided Stays Auditable</h4><p>Voided entries remain in the audit trail and count nowhere.</p></div></li>
-        </ol>
+        <h3><span class="n">7.2</span>The Real Check</h3>
+        <p>This is the function that enforces it, trimmed to the lines that matter. It is pure Python with no database, so the rule is easy to test.</p>
+        <div class="src"><span>lightning/core/ledger.py</span><a href="https://github.com/elfekimuhammed/Lightning/blob/main/lightning/core/ledger.py" target="_blank" rel="noopener noreferrer">open the file ↗</a></div>
+<pre class="code" aria-label="Excerpt of validate_posting"><span class="kw">def</span> <span class="f">validate_posting</span>(lines: list[PostingLine]) -> <span class="kw">None</span>:
+    <span class="s">"""Raise ValidationError unless the lines form a valid posting."""</span>
+    <span class="c"># ...</span>
+    <span class="kw">for</span> i, line <span class="kw">in</span> <span class="f">enumerate</span>(lines, start=1):
+        <span class="c"># ...</span>
+        <span class="kw">if</span> line.effect <span class="kw">in</span> (Effect.INFLOW, Effect.OUTFLOW) <span class="kw">and</span> line.category_id <span class="kw">is None</span>:
+            <span class="kw">raise</span> ValidationError(<span class="s">f"Line {i}: money in and money out need a category."</span>, <span class="s">"category"</span>)
+        <span class="c"># ...</span>
+        <span class="kw">if</span> line.effect == Effect.INTERNAL:
+            internal_total += line.amount_base
+    <span class="kw">if</span> internal_total != ZERO:
+        <span class="kw">raise</span> ValidationError(
+            <span class="s">f"Internal movements must net to zero (they net to {internal_total})."</span>
+        )</pre>
 
-        <h3><span class="n">4.3</span>Precision and Migrations</h3>
-        <p>Money, prices and quantities are <code>Decimal</code> or integer <code>_e6</code>. Dates are ISO <code>yyyy-mm-dd</code>. Migrations are ordered and append-only: <strong>never edit an applied migration.</strong> Persistent state needs a new migration and a module that owns its table. Corrections are audited, and used categories are archived, never removed.</p>
-        <p>Foreign currency stores the native amount, the dated base amount and the rate used. Stored values are never rewritten when rates change.</p>
-      </section>
-
-      <section id="security" aria-labelledby="t-sec">
-        <p class="label">05 / security</p>
-        <h2 id="t-sec">Local, Encrypted, Honest</h2>
-        <p>Profiles are encrypted on your machine. No server holds your data and no account is needed.</p>
-        <ol class="rules">
-          <li><span class="no">5.1</span><div><h4>SQLCipher Database</h4><p>Keyed with a random 32-byte data key made once per profile and never typed.</p></div></li>
-          <li><span class="no">5.2</span><div><h4>Three Secrets</h4><p>A password of any length, a 12-digit recovery key shown once, and a security question. The password opens; the recovery key and the answer together reset it.</p></div></li>
-          <li><span class="no">5.3</span><div><h4>Two Locks on One Key</h4><p>The data key is wrapped twice with AES-256-GCM under Argon2id keys, one from the password and one from the recovery key and answer.</p></div></li>
-          <li><span class="no">5.4</span><div><h4>Wrong Tries Slow Down</h4><p>Five free tries, then waits of 1, 5 and 15 minutes and 1 hour. Never a permanent lockout.</p></div></li>
-        </ol>
-        <div class="box">
-          <h3>What It Does Not Protect</h3>
-          <p>Nothing protects an unlocked PC from malware. Freed memory is not wiped: decrypted fragments may persist in freed memory, crash dumps, the page file or the hibernation file. Wiping made encrypted reads about three times slower, so the owner chose speed. A copied database without its key file is a 256-bit problem; with the key file, an attacker can guess offline, and Argon2 slows each guess.</p>
-        </div>
-        <p>Details: <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" target="_blank" rel="noopener noreferrer">Desktop app and encrypted profiles ↗</a></p>
+        <h3><span class="n">7.3</span>Precision and Migrations</h3>
+        <p>Money, prices and quantities are <code>Decimal</code> or integer <code>_e6</code>. Dates are ISO <code>yyyy-mm-dd</code>. Migrations are ordered and append-only: <strong>never edit an applied migration.</strong> Persistent state needs a new migration and a module that owns its table. Foreign currency stores the native amount, the dated base amount and the rate used, and stored values are never rewritten when rates change.</p>
       </section>
 
       <section id="run" aria-labelledby="t-run">
-        <p class="label">06 / run it</p>
+        <p class="label">08 / run it</p>
         <h2 id="t-run">Clone, Test, Open</h2>
         <p>You need Python 3.11+ and Git. The sample household runs in its own database, so your own data is never touched.</p>
         <pre class="code has-cp" data-copy="git clone https://github.com/elfekimuhammed/Lightning.git&#10;cd Lightning&#10;pip install -r requirements-dev.txt&#10;python -m pytest&#10;lint-imports"><span class="c"># get the code and prove it works</span>
@@ -477,29 +748,8 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
         </div>
       </section>
 
-      <section id="map" aria-labelledby="t-map">
-        <p class="label">07 / repo map</p>
-        <h2 id="t-map">Where Things Live</h2>
-        <pre class="tree" aria-label="Repository layout"><b>lightning/</b>          <span class="d">the app</span>
-  core/ database/      <span class="d">money, dates, posting rules · SQLite, migrations</span>
-  accounts/ assets/    <span class="d">where value is held · what is held</span>
-  transactions/        <span class="d">the only writer of postings</span>
-  planning/ budgeting/ <span class="d">forecast, bills, loans · plans and reserves</span>
-  reporting/ ui/       <span class="d">read-only views · routes and templates</span>
-  security/ runtime/   <span class="d">encryption · profiles and sessions</span>
-<b>tests/</b>              <span class="d">200+ files, including Mohab's year</span>
-<b>docs/</b>               <span class="d">overview, architecture, glossary</span>
-<b>report/</b>             <span class="d">known bugs and improvements, one file each</span>
-<b>guideline/</b>          <span class="d">the brand and UI rules</span>
-<b>android/</b>            <span class="d">the phone app</span>
-<b>packaging/</b>          <span class="d">the Windows build</span>
-<b>tools/</b>              <span class="d">market data, guideline and release helpers</span>
-<b>skills/</b>             <span class="d">checklists for bug hunts, number audits, releases</span></pre>
-        <p>The full module table, with each module's responsibility, is in <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#modules" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md › Modules ↗</a>. Read one section, not the whole file.</p>
-      </section>
-
       <section id="contribute" aria-labelledby="t-contrib">
-        <p class="label">08 / contribute</p>
+        <p class="label">09 / contribute</p>
         <h2 id="t-contrib">How to Send a Change</h2>
         <ol class="steps">
           <li><strong>Read what your task touches</strong>Start with the project overview, then one section of the architecture. The docs list when to read each section.</li>
@@ -517,15 +767,15 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
           <p><strong>Never commit</strong> real financial data, passwords or keys.</p>
         </div>
         <p>The UI follows a strict brand guideline. CSS that differs from it is wrong, so read <a class="in" href="https://github.com/elfekimuhammed/Lightning/tree/main/guideline" target="_blank" rel="noopener noreferrer">guideline/ ↗</a> before you touch a screen.</p>
-        <h3><span class="n">8.1</span>Talk to Us</h3>
+        <h3><span class="n">9.1</span>Talk to Us</h3>
         <div class="contact">
-          <a href="mailto:geeks@lightningeg.com"><b>geeks@lightningeg.com</b><span>Code, architecture and ideas. Write here if you want to build with us.</span></a>
+          <a href="mailto:geeks@lightningeg.com"><b>geeks@lightningeg.com</b><span>Code, architecture, security and ideas. Write here if you want to build with us.</span></a>
           <a href="mailto:hello@lightningeg.com"><b>hello@lightningeg.com</b><span>Everything else: the app, the beta and the team.</span></a>
         </div>
       </section>
 
       <section id="help" aria-labelledby="t-help">
-        <p class="label">09 / where help lands</p>
+        <p class="label">10 / where help lands</p>
         <h2 id="t-help">What Needs Building</h2>
         <p>Straight from the roadmap, reviewed 2026-10-13. State first, then the next piece of work.</p>
         <div class="scroll"><table class="tbl">
@@ -546,7 +796,7 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
       </section>
 
       <section id="docs" aria-labelledby="t-docs">
-        <p class="label">10 / all the docs</p>
+        <p class="label">11 / all the docs</p>
         <h2 id="t-docs">Read the Source of Truth</h2>
         <p>Each fact lives in one file. These are the files.</p>
         <ul class="links">
@@ -568,11 +818,19 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
   <div class="frame foot-in">
     <div>
       <img src="assets/brand/lightning-mark.svg" width="28" height="28" alt="Lightning">
-      <p class="sign">Study Your Patterns. Control Your Future.</p>
+      <p class="sign">// efficient · insightful · secure<br>// read it, run it, break it, fix it.</p>
     </div>
-    <p>for geeks · page 2.0 · 2026-10-17<br>built in Egypt<br><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a> · <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a><br>source-available under <a href="https://github.com/elfekimuhammed/Lightning/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">PolyForm Noncommercial 1.0.0</a><br><a href="index.html">main website</a></p>
+    <p>for geeks · page 3.0 · 2026-10-17<br>built in Egypt<br><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a> · <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a><br>source-available under <a href="https://github.com/elfekimuhammed/Lightning/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">PolyForm Noncommercial 1.0.0</a><br><a href="index.html">main website</a> · <button class="lk" id="replay" type="button">replay the strike</button></p>
   </div>
 </footer>
+
+<div class="cmd" id="cmd" role="dialog" aria-modal="true" aria-label="Jump to" hidden>
+  <div class="cmd-box">
+    <input id="cmd-in" type="text" placeholder="jump to a section, doc or palette" aria-label="Search commands" autocomplete="off" spellcheck="false">
+    <ul id="cmd-list" role="listbox" aria-label="Commands"></ul>
+    <div class="cmd-foot">↑ ↓ move · enter select · esc close</div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -580,11 +838,13 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
   var doc=document,root=doc.documentElement,body=doc.body;
   body.classList.remove('no-js');
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $=function(s,c){return (c||doc).querySelector(s)},$$=function(s,c){return [].slice.call((c||doc).querySelectorAll(s))};
 
-  /* ---- palette ---- */
+  /* ===== palette ===== */
   var names=['meadow','volt','amber','blue','rose','minimal'];
+  var labels={meadow:'Meadow',volt:'Volt',amber:'Amber',blue:'Blue',rose:'Rose',minimal:'Paper'};
   var themeColors={meadow:'#071522',volt:'#0c0d0a',amber:'#120d05',blue:'#071324',rose:'#160d15',minimal:'#f4f3ed'};
-  var sel=doc.getElementById('palette'),meta=doc.querySelector('meta[name="theme-color"]');
+  var sel=$('#palette'),meta=$('meta[name="theme-color"]');
   function setPalette(n,save){
     if(names.indexOf(n)<0)n='meadow';
     root.dataset.palette=n;sel.value=n;if(meta)meta.content=themeColors[n];
@@ -594,26 +854,41 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
   setPalette(root.dataset.palette||'meadow',false);
   sel.addEventListener('change',function(){setPalette(sel.value,true)});
 
-  /* ---- reveal on scroll ---- */
-  var rev=[].slice.call(doc.querySelectorAll('.reveal'));
-  if(!('IntersectionObserver' in window)||reduce){rev.forEach(function(e){e.classList.add('in')})}
+  /* ===== reveal; widgets that animate once when seen ===== */
+  var revs=$$('.reveal');
+  if(!('IntersectionObserver' in window)||reduce){revs.forEach(function(e){e.classList.add('in')});['clockw','speedw'].forEach(function(id){var e=doc.getElementById(id);if(e)e.classList.add('go')})}
   else{
-    var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.08});
-    rev.forEach(function(e){ro.observe(e)});
+    var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');if(e.target.id==='clockw'||e.target.id==='speedw')e.target.classList.add('go');ro.unobserve(e.target)}})},{threshold:.2});
+    revs.forEach(function(e){ro.observe(e)});
   }
 
-  /* ---- docs index: mark the section being read ---- */
-  var links=[].slice.call(doc.querySelectorAll('.toc a'));
-  var secs=links.map(function(a){return doc.querySelector(a.getAttribute('href'))}).filter(Boolean);
-  function mark(id){links.forEach(function(a){if(a.getAttribute('href')==='#'+id){a.setAttribute('aria-current','true');var ol=a.closest('ol');if(ol&&ol.scrollWidth>ol.clientWidth){ol.scrollLeft=a.offsetLeft-24}}else a.removeAttribute('aria-current')})}
-  if('IntersectionObserver' in window){
-    var cur=null;
-    var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.target.id!==cur){cur=e.target.id;mark(cur)}})},{rootMargin:'-30% 0px -60% 0px'});
-    secs.forEach(function(s){so.observe(s)});
+  /* ===== docs index: a circuit that energises as you read ===== */
+  var tlinks=$$('.toc a'),tsecs=tlinks.map(function(a){return $(a.getAttribute('href'))}).filter(Boolean);
+  var wire=$('#wire'),prog=$('#prog'),ol=$('.rail ol'),ticking=false;
+  function circuit(){
+    ticking=false;
+    var line=window.innerHeight*.38,k=-1,tops=tsecs.map(function(s){return s.getBoundingClientRect().top});
+    tops.forEach(function(t,i){if(t<=line)k=i});
+    tlinks.forEach(function(a,i){
+      var on=i<=k;
+      if(on&&!a.hasAttribute('data-pass')){a.setAttribute('data-pass','');if(!reduce){a.classList.add('pop');setTimeout(function(){a.classList.remove('pop')},720)}}
+      if(!on)a.removeAttribute('data-pass');
+      if(i===k)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');
+    });
+    if(window.innerWidth>1020&&wire){
+      var ys=tlinks.map(function(a){return a.parentNode.offsetTop+a.offsetHeight/2}),h=0;
+      if(k>=0){h=ys[k];if(k<ys.length-1){var t=Math.max(0,Math.min(1,(line-tops[k])/(tops[k+1]-tops[k])));h=ys[k]+t*(ys[k+1]-ys[k])}}
+      wire.style.height=h+'px';
+    }
+    var dh=doc.documentElement.scrollHeight-window.innerHeight;
+    if(prog)prog.style.setProperty('--pct',(dh>0?Math.min(100,window.scrollY/dh*100):0)+'%');
+    if(k>=0&&ol&&ol.scrollWidth>ol.clientWidth&&window.innerWidth<=1020){var cur=tlinks[k];ol.scrollLeft=cur.offsetLeft-24}
   }
+  function qc(){if(!ticking){ticking=true;requestAnimationFrame(circuit)}}
+  window.addEventListener('scroll',qc,{passive:true});window.addEventListener('resize',qc);circuit();
 
-  /* ---- layer tabs ---- */
-  var tabs=[].slice.call(doc.querySelectorAll('.tab'));
+  /* ===== layer tabs ===== */
+  var tabs=$$('.tab');
   function pick(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;doc.getElementById(x.getAttribute('aria-controls')).hidden=!on})}
   tabs.forEach(function(t,i){
     t.addEventListener('click',function(){pick(t)});
@@ -625,115 +900,343 @@ reevaluation_entries ──many:one── reevaluation period ──1:1 per acco
     });
   });
 
-  /* ---- posting lab ---- */
+  /* ===== posting lab ===== */
   var data={
     expense:[['CIB cash',-450,'outflow',1]],
     transfer:[['CIB',-10000,'internal',0],['THNDR',10000,'internal',0]],
     buy:[['THNDR cash',-5000,'internal',0],['THNDR · COMI units, at cost',5000,'internal',0]],
     broken:[['CIB',-10000,'internal',0],['THNDR',9000,'internal',0]]
   };
-  var rowsEl=doc.getElementById('lab-rows'),chkEl=doc.getElementById('lab-checks');
-  function fmt(n){return (n<0?'−':'+')+Math.abs(n).toLocaleString('en-US')}
+  var labRows=$('#lab-rows'),labChk=$('#lab-checks');
+  function sg(n){return (n<0?'−':'+')+Math.abs(n).toLocaleString('en-US')}
   function lab(k){
-    var rows=data[k],html='',internal=0,hasInternal=false,ext=false,bad=[];
-    rows.forEach(function(r){
-      html+='<tr><td>'+r[0]+'</td><td class="num">'+fmt(r[1])+'</td><td>'+r[2]+(r[3]?' · needs a category':'')+'</td></tr>';
-      if(r[2]==='internal'){internal+=r[1];hasInternal=true}else ext=true;
-    });
-    rowsEl.innerHTML=html;
-    var out='';
-    if(hasInternal){
-      if(internal===0)out+='<li>internal lines net to zero</li>';
-      else{out+='<li class="bad">refused: internal lines net to '+fmt(internal)+', not zero</li>';bad.push(1)}
-    }
+    var rows=data[k],html='',internal=0,hasI=false,ext=false,bad=false;
+    rows.forEach(function(r){html+='<tr><td>'+r[0]+'</td><td class="num">'+sg(r[1])+'</td><td>'+r[2]+(r[3]?' · needs a category':'')+'</td></tr>';if(r[2]==='internal'){internal+=r[1];hasI=true}else ext=true});
+    labRows.innerHTML=html;var out='';
+    if(hasI){if(internal===0)out+='<li>internal lines net to zero</li>';else{out+='<li class="bad">refused: internal lines net to '+sg(internal)+', not zero</li>';bad=true}}
     if(ext)out+='<li>external outflow carries a category</li>';
-    if(!bad.length)out+='<li>posted through <code>TransactionService</code></li>';
-    else out+='<li class="bad">nothing was written to the ledger</li>';
-    chkEl.innerHTML=out;
+    out+=bad?'<li class="bad">nothing was written to the ledger</li>':'<li>posted through <code>TransactionService</code></li>';
+    labChk.innerHTML=out;
   }
-  var lb=[].slice.call(doc.querySelectorAll('#lab .lab-top button'));
-  lb.forEach(function(b){b.addEventListener('click',function(){lb.forEach(function(x){x.setAttribute('aria-pressed',x===b)});lab(b.dataset.k)})});
+  var lbs=$$('#lab .w-top button');
+  lbs.forEach(function(b){b.addEventListener('click',function(){lbs.forEach(function(x){x.setAttribute('aria-pressed',x===b)});lab(b.dataset.k)})});
   lab('expense');
 
-  /* ---- copy buttons ---- */
-  [].slice.call(doc.querySelectorAll('pre.code[data-copy]')).forEach(function(pre){
+  /* ===== copy buttons ===== */
+  $$('pre.code[data-copy]').forEach(function(pre){
     var b=doc.createElement('button');b.type='button';b.className='cp';b.textContent='copy';b.setAttribute('aria-label','Copy these commands');
-    b.addEventListener('click',function(){
-      var text=pre.getAttribute('data-copy');
-      function done(ok){b.textContent=ok?'copied':'press Ctrl+C';setTimeout(function(){b.textContent='copy'},1600)}
-      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true)},function(){done(false)})}
-      else{var t=doc.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';body.appendChild(t);t.select();var ok=false;try{ok=doc.execCommand('copy')}catch(_){}body.removeChild(t);done(ok)}
-    });
+    b.addEventListener('click',function(){copyText(pre.getAttribute('data-copy'),function(ok){b.textContent=ok?'copied':'press Ctrl+C';setTimeout(function(){b.textContent='copy'},1600)})});
     pre.appendChild(b);
   });
-
-  /* ---- terminal: types once when it scrolls into view; a click skips it ---- */
-  var term=doc.getElementById('term');
-  if(term&&!reduce&&'IntersectionObserver' in window){
-    var full=term.innerHTML,started=false,ls=full.split('\n'),skip=false;
-    term.innerHTML='';
-    function show(i){
-      if(skip||i>=ls.length){term.innerHTML=full;return}
-      term.innerHTML=ls.slice(0,i+1).join('\n');
-      setTimeout(function(){show(i+1)},i===0?380:130);
-    }
-    var to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!started){started=true;to.disconnect();show(0)}})},{threshold:.35});
-    to.observe(term);
-    term.addEventListener('click',function(){skip=true;term.innerHTML=full});
+  function copyText(text,cb){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){cb(true)},function(){cb(false)})}
+    else{var t=doc.createElement('textarea');t.value=text;t.style.cssText='position:fixed;opacity:0';body.appendChild(t);t.select();var ok=false;try{ok=doc.execCommand('copy')}catch(_){}body.removeChild(t);cb(ok)}
   }
 
-  /* ---- particle bolt: a calm lightning shape that breathes; the pulse travels down it ---- */
-  var cv=doc.getElementById('bolt');
-  if(cv&&cv.getContext){
-    var ctx=cv.getContext('2d'),W=0,H=0,dpr=1,P=[],raf=0,visible=true,t0=performance.now(),mx=-9999,my=-9999,colour='#7be6b5';
-    var pts=[[.68,.02],[.40,.44],[.58,.46],[.30,.98]];
-    function readColour(){colour=getComputedStyle(root).getPropertyValue('--accent').trim()||colour}
-    function build(){
-      var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;
-      dpr=Math.min(window.devicePixelRatio||1,1.5);cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-      var n=W<360?380:760,seg=[],tot=0;
-      for(var i=0;i<pts.length-1;i++){var dx=(pts[i+1][0]-pts[i][0])*W,dy=(pts[i+1][1]-pts[i][1])*H,l=Math.sqrt(dx*dx+dy*dy);seg.push(l);tot+=l}
-      P=[];
-      for(var k=0;k<n;k++){
-        var u=Math.random()*tot,s=0,acc=0;
-        while(s<seg.length-1&&acc+seg[s]<u){acc+=seg[s];s++}
-        var f=(u-acc)/seg[s],a=pts[s],b=pts[s+1];
-        var g=(Math.random()+Math.random()+Math.random()-1.5)*(W*.026);
-        var hx=(a[0]+(b[0]-a[0])*f)*W+g,hy=(a[1]+(b[1]-a[1])*f)*H+(Math.random()-.5)*W*.01;
-        P.push({x:hx+(Math.random()-.5)*60,y:hy+(Math.random()-.5)*60,hx:hx,hy:hy,t:(u/tot),s:Math.random()*6.28,z:Math.random()<.14?2:1.6,a:.3+Math.random()*.5});
+  /* ===== about terminal: types once when seen; a click skips ===== */
+  var term=$('#term');
+  if(term&&!reduce&&'IntersectionObserver' in window){
+    var full=term.innerHTML,ls=full.split('\n'),started=false,skip=false;
+    term.innerHTML='';
+    var show=function(i){if(skip||i>=ls.length){term.innerHTML=full;return}term.innerHTML=ls.slice(0,i+1).join('\n');setTimeout(function(){show(i+1)},i===0?380:130)};
+    var to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!started){started=true;to.disconnect();show(0)}})},{threshold:.35});
+    to.observe(term);term.addEventListener('click',function(){skip=true;term.innerHTML=full});
+  }
+
+  /* ===== hero: the ledger replay ===== */
+  var rowsEl=$('#rows'),figEl=$('#fig'),deltaEl=$('#delta'),ledgerEl=$('#ledger');
+  var events=[
+    {n:'Salary',note:'inflow · Work',a:32000,t:'in'},
+    {n:'Rent',note:'outflow · Personal',a:-9000,t:'out'},
+    {n:'CIB → THNDR',note:'internal · nets to 0',a:10000,t:'int'},
+    {n:'Carrefour',note:'outflow · Personal',a:-1240,t:'out'},
+    {n:'CIB → THNDR',note:'internal · nets to −1,000',a:9000,t:'bad'},
+    {n:'Vodafone',note:'outflow · Personal',a:-380,t:'out'},
+    {n:'Buy COMI',note:'internal · units at cost',a:5000,t:'int'}
+  ];
+  var START=48000,val=START,idx=0,paused=false,seen=true,rtimer=0,tween=0;
+  function fmtN(n){return n.toLocaleString('en-US')}
+  function minus(n){return (n<0?'−':'+')+Math.abs(n).toLocaleString('en-US')}
+  function tweenTo(to){
+    cancelAnimationFrame(tween);var from=parseInt(figEl.textContent.replace(/,/g,''),10)||0,t0=performance.now();
+    if(reduce){figEl.textContent=fmtN(to);return}
+    (function s(now){var p=Math.min(1,(now-t0)/600),e=1-Math.pow(1-p,3);figEl.textContent=fmtN(Math.round(from+(to-from)*e));if(p<1)tween=requestAnimationFrame(s)})(t0);
+  }
+  function rowHTML(e){
+    var am=e.t==='in'||e.t==='out'?minus(e.a):fmtN(e.a)+' ↔',st=e.t==='bad'?'✕ refused':(e.t==='int'?'✓ kept':'✓ posted');
+    return '<li class="'+(e.t==='bad'?'bad':'')+'"><b>'+e.n+'</b><span class="am">'+am+'</span><small>'+e.note+'</small><span class="st">'+st+'</span></li>';
+  }
+  function step(){
+    var e=events[idx];
+    rowsEl.insertAdjacentHTML('afterbegin',rowHTML(e));
+    while(rowsEl.children.length>6)rowsEl.removeChild(rowsEl.lastChild);
+    if(e.t==='in'||e.t==='out'){
+      val+=e.a;tweenTo(val);
+      deltaEl.textContent=minus(e.a);deltaEl.className='delta show'+(e.a<0?' neg':'');
+      setTimeout(function(){deltaEl.className='delta'+(e.a<0?' neg':'')},1100);
+    }
+    idx++;
+    if(idx>=events.length){idx=0;rtimer=setTimeout(function(){rowsEl.innerHTML='';val=START;tweenTo(START);loop()},3200);return}
+    loop();
+  }
+  function loop(){clearTimeout(rtimer);rtimer=setTimeout(function(){if(paused||!seen||doc.hidden){loop();return}step()},1700)}
+  if(rowsEl){
+    if(reduce){events.forEach(function(e){rowsEl.insertAdjacentHTML('afterbegin',rowHTML(e));if(e.t==='in'||e.t==='out')val+=e.a});figEl.textContent=fmtN(val)}
+    else{
+      setTimeout(step,900);
+      ledgerEl.addEventListener('pointerenter',function(){paused=true});ledgerEl.addEventListener('pointerleave',function(){paused=false});
+      ledgerEl.addEventListener('focusin',function(){paused=true});ledgerEl.addEventListener('focusout',function(){paused=false});
+      if('IntersectionObserver' in window)new IntersectionObserver(function(es){seen=es[0].isIntersecting}).observe(ledgerEl);
+    }
+  }
+
+  /* ===== type less ===== */
+  var qa=$('#qa'),qaOut=$('#qa-out'),qd=$('#qd'),qdOut=$('#qd-out');
+  function digits(s){return s.replace(/[٠-٩]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[۰-۹]/g,function(d){return d.charCodeAt(0)-1776}).replace(/٫/g,'.').replace(/[٬،,]/g,'')}
+  function calc(raw){
+    var s=digits(raw).replace(/\s+/g,'');s=s.replace(/^=/,'').replace(/=$/,'');
+    if(!s)return {e:''};
+    if(!/^[0-9+\-*/().]+$/.test(s))return {e:'Use numbers and + − × ÷ only.'};
+    var i=0,bad=false;
+    function peek(){return s.charAt(i)}
+    function num(){var m=/^(\d+\.?\d*|\.\d+)/.exec(s.slice(i));if(!m){bad=true;return 0}i+=m[0].length;return parseFloat(m[0])}
+    function fac(){if(peek()==='-'){i++;return -fac()}if(peek()==='('){i++;var v=expr();if(peek()===')')i++;else bad=true;return v}return num()}
+    function term(){var v=fac();while(peek()==='*'||peek()==='/'){var o=s.charAt(i++),r=fac();if(o==='*')v*=r;else{if(r===0){bad=true;return 0}v/=r}}return v}
+    function expr(){var v=term();while(peek()==='+'||peek()==='-'){var o=s.charAt(i++),r=term();v=o==='+'?v+r:v-r}return v}
+    var v=expr();
+    if(bad||i!==s.length||!isFinite(v))return {e:'That is not a sum Lightning can read.'};
+    return {v:v};
+  }
+  function showQA(){
+    var r=calc(qa.value);
+    if(r.e!==undefined){qaOut.className='out'+(r.e?' err':'');qaOut.textContent=r.e;return}
+    qaOut.className='out';qaOut.innerHTML=r.v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+'<small>EGP</small>';
+  }
+  function pad(n){return (n<10?'0':'')+n}
+  function showQD(){
+    var s=digits(qd.value).trim();
+    if(!s){qdOut.className='out';qdOut.textContent='';return}
+    var m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s),d,mo,y;
+    if(m){y=+m[1];mo=+m[2];d=+m[3]}
+    else{m=/^(\d{1,2})[\/.\-](\d{1,2})(?:[\/.\-](\d{2,4}))?$/.exec(s);if(m){d=+m[1];mo=+m[2];y=m[3]?(+m[3]<100?2000+ +m[3]:+m[3]):new Date().getFullYear()}}
+    if(!m){qdOut.className='out err';qdOut.textContent='Try 31/1, 5/10/2026 or 2026-10-17.';return}
+    var dt=new Date(y,mo-1,d);
+    if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==d){qdOut.className='out err';qdOut.textContent='That date does not exist.';return}
+    qdOut.className='out';qdOut.textContent=y+'-'+pad(mo)+'-'+pad(d);
+  }
+  if(qa){qa.addEventListener('input',showQA);qd.addEventListener('input',showQD);showQA();showQD();
+    $$('[data-qa]').forEach(function(b){b.addEventListener('click',function(){qa.value=b.dataset.qa;showQA()})});
+    $$('[data-qd]').forEach(function(b){b.addEventListener('click',function(){qd.value=b.dataset.qd;showQD()})});}
+
+  /* ===== trace a number (the registry's real formulas) ===== */
+  var F={
+    bank:{l:'Bank and wallet cash',m:'Your cash in bank accounts and wallets.'},
+    brok:{l:'Brokerage cash',m:'Your uninvested cash inside brokerage accounts.'},
+    cash:{l:'Cash you own',m:'Your cash in banks, wallets and brokerage accounts.',f:'Bank and wallet cash + Brokerage cash',k:['bank','brok']},
+    kept:{l:'Kept apart',m:'Cash you own that is not ready to spend: cash in a brokerage, cash in another currency, or an account you set apart.'},
+    res:{l:'Reserves',m:'Cash you set aside for emergencies and dated goals, less what linked payments already used. It stays in your accounts and in what you own.'},
+    bills:{l:'Bills due',m:'Bills, subscriptions and loan payments dated today or earlier that nothing has paid yet.'},
+    free_cash:{l:'Free cash',m:'Cash you can spend without touching reserves or leaving a bill unpaid. Cash kept apart (brokerage, other currencies) is left out.',f:'Cash you own − Kept apart − Reserves − Bills due',k:['cash','kept','res','bills']},
+    hold:{l:'Holdings value',m:'Everything you own that is not cash, at its latest value: certificates and deposits, Gam\'eya paid in, stocks, funds, gold and other assets.'},
+    other:{l:'Other you own',m:'Anything you own that is neither cash nor a holding.',f:'What you own − Cash you own − Holdings value'},
+    own:{l:'What you own',m:'The value of everything in your accounts that is yours.',f:'Cash you own + Holdings value + Other you own',k:['cash','hold','other']},
+    loans:{l:'Loans still to pay',m:'Every loan payment not paid yet, due or upcoming.'},
+    gam:{l:'Gam\'eya still to pay',m:'What you owe a savings circle you took the pot from early: its balance while it is below zero.'},
+    owe:{l:'What you owe',m:'Payments you are certain to make: bills already due, loans and what you owe a savings circle.',f:'Bills due (other than loan payments) + Loans still to pay + Gam\'eya still to pay',k:['bills','loans','gam']},
+    net_worth:{l:'Net worth',m:'What you own after what you owe.',f:'What you own − What you owe',k:['own','owe']},
+    after:{l:'Holdings after sale (estimate)',m:'What your holdings, deposits included, might fetch if sold or cashed in today, after each class\'s sale factor.',f:'Σ Holdings value of each class × its sale factor'},
+    sold:{l:'If you sold today (estimate)',m:'Free cash plus what your holdings might fetch.',f:'Free cash + Holdings after sale (estimate)',k:['free_cash','after']}
+  };
+  var treeEl=$('#tree');
+  function node(key,d,depth){
+    var n=F[key],hasK=n.k&&n.k.length,id='m-'+Math.random().toString(36).slice(2,8);
+    var li=doc.createElement('li');li.style.setProperty('--d',d+'ms');
+    var b=doc.createElement('button');b.type='button';b.className='node';b.setAttribute('aria-expanded',depth===0?'true':'false');b.setAttribute('aria-controls',id);
+    b.innerHTML=n.l+(hasK||n.f?'':'<span class="base">base figure</span>')+(n.f?'<span class="eq">= '+n.f+'</span>':'');
+    var p=doc.createElement('p');p.className='mean';p.id=id;p.textContent=n.m;p.hidden=depth!==0;
+    b.addEventListener('click',function(){var open=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!open);p.hidden=open});
+    li.appendChild(b);li.appendChild(p);
+    if(hasK){var ul=doc.createElement('ul');var dd=d+110;n.k.forEach(function(c){ul.appendChild(node(c,dd,depth+1));dd+=110});li.appendChild(ul)}
+    return li;
+  }
+  function renderTree(root){treeEl.innerHTML='';treeEl.appendChild(node(root,0,0))}
+  if(treeEl){
+    renderTree('free_cash');
+    var tb=$$('#trace .w-top button');
+    tb.forEach(function(b){b.addEventListener('click',function(){tb.forEach(function(x){x.setAttribute('aria-pressed',x===b)});renderTree(b.dataset.root==='sold'?'sold':b.dataset.root)})});
+  }
+
+  /* ===== unlock sequence ===== */
+  var ulog=$('#ulog'),keyEl=$('#key'),dbEl=$('#db'),tries=0,ut=[];
+  function clearU(){ut.forEach(clearTimeout);ut=[];$$('#ulw .st,#ulw .ar').forEach(function(e){e.classList.remove('lit','arl')});dbEl.className=''}
+  function lit(sel,on){$$(sel).forEach(function(e){e.classList.add(e.classList.contains('ar')?'arl':'lit')})}
+  function run(path,end){
+    var steps=path==='a'?['[data-a="1"]','[data-a="2"]','[data-a="3"]']:['[data-b="1"]','[data-b="2"]','[data-b="3"]'];
+    var delay=reduce?0:420;
+    steps.forEach(function(s,i){ut.push(setTimeout(function(){lit(s);if(i<2||true)lit(s.replace('st','ar'))},delay*i))});
+    ut.push(setTimeout(function(){end()},delay*steps.length));
+  }
+  function setLog(h){ulog.innerHTML=h}
+  var uw=$('#ulw');
+  if(uw){
+    $$('#ulw .w-top button').forEach(function(b){b.addEventListener('click',function(){
+      clearU();var k=b.dataset.u;
+      if(k==='open'){tries=0;setLog('<b>password</b> → Argon2id → unwrap with lock A…');run('a',function(){keyEl.classList.add('lit');setLog('<b>data key unwrapped.</b> The profile opens. Nothing was re-encrypted.')})}
+      else if(k==='reset'){tries=0;setLog('<b>recovery key + answer</b> → Argon2id → unwrap with lock B…');run('b',function(){keyEl.classList.add('lit');setLog('<b>data key unwrapped.</b> Now set a new password: the same key is rewrapped under it. Nothing is re-encrypted.')})}
+      else{
+        tries++;var ladder=['1 minute','5 minutes','15 minutes','1 hour'];
+        lit('[data-a="1"]');lit('[data-a="2"]');
+        if(tries<=5)setLog('<b>wrong password</b> · free try '+tries+' of 5. Argon2id spent its time and memory, and lock A stayed shut.');
+        else{var w=ladder[Math.min(tries-6,3)];setLog('<b>wrong password</b> · wait '+w+' before the next try. Never a permanent lockout.')}
+      }
+    })});
+  }
+
+  /* ===== command palette ===== */
+  var cmd=$('#cmd'),cin=$('#cmd-in'),clist=$('#cmd-list'),openBtn=$('#open-cmd'),prevFocus=null,cur=0,shown=[];
+  var isMac=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent||'');
+  $('#kbd').textContent=isMac?'⌘ K':'Ctrl K';
+  function go(id){var e=doc.getElementById(id);if(e)e.scrollIntoView({behavior:reduce?'auto':'smooth'})}
+  var items=[];
+  $$('.toc a').forEach(function(a){items.push({t:'Go to '+a.textContent.replace(/^\d+/,function(m){return m+' · '}),h:'section',run:function(){go(a.getAttribute('href').slice(1))}})});
+  [['PROJECT_OVERVIEW.md','docs/PROJECT_OVERVIEW.md'],['ARCHITECTURE.md','docs/ARCHITECTURE.md'],['GLOSSARY.md','docs/GLOSSARY.md'],['CONTRIBUTING.md','CONTRIBUTING.md'],['AGENTS.md','AGENTS.md']].forEach(function(d){items.push({t:'Open '+d[0],h:'github ↗',run:function(){window.open('https://github.com/elfekimuhammed/Lightning/blob/main/'+d[1],'_blank','noopener')}})});
+  items.push({t:'Copy the clone command',h:'action',run:function(){copyText('git clone https://github.com/elfekimuhammed/Lightning.git',function(){})}});
+  items.push({t:'Email geeks@lightningeg.com',h:'action',run:function(){location.href='mailto:geeks@lightningeg.com'}});
+  names.forEach(function(n){items.push({t:'Palette: '+labels[n],h:'theme',run:function(){setPalette(n,true)}})});
+  items.push({t:'Replay the strike',h:'effect',run:function(){strike(true)}});
+  function sub(q,s){q=q.toLowerCase().replace(/\s+/g,'');s=s.toLowerCase();var j=0;for(var i=0;i<s.length&&j<q.length;i++)if(s.charAt(i)===q.charAt(j))j++;return j===q.length}
+  function paint(){
+    var q=cin.value.trim();shown=items.filter(function(it){return !q||sub(q,it.t)});
+    if(cur>=shown.length)cur=0;
+    clist.innerHTML='';
+    shown.forEach(function(it,i){var li=doc.createElement('li'),b=doc.createElement('button');b.type='button';b.setAttribute('role','option');b.setAttribute('aria-selected',i===cur);b.innerHTML='<span></span><small></small>';b.firstChild.textContent=it.t;b.lastChild.textContent=it.h;
+      b.addEventListener('click',function(){choose(i)});b.addEventListener('mousemove',function(){if(cur!==i){cur=i;mark()}});li.appendChild(b);clist.appendChild(li)});
+    if(!shown.length){clist.innerHTML='<li style="padding:14px 12px;font:400 13px var(--mono);color:var(--subtle)">Nothing matches.</li>'}
+  }
+  function mark(){$$('#cmd-list button').forEach(function(b,i){b.setAttribute('aria-selected',i===cur)});var s=$('#cmd-list button[aria-selected="true"]');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest'})}
+  function openCmd(){prevFocus=doc.activeElement;cmd.hidden=false;cin.value='';cur=0;paint();cin.focus();body.style.overflow='hidden'}
+  function closeCmd(){cmd.hidden=true;body.style.overflow='';if(prevFocus&&prevFocus.focus)prevFocus.focus()}
+  function choose(i){var it=shown[i];if(!it)return;closeCmd();setTimeout(it.run,30)}
+  openBtn.addEventListener('click',openCmd);
+  cin.addEventListener('input',function(){cur=0;paint()});
+  cmd.addEventListener('mousedown',function(e){if(e.target===cmd)closeCmd()});
+  cmd.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){e.preventDefault();closeCmd()}
+    else if(e.key==='ArrowDown'){e.preventDefault();if(shown.length){cur=(cur+1)%shown.length;mark()}}
+    else if(e.key==='ArrowUp'){e.preventDefault();if(shown.length){cur=(cur-1+shown.length)%shown.length;mark()}}
+    else if(e.key==='Enter'){e.preventDefault();choose(cur)}
+    else if(e.key==='Tab'){e.preventDefault()}
+  });
+  doc.addEventListener('keydown',function(e){
+    var tag=(e.target.tagName||'').toLowerCase(),typing=tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable;
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();cmd.hidden?openCmd():closeCmd()}
+    else if(e.key==='/'&&!typing&&cmd.hidden){e.preventDefault();openCmd()}
+  });
+  $('#replay').addEventListener('click',function(){strike(true)});
+
+  /* ===== background: a ledger grid that answers you, and one strike ===== */
+  var cv=$('#grid'),ctx=cv.getContext('2d'),W=0,H=0,dpr=1,S=26,cols=0,rows=0,boost=null,colour='#7be6b5',light=false;
+  var mouse={x:-9999,y:-9999,last:0},ripples=[],sparks=[],bolt=null,run0=0,raf=0,rtm=0,sx=0;
+  function readColour(){var cs=getComputedStyle(root);colour=cs.getPropertyValue('--accent').trim()||colour;light=root.dataset.palette==='minimal'}
+  function size(){
+    W=window.innerWidth;H=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,1.5);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    S=W<600?24:(W*H>2400000?32:26);cols=Math.ceil(W/S);rows=Math.ceil(H/S);boost=new Float32Array(cols*rows);
+    draw(performance.now());
+  }
+  function baseA(){return light?.2:.15}
+  function draw(now){
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=colour;
+    var b=baseA(),mr=150,mr2=mr*mr,active=false;
+    // strike flash
+    if(bolt){
+      var t=(now-bolt.t0)/1000;
+      if(t<.5){var g=ctx.createRadialGradient(bolt.pts[0].x,0,0,bolt.pts[0].x,0,Math.max(W,H)*.8);g.addColorStop(0,colour);g.addColorStop(1,'transparent');ctx.globalAlpha=(light?.1:.2)*(1-t/.5);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle=colour}
+    }
+    var hasMouse=mouse.x>-999;
+    for(var j=0;j<rows;j++){
+      var y=j*S+S/2;
+      for(var i=0;i<cols;i++){
+        var x=i*S+S/2,k=j*cols+i,a=b;
+        if(hasMouse){var dx=x-mouse.x,dy=y-mouse.y,d2=dx*dx+dy*dy;if(d2<mr2){var f=1-Math.sqrt(d2)/mr;a+=f*f*(light?.5:.5)}}
+        for(var r=0;r<ripples.length;r++){var rp=ripples[r],dd=Math.abs(Math.sqrt((x-rp.x)*(x-rp.x)+(y-rp.y)*(y-rp.y))-rp.r);if(dd<70){var q=1-dd/70;a+=q*q*.4*rp.f}}
+        var bo=boost[k];if(bo>.01){a+=bo;boost[k]=bo*Math.exp(-(now-sx)/1000/.8);active=true}
+        if(a>b+.01||true){ctx.globalAlpha=Math.min(.95,a);ctx.fillRect(x-1,y-1,2,2)}
       }
     }
-    function draw(now){
-      raf=0;
-      var t=(now-t0)/1000,phase=((t%13)/13)/.38;       // one pass every 13s, matching the page's circuit
-      ctx.clearRect(0,0,W,H);ctx.fillStyle=colour;
-      for(var i=0;i<P.length;i++){
-        var p=P[i];
-        var tx=p.hx+Math.sin(t*.7+p.s)*2.2,ty=p.hy+Math.cos(t*.6+p.s)*2.2;
-        var dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
-        if(d2<4900){var d=Math.sqrt(d2)||1,f=(70-d)/70;tx+=dx/d*f*26;ty+=dy/d*f*26}
-        p.x+=(tx-p.x)*.07;p.y+=(ty-p.y)*.07;
-        var boost=0;if(phase<=1.2){var dd=Math.abs(p.t-phase);if(dd<.07)boost=(1-dd/.07)*.6}
-        ctx.globalAlpha=Math.min(1,p.a*(.7+.3*Math.sin(t*1.1+p.s))+boost);
-        ctx.fillRect(p.x,p.y,p.z,p.z);
+    sx=now;
+    // bolt
+    if(bolt){
+      var tt=(now-bolt.t0)/1000,reveal=Math.min(1,tt/.5),fade=tt<.9?1:Math.max(0,1-(tt-.9)/.7);
+      if(fade>0){
+        var n=bolt.pts.length-1,upto=reveal*n;
+        ctx.save();ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor=colour;ctx.shadowBlur=18;ctx.globalAlpha=fade;
+        [bolt.pts].concat(bolt.branches).forEach(function(pts,bi){
+          var lim=bi===0?upto:Math.max(0,upto-bolt.bStart[bi-1]);
+          ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+          for(var m=1;m<pts.length;m++){var seg=m-1;if(seg>=lim)break;var fr=Math.min(1,lim-seg);ctx.lineTo(pts[m-1].x+(pts[m].x-pts[m-1].x)*fr,pts[m-1].y+(pts[m].y-pts[m-1].y)*fr)}
+          ctx.strokeStyle=colour;ctx.lineWidth=bi===0?2.4:1.5;ctx.stroke();
+        });
+        ctx.shadowBlur=0;ctx.strokeStyle=light?'#ffffff':'#ffffff';ctx.globalAlpha=fade*.8;ctx.lineWidth=.9;
+        ctx.beginPath();ctx.moveTo(bolt.pts[0].x,bolt.pts[0].y);for(var m2=1;m2<bolt.pts.length;m2++){if(m2-1>=upto)break;var fr2=Math.min(1,upto-(m2-1));ctx.lineTo(bolt.pts[m2-1].x+(bolt.pts[m2].x-bolt.pts[m2-1].x)*fr2,bolt.pts[m2-1].y+(bolt.pts[m2].y-bolt.pts[m2-1].y)*fr2)}ctx.stroke();
+        ctx.restore();active=true;
       }
-      ctx.globalAlpha=1;
-      if(visible&&!reduce)raf=requestAnimationFrame(draw);
+      if(tt>1.7)bolt=null;
     }
-    function still(){
-      for(var i=0;i<P.length;i++){P[i].x=P[i].hx;P[i].y=P[i].hy}
-      ctx.clearRect(0,0,W,H);ctx.fillStyle=colour;
-      for(var j=0;j<P.length;j++){ctx.globalAlpha=P[j].a;ctx.fillRect(P[j].x,P[j].y,P[j].z,P[j].z)}
-      ctx.globalAlpha=1;
+    // sparks
+    for(var s=sparks.length-1;s>=0;s--){
+      var sp=sparks[s];sp.l-=1/60;if(sp.l<=0){sparks.splice(s,1);continue}
+      sp.vy+=3;sp.x+=sp.vx/60;sp.y+=sp.vy/60;ctx.globalAlpha=Math.min(1,sp.l*1.6);ctx.fillStyle=colour;ctx.fillRect(sp.x,sp.y,2,2);active=true;
     }
-    function start(){readColour();build();if(reduce)still();else if(!raf)raf=requestAnimationFrame(draw)}
-    start();
-    var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(start,150)});
-    window.addEventListener('palettechange',function(){readColour();if(reduce)still()});
-    cv.parentNode.addEventListener('pointermove',function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
-    cv.parentNode.addEventListener('pointerleave',function(){mx=my=-9999});
-    if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible&&!reduce&&!raf)raf=requestAnimationFrame(draw)}).observe(cv)}
-    doc.addEventListener('visibilitychange',function(){if(doc.hidden){if(raf){cancelAnimationFrame(raf);raf=0}}else if(visible&&!reduce&&!raf)raf=requestAnimationFrame(draw)});
+    // ripples
+    for(var r2=ripples.length-1;r2>=0;r2--){var rr=ripples[r2];rr.r+=7;rr.f=Math.max(0,1-rr.r/rr.max);if(rr.r>rr.max)ripples.splice(r2,1);else active=true}
+    ctx.globalAlpha=1;
+    var recent=performance.now()-mouse.last<900;
+    if((active||recent)&&!reduce&&!doc.hidden)raf=requestAnimationFrame(draw);else raf=0;
+  }
+  function kick(){if(!raf&&!reduce&&!doc.hidden)raf=requestAnimationFrame(draw)}
+  function addBoost(x1,y1,x2,y2){
+    var pad=110,minX=Math.max(0,Math.floor((Math.min(x1,x2)-pad)/S)),maxX=Math.min(cols-1,Math.ceil((Math.max(x1,x2)+pad)/S)),minY=Math.max(0,Math.floor((Math.min(y1,y2)-pad)/S)),maxY=Math.min(rows-1,Math.ceil((Math.max(y1,y2)+pad)/S));
+    var vx=x2-x1,vy=y2-y1,l2=vx*vx+vy*vy||1;
+    for(var j=minY;j<=maxY;j++)for(var i=minX;i<=maxX;i++){
+      var x=i*S+S/2,y=j*S+S/2,t=Math.max(0,Math.min(1,((x-x1)*vx+(y-y1)*vy)/l2)),px=x1+vx*t,py=y1+vy*t,d=Math.sqrt((x-px)*(x-px)+(y-py)*(y-py));
+      if(d<pad){var v=(1-d/pad)*.95,k=j*cols+i;if(v>boost[k])boost[k]=v}
+    }
+  }
+  function strike(force){
+    if(reduce)return;
+    if(!force){try{if(sessionStorage.getItem('lg-geeks-strike'))return;sessionStorage.setItem('lg-geeks-strike','1')}catch(_){}}
+    readColour();
+    var x=W*(.56+Math.random()*.22),y=-8,pts=[{x:x,y:y}],endY=H*(.5+Math.random()*.2);
+    while(y<endY){y+=34+Math.random()*34;x+=(Math.random()-.5)*90;pts.push({x:x,y:y})}
+    var branches=[],bStart=[];
+    for(var b=0;b<2;b++){
+      var si=2+Math.floor(Math.random()*(pts.length-4)),bp=[{x:pts[si].x,y:pts[si].y}],bx=pts[si].x,by=pts[si].y,dir=Math.random()<.5?-1:1;
+      for(var q=0;q<4;q++){bx+=dir*(20+Math.random()*34);by+=24+Math.random()*28;bp.push({x:bx,y:by})}
+      branches.push(bp);bStart.push(si);
+    }
+    bolt={pts:pts,branches:branches,bStart:bStart,t0:performance.now()};
+    for(var i=0;i<pts.length-1;i++){(function(i){setTimeout(function(){addBoost(pts[i].x,pts[i].y,pts[i+1].x,pts[i+1].y);for(var s=0;s<5;s++)sparks.push({x:pts[i+1].x,y:pts[i+1].y,vx:(Math.random()-.5)*140,vy:-20+Math.random()*80,l:.7+Math.random()*.8})},i*(500/pts.length))})(i)}
+    branches.forEach(function(bp,bi){for(var i=0;i<bp.length-1;i++)addBoost(bp[i].x,bp[i].y,bp[i+1].x,bp[i+1].y)});
+    var h=$('#h1');if(h){h.classList.remove('struck');void h.offsetWidth;h.classList.add('struck')}
+    kick();
+  }
+  function scheduleRipple(){
+    clearTimeout(rtm);
+    rtm=setTimeout(function(){
+      if(!doc.hidden&&!reduce){ripples.push({x:Math.random()*W,y:Math.random()*H,r:0,max:Math.max(W,H)*.6,f:1});kick()}
+      scheduleRipple();
+    },9000+Math.random()*5000);
+  }
+  readColour();size();
+  window.addEventListener('resize',function(){clearTimeout(run0);run0=setTimeout(function(){readColour();size()},120)});
+  window.addEventListener('palettechange',function(){readColour();draw(performance.now())});
+  if(!reduce){
+    window.addEventListener('pointermove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.last=performance.now();kick()},{passive:true});
+    doc.addEventListener('pointerleave',function(){mouse.x=mouse.y=-9999;kick()});
+    doc.addEventListener('visibilitychange',function(){if(!doc.hidden)kick()});
+    scheduleRipple();
+    setTimeout(function(){strike(location.search.indexOf('strike')>-1)},500);
   }
 })();
 </script>
