@@ -1,0 +1,257 @@
+<!doctype html>
+<!-- For Geeks · roadmap · 2026-10-17 · the milestones: M1 core and open-source workflow, M2 Google Play, M3 App Store (owner, 2026-10-17). Keep it in step with NOW.md and PROJECT_OVERVIEW.md › Roadmap in the app repository. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://lightningeg.com/forgeeks-roadmap.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Lightning">
+  <meta property="og:title" content="Roadmap · For Geeks · Lightning">
+  <meta property="og:description" content="The Lightning roadmap: finish the core and open it to contributors, then Google Play, then the App Store. What is done, what we are on, what comes next.">
+  <meta property="og:url" content="https://lightningeg.com/forgeeks-roadmap.html">
+  <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="The Lightning roadmap: finish the core and open it to contributors, then Google Play, then the App Store. What is done, what we are on, what comes next.">
+  <title>Roadmap · For Geeks · Lightning</title>
+  <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261017-1">
+</head>
+<body class="no-js">
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="grid" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="forgeeks.html" aria-label="Lightning, For Geeks home">
+      <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="15" height="21">
+      lightning
+    </a>
+    <span class="crumb" aria-hidden="true">~/root/for-geeks/<b>roadmap</b><span class="caret"></span></span>
+    <nav class="links" aria-label="For Geeks">
+      <a href="forgeeks.html">home</a>
+      <a href="forgeeks-roadmap.html" aria-current="page">roadmap</a>
+    </nav>
+    <div class="tools">
+      <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
+        <span class="dots" aria-hidden="true"><i style="background:var(--bg)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i></span>
+        <span class="t-name">theme: <span id="theme-name">mono</span></span>
+      </button>
+      <a class="chip src" href="https://github.com/elfekimuhammed/Lightning" rel="noopener">source ↗</a>
+    </div>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<nav class="rail" id="rail" aria-label="On this page">
+      <a href="#core"><span>M1</span><i></i><em>the core</em></a>
+      <a href="#play"><span>M2</span><i></i><em>google play</em></a>
+      <a href="#ios"><span>M3</span><i></i><em>app store</em></a>
+      <a href="#help"><span>→</span><i></i><em>help</em></a>
+</nav>
+
+<div class="tm" id="themes" hidden>
+  <div class="tm-back" data-close></div>
+  <div class="tm-win" role="dialog" aria-modal="true" aria-labelledby="tm-title">
+    <div class="tm-head"><span class="d" aria-hidden="true"><i></i><i></i><i></i></span><span id="tm-title"><b>$</b> theme --pick</span><button class="tm-x" type="button" data-close>esc ✕</button></div>
+    <div class="tm-grid" role="listbox" id="theme-list" aria-label="Themes" tabindex="0"></div>
+    <div class="tm-foot"><span><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> preview</span><span><kbd>enter</kbd> keep</span><span><kbd>esc</kbd> cancel</span><span><kbd>T</kbd> opens this anywhere</span></div>
+  </div>
+</div>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="h1">
+    <div class="wrap">
+      <h1 id="h1">From a working beta<br>to <span class="hi">every phone in Egypt.</span></h1>
+      <div class="hero-grid">
+        <p class="lede">Three milestones, in order. Each lists what is <b>done</b>, what we are <b>on now</b>, and what comes <b>next</b>. Dates come when the work before them is finished, not before.</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/elfekimuhammed/Lightning/issues" rel="noopener">Pick an issue</a>
+          <a class="btn ghost" href="#core"><span class="k">$</span> read the plan</a>
+        </div>
+      </div>
+      <nav class="track" aria-label="Milestones">
+        <a class="now" href="#core"><b>M1 · now</b><span>Finish the core, open the workflow</span><small>backend, features, contributors</small></a>
+        <a href="#play"><b>M2 · next</b><span>Publish on Google Play</span><small>android, closed test, release</small></a>
+        <a href="#ios"><b>M3 · later</b><span>Publish on the App Store</span><small>iOS, TestFlight, release</small></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="s" id="core" aria-labelledby="t-core">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>M1</b> / now</div>
+        <div>
+          <h2 id="t-core">Finish the core. <span class="hi">Open the workflow.</span></h2>
+          <p class="s-sub">Two tracks at the same time: make the backend complete and the features whole, and set up how people outside the team can build with us.</p>
+          <div class="ms-meter reveal"><i style="--p:0.190"></i><span>4 of 21 done · 3 in progress</span></div>
+        </div>
+      </div>
+        <div class="tracks">
+        <div class="lane reveal">
+          <h3>1a · backend and features<span>the app works, end to end</span></h3>
+          <ul class="items">
+          <li class="is-done"><span class="st done">[done]</span><p><b>The core of v1.1</b>Ledger, budget, reports, investments, certificates and gold, cash planning, bank CSV import, Arabic. One ledger, every figure traceable.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>Phone and PC, paired</b>Encrypted profiles on both, paired directly with no cloud. Bank SMS for CIB and NBE, review-only.</p></li>
+          <li><span class="st now">[now]</span><p><b>Ordinary-PC acceptance</b>Recovery and fault drills on an ordinary Windows PC, including the reboot drill and power-loss evidence.</p></li>
+          <li><span class="st now">[now]</span><p><b>Legacy import and in-app restore</b>Bring old data in, and restore a backup from inside the app, both proven end to end.</p></li>
+          <li><span class="st next">[next]</span><p><b>PDF and Excel statements</b>Read them through the same CSV review: size caps, no macros, no formulas run. (#17)</p></li>
+          <li><span class="st next">[next]</span><p><b>A trusted price source for Europe and the Gulf</b>Licensed or live-verified prices for European and GCC shares. The adapters exist; the source does not yet. (#18)</p></li>
+          <li><span class="st next">[next]</span><p><b>Currencies that match across banks</b>Pair bank-imported transfers when the two sides are in different currencies.</p></li>
+          <li><span class="st next">[next]</span><p><b>Search that knows where you are</b>Scoped pickers, alias history and ranking on top of today's Ctrl-K.</p></li>
+          <li><span class="st next">[next]</span><p><b>Honest async</b>Routes are async def with synchronous database work inside. Make them one or the other.</p></li>
+          <li><span class="st later">[later]</span><p><b>Windows in-app updates</b>An Update button: verify the signature, swap folders, keep the old one for rollback, never touch profiles.</p></li>
+          <li><span class="st later">[later]</span><p><b>The phone finds the PC by itself</b>Discovery instead of typing an address, and periodic recovery copies between devices.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>1b · open-source workflow<span>anyone can help, safely</span></h3>
+          <ul class="items">
+          <li class="is-done"><span class="st done">[done]</span><p><b>Public source, plain terms</b>PolyForm Noncommercial 1.0.0. Contribution terms in CONTRIBUTING.md: you keep your copyright.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>Rules a newcomer can follow</b>AGENTS.md, one-file findings in report/, and an architecture that tests enforce, not reviewers.</p></li>
+          <li><span class="st now">[now]</span><p><b>A public roadmap</b>This page. Kept in step with NOW.md and the project overview.</p></li>
+          <li><span class="st next">[next]</span><p><b>Issue templates</b>Bug, feature, and bank SMS format, with redacted samples only. Never real data.</p></li>
+          <li><span class="st next">[next]</span><p><b>Good first issues</b>Labelled from report/: small, self-contained, with the files to read named.</p></li>
+          <li><span class="st next">[next]</span><p><b>CI on every pull request</b>pytest and lint-imports run on each PR, with a pull request template that asks for tests and a changelog line.</p></li>
+          <li><span class="st next">[next]</span><p><b>A security policy</b>SECURITY.md: how to report a flaw privately to geeks@lightningeg.com, and what happens next.</p></li>
+          <li><span class="st next">[next]</span><p><b>Setup in one command</b>Clone, install and open the demo household with one script, on Windows, macOS and Linux.</p></li>
+          <li><span class="st next">[next]</span><p><b>Clear review rules</b>Who reviews which area (CODEOWNERS exists), what a review checks, and how long to expect.</p></li>
+          <li><span class="st later">[later]</span><p><b>A home for contributors</b>A developer channel on Discord and a short monthly note on what landed and what needs hands.</p></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="play" aria-labelledby="t-play">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>M2</b> / next</div>
+        <div>
+          <h2 id="t-play">Publish on <span class="hi">Google Play.</span></h2>
+          <p class="s-sub">The Android app already runs from the same code. This milestone makes it a store app.</p>
+          <div class="ms-meter reveal"><i style="--p:0.143"></i><span>1 of 7 done · 1 in progress</span></div>
+        </div>
+      </div>
+        <div class="lane reveal">
+          <h3>play store<span>android first, it's what most of Egypt carries</span></h3>
+          <ul class="items">
+          <li class="is-done"><span class="st done">[done]</span><p><b>An Android app from the same code</b>Python runs on the phone through Chaquopy. A signed arm64 APK is out to testers.</p></li>
+          <li><span class="st now">[now]</span><p><b>The SMS permission declaration</b>Google Play asks why the app reads SMS. Ours: bank messages, suggested as transactions, always confirmed by you.</p></li>
+          <li><span class="st next">[next]</span><p><b>A Play-ready build</b>An Android App Bundle with Play App Signing, 16 KB page support, and the target API level Play requires.</p></li>
+          <li><span class="st next">[next]</span><p><b>Data safety, told plainly</b>No account, no cloud, data stays on the device. The form and the privacy policy say the same thing.</p></li>
+          <li><span class="st next">[next]</span><p><b>A store listing in two languages</b>English and Egyptian Arabic, with real screens from Mohab's sample year.</p></li>
+          <li><span class="st next">[next]</span><p><b>A closed test</b>Testers from the WhatsApp and Discord groups on Play's closed track before anything goes public.</p></li>
+          <li><span class="st later">[later]</span><p><b>Public release</b>Then updates arrive through Google Play, like any other app.</p></li>
+          </ul>
+        </div>
+    </div>
+  </section>
+
+  <section class="s" id="ios" aria-labelledby="t-ios">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>M3</b> / later</div>
+        <div>
+          <h2 id="t-ios">Publish on the <span class="hi">App Store.</span></h2>
+          <p class="s-sub">The hardest port: the Python core, encrypted, on iPhone. Nothing here has started, and we say so.</p>
+          <div class="ms-meter reveal"><i style="--p:0.000"></i><span>0 of 6 done · 0 in progress</span></div>
+        </div>
+      </div>
+        <div class="lane reveal">
+          <h3>app store<span>iOS, after Play is out</span></h3>
+          <ul class="items">
+          <li><span class="st later">[later]</span><p><b>Python on iOS</b>CPython supports iOS since 3.13. Build SQLCipher and cryptography for it, and never swap in plaintext SQLite to make it work.</p></li>
+          <li><span class="st later">[later]</span><p><b>A native shell around the same screens</b>The same pages and the same rules, paired with the PC the same way.</p></li>
+          <li><span class="st later">[later]</span><p><b>Face ID, optional</b>A third lock on the same key, like fingerprint on Android. Password and recovery key always still work.</p></li>
+          <li><span class="st later">[later]</span><p><b>TestFlight</b>An Apple developer account and a TestFlight beta for testers.</p></li>
+          <li><span class="st later">[later]</span><p><b>App Store review</b>Privacy labels and Apple's rules for finance apps, met before we submit.</p></li>
+          <li><span class="st later">[later]</span><p><b>App Store release</b>Lightning on iPhone.</p></li>
+          </ul>
+        </div>
+    </div>
+  </section>
+
+  <section class="s" id="help" aria-labelledby="t-help">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>→</b> / help</div>
+        <div>
+          <h2 id="t-help">Where your hands <span class="hi">help most.</span></h2>
+          <p class="s-sub">Anything marked <span class="mono accent">[next]</span> in M1 is open. Say which one in an issue before you start, so two people don't build the same thing.</p>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>Python</h3><p>PDF and Excel import, search ranking, the async cleanup.</p></div>
+        <div class="step"><b>02</b><h3>Android</h3><p>The Play-ready bundle: signing, 16 KB pages, target API.</p></div>
+        <div class="step"><b>03</b><h3>Bank formats</h3><p>Redacted SMS and statement samples from Egyptian banks.</p></div>
+        <div class="step"><b>04</b><h3>iOS, early</h3><p>Know Python on iOS, SQLCipher or cryptography builds? Talk to us now.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="closing" aria-labelledby="t-close">
+    <div class="wrap">
+      <div class="closing-grid reveal">
+        <h2 id="t-close">Pick something from M1.<br><span class="hi">Build it with us.</span></h2>
+        <div class="cta">
+          <a class="btn" href="https://github.com/elfekimuhammed/Lightning/issues" rel="noopener">Browse the issues</a>
+          <a class="btn ghost" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">join the discord</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>System</h4><ul>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" rel="noopener">Architecture</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/lightning/core/figures.py" rel="noopener">Figures registry</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/pyproject.toml" rel="noopener">Import contracts</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/GLOSSARY.md" rel="noopener">Glossary</a></li>
+      </ul></div>
+      <div><h4>Docs</h4><ul>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" rel="noopener">Project overview</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/AGENTS.md" rel="noopener">Working rules</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/NOW.md" rel="noopener">What's next</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/CHANGELOG.md" rel="noopener">Changelog</a></li>
+      </ul></div>
+      <div><h4>Community</h4><ul>
+        <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/issues" rel="noopener">Issues</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/tree/main/report" rel="noopener">Known findings</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/CONTRIBUTING.md" rel="noopener">Contributing</a></li>
+        <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
+      </ul></div>
+      <div><h4>Get started</h4><ul>
+        <li><a href="forgeeks.html">For Geeks home</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning" rel="noopener">Clone the repo</a></li>
+        <li><a href="#build">Run the demo</a></li>
+        <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/LICENSE" rel="noopener">Licence</a></li>
+        <li><a href="index.html">Lightning, the app</a></li>
+      </ul></div>
+    </div>
+    <div class="legal"><span><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px">© 2026 Lightning · built in Egypt</span><span>source-available · PolyForm Noncommercial 1.0.0</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/forgeeks.js?v=20261017-1"></script>
+</body>
+</html>

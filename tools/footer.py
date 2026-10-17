@@ -68,7 +68,7 @@ FOOTER = re.compile(r"<footer\b[^>]*>.*?</footer>", re.S)
 
 
 # For Geeks is its own section with its own footer (owner, 2026-10-17), and so are its earlier concepts
-OWN_FOOTER = re.compile(r"^for-?geeks(-\d+)?\.html$")
+OWN_FOOTER = re.compile(r"^for-?geeks(-[a-z0-9]+)?\.html$")
 
 
 def pages():
