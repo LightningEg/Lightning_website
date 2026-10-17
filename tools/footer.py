@@ -43,7 +43,7 @@ WORDS = {
         "explore": "Explore",
         "more": "More",
         "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides")],
-        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy")],
+        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("forgeeks", "For Geeks")],
         "mark": "Lightning",
     },
     "ar": {
@@ -59,7 +59,7 @@ WORDS = {
         "explore": "استكشف",
         "more": "كمان",
         "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات")],
-        "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية")],
+        "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية"), ("../forgeeks", "For Geeks")],
         "mark": "Lightning",
     },
 }
@@ -67,8 +67,14 @@ WORDS = {
 FOOTER = re.compile(r"<footer\b[^>]*>.*?</footer>", re.S)
 
 
+# For Geeks is its own section with its own footer (owner, 2026-10-17), and so are its earlier concepts
+OWN_FOOTER = re.compile(r"^for-?geeks(-\d+)?\.html$")
+
+
 def pages():
     for path in sorted(list(ROOT.glob("*.html")) + list(ROOT.glob("ar/*.html"))):
+        if OWN_FOOTER.match(path.name):
+            continue
         text = path.read_text(encoding="utf-8")
         if FOOTER.search(text):
             yield path, text
