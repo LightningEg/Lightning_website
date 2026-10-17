@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#080c11">
+<meta name="description" content="Explore Lightning's source code, architecture, tests, and contribution process. A developer workspace for Lightning Egypt.">
+<title>For Geeks · Lightning</title>
+<link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:dark;--bg:#080c11;--pane:#0d1218;--pane2:#101820;--line:#253540;--line2:#1c2b34;--text:#e2ebea;--muted:#84989e;--green:#70e6af;--blue:#84d7ff;--amber:#f2d087;--pink:#ec94a8;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:14px/1.65 var(--mono)}a{color:inherit}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:2px solid var(--blue);outline-offset:4px}::selection{background:#224d4c;color:white}
+.skip{position:absolute;top:-100px;left:16px;background:var(--green);color:#07100c;padding:8px;z-index:99}.skip:focus{top:10px}
+.shell{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+.sidebar{border-right:1px solid var(--line);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:#080c11;z-index:5}
+.brand{display:flex;align-items:center;gap:13px;padding:25px 22px 23px;border-bottom:1px solid var(--line)}.brand img{width:30px;height:30px}.brand b{display:block;font-size:16px;letter-spacing:.08em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.1em}.sidehead{font-size:10px;color:#70858d;letter-spacing:.15em;padding:29px 22px 9px}.side-nav a{display:flex;align-items:center;gap:12px;padding:11px 21px;color:#a9b9bd;text-decoration:none;border-left:2px solid transparent;font-size:12px}.side-nav a:hover,.side-nav a.active{background:#112025;border-left-color:var(--green);color:var(--green)}.side-nav a span{color:#57747e;font-size:11px}.side-bottom{margin-top:auto;padding:20px 22px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.on{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 11px #70e6af55;margin-right:7px}
+.content{min-width:0}.top{height:64px;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid var(--line);padding:0 36px;font-size:11px;letter-spacing:.04em}.crumb{color:var(--muted)}.crumb b{color:var(--text);font-weight:600}.topright{display:flex;align-items:center;gap:18px}.topright .chip{border:1px solid #395a4b;color:var(--green);padding:4px 9px}.topright a{color:var(--muted);text-decoration:none}.topright a:hover{color:var(--blue)}
+.page{max-width:1280px;margin:auto;padding:38px 36px 90px}
+.eyebrow{font-size:11px;color:var(--green);letter-spacing:.18em;text-transform:uppercase}.hero{position:relative;border:1px solid var(--line);padding:45px 45px 42px;overflow:hidden;background:radial-gradient(ellipse at 92% 5%,#122933 0%,transparent 55%),linear-gradient(135deg,#0d151a,#090d12)}.hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;background-image:radial-gradient(#67e7bb 1px,transparent 1px);background-size:23px 23px;mask-image:linear-gradient(90deg,transparent 45%,black)}.hero>*{position:relative;z-index:1}.hero h1{font-size:clamp(44px,7vw,94px);line-height:1.05;letter-spacing:-.075em;margin:23px 0 19px;color:var(--text);font-weight:800}.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:610px;font-size:15px;color:#b4c3c5;line-height:1.8}.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:27px}.btn{min-height:41px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 18px;font-weight:700;text-decoration:none;border:1px solid #4a626b;font-size:12px;background:#101820}.btn:hover{border-color:var(--blue);color:var(--blue)}.btn.primary{background:var(--green);border-color:var(--green);color:#071611}.btn.primary:hover{background:#a7f6d2}.tiny{font-size:10px;color:var(--muted);margin-top:17px}.section{margin-top:45px;scroll-margin-top:22px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.section-title h2{margin:0;font-size:16px;letter-spacing:.02em;font-weight:750;color:#dceceb}.index{color:var(--green);margin-right:12px}.dim{color:var(--muted);font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}.panel{border:1px solid var(--line);background:var(--pane);min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:13px 17px;font-size:11px;color:var(--blue);font-weight:700;letter-spacing:.035em}.panel-body{padding:20px}.intro{grid-column:span 7}.metrics{grid-column:span 5}.architect{grid-column:span 8}.principles{grid-column:span 4}.half{grid-column:span 6}.full{grid-column:1/-1}
+.lede{font-size:14px;color:#bbcbcb;margin:0 0 13px}.lede:last-child{margin-bottom:0}.label{color:var(--green);font-size:11px;margin-bottom:7px}.statline{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed #26353b;font-size:12px}.statline:last-child{border:0}.statline strong{font-weight:600;color:#dfeae9;text-align:right}.codepath{color:var(--blue)}.ok{color:var(--green)}.muted{color:var(--muted)}.warn{color:var(--amber)}
+.diagram{display:grid;gap:5px}.module{display:grid;grid-template-columns:130px 1fr;gap:15px;padding:9px 13px;background:#111e23;border-left:2px solid #426d6f;font-size:12px}.module b{color:var(--green)}.module span{color:#b6c8c9}.rules{list-style:none;padding:0;margin:0}.rules li{padding:12px 0;border-bottom:1px solid var(--line2);color:#b9caca;font-size:12px}.rules li:last-child{border:0}.rules li:before{content:"[+]";color:var(--green);margin-right:10px}
+.terminal{border:1px solid #36535a;background:#080e11;overflow:hidden}.terminalbar{display:flex;align-items:center;gap:9px;background:#15242b;border-bottom:1px solid #36535a;padding:11px 14px;color:#bed0d1;font-size:11px}.dots{display:flex;gap:5px;margin-right:13px}.dots i{display:block;width:7px;height:7px;border:1px solid #65818a;border-radius:50%}.terminalbody{padding:21px;min-height:228px;white-space:pre-wrap;word-break:break-word;font-size:12px;line-height:1.9;color:#c5d4d2}.terminalbody .prompt{color:var(--green)}.terminalbody .info{color:var(--blue)}.terminalbody .comment{color:#82989d}.term-entry{display:flex;align-items:center;gap:10px;padding:0 21px 21px;font-size:12px;color:var(--green)}.term-entry input{min-width:0;flex:1;background:none;border:none;outline:0;color:#e1ebea;caret-color:var(--green);padding:5px}.terminalhelp{color:var(--muted);font-size:11px;margin-top:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.step{border:1px solid var(--line2);padding:17px;min-width:0}.stepnum{color:var(--green);font-size:11px}.step h3{font-size:13px;margin:12px 0 8px}.step p{font-size:12px;color:#abbdc0;margin:0}.step a{color:var(--blue)}
+.codebox{display:flex;align-items:start;justify-content:space-between;gap:10px;background:#091115;border:1px solid var(--line);padding:15px 17px;font-size:12px;overflow:hidden}.codebox code{white-space:pre-wrap;overflow-wrap:anywhere;color:#b6e9d7}.copy{color:var(--blue);border:1px solid #3b5b64;background:transparent;padding:4px 9px;font-size:10px;flex-shrink:0}.copy:hover{background:#172b30}.route{padding:13px 0;display:flex;gap:12px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line2)}.route:last-child{border:0}.route a{font-weight:700;text-decoration:none;color:var(--blue);font-size:12px}.route a:hover{text-decoration:underline}.route p{margin:4px 0 0;color:var(--muted);font-size:11px}.arrow{color:var(--green)}
+.notice{margin-top:17px;border-left:2px solid var(--amber);padding:12px 17px;background:#1d1d17;color:#cecbc1;font-size:12px}.notice strong{color:var(--amber)}.end{border-top:1px solid var(--line);padding-top:24px;margin-top:52px;color:var(--muted);display:flex;justify-content:space-between;gap:14px;font-size:11px}.end a{color:var(--green)}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:1000px){.shell{grid-template-columns:1fr}.sidebar{height:auto;position:relative;display:block;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:15px 23px;border:0}.sidehead,.side-bottom{display:none}.side-nav{display:flex;overflow:auto;border-top:1px solid var(--line)}.side-nav a{white-space:nowrap;padding:11px 16px}.top{padding:0 23px}.page{padding:25px 23px 60px}}
+@media(max-width:700px){.hero{padding:28px 23px}.hero h1{font-size:clamp(42px,11vw,68px)}.page{padding:18px 15px 50px}.top{padding:0 15px;height:51px}.topright .chip{display:none}.grid{display:block}.panel{margin-bottom:13px}.steps{grid-template-columns:1fr}.module{grid-template-columns:1fr;gap:2px}.terminalbody{font-size:11px;padding:14px;min-height:270px}.term-entry{padding:0 14px 16px}.end{display:block}.end span{display:block;margin-top:7px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="shell">
+<aside class="sidebar">
+<div class="brand"><img src="assets/brand/lightning-mark.svg" alt=""><div><b>LIGHTNING<span style="color:var(--green)">_DEV</span></b><small>FOR GEEKS // TERMINAL</small></div></div>
+<div class="sidehead">WORKSPACE</div>
+<nav class="side-nav" aria-label="Page sections">
+<a href="#overview" class="active"><span>01</span>Overview</a>
+<a href="#architecture"><span>02</span>Architecture</a>
+<a href="#terminal"><span>03</span>Terminal</a>
+<a href="#contribute"><span>04</span>Contribute</a>
+<a href="#resources"><span>05</span>Resources</a>
+</nav>
+<div class="side-bottom"><span class="on"></span>SOURCE AVAILABLE<br>EGYPT / BUILT IN THE OPEN</div>
+</aside>
+<div class="content">
+<header class="top"><div class="crumb">LIGHTNING / <b>FOR_GEEKS</b> / INDEX</div><div class="topright"><span class="chip">SOURCE: PUBLIC</span><a href="index.html">← Main site</a></div></header>
+<main id="main" class="page">
+<section class="hero" id="overview">
+<div class="eyebrow">$ whoami  /  developer</div>
+<h1>FOR <em>GEEKS_</em></h1>
+<p>Under the hood of Lightning. The source, the decisions, the messy edges and the tests that keep the numbers honest. If you want to understand the code—or make it better—start here.</p>
+<div class="actions"><a class="btn primary" href="https://github.com/elfekimuhammed/Lightning" target="_blank" rel="noopener noreferrer">Explore the source ↗</a><a class="btn" href="#contribute">Start contributing ↓</a></div>
+<div class="tiny">// Python 3.11+ &nbsp; // SQLite &nbsp; // FastAPI &nbsp; // Windows + Android</div>
+</section>
+<section class="section">
+<div class="section-title"><h2><span class="index">01 //</span> System Overview</h2><span class="dim">README.md</span></div>
+<div class="grid">
+<article class="panel intro"><div class="panel-head">ABOUT_LIGHTNING <span>↗</span></div><div class="panel-body"><div class="label">&gt; cat /project/mission.txt</div><p class="lede">Lightning is a local-first personal finance app built for Egypt. It brings bank accounts, wallets, budgets, savings, gold, shares and money plans into one place.</p><p class="lede">Its numbers come from a ledger. Plans stay separate from transactions. Reports calculate what the records can actually support.</p><p class="lede">Built for people who want to understand their money without handing over their bank login.</p></div></article>
+<article class="panel metrics"><div class="panel-head">STACK_INFO <span>v1.1 beta 1</span></div><div class="panel-body"><div class="statline"><span>Core</span><strong>Python · FastAPI</strong></div><div class="statline"><span>Storage</span><strong>SQLite · SQL migrations</strong></div><div class="statline"><span>Interface</span><strong>Jinja2 · CSS · JS</strong></div><div class="statline"><span>Money precision</span><strong>Decimal · scaled integers</strong></div><div class="statline"><span>Checks</span><strong>pytest · import-linter</strong></div><div class="statline"><span>Distribution</span><strong class="ok">Windows · Android</strong></div></div></article>
+</div>
+</section>
+<section class="section" id="architecture"><div class="section-title"><h2><span class="index">02 //</span> How It Works</h2><span class="dim">ARCHITECTURE.md</span></div>
+<div class="grid"><article class="panel architect"><div class="panel-head">SOURCE_TREE / lightning/ <span>▼</span></div><div class="panel-body"><div class="diagram">
+<div class="module"><b>ui/</b><span>FastAPI routes, Jinja templates, CSS and JavaScript</span></div>
+<div class="module"><b>workflows/</b><span>Actions that coordinate modules in one transaction</span></div>
+<div class="module"><b>planning/</b><span>Budgets, upcoming activity and cash outlook</span></div>
+<div class="module"><b>transactions/</b><span>The only writer of the real-money ledger</span></div>
+<div class="module"><b>investments/</b><span>Holdings, buys, sells and returns</span></div>
+<div class="module"><b>reporting/</b><span>Calculated views, not another source of truth</span></div>
+<div class="module"><b>database/</b><span>SQLite, migrations, backups and audit history</span></div>
+<div class="module"><b>core/</b><span>Money precision, identifiers and posting rules</span></div>
+</div><p class="terminalhelp">Illustrative entry points, not the complete directory listing. <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">Read the full architecture ↗</a></p></div></article>
+<article class="panel principles"><div class="panel-head">DESIGN_RULES <span class="ok">PASS</span></div><div class="panel-body"><ul class="rules"><li>Real money belongs in the ledger.</li><li>A plan never becomes a real transaction by itself.</li><li>Money uses Decimal, not floating-point math.</li><li>Modules use service boundaries.</li><li>Every change should have tests.</li><li>Private financial data stays out of Git.</li></ul></div></article></div>
+</section>
+<section class="section" id="terminal"><div class="section-title"><h2><span class="index">03 //</span> Try the Terminal</h2><span class="dim">INTERACTIVE // LOCAL DEMO</span></div>
+<div class="terminal" role="region" aria-label="Interactive demo terminal"><div class="terminalbar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>guest@lightning: ~ <span style="margin-left:auto;color:var(--green)">● READY</span></div><div class="terminalbody" id="terminal-output" aria-live="polite"><span class="info">Lightning developer console · simulated, read-only</span>
+Type <span class="prompt">help</span> to explore the project. No code is executed.
+
+</div><form class="term-entry" id="terminal-form" autocomplete="off"><label for="terminal-command">guest@lightning:~$</label><input id="terminal-command" name="command" aria-label="Terminal command" placeholder="help" spellcheck="false" maxlength="60"><button type="submit" class="copy">RUN ↵</button></form></div>
+<p class="terminalhelp">Commands: help · about · stack · ls · architecture · contribute · links · clear. This is a guided demo, not a shell.</p>
+</section>
+<section class="section" id="contribute"><div class="section-title"><h2><span class="index">04 //</span> Make Lightning Better</h2><span class="dim">CONTRIBUTING.md</span></div>
+<div class="panel"><div class="panel-head">GET_STARTED <span class="ok">PULL REQUESTS WELCOME</span></div><div class="panel-body"><div class="steps"><div class="step"><span class="stepnum">STEP 01 / EXPLORE</span><h3>Read before editing</h3><p>Start with the <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" target="_blank" rel="noopener noreferrer">project overview</a>, <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">architecture</a> and <a href="https://github.com/elfekimuhammed/Lightning/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">work rules</a>.</p></div>
+<div class="step"><span class="stepnum">STEP 02 / BUILD</span><h3>Run the tests</h3><p>Clone the repository, work on a focused branch and keep the existing financial invariants intact.</p></div>
+<div class="step"><span class="stepnum">STEP 03 / SHARE</span><h3>Open an issue or PR</h3><p>Discuss larger changes in an issue first. Explain what changed, why, and how you verified it.</p></div></div>
+<div style="margin-top:20px" class="label">&gt; bootstrap.sh</div><div class="codebox"><code>git clone https://github.com/elfekimuhammed/Lightning.git
+cd Lightning
+python -m pip install -r requirements-dev.txt
+python -m pytest
+lint-imports</code><button type="button" class="copy" id="copy-setup" aria-label="Copy setup commands">COPY</button></div>
+<div class="notice"><strong>LICENCE NOTE //</strong> Lightning is source-available, not OSI open source. PolyForm Noncommercial 1.0.0 covers non-commercial use; commercial use requires written permission. Pull requests are welcome under the project's contribution terms. <a style="color:var(--amber)" href="https://github.com/elfekimuhammed/Lightning/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Read the license ↗</a></div>
+</div></div>
+</section>
+<section class="section" id="resources"><div class="section-title"><h2><span class="index">05 //</span> Developer Resources</h2><span class="dim">LINK_DIRECTORY</span></div>
+<div class="grid"><div class="panel half"><div class="panel-head">CODE &amp; DOCUMENTATION <span>4 FILES</span></div><div class="panel-body">
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning">App source repository ↗</a><p>Code, tests and build instructions.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md">Architecture ↗</a><p>Modules, data model and calculation contracts.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/GLOSSARY.md">Glossary ↗</a><p>Canonical names and financial terms.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/CONTRIBUTING.md">Contributing ↗</a><p>How to submit work and what it means.</p></div><span class="arrow">↗</span></div>
+</div></div>
+<div class="panel half"><div class="panel-head">GET INVOLVED <span>4 ENTRIES</span></div><div class="panel-body">
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/issues">Issues ↗</a><p>Report a reproducible bug or propose a change.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/pulls">Pull requests ↗</a><p>Review changes and send your own.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning_website">Website source ↗</a><p>The static site you are reading now.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning-downloads/releases">Published builds ↗</a><p>Windows and Android releases and checksums.</p></div><span class="arrow">↗</span></div>
+</div></div></div></section>
+<footer class="end"><div>LIGHTNING_DEV // MADE IN EGYPT // <span class="ok">END OF FILE</span></div><span>Back to <a href="index.html">Lightning</a> · All Your Money. One Clear Picture.</span></footer>
+</main></div></div>
+<script>
+(function(){
+"use strict";
+var output=document.getElementById("terminal-output"),form=document.getElementById("terminal-form"),input=document.getElementById("terminal-command");
+var responses={
+help:"Available commands:\n  about         What Lightning does\n  stack         Languages and tools\n  ls            Start exploring files\n  architecture  How the code is organized\n  contribute    How to help\n  links         GitHub and documentation\n  clear         Clear this demo",
+about:"Lightning is a local-first personal finance app for Egypt. One ledger records real money; planning and reporting live around it.",
+stack:"Python 3.11+ / FastAPI / Jinja2 / SQLite / vanilla CSS + JS\nTests: pytest and import-linter\nDistribution: Windows desktop and Android",
+ls:"README.md  CONTRIBUTING.md  AGENTS.md  NOW.md\nlightning/  tests/  docs/  packaging/  guideline/\nThis is a curated map. See GitHub for the current tree.",
+architecture:"ui -> services/workflows -> database + core\nReal money: transaction ledger\nFuture plans: planning modules\nReports: derived from recorded data\nDetailed contracts: docs/ARCHITECTURE.md",
+contribute:"1. Read CONTRIBUTING.md and AGENTS.md\n2. Discuss larger work in a GitHub issue\n3. Work on a focused branch\n4. Run python -m pytest and lint-imports\n5. Submit a PR with test evidence\nNever commit real financial data or secrets.",
+links:"Source: https://github.com/elfekimuhammed/Lightning\nDocs: https://github.com/elfekimuhammed/Lightning/tree/main/docs\nIssues: https://github.com/elfekimuhammed/Lightning/issues"
+};
+function line(s,cl){var el=document.createElement("div");if(cl)el.className=cl;el.textContent=s;output.appendChild(el)}
+form.addEventListener("submit",function(e){e.preventDefault();var raw=input.value.trim();if(!raw)return;line("guest@lightning:~$ "+raw,"prompt");var key=raw.toLowerCase();if(key==="clear"){output.textContent="";}else{line(Object.prototype.hasOwnProperty.call(responses,key)?responses[key]:"Unknown command. Type help to see available commands.");line("");}input.value="";output.scrollTop=output.scrollHeight});
+var copy=document.getElementById("copy-setup");copy.addEventListener("click",function(){var value=document.querySelector(".codebox code").textContent;var done=function(){copy.textContent="COPIED";setTimeout(function(){copy.textContent="COPY"},1800)};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(value).then(done,function(){copy.textContent="SELECT TEXT"})}else{var field=document.createElement("textarea");field.value=value;document.body.appendChild(field);field.select();try{if(document.execCommand("copy"))done();else copy.textContent="SELECT TEXT"}catch(_){copy.textContent="SELECT TEXT"}field.remove()}});
+var nav=Array.from(document.querySelectorAll(".side-nav a"));nav.forEach(function(a){a.addEventListener("click",function(){nav.forEach(function(n){n.classList.remove("active")});a.classList.add("active")})});
+})();
+</script>
+</body>
+</html>
