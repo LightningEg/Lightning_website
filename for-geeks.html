@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · page 4.0 · 2026-10-17 · its own section with its own design: particle field, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
+<!-- For Geeks · page 4.1 · 2026-10-17 · its own section with its own design: particle terrain with lightning, current in the pixel grid, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -59,7 +59,7 @@
     .nav{display:flex;gap:4px;margin-left:auto}
     .nav a{font:400 12.5px var(--mono);color:var(--dim);text-decoration:none;padding:6px 10px;border-radius:4px;transition:color .2s,background-color .2s}
     .nav a:hover,.nav a.on{color:var(--ink);background:rgba(var(--particle),.06)}
-    .nav a span{color:var(--faint)}
+    .nav a span{color:var(--dim);opacity:.75}
     .tools{display:flex;align-items:center;gap:8px}
     .chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:6px;background:transparent;font:400 12.5px var(--mono);color:var(--ink);text-decoration:none;cursor:pointer;transition:border-color .2s,background-color .2s}
     .chip:hover{border-color:var(--line-strong);background:rgba(var(--particle),.05)}
@@ -88,16 +88,19 @@
     kbd{font:500 10.5px var(--mono);padding:1px 5px;border:1px solid var(--line-strong);border-radius:3px;color:var(--ink)}
 
     /* ---------- hero ---------- */
-    .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 56px}
-    .hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}
-    .boot{font:400 12.5px/1.9 var(--mono);color:var(--dim);margin:0 0 28px;min-height:4.6em}
-    .boot .ok{color:var(--accent)}
-    h1{font:300 clamp(36px,6.4vw,82px)/1.08 var(--mono);letter-spacing:-.035em;margin:0;color:var(--dim)}
+    .hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 48px}
+    /* a soft floor under the hero text, so the terrain never runs behind a word */
+    .hero::before{content:"";position:absolute;inset:auto 0 0;height:58%;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 88%,transparent) 38%)}
+    .hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-top:26px}
+    h1{font:300 clamp(34px,5.1vw,70px)/1.1 var(--mono);letter-spacing:-.035em;margin:0;color:var(--dim);transition:text-shadow .5s}
+    .flash h1 .hi,.flash h1 .word{text-shadow:0 0 28px rgba(var(--glow),.55);transition:text-shadow .04s}
     h1 .hi{color:var(--ink);font-weight:400}
     .word{display:inline-block;color:var(--accent);font-weight:400;white-space:nowrap;transition:width .45s cubic-bezier(.2,.8,.2,1);text-align:left;vertical-align:bottom}
-    .lede{max-width:560px;margin:26px 0 0;color:var(--dim);font-size:17px}
+    .lede{max-width:560px;margin:0;color:var(--dim);font-size:17px}
+    .hint{font:400 12px var(--mono);color:var(--dim)}
+    @media (hover:none),(prefers-reduced-motion:reduce){.hint{display:none}}
     .lede b{color:var(--ink);font-weight:500}
-    .cta{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+    .cta{display:flex;align-items:center;gap:12px}
     .btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 20px;background:var(--btn);color:var(--btn-ink);border:0;border-radius:2px;font:500 14px var(--sans);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s,box-shadow .3s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 10px 40px rgba(var(--glow),.25)}
     .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong);font-family:var(--mono);font-size:13px}
@@ -105,11 +108,11 @@
     .btn .k{color:var(--accent)}
     .meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:56px;padding-top:18px;border-top:1px solid var(--line)}
     .meta span{font:400 12px var(--mono);color:var(--dim)}
-    .meta span::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(var(--glow),.8);vertical-align:1px}
+    .meta span:not(.hint)::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(var(--glow),.8);vertical-align:1px}
     .scroll{font:400 11px var(--mono);color:var(--dim);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;margin-left:auto}
     .scroll::after{content:" ↓";display:inline-block;animation:nudge 1.8s ease-in-out infinite}
     @keyframes nudge{50%{transform:translateY(3px)}}
-    @media (max-width:820px){.hero-grid{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:row;flex-wrap:wrap}}
+    @media (max-width:820px){.hero-grid{grid-template-columns:1fr;gap:24px}.cta{flex-wrap:wrap}}
 
     /* ---------- sections ---------- */
     section.s{padding:140px 0}
@@ -126,17 +129,15 @@
     .no-js .reveal{opacity:1;transform:none}
 
     /* mission */
-    .mission{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+    .mission{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start}
     .mission p{margin:0 0 18px;font-size:18px;color:var(--dim);max-width:520px}
     .mission p b{color:var(--ink);font-weight:500}
-    .stage{position:relative;aspect-ratio:1/1;width:100%}
-    .stage-cap{position:absolute;left:0;bottom:-6px;font:400 11.5px var(--mono);color:var(--dim)}
-    .pillars{list-style:none;margin:34px 0 0;padding:0;border-top:1px solid var(--line)}
+    .pillars{list-style:none;margin:6px 0 0;padding:0;border-top:1px solid var(--line)}
     .pillars li{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font:400 14px var(--mono)}
     .pillars li span:first-child{color:var(--accent)}
     .pillars li span:last-child{color:var(--ink)}
     .pillars small{display:block;color:var(--dim);font-size:12.5px;margin-top:2px}
-    @media (max-width:820px){.mission{grid-template-columns:1fr}.stage{order:-1;max-width:460px;margin:0 auto}}
+    @media (max-width:820px){.mission{grid-template-columns:1fr;gap:28px}}
 
     /* principles */
     .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -292,14 +293,11 @@
   <!-- ===== hero ===== -->
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="wrap">
-      <p class="boot" id="boot" aria-hidden="true"></p>
-      <div class="hero-grid">
-        <div>
-          <h1 id="h1" aria-label="Financial planning every Egyptian can afford, read, run and trust.">
+      <h1 id="h1" aria-label="Financial planning every Egyptian can afford, read, run and trust.">
             <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford</span>.</span>
-          </h1>
-          <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim on this page comes with the file or the command that proves it.</p>
-        </div>
+      </h1>
+      <div class="hero-grid">
+        <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim on this page comes with the file or the command that proves it.</p>
         <div class="cta">
           <a class="btn" href="https://github.com/elfekimuhammed/Lightning" rel="noopener">Read the source</a>
           <a class="btn ghost" href="#proof"><span class="k">$</span> run the proof</a>
@@ -310,6 +308,7 @@
         <span>python · sqlite · no frontend build</span>
         <span>source-available</span>
         <span>built in Egypt</span>
+        <span class="hint" aria-hidden="true">⚡ click the sky</span>
         <a class="scroll" href="#mission">scroll</a>
       </div>
     </div>
@@ -329,14 +328,13 @@
           <p>Lightning shows a salaried person in Egypt <b>where their money stands, what is coming, and why</b>. Bank, wallet, cash at home, certificates, THNDR and gold, in EGP, on their own PC and phone.</p>
           <p>A money app asks for trust. We would rather <b>show our working</b>. With the source public, anyone can check how a figure is calculated, how the data is locked, and what happens when something breaks.</p>
           <p>And the more people can read it, the faster it gets better <b>for every Egyptian</b> who plans with it.</p>
+        </div>
+        <div class="reveal">
           <ul class="pillars">
             <li><span>[free]</span><span>Free to download and use<small>no account, no subscription</small></span></li>
             <li><span>[local]</span><span>Your ledger stays on your devices<small>phone and PC pair directly, no cloud</small></span></li>
             <li><span>[public]</span><span>Read it, run it, change it<small>PolyForm Noncommercial 1.0.0: source-available, free for non-commercial use</small></span></li>
           </ul>
-        </div>
-        <div class="stage" id="stage" aria-hidden="true">
-          <span class="stage-cap">// 22°N–31.6°N · the Nile in light</span>
         </div>
       </div>
     </div>
@@ -651,24 +649,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   /* layer pulse travels the full rail */
   var layers=$('#layers');function railH(){layers.style.setProperty('--h',layers.offsetHeight+'px')}railH();addEventListener('resize',railH);
 
-  /* ===================== hero: boot lines + decoding word ===================== */
-  var bootLines=[
-    ['$ lightning --about',''],
-    ['  local-first ledger ........ ','ok'],
-    ['  encrypted at rest ......... ','ok'],
-    ['  source public ............. ','ok']
-  ];
-  var bootEl=$('#boot');
-  if(reduce){bootEl.innerHTML=bootLines.map(function(l){return l[0]+(l[1]?'<span class="ok">'+l[1]+'</span>':'')}).join('<br>')}
-  else{
-    var li=0,ci=0,html='';
-    (function typeBoot(){
-      if(li>=bootLines.length){bootEl.innerHTML=html;return}
-      var l=bootLines[li];
-      if(ci<=l[0].length){bootEl.innerHTML=html+l[0].slice(0,ci)+'<span class="caret"></span>';ci+=li===0?1:3;setTimeout(typeBoot,li===0?38:14)}
-      else{html+=l[0]+(l[1]?'<span class="ok">'+l[1]+'</span>':'')+'<br>';li++;ci=0;setTimeout(typeBoot,li===1?260:120)}
-    })();
-  }
+  /* ===================== hero: decoding word ===================== */
   var words=['afford','read','run','trust'],wi=0,word=$('#word'),GL='01<>/\\{}[]#$%&*+=_ABCDEFGHJKLMNPQRSTUVWXYZ';
   function setW(w){word.style.width='calc('+w.length+'ch - '+(w.length*.035).toFixed(3)+'em)'}
   setW(words[0]);
@@ -772,30 +753,17 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     to.observe($('#term'));
   }else skipAll();
 
-  /* ===================== the field: terrain of light that becomes Egypt ===================== */
+  /* ===================== the field: a terrain of light, current in the grid, and lightning =====================
+     The terrain belongs to the hero and the closing and scrolls away with them; the middle of the page keeps only
+     the pixel grid, where a faint current runs now and then. Lightning strikes the terrain every few seconds, or where you click the sky. */
   var cv=$('#field'),ctx=cv.getContext('2d');
   if(!ctx)return;
-  var W=0,H=0,DPR=1,N=0,small=false;
-  var U,Z,J,SEED,EX,EY,EK,DEL,LIFT,px,py,pa,ps,pc;
-  var STARS=[];
-  var PART='242,242,242',GLOWC='255,255,255';
-  function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;}
+  var W=0,H=0,DPR=1,N=0,small=false,U,Z,SEED,px,py,pa,ps;
+  var STARS=[],PULSES=[],BOLTS=[],GLOWS=[],GRID=24;
+  var PART='242,242,242',GLOWC='255,255,255',CORE='255,255,255',LIGHT=false;
+  function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=root.dataset.theme==='paper';CORE=LIGHT?GLOWC:'255,255,255'}
   onTheme(function(){readColors();if(reduce)frame(performance.now())});
-
-  /* Egypt, as longitude/latitude. Coast, Sinai, the Gulf of Suez notch, Red Sea coast, 22°N and 25°E. */
-  var EGYPT=[[25.0,31.6],[25.15,31.58],[26.2,31.55],[27.2,31.38],[28.1,31.08],[28.9,30.9],[29.6,31.08],[29.9,31.2],[30.4,31.45],[31.0,31.6],[31.8,31.52],[32.3,31.28],[33.2,31.12],[34.22,31.32],[34.55,30.6],[34.9,29.5],[34.65,28.7],[34.42,28.1],[34.25,27.75],[33.75,28.2],[33.2,28.8],[32.75,29.55],[32.55,29.97],[32.35,29.6],[32.65,29.05],[33.1,28.35],[33.55,27.7],[33.8,27.25],[33.95,26.75],[34.28,26.1],[34.6,25.6],[34.9,25.07],[35.2,24.5],[35.48,23.95],[35.8,23.9],[35.65,23.3],[36.1,22.8],[36.6,22.2],[36.9,22.0],[33.2,22.0],[31.3,22.0],[25.0,22.0],[25.0,26.0],[25.0,29.5]];
-  var NILE=[[31.35,22.0],[31.6,22.4],[31.9,22.8],[32.3,23.1],[32.6,23.4],[32.9,24.09],[32.93,24.47],[32.87,24.98],[32.64,25.69],[32.72,26.16],[32.25,26.05],[31.69,26.56],[31.18,27.18],[30.95,27.6],[30.75,28.1],[30.95,28.6],[31.1,29.07],[31.2,29.6],[31.24,30.04],[31.1,30.2]];
-  var ROSETTA=[[31.1,30.2],[30.85,30.55],[30.6,30.9],[30.42,31.45]];
-  var DAMIETTA=[[31.1,30.2],[31.25,30.55],[31.4,30.9],[31.82,31.47]];
-  var CITIES=[['cairo',31.24,30.04],['alexandria',29.92,31.2],['luxor',32.64,25.69],['aswan',32.9,24.09]];
-  var LON0=24.6,LON1=37.3,LAT0=21.6,LAT1=32.0,KX=.89;
-  function inPoly(x,y,p){var c=false;for(var i=0,j=p.length-1;i<p.length;j=i++){var xi=p[i][0],yi=p[i][1],xj=p[j][0],yj=p[j][1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
-  function alongLine(pts,closed){
-    var segs=[],tot=0,n=pts.length,m=closed?n:n-1;
-    for(var i=0;i<m;i++){var a=pts[i],b=pts[(i+1)%n],l=Math.hypot((b[0]-a[0])*KX,b[1]-a[1]);segs.push([a,b,l]);tot+=l}
-    return function(r){var d=r*tot;for(var i=0;i<segs.length;i++){if(d<=segs[i][2]){var t=d/segs[i][2],s=segs[i];return [s[0][0]+(s[1][0]-s[0][0])*t,s[0][1]+(s[1][1]-s[0][1])*t]}d-=segs[i][2]}var l=segs[segs.length-1];return [l[1][0],l[1][1]]};
-  }
-  var border=alongLine(EGYPT,true),nile=alongLine(NILE,false),ros=alongLine(ROSETTA,false),dam=alongLine(DAMIETTA,false);
+  var hero=$('#top'),closing=$('#closing');
   function rnd(){return Math.random()}
 
   function build(){
@@ -803,120 +771,153 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     DPR=Math.min(devicePixelRatio||1,small?1.5:2);
     W=innerWidth;H=innerHeight;
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
-    var C=small?84:150,R=small?40:54;N=C*R;
-    U=new Float32Array(N);Z=new Float32Array(N);J=new Float32Array(N);SEED=new Float32Array(N);
-    EX=new Float32Array(N);EY=new Float32Array(N);EK=new Uint8Array(N);DEL=new Float32Array(N);LIFT=new Float32Array(N);
-    px=new Float32Array(N);py=new Float32Array(N);pa=new Float32Array(N);ps=new Float32Array(N);pc=new Uint8Array(N);
+    var C=small?80:140,R=small?36:50;N=C*R;
+    U=new Float32Array(N);Z=new Float32Array(N);SEED=new Float32Array(N);
+    px=new Float32Array(N);py=new Float32Array(N);pa=new Float32Array(N);ps=new Float32Array(N);
     var k=0;
-    for(var r=0;r<R;r++)for(var c=0;c<C;c++){
-      U[k]=(c+rnd()*.9)/C;
-      var v=(r+rnd()*.9)/R;Z[k]=1.6+Math.pow(v,1.35)*34;
-      J[k]=rnd();SEED[k]=rnd()*6.283;DEL[k]=rnd()*.35;LIFT[k]=.3+rnd();
-      var q=rnd(),p;
-      if(q<.30){p=border(rnd());p[0]+=(rnd()-.5)*.06;p[1]+=(rnd()-.5)*.06;EK[k]=1}
-      else if(q<.47){p=nile(rnd());p[0]+=(rnd()-.5)*.09;p[1]+=(rnd()-.5)*.05;EK[k]=2}
-      else if(q<.53){p=(rnd()<.5?ros:dam)(rnd());p[0]+=(rnd()-.5)*.05;p[1]+=(rnd()-.5)*.05;EK[k]=2}
-      else{do{p=[LON0+rnd()*(LON1-LON0),LAT0+rnd()*(LAT1-LAT0)]}while(!inPoly(p[0],p[1],EGYPT));EK[k]=0}
-      EX[k]=p[0];EY[k]=p[1];k++;
+    for(var r=0;r<R;r++)for(var c=0;c<C;c++){U[k]=(c+rnd()*.9)/C;Z[k]=1.6+Math.pow((r+rnd()*.9)/R,1.35)*34;SEED[k]=rnd()*6.283;k++}
+    STARS=[];for(var s=0;s<(small?60:140);s++)STARS.push([rnd(),rnd(),rnd()*6.283,.4+rnd()*.9]);
+  }
+
+  /* where the terrain sits: the hero's top area, or the space above the closing headline */
+  function anchor(){
+    var hr=hero.getBoundingClientRect();
+    if(hr.bottom>0)return {top:hr.top,hz:hr.top+H*(small?.13:.17),fa:hr.top+H*(small?.27:.33),fb:hr.top+H*(small?.4:.5)};
+    var cr=closing.getBoundingClientRect(),pad=parseFloat(getComputedStyle(closing).paddingTop)||H*.5;
+    if(cr.top<H)return {top:cr.top,hz:cr.top+pad*.22,fa:cr.top+pad*.62,fb:cr.top+pad*.96};
+    return null;
+  }
+
+  /* ---- current in the grid: short pulses that run along the dots and turn at right angles ---- */
+  function node(v){return Math.round((v-12)/GRID)*GRID+12}
+  function pulse(x,y,strong){
+    var pts=[[node(x),node(y)]],dir=rnd()*4|0,legs=strong?3+(rnd()*3|0):5+(rnd()*6|0),len=0;
+    for(var i=0;i<legs;i++){
+      dir=(dir+(rnd()<.5?1:3))%4;
+      var cells=2+(rnd()*5|0),p=pts[pts.length-1],dx=[1,0,-1,0][dir],dy=[0,1,0,-1][dir];
+      pts.push([p[0]+dx*cells*GRID,p[1]+dy*cells*GRID]);len+=cells*GRID;
     }
-    STARS=[];for(var s=0;s<(small?70:160);s++)STARS.push([rnd(),rnd()*.5,rnd()*6.283,.4+rnd()*.9]);
+    PULSES.push({pts:pts,len:len,d:0,v:strong?420:150+rnd()*90,trail:strong?150:110,a:strong?.85:.42});
+  }
+  function at(p,d){
+    for(var i=1;i<p.pts.length;i++){var a=p.pts[i-1],b=p.pts[i],l=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]);if(d<=l){var t=d/l;return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,i]}d-=l}
+    var e=p.pts[p.pts.length-1];return [e[0],e[1],p.pts.length];
+  }
+  function drawPulses(dt){
+    ctx.lineWidth=1;
+    for(var k=PULSES.length-1;k>=0;k--){
+      var p=PULSES[k];p.d+=p.v*dt;
+      if(p.d-p.trail>p.len){PULSES.splice(k,1);continue}
+      var head=Math.min(p.d,p.len),tail=Math.max(0,p.d-p.trail),steps=6;
+      for(var s=0;s<steps;s++){
+        var d0=tail+(head-tail)*s/steps,d1=tail+(head-tail)*(s+1)/steps,A=at(p,d0),B=at(p,d1);
+        ctx.strokeStyle='rgba('+GLOWC+','+(p.a*(s+1)/steps).toFixed(3)+')';
+        ctx.beginPath();ctx.moveTo(A[0],A[1]);
+        for(var i=A[2];i<B[2];i++)ctx.lineTo(p.pts[i][0],p.pts[i][1]);
+        ctx.lineTo(B[0],B[1]);ctx.stroke();
+      }
+      if(p.d<p.len){var h=at(p,head);ctx.fillStyle='rgba('+CORE+','+p.a+')';ctx.fillRect(h[0]-1.5,h[1]-1.5,3,3)}
+    }
   }
 
-  var mouse={x:-9999,y:-9999,tx:.5,sx:.5},morph=0,morphT=0,tAlpha=1,tAlphaT=1,intro=reduce?1:0,t0=performance.now();
-  addEventListener('pointermove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.tx=e.clientX/W},{passive:true});
-  doc.addEventListener('pointerleave',function(){mouse.x=mouse.y=-9999});
-  var stage=$('#stage'),hero=$('#top'),closing=$('#closing');
-  function vis(el){var r=el.getBoundingClientRect();var a=Math.max(0,Math.min(r.bottom,H)-Math.max(r.top,0));return Math.min(1,a/Math.min(H,r.height||1))}
-  function targets(){
-    var r=stage.getBoundingClientRect(),c=(r.top+r.bottom)/2/H;
-    morphT=Math.max(0,1-Math.abs(c-.5)/.42);morphT=Math.min(1,morphT*1.7);
-    var hv=vis(hero),cr=closing.getBoundingClientRect(),cv2=cr.top<H*.9?1:0;
-    tAlphaT=Math.max(.16,Math.max(hv,cv2));
+  /* ---- lightning: midpoint displacement with a few branches ---- */
+  function strike(x1,y1){
+    var y0=-20,sy=scrollY,x0=x1+(rnd()-.5)*W*.12,segs=[];
+    (function sub(ax,ay,bx,by,dis,w,depth){
+      if(dis<2.5){segs.push([ax,ay+sy,bx,by+sy,w]);return}
+      var mx=(ax+bx)/2+(rnd()-.5)*dis,my=(ay+by)/2+(rnd()-.5)*dis*.3;
+      sub(ax,ay,mx,my,dis/2,w,depth);sub(mx,my,bx,by,dis/2,w,depth);
+      if(depth<2&&dis>14&&rnd()<.22){var ang=Math.atan2(by-ay,bx-ax)+(rnd()<.5?-1:1)*(.35+rnd()*.5),l=dis*(1.4+rnd());sub(mx,my,mx+Math.cos(ang)*l,my+Math.sin(ang)*l,dis/2,w*.45,depth+1)}
+    })(x0,y0,x1,y1,Math.hypot(x1-x0,y1-y0)*.3,1,0);
+    BOLTS.push({segs:segs,age:0});
+    GLOWS.push({x:x1,y:y1+sy,life:1});
+    for(var i=0;i<4;i++)pulse(x1,y1,true);
+    if(hero.getBoundingClientRect().bottom>H*.3){root.classList.add('flash');setTimeout(function(){root.classList.remove('flash')},200)}
+  }
+  function intensity(a){return a<.05?1:a<.1?.25:a<.17?.9:Math.max(0,1-(a-.17)/.45)}
+  function drawBolts(dt){
+    if(!LIGHT)ctx.globalCompositeOperation='lighter';
+    for(var g=GLOWS.length-1;g>=0;g--){
+      var G=GLOWS[g];G.life-=dt/1.1;if(G.life<=0){GLOWS.splice(g,1);continue}
+      var gy=G.y-scrollY,rad=small?150:240,grd=ctx.createRadialGradient(G.x,gy,0,G.x,gy,rad);
+      grd.addColorStop(0,'rgba('+GLOWC+','+(.22*G.life*G.life).toFixed(3)+')');grd.addColorStop(1,'rgba('+GLOWC+',0)');
+      ctx.fillStyle=grd;ctx.fillRect(G.x-rad,gy-rad,rad*2,rad*2);
+    }
+    ctx.lineCap='round';
+    for(var b=BOLTS.length-1;b>=0;b--){
+      var B=BOLTS[b];B.age+=dt;var I=intensity(B.age);if(B.age>.65){BOLTS.splice(b,1);continue}
+      if(b===BOLTS.length-1&&!LIGHT){ctx.fillStyle='rgba('+GLOWC+','+(.035*I).toFixed(3)+')';ctx.fillRect(0,0,W,H)}
+      var passes=[[10,'rgba('+GLOWC+','+(.12*I).toFixed(3)+')'],[3.4,'rgba('+GLOWC+','+(.5*I).toFixed(3)+')'],[1.5,'rgba('+CORE+','+(.95*I).toFixed(3)+')']];
+      for(var q=0;q<3;q++){
+        ctx.strokeStyle=passes[q][1];
+        [1,.45,.2025].forEach(function(w){
+          ctx.lineWidth=passes[q][0]*w;ctx.beginPath();
+          for(var i=0;i<B.segs.length;i++){var s=B.segs[i];if(Math.abs(s[4]-w)>.01)continue;ctx.moveTo(s[0],s[1]-scrollY);ctx.lineTo(s[2],s[3]-scrollY)}
+          ctx.stroke();
+        });
+      }
+    }
+    ctx.globalCompositeOperation='source-over';
   }
 
-  function frame(now){
-    var t=(now-t0)/1000;
-    targets();
-    if(reduce){morph=morphT;tAlpha=tAlphaT}
-    else{morph+=(morphT-morph)*.045;tAlpha+=(tAlphaT-tAlpha)*.06;intro=Math.min(1,intro+.012)}
-    mouse.sx+=(mouse.tx-mouse.sx)*.04;
-    ctx.clearRect(0,0,W,H);
-
-    var f=Math.max(W,H*1.2)*.62,horizon=H*(small?.30:.33),camY=1.55,camX=(mouse.sx-.5)*.9;
-    var spread=W/f*1.25,ease=1-Math.pow(1-intro,3);
-    var sr=stage.getBoundingClientRect(),sW=sr.width,sH=sr.height;
-    var sc=Math.min(sW/((LON1-LON0)*KX),sH/(LAT1-LAT0)),ox=sr.left+(sW-(LON1-LON0)*KX*sc)/2,oy=sr.top+(sH-(LAT1-LAT0)*sc)/2;
-    var mx=mouse.x,my=mouse.y,MR=small?0:110;
-
-    /* stars */
-    if(tAlpha*(1-morph)>.02){
+  /* ---- the terrain ---- */
+  function drawTerrain(a,t){
+    var ease=1-Math.pow(1-intro,3),f=Math.max(W,H*1.2)*.62,camY=1.55,spread=W/f*1.25;
+    if(a.hz>-H*.5&&a.top<H){
       ctx.fillStyle='rgb('+PART+')';
-      for(var s=0;s<STARS.length;s++){var st=STARS[s];ctx.globalAlpha=tAlpha*(1-morph)*(reduce?.5:(.25+.35*Math.sin(t*st[3]+st[2])))*ease;ctx.fillRect(st[0]*W,st[1]*H,1.2,1.2)}
+      for(var s=0;s<STARS.length;s++){var st=STARS[s],sy=a.top+st[1]*(a.hz-a.top);if(sy<0||sy>H)continue;ctx.globalAlpha=(reduce?.4:(.2+.3*Math.sin(t*st[3]+st[2])))*ease;ctx.fillRect(st[0]*W,sy,1.2,1.2)}
     }
-
+    var g0=GLOWS[0],g1=GLOWS[1];
     for(var i=0;i<N;i++){
-      var z=Z[i],X=(U[i]-.5)*z*spread+camX;
-      var hgt=(.55*Math.sin(X*.26+t*.32+SEED[i]*.05)*Math.cos(z*.17-t*.2)
-            +.32*Math.sin((X*.55+z*.8)*.36+t*.55)
-            +.75*Math.exp(-Math.pow(X-2.4-Math.sin(z*.19+t*.12)*4.2,2)/5)
+      var z=Z[i],X=(U[i]-.5)*z*spread;
+      var hgt=(.55*Math.sin(X*.26+t*.22+SEED[i]*.05)*Math.cos(z*.17-t*.14)
+            +.32*Math.sin((X*.55+z*.8)*.36+t*.38)
+            +.75*Math.exp(-Math.pow(X-2.4-Math.sin(z*.19+t*.08)*4.2,2)/5)
             +.45*Math.exp(-Math.pow(X+6-Math.cos(z*.15)*3,2)/9))*ease;
-      var tx=W/2+(X-camX*.4)*f/z,ty=horizon+(camY-hgt)*f/z;
-      var depth=1-z/35.6,bright=Math.min(1,Math.max(0,(hgt+.5)/1.7));
-      var fade=Math.min(1,Math.max(.12,(H*(small?.62:.74)-ty)/(H*.3)));
-      var ta=Math.pow(depth,.7)*(.1+.9*Math.pow(bright,1.4))*tAlpha*(.35+.65*ease)*fade;
-      var tsz=.7+depth*1.5;
-
-      var m=reduce?morph:Math.min(1,Math.max(0,morph*1.35-DEL[i]));m=m*m*(3-2*m);
-      var x,y,a,sz,col=0;
-      if(m<=0){x=tx;y=ty;a=ta;sz=tsz}
-      else{
-        var ex=ox+(EX[i]-LON0)*KX*sc,ey=oy+(LAT1-EY[i])*sc,ea,esz;
-        if(EK[i]===2){ea=.55+.45*Math.sin(t*2.2-EY[i]*1.6+SEED[i]);esz=1.5;col=m>.5?1:0}
-        else if(EK[i]===1){ea=.75;esz=1.2}
-        else{ea=.14+.1*Math.sin(t*.8+SEED[i]);esz=1}
-        if(!reduce){ex+=Math.sin(t*.6+SEED[i])*1.2;ey+=Math.cos(t*.5+SEED[i])*1.2}
-        x=tx+(ex-tx)*m;y=ty+(ey-ty)*m-Math.sin(m*3.1416)*60*LIFT[i];
-        a=ta+(ea-ta)*m;sz=tsz+(esz-tsz)*m;
-      }
-      if(MR){var dx=x-mx,dy=y-my,d2=dx*dx+dy*dy;if(d2<MR*MR){var d=Math.sqrt(d2)||1,pw=1-d/MR;pw*=pw;x+=dx/d*pw*28;y+=dy/d*pw*28;a=Math.min(1,a+pw*.6)}}
-      px[i]=x;py[i]=y;pa[i]=a;ps[i]=sz;pc[i]=col;
+      var x=W/2+X*f/z,y=a.hz+(camY-hgt)*f/z;
+      if(y>a.fb||y<-4||y>H+4||x<-4||x>W+4){pa[i]=0;continue}
+      var fade=y<a.fa?1:1-(y-a.fa)/(a.fb-a.fa),depth=1-z/35.6,bright=Math.min(1,Math.max(0,(hgt+.5)/1.7));
+      var al=Math.pow(depth,.7)*(.1+.9*Math.pow(bright,1.4))*fade*(.35+.65*ease);
+      if(g0){var gy=g0.y-scrollY,dx=x-g0.x,dy=y-gy;al+=g0.life*Math.exp(-(dx*dx+dy*dy*2)/(2*170*170))*fade}
+      if(g1){var gy1=g1.y-scrollY,dx1=x-g1.x,dy1=y-gy1;al+=g1.life*Math.exp(-(dx1*dx1+dy1*dy1*2)/(2*170*170))*fade}
+      px[i]=x;py[i]=y;pa[i]=Math.min(1,al);ps[i]=.7+depth*1.5;
     }
-    /* draw in alpha buckets: few state changes, thousands of rects */
-    var B=7;
-    for(var cidx=0;cidx<2;cidx++){
-      ctx.fillStyle='rgb('+(cidx?GLOWC:PART)+')';
-      for(var b=0;b<B;b++){
-        var lo=b/B,hi2=(b+1)/B;ctx.globalAlpha=(b+.6)/B;
-        for(var j=0;j<N;j++){
-          var aj=pa[j];if(pc[j]!==cidx||aj<lo||aj>=hi2&&b<B-1||aj<.015)continue;
-          var xj=px[j],yj=py[j];if(xj<-4||yj<-4||xj>W+4||yj>H+4)continue;
-          ctx.fillRect(xj,yj,ps[j],ps[j]);
-        }
-      }
-    }
-    /* city nodes once Egypt has formed */
-    if(morph>.6){
-      var la=(morph-.6)/.4;
-      ctx.font='400 10.5px "JetBrains Mono",monospace';
-      for(var q=0;q<CITIES.length;q++){
-        var cc=CITIES[q],cx=ox+(cc[1]-LON0)*KX*sc,cy=oy+(LAT1-cc[2])*sc;
-        ctx.globalAlpha=la;ctx.fillStyle='rgb('+GLOWC+')';ctx.beginPath();ctx.arc(cx,cy,2.6,0,6.283);ctx.fill();
-        if(!reduce){var ph=(t*.6+q*.25)%1;ctx.globalAlpha=la*(1-ph)*.8;ctx.strokeStyle='rgb('+GLOWC+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,3+ph*16,0,6.283);ctx.stroke()}
-        ctx.globalAlpha=la*.85;ctx.fillStyle='rgb('+PART+')';
-        var left=cc[0]==='alexandria'&&cx>110;ctx.textAlign=left?'right':'left';
-        ctx.fillText(cc[0]+' '+cc[2].toFixed(2)+'°N',cx+(left?-9:9),cy+(left?-6:4));
-      }
-      ctx.textAlign='left';
+    var BK=7;ctx.fillStyle='rgb('+PART+')';
+    for(var b=0;b<BK;b++){
+      var lo=b/BK,hi=(b+1)/BK;ctx.globalAlpha=(b+.6)/BK;
+      for(var j=0;j<N;j++){var aj=pa[j];if(aj<.015||aj<lo||(aj>=hi&&b<BK-1))continue;ctx.fillRect(px[j],py[j],ps[j],ps[j])}
     }
     ctx.globalAlpha=1;
   }
+
+  var intro=reduce?1:0,t0=performance.now(),last=t0,nextStrike=2.6,nextPulse=1;
+  function frame(now){
+    var t=(now-t0)/1000,dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;
+    ctx.clearRect(0,0,W,H);
+    var a=anchor();
+    if(!reduce){
+      intro=Math.min(1,intro+dt*.7);
+      if(t>nextPulse){if(PULSES.length<5)pulse(rnd()*W,rnd()*H,false);nextPulse=t+.9+rnd()*1.1}
+      if(a&&t>nextStrike&&a.hz>0&&a.hz<H){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
+      drawPulses(dt);
+    }
+    if(a)drawTerrain(a,reduce?4:t);
+    if(!reduce)drawBolts(dt);
+  }
+
+  /* click the sky for a strike */
+  if(!reduce)[hero,closing].forEach(function(sec){
+    sec.addEventListener('click',function(e){
+      if(e.target.closest('a,button,input,h1,h2,p,.meta')||String(getSelection()))return;
+      var a=anchor();if(!a)return;strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa));nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
+    });
+  });
 
   var raf=0;
   function loop(now){frame(now);raf=requestAnimationFrame(loop)}
   function start(){readColors();build();if(reduce){frame(performance.now())}else{cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
   var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(start,150)});
   if(reduce)addEventListener('scroll',function(){requestAnimationFrame(frame)},{passive:true});
-  if(doc.fonts&&doc.fonts.ready)doc.fonts.ready.then(function(){if(reduce)frame(performance.now())});
   start();
 })();
 </script>
