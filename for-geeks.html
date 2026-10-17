@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · page 4.1 · 2026-10-17 · its own section with its own design: particle terrain with lightning, current in the pixel grid, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
+<!-- For Geeks · page 4.2 · 2026-10-17 · its own section with its own design: fixed particle terrain with lightning, current in the pixel grid, terminal, seven palettes. It follows no site guideline on purpose (owner, 2026-10-17). The previous docs concept is for-geeks-4.html. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -26,7 +26,8 @@
 
     *,*::before,*::after{box-sizing:border-box}
     html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .5s,color .5s}
+    html,body{overflow-x:clip}
+    body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;transition:background-color .5s,color .5s}
     a{color:inherit}button,input{font:inherit;color:inherit}
     ::selection{background:rgba(var(--glow),.3)}
     :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -47,11 +48,11 @@
     .accent{color:var(--accent)}
 
     /* ---------- top bar ---------- */
-    .bar{position:fixed;inset:0 0 auto;z-index:40;border-bottom:1px solid transparent;transition:background-color .3s,border-color .3s,backdrop-filter .3s}
-    .bar.solid{background:color-mix(in srgb,var(--bg) 78%,transparent);border-color:var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .bar{position:fixed;inset:0 0 auto;z-index:40;border-bottom:1px solid transparent;transition:background-color .3s,border-color .3s}
+    .bar.solid{background:color-mix(in srgb,var(--bg) 94%,transparent);border-color:var(--line);}
     .bar .wrap{display:flex;align-items:center;gap:20px;height:60px}
     .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:500 14px var(--mono);white-space:nowrap}
-    .brand svg{width:18px;height:18px;color:var(--accent)}
+    .brand img{width:15px;height:21px;display:block}
     .crumb{color:var(--dim);font:400 13px var(--mono);white-space:nowrap}
     .crumb b{color:var(--ink);font-weight:500}
     .caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--accent);animation:blink 1.06s steps(1) infinite}
@@ -124,6 +125,8 @@
     .s-sub{max-width:640px;margin:18px 0 0;color:var(--dim)}
     @media (max-width:820px){section.s{padding:96px 0}.s-head{grid-template-columns:1fr;gap:12px;margin-bottom:36px}}
 
+    /* grid children may shrink below their content, so a long code line scrolls inside its box instead of widening the page */
+    .hero-grid>*,.mission>*,.proof-grid>*,.stack-grid>*,.closing-grid>*{min-width:0}
     .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
     .reveal.in{opacity:1;transform:none}
     .no-js .reveal{opacity:1;transform:none}
@@ -259,7 +262,7 @@
 <header class="bar" id="bar">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Lightning, For Geeks, back to top">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+      <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="15" height="21">
       lightning
     </a>
     <span class="crumb" aria-hidden="true">~/root/<b>for-geeks</b><span class="caret"></span></span>
@@ -535,7 +538,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <li><a href="index.html">Lightning, the app</a></li>
       </ul></div>
     </div>
-    <div class="legal"><span>© 2026 Lightning · built in Egypt</span><span>source-available · PolyForm Noncommercial 1.0.0</span></div>
+    <div class="legal"><span><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px">© 2026 Lightning · built in Egypt</span><span>source-available · PolyForm Noncommercial 1.0.0</span></div>
   </div>
 </footer>
 
@@ -754,11 +757,11 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   }else skipAll();
 
   /* ===================== the field: a terrain of light, current in the grid, and lightning =====================
-     The terrain belongs to the hero and the closing and scrolls away with them; the middle of the page keeps only
-     the pixel grid, where a faint current runs now and then. Lightning strikes the terrain every few seconds, or where you click the sky. */
+     The terrain stays behind the page, faint between the hero and the closing; a faint current runs through
+     the pixel grid now and then. Lightning strikes the terrain every few seconds, or where you click the sky. */
   var cv=$('#field'),ctx=cv.getContext('2d');
   if(!ctx)return;
-  var W=0,H=0,DPR=1,N=0,small=false,U,Z,SEED,px,py,pa,ps;
+  var W=0,H=0,DPR=1,N=0,small=false,U,Z,SEED,px,py,pa,ps,BI,ORD,BK=7,CNT=new Int32Array(8);
   var STARS=[],PULSES=[],BOLTS=[],GLOWS=[],GRID=24;
   var PART='242,242,242',GLOWC='255,255,255',CORE='255,255,255',LIGHT=false;
   function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=root.dataset.theme==='paper';CORE=LIGHT?GLOWC:'255,255,255'}
@@ -768,24 +771,24 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
   function build(){
     small=innerWidth<760;
-    DPR=Math.min(devicePixelRatio||1,small?1.5:2);
     W=innerWidth;H=innerHeight;
+    /* on a 1x PC screen, sub-pixel dots crawl and flicker as they move: draw at 1.5x at least, within about 4.5 million pixels */
+    DPR=Math.max(1,Math.min(small?2:1.75,Math.max(devicePixelRatio||1,1.5),Math.sqrt(4.5e6/(W*H))));
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
     var C=small?80:140,R=small?36:50;N=C*R;
     U=new Float32Array(N);Z=new Float32Array(N);SEED=new Float32Array(N);
-    px=new Float32Array(N);py=new Float32Array(N);pa=new Float32Array(N);ps=new Float32Array(N);
+    px=new Float32Array(N);py=new Float32Array(N);pa=new Float32Array(N);ps=new Float32Array(N);BI=new Uint8Array(N);ORD=new Int32Array(N);
     var k=0;
     for(var r=0;r<R;r++)for(var c=0;c<C;c++){U[k]=(c+rnd()*.9)/C;Z[k]=1.6+Math.pow((r+rnd()*.9)/R,1.35)*34;SEED[k]=rnd()*6.283;k++}
     STARS=[];for(var s=0;s<(small?60:140);s++)STARS.push([rnd(),rnd(),rnd()*6.283,.4+rnd()*.9]);
   }
 
-  /* where the terrain sits: the hero's top area, or the space above the closing headline */
-  function anchor(){
-    var hr=hero.getBoundingClientRect();
-    if(hr.bottom>0)return {top:hr.top,hz:hr.top+H*(small?.13:.17),fa:hr.top+H*(small?.27:.33),fb:hr.top+H*(small?.4:.5)};
-    var cr=closing.getBoundingClientRect(),pad=parseFloat(getComputedStyle(closing).paddingTop)||H*.5;
-    if(cr.top<H)return {top:cr.top,hz:cr.top+pad*.22,fa:cr.top+pad*.62,fb:cr.top+pad*.96};
-    return null;
+  /* the terrain stays put behind the page as you scroll: full in the hero and the closing, faint in between */
+  function anchor(){return {top:0,hz:H*(small?.13:.17),fa:H*(small?.27:.33),fb:H*(small?.4:.5)}}
+  var TA=1;
+  function targetTA(){
+    var hr=hero.getBoundingClientRect(),cr=closing.getBoundingClientRect();
+    return Math.max(.14,Math.min(1,Math.max(0,hr.bottom/H-.25)/.5),cr.top<H*.9?1:0);
   }
 
   /* ---- current in the grid: short pulses that run along the dots and turn at right angles ---- */
@@ -822,7 +825,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
   /* ---- lightning: midpoint displacement with a few branches ---- */
   function strike(x1,y1){
-    var y0=-20,sy=scrollY,x0=x1+(rnd()-.5)*W*.12,segs=[];
+    var y0=-20,sy=0,x0=x1+(rnd()-.5)*W*.12,segs=[];
     (function sub(ax,ay,bx,by,dis,w,depth){
       if(dis<2.5){segs.push([ax,ay+sy,bx,by+sy,w]);return}
       var mx=(ax+bx)/2+(rnd()-.5)*dis,my=(ay+by)/2+(rnd()-.5)*dis*.3;
@@ -839,7 +842,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     if(!LIGHT)ctx.globalCompositeOperation='lighter';
     for(var g=GLOWS.length-1;g>=0;g--){
       var G=GLOWS[g];G.life-=dt/1.1;if(G.life<=0){GLOWS.splice(g,1);continue}
-      var gy=G.y-scrollY,rad=small?150:240,grd=ctx.createRadialGradient(G.x,gy,0,G.x,gy,rad);
+      var gy=G.y,rad=small?150:240,grd=ctx.createRadialGradient(G.x,gy,0,G.x,gy,rad);
       grd.addColorStop(0,'rgba('+GLOWC+','+(.22*G.life*G.life).toFixed(3)+')');grd.addColorStop(1,'rgba('+GLOWC+',0)');
       ctx.fillStyle=grd;ctx.fillRect(G.x-rad,gy-rad,rad*2,rad*2);
     }
@@ -852,7 +855,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         ctx.strokeStyle=passes[q][1];
         [1,.45,.2025].forEach(function(w){
           ctx.lineWidth=passes[q][0]*w;ctx.beginPath();
-          for(var i=0;i<B.segs.length;i++){var s=B.segs[i];if(Math.abs(s[4]-w)>.01)continue;ctx.moveTo(s[0],s[1]-scrollY);ctx.lineTo(s[2],s[3]-scrollY)}
+          for(var i=0;i<B.segs.length;i++){var s=B.segs[i];if(Math.abs(s[4]-w)>.01)continue;ctx.moveTo(s[0],s[1]);ctx.lineTo(s[2],s[3])}
           ctx.stroke();
         });
       }
@@ -865,27 +868,33 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     var ease=1-Math.pow(1-intro,3),f=Math.max(W,H*1.2)*.62,camY=1.55,spread=W/f*1.25;
     if(a.hz>-H*.5&&a.top<H){
       ctx.fillStyle='rgb('+PART+')';
-      for(var s=0;s<STARS.length;s++){var st=STARS[s],sy=a.top+st[1]*(a.hz-a.top);if(sy<0||sy>H)continue;ctx.globalAlpha=(reduce?.4:(.2+.3*Math.sin(t*st[3]+st[2])))*ease;ctx.fillRect(st[0]*W,sy,1.2,1.2)}
+      for(var s=0;s<STARS.length;s++){var st=STARS[s],sy=a.top+st[1]*(a.hz-a.top);if(sy<0||sy>H)continue;ctx.globalAlpha=(reduce?.4:(.2+.3*Math.sin(t*st[3]+st[2])))*ease*TA;ctx.fillRect(st[0]*W,sy,1.2,1.2)}
     }
     var g0=GLOWS[0],g1=GLOWS[1];
     for(var i=0;i<N;i++){
       var z=Z[i],X=(U[i]-.5)*z*spread;
-      var hgt=(.55*Math.sin(X*.26+t*.22+SEED[i]*.05)*Math.cos(z*.17-t*.14)
-            +.32*Math.sin((X*.55+z*.8)*.36+t*.38)
-            +.75*Math.exp(-Math.pow(X-2.4-Math.sin(z*.19+t*.08)*4.2,2)/5)
+      var hgt=(.55*Math.sin(X*.26+t*.16+SEED[i]*.05)*Math.cos(z*.17-t*.1)
+            +.32*Math.sin((X*.55+z*.8)*.36+t*.27)
+            +.75*Math.exp(-Math.pow(X-2.4-Math.sin(z*.19+t*.06)*4.2,2)/5)
             +.45*Math.exp(-Math.pow(X+6-Math.cos(z*.15)*3,2)/9))*ease;
       var x=W/2+X*f/z,y=a.hz+(camY-hgt)*f/z;
       if(y>a.fb||y<-4||y>H+4||x<-4||x>W+4){pa[i]=0;continue}
       var fade=y<a.fa?1:1-(y-a.fa)/(a.fb-a.fa),depth=1-z/35.6,bright=Math.min(1,Math.max(0,(hgt+.5)/1.7));
-      var al=Math.pow(depth,.7)*(.1+.9*Math.pow(bright,1.4))*fade*(.35+.65*ease);
-      if(g0){var gy=g0.y-scrollY,dx=x-g0.x,dy=y-gy;al+=g0.life*Math.exp(-(dx*dx+dy*dy*2)/(2*170*170))*fade}
-      if(g1){var gy1=g1.y-scrollY,dx1=x-g1.x,dy1=y-gy1;al+=g1.life*Math.exp(-(dx1*dx1+dy1*dy1*2)/(2*170*170))*fade}
-      px[i]=x;py[i]=y;pa[i]=Math.min(1,al);ps[i]=.7+depth*1.5;
+      var al=Math.pow(depth,.7)*(.1+.9*Math.pow(bright,1.4))*fade*(.35+.65*ease)*TA;
+      if(g0){var gy=g0.y,dx=x-g0.x,dy=y-gy;al+=g0.life*Math.exp(-(dx*dx+dy*dy*2)/(2*170*170))*fade}
+      if(g1){var gy1=g1.y,dx1=x-g1.x,dy1=y-gy1;al+=g1.life*Math.exp(-(dx1*dx1+dy1*dy1*2)/(2*170*170))*fade}
+      px[i]=x;py[i]=y;pa[i]=Math.min(1,al);ps[i]=1.05+depth*1.3;
     }
-    var BK=7;ctx.fillStyle='rgb('+PART+')';
-    for(var b=0;b<BK;b++){
-      var lo=b/BK,hi=(b+1)/BK;ctx.globalAlpha=(b+.6)/BK;
-      for(var j=0;j<N;j++){var aj=pa[j];if(aj<.015||aj<lo||(aj>=hi&&b<BK-1))continue;ctx.fillRect(px[j],py[j],ps[j],ps[j])}
+    /* one pass: sort the visible dots into seven brightness buckets, then draw each bucket with one alpha */
+    CNT.fill(0);var M=0;
+    for(var j=0;j<N;j++){var aj=pa[j];if(aj<.015){BI[j]=255;continue}var bk=Math.min(BK-1,aj*BK|0);BI[j]=bk;CNT[bk+1]++;M++}
+    for(var q=1;q<=BK;q++)CNT[q]+=CNT[q-1];
+    var start=CNT.slice(0,BK);
+    for(j=0;j<N;j++){var bb=BI[j];if(bb!==255)ORD[start[bb]++]=j}
+    ctx.fillStyle='rgb('+PART+')';
+    for(var b2=0;b2<BK;b2++){
+      if(CNT[b2+1]===CNT[b2])continue;ctx.globalAlpha=(b2+.6)/BK;
+      for(var o=CNT[b2];o<CNT[b2+1];o++){var n=ORD[o];ctx.fillRect(px[n],py[n],ps[n],ps[n])}
     }
     ctx.globalAlpha=1;
   }
@@ -894,14 +903,15 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   function frame(now){
     var t=(now-t0)/1000,dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;
     ctx.clearRect(0,0,W,H);
-    var a=anchor();
+    var a=anchor(),tt=targetTA();
+    TA=reduce?tt:TA+(tt-TA)*(1-Math.exp(-dt*5));
     if(!reduce){
       intro=Math.min(1,intro+dt*.7);
       if(t>nextPulse){if(PULSES.length<5)pulse(rnd()*W,rnd()*H,false);nextPulse=t+.9+rnd()*1.1}
-      if(a&&t>nextStrike&&a.hz>0&&a.hz<H){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
+      if(t>nextStrike&&TA>.6){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
       drawPulses(dt);
     }
-    if(a)drawTerrain(a,reduce?4:t);
+    drawTerrain(a,reduce?4:t);
     if(!reduce)drawBolts(dt);
   }
 
@@ -909,7 +919,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   if(!reduce)[hero,closing].forEach(function(sec){
     sec.addEventListener('click',function(e){
       if(e.target.closest('a,button,input,h1,h2,p,.meta')||String(getSelection()))return;
-      var a=anchor();if(!a)return;strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa));nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
+      var a=anchor();strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa));nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
     });
   });
 
