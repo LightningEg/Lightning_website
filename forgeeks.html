@@ -267,7 +267,19 @@
       .caret,.scroll::after,.layers::after{animation:none}
       .bar-cmp i{transition:none}
     }
-  </style>
+  
+/* Intermittent ambient electrical trace. Reduced motion keeps the static trace. */
+.hero{isolation:isolate}
+.hero>.geeks-signal{position:absolute;inset:0;z-index:0;width:100%;height:100%;overflow:hidden;pointer-events:none;color:var(--accent,var(--green,#70e6af));opacity:.57}
+.hero>.geeks-signal~*{position:relative;z-index:1}
+.geeks-signal__trace{fill:none;stroke:currentColor;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;opacity:.19;vector-effect:non-scaling-stroke}
+.geeks-signal__branch{opacity:.12;stroke-width:.9}
+.geeks-signal__pulse{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:32 968;stroke-dashoffset:1000;filter:drop-shadow(0 0 5px currentColor);opacity:0;vector-effect:non-scaling-stroke;animation:geeks-signal-travel 15s linear infinite}
+.geeks-signal__node{fill:currentColor;opacity:.22}
+@keyframes geeks-signal-travel{0%{stroke-dashoffset:1000;opacity:0}4%{opacity:.65}49%{stroke-dashoffset:0;opacity:.65}56%,100%{stroke-dashoffset:0;opacity:0}}
+@media(max-width:700px){.hero>.geeks-signal{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.geeks-signal__pulse{animation:none;opacity:0}}
+</style>
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -311,6 +323,7 @@
 <main id="main">
   <!-- ===== hero ===== -->
   <section class="hero" id="top" aria-labelledby="h1">
+<svg class="geeks-signal" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path class="geeks-signal__trace" pathLength="1000" d="M725 5 L695 68 L747 116 L710 176 L802 239 L769 300 L847 359 L799 418 L872 472 L835 545 L900 635"/><path class="geeks-signal__trace geeks-signal__branch" d="M710 176 L645 210 L674 267 L601 319 M847 359 L922 379 L950 444 L1030 468 M872 472 L972 493 L1018 567"/><path class="geeks-signal__pulse" pathLength="1000" d="M725 5 L695 68 L747 116 L710 176 L802 239 L769 300 L847 359 L799 418 L872 472 L835 545 L900 635"/><circle class="geeks-signal__node" cx="710" cy="176" r="2.5"/><circle class="geeks-signal__node" cx="847" cy="359" r="2.5"/></svg>
     <div class="wrap">
       <h1 id="h1" aria-label="Financial planning every Egyptian can afford, read, run and trust.">
             <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford</span>.</span>

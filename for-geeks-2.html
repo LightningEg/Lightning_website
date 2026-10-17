@@ -28,6 +28,18 @@
 @media(max-width:1000px){.shell{grid-template-columns:1fr}.sidebar{height:auto;position:relative;display:block;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:15px 23px;border:0}.sidehead,.side-bottom{display:none}.side-nav{display:flex;overflow:auto;border-top:1px solid var(--line)}.side-nav a{white-space:nowrap;padding:11px 16px}.top{padding:0 23px}.page{padding:25px 23px 60px}}
 @media(max-width:700px){.hero{padding:28px 23px}.hero h1{font-size:clamp(42px,11vw,68px)}.page{padding:18px 15px 50px}.top{padding:0 15px;height:51px}.topright .chip{display:none}.grid{display:block}.panel{margin-bottom:13px}.steps{grid-template-columns:1fr}.module{grid-template-columns:1fr;gap:2px}.terminalbody{font-size:11px;padding:14px;min-height:270px}.term-entry{padding:0 14px 16px}.end{display:block}.end span{display:block;margin-top:7px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Intermittent ambient electrical trace. Reduced motion keeps the static trace. */
+.hero{isolation:isolate}
+.hero>.geeks-signal{position:absolute;inset:0;z-index:0;width:100%;height:100%;overflow:hidden;pointer-events:none;color:var(--accent,var(--green,#70e6af));opacity:.57}
+.hero>.geeks-signal~*{position:relative;z-index:1}
+.geeks-signal__trace{fill:none;stroke:currentColor;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;opacity:.19;vector-effect:non-scaling-stroke}
+.geeks-signal__branch{opacity:.12;stroke-width:.9}
+.geeks-signal__pulse{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:32 968;stroke-dashoffset:1000;filter:drop-shadow(0 0 5px currentColor);opacity:0;vector-effect:non-scaling-stroke;animation:geeks-signal-travel 15s linear infinite}
+.geeks-signal__node{fill:currentColor;opacity:.22}
+@keyframes geeks-signal-travel{0%{stroke-dashoffset:1000;opacity:0}4%{opacity:.65}49%{stroke-dashoffset:0;opacity:.65}56%,100%{stroke-dashoffset:0;opacity:0}}
+@media(max-width:700px){.hero>.geeks-signal{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.geeks-signal__pulse{animation:none;opacity:0}}
 </style>
 </head>
 <body>
@@ -49,6 +61,7 @@
 <header class="top"><div class="crumb">LIGHTNING / <b>FOR_GEEKS</b> / INDEX</div><div class="topright"><span class="chip">SOURCE: PUBLIC</span><a href="index.html">← Main site</a></div></header>
 <main id="main" class="page">
 <section class="hero" id="overview">
+<svg class="geeks-signal" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path class="geeks-signal__trace" pathLength="1000" d="M725 5 L695 68 L747 116 L710 176 L802 239 L769 300 L847 359 L799 418 L872 472 L835 545 L900 635"/><path class="geeks-signal__trace geeks-signal__branch" d="M710 176 L645 210 L674 267 L601 319 M847 359 L922 379 L950 444 L1030 468 M872 472 L972 493 L1018 567"/><path class="geeks-signal__pulse" pathLength="1000" d="M725 5 L695 68 L747 116 L710 176 L802 239 L769 300 L847 359 L799 418 L872 472 L835 545 L900 635"/><circle class="geeks-signal__node" cx="710" cy="176" r="2.5"/><circle class="geeks-signal__node" cx="847" cy="359" r="2.5"/></svg>
 <div class="eyebrow">$ whoami  /  developer</div>
 <h1>FOR <em>GEEKS_</em></h1>
 <p>Under the hood of Lightning. The source, the decisions, the messy edges and the tests that keep the numbers honest. If you want to understand the code—or make it better—start here.</p>
