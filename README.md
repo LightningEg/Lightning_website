@@ -26,7 +26,7 @@ sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financi
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
 survey.html         optional personal finance survey (the landing system: the same top bar without the button, hero, card, tagline and footer; always light)
-forgeeks.html       For Geeks page; for-geeks.html redirects here for existing links
+forgeeks.html       For Geeks, the developer page (for-geeks.html redirects here for existing links): its own section and design (fixed particle terrain that never rebuilds while you scroll, faint between the hero and the closing, lightning strikes anywhere on the page, current running through the pixel grid, live terminal, eleven themes behind one button), no site guideline (owner, 2026-10-17); indexed, in the sitemap and llms.txt, linked from every footer (More). for-geeks-2.html, for-geeks-3.html and for-geeks-4.html keep earlier concepts
 features.html       Features: the five things it does best (each with a Mohab number), then all 102 features in twelve groups, the phone and PC second, with a jump to each (css/features.css)
 guides.html         Guides: the one library page, two cards (Using Lightning: the seven guides below; Budgeting basics: the five articles), each a list of the readers' questions linked to the page that answers it (css/guides.css `.g-lib`)
 *-egypt.html, net-worth-tracker.html, cash-flow-planner.html, bank-statement-budgeting.html, offline-personal-finance-app.html
@@ -64,7 +64,6 @@ audit/              website audits against the guideline
 css/theme.css       light/dark switch
 css/motion.css      small motion on the home page, Features, How It Works, Downloads and the guides (see Motion below)
 js/motion.js        count-up figures, the rolling calculator answer, lists arriving item by item and scroll reveal
-for-geeks.html      For Geeks, the developer page: its own section and design (fixed particle terrain that never rebuilds while you scroll, faint between the hero and the closing, lightning strikes anywhere on the page, current running through the pixel grid, live terminal, eleven themes behind one button), no site guideline (owner, 2026-10-17); noindex, unlinked. for-geeks-2.html, for-geeks-3.html and for-geeks-4.html keep earlier concepts
 test.html           private test page, not indexed or linked: the same two-screen ledger handoff as Home follows the hero; its one-time animation has a Hand back control and a static reduced-motion state; the six-places wow still plays
 css/wow.css, js/wow.js the wow moment on the home page and test.html (see Motion below)
 js/vendor/          GSAP 3.15 and ScrollTrigger, hosted here; js/wow.js fetches them after the page loads

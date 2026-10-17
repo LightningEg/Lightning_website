@@ -23,6 +23,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Downloads](https://lightningeg.com/current-status.html): the Windows ZIP and Android APK of the beta, a safe sample year of fictional CSV statements to learn on, and how to give feedback.
 - [Sample profiles](https://lightningeg.com/sample-profiles.html): four fictional Egyptian 2026 profiles—Amr (irregular side income), Abdelrahman (steady salary and equity investing), Menna (freelance income), and Fatma (predictable household costs and an emergency reserve)—loadable in Lightning.
 - [Release log](https://lightningeg.com/release-log.html): what changed build by build.
+- [For Geeks](https://lightningeg.com/forgeeks.html): for developers: why the source is public (source-available, PolyForm Noncommercial 1.0.0), the stack (Python, FastAPI, SQLite with SQLCipher, no frontend build), the test and contract counts, what is not finished, and how to contribute.
 
 ## Guides
 
