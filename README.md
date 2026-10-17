@@ -26,6 +26,7 @@ sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financi
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
 survey.html         optional personal finance survey (the landing system: the same top bar without the button, hero, card, tagline and footer; always light)
+forgeeks.html       For Geeks page; for-geeks.html redirects here for existing links
 features.html       Features: the five things it does best (each with a Mohab number), then all 102 features in twelve groups, the phone and PC second, with a jump to each (css/features.css)
 guides.html         Guides: the one library page, two cards (Using Lightning: the seven guides below; Budgeting basics: the five articles), each a list of the readers' questions linked to the page that answers it (css/guides.css `.g-lib`)
 *-egypt.html, net-worth-tracker.html, cash-flow-planner.html, bank-statement-budgeting.html, offline-personal-finance-app.html
