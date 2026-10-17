@@ -1798,8 +1798,8 @@
       "id": "UX-2026.10.14.04",
       "name": "app-feedback · Sends in the background",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.14.04.html"
     },
     {
       "id": "UX-2026.10.13.16",
@@ -2141,8 +2141,8 @@
       "id": "UX-2026.10.15.45",
       "name": "Downloads · Get build news",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.45.html"
     },
     {
       "id": "UX-2026.10.15.46",
@@ -2204,8 +2204,8 @@
       "id": "UX-2026.10.15.54",
       "name": "Release Log · Get build news",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.54.html"
     },
     {
       "id": "UX-2026.10.15.55",
@@ -2357,6 +2357,41 @@
     {
       "id": "UX-2026.10.15.76",
       "name": "Version Archive · Android in the hero note",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.76.html"
+    },
+    {
+      "id": "UX-2026.10.17.01",
+      "name": "Downloads · Lightning 1.3",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.17.02",
+      "name": "Release Log · Lightning 1.3.0",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.17.03",
+      "name": "Version Archive · Lightning 1.3.0 downloads",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.17.03.html"
+    },
+    {
+      "id": "UX-2026.10.17.04",
+      "name": "App feedback · Lightning 1.3.0 build selector",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.17.05",
+      "name": "Version Archive · Lightning 1.3.0 downloads and feedback",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
