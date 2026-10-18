@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · collaborate · 2026-10-18 · the contribution flow as written in the app repo: CONTRIBUTING.md, .github/MAINTAINERS.md, AGENTS.md §3 and §6, .github/workflows/contributors.yml. Keep it in step with them. -->
+<!-- For Geeks · collaborate · 2026-10-18 · the contribution flow as written in the app repo: CONTRIBUTING.md, AGENTS.md §3 and §6, .github/workflows/contributors.yml. Keep it in step with them. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -77,11 +77,11 @@
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="wrap">
-      <h1 id="h1">Start on the website.<br><span class="hi">Build with us.</span></h1>
+      <h1 id="h1">Take one task.<br><span class="hi">Build with us.</span></h1>
       <div class="hero-grid">
-        <p class="lede">Start with the Roadmap, join Discord for help choosing a task, then follow its GitHub link. <b>Claim, branch, review, merge.</b> The steps below show what you can do now and what we still plan to build.</p>
+        <p class="lede">Everything happens on GitHub, and all you need is a free account. <b>Pick, /take, change, pull request.</b> Four steps, all in your browser.</p>
         <div class="cta">
-          <a class="btn" href="https://discord.gg/fukkUs263W" rel="noopener" target="_blank">Join Discord to start</a>
+          <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick a task</a>
           <a class="btn ghost" href="#flow"><span class="k">$</span> read the flow</a>
         </div>
       </div>
@@ -98,67 +98,12 @@
         </div>
       </div>
       <div class="steps reveal">
-        <div class="step"><b>01</b><h3>Start on the website</h3><p>Open the <a class="accent" href="forgeeks-roadmap.html#build">Roadmap contribution guide</a>, then join Discord. You do not need to understand the whole project.</p></div>
-        <div class="step"><b>02</b><h3>Get a welcome</h3><p>We plan a short welcome in <span class="mono">#start-here</span>, available tasks in <span class="mono">#find-a-task</span>, and questions in <span class="mono">#help</span>. These channels still need setup or verification.</p></div>
-        <div class="step"><b>03</b><h3>Choose a numbered task</h3><p>Pick something small from the <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">available GitHub issues</a>. Discord task listings will use the same number, such as Task #37, and link to its full description.</p></div>
-        <div class="step"><b>04</b><h3>Claim it on GitHub</h3><p>Comment <span class="mono">/take</span> on the issue and wait until your name is assigned. <span class="mono">/drop</span> gives it back. A Discord claim button is planned, not available yet.</p></div>
+        <div class="step"><b>01</b><h3>Pick a task</h3><p>Choose an unassigned <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">good first issue</a>. It says what's wrong, what finished looks like and which file to open.</p></div>
+        <div class="step"><b>02</b><h3>Comment /take</h3><p>A bot assigns it to you at once. One task at a time; <span class="mono">/drop</span> gives it back, and 14 quiet days free it for someone else.</p></div>
+        <div class="step"><b>03</b><h3>Change it in a Codespace</h3><p><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open a Codespace</a> and press Create. The demo household opens in a preview tab. Edit, commit, then Sync; say yes when GitHub offers to make your fork.</p></div>
+        <div class="step"><b>04</b><h3>Open a pull request</h3><p>Press Compare &amp; pull request, write <span class="mono">Closes #37</span> with your issue's number and how you checked it. Tests run, we review and merge, and the issue closes.</p></div>
       </div>
-      <div class="steps reveal">
-        <div class="step"><b>05</b><h3>Work on your branch</h3><p>Make a fork, your own copy of Lightning, then create a branch for this task. Your work stays separate from the official version. Nobody pushes directly to <span class="mono">main</span>.</p></div>
-        <div class="step"><b>06</b><h3>Make and check the change</h3><p>Follow the task instructions and test what you changed. Codespaces can run your workspace in a browser using your own GitHub allowance. Ask for help with your task link.</p></div>
-        <div class="step"><b>07</b><h3>Send a pull request</h3><p>Propose your change with <span class="mono">Closes #37</span>, using your actual issue number. Explain what changed and how you checked it. Make requested fixes on the same branch.</p></div>
-        <div class="step"><b>08</b><h3>Review and merge</h3><p>The owner or an authorized AI reviews the latest changes. After tests pass and discussions are resolved, the AI may merge through the owner's existing account. The linked issue closes.</p></div>
-      </div>
-      <p class="stats-note reveal">// today: claim on GitHub with /take · Discord is for task links and help · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">setup and contributor guide</a></p>
-    </div>
-  </section>
-  <section class="s" id="setup-status" aria-labelledby="t-progress">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>✓</b> / progress</div>
-        <div>
-          <h2 id="t-progress">Built so far. <span class="hi">Still to do.</span></h2>
-          <p class="s-sub">Published pages and written rules are ready. Discord automation and stronger GitHub protection still need activation and a complete trial.</p>
-        </div>
-      </div>
-      <div class="tracks">
-        <div class="lane reveal">
-          <h3>completed<span>merged and published</span></h3>
-          <ul class="items">
-            <li><span class="st done">[done]</span><p><b>One organization</b>The app, website, downloads and market-data repositories are under LightningEg.</p></li>
-            <li><span class="st done">[done]</span><p><b>Contribute is on the Roadmap</b>The guide is in the page body, outside the header. Old home-page contribution links forward to it.</p></li>
-            <li><span class="st done">[done]</span><p><b>AI work uses the owner account</b>Authorized AI sessions may merge passing pull requests. Separate AI accounts are not required, and contributors keep their own accounts.</p></li>
-            <li><span class="st done">[done]</span><p><b>GitHub claim workflow and setup tool</b>The repository contains /take and /drop automation, plus a previewable protection setup tool. A complete live contributor trial is still pending.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>next<span>not yet confirmed live</span></h3>
-          <ul class="items">
-            <li><span class="st">[next]</span><p><b>Discord welcome and tasks</b>Set up or verify the three channels, pinned instructions and numbered task listings. Align the Roadmap's main invitation with this route.</p></li>
-            <li><span class="st">[next]</span><p><b>Numbered claims</b>Choose the role or discussion approach below, then build the claim button, account linking and assignment cleanup.</p></li>
-            <li><span class="st">[next]</span><p><b>Activate stronger protection</b>The owner-side setup tool is merged. Merging it does not switch on GitHub settings; activation has not been confirmed.</p></li>
-            <li><span class="st">[next]</span><p><b>Try the whole path</b>Run one small task from website entry to claim, branch, pull request, checks, AI merge and assignment cleanup.</p></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="s" id="numbered-tasks" aria-labelledby="t-numbered">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>+</b> / proposed</div>
-        <div>
-          <h2 id="t-numbered">One task number. <span class="hi">A clear owner.</span></h2>
-          <p class="s-sub">The proposed Discord integration uses GitHub's issue number everywhere. It is not implemented yet, and the role-versus-discussion choice remains open.</p>
-        </div>
-      </div>
-      <div class="steps reveal">
-        <div class="step"><b>01</b><h3>See Task #37</h3><p>A task listing shows its number, a simple title, useful skills and the GitHub link. The number identifies the same work in both places.</p></div>
-        <div class="step"><b>02</b><h3>Claim from Discord</h3><p>A planned Claim task #37 button would verify your GitHub account, check availability and record your assignment on GitHub before confirming it in Discord.</p></div>
-        <div class="step"><b>03</b><h3>Show who is working</h3><p>The owner proposed a role such as <span class="mono">Working on #37</span>. Another option is one Contributor role and a numbered task discussion showing its assignee. Neither option has been selected or deployed.</p></div>
-        <div class="step"><b>04</b><h3>Keep it in sync</h3><p>Two people cannot claim the same task. Dropping or completing it would remove the task role or update its discussion. An active pull request should keep its claim.</p></div>
-      </div>
-      <p class="stats-note reveal">// a task role identifies work; it grants no repository write access, merge permission or administrator powers · until the bot is ready, use /take on GitHub</p>
+      <p class="stats-note reveal">// Codespaces are free within GitHub's monthly allowance; stop yours when you finish · your first pull request runs its tests once the owner approves · ask on the issue if you're stuck · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">the full guide</a></p>
     </div>
   </section>
   <section class="s" id="who" aria-labelledby="t-who">
@@ -238,7 +183,7 @@
         <div class="step"><b>03</b><h3>Money lives in Python</h3><p>Financial calculations stay in services, never templates or JavaScript. Say how a change can fail and show the test.</p></div>
         <div class="step"><b>04</b><h3>Brand and tests</h3><p>Visible changes follow the guideline. Run the tests of what you changed; CI runs the full suite.</p></div>
       </div>
-      <p class="stats-note reveal">// licence: PolyForm Noncommercial 1.0.0 · by sending a PR you confirm the work is yours to give and let the owner relicense it · you keep your copyright · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/.github/MAINTAINERS.md" target="_blank" rel="noopener">MAINTAINERS.md</a></p>
+      <p class="stats-note reveal">// licence: PolyForm Noncommercial 1.0.0 · by sending a PR you confirm the work is yours to give and let the owner relicense it · you keep your copyright · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a></p>
     </div>
   </section>
   <section class="s" id="ai" aria-labelledby="t-ai">
@@ -264,7 +209,7 @@
         <h2 id="t-close">Take a good first issue.<br><span class="hi">Send the pull request.</span></h2>
         <div class="cta">
           <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Start contributing</a>
-          <a class="btn ghost" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">join the discord</a>
+          <a class="btn ghost" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">open a codespace</a>
         </div>
       </div>
     </div>
