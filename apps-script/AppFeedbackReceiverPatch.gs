@@ -183,7 +183,7 @@ function testAppFeedbackRoute() {
 // A leading apostrophe makes formula-shaped untrusted input literal in Sheets.
 // Check after whitespace/control characters as well as at the start.
 function appFeedbackCell_(value) {
-  if (typeof value !== 'string') return value;
-  const text = value.slice(0, 2000);
+  if (typeof value === 'number' || value instanceof Date) return value;
+  const text = String(value == null ? '' : value).slice(0, 2000);
   return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }

@@ -43,13 +43,13 @@ function uxSheet_() {
 }
 
 function saveUxTest_(data) {
-  const response = ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+  const respond = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  const response = respond({ ok: true });
 
-  if (data.website || typeof data.feedback_json !== 'string' || data.feedback_json.length > 100000) return response;
+  if (data.website || typeof data.feedback_json !== 'string' || data.feedback_json.length > 100000) return respond({ ok: false, error: 'invalid_submission' });
   let feedback = [];
-  try { feedback = JSON.parse(data.feedback_json || '[]'); } catch (error) { return response; }
-  if (!Array.isArray(feedback) || feedback.length > 30) return response;
+  try { feedback = JSON.parse(data.feedback_json || '[]'); } catch (error) { return respond({ ok: false, error: 'invalid_submission' }); }
+  if (!Array.isArray(feedback) || feedback.length > 30) return respond({ ok: false, error: 'invalid_submission' });
   const submittedAt = new Date();
   const rows = feedback
     .filter(item => item && item.reaction)
@@ -64,7 +64,7 @@ function saveUxTest_(data) {
       data.session_id || '',
       data.device || ''
     ].map(uxCell_));
-  if (!rows.length) return response;
+  if (!rows.length) return respond({ ok: false, error: 'no_feedback' });
 
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -73,7 +73,7 @@ function saveUxTest_(data) {
     const day = submittedAt.toISOString().slice(0, 10);
     let usage = JSON.parse(props.getProperty('UX_FEEDBACK_USAGE') || '{}');
     if (usage.day !== day) usage = { day, rows: 0 };
-    if (usage.rows + rows.length > 1000) return response;
+    if (usage.rows + rows.length > 1000) return respond({ ok: false, error: 'daily_limit' });
     props.setProperty('UX_FEEDBACK_USAGE', JSON.stringify({ day, rows: usage.rows + rows.length }));
     const sheet = uxSheet_();
     sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, UX_HEADERS.length).setValues(rows);
@@ -97,7 +97,7 @@ function testUxRoute() {
 }
 
 function uxCell_(value) {
-  if (typeof value !== 'string') return value;
-  const text = value.slice(0, 2000);
+  if (typeof value === 'number' || value instanceof Date) return value;
+  const text = String(value == null ? '' : value).slice(0, 2000);
   return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }

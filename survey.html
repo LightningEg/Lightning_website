@@ -33,6 +33,7 @@
 <script src="js/analytics.js?v=20261003-1" defer></script>
 <script src="js/nav-menu.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
+<script src="js/form-security.js?v=20261018-1" defer></script>
 </head>
 <body>
 <div class="d-bar">
@@ -110,7 +111,7 @@
     button.disabled = true; status.textContent = 'Sending…';
     try {
       survey.querySelector('[name="page_url"]').value = window.location.href;
-      await fetch(endpoint, {method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(survey))});
+      await window.LightningForms.send(endpoint, new URLSearchParams(new FormData(survey)), survey);
       survey.reset(); status.textContent = 'Thank you — your answers have been received.';
     } catch (_) { status.textContent = 'We could not send your answers. Please try again.'; }
     finally { button.disabled = false; }

@@ -1,0 +1,6 @@
+
+# Private deployment backups and generated receiver bundle
+.security-backups/
+LightningAppsScript.gs
+
+__pycache__/

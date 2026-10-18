@@ -100,7 +100,7 @@
     submit.disabled = true; status.textContent = 'Sending your feedback…';
     try {
       const payload = new URLSearchParams({ form_type: 'ux_test', experience_version: experienceVersion, page_url: location.href, session_id: sessionId, device: matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop', feedback_json: JSON.stringify(rows) });
-      await fetch(endpoint, { method: 'POST', mode: 'no-cors', body: payload });
+      await window.LightningForms.send(endpoint, payload, rail);
       feedback.clear(); render(); status.textContent = 'Thank you — your feedback has been saved.';
     } catch (_) { status.textContent = 'We could not save that just now. Please try again.'; }
     finally { submit.disabled = false; }

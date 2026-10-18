@@ -47,6 +47,7 @@ html[dir=rtl] .survey legend{font-family:var(--display);font-weight:700;line-hei
 <link rel="stylesheet" href="../css/arabic.css?v=20261012-3">
 <script src="../js/nav-menu.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="../css/footer.css?v=20261015-1">
+<script src="../js/form-security.js?v=20261018-1" defer></script>
 </head>
 <body>
 <div class="d-bar">
@@ -125,7 +126,7 @@ html[dir=rtl] .survey legend{font-family:var(--display);font-weight:700;line-hei
     button.disabled = true; status.textContent = 'بنبعت…';
     try {
       survey.querySelector('[name="page_url"]').value = window.location.href;
-      await fetch(endpoint, {method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(survey))});
+      await window.LightningForms.send(endpoint, new URLSearchParams(new FormData(survey)), survey);
       survey.reset(); status.textContent = 'شكرًا ليك، إجاباتك وصلتنا.';
     } catch (_) { status.textContent = 'معرفناش نبعت إجاباتك. جرّب تاني.'; }
     finally { button.disabled = false; }
