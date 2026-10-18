@@ -25,7 +25,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [Release log](https://lightningeg.com/release-log.html): what changed build by build.
 - [For Geeks](https://lightningeg.com/forgeeks.html): for developers: who builds Lightning and why the source is public (source-available, PolyForm Noncommercial 1.0.0), the stack (Python, FastAPI, SQLite with SQLCipher, no frontend build), the test and contract counts, what is not finished, where help is needed (Arabic, screens, Python backend, Android, testing on real PCs and bank formats), and how to contribute.
 - [Roadmap](https://lightningeg.com/forgeeks-roadmap.html): the milestones in order: M1 finish the backend and features and set up the open-source contribution workflow; M2 publish on Google Play; M3 publish on the App Store (iOS, not started). Each lists what is done, in progress and next.
-- [Collaborate](https://lightningeg.com/forgeeks-collaborate.html): how to contribute step by step: pick a good first issue, /take it, fork and branch, build in Codespaces, open a pull request, pass the checks, get reviewed and squash-merged; who can do what, what every change must pass, and the hand-off rules for AI teammates.
+- [Collaborate](https://lightningeg.com/forgeeks-collaborate.html): how to contribute step by step: pick a good first issue, /take it, change it in a Codespace (GitHub makes your fork), open a pull request, pass the checks, get reviewed and squash-merged; who can do what, what every change must pass, and the hand-off rules for AI teammates.
 
 ## Guides
 
