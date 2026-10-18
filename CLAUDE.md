@@ -6,10 +6,10 @@
 
 Be as efficient with tokens as you can, in what you read, run and write. This never means skipping a check, or a read you need to be sure of an answer.
 
-- **The guideline is three documents in `guideline/`:** `website.html` (Part B, B01–B12) is this site; `app.html` (Part A, the PC app) and `phone.html` (Part C, the phone) are the other two. **Never open one whole** (about 95,000 tokens in all, mostly drawings). With the app repository checked out next to this one, `python ../Lightning/tools/guideline.py --dir guideline B05` prints one section as text. Without it, find the section with `grep -n 'secnum">B05' guideline/website.html` and read only that section.
+- **The guideline is four documents in `guideline/`:** `website.html` (Part B, Normal, B01–B12) is this site; `coders.html` (Part D, Coders, D01–D12) is its For Geeks pages (forgeeks*.html); `app.html` (Part A, the PC app) and `phone.html` (Part C, the phone) are the other two. **Never open one whole** (about 95,000 tokens in all, mostly drawings). With the app repository checked out next to this one, `python ../Lightning/tools/guideline.py --dir guideline B05` prints one section as text. Without it, find the section with `grep -n 'secnum">B05' guideline/website.html` and read only that section.
 - Search before you read: grep for the class, id or text, then read only the lines around it.
 - The app's hand-off, including website tasks, is `NOW.md` in the app repository (`elfekimuhammed/Lightning`); what only the owner can do or decide is tracked as GitHub issues.
-- Change `guideline/` and the app's `guideline/` together: the app's tests check the three files are identical.
+- Change `guideline/` and the app's `guideline/` together: the app's tests check the four files are identical.
 - `guideline/brand-voice.md` is the voice (B10, A14): read it before writing site copy, and keep it identical in both repos.
 
 ## Git workflow (owner rule)

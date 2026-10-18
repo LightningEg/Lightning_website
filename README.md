@@ -26,7 +26,7 @@ sample-profiles.html four fictional Egyptian 2026 sample ledgers and the financi
 versions.html       release registry and visible IDs for every testable experience
 version-registry.json machine-readable release IDs and archive locations
 survey.html         optional personal finance survey (the landing system: the same top bar without the button, hero, card, tagline and footer; always light)
-forgeeks.html       For Geeks, the developer page (for-geeks.html redirects here for existing links): its own section and design (fixed particle terrain that never rebuilds while you scroll, faint between the hero and the closing, lightning strikes anywhere on the page, current running through the pixel grid, live terminal, twelve themes in a picker window, the page sections in a rail on the left), no site guideline (owner, 2026-10-17); indexed, in the sitemap and llms.txt, linked from every footer (More). for-geeks-2.html, for-geeks-3.html and for-geeks-4.html keep earlier concepts
+forgeeks.html       For Geeks, the developer page (for-geeks.html redirects here for existing links): its own section and design (fixed particle terrain that never rebuilds while you scroll, faint between the hero and the closing, lightning strikes anywhere on the page, current running through the pixel grid, live terminal, twelve themes in a picker window, the page sections in a rail on the left), with its own guideline, Part D Coders (guideline/coders.html), not Part B; indexed, in the sitemap and llms.txt, linked from every footer (More). for-geeks-2.html, for-geeks-3.html and for-geeks-4.html keep earlier concepts
 forgeeks-roadmap.html For Geeks roadmap: M1 core and open-source workflow, M2 Google Play, M3 App Store, each with done, now, next and later items; keep it in step with the app repo's NOW.md and Project Overview › Roadmap
 css/forgeeks.css, js/forgeeks.js the two For Geeks pages' shared styles and script: themes, top bar, rail, reveal and the field with its lightning
 features.html       Features: the five things it does best (each with a Mohab number), then all 102 features in twelve groups, the phone and PC second, with a jump to each (css/features.css)
@@ -79,7 +79,7 @@ js/current-status.js multi-ticket app feedback form behavior
 apps-script/        Apps Script receiver patches
 assets/samples/     fictional Mohab CSV files for safe beta imports
 assets/brand/       the two-leaf logo and icons (see Logo below); social-card.png is the 1200 × 630 link preview
-guideline/            Lightning guideline 3.30 in three documents: app.html (A, the PC app), website.html (B, this site) and phone.html (C, the phone); same folder as the app's guideline/
+guideline/            Lightning guideline 3.30 in four documents: app.html (A, the PC app), website.html (B, Normal: this site except For Geeks), phone.html (C, the phone) and coders.html (D, Coders: the For Geeks pages); same folder as the app's guideline/
 ```
 
 It's a static site with no build step and no dependencies. Fonts load from Google Fonts; the Arabic pages add Readex Pro and IBM Plex Sans Arabic, hosted here.
