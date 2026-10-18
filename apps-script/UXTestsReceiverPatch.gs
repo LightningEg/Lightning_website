@@ -43,11 +43,13 @@ function uxSheet_() {
 }
 
 function saveUxTest_(data) {
-  const response = ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+  const respond = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  const response = respond({ ok: true });
 
+  if (data.website || typeof data.feedback_json !== 'string' || data.feedback_json.length > 100000) return respond({ ok: false, error: 'invalid_submission' });
   let feedback = [];
-  try { feedback = JSON.parse(data.feedback_json || '[]'); } catch (error) { return response; }
+  try { feedback = JSON.parse(data.feedback_json || '[]'); } catch (error) { return respond({ ok: false, error: 'invalid_submission' }); }
+  if (!Array.isArray(feedback) || feedback.length > 30) return respond({ ok: false, error: 'invalid_submission' });
   const submittedAt = new Date();
   const rows = feedback
     .filter(item => item && item.reaction)
@@ -61,12 +63,18 @@ function saveUxTest_(data) {
       data.page_url || '',
       data.session_id || '',
       data.device || ''
-    ]);
-  if (!rows.length) return response;
+    ].map(uxCell_));
+  if (!rows.length) return respond({ ok: false, error: 'no_feedback' });
 
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    const props = PropertiesService.getScriptProperties();
+    const day = submittedAt.toISOString().slice(0, 10);
+    let usage = JSON.parse(props.getProperty('UX_FEEDBACK_USAGE') || '{}');
+    if (usage.day !== day) usage = { day, rows: 0 };
+    if (usage.rows + rows.length > 1000) return respond({ ok: false, error: 'daily_limit' });
+    props.setProperty('UX_FEEDBACK_USAGE', JSON.stringify({ day, rows: usage.rows + rows.length }));
     const sheet = uxSheet_();
     sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, UX_HEADERS.length).setValues(rows);
   } finally {
@@ -86,4 +94,10 @@ function testUxRoute() {
     feedback_json: JSON.stringify([{ id: 'test', title: 'Routing test', reaction: 'liked', reasons: [] }])
   } });
   Logger.log(result.getContent());
+}
+
+function uxCell_(value) {
+  if (typeof value === 'number' || value instanceof Date) return value;
+  const text = String(value == null ? '' : value).slice(0, 2000);
+  return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }

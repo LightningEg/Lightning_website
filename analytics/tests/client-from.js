@@ -1,11 +1,11 @@
 // Client test: the `from` field is the referring page of this site, 'outside', or empty; never a URL or query string.
 //   node analytics/tests/client-from.js
-const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const types = { html: 'text/html', css: 'text/css', js: 'application/javascript', svg: 'image/svg+xml', json: 'application/json' };
 (async () => {
-  const b = await chromium.launch();
+  const b = await chromium.launch(process.env.CHROMIUM_EXECUTABLE ? { executablePath: process.env.CHROMIUM_EXECUTABLE } : {});
   let bad = 0;
   for (const [referrer, want, label] of [['http://lightningeg.test/features.html?x=1#top', 'features', 'same-site page'], ['http://lightningeg.test/ar/features', 'ar/features', 'Arabic page'], ['https://www.google.com/search?q=secret', 'outside', 'another site'], ['', '', 'no referrer']]) {
     const ctx = await b.newContext();

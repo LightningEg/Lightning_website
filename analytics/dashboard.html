@@ -119,7 +119,7 @@
 
   <section class="dash-section" id="locked" hidden>
     <div class="card card-support dash-card">
-      <p class="dash-empty" id="locked-text">Enter your key to see the numbers. It stays in this browser.</p>
+      <p class="dash-empty" id="locked-text">Enter your key to see the numbers. It stays in this page until you lock or reload it.</p>
       <form class="dash-toolbar" id="key-form"><label for="key" class="sr-only">Key</label><input class="dash-select" id="key" type="password" autocomplete="off" placeholder="Key"><button class="dash-select" type="submit">Show numbers</button></form>
     </div>
   </section>
@@ -212,9 +212,12 @@
 
   const RECEIVER = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
   // The receiver script's version this page was written for (apps-script/AnalyticsEventsReceiverPatch.gs). A mismatch shows in the health strip.
-  const EXPECTED_SCRIPT_VERSION = '2026-10-15.1';
-  const KEY = 'lightning-dashboard-key'; // kept in this browser only, never in the repo
-  const stored = () => { try { return localStorage.getItem(KEY) || ''; } catch (_) { return ''; } };
+  const EXPECTED_SCRIPT_VERSION = '2026-10-18.1';
+  const KEY = 'lightning-dashboard-key'; // legacy storage key, removed below
+  let readKey = '', authGeneration = 0;
+  // Remove keys persisted by earlier versions; keep new credentials in this page only.
+  try { localStorage.removeItem(KEY); } catch (_) {}
+  const stored = () => readKey;
   // The owner's browser is not counted on the site (js/analytics.js reads the same mark). Unlocking marks it.
   const NOTRACK = 'lightning-notrack';
   const notCounted = () => { try { return localStorage.getItem(NOTRACK) === '1'; } catch (_) { return false; } };
@@ -232,28 +235,32 @@
   const ask = async (what, d) => {
     const query = new URLSearchParams({action: 'journeys', what, key: stored(), days: Math.min(d, 88)});
     let data;
-    try { data = await (await fetch(`${RECEIVER}?${query}`)).json(); } catch (_) { const e = new Error('reach'); e.code = 'reach'; throw e; }
+    try { data = await (await fetch(RECEIVER, { method: 'POST', body: query, credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store' })).json(); } catch (_) { const e = new Error('reach'); e.code = 'reach'; throw e; }
     if (data.error === 'forbidden') { const e = new Error('key'); e.code = 'key'; throw e; }
     if (data.error) { const e = new Error(data.message || data.error); e.code = 'script'; throw e; }
     return data;
   };
   function locked(message) {
     show('locked'); $('status').hidden = true;
-    $('locked-text').textContent = message || 'Enter your key to see the numbers. It is in the Dashboard key tab of the analytics spreadsheet, and stays in this browser.';
+    $('locked-text').textContent = message || 'Enter your key to see the numbers. It is in the Dashboard key tab of the analytics spreadsheet, and stays in this page until you lock or reload it.';
   }
   async function load() {
     if (!stored()) return locked();
+    const generation = authGeneration;
     $('status').hidden = false; $('status').textContent = 'Loading…';
     try {
       const [c, j, i, w] = await Promise.all([ask('counts', period * 2), ask('journeys', period), ask('insights', period), ask('insights', period * 2), loadRegistry()]);
+      if (generation !== authGeneration) return;
       daily = c.daily || []; events = c.events || []; downloads = c.downloads || [];
       cur = i && typeof i.views === 'number' ? i : null; // an older script answers with something else
       wide = w && typeof w.views === 'number' ? w : null;
       journeys = {rows: j.rows || [], dropped: j.dropped_total || 0};
       await prepareContext();
+      if (generation !== authGeneration) return;
       show('content'); $('status').hidden = true; render();
     } catch (e) {
-      if (e.code === 'key') { try { localStorage.removeItem(KEY); } catch (_) {} locked('That key was refused. Copy it again from the Dashboard key tab of the analytics spreadsheet.'); }
+      if (generation !== authGeneration) return;
+      if (e.code === 'key') { readKey = ''; locked('That key was refused. Copy it again from the Dashboard key tab of the analytics spreadsheet.'); }
       else if (e.code === 'script') { show('locked'); $('status').hidden = false; $('status').textContent = `The script answered with an error: ${e.message}`; }
       else { show('locked'); $('status').hidden = false; $('status').textContent = 'Could not reach the script from this browser. Try again, or read the tabs of your spreadsheet.'; }
     }
@@ -740,14 +747,14 @@
     document.querySelectorAll('#period button[data-days]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     load();
   });
-  $('lock').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch (_) {} locked(); });
+  $('lock').addEventListener('click', () => { authGeneration++; readKey = ''; locked(); });
   $('release').addEventListener('change', readers);
   $('rel-page').addEventListener('change', releaseEffect);
   document.addEventListener('click', e => { const a = e.target.closest('a[href="#details"]'); if (a) $('details').open = true; });
   $('key-form').addEventListener('submit', e => {
     e.preventDefault();
     const v = $('key').value.trim(); if (!v) return;
-    try { localStorage.setItem(KEY, v); } catch (_) {}
+    authGeneration++; readKey = v;
     setCounted(false);
     $('key').value = ''; load();
   });

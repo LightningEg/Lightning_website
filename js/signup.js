@@ -12,7 +12,7 @@
     button.disabled = true; status.classList.remove('is-error'); status.textContent = (ar ? 'بنبعت…' : 'Sending…');
     try {
       signup.querySelector('[name="page_url"]').value = window.location.href;
-      await fetch(signup.dataset.endpoint, {method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(signup))});
+      await window.LightningForms.send(signup.dataset.endpoint, new URLSearchParams(new FormData(signup)), signup);
       signup.reset(); status.textContent = (ar ? 'اتسجلت معانا. هنكلمك قريب.' : 'You’re on the list. We’ll be in touch.');
     } catch (_) {
       status.classList.add('is-error'); status.textContent = (ar ? 'معرفناش نحفظ إيميلك. جرّب تاني.' : 'We could not save your email. Please try again.');

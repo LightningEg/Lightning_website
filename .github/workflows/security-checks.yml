@@ -1,0 +1,28 @@
+name: Website security checks
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  website-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with: {python-version: '3.13'}
+      - run: |
+          node apps-script/tests/feedback-security.test.js
+          node apps-script/tests/website-receiver.test.js
+          node apps-script/tests/receiver.test.js
+          node analytics/tests/rules.test.js
+          python tools/site_check.py
+          python apps-script/tests/test_deploy_receiver.py
+          python tools/deploy_receiver.py --output /tmp/LightningAppsScript.gs
+          node --check < /tmp/LightningAppsScript.gs

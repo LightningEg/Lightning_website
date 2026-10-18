@@ -285,7 +285,7 @@
     sending += 1;
     status.textContent = t(attachments.length ? 'Sending in the background. You can write the next ticket; keep this page open until it says sent.' : 'Sending your ticket…');
     try {
-      await fetch(endpoint, { method: 'POST', mode: 'no-cors', body: payload });
+      await window.LightningForms.send(endpoint, payload, form);
       attachments.forEach(item => URL.revokeObjectURL(item.previewUrl));
       status.textContent = t('Thank you — your feedback and images have been sent.');
     } catch (_) {

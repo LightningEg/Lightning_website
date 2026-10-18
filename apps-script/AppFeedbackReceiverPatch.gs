@@ -89,14 +89,19 @@ function appFeedbackSafeName_(name, mime) {
 
 function saveAppFeedback_(data) {
   const respond = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  if (data.website) return respond({ ok: false, error: 'invalid_submission' });
+  if (typeof data.tickets_json !== 'string' || data.tickets_json.length > 72 * 1024 * 1024) return respond({ ok: false, error: 'invalid_tickets' });
   let tickets;
   try { tickets = JSON.parse(data.tickets_json || '[]'); } catch (_) { return respond({ ok: false, error: 'invalid_tickets' }); }
-  if (!Array.isArray(tickets)) return respond({ ok: false, error: 'invalid_tickets' });
+  if (!Array.isArray(tickets) || tickets.length > 30) return respond({ ok: false, error: 'invalid_tickets' });
 
   const submittedAt = new Date();
   const validTickets = tickets.filter(ticket => ticket && ticket.section && ticket.type && ticket.area && ticket.description);
   let totalImages = 0;
   try {
+    // Count before decoding so an oversized array cannot allocate many image buffers.
+    const count = validTickets.reduce((n, ticket) => n + (Array.isArray(ticket.attachments) ? ticket.attachments.length : 0), 0);
+    if (count > APP_FEEDBACK_MAX_IMAGES_PER_SUBMISSION) throw new Error('Submission has too many screenshots');
     validTickets.forEach(ticket => {
       if (ticket.attachments == null) ticket.attachments = [];
       if (!Array.isArray(ticket.attachments) || ticket.attachments.length > APP_FEEDBACK_MAX_IMAGES_PER_TICKET) throw new Error('Invalid screenshot count');
@@ -113,6 +118,15 @@ function saveAppFeedback_(data) {
     lock.waitLock(10000);
     const createdFiles = [];
     try {
+      // A shared daily cap bounds Drive and Sheet growth; Apps Script exposes no client IP.
+      const props = PropertiesService.getScriptProperties();
+      const day = submittedAt.toISOString().slice(0, 10);
+      let usage = JSON.parse(props.getProperty('APP_FEEDBACK_USAGE') || '{}');
+      if (usage.day !== day) usage = { day, rows: 0, bytes: 0 };
+      const bytes = validTickets.reduce((n, t) => n + t.attachments.reduce((m, a) => m + a.bytes.length, 0), 0);
+      if (usage.rows + validTickets.length > 1000 || usage.bytes + bytes > 100 * 1024 * 1024) return respond({ ok: false, error: 'daily_limit' });
+      // Reserve capacity before writes; failed requests still consume their quota.
+      props.setProperty('APP_FEEDBACK_USAGE', JSON.stringify({ day, rows: usage.rows + validTickets.length, bytes: usage.bytes + bytes }));
       const folder = totalImages ? appFeedbackImageFolder_() : null;
       const rows = validTickets.map((ticket, index) => {
         const links = (ticket.attachments || []).map((attachment, imageIndex) => {
@@ -137,7 +151,7 @@ function saveAppFeedback_(data) {
           String(data.reporter_name || '').slice(0, 100),
           String(data.reporter_email || '').slice(0, 254),
           links.join('\n')
-        ];
+        ].map(appFeedbackCell_);
       });
       if (!rows.length) return respond({ ok: false, error: 'no_tickets' });
       const sheet = appFeedbackSheet_();
@@ -164,4 +178,12 @@ function testAppFeedbackRoute() {
     tickets_json: JSON.stringify([{ section: 'Import CSV', type: 'Improvement', area: 'Visual', description: 'Test row — delete after confirming the route.' }])
   } });
   Logger.log(result.getContent());
+}
+
+// A leading apostrophe makes formula-shaped untrusted input literal in Sheets.
+// Check after whitespace/control characters as well as at the start.
+function appFeedbackCell_(value) {
+  if (typeof value === 'number' || value instanceof Date) return value;
+  const text = String(value == null ? '' : value).slice(0, 2000);
+  return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }
