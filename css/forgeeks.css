@@ -53,7 +53,7 @@ main,header,footer{position:relative;z-index:2}
 @keyframes blink{50%{opacity:0}}
 /* top bar: the pages of this section; the sections of a page are in the rail on the left */
 .links{display:flex;gap:4px;margin-left:auto}
-.links a{font:400 13px var(--mono);color:var(--dim);text-decoration:none;padding:6px 11px;border-radius:4px;transition:color .2s,background-color .2s}
+.links a{white-space:nowrap;font:400 13px var(--mono);color:var(--dim);text-decoration:none;padding:6px 11px;border-radius:4px;transition:color .2s,background-color .2s}
 .links a:hover{color:var(--ink);background:rgba(var(--particle),.06)}
 .links a[aria-current="page"]{color:var(--ink)}
 .links a[aria-current="page"]::before{content:"› ";color:var(--accent)}
@@ -65,7 +65,8 @@ main,header,footer{position:relative;z-index:2}
 .dots i:first-child{margin-left:0}
 .progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
 @media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.src{display:none}}
-@media (max-width:760px){.crumb{display:none}.chip .t-name{display:none}}
+@media (max-width:1040px){.crumb{display:none}}
+@media (max-width:860px){.chip .t-name{display:none}}
 @media (max-width:420px){.bar .wrap{gap:8px}.brand{gap:6px;font-size:12px}.links a{padding:6px 5px;font-size:12px}.tools .chip{padding:0 8px}}
 
 /* ---------- hero ---------- */
@@ -326,4 +327,6 @@ footer{padding:0 0 40px}
 /* the build section: start contributing, under the four steps */
 .build-cta{margin:0 0 20px}
 /* the top bar keeps three pages on a narrow phone; "contribute" is in the page itself there */
-@media (max-width:520px){.links a.opt{display:none}}
+/* phones: the brand is the way home, so the home link goes and the rest stay on one line */
+@media (max-width:760px){.links a.opt,.links a[href="forgeeks.html"]{display:none}}
+@media (max-width:370px){.brand{font-size:0;gap:0}}
