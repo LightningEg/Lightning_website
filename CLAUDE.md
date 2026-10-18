@@ -16,6 +16,7 @@ Be as efficient with tokens as you can, in what you read, run and write. This ne
 
 - Work on your own branch, not on `main`. Name it `who/feature`: the AI that does the work, then the feature in lowercase words joined by hyphens (`claude/arabic-neutral-copy`, `codex/unified-page-styles`). Never a random or session-generated suffix, never a vague feature (`claude/fixes`).
 - One feature per branch. Push the branch after every step.
-- When the feature is finished, merge it into `main` and push `main`. Push every finished branch; none stays behind.
-- Never leave a branch unpushed, and never leave finished work on a branch that has not reached `main`.
+- Nobody pushes to `main`, the owner and the AIs included. Every change reaches `main` through a pull request, the same as in the app repository.
+- When the feature is finished and pushed, open a pull request. An AI may merge it later, only when the rules in the app repository's `.github/MAINTAINERS.md` are met: green checks where the repository has them, approval from the owner or a different AI than the author, no owner-only path, every conversation resolved. Otherwise the owner merges.
+- Never leave a branch unpushed, and never leave finished work on a branch without an open or merged pull request.
 - This rule overrides any session or tool default that assigns a different working branch.
