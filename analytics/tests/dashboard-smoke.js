@@ -2,7 +2,7 @@
 // desktop widths in light and dark, and checks the acceptance points of the decision dashboard.
 //   node analytics/tests/gen-data.js /tmp/dash-data.json && node analytics/tests/dashboard-smoke.js /tmp/dash-data.json /tmp
 // Needs Playwright (npm i -g playwright, or the preinstalled one in Claude Code cloud sessions).
-const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..', '..'), OUT = process.argv[3] || require('os').tmpdir();
 const DATA = JSON.parse(fs.readFileSync(process.argv[2]));
@@ -19,7 +19,8 @@ const blank = { insights: () => ({ days: 28, views: 0, consent: { all: 0, essent
 async function open(b, scenario, vp, dark) {
   const ctx = await b.newContext({ viewport: vp, colorScheme: dark ? 'dark' : 'light' });
   await ctx.route('**/*', route => { const u = new URL(route.request().url());
-    if (u.hostname === 'script.google.com') { const q = u.searchParams, d = +q.get('days');
+    if (u.hostname === 'script.google.com') { const q = new URLSearchParams(route.request().postData() || ''), d = +q.get('days');
+      ok(route.request().method() === 'POST' && !u.searchParams.has('key'), 'analytics credentials travel in POST body only');
       const body = q.get('key') !== DATA.key ? { error: 'forbidden' } : q.get('what') === 'counts' ? scenario.counts : q.get('what') === 'insights' ? scenario.insights(d) : DATA.journeys;
       return route.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); }
     if (u.hostname !== 'lightningeg.test') return route.fulfill({ body: '' });
@@ -32,9 +33,10 @@ async function open(b, scenario, vp, dark) {
 }
 
 (async () => {
-  const b = await chromium.launch();
+  const b = await chromium.launch(process.env.CHROMIUM_EXECUTABLE ? { executablePath: process.env.CHROMIUM_EXECUTABLE } : {});
   for (const [name, vp, dark] of [['desktop-light', { width: 1280, height: 900 }, false], ['desktop-dark', { width: 1280, height: 900 }, true], ['phone-light', { width: 390, height: 844 }, false], ['phone-dark', { width: 390, height: 844 }, true]]) {
     const { p, ctx, errs } = await open(b, full, vp, dark);
+    ok(await p.evaluate(() => localStorage.getItem('lightning-dashboard-key')) === null, 'read key is never persisted');
     ok(errs.length === 0, `${name}: no page errors ${errs.join(' | ')}`);
     ok(await p.evaluate(() => document.documentElement.scrollWidth - innerWidth) <= 0, `${name}: no horizontal page scroll`);
     if (name === 'desktop-light') {
@@ -64,6 +66,21 @@ async function open(b, scenario, vp, dark) {
       ok(!/download button/i.test(text.replace(/pressed a download button/gi, '')), 'no card suggests adding a download button');
     }
     await p.screenshot({ path: `${OUT}/dash-${name}.png`, fullPage: true });
+    if (name === 'desktop-light') {
+      let release;
+      const held = new Promise(resolve => { release = resolve; });
+      await ctx.route('https://script.google.com/**', async route => { await held; await route.fallback(); });
+      const pending = p.waitForRequest('https://script.google.com/**');
+      await p.click('#period button >> nth=0');
+      await pending;
+      await p.click('#lock');
+      release();
+      await p.waitForTimeout(900);
+      ok(await p.$eval('#locked', e => !e.hidden), 'a response arriving after locking cannot reopen the dashboard');
+    } else await p.click('#lock');
+    ok(await p.$eval('#locked', e => !e.hidden), 'locking hides the private dashboard');
+    await p.reload();
+    ok(await p.$eval('#locked', e => !e.hidden), 'reloading requires the key again');
     await ctx.close();
   }
   { // an outdated receiver: the strip says so and the page still renders

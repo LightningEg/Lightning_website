@@ -72,7 +72,7 @@ const daily = dates.map((d, i) => dly(d, 55 - i)), events = [];
 dates.slice(-7).forEach(d => events.push([d, '', 'consent-all', 1], [d, '', 'consent-essential', 2]));
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ kind: 'counts', key, days: dates, daily, events, downloads: [] }) });
 for (let k = 20; k >= 0; k -= 2) saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ kind: 'counts', key, days: [], downloads: [[day(k), 'v1.0.0-beta.1', 'Lightning-windows.zip', 'windows', 10 + (20 - k)], [day(k), 'v1.0.0-beta.1', 'Lightning-android.apk', 'android', 3 + (20 - k) / 2]] }) });
-const q = (what, d) => JSON.parse(analyticsJourneys_({ key, what, days: d }).t);
+const q = (what, d) => JSON.parse(analyticsJourneys_({ key, what, days: d }, 'POST').t);
 const out = { key, counts: q('counts', 56), journeys: q('journeys', 28) };
 out.insights28 = q('insights', 28); out.insights56 = q('insights', 56);
 require('fs').writeFileSync(process.argv[2] || 'dash-data.json', JSON.stringify(out));

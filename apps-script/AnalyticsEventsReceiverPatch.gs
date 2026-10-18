@@ -21,14 +21,15 @@
  *      return saveAnalyticsEvents_(e.parameter);
  *    }
  *
- * 3. Add this route to doGet(e). If the receiver has no doGet, add:
+ * 3. Add this route at the TOP of doPost(e), before the survey fallback:
  *
- *    function doGet(e) {
- *      if (e && e.parameter && e.parameter.action === 'journeys') {
- *        return analyticsJourneys_(e.parameter);
- *      }
- *      return ContentService.createTextOutput('ok');
+ *    if (e && e.parameter && e.parameter.action === 'journeys') {
+ *      return analyticsJourneys_(e.parameter, 'POST');
  *    }
+ *
+ *    Remove the old journeys route from doGet(e). Reads through the old
+ *    one-argument handler now return method_not_allowed, even with a valid key.
+ *    Deploy this receiver before publishing the updated dashboard.
  *
  * 4. Deploy a NEW VERSION of the existing web app deployment. Keep its /exec
  *    URL unchanged.
@@ -81,7 +82,7 @@ const ANALYTICS_PV_HEADERS = [
 // If that page is ever renamed, change this one line, and the same slug in README > Analytics and consent.
 const ANALYTICS_DOWNLOADS_PAGE = 'current-status';
 // Bump this with every change here; analytics/dashboard.html holds the same string as EXPECTED_SCRIPT_VERSION.
-const ANALYTICS_SCRIPT_VERSION = '2026-10-15.1';
+const ANALYTICS_SCRIPT_VERSION = '2026-10-18.1';
 // The version whose setup has run; a new version sets itself up on its first request (analyticsAutoSetup_).
 const ANALYTICS_SETUP_PROPERTY = 'ANALYTICS_SETUP_VERSION';
 const ANALYTICS_BOOK_PROPERTY = 'ANALYTICS_SPREADSHEET_ID';
@@ -671,7 +672,7 @@ function setupAnalyticsEvents() {
   ]);
   backfillVisitorNumbers();
   backfillPageViews();
-  Logger.log('ANALYTICS_READ_KEY (also in the Dashboard key tab): ' + key);
+  Logger.log('Analytics setup complete; read the key in the private Dashboard key tab.');
   props.setProperty(ANALYTICS_SETUP_PROPERTY, ANALYTICS_SCRIPT_VERSION);
 }
 
@@ -790,8 +791,9 @@ function purgeAnalyticsEvents() {
 }
 
 // Every read answers in JSON, a failure included, so the dashboard can say what went wrong instead of going blank.
-function analyticsJourneys_(params) {
+function analyticsJourneys_(params, method) {
   const json = obj => ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+  if (method !== 'POST') return json({error: 'method_not_allowed'});
   try {
     analyticsAutoSetup_();
     return analyticsRead_(json, params || {});

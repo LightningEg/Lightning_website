@@ -60,7 +60,7 @@ setupAnalyticsEvents();
 ok(JSON.stringify(tabs.Events.rows.map(r => r[15])) === before, 'setup rerun changes no numbers');
 // Journeys still work with the extra column.
 const key = props.ANALYTICS_READ_KEY;
-const out = JSON.parse(analyticsJourneys_({ key, days: 10 }).t);
+const out = JSON.parse(analyticsJourneys_({ key, days: 10 }, 'POST').t);
 ok(out.rows.reduce((n, r) => n + r.visits, 0) === 7, 'journeys reads 16 columns: 7 visits (' + out.rows.reduce((n, r) => n + r.visits, 0) + ')');
 // Purge: visitor silent for 100 days goes; numbers are not reused.
 tabs.Visitors.rows[1][3] = new Date(Date.now() - 100 * 864e5); tabs.Events.rows[1][0] = new Date(Date.now() - 100 * 864e5);
@@ -72,7 +72,7 @@ ok(tabs.Events.rows.pop()[15] === 5, 'next new visitor is 5: numbers are never r
 // ---- small groups are merged; big ones stay ----
 const hx = n => n.toString(16).padStart(16, '0');
 for (let i = 0; i < 6; i++) post({ ux: 'UX-K', page: 'k', sid: hx(1000 + i), vid: hx(1000 + i), vn: 1, pv: hx(2000 + i), ev: [{ n: 'view', t: 0 }] });
-const k = JSON.parse(analyticsJourneys_({ key, days: 10 }).t);
+const k = JSON.parse(analyticsJourneys_({ key, days: 10 }, 'POST').t);
 const kept = k.rows.find(r => r.landing_release === 'UX-K');
 ok(kept && kept.visits === 6, 'a group of 6 visits keeps its own row');
 ok(k.rows.every(r => r.visits >= 5 || r.landing_release === 'other'), 'no small group leaves except merged into "other"');
@@ -89,7 +89,7 @@ const added = tabs.Visitors.rows.length - vBefore;
 ok(+props.ANALYTICS_DROPPED_TOTAL === 320 - added && +props.ANALYTICS_DROPPED_TOTAL > 0, 'dropped events counted: ' + props.ANALYTICS_DROPPED_TOTAL);
 const again = tabs.Events.rows.length; post({ sid: hx(1000), vid: hx(1000), vn: 2, pv: hx(2900), ev: [{ n: 'view', t: 0 }] });
 ok(tabs.Events.rows.length === again + 1, 'a known visitor can still add events once new visitors are capped');
-ok(JSON.parse(analyticsJourneys_({ key, days: 10 }).t).dropped_total === +props.ANALYTICS_DROPPED_TOTAL, 'journeys reports dropped_total');
+ok(JSON.parse(analyticsJourneys_({ key, days: 10 }, 'POST').t).dropped_total === +props.ANALYTICS_DROPPED_TOTAL, 'journeys reports dropped_total');
 
 // ---- GoatCounter totals pushed privately ----
 const push = o => saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ kind: 'counts', ...o }) }).t;
@@ -99,10 +99,10 @@ ok(tabs.Daily === undefined, 'counts: nothing stored on a wrong key');
 const D1 = new Date(Date.now() - 1 * 864e5).toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' }), D2 = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
 ok(push({ key, days: [D1, D2], daily: [dly(D1, 5), dly(D2, 7)], events: [[D2, 'UX-1', 'reach-a', 3], [D2, '', 'consent-all', 1]] }) === 'ok', 'counts: right key accepted');
 ok(push({ key, days: [D2], daily: [dly(D2, 9)], events: [[D2, 'UX-1', 'reach-a', 4]] }) === 'ok', 'counts: rerun for one day');
-const out2 = JSON.parse(analyticsJourneys_({ key, what: 'counts', days: 5 }).t);
+const out2 = JSON.parse(analyticsJourneys_({ key, what: 'counts', days: 5 }, 'POST').t);
 ok(out2.daily.length === 2 && out2.daily.find(r => r.date === D2).page_visits === 9 && out2.daily.find(r => r.date === D1).page_visits === 5, 'counts: that day replaced, the other kept, no duplicates');
 ok(out2.events.length === 1 && out2.events[0].count === 4, 'counts: events for the refreshed day replaced');
-ok(JSON.parse(analyticsJourneys_({ key: 'bad', what: 'counts' }).t).error === 'forbidden', 'counts: reading needs the key');
+ok(JSON.parse(analyticsJourneys_({ key: 'bad', what: 'counts' }, 'POST').t).error === 'forbidden', 'counts: reading needs the key');
 ok(push({ key, days: ['not a date'], daily: [], events: [] }) === 'no days', 'counts: bad dates refused');
 ok(tabs.Daily.fmt['A:A'] === '@', 'counts: date column is plain text');
 ok(tabs.__tz === 'Africa/Cairo', 'setup sets the spreadsheet time zone to Cairo');
@@ -145,7 +145,7 @@ add('phone', 'index', 'gpc', 'view:0 click-index-join:4');
 add('desktop', 'index', 'essential', 'view:0 seen-current-status:0 nav-current-status:9');
 add('desktop', 'index', 'all', 'view:0 seen-current-status:0 faq-3:12 dead-img-picture:5 rage-click:6 js-error-abc123:7', { sid: h(950), vid: h(951), vn: 1 });
 add('desktop', 'current-status', 'essential', 'view:0 download-app-v1-windows:8');
-const ins = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
+const ins = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }, 'POST').t);
 const phone = ins.find.find(f => f.device === 'phone'), desk = ins.find.find(f => f.device === 'desktop');
 ok(ins.views === 6 && ins.consent.essential === 3 && ins.consent.all === 1 && ins.consent.gpc === 1 && ins.consent.undecided === 1, 'insights: views and consent mix');
 ok(phone.views === 3 && phone.seen === 1 && phone.clicked === 1 && phone.started === 1 && phone.submitted === 1, 'insights: phone saw the download link 1 of 3, clicked 1, signed up 1');
@@ -158,15 +158,15 @@ ok(ins.broken.errors[0].code === 'js-error-abc123', 'insights: errors listed by 
 ok(ins.reach.some(g => g.page === 'index' && g.sections.picture === 1), 'insights: sections reached per page');
 ok(ins.who.source.length === 1 && ins.who.source[0].key === 'google' && ins.who.source[0].views === 6 && ins.who.device.find(r => r.key === 'phone').views === 3, 'insights: one big source kept, devices counted');
 add('phone', 'index', 'essential', 'view:0', { ref: 'a.example' }); add('phone', 'index', 'essential', 'view:0', { ref: 'b.example' });
-const ins2 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
+const ins2 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }, 'POST').t);
 ok(ins2.who.source.find(r => r.key === 'Smaller groups').views === 2 && !ins2.who.source.some(r => /example/.test(r.key)), 'insights: sources under 5 views are merged into Smaller groups');
-ok(JSON.parse(analyticsJourneys_({ key: 'bad', what: 'insights' }).t).error === 'forbidden', 'insights: needs the key');
+ok(JSON.parse(analyticsJourneys_({ key: 'bad', what: 'insights' }, 'POST').t).error === 'forbidden', 'insights: needs the key');
 
 // ---- GitHub download counts ----
 const dl = (date, count) => [[date, 'v1.0.0-beta.1', 'Lightning-android.apk', 'android', count], [date, 'v1.0.0-beta.1', 'Lightning-windows.zip', 'windows', count + 5]];
 ok(push({ key, days: [], downloads: dl('2026-10-13', 3) }) === 'ok', 'downloads: accepted without GoatCounter days');
 push({ key, days: [], downloads: dl('2026-10-14', 7) }); push({ key, days: [], downloads: dl('2026-10-14', 9) });
-const dls = JSON.parse(analyticsJourneys_({ key, what: 'counts', days: 120 }).t).downloads;
+const dls = JSON.parse(analyticsJourneys_({ key, what: 'counts', days: 120 }, 'POST').t).downloads;
 ok(dls.length === 4 && dls.filter(r => r.date === '2026-10-14').every(r => r.count === 9 || r.count === 14), 'downloads: one snapshot per day (re-run replaced), other days kept');
 
 // ---- purge and limits ----
@@ -195,8 +195,8 @@ addX({ device: 'phone', os: 'android', page: 'index', from: '' }, 'view:0 signup
 addX({ device: 'phone', os: 'android', page: 'current-status', from: 'index', lcp: 6 }, 'view:0 download-app-v1-windows:8');
 addX({ device: 'desktop', os: 'windows', page: 'current-status', from: 'ar/index', lcp: 1 }, 'view:0 download-app-v1-android:8');
 addX({ device: 'desktop', os: 'windows', page: 'index', ux: 'UX-2026.10.14.01', from: 'x y' }, 'view:0');
-const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
-ok(i3.meta.script_version === '2026-10-15.1' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
+const i3 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }, 'POST').t);
+ok(i3.meta.script_version === '2026-10-18.1' && i3.meta.dropped_total >= 0 && i3.meta.sheet_rows === 5, 'meta: script version, dropped total and row count');
 ok(new Date(i3.meta.last_row_at).getTime() > NOWISO - 60000 && typeof i3.meta.rows_today === 'number', 'meta: last row time and today count');
 ok(PV()[1][21] === 'outside' && PV()[2][21] === '' && PV()[3][21] === 'index' && PV()[4][21] === 'ar/index' && PV()[5][21] === '', 'from: stored in the last column; a bad value is blanked');
 ok(tabs['Page views'].rows[0][21] === 'From', 'from: header is the last column');
@@ -219,7 +219,7 @@ ok(['www.google.com', 'google.com.eg', 'com.google.android.googlequicksearchbox'
   'sources: google variants fold together, facebook wrappers too, utm_source wins, none is direct');
 for (let k = 0; k < 5; k++) addX({ ref: '', from: '', page: 'index' }, k ? 'view:0' : 'view:0 seen-current-status:1 click-current-status:3');
 addX({ ref: '', from: 'index', page: 'features' }, 'view:0 seen-current-status:1 nav-current-status:3');
-const i4 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }).t);
+const i4 = JSON.parse(analyticsJourneys_({ key, what: 'insights', days: 5 }, 'POST').t);
 const dir = i4.who.source.find(r => r.key === 'direct');
 ok(dir && dir.views === 5 && dir.toward === 1 && dir.pressed === 0, 'sources: the internal page view is no arrival; counts, not rounded percentages');
 ok(i4.daily.reduce((t, d) => t + d.link, 0) === 2 && i4.by_release.reduce((t, r) => t + r.link, 0) === 2, 'link: presses of a link to Downloads counted per day and release');
@@ -231,18 +231,18 @@ ok(tabs['Page views'].rows.length === nofrom + 1 && tabs['Page views'].rows[nofr
 Object.keys(tabs).forEach(k => delete tabs[k]); Object.keys(props).forEach(k => delete props[k]);
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8000), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'Africa/Cairo', 'first request sets the spreadsheet to Cairo time');
-ok(props.ANALYTICS_SETUP_VERSION === '2026-10-15.1' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
+ok(props.ANALYTICS_SETUP_VERSION === '2026-10-18.1' && /^[a-z0-9]+$/.test(props.ANALYTICS_READ_KEY || ''), 'first request records the setup and creates the key');
 ok(tabs['Dashboard key'] && tabs['Dashboard key'].rows[0][1] === props.ANALYTICS_READ_KEY, 'the key is in the Dashboard key tab');
 ok(tabs.Visitors.fmt['C:D'] && tabs['Page views'].fmt['A:A'], 'existing tabs get their time formats');
 ok(tabs['Page views'].rows.length === 2, 'the page view of that first request is stored');
 tabs.__tz = 'UTC';
 saveAnalyticsEvents_({ form_type: 'event', payload: JSON.stringify({ v: 2, pv: h(8001), consent: 'essential', ux: 'UX-1', page: 'index', tl: [['view', 0]] }) });
 ok(tabs.__tz === 'UTC', 'setup runs once per script version, not on every request');
-const fresh = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 5 }).t);
-ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-15.1', 'the dashboard reads them with the key from the tab');
-ok(JSON.parse(analyticsJourneys_({ key: 'wrong', what: 'insights' }).t).error === 'forbidden', 'a wrong key is refused');
+const fresh = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 5 }, 'POST').t);
+ok(fresh.views === 2 && fresh.meta.script_version === '2026-10-18.1', 'the dashboard reads them with the key from the tab');
+ok(JSON.parse(analyticsJourneys_({ key: 'wrong', what: 'insights' }, 'POST').t).error === 'forbidden', 'a wrong key is refused');
 const realGet = tabs['Page views'].getLastRow; tabs['Page views'].getLastRow = () => { throw new Error('Sheet broke'); };
-const broke = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights' }).t);
+const broke = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights' }, 'POST').t);
 tabs['Page views'].getLastRow = realGet;
 ok(broke.error === 'script' && broke.message === 'Sheet broke', 'a failure answers in JSON with its reason, never an error page');
 
@@ -261,6 +261,10 @@ ok(P[1][2] === 'all' && P[1][20] === 'view:0 seen-current-status:3' && P[1][13] 
 ok(P[1][16] === '' && P[1][17] === '', 'scroll and time on page stay empty: never recorded then');
 ok(backfillPageViews() === 0 && P.length === 4, 'rerunning adds nothing');
 analyticsAutoSetup_(); ok(P.length === 4, 'the setup run that follows adds nothing again');
-const back = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 10 }).t);
+const back = JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY, what: 'insights', days: 10 }, 'POST').t);
 ok(back.views === 3 && back.downloaded === 1 && back.daily.length >= 1, 'the dashboard counts the rebuilt page views');
 ok(back.scroll.p50 === 100 && back.active_median === 30, 'scroll and time on page come only from rows that measured them');
+
+// A legacy doGet router cannot accidentally keep accepting key-bearing URLs.
+ok(JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY }).t).error === 'method_not_allowed', 'GET/legacy reads rejected even with a valid key');
+ok(JSON.parse(analyticsJourneys_({ key: props.ANALYTICS_READ_KEY }, 'GET').t).error === 'method_not_allowed', 'GET explicitly rejected');
