@@ -42,7 +42,6 @@
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html" aria-current="page">home</a>
       <a href="forgeeks-roadmap.html">roadmap</a>
-      <a href="forgeeks-collaborate.html">collaborate</a>
       <a class="opt" href="forgeeks.html#build">contribute</a>
       <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
@@ -410,7 +409,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['55672']},
     {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1638']},
     {c:'ls lightning/database/migrations | wc -l',o:['67']},
-    {c:'cat .secret',o:['<span class="d">psst. you found a secret. when this finishes, type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
+    {c:'cat .notes',o:['<span class="d">found something strange. type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
     {c:'lint-imports',o:['<span class="d">Layers: each layer may only import the layers below it</span> <span class="ok">KEPT</span>','<span class="d">… 3 more contracts</span> <span class="ok">KEPT</span>','','Contracts: <span class="ok">4 kept</span>, 0 broken.']},
     {c:'python -m lightning --demo',o:['<span class="d">Mohab\'s sample household, rebuilt on every start</span>','serving on <span class="a2">http://127.0.0.1:8766</span>']}
   ];
@@ -427,7 +426,8 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     contact:function(){return ['code, architecture, security: <span class="a2">geeks@lightningeg.com</span>','everything else:             <span class="a2">hello@lightningeg.com</span>','chat:     <a class="a2" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="a2" href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">whatsapp</a>','reddit:   <a class="a2" href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a>']},
     whoami:function(){return ['geek. welcome.']},
     secret:function(){return ['<span class="d">close. the word is in the replay above.</span>']},
-    gattaca:function(){var s=$('.secret');if(s)s.open=true;return ['<span class="ok">access granted.</span> <span class="d">the real reason the code is public:</span>','the founder works in finance, not software.','<span class="d">can price a certificate by heart. cannot explain a test that passed at 11 p.m. and fails at 2 a.m.</span>','<span class="d">more readers, fewer bugs to find alone. pull requests are cheaper than therapy.</span>','<span class="d">the full confession is open under</span> <a class="a2" href="#mission">01 / mission</a>']},
+    gattaca:function(){return ['<span class="d">actually, the main reason we opened the code?</span>','it\'s not fun building alone :)','<span class="d">— the founder. type</span> <span class="ok">contribute</span> <span class="d">to help.</span>']},
+    gataka:function(){return CMDS.gattaca()},
     ls:function(){return ['<span class="a2">lightning/</span>  <span class="a2">tests/</span>  <span class="a2">docs/</span>  <span class="a2">android/</span>  <span class="a2">guideline/</span>  <span class="a2">report/</span>  <span class="a2">tools/</span>  AGENTS.md  NOW.md  CHANGELOG.md']},
     sudo:function(){return ['<span class="d">nothing here runs as root. that\'s the point.</span>']},
     exit:function(){return ['<span class="d">there is no exit. only pull requests.</span>']},
