@@ -43,6 +43,10 @@ main,header,footer{position:relative;z-index:2}
 .bar .wrap{display:flex;align-items:center;gap:20px;height:60px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:500 14px var(--mono);white-space:nowrap}
 .brand img{width:15px;height:21px;display:block}
+/* Match the mark to the palette, including its saved state and live preview. */
+:root .geeks-mark-light{display:none}
+:root[data-theme="paper"] .geeks-mark-dark{display:none}
+:root[data-theme="paper"] .geeks-mark-light{display:inline}
 .crumb{color:var(--dim);font:400 13px var(--mono);white-space:nowrap}
 .crumb b{color:var(--ink);font-weight:500}
 .caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--accent);animation:blink 1.06s steps(1) infinite}
