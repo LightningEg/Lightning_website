@@ -187,6 +187,14 @@ h1,h2,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.closing h2
 @media (max-width:900px){.stack-grid{grid-template-columns:1fr}.layers li{grid-template-columns:1fr;gap:2px}}
 
 /* gaps */
+.secret{margin-top:22px;font-size:15px}
+.secret summary{cursor:pointer;list-style:none;display:inline-flex;gap:10px;font:400 12.5px var(--mono);color:var(--dim);opacity:.6;transition:opacity .2s}
+.secret summary::-webkit-details-marker{display:none}
+.secret summary:hover,.secret summary:focus-visible,.secret[open] summary{opacity:1}
+.secret summary span{color:var(--accent2)}
+.secret>div{margin-top:14px;padding-left:16px;border-left:1px solid var(--line)}
+.mission .secret p{font-size:15px;margin:0 0 10px;color:var(--dim);line-height:1.6}
+.secret small{font:400 12px var(--mono);color:var(--dim)}
 .gaps{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .gaps li{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
 .gaps .tag{font:500 12px var(--mono);color:var(--accent2)}
