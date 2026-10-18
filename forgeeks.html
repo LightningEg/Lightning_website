@@ -42,6 +42,7 @@
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html" aria-current="page">home</a>
       <a href="forgeeks-roadmap.html">roadmap</a>
+      <a class="opt" href="forgeeks.html#build">contribute</a>
       <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
@@ -263,20 +264,24 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <div class="s-num"><b>06</b> / build</div>
         <div>
           <h2 id="t-build">Build it <span class="hi">with us.</span></h2>
-          <p class="s-sub">You need Python 3.11+ and Git. The demo household runs in its own database, so nothing real is touched.</p>
+          <p class="s-sub">Four steps, nothing to install. Every good first issue says what is wrong, when it is done and which file to open. The demo household is fictional, so nothing real is touched.</p>
         </div>
       </div>
       <div class="steps reveal">
-        <div class="step"><b>01</b><h3>Read one section</h3><p>Start with the project overview, then only the part of the architecture your change touches.</p></div>
-        <div class="step"><b>02</b><h3>Open an issue</h3><p>Say what you want to change and why, before you write it.</p></div>
-        <div class="step"><b>03</b><h3>Branch, then test</h3><p>One feature per branch. <span class="mono">pytest</span> and <span class="mono">lint-imports</span> both green.</p></div>
-        <div class="step"><b>04</b><h3>Send the PR</h3><p>Three lines in the changelog, never real financial data, and you keep your copyright.</p></div>
+        <div class="step"><b>01</b><h3>Pick an issue</h3><p>Open the <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">good first issues</a>. Small, and it says what to do.</p></div>
+        <div class="step"><b>02</b><h3>Comment /take</h3><p>A bot assigns it to you at once. <span class="mono">/drop</span> gives it back.</p></div>
+        <div class="step"><b>03</b><h3>Open Codespaces</h3><p>Everything installs and the demo opens in your browser. No setup.</p></div>
+        <div class="step"><b>04</b><h3>Send the PR</h3><p>Write <span class="mono">Closes #123</span> and how you checked it. We do the changelog.</p></div>
+      </div>
+      <div class="cta build-cta reveal">
+        <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Start contributing</a>
+        <a class="btn ghost" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" rel="noopener" target="_blank"><span class="k">›</span> open in codespaces</a>
       </div>
       <div class="clone reveal">
         <code><span class="p">$</span> git clone https://github.com/LightningEg/Lightning.git &amp;&amp; cd Lightning &amp;&amp; python -m lightning --demo</code>
         <button type="button" data-copy="git clone https://github.com/LightningEg/Lightning.git && cd Lightning && python -m lightning --demo">copy</button>
       </div>
-      <p class="stats-note reveal">// first run: pip install -r requirements-dev.txt · the demo opens at http://127.0.0.1:8766 · on Windows, run.bat does the setup</p>
+      <p class="stats-note reveal">// on your own machine: python 3.11+, then pip install -r requirements-dev.txt · the demo opens at http://127.0.0.1:8766 · stuck? #help on <a class="accent" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a></p>
     </div>
   </section>
 
@@ -285,7 +290,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     <div class="wrap">
       <div class="closing-grid reveal">
         <h2 id="t-close">Help every Egyptian<br><span class="hi">plan their month</span><br>with confidence.</h2>
-        <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Open the repository</a>
+        <div class="cta"><a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Start contributing</a><a class="btn ghost" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">join the discord</a></div>
       </div>
     </div>
   </section>
@@ -318,7 +323,8 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
       <div><h4>Get started</h4><ul>
         <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
         <li><a href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Clone the repo</a></li>
-        <li><a href="#build">Run the demo</a></li>
+        <li><a href="#build">Start contributing</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Good first issues</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener" target="_blank">Licence</a></li>
         <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
       </ul></div>
@@ -372,11 +378,12 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     {c:'python -m lightning --demo',o:['<span class="d">Mohab\'s sample household, rebuilt on every start</span>','serving on <span class="a2">http://127.0.0.1:8766</span>']}
   ];
   var CMDS={
-    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
+    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">contribute</span>  how to help, in four steps','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
     mission:function(){return ['Financial planning every Egyptian can afford, read, run and trust.','<span class="d">Free to use. Local by default. Source public, so you can check our working.</span>']},
     principles:function(){return ['<span class="ok">efficient</span>   163 ms to open Overview on 2,239 transactions (was 507 ms)','<span class="ok">insightful</span>  one name, one formula, one function per figure','<span class="ok">secure</span>      SQLCipher at rest · Argon2id locks · 127.0.0.1 only']},
     stack:function(){return ['python 3.11+ · fastapi · jinja2 · sqlite + sqlcipher · decimal','pytest · import-linter · pywebview + webview2 · android','<span class="d">no frontend build. one process, one file.</span>']},
     gaps:function(){return ['<span class="a2">[beta]</span>     acceptance, legacy import, in-app restore unfinished','<span class="a2">[unproven]</span> restore safety on an ordinary Windows PC','<span class="a2">[known]</span>    freed memory is not wiped','<span class="a2">[partial]</span>  PDF and Excel statement import']},
+    contribute:function(){return ['<span class="ok">1</span> pick a good first issue   <a class="a2" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">github.com/LightningEg/Lightning/issues</a>','<span class="ok">2</span> comment /take            <span class="d">a bot assigns it to you</span>','<span class="ok">3</span> open in codespaces       <a class="a2" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">codespaces.new/LightningEg/Lightning</a>','<span class="ok">4</span> send the pull request    <span class="d">Closes #123 · we do the changelog</span>']},
     clone:function(){copy('git clone https://github.com/LightningEg/Lightning.git');return ['<span class="d">copied:</span> git clone https://github.com/LightningEg/Lightning.git']},
     license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send.</span>']},
     contact:function(){return ['code, architecture, security: <span class="a2">geeks@lightningeg.com</span>','everything else:             <span class="a2">hello@lightningeg.com</span>','chat:     <a class="a2" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="a2" href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">whatsapp</a>','reddit:   <a class="a2" href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a>']},

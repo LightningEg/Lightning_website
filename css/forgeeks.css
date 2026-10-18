@@ -314,3 +314,8 @@ footer{padding:0 0 40px}
 @media (max-width:900px){.tracks{grid-template-columns:1fr}}
 @media (max-width:520px){.items li{grid-template-columns:1fr;gap:4px}.ms-meter i{flex-basis:140px}}
 @media (prefers-reduced-motion:reduce){.track::after{display:none}.ms-meter i::before{transition:none;transform:none}.items .st.now::after{animation:none}}
+
+/* the build section: start contributing, under the four steps */
+.build-cta{margin:0 0 20px}
+/* the top bar keeps three pages on a narrow phone; "contribute" is in the page itself there */
+@media (max-width:520px){.links a.opt{display:none}}
