@@ -9,7 +9,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lightning">
   <meta property="og:title" content="For Geeks · Lightning">
-  <meta property="og:description" content="Lightning for developers: why the code is public, what it proves, and how to build it with us.">
+  <meta property="og:description" content="Lightning for developers: who builds it and why the code is public, what it proves, where we need help, and how to send your first pull request.">
   <meta property="og:url" content="https://lightningeg.com/forgeeks.html">
   <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Lightning for developers: why the code is public, what it proves, and how to build it with us.">
+  <meta name="description" content="Lightning for developers: who builds it and why the code is public, what it proves, where we need help, and how to send your first pull request.">
   <title>For Geeks · Lightning</title>
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,7 +63,8 @@
       <a href="#proof"><span>03</span><i></i><em>proof</em></a>
       <a href="#stack"><span>04</span><i></i><em>stack</em></a>
       <a href="#gaps"><span>05</span><i></i><em>gaps</em></a>
-      <a href="#build"><span>06</span><i></i><em>build</em></a>
+      <a href="#help"><span>06</span><i></i><em>help</em></a>
+      <a href="#build"><span>07</span><i></i><em>build</em></a>
 </nav>
 
 <div class="tm" id="themes" hidden>
@@ -90,7 +91,7 @@
         </div>
       </div>
       <div class="meta">
-        <span>v1.1.0-beta.1</span>
+        <span>v1.3.0</span>
         <span>python · sqlite · no frontend build</span>
         <span>source-available</span>
         <span>built in Egypt</span>
@@ -114,6 +115,7 @@
           <p>Lightning shows a salaried person in Egypt <b>where their money stands, what is coming, and why</b>. Bank, wallet, cash at home, certificates, THNDR and gold, in EGP, on their own PC and phone.</p>
           <p>A money app asks for trust. We would rather <b>show our working</b>. With the source public, anyone can check how a figure is calculated, how the data is locked, and what happens when something breaks.</p>
           <p>And the more people can read it, the faster it gets better <b>for every Egyptian</b> who plans with it.</p>
+          <p><b>Who we are.</b> Lightning started with one person who logged every pound by hand for years, and wanted a tool that showed it all in one place (<a class="accent" href="current-status.html">the story</a>). Today the founder, a small team and three AI teammates build it in public, through the same pull requests you would open.</p>
         </div>
         <div class="reveal">
           <ul class="pillars">
@@ -121,6 +123,16 @@
             <li><span>[local]</span><span>Your ledger stays on your devices<small>phone and PC pair directly, no cloud</small></span></li>
             <li><span>[public]</span><span>Read it, run it, change it<small>PolyForm Noncommercial 1.0.0: source-available, free for non-commercial use</small></span></li>
           </ul>
+          <details class="secret">
+            <summary><span>[secret]</span> the other reason</summary>
+            <div>
+              <p>Everything on the left is true. This is also true.</p>
+              <p>I work in finance. I can price a three-year certificate in my head and tell you what a gram of 21-karat did last March. What I can't tell you is why a test that passed at 11 p.m. fails at 2 a.m. with no change in between.</p>
+              <p>After enough of those nights, opening the code stopped being a principle and became a plan: if more people can read it, fewer of the bugs are mine to find alone.</p>
+              <p>So yes, transparency. And also: please send help. Pull requests are cheaper than therapy.</p>
+              <small>// the founder, still debugging</small>
+            </div>
+          </details>
         </div>
       </div>
     </div>
@@ -249,20 +261,41 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         </div>
       </div>
       <ul class="gaps reveal">
-        <li><span class="tag b">[beta]</span><p><b>v1.1.0-beta.1.</b> Ordinary-PC acceptance, legacy import and in-app backup restore are not finished. Test with sample data, and keep your own backup of anything real.</p></li>
+        <li><span class="tag b">[beta]</span><p><b>Still in testing.</b> Ordinary-PC acceptance, legacy import and in-app backup restore are not finished. Test with sample data, and keep your own backup of anything real.</p></li>
         <li><span class="tag">[unproven]</span><p><b>Restore safety</b> is tested, not proven: the reboot drill on an ordinary Windows PC is still to do, and power-loss behaviour is unverified.</p></li>
         <li><span class="tag">[known]</span><p><b>Freed memory is not wiped.</b> Decrypted fragments may persist in freed memory, crash dumps or the page file. Nothing protects an unlocked PC from malware.</p></li>
-        <li><span class="tag">[partial]</span><p><b>Statement import</b> reads CSV today. PDF and Excel are next.</p></li>
-        <li><span class="tag">[open]</span><p><b>Routes are async def</b> with synchronous database work inside. It works; it isn't right yet.</p></li>
+        <li><span class="tag">[partial]</span><p><b>Statement import</b> reads CSV today. PDF and Excel are next, and open to help.</p></li>
+        <li><span class="tag">[open]</span><p><b>Routes are async def</b> with synchronous database work inside. It works; it isn't right yet. Open to help too.</p></li>
       </ul>
     </div>
   </section>
 
-  <!-- ===== 06 build ===== -->
+  <!-- ===== 06 help ===== -->
+  <section class="s" id="help" aria-labelledby="t-help">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>06</b> / help</div>
+        <div>
+          <h2 id="t-help">Where we <span class="hi">need you.</span></h2>
+          <p class="s-sub">You don't need to know finance, or all of the code. Pick the one you know. Each links to real work, open today.</p>
+        </div>
+      </div>
+      <ul class="gaps reveal">
+        <li><span class="tag b">[arabic]</span><p><b>Arabic and right to left.</b> Lines that stay in English, figures that read out of order. If you read Arabic and can edit a template, start here: <a class="accent" href="https://github.com/LightningEg/Lightning/issues/37" rel="noopener" target="_blank">#37</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/34" rel="noopener" target="_blank">#34</a>.</p></li>
+        <li><span class="tag">[screens]</span><p><b>Screens and charts.</b> Small fixes in Jinja, CSS and plain JavaScript, each with the file named: <a class="accent" href="https://github.com/LightningEg/Lightning/issues/33" rel="noopener" target="_blank">#33</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/35" rel="noopener" target="_blank">#35</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/36" rel="noopener" target="_blank">#36</a>.</p></li>
+        <li><span class="tag">[python]</span><p><b>Backend.</b> PDF and Excel statements through the same review as CSV, and routes that are honestly sync or async. Python, FastAPI, Decimal, tests first.</p></li>
+        <li><span class="tag">[android]</span><p><b>Android.</b> The app runs on the phone through Chaquopy. Next is a Play-ready build: an App Bundle, Play App Signing and the API level Play asks for.</p></li>
+        <li><span class="tag">[testing]</span><p><b>Your own PC and bank.</b> Run the Windows build with sample data and file what breaks. Know a bank's SMS or CSV format we don't read? Open an issue with redacted samples, never real ones.</p></li>
+      </ul>
+      <p class="stats-note reveal">// the rest, in order: the <a class="accent" href="forgeeks-roadmap.html">roadmap</a> · not sure where you fit? ask in #help on <a class="accent" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a></p>
+    </div>
+  </section>
+
+  <!-- ===== 07 build ===== -->
   <section class="s" id="build" aria-labelledby="t-build">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>06</b> / build</div>
+        <div class="s-num"><b>07</b> / build</div>
         <div>
           <h2 id="t-build">Build it <span class="hi">with us.</span></h2>
           <p class="s-sub">Four steps, nothing to install. Every good first issue says what is wrong, when it is done and which file to open. The demo household is fictional, so nothing real is touched.</p>
@@ -282,6 +315,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <code><span class="p">$</span> git clone https://github.com/LightningEg/Lightning.git &amp;&amp; cd Lightning &amp;&amp; python -m lightning --demo</code>
         <button type="button" data-copy="git clone https://github.com/LightningEg/Lightning.git && cd Lightning && python -m lightning --demo">copy</button>
       </div>
+      <p class="stats-note reveal">// the licence, plainly: PolyForm Noncommercial 1.0.0. Anyone may read, run and change Lightning for non-commercial use. You keep the copyright in what you write; by sending a pull request you let the owner use and relicense it as part of Lightning, commercially too. <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> has the exact words.</p>
       <p class="stats-note reveal">// the full path, gates and roles: <a class="accent" href="forgeeks-collaborate.html">how we collaborate</a><br>// on your own machine: python 3.11+, then pip install -r requirements-dev.txt · the demo opens at http://127.0.0.1:8766 · stuck? #help on <a class="accent" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a></p>
     </div>
   </section>
@@ -376,20 +410,24 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['55672']},
     {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1638']},
     {c:'ls lightning/database/migrations | wc -l',o:['67']},
+    {c:'cat .secret',o:['<span class="d">psst. you found a secret. when this finishes, type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
     {c:'lint-imports',o:['<span class="d">Layers: each layer may only import the layers below it</span> <span class="ok">KEPT</span>','<span class="d">… 3 more contracts</span> <span class="ok">KEPT</span>','','Contracts: <span class="ok">4 kept</span>, 0 broken.']},
     {c:'python -m lightning --demo',o:['<span class="d">Mohab\'s sample household, rebuilt on every start</span>','serving on <span class="a2">http://127.0.0.1:8766</span>']}
   ];
   var CMDS={
-    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">contribute</span>  how to help, in four steps','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
-    mission:function(){return ['Financial planning every Egyptian can afford, read, run and trust.','<span class="d">Free to use. Local by default. Source public, so you can check our working.</span>']},
+    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public, and who we are','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">needs</span>       where we need you','  <span class="ok">contribute</span>  how to help, in four steps','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
+    mission:function(){return ['Financial planning every Egyptian can afford, read, run and trust.','<span class="d">Free to use. Local by default. Source public, so you can check our working.</span>','<span class="d">built by the founder, a small team and three AI teammates, in public.</span>']},
+    needs:function(){return ['<span class="a2">[arabic]</span>   lines left in English, figures out of order · #37 #34','<span class="a2">[screens]</span>  small Jinja, CSS and JS fixes · #33 #35 #36','<span class="a2">[python]</span>   PDF and Excel statements · honest sync or async routes','<span class="a2">[android]</span>  a Play-ready build: App Bundle, Play App Signing','<span class="a2">[testing]</span>  your own PC, your bank\'s SMS or CSV format, redacted']},
     principles:function(){return ['<span class="ok">efficient</span>   163 ms to open Overview on 2,239 transactions (was 507 ms)','<span class="ok">insightful</span>  one name, one formula, one function per figure','<span class="ok">secure</span>      SQLCipher at rest · Argon2id locks · 127.0.0.1 only']},
     stack:function(){return ['python 3.11+ · fastapi · jinja2 · sqlite + sqlcipher · decimal','pytest · import-linter · pywebview + webview2 · android','<span class="d">no frontend build. one process, one file.</span>']},
     gaps:function(){return ['<span class="a2">[beta]</span>     acceptance, legacy import, in-app restore unfinished','<span class="a2">[unproven]</span> restore safety on an ordinary Windows PC','<span class="a2">[known]</span>    freed memory is not wiped','<span class="a2">[partial]</span>  PDF and Excel statement import']},
     contribute:function(){return ['<span class="ok">1</span> pick a good first issue   <a class="a2" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">github.com/LightningEg/Lightning/issues</a>','<span class="ok">2</span> comment /take            <span class="d">a bot assigns it to you</span>','<span class="ok">3</span> open in codespaces       <a class="a2" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">codespaces.new/LightningEg/Lightning</a>','<span class="ok">4</span> send the pull request    <span class="d">Closes #123 · we do the changelog</span>']},
     clone:function(){copy('git clone https://github.com/LightningEg/Lightning.git');return ['<span class="d">copied:</span> git clone https://github.com/LightningEg/Lightning.git']},
-    license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send.</span>']},
+    license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send; the owner may relicense it as part of Lightning, commercially too.</span>']},
     contact:function(){return ['code, architecture, security: <span class="a2">geeks@lightningeg.com</span>','everything else:             <span class="a2">hello@lightningeg.com</span>','chat:     <a class="a2" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="a2" href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">whatsapp</a>','reddit:   <a class="a2" href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a>']},
     whoami:function(){return ['geek. welcome.']},
+    secret:function(){return ['<span class="d">close. the word is in the replay above.</span>']},
+    gattaca:function(){var s=$('.secret');if(s)s.open=true;return ['<span class="ok">access granted.</span> <span class="d">the real reason the code is public:</span>','the founder works in finance, not software.','<span class="d">can price a certificate by heart. cannot explain a test that passed at 11 p.m. and fails at 2 a.m.</span>','<span class="d">more readers, fewer bugs to find alone. pull requests are cheaper than therapy.</span>','<span class="d">the full confession is open under</span> <a class="a2" href="#mission">01 / mission</a>']},
     ls:function(){return ['<span class="a2">lightning/</span>  <span class="a2">tests/</span>  <span class="a2">docs/</span>  <span class="a2">android/</span>  <span class="a2">guideline/</span>  <span class="a2">report/</span>  <span class="a2">tools/</span>  AGENTS.md  NOW.md  CHANGELOG.md']},
     sudo:function(){return ['<span class="d">nothing here runs as root. that\'s the point.</span>']},
     exit:function(){return ['<span class="d">there is no exit. only pull requests.</span>']},
