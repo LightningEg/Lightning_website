@@ -42,6 +42,7 @@
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html">home</a>
       <a href="forgeeks-roadmap.html" aria-current="page">roadmap</a>
+      <a class="opt" href="forgeeks.html#build">contribute</a>
       <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
@@ -78,7 +79,7 @@
       <div class="hero-grid">
         <p class="lede">Three milestones, in order. Each lists what is <b>done</b>, what we are <b>on now</b>, and what comes <b>next</b>. Dates come when the work before them is finished, not before.</p>
         <div class="cta">
-          <a class="btn" href="https://github.com/LightningEg/Lightning/issues" rel="noopener" target="_blank">Pick an issue</a>
+          <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick an issue</a>
           <a class="btn ghost" href="#core"><span class="k">$</span> read the plan</a>
         </div>
       </div>
@@ -97,7 +98,7 @@
         <div>
           <h2 id="t-core">Finish the core. <span class="hi">Open the workflow.</span></h2>
           <p class="s-sub">Two tracks at the same time: make the backend complete and the features whole, and set up how people outside the team can build with us.</p>
-          <div class="ms-meter reveal"><i style="--p:0.190"></i><span>4 of 21 done · 3 in progress</span></div>
+          <div class="ms-meter reveal"><i style="--p:0.381"></i><span>8 of 21 done · 6 in progress</span></div>
         </div>
       </div>
         <div class="tracks">
@@ -123,13 +124,13 @@
           <li class="is-done"><span class="st done">[done]</span><p><b>Public source, plain terms</b>PolyForm Noncommercial 1.0.0. Contribution terms in CONTRIBUTING.md: you keep your copyright.</p></li>
           <li class="is-done"><span class="st done">[done]</span><p><b>Rules a newcomer can follow</b>AGENTS.md, one-file findings in report/, and an architecture that tests enforce, not reviewers.</p></li>
           <li><span class="st now">[now]</span><p><b>A public roadmap</b>This page. Kept in step with NOW.md and the project overview.</p></li>
-          <li><span class="st next">[next]</span><p><b>Issue templates</b>Bug, feature, and bank SMS format, with redacted samples only. Never real data.</p></li>
-          <li><span class="st next">[next]</span><p><b>Good first issues</b>Labelled from report/: small, self-contained, with the files to read named.</p></li>
-          <li><span class="st next">[next]</span><p><b>CI on every pull request</b>pytest and lint-imports run on each PR, with a pull request template that asks for tests and a changelog line.</p></li>
-          <li><span class="st next">[next]</span><p><b>A security policy</b>SECURITY.md: how to report a flaw privately to geeks@lightningeg.com, and what happens next.</p></li>
-          <li><span class="st next">[next]</span><p><b>Setup in one command</b>Clone, install and open the demo household with one script, on Windows, macOS and Linux.</p></li>
-          <li><span class="st next">[next]</span><p><b>Clear review rules</b>Who reviews which area (CODEOWNERS exists), what a review checks, and how long to expect.</p></li>
-          <li><span class="st later">[later]</span><p><b>A home for contributors</b>A developer channel on Discord and a short monthly note on what landed and what needs hands.</p></li>
+          <li><span class="st now">[now]</span><p><b>Issue templates</b>Bug or improvement, and Good first issue, are live. Bank SMS format next, with redacted samples only.</p></li>
+          <li><span class="st now">[now]</span><p><b>Good first issues</b>Small and self-contained, with the file to open named. Comment /take and a bot assigns it to you.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>CI on every pull request</b>Tests, dependency review and CodeQL run on each PR; the template asks what changed and how you checked it.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>A security policy</b>SECURITY.md: report a flaw privately through GitHub, never in a public issue.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>Setup in one click</b>Open in Codespaces: everything installs and the demo household opens in your browser.</p></li>
+          <li class="is-done"><span class="st done">[done]</span><p><b>Clear review rules</b>CODEOWNERS and .github/MAINTAINERS.md: who reviews, who merges, and what a review checks.</p></li>
+          <li><span class="st now">[now]</span><p><b>A home for contributors</b>Discord: #start-here, #chat and #help, with GitHub news in #github-feed. A short monthly note on what landed next.</p></li>
           </ul>
         </div>
       </div>
@@ -191,7 +192,7 @@
         <div class="s-num"><b>→</b> / help</div>
         <div>
           <h2 id="t-help">Where your hands <span class="hi">help most.</span></h2>
-          <p class="s-sub">Anything marked <span class="mono accent">[next]</span> in M1 is open. Say which one in an issue before you start, so two people don't build the same thing.</p>
+          <p class="s-sub">New here? Take a good first issue: comment <span class="mono accent">/take</span> and it's yours. For anything bigger marked <span class="mono accent">[next]</span> in M1, say which in an issue first, so two people don't build the same thing.</p>
         </div>
       </div>
       <div class="steps reveal">
@@ -208,7 +209,7 @@
       <div class="closing-grid reveal">
         <h2 id="t-close">Pick something from M1.<br><span class="hi">Build it with us.</span></h2>
         <div class="cta">
-          <a class="btn" href="https://github.com/LightningEg/Lightning/issues" rel="noopener" target="_blank">Browse the issues</a>
+          <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Start contributing</a>
           <a class="btn ghost" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">join the discord</a>
         </div>
       </div>
