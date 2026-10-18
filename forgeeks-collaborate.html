@@ -9,7 +9,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lightning">
   <meta property="og:title" content="Collaborate · For Geeks · Lightning">
-  <meta property="og:description" content="The Lightning roadmap: finish the core and open it to contributors, then Google Play, then the App Store. What is done, what we are on, what comes next.">
+  <meta property="og:description" content="How to collaborate on Lightning: claim a GitHub issue, work on a branch, send a pull request, and get it reviewed and merged.">
   <meta property="og:url" content="https://lightningeg.com/forgeeks-collaborate.html">
   <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -42,7 +42,6 @@
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html">home</a>
       <a href="forgeeks-roadmap.html" aria-current="page">roadmap</a>
-      <a class="opt" href="forgeeks.html#build">contribute</a>
       <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
@@ -78,7 +77,7 @@
     <div class="wrap">
       <h1 id="h1">Eight steps from an idea<br>to <span class="hi">merged on main.</span></h1>
       <div class="hero-grid">
-        <p class="lede">The same path for a stranger, a teammate and an AI: <b>issue, fork, pull request, checks, review, squash</b>. Nobody pushes to <span class="mono accent">main</span>, and every gate is enforced by GitHub, not by trust.</p>
+        <p class="lede">Pick a task, claim it on GitHub, make a change on your own branch, and send it for review. <b>Checks, review, then merge.</b> Every change reaches <span class="mono accent">main</span> through a pull request.</p>
         <div class="cta">
           <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick an issue</a>
           <a class="btn ghost" href="#flow"><span class="k">$</span> read the flow</a>
@@ -92,19 +91,19 @@
         <div class="s-num"><b>01</b> / flow</div>
         <div>
           <h2 id="t-flow">From issue to <span class="hi">merge.</span></h2>
-          <p class="s-sub">Eight steps, nothing to install. Steps 1 to 4 are yours; 5 to 8 are shared with the maintainers.</p>
+          <p class="s-sub">Steps 1 to 5 are yours. The checks, review and merge follow. Codespaces lets you work in a browser using your own GitHub allowance.</p>
         </div>
       </div>
       <div class="steps reveal">
         <div class="step"><b>01</b><h3>Pick an issue</h3><p>Open the <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">good first issues</a> with no assignee. Each says what is wrong, when it is done and which file to open.</p></div>
-        <div class="step"><b>02</b><h3>Comment /take</h3><p>A bot assigns it to you and adds the <span class="mono">taken</span> label. One at a time; <span class="mono">/drop</span> gives it back; 14 quiet days free it.</p></div>
+        <div class="step"><b>02</b><h3>Comment /take</h3><p>Post <span class="mono">/take</span> on the GitHub issue and wait for assignment. One task at a time; <span class="mono">/drop</span> gives it back. Ask for help in Discord.</p></div>
         <div class="step"><b>03</b><h3>Fork and branch</h3><p>Branch in your fork, named <span class="mono">who/feature</span>: <span class="mono">yourname/fix-gold-label</span>. One feature per branch.</p></div>
         <div class="step"><b>04</b><h3>Build and test</h3><p>Codespaces needs nothing installed. Locally: <span class="mono">python -m lightning --demo</span>, then <span class="mono">python -m pytest -q</span>.</p></div>
       </div>
       <div class="steps reveal">
         <div class="step"><b>05</b><h3>Open the pull request</h3><p>Write <span class="mono">Closes #123</span> and one line on how you checked it. Tick the box: no real data, passwords or keys.</p></div>
-        <div class="step"><b>06</b><h3>Checks run</h3><p><span class="mono">tests</span>, <span class="mono">dependency-review</span> and <span class="mono">analyze</span> must be green. A first-time fork waits for the owner to approve the run.</p></div>
-        <div class="step"><b>07</b><h3>Review</h3><p>A code owner who is not the author approves the exact latest diff. A new push dismisses the approval. Every conversation gets resolved.</p></div>
+        <div class="step"><b>06</b><h3>Checks run</h3><p><span class="mono">tests</span>, <span class="mono">dependency-review</span> and <span class="mono">analyze</span> must be green. An outside contribution may wait for the owner to approve its check run.</p></div>
+        <div class="step"><b>07</b><h3>Review</h3><p>A maintainer reviews the latest changes. Answer questions, fix anything flagged, and resolve the review conversations before merging.</p></div>
         <div class="step"><b>08</b><h3>Squash and merge</h3><p>One squash commit on <span class="mono">main</span>. The branch goes, the issue closes, and maintainers add the changelog and brand details.</p></div>
       </div>
       <div class="clone reveal">
@@ -119,24 +118,24 @@
         <div class="s-num"><b>02</b> / who</div>
         <div>
           <h2 id="t-who">Who can <span class="hi">do what.</span></h2>
-          <p class="s-sub">Merge rights are small on purpose: the owner and the AI bot accounts. Everyone else works from a fork.</p>
+          <p class="s-sub">The owner controls merging and authorizes AI sessions to work through the existing owner account. Contributors keep their own accounts and work from forks.</p>
         </div>
       </div>
       <div class="tracks">
         <div class="lane reveal">
           <h3>people<span>how they work</span></h3>
           <ul class="items">
-          <li><span class="st done">[owner]</span><p><b>Owner</b>Admin, the only one. Reviews and merges everything, including every outside pull request.</p></li>
-          <li><span class="st done">[team]</span><p><b>Internal team</b>Trusted humans with Triage. Fork, branch, open PRs, label and assign. They cannot push or merge.</p></li>
-          <li><span class="st done">[open]</span><p><b>Open contributors</b>Anyone. Fork, branch, open a PR from the fork. No access to the repository itself, until the owner decides.</p></li>
+          <li><span class="st done">[owner]</span><p><b>Owner</b>Controls repository settings and merging. May authorize AI sessions to review and merge through the connected owner account.</p></li>
+          <li><span class="st done">[team]</span><p><b>Returning contributors</b>Use your own account, fork and branch. Coordinate on the GitHub issue before starting another task.</p></li>
+          <li><span class="st done">[open]</span><p><b>New contributors</b>Pick a known issue and send a pull request from your fork. You do not need the owner’s account or repository write access.</p></li>
           </ul>
         </div>
         <div class="lane reveal">
           <h3>ai teammates<span>claude, codex, luna</span></h3>
           <ul class="items">
-          <li><span class="st done">[write]</span><p><b>Own bot account each</b>Write access through one team, never the owner login. They push their own branch and open a PR.</p></li>
-          <li><span class="st done">[merge]</span><p><b>May merge, under rules</b>Only when every gate below holds and a different identity approved. Never their own work alone.</p></li>
-          <li><span class="st done">[never]</span><p><b>Never</b>Push to <span class="mono">main</span>, approve an outsider’s PR, or touch an owner-only path without the owner.</p></li>
+          <li><span class="st done">[write]</span><p><b>Owner-authorized access</b>Use the existing connected owner account. Work on a branch and open a pull request. Contributors never receive owner credentials.</p></li>
+          <li><span class="st done">[merge]</span><p><b>May merge, under rules</b>Review the latest changes, wait for passing checks and resolve discussions before merging authorized work. No separate AI account is required.</p></li>
+          <li><span class="st done">[never]</span><p><b>Never</b>Push directly to <span class="mono">main</span>, skip checks, share owner credentials, or publish a release without authorization.</p></li>
           </ul>
         </div>
       </div>
@@ -148,24 +147,24 @@
         <div class="s-num"><b>03</b> / gates</div>
         <div>
           <h2 id="t-gates">What a change <span class="hi">must pass.</span></h2>
-          <p class="s-sub">These rules are in the repository’s ruleset and apply to AIs too. Only the owner can bypass, and only through a pull request.</p>
+          <p class="s-sub">The owner and authorized AI sessions follow these checks before merging. Merging code does not authorize signing or publishing a release.</p>
         </div>
       </div>
       <div class="tracks">
         <div class="lane reveal">
-          <h3>on every pull request<span>enforced by GitHub</span></h3>
+          <h3>on every pull request<span>before merging</span></h3>
           <ul class="items">
           <li><span class="st gate">[pr]</span><p><b>Pull request only</b>Nobody pushes to <span class="mono">main</span>. No force-push, no deletion, linear history.</p></li>
           <li><span class="st gate">[ci]</span><p><b>Three green checks</b><span class="mono">tests</span>, <span class="mono">dependency-review</span> and <span class="mono">analyze</span> (CodeQL), up to date with <span class="mono">main</span>.</p></li>
-          <li><span class="st gate">[owner]</span><p><b>One code-owner approval</b>From the owner or a different AI account. GitHub blocks self-approval.</p></li>
-          <li><span class="st gate">[fresh]</span><p><b>Approval after the last push</b>Push again and the approval is gone. Review is of the exact final diff.</p></li>
-          <li><span class="st gate">[talk]</span><p><b>Conversations resolved</b>Every review thread closed before the Merge button works.</p></li>
+          <li><span class="st gate">[owner]</span><p><b>Maintainer review</b>Review the actual changes and test results. AIs working through the owner account follow the owner’s authorization.</p></li>
+          <li><span class="st gate">[fresh]</span><p><b>Review the latest version</b>New changes need another look. GitHub cannot record the owner account approving its own pull request.</p></li>
+          <li><span class="st gate">[talk]</span><p><b>Conversations resolved</b>Answer questions and resolve review threads before merging.</p></li>
           </ul>
         </div>
         <div class="lane reveal">
-          <h3>owner only<span>these paths need the owner</span></h3>
+          <h3>sensitive changes<span>need owner authorization</span></h3>
           <ul class="items">
-          <li><span class="st path">[path]</span><p><b>Workflows, rules and templates</b>They run on machines, so the owner reads them.</p></li>
+          <li><span class="st path">[path]</span><p><b>Workflows, rules and templates</b>Changes that run on machines need careful review and owner authorization.</p></li>
           <li><span class="st path">[path]</span><p><b>packaging/, android/, cloudflare/</b>What ships to people’s devices.</p></li>
           <li><span class="st path">[path]</span><p><b>Scripts, and tests/conftest.py</b>Code that runs with a developer’s permissions.</p></li>
           <li><span class="st path">[path]</span><p><b>AGENTS.md, CLAUDE.md, LICENSE, SECURITY.md</b>The rules and the legal text.</p></li>
@@ -261,6 +260,6 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261017-1"></script>
+<script src="js/forgeeks.js?v=20261018-contribute"></script>
 </body>
 </html>
