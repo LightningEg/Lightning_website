@@ -1,6 +1,11 @@
 /* For Geeks: shared by forgeeks.html and forgeeks-roadmap.html. Themes, top bar, rail, reveal, and the field with its lightning. */
 (function(){
   'use strict';
+  // Keep links to the former home-page contribution section working.
+  if(location.pathname.endsWith('/forgeeks.html') && location.hash==='#build'){
+    location.replace('forgeeks-roadmap.html#build');
+    return;
+  }
   var doc=document,root=doc.documentElement;
   doc.body.classList.remove('no-js');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

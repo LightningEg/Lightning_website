@@ -42,7 +42,6 @@
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html">home</a>
       <a href="forgeeks-roadmap.html" aria-current="page">roadmap</a>
-      <a class="opt" href="forgeeks.html#build">contribute</a>
       <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
@@ -61,6 +60,7 @@
       <a href="#play"><span>M2</span><i></i><em>google play</em></a>
       <a href="#ios"><span>M3</span><i></i><em>app store</em></a>
       <a href="#help"><span>→</span><i></i><em>help</em></a>
+      <a href="#build"><span>+</span><i></i><em>contribute</em></a>
       <a href="forgeeks-collaborate.html"><span>↳</span><i></i><em>collaborate</em></a>
 </nav>
 
@@ -205,12 +205,38 @@
     </div>
   </section>
 
+  <!-- ===== contribute ===== -->
+  <section class="s" id="build" aria-labelledby="t-build">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>→</b> / contribute</div>
+        <div>
+          <h2 id="t-build">Build it <span class="hi">with us.</span></h2>
+          <p class="s-sub">Pick one small task. Claim it on GitHub, make your change on a branch, and send it for review. Discord is where you can ask for help.</p>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>Pick an issue</h3><p>Choose an unassigned <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">good first issue</a>. It explains the task and what finished looks like.</p></div>
+        <div class="step"><b>02</b><h3>Claim it on GitHub</h3><p>Comment <span class="mono">/take</span> on that issue and wait for the bot to assign you. One task at a time; <span class="mono">/drop</span> gives it back.</p></div>
+        <div class="step"><b>03</b><h3>Make your change</h3><p><a class="accent" href="https://github.com/LightningEg/Lightning/fork" rel="noopener" target="_blank">Fork the repository</a> to make your own copy, then work on a branch. Codespaces lets you work in your browser.</p></div>
+        <div class="step"><b>04</b><h3>Send it for review</h3><p>Open a pull request to propose your change. Include <span class="mono">Closes #123</span> with your issue number and explain how you tested it.</p></div>
+      </div>
+      <div class="cta build-cta reveal">
+        <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick a task</a>
+        <a class="btn ghost" href="https://discord.gg/fukkUs263W" rel="noopener" target="_blank">Ask in Discord</a>
+      </div>
+      <p class="stats-note reveal">// then: checks run, a maintainer reviews your work, and you fix anything they flag. When the pull request is merged, your issue closes. Every change goes through a branch and pull request; nobody pushes directly to main.</p>
+      <p class="stats-note reveal">// the demo uses fictional data. Never include real financial records, passwords or keys. We take care of the changelog before merging. <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Read the contributor guide</a> for setup and licence terms.</p>
+      <p class="stats-note reveal">// <a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open Codespaces</a> · uses your own GitHub allowance; GitHub may ask you to fork before you save your branch · claims belong on the GitHub issue, not in Discord · <a class="accent" href="forgeeks-collaborate.html">how review and merging work</a></p>
+    </div>
+  </section>
+
   <section class="closing" id="closing" aria-labelledby="t-close">
     <div class="wrap">
       <div class="closing-grid reveal">
         <h2 id="t-close">Pick something from M1.<br><span class="hi">Build it with us.</span></h2>
         <div class="cta">
-          <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Start contributing</a>
+          <a class="btn" href="#build">Start contributing</a>
           <a class="btn ghost" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">join the discord</a>
         </div>
       </div>
@@ -245,7 +271,7 @@
       <div><h4>Get started</h4><ul>
         <li><a href="forgeeks.html">For Geeks home</a></li>
         <li><a href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Clone the repo</a></li>
-        <li><a href="#build">Run the demo</a></li>
+        <li><a href="#build">Start contributing</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener" target="_blank">Licence</a></li>
         <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
       </ul></div>
@@ -256,6 +282,6 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261017-1"></script>
+<script src="js/forgeeks.js?v=20261018-contribute"></script>
 </body>
 </html>
