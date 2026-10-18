@@ -62,6 +62,7 @@ main,header,footer{position:relative;z-index:2}
 .progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
 @media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.src{display:none}}
 @media (max-width:760px){.crumb{display:none}.chip .t-name{display:none}}
+@media (max-width:420px){.bar .wrap{gap:8px}.brand{gap:6px;font-size:12px}.links a{padding:6px 5px;font-size:12px}.tools .chip{padding:0 8px}}
 
 /* ---------- hero ---------- */
 .hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 48px}

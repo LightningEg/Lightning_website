@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261017-2">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261018-1">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -34,21 +34,22 @@
 
 <header class="bar" id="bar">
   <div class="wrap">
-    <a class="brand" href="forgeeks.html" aria-label="Lightning, For Geeks home">
+    <a class="brand" href="forgeeks.html" aria-label="Lightning, For Geeks home" target="_blank" rel="noopener">
       <img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="15" height="21">
       lightning
     </a>
     <span class="crumb" aria-hidden="true">~/root/<b>for-geeks</b><span class="caret"></span></span>
     <nav class="links" aria-label="For Geeks">
-      <a href="forgeeks.html" aria-current="page">home</a>
-      <a href="forgeeks-roadmap.html">roadmap</a>
+      <a href="forgeeks.html" aria-current="page" target="_blank" rel="noopener">home</a>
+      <a href="forgeeks-roadmap.html" target="_blank" rel="noopener">roadmap</a>
+      <a href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
       <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
         <span class="dots" aria-hidden="true"><i style="background:var(--bg)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i></span>
         <span class="t-name">theme: <span id="theme-name">mono</span></span>
       </button>
-      <a class="chip src" href="https://github.com/LightningEg/Lightning" rel="noopener">source ↗</a>
+      <a class="chip src" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">source ↗</a>
     </div>
   </div>
   <div class="progress" id="progress" aria-hidden="true"></div>
@@ -82,7 +83,7 @@
       <div class="hero-grid">
         <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim on this page comes with the file or the command that proves it.</p>
         <div class="cta">
-          <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener">Read the source</a>
+          <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Read the source</a>
           <a class="btn ghost" href="#proof"><span class="k">$</span> run the proof</a>
         </div>
       </div>
@@ -148,13 +149,13 @@
           <h3>insightful <span>02</span></h3>
           <div class="big"><span data-count="1">1</span><small>formula per figure</small></div>
           <p>Every figure has <b>one name, one formula and one function</b>. Screens read their labels from one registry, and a test checks every function it names exists.</p>
-          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener">lightning/core/figures.py ↗</a><br>tests/test_figures.py</div>
+          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">lightning/core/figures.py ↗</a><br>tests/test_figures.py</div>
         </article>
         <article class="card reveal">
           <h3>secure <span>03</span></h3>
           <div class="big"><span data-count="256">256</span><small>-bit</small></div>
           <p>SQLCipher encryption at rest, with the key held under <b>Argon2id</b> locks. The app serves on <b>127.0.0.1</b> only, and needs no account.</p>
-          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" rel="noopener">architecture › encrypted profiles ↗</a><br>found a flaw? geeks@lightningeg.com</div>
+          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" rel="noopener" target="_blank">architecture › encrypted profiles ↗</a><br>found a flaw? geeks@lightningeg.com</div>
         </article>
       </div>
     </div>
@@ -229,7 +230,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 <span class="c"># a posting that doesn't balance never lands</span>
 <span class="k">if</span> internal_total != ZERO:
     <span class="k">raise</span> ValidationError(<span class="s2">"Internal movements must net to zero"</span>)</pre>
-          <p class="stats-note">// trimmed from <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/ledger.py" rel="noopener">lightning/core/ledger.py ↗</a></p>
+          <p class="stats-note">// trimmed from <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/ledger.py" rel="noopener" target="_blank">lightning/core/ledger.py ↗</a></p>
         </div>
       </div>
     </div>
@@ -242,7 +243,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <div class="s-num"><b>05</b> / gaps</div>
         <div>
           <h2 id="t-gaps">What isn't <span class="hi">done yet.</span></h2>
-          <p class="s-sub">Good engineering is honest about its edges. These are ours, today. What comes after them is on the <a class="accent" href="forgeeks-roadmap.html">roadmap →</a></p>
+          <p class="s-sub">Good engineering is honest about its edges. These are ours, today. What comes after them is on the <a class="accent" href="forgeeks-roadmap.html" target="_blank" rel="noopener">roadmap →</a></p>
         </div>
       </div>
       <ul class="gaps reveal">
@@ -284,7 +285,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     <div class="wrap">
       <div class="closing-grid reveal">
         <h2 id="t-close">Help every Egyptian<br><span class="hi">plan their month</span><br>with confidence.</h2>
-        <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener">Open the repository</a>
+        <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Open the repository</a>
       </div>
     </div>
   </section>
@@ -294,32 +295,32 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   <div class="wrap">
     <div class="cols">
       <div><h4>System</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md" rel="noopener">Architecture</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener">Figures registry</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" rel="noopener">Import contracts</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" rel="noopener">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md" rel="noopener" target="_blank">Architecture</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">Figures registry</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" rel="noopener" target="_blank">Import contracts</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" rel="noopener" target="_blank">Glossary</a></li>
       </ul></div>
       <div><h4>Docs</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" rel="noopener">Project overview</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/AGENTS.md" rel="noopener">Working rules</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/NOW.md" rel="noopener">What's next</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" rel="noopener">Changelog</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" rel="noopener" target="_blank">Project overview</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/AGENTS.md" rel="noopener" target="_blank">Working rules</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/NOW.md" rel="noopener" target="_blank">What's next</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a></li>
       </ul></div>
       <div><h4>Community</h4><ul>
         <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
         <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/issues" rel="noopener">Issues</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/tree/main/report" rel="noopener">Known findings</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" rel="noopener">Contributing</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues" rel="noopener" target="_blank">Issues</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/tree/main/report" rel="noopener" target="_blank">Known findings</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" rel="noopener" target="_blank">Contributing</a></li>
         <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
       </ul></div>
       <div><h4>Get started</h4><ul>
-        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning" rel="noopener">Clone the repo</a></li>
+        <li><a href="forgeeks-roadmap.html" target="_blank" rel="noopener">Roadmap</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Clone the repo</a></li>
         <li><a href="#build">Run the demo</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener">Licence</a></li>
-        <li><a href="index.html">Lightning, the app</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener" target="_blank">Licence</a></li>
+        <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
       </ul></div>
     </div>
     <div class="legal"><span><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px">© 2026 Lightning · built in Egypt</span><span>source-available · PolyForm Noncommercial 1.0.0</span></div>
