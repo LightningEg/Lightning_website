@@ -409,7 +409,7 @@ button,input{font:inherit}
 
 /* Language switch shared by the English pages. */
 .lang-switch{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;border:1px solid var(--line,#dce8e1);border-radius:999px;color:inherit;text-decoration:none;font-weight:800;white-space:nowrap;font-size:.88rem}
-@media (min-width:641px) and (max-width:1000px){.d-links a{padding:8px 10px}.d-bar-end{gap:8px}.d-bar .cta-long{display:none}.d-bar .cta-short{display:inline}}
+@media (min-width:641px) and (max-width:1080px){.d-links a{padding:8px 10px}.d-bar-end{gap:8px}.d-bar .cta-long{display:none}.d-bar .cta-short{display:inline}}
 /* phone and small tablet: the page links fold into a Menu button (js/nav-menu.js) */
 .d-menu-lang{display:none}
 .d-menu-btn{display:none;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:1px solid var(--line-ctl,var(--line));border-radius:99px;background:transparent;color:var(--ink);cursor:pointer}

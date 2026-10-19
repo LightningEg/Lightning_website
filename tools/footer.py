@@ -42,7 +42,7 @@ WORDS = {
         "about": "Made in Egypt. Your money stays on your devices.",
         "explore": "Explore",
         "more": "More",
-        "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides")],
+        "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("contribute", "Contribute")],
         "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("forgeeks", "For Geeks")],
         "mark": "Lightning",
     },
@@ -58,7 +58,7 @@ WORDS = {
         "about": "اتعمل في مصر. وفلوسك بتفضل على أجهزتك.",
         "explore": "استكشف",
         "more": "كمان",
-        "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات")],
+        "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات"), ("contribute", "ساهم معانا")],  # the Arabic Contribute page, not the English one
         "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية"), ("../forgeeks", "For Geeks")],
         "mark": "Lightning",
     },
