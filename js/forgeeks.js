@@ -138,14 +138,14 @@
   var PART='242,242,242',GLOWC='255,255,255',CORE='255,255,255',LIGHT=false;
   function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=root.dataset.theme==='paper';CORE=LIGHT?GLOWC:'255,255,255'}
   onTheme(function(){readColors();if(reduce)frame(performance.now())});
-  var hero=$('#top'),closing=$('#closing');
+  var hero=$('#top'),closing=$('#closing'),heroH1=$('#top h1');
   function rnd(){return Math.random()}
 
   function build(){
     small=innerWidth<760;
     W=innerWidth;H=Math.max(innerHeight,cv.getBoundingClientRect().height||0);BW=W;
     /* on a 1x PC screen, sub-pixel dots crawl and flicker as they move: draw at 1.5x at least, within about 4.5 million pixels */
-    DPR=Math.max(1,Math.min(small?2:1.75,Math.max(devicePixelRatio||1,1.5),Math.sqrt(4.5e6/(W*H))));
+    DPR=Math.max(1,Math.min(small?1.5:1.75,Math.max(devicePixelRatio||1,1.5),Math.sqrt(4.5e6/(W*H))));
     cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
     var C=small?80:140,R=small?36:50;N=C*R;
     U=new Float32Array(N);Z=new Float32Array(N);SEED=new Float32Array(N);
@@ -205,10 +205,11 @@
       if(depth<2&&dis>14&&rnd()<.22){var ang=Math.atan2(by-ay,bx-ax)+(rnd()<.5?-1:1)*(.35+rnd()*.5),l=dis*(1.4+rnd());sub(mx,my,mx+Math.cos(ang)*l,my+Math.sin(ang)*l,dis/2,w*.45,depth+1)}
     })(x0,y0,x1,y1,Math.hypot(x1-x0,y1-y0)*.3,1,0);
     var k=clicked?1:.45+.55*TA;
-    BOLTS.push({segs:segs,age:0,k:k});
+    var paths=[1,.45,.2025].map(function(w){var p=new Path2D();segs.forEach(function(s){if(Math.abs(s[4]-w)<=.01){p.moveTo(s[0],s[1]);p.lineTo(s[2],s[3])}});return p});
+    BOLTS.push({paths:paths,age:0,k:k});
     GLOWS.push({x:x1,y:y1+sy,life:k});
     for(var i=0;i<(k>.9?4:2);i++)pulse(x1,y1,true);
-    if(hero.getBoundingClientRect().bottom>H*.3){root.classList.add('flash');setTimeout(function(){root.classList.remove('flash')},200)}
+    if(!small&&heroH1&&hero.getBoundingClientRect().bottom>H*.3){heroH1.classList.add('flash');setTimeout(function(){heroH1.classList.remove('flash')},200)}
   }
   function intensity(a){return a<.05?1:a<.1?.25:a<.17?.9:Math.max(0,1-(a-.17)/.45)}
   function drawBolts(dt){
@@ -222,15 +223,13 @@
     ctx.lineCap='round';
     for(var b=BOLTS.length-1;b>=0;b--){
       var B=BOLTS[b];B.age+=dt;var I=intensity(B.age)*B.k;if(B.age>.65){BOLTS.splice(b,1);continue}
-      if(b===BOLTS.length-1&&!LIGHT&&B.k>.9){ctx.fillStyle='rgba('+GLOWC+','+(.035*I).toFixed(3)+')';ctx.fillRect(0,0,W,H)}
-      var passes=[[10,'rgba('+GLOWC+','+(.12*I).toFixed(3)+')'],[3.4,'rgba('+GLOWC+','+(.5*I).toFixed(3)+')'],[1.5,'rgba('+CORE+','+(.95*I).toFixed(3)+')']];
-      for(var q=0;q<3;q++){
+      if(b===BOLTS.length-1&&!LIGHT&&!small&&B.k>.9){ctx.fillStyle='rgba('+GLOWC+','+(.035*I).toFixed(3)+')';ctx.fillRect(0,0,W,H)}
+      /* phones draw two passes (glow, core) instead of three: the same bolt at half the strokes */
+      var passes=small?[[6,'rgba('+GLOWC+','+(.3*I).toFixed(3)+')'],[1.6,'rgba('+CORE+','+(.95*I).toFixed(3)+')']]
+        :[[10,'rgba('+GLOWC+','+(.12*I).toFixed(3)+')'],[3.4,'rgba('+GLOWC+','+(.5*I).toFixed(3)+')'],[1.5,'rgba('+CORE+','+(.95*I).toFixed(3)+')']];
+      for(var q=0;q<passes.length;q++){
         ctx.strokeStyle=passes[q][1];
-        [1,.45,.2025].forEach(function(w){
-          ctx.lineWidth=passes[q][0]*w;ctx.beginPath();
-          for(var i=0;i<B.segs.length;i++){var s=B.segs[i];if(Math.abs(s[4]-w)>.01)continue;ctx.moveTo(s[0],s[1]);ctx.lineTo(s[2],s[3])}
-          ctx.stroke();
-        });
+        for(var w=0;w<3;w++){ctx.lineWidth=passes[q][0]*[1,.45,.2025][w];ctx.stroke(B.paths[w])}
       }
     }
     ctx.globalCompositeOperation='source-over';
