@@ -2246,8 +2246,8 @@
       "id": "UX-2026.10.15.60",
       "name": "Lightning · Dollars guide linked",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.60.html"
     },
     {
       "id": "UX-2026.10.15.61",
@@ -2393,6 +2393,27 @@
       "id": "UX-2026.10.17.05",
       "name": "Version Archive · Lightning 1.3.0 downloads and feedback",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.17.05.html"
+    },
+    {
+      "id": "UX-2026.10.19.01",
+      "name": "Lightning · Help build Lightning",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.19.02",
+      "name": "Version Archive · Contribute page",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.19.03",
+      "name": "Contribute · Help with one small task",
+      "page": "contribute.html",
       "status": "current",
       "archive_url": null
     }

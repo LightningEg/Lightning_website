@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · page 5.0 · 2026-10-17 · its own section with its own design (owner, 2026-10-17): fixed particle terrain with lightning, current in the pixel grid, terminal, twelve themes in a picker window. Shared styles and scripts: css/forgeeks.css, js/forgeeks.js; the roadmap is forgeeks-roadmap.html. Indexed and linked from every footer. -->
+<!-- For Geeks · home · 2026-10-19 · guideline Part D (Coders): where we need you and the three steps first, then why and the proof. Shell (top bar, footer): tools/geeks_shell.py. Shared styles and script: css/forgeeks.css, js/forgeeks.js. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -9,7 +9,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lightning">
   <meta property="og:title" content="For Geeks · Lightning">
-  <meta property="og:description" content="Lightning for developers: why the code is public, what it proves, and how to build it with us.">
+  <meta property="og:description" content="Lightning for developers: who builds it and why the code is public, what it proves, where we need help, and how to send your first pull request.">
   <meta property="og:url" content="https://lightningeg.com/forgeeks.html">
   <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -17,14 +17,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Lightning for developers: why the code is public, what it proves, and how to build it with us.">
+  <meta name="description" content="Lightning for developers: who builds it and why the code is public, what it proves, where we need help, and how to send your first pull request.">
   <title>For Geeks · Lightning</title>
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261018-2">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-1">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -41,8 +41,9 @@
     <span class="crumb" aria-hidden="true">~/root/<b>for-geeks</b><span class="caret"></span></span>
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html" aria-current="page">home</a>
+      <a href="forgeeks-guide.html">contribute</a>
       <a href="forgeeks-roadmap.html">roadmap</a>
-      <a href="index.html" target="_blank" rel="noopener">app</a>
+      <a class="opt" href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
       <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
@@ -56,12 +57,12 @@
 </header>
 
 <nav class="rail" id="rail" aria-label="On this page">
-      <a href="#mission"><span>01</span><i></i><em>mission</em></a>
-      <a href="#principles"><span>02</span><i></i><em>principles</em></a>
-      <a href="#proof"><span>03</span><i></i><em>proof</em></a>
-      <a href="#stack"><span>04</span><i></i><em>stack</em></a>
-      <a href="#gaps"><span>05</span><i></i><em>gaps</em></a>
-      <a href="#build"><span>06</span><i></i><em>build</em></a>
+      <a href="#help"><span>01</span><i></i><em>start</em></a>
+      <a href="#mission"><span>02</span><i></i><em>mission</em></a>
+      <a href="#principles"><span>03</span><i></i><em>principles</em></a>
+      <a href="#proof"><span>04</span><i></i><em>proof</em></a>
+      <a href="#stack"><span>05</span><i></i><em>stack</em></a>
+      <a href="#gaps"><span>06</span><i></i><em>gaps</em></a>
 </nav>
 
 <div class="tm" id="themes" hidden>
@@ -81,28 +82,58 @@
             <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford</span>.</span>
       </h1>
       <div class="hero-grid">
-        <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim on this page comes with the file or the command that proves it.</p>
+        <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim here comes with the file or command that proves it. <b>Pick one small task and build it with us</b>, in your browser.</p>
         <div class="cta">
-          <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Read the source</a>
-          <a class="btn ghost" href="#proof"><span class="k">$</span> run the proof</a>
+          <a class="btn" href="#help">Pick a task</a>
+          <a class="btn ghost" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank"><span class="k">$</span> read the source</a>
         </div>
       </div>
       <div class="meta">
-        <span>v1.1.0-beta.1</span>
+        <span>v1.3.0</span>
         <span>python · sqlite · no frontend build</span>
         <span>source-available</span>
         <span>built in Egypt</span>
         <span class="hint" aria-hidden="true">⚡ click anywhere empty</span>
-        <a class="scroll" href="#mission">scroll</a>
+        <a class="scroll" href="#help">scroll</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== 01 mission ===== -->
+  <!-- ===== 01 start: where we need you, and the three steps ===== -->
+  <section class="s" id="help" aria-labelledby="t-help">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>01</b> / start</div>
+        <div>
+          <h2 id="t-help">Where we <span class="hi">need you.</span></h2>
+          <p class="s-sub">You don't need to know finance, or all of the code. Pick the one you know: each links to real work, open today.</p>
+        </div>
+      </div>
+      <ul class="gaps reveal">
+        <li><span class="tag b">[arabic]</span><p><b>Arabic and right to left.</b> Lines that stay in English, figures that read out of order. Read Arabic and can edit a template? Start here: <a class="accent" href="https://github.com/LightningEg/Lightning/issues/37" rel="noopener" target="_blank">#37</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/34" rel="noopener" target="_blank">#34</a>.</p></li>
+        <li><span class="tag b">[screens]</span><p><b>Screens and charts.</b> Small fixes in Jinja, CSS and plain JavaScript, each with the file named: <a class="accent" href="https://github.com/LightningEg/Lightning/issues/33" rel="noopener" target="_blank">#33</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/35" rel="noopener" target="_blank">#35</a>, <a class="accent" href="https://github.com/LightningEg/Lightning/issues/36" rel="noopener" target="_blank">#36</a>.</p></li>
+        <li><span class="tag">[python]</span><p><b>Backend.</b> PDF and Excel statements through the same review as CSV, search ranking, and routes that are honestly sync or async. FastAPI, Decimal, tests first.</p></li>
+        <li><span class="tag">[mobile]</span><p><b>Android, then iOS.</b> The phone app runs Python through Chaquopy; next is a Play-ready build. Know Python on iOS, or SQLCipher builds? Talk to us now.</p></li>
+        <li><span class="tag">[testing]</span><p><b>Your own PC and bank.</b> Run the Windows build with sample data and file what breaks. Know a bank's SMS or CSV format we don't read? Open an issue with redacted samples, never real ones.</p></li>
+      </ul>
+      <div class="steps three reveal">
+        <div class="step"><b>01 · pick it</b><h3>Comment /take</h3><p>Open a <a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">good first issue</a> and comment <span class="mono">/take</span>. A bot assigns it to you; <span class="mono">/drop</span> gives it back.</p></div>
+        <div class="step"><b>02 · change it</b><h3>Edit in a Codespace</h3><p><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" rel="noopener" target="_blank">Open a Codespace</a>: the demo runs in your browser. Edit the file the issue names, then commit and sync.</p></div>
+        <div class="step"><b>03 · send it</b><h3>Open a pull request</h3><p>Write <span class="mono">Closes #123</span> and how you checked it. Checks run, we review, and the issue closes when it merges.</p></div>
+      </div>
+      <div class="cta build-cta reveal">
+        <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">See the open tasks</a>
+        <a class="btn ghost" href="forgeeks-guide.html#path"><span class="k">›</span> every click, in plain words</a>
+      </div>
+      <p class="stats-note reveal">// first time on GitHub? the <a class="accent" href="forgeeks-guide.html">contribute page</a> explains each word and each click · stuck? ask on the issue, we answer there · bigger plans: the <a class="accent" href="forgeeks-roadmap.html">roadmap</a></p>
+    </div>
+  </section>
+
+  <!-- ===== 02 mission ===== -->
   <section class="s" id="mission" aria-labelledby="t-mission">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>01</b> / mission</div>
+        <div class="s-num"><b>02</b> / mission</div>
         <div>
           <h2 id="t-mission">Why we opened <span class="hi">the code.</span></h2>
         </div>
@@ -112,6 +143,7 @@
           <p>Lightning shows a salaried person in Egypt <b>where their money stands, what is coming, and why</b>. Bank, wallet, cash at home, certificates, THNDR and gold, in EGP, on their own PC and phone.</p>
           <p>A money app asks for trust. We would rather <b>show our working</b>. With the source public, anyone can check how a figure is calculated, how the data is locked, and what happens when something breaks.</p>
           <p>And the more people can read it, the faster it gets better <b>for every Egyptian</b> who plans with it.</p>
+          <p><b>Who we are.</b> Lightning started with one person who logged every pound by hand for years, and wanted a tool that showed it all in one place (<a class="accent" href="current-status.html" target="_blank" rel="noopener">the story</a>). Today the founder, a small team and three AI teammates build it in public, through the same pull requests you would open.</p>
         </div>
         <div class="reveal">
           <ul class="pillars">
@@ -119,23 +151,33 @@
             <li><span>[local]</span><span>Your ledger stays on your devices<small>phone and PC pair directly, no cloud</small></span></li>
             <li><span>[public]</span><span>Read it, run it, change it<small>PolyForm Noncommercial 1.0.0: source-available, free for non-commercial use</small></span></li>
           </ul>
+          <details class="secret">
+            <summary><span>[secret]</span> the other reason</summary>
+            <div>
+              <p>Everything on the left is true. This is also true.</p>
+              <p>I work in finance. I can price a three-year certificate in my head and tell you what a gram of 21-karat did last March. What I can't tell you is why a test that passed at 11 p.m. fails at 2 a.m. with no change in between.</p>
+              <p>After enough of those nights, opening the code stopped being a principle and became a plan: if more people can read it, fewer of the bugs are mine to find alone.</p>
+              <p>So yes, transparency. And also: please send help. Pull requests are cheaper than therapy.</p>
+              <small>// the founder, still debugging</small>
+            </div>
+          </details>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== 02 principles ===== -->
+  <!-- ===== 03 principles ===== -->
   <section class="s" id="principles" aria-labelledby="t-principles">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>02</b> / principles</div>
+        <div class="s-num"><b>03</b> / principles</div>
         <div>
           <h2 id="t-principles">Efficient. <span class="hi">Insightful.</span> Secure.</h2>
           <p class="s-sub">Three words are easy to write. Here is the number behind each, and where to check it.</p>
         </div>
       </div>
-      <div class="cards">
-        <article class="card reveal">
+      <div class="cards reveal">
+        <article class="card">
           <h3>efficient <span>01</span></h3>
           <div class="big"><span data-count="163">163</span><small>ms</small></div>
           <p>to open Overview on <b>2,239 transactions</b>. It took 507 ms before a request cache, 50-row registers and bundled fonts.</p>
@@ -145,13 +187,13 @@
           </div>
           <div class="proof">measured 2026-10-03 · budget › all time went 4.6 s → 0.33 s</div>
         </article>
-        <article class="card reveal">
+        <article class="card">
           <h3>insightful <span>02</span></h3>
           <div class="big"><span data-count="1">1</span><small>formula per figure</small></div>
           <p>Every figure has <b>one name, one formula and one function</b>. Screens read their labels from one registry, and a test checks every function it names exists.</p>
           <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">lightning/core/figures.py ↗</a><br>tests/test_figures.py</div>
         </article>
-        <article class="card reveal">
+        <article class="card">
           <h3>secure <span>03</span></h3>
           <div class="big"><span data-count="256">256</span><small>-bit</small></div>
           <p>SQLCipher encryption at rest, with the key held under <b>Argon2id</b> locks. The app serves on <b>127.0.0.1</b> only, and needs no account.</p>
@@ -161,11 +203,11 @@
     </div>
   </section>
 
-  <!-- ===== 03 proof ===== -->
+  <!-- ===== 04 proof ===== -->
   <section class="s" id="proof" aria-labelledby="t-proof">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>03</b> / proof</div>
+        <div class="s-num"><b>04</b> / proof</div>
         <div>
           <h2 id="t-proof">Don't trust us. <span class="hi">Run it.</span></h2>
           <p class="s-sub">The terminal replays the real commands and their real results. When it finishes, it is yours: type <span class="mono accent">help</span>.</p>
@@ -194,11 +236,11 @@
     </div>
   </section>
 
-  <!-- ===== 04 stack ===== -->
+  <!-- ===== 05 stack ===== -->
   <section class="s" id="stack" aria-labelledby="t-stack">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>04</b> / stack</div>
+        <div class="s-num"><b>05</b> / stack</div>
         <div>
           <h2 id="t-stack">One process. <span class="hi">One file.</span></h2>
           <p class="s-sub">A single-user modular monolith: one Python process, one SQLite database, pages rendered on the server. A backup is a copy.</p>
@@ -236,18 +278,18 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     </div>
   </section>
 
-  <!-- ===== 05 gaps ===== -->
+  <!-- ===== 06 gaps ===== -->
   <section class="s" id="gaps" aria-labelledby="t-gaps">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>05</b> / gaps</div>
+        <div class="s-num"><b>06</b> / gaps</div>
         <div>
           <h2 id="t-gaps">What isn't <span class="hi">done yet.</span></h2>
           <p class="s-sub">Good engineering is honest about its edges. These are ours, today. What comes after them is on the <a class="accent" href="forgeeks-roadmap.html">roadmap →</a></p>
         </div>
       </div>
       <ul class="gaps reveal">
-        <li><span class="tag b">[beta]</span><p><b>v1.1.0-beta.1.</b> Ordinary-PC acceptance, legacy import and in-app backup restore are not finished. Test with sample data, and keep your own backup of anything real.</p></li>
+        <li><span class="tag b">[beta]</span><p><b>Still in testing.</b> Ordinary-PC acceptance, legacy import and in-app backup restore are not finished. Test with sample data, and keep your own backup of anything real.</p></li>
         <li><span class="tag">[unproven]</span><p><b>Restore safety</b> is tested, not proven: the reboot drill on an ordinary Windows PC is still to do, and power-loss behaviour is unverified.</p></li>
         <li><span class="tag">[known]</span><p><b>Freed memory is not wiped.</b> Decrypted fragments may persist in freed memory, crash dumps or the page file. Nothing protects an unlocked PC from malware.</p></li>
         <li><span class="tag">[partial]</span><p><b>Statement import</b> reads CSV today. PDF and Excel are next.</p></li>
@@ -256,36 +298,12 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     </div>
   </section>
 
-  <!-- ===== 06 build ===== -->
-  <section class="s" id="build" aria-labelledby="t-build">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>06</b> / build</div>
-        <div>
-          <h2 id="t-build">Build it <span class="hi">with us.</span></h2>
-          <p class="s-sub">You need Python 3.11+ and Git. The demo household runs in its own database, so nothing real is touched.</p>
-        </div>
-      </div>
-      <div class="steps reveal">
-        <div class="step"><b>01</b><h3>Read one section</h3><p>Start with the project overview, then only the part of the architecture your change touches.</p></div>
-        <div class="step"><b>02</b><h3>Open an issue</h3><p>Say what you want to change and why, before you write it.</p></div>
-        <div class="step"><b>03</b><h3>Branch, then test</h3><p>One feature per branch. <span class="mono">pytest</span> and <span class="mono">lint-imports</span> both green.</p></div>
-        <div class="step"><b>04</b><h3>Send the PR</h3><p>Three lines in the changelog, never real financial data, and you keep your copyright.</p></div>
-      </div>
-      <div class="clone reveal">
-        <code><span class="p">$</span> git clone https://github.com/LightningEg/Lightning.git &amp;&amp; cd Lightning &amp;&amp; python -m lightning --demo</code>
-        <button type="button" data-copy="git clone https://github.com/LightningEg/Lightning.git && cd Lightning && python -m lightning --demo">copy</button>
-      </div>
-      <p class="stats-note reveal">// first run: pip install -r requirements-dev.txt · the demo opens at http://127.0.0.1:8766 · on Windows, run.bat does the setup</p>
-    </div>
-  </section>
-
   <!-- ===== closing ===== -->
   <section class="closing" id="closing" aria-labelledby="t-close">
     <div class="wrap">
       <div class="closing-grid reveal">
         <h2 id="t-close">Help every Egyptian<br><span class="hi">plan their month</span><br>with confidence.</h2>
-        <a class="btn" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Open the repository</a>
+        <div><div class="cta"><a class="btn" href="forgeeks-guide.html">Start contributing</a></div><p class="stats-note">// three steps, all in your browser · chat, if you like: <a class="accent" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a></p></div>
       </div>
     </div>
   </section>
@@ -294,32 +312,32 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 <footer>
   <div class="wrap">
     <div class="cols">
-      <div><h4>System</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md" rel="noopener" target="_blank">Architecture</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">Figures registry</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" rel="noopener" target="_blank">Import contracts</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" rel="noopener" target="_blank">Glossary</a></li>
+      <div><h4>Start here</h4><ul>
+        <li><a href="forgeeks-guide.html">Contribute in three steps</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Good first issues</a></li>
+        <li><a href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open a Codespace</a></li>
+        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
+        <li><a href="app-feedback.html" target="_blank" rel="noopener">Not a coder? Send feedback</a></li>
       </ul></div>
-      <div><h4>Docs</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" rel="noopener" target="_blank">Project overview</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/AGENTS.md" rel="noopener" target="_blank">Working rules</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/NOW.md" rel="noopener" target="_blank">What's next</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a></li>
+      <div><h4>System</h4><ul>
+        <li><a href="forgeeks-guide.html#built">Architecture</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
+        <li><a href="forgeeks-guide.html#terms">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
+      </ul></div>
+      <div><h4>Rules</h4><ul>
+        <li><a href="forgeeks-guide.html#product">What Lightning is</a></li>
+        <li><a href="forgeeks-guide.html#rules">Ground rules</a></li>
+        <li><a href="forgeeks-guide.html#team">Who does what</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">Licence</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/security/advisories/new" target="_blank" rel="noopener">Report a flaw privately</a></li>
       </ul></div>
       <div><h4>Community</h4><ul>
         <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
         <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/issues" rel="noopener" target="_blank">Issues</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/tree/main/report" rel="noopener" target="_blank">Known findings</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CONTRIBUTING.md" rel="noopener" target="_blank">Contributing</a></li>
         <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
-      </ul></div>
-      <div><h4>Get started</h4><ul>
-        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Clone the repo</a></li>
-        <li><a href="#build">Run the demo</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener" target="_blank">Licence</a></li>
         <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
       </ul></div>
     </div>
@@ -329,14 +347,12 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261017-1"></script>
+<script src="js/forgeeks.js?v=20261019-1"></script>
 <script>
 (function(){
   'use strict';
   var doc=document,LG=window.LG,reduce=LG.reduce,THEMES=LG.THEMES,keep=LG.keep,copy=LG.copy;
   var $=function(s){return doc.querySelector(s)};
-  /* layer pulse travels the full rail */
-  var layers=$('#layers');function railH(){layers.style.setProperty('--h',layers.offsetHeight+'px')}railH();addEventListener('resize',railH);
 
   /* ===================== hero: decoding word ===================== */
   var words=['afford','read','run','trust'],wi=0,word=$('#word'),GL='01<>/\\{}[]#$%&*+=_ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -356,7 +372,9 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
       if(frame<=total)setTimeout(tick,38);else word.textContent=to;
     })();
   }
-  if(!reduce)setInterval(function(){if(doc.hidden)return;wi=(wi+1)%words.length;decode(words[wi])},3200);
+  var heroSeen=true;
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){heroSeen=es[0].isIntersecting}).observe($('#h1'));
+  if(!reduce)setInterval(function(){if(doc.hidden||!heroSeen)return;wi=(wi+1)%words.length;decode(words[wi])},3200);
 
   /* ===================== terminal ===================== */
   var out=$('#term-out'),body=$('#term-body'),inWrap=$('#term-in'),input=$('#term-input'),skipBtn=$('#term-skip');
@@ -368,20 +386,26 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['55672']},
     {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1638']},
     {c:'ls lightning/database/migrations | wc -l',o:['67']},
+    {c:'cat .notes',o:['<span class="d">found something strange. type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
     {c:'lint-imports',o:['<span class="d">Layers: each layer may only import the layers below it</span> <span class="ok">KEPT</span>','<span class="d">… 3 more contracts</span> <span class="ok">KEPT</span>','','Contracts: <span class="ok">4 kept</span>, 0 broken.']},
     {c:'python -m lightning --demo',o:['<span class="d">Mohab\'s sample household, rebuilt on every start</span>','serving on <span class="a2">http://127.0.0.1:8766</span>']}
   ];
   var CMDS={
-    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
-    mission:function(){return ['Financial planning every Egyptian can afford, read, run and trust.','<span class="d">Free to use. Local by default. Source public, so you can check our working.</span>']},
+    help:function(){return ['commands:','  <span class="ok">mission</span>     why the code is public, and who we are','  <span class="ok">principles</span>  efficient, insightful, secure','  <span class="ok">stack</span>       what it is built with','  <span class="ok">gaps</span>        what isn\'t done yet','  <span class="ok">needs</span>       where we need you','  <span class="ok">contribute</span>  how to help, in three steps','  <span class="ok">clone</span>       copy the clone command','  <span class="ok">license</span>     the terms, plainly','  <span class="ok">contact</span>     who to write to','  <span class="ok">theme</span>       list themes · theme &lt;name&gt; to switch','  <span class="ok">clear</span>       clear the screen']},
+    mission:function(){return ['Financial planning every Egyptian can afford, read, run and trust.','<span class="d">Free to use. Local by default. Source public, so you can check our working.</span>','<span class="d">built by the founder, a small team and three AI teammates, in public.</span>']},
+    needs:function(){return ['<span class="a2">[arabic]</span>   lines left in English, figures out of order · #37 #34','<span class="a2">[screens]</span>  small Jinja, CSS and JS fixes · #33 #35 #36','<span class="a2">[python]</span>   PDF and Excel statements · search ranking · honest sync or async','<span class="a2">[mobile]</span>   a Play-ready Android build · Python on iOS, early','<span class="a2">[testing]</span>  your own PC, your bank\'s SMS or CSV format, redacted','<span class="d">type</span> <span class="ok">contribute</span> <span class="d">for the three steps.</span>']},
     principles:function(){return ['<span class="ok">efficient</span>   163 ms to open Overview on 2,239 transactions (was 507 ms)','<span class="ok">insightful</span>  one name, one formula, one function per figure','<span class="ok">secure</span>      SQLCipher at rest · Argon2id locks · 127.0.0.1 only']},
     stack:function(){return ['python 3.11+ · fastapi · jinja2 · sqlite + sqlcipher · decimal','pytest · import-linter · pywebview + webview2 · android','<span class="d">no frontend build. one process, one file.</span>']},
     gaps:function(){return ['<span class="a2">[beta]</span>     acceptance, legacy import, in-app restore unfinished','<span class="a2">[unproven]</span> restore safety on an ordinary Windows PC','<span class="a2">[known]</span>    freed memory is not wiped','<span class="a2">[partial]</span>  PDF and Excel statement import']},
+    contribute:function(){return ['<span class="ok">1 pick it</span>    comment /take on a good first issue: a bot assigns it to you   <a class="a2" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">open tasks</a>','<span class="ok">2 change it</span>  edit in a Codespace, an editor in your browser; commit, sync   <a class="a2" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">open one</a>','<span class="ok">3 send it</span>    open a pull request with Closes #123','<span class="d">checks run, we review, and the issue closes itself.</span> <a class="a2" href="forgeeks-guide.html">every click →</a>']},
     clone:function(){copy('git clone https://github.com/LightningEg/Lightning.git');return ['<span class="d">copied:</span> git clone https://github.com/LightningEg/Lightning.git']},
-    license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send.</span>']},
+    license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send; the owner may relicense it as part of Lightning, commercially too.</span>']},
     contact:function(){return ['code, architecture, security: <span class="a2">geeks@lightningeg.com</span>','everything else:             <span class="a2">hello@lightningeg.com</span>','chat:     <a class="a2" href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">discord</a> · <a class="a2" href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">whatsapp</a>','reddit:   <a class="a2" href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a>']},
     whoami:function(){return ['geek. welcome.']},
-    ls:function(){return ['<span class="a2">lightning/</span>  <span class="a2">tests/</span>  <span class="a2">docs/</span>  <span class="a2">android/</span>  <span class="a2">guideline/</span>  <span class="a2">report/</span>  <span class="a2">tools/</span>  AGENTS.md  NOW.md  CHANGELOG.md']},
+    secret:function(){return ['<span class="d">close. the word is in the replay above.</span>']},
+    gattaca:function(){return ['<span class="d">actually, the main reason we opened the code?</span>','it\'s not fun building alone :)','<span class="d">— the founder. type</span> <span class="ok">contribute</span> <span class="d">to help.</span>']},
+    gataka:function(){return CMDS.gattaca()},
+    ls:function(){return ['<span class="a2">lightning/</span>  <span class="a2">tests/</span>  <span class="a2">docs/</span>  <span class="a2">android/</span>  <span class="a2">guideline/</span>  <span class="a2">issues/</span>  <span class="a2">tools/</span>  AGENTS.md  NOW.md  CHANGELOG.md']},
     sudo:function(){return ['<span class="d">nothing here runs as root. that\'s the point.</span>']},
     exit:function(){return ['<span class="d">there is no exit. only pull requests.</span>']},
     theme:function(arg){
