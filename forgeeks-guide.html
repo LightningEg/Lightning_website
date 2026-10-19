@@ -9,7 +9,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lightning">
   <meta property="og:title" content="Contribution guide · For Geeks · Lightning">
-  <meta property="og:description" content="A plain-words guide to your first Lightning contribution: what the GitHub words mean, each step from picking a task to the merge, and what to do when something looks wrong.">
+  <meta property="og:description" content="Everything about Lightning in plain words: your first contribution step by step, what the product is, how it is built, its terms and how the team works.">
   <meta property="og:url" content="https://lightningeg.com/forgeeks-guide.html">
   <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="The full contribution guide in plain words: the GitHub vocabulary, pick a task, /take it, change it in a Codespace, send a pull request, and what happens next.">
+  <meta name="description" content="Everything about Lightning in plain words: contribute step by step, what it is, how it is built, its terms and how we work.">
   <title>Contribution guide · For Geeks · Lightning</title>
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,6 +61,10 @@
       <a href="#after"><span>03</span><i></i><em>after you send</em></a>
       <a href="#stuck"><span>04</span><i></i><em>if stuck</em></a>
       <a href="#rules"><span>05</span><i></i><em>rules, licence</em></a>
+      <a href="#product"><span>06</span><i></i><em>what it is</em></a>
+      <a href="#built"><span>07</span><i></i><em>how it is built</em></a>
+      <a href="#terms"><span>08</span><i></i><em>its words</em></a>
+      <a href="#team"><span>09</span><i></i><em>how we work</em></a>
 </nav>
 
 <div class="tm" id="themes" hidden>
@@ -75,12 +79,12 @@
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="wrap">
-      <h1 id="h1">The full guide.<br><span class="hi">In plain words.</span></h1>
+      <h1 id="h1">Everything, <br><span class="hi">in plain words.</span></h1>
       <div class="hero-grid">
-        <p class="lede">Never used GitHub? Start here. This is the whole path from <b>"I'd like to help"</b> to <b>"my change is in the app"</b>, with what each word means and what to do when something looks wrong.</p>
+        <p class="lede">Never used GitHub? Start here. Your first contribution step by step, then what Lightning is, how it is built, its own words and how we work. No GitHub files to dig through.</p>
         <div class="cta">
           <a class="btn" href="#path">Start at step one</a>
-          <a class="btn ghost" href="forgeeks-collaborate.html"><span class="k">$</span> the short version</a>
+          <a class="btn ghost" href="#product"><span class="k">$</span> what is lightning</a>
         </div>
       </div>
     </div>
@@ -223,6 +227,157 @@
     </div>
   </section>
 
+  <section class="s" id="product" aria-labelledby="t-product">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>06</b> / product</div>
+        <div>
+          <h2 id="t-product">What Lightning <span class="hi">is.</span></h2>
+          <p class="s-sub">A local-first money app for salaried people in Egypt. It runs on your own computer and phone; your data never has to leave them.</p>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>The loop</h3><p>Record or import activity, sort out unclear names and categories, read the analysis, save towards goals.</p></div>
+        <div class="step"><b>02</b><h3>Where vs what</h3><p>Two questions stay apart: <i>where</i> value is held (CIB, the cash wallet, gold at home) and <i>what</i> is held (EGP, shares, fund units, gold grams, dollars).</p></div>
+        <div class="step"><b>03</b><h3>Three layers</h3><p><b>Ledger</b> is real money. <b>Plan</b> is what-if and moves nothing. <b>Report</b> reads both and stores nothing. Every screen says which one a number comes from.</p></div>
+        <div class="step"><b>04</b><h3>Where it ships</h3><p>Mainly a Windows app with encrypted profiles, plus an Android phone app that hands the ledger to the PC over local Wi-Fi. Arabic (Egyptian) and English throughout.</p></div>
+      </div>
+      <div class="tracks">
+        <div class="lane reveal">
+          <h3>what you can do today<span>feature map</span></h3>
+          <ul class="items">
+          <li><span class="st done">[ledger]</span><p><b>Accounts and transactions</b>Money in, out and between accounts; edit, void, restore, search; check an account against the bank.</p></li>
+          <li><span class="st done">[import]</span><p><b>CSV and bank SMS import</b>Every row is reviewed before it posts; duplicates are flagged.</p></li>
+          <li><span class="st done">[plan]</span><p><b>Budget and cash planning</b>Planned, spent and left; safe to spend; bills, loans, reserves and a three-month forecast.</p></li>
+          <li><span class="st done">[invest]</span><p><b>Investments and gold</b>Trades, positions, certificates, US stocks in USD, foreign cash, physical gold.</p></li>
+          <li><span class="st done">[egypt]</span><p><b>Made for Egypt</b>Gam'eya savings circles, zakat estimate, EGX instruments, CIB and NBE SMS.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>decisions that hold<span>for every change</span></h3>
+          <ul class="items">
+          <li><span class="st gate">[one]</span><p><b>One name, one calculation</b>Each figure has a single name and a single function. Screens never compute their own.</p></li>
+          <li><span class="st gate">[local]</span><p><b>Local first</b>Profile data and backups stay on your device, never in Git. Dummy data only while it is a beta.</p></li>
+          <li><span class="st gate">[quiet]</span><p><b>No silent results</b>Every action shows feedback. A wrong or silent result is worse than an extra click.</p></li>
+          <li><span class="st gate">[brand]</span><p><b>Strict brand guideline</b>CSS that differs from the guideline is wrong. Whole EGP on big figures, no coloured headers, no card in a card.</p></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="built" aria-labelledby="t-built">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>07</b> / built</div>
+        <div>
+          <h2 id="t-built">How it is <span class="hi">built.</span></h2>
+          <p class="s-sub">A map before you open the code. Imports only point down, and a test fails the build if they don't.</p>
+        </div>
+      </div>
+      <div class="tracks">
+        <div class="lane reveal">
+          <h3>the stack<span>no frontend build</span></h3>
+          <ul class="items">
+          <li><span class="st done">[py]</span><p><b>Python 3.11+, FastAPI</b>Server-rendered Jinja pages with plain JavaScript and CSS.</p></li>
+          <li><span class="st done">[db]</span><p><b>One SQLite file</b>Ordered migrations and local backups; encrypted profiles with SQLCipher on the desktop.</p></li>
+          <li><span class="st done">[math]</span><p><b>Money is never a float</b><span class="mono">Decimal</span> in Python, scaled integers (<span class="mono">_e6</span>) in SQLite.</p></li>
+          <li><span class="st done">[net]</span><p><b>Local only</b>The server listens on <span class="mono">127.0.0.1</span> and nothing else.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>where things live<span>top depends on bottom</span></h3>
+<pre class="code"><span class="c"># imports only point down</span>
+ui/          routes, templates; no SQL, no maths
+workflows/   use-cases across modules
+planning/    bills, loans, forecast
+services/    accounts, transactions, investments
+reporting/   read-only queries
+database/    SQLite, migrations, backups
+core/        dates, money, posting rules</pre>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>One writer</h3><p>Only <span class="mono">TransactionService</span> writes postings. Everything else builds a validated posting and asks it.</p></div>
+        <div class="step"><b>02</b><h3>Figures registry</h3><p><span class="mono">lightning/core/figures.py</span> names every figure, its layer and its function. Routes never compute them.</p></div>
+        <div class="step"><b>03</b><h3>Try it</h3><p><span class="mono">python -m lightning --demo</span> opens Mohab's fictional household at http://127.0.0.1:8766, rebuilt on every start.</p></div>
+        <div class="step"><b>04</b><h3>Mohab's year</h3><p><span class="mono">tests/test_mohab_year.py</span> lives a whole year through the screens. It is the acceptance test.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="terms" aria-labelledby="t-terms">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>08</b> / terms</div>
+        <div>
+          <h2 id="t-terms">Lightning's own <span class="hi">words.</span></h2>
+          <p class="s-sub">One name and one meaning per term. If a name needs explaining, we rename it.</p>
+        </div>
+      </div>
+      <div class="tracks">
+        <div class="lane reveal">
+          <h3>the basics<span>glossary</span></h3>
+          <ul class="items">
+          <li><span class="st done">[ledger]</span><p><b>Account</b>Where value is held: CIB, the cash wallet, a brokerage.</p></li>
+          <li><span class="st done">[ledger]</span><p><b>Financial asset</b>What an account holds: EGP cash, a COMI share, a fund unit, a CD, a gram of gold.</p></li>
+          <li><span class="st done">[ledger]</span><p><b>Holding / position</b>The calculated quantity of one asset in one account on a date.</p></li>
+          <li><span class="st done">[ledger]</span><p><b>Balance</b>Always calculated from the ledger, never typed in.</p></li>
+          <li><span class="st done">[plan]</span><p><b>Payday</b>The day your salary usually arrives. The plan expects it then; nothing is recorded until the money lands.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>made for egypt<span>and gold</span></h3>
+          <ul class="items">
+          <li><span class="st done">[ledger]</span><p><b>Gam'eya</b>A rotating savings circle: one account per circle. Instalments and your payout are internal transfers, never income or spending.</p></li>
+          <li><span class="st done">[ledger]</span><p><b>Physical item</b>A tangible asset such as a gold piece, tracked by weight, karat, cost and valuation.</p></li>
+          <li><span class="st done">[plan]</span><p><b>Zakat day</b>The date you pick once for counting zakat; the next is 354 days later. An estimate, never a ruling.</p></li>
+          <li><span class="st done">[plan]</span><p><b>Instalment purchase (taqseet)</b>A loan plan for an outstanding purchase. Creating it records no cash.</p></li>
+          <li><span class="st done">[report]</span><p><b>Adjust balance</b>Set an account to a balance you know on a date; the difference is saved as one adjustment.</p></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="team" aria-labelledby="t-team">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>09</b> / team</div>
+        <div>
+          <h2 id="t-team">How we work, and <span class="hi">what is next.</span></h2>
+          <p class="s-sub">The repository is the only channel, for people and AI teammates alike.</p>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>One file per fact</h3><p><span class="mono">NOW.md</span> is the hand-off, <span class="mono">issues/</span> is the plan, <span class="mono">CHANGELOG.md</span> records every change, and the docs hold the rest.</p></div>
+        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in the Claimed table first, so two people never edit the same files.</p></div>
+        <div class="step"><b>03</b><h3>Small finished steps</h3><p>Test, commit and push each step. Each change gets a changelog line of three lines at most.</p></div>
+        <div class="step"><b>04</b><h3>People first</h3><p>An issue with an assignee belongs to that person. Nobody starts on it.</p></div>
+      </div>
+      <div class="tracks">
+        <div class="lane reveal">
+          <h3>the plan<span>nine milestones</span></h3>
+          <ul class="items">
+          <li><span class="st done">[now]</span><p><b>1 · Easy to contribute</b>The workflow you just read, made smooth and safe.</p></li>
+          <li><span class="st done">[next]</span><p><b>2 · Safe for real money</b>Restore safety and promotion durability.</p></li>
+          <li><span class="st done">[next]</span><p><b>3 · Polish and Arabic</b>Tab-by-tab review and the owner's checks on PC and phone.</p></li>
+          <li><span class="st done">[next]</span><p><b>4 to 7</b>Edit journal and devices, investments, market data, planning and import.</p></li>
+          <li><span class="st done">[later]</span><p><b>8 and 9</b>Website, then later ideas.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>maintainers and ai<span>read next</span></h3>
+          <ul class="items">
+          <li><span class="st path">[merge]</span><p><b>Who can do what, and the merge gates</b>Read <a class="accent" href="forgeeks-collaborate.html">Collaborate</a>.</p></li>
+          <li><span class="st path">[map]</span><p><b>Milestones and the roadmap</b>Read <a class="accent" href="forgeeks-roadmap.html">Roadmap</a>.</p></li>
+          <li><span class="st path">[log]</span><p><b>Every change</b>The changelog lists them newest first, in the repository.</p></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="closing" id="closing" aria-labelledby="t-close">
     <div class="wrap">
       <div class="closing-grid reveal">
@@ -241,15 +396,15 @@
   <div class="wrap">
     <div class="cols">
       <div><h4>System</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md" rel="noopener" target="_blank">Architecture</a></li>
+        <li><a href="forgeeks-guide.html#built">Architecture</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">Figures registry</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" rel="noopener" target="_blank">Import contracts</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" rel="noopener" target="_blank">Glossary</a></li>
+        <li><a href="forgeeks-guide.html#terms">Glossary</a></li>
       </ul></div>
       <div><h4>Docs</h4><ul>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" rel="noopener" target="_blank">Project overview</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/AGENTS.md" rel="noopener" target="_blank">Working rules</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/NOW.md" rel="noopener" target="_blank">What's next</a></li>
+        <li><a href="forgeeks-guide.html#product">Project overview</a></li>
+        <li><a href="forgeeks-guide.html#team">Working rules</a></li>
+        <li><a href="forgeeks-guide.html#team">What's next</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a></li>
       </ul></div>
       <div><h4>Community</h4><ul>
