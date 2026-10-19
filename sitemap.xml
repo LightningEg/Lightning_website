@@ -5,7 +5,7 @@
     <loc>https://lightningeg.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/index.html" />
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-19</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/features.html</loc>
@@ -125,7 +125,7 @@
     <loc>https://lightningeg.com/ar/index.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/index.html" />
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-19</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/sample-profiles.html</loc>
@@ -153,11 +153,11 @@
   </url>
   <url>
     <loc>https://lightningeg.com/forgeeks.html</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-19</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/forgeeks-collaborate.html</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-19</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/forgeeks-roadmap.html</loc>
@@ -276,5 +276,17 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/sample-profiles.html" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/sample-profiles.html" />
     <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/contribute.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/contribute.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/contribute.html" />
+    <lastmod>2026-10-19</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/ar/contribute.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/contribute.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/contribute.html" />
+    <lastmod>2026-10-19</lastmod>
   </url>
 </urlset>
