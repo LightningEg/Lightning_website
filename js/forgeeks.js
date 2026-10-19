@@ -1,9 +1,9 @@
-/* For Geeks: shared by forgeeks.html and forgeeks-roadmap.html. Themes, top bar, rail, reveal, and the field with its lightning. */
+/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Themes, top bar, rail, reveal, and the field with its lightning. */
 (function(){
   'use strict';
-  // Keep links to the former home-page contribution section working.
-  if(location.pathname.endsWith('/forgeeks.html') && location.hash==='#build'){
-    location.replace('forgeeks-roadmap.html#build');
+  // Keep links to the former home-page contribution section working: the steps now live on the contribute page.
+  if(/\/forgeeks(\.html)?$/.test(location.pathname) && location.hash==='#build'){
+    location.replace('forgeeks-guide.html#path');
     return;
   }
   var doc=document,root=doc.documentElement;
@@ -105,7 +105,9 @@
   }
   addEventListener('scroll',onScroll,{passive:true});onScroll();
   if(rail&&'IntersectionObserver' in window){
-    var secObs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){railLinks.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-45% 0px -50% 0px'});
+    var secObs=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;railLinks.forEach(function(a){var on=a.getAttribute('href')==='#'+e.target.id;a.classList.toggle('on',on);if(on)centre(a)})})},{rootMargin:'-45% 0px -50% 0px'});
+    /* under 1300px the rail is a strip under the top bar: scroll it sideways so the current section shows */
+    var centre=function(a){if(rail.scrollWidth<=rail.clientWidth)return;var x=a.offsetLeft-(rail.clientWidth-a.offsetWidth)/2;rail.scrollTo({left:Math.max(0,x),behavior:reduce?'auto':'smooth'})};
     $$('section.s,#closing,#top').forEach(function(s){secObs.observe(s)});
   }
 
@@ -117,12 +119,10 @@
     el.textContent='0';requestAnimationFrame(step);
   }
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;e.target.classList.add('in');$$('[data-count]').forEach(function(c){if(e.target.contains(c)&&!c.dataset.done){c.dataset.done=1;countUp(c)}});io.unobserve(e.target)})},{threshold:.18});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;e.target.classList.add('in');$$('[data-count]').forEach(function(c){if(e.target.contains(c)&&!c.dataset.done){c.dataset.done=1;countUp(c)}});io.unobserve(e.target)})},{threshold:0,rootMargin:'0px 0px -8% 0px'});
     $$('.reveal').forEach(function(el){io.observe(el)});
   }else $$('.reveal').forEach(function(el){el.classList.add('in')});
 
-  /* card spotlight */
-  $$('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
   /* card spotlight */
   $$('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
 
@@ -196,7 +196,7 @@
   }
 
   /* ---- lightning: midpoint displacement with a few branches ---- */
-  function strike(x1,y1){
+  function strike(x1,y1,clicked){
     var y0=-20,sy=0,x0=x1+(rnd()-.5)*W*.12,segs=[];
     (function sub(ax,ay,bx,by,dis,w,depth){
       if(dis<2.5){segs.push([ax,ay+sy,bx,by+sy,w]);return}
@@ -204,9 +204,10 @@
       sub(ax,ay,mx,my,dis/2,w,depth);sub(mx,my,bx,by,dis/2,w,depth);
       if(depth<2&&dis>14&&rnd()<.22){var ang=Math.atan2(by-ay,bx-ax)+(rnd()<.5?-1:1)*(.35+rnd()*.5),l=dis*(1.4+rnd());sub(mx,my,mx+Math.cos(ang)*l,my+Math.sin(ang)*l,dis/2,w*.45,depth+1)}
     })(x0,y0,x1,y1,Math.hypot(x1-x0,y1-y0)*.3,1,0);
-    BOLTS.push({segs:segs,age:0});
-    GLOWS.push({x:x1,y:y1+sy,life:1});
-    for(var i=0;i<4;i++)pulse(x1,y1,true);
+    var k=clicked?1:.45+.55*TA;
+    BOLTS.push({segs:segs,age:0,k:k});
+    GLOWS.push({x:x1,y:y1+sy,life:k});
+    for(var i=0;i<(k>.9?4:2);i++)pulse(x1,y1,true);
     if(hero.getBoundingClientRect().bottom>H*.3){root.classList.add('flash');setTimeout(function(){root.classList.remove('flash')},200)}
   }
   function intensity(a){return a<.05?1:a<.1?.25:a<.17?.9:Math.max(0,1-(a-.17)/.45)}
@@ -220,8 +221,8 @@
     }
     ctx.lineCap='round';
     for(var b=BOLTS.length-1;b>=0;b--){
-      var B=BOLTS[b];B.age+=dt;var I=intensity(B.age);if(B.age>.65){BOLTS.splice(b,1);continue}
-      if(b===BOLTS.length-1&&!LIGHT){ctx.fillStyle='rgba('+GLOWC+','+(.035*I).toFixed(3)+')';ctx.fillRect(0,0,W,H)}
+      var B=BOLTS[b];B.age+=dt;var I=intensity(B.age)*B.k;if(B.age>.65){BOLTS.splice(b,1);continue}
+      if(b===BOLTS.length-1&&!LIGHT&&B.k>.9){ctx.fillStyle='rgba('+GLOWC+','+(.035*I).toFixed(3)+')';ctx.fillRect(0,0,W,H)}
       var passes=[[10,'rgba('+GLOWC+','+(.12*I).toFixed(3)+')'],[3.4,'rgba('+GLOWC+','+(.5*I).toFixed(3)+')'],[1.5,'rgba('+CORE+','+(.95*I).toFixed(3)+')']];
       for(var q=0;q<3;q++){
         ctx.strokeStyle=passes[q][1];
@@ -291,7 +292,7 @@
   if(!reduce)[$('#main')].forEach(function(sec){
     sec.addEventListener('click',function(e){
       if(e.target.closest('a,button,input,label,h1,h2,h3,p,li,pre,code,.meta,.term,.card,.stats,.steps,.clone,.tags,.track,.lane')||String(getSelection()))return;
-      var a=anchor();strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa));nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
+      var a=anchor();strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa),true);nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
     });
   });
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- For Geeks · guide · 2026-10-19 · the plain-words contribution guide, from the app repo's CONTRIBUTING.md (first part). Keep it in step with it. -->
+<!-- For Geeks · contribute · 2026-10-19 · the one contribution page (it took in forgeeks-collaborate.html): the three steps first, then the words, after, stuck, rules, team and the reference. From the app repo's CONTRIBUTING.md and AGENTS.md; keep it in step with them. Shell: tools/geeks_shell.py. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -8,8 +8,8 @@
   <link rel="canonical" href="https://lightningeg.com/forgeeks-guide.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lightning">
-  <meta property="og:title" content="Contribution guide · For Geeks · Lightning">
-  <meta property="og:description" content="Everything about Lightning in plain words: your first contribution step by step, what the product is, how it is built, its terms and how the team works.">
+  <meta property="og:title" content="Contribute · For Geeks · Lightning">
+  <meta property="og:description" content="Your first pull request to Lightning in three steps, all in your browser: pick a task, change it in a Codespace, send it. Every click in plain words.">
   <meta property="og:url" content="https://lightningeg.com/forgeeks-guide.html">
   <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -17,14 +17,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Everything about Lightning in plain words: contribute step by step, what it is, how it is built, its terms and how we work.">
-  <title>Contribution guide · For Geeks · Lightning</title>
+  <meta name="description" content="Your first pull request to Lightning in three steps, all in your browser: pick a task, change it in a Codespace, send it. Every click in plain words.">
+  <title>Contribute · For Geeks · Lightning</title>
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261018-3">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-1">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -38,11 +38,12 @@
       <img class="geeks-mark-dark" src="assets/brand/lightning-mark-white.svg" alt="" width="15" height="21"><img class="geeks-mark-light" src="assets/brand/lightning-mark-nile.svg" alt="" width="15" height="21">
       lightning
     </a>
-    <span class="crumb" aria-hidden="true">~/root/for-geeks/roadmap/<b>guide</b><span class="caret"></span></span>
+    <span class="crumb" aria-hidden="true">~/root/for-geeks/<b>contribute</b><span class="caret"></span></span>
     <nav class="links" aria-label="For Geeks">
       <a href="forgeeks.html">home</a>
-      <a href="forgeeks-roadmap.html" aria-current="page">roadmap</a>
-      <a href="index.html" target="_blank" rel="noopener">app</a>
+      <a href="forgeeks-guide.html" aria-current="page">contribute</a>
+      <a href="forgeeks-roadmap.html">roadmap</a>
+      <a class="opt" href="index.html" target="_blank" rel="noopener">app</a>
     </nav>
     <div class="tools">
       <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
@@ -56,15 +57,15 @@
 </header>
 
 <nav class="rail" id="rail" aria-label="On this page">
-      <a href="#words"><span>01</span><i></i><em>six words</em></a>
-      <a href="#path"><span>02</span><i></i><em>the path</em></a>
-      <a href="#after"><span>03</span><i></i><em>after you send</em></a>
-      <a href="#stuck"><span>04</span><i></i><em>if stuck</em></a>
-      <a href="#rules"><span>05</span><i></i><em>rules, licence</em></a>
-      <a href="#product"><span>06</span><i></i><em>what it is</em></a>
-      <a href="#built"><span>07</span><i></i><em>how it is built</em></a>
-      <a href="#terms"><span>08</span><i></i><em>its words</em></a>
-      <a href="#team"><span>09</span><i></i><em>how we work</em></a>
+      <a href="#path"><span>01</span><i></i><em>path</em></a>
+      <a href="#words"><span>02</span><i></i><em>words</em></a>
+      <a href="#after"><span>03</span><i></i><em>after</em></a>
+      <a href="#stuck"><span>04</span><i></i><em>stuck</em></a>
+      <a href="#rules"><span>05</span><i></i><em>rules</em></a>
+      <a href="#team"><span>06</span><i></i><em>team</em></a>
+      <a href="#product"><span>07</span><i></i><em>product</em></a>
+      <a href="#built"><span>08</span><i></i><em>built</em></a>
+      <a href="#terms"><span>09</span><i></i><em>terms</em></a>
 </nav>
 
 <div class="tm" id="themes" hidden>
@@ -79,21 +80,73 @@
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="wrap">
-      <h1 id="h1">Everything, <br><span class="hi">in plain words.</span></h1>
+      <h1 id="h1">Pick it.<br>Change it.<br><span class="hi">Send it.</span></h1>
       <div class="hero-grid">
-        <p class="lede">Never used GitHub? Start here. Your first contribution step by step, then what Lightning is, how it is built, its own words and how we work. No GitHub files to dig through.</p>
+        <p class="lede">Your first pull request to Lightning, in three steps, <b>all on GitHub and all in your browser</b>. Nothing to install, no finance to know. Never used GitHub? Every click is below, in plain words.</p>
         <div class="cta">
-          <a class="btn" href="#path">Start at step one</a>
-          <a class="btn ghost" href="#product"><span class="k">$</span> what is lightning</a>
+          <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick a task</a>
+          <a class="btn ghost" href="#path"><span class="k">$</span> step one</a>
         </div>
       </div>
+      <div class="meta">
+        <span>a free GitHub account</span>
+        <span>a browser</span>
+        <span>we do the paperwork</span>
+        <a class="scroll" href="#path">scroll</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="path" aria-labelledby="t-path">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>01</b> / path</div>
+        <div>
+          <h2 id="t-path">From a task <span class="hi">to a merge.</span></h2>
+          <p class="s-sub">Each step says what to click, what you should see and what to do if you don't. New words, like fork or commit, are explained <a class="accent" href="#words">just below ↓</a></p>
+        </div>
+      </div>
+      <div class="tracks three">
+        <div class="lane reveal">
+          <h3>1 · pick it<span>2 minutes</span></h3>
+          <ul class="items">
+          <li><span class="st done">[account]</span><p><b>Make a free GitHub account</b>At <a class="accent" href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>. That is the only account you need.</p></li>
+          <li><span class="st done">[find]</span><p><b>Open the good first issues</b><a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">These tasks</a> are small, self-contained and nobody has them yet. Each title starts with a code like <span class="mono">[3C]</span>: item C of milestone 3 of the <a class="accent" href="forgeeks-roadmap.html#core">plan</a>.</p></li>
+          <li><span class="st done">[take]</span><p><b>Comment <span class="mono">/take</span></b>In the comment box at the bottom of the issue. A bot assigns it to you within seconds; no one has to approve it.</p></li>
+          <li><span class="st gate">[rule]</span><p><b>One at a time</b><span class="mono">/drop</span> hands it back. After 14 quiet days it is freed for someone else, unless your pull request is open.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>2 · change it<span>your pace</span></h3>
+          <ul class="items">
+          <li><span class="st done">[open]</span><p><b>Open a Codespace</b><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Click here</a> and press <i>Create codespace</i>. Wait about a minute while it installs.</p></li>
+          <li><span class="st done">[see]</span><p><b>The demo opens in a preview tab</b>Mohab's household, with fictional data. It reloads when you save a file.</p></li>
+          <li><span class="st done">[edit]</span><p><b>Edit the file the issue names</b>Change only what the issue asks for. Smaller changes are reviewed faster.</p></li>
+          <li><span class="st done">[test]</span><p><b>Run its test</b>In the terminal at the bottom, for example <span class="mono">python -m pytest tests/test_charts.py</span>. The pull request runs everything else.</p></li>
+          <li><span class="st done">[save]</span><p><b>Commit and sync</b>Open <i>Source Control</i> (left bar), write a short message, press <i>Commit</i>, then <i>Sync</i> or <i>Publish Branch</i>. When GitHub offers to create your fork, say yes.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>3 · send it<span>1 minute</span></h3>
+          <ul class="items">
+          <li><span class="st done">[open]</span><p><b>Press <i>Compare &amp; pull request</i></b>GitHub shows the button on the repository page right after you sync.</p></li>
+          <li><span class="st done">[write]</span><p><b>Write two lines</b><span class="mono">Closes #123</span> with your issue's number, and one line on how you checked it.</p></li>
+          <li><span class="st gate">[wait]</span><p><b>Your first test run waits for the owner</b>GitHub holds a newcomer's first run until the owner approves it. It is one click on our side, not a problem with your change.</p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="cta build-cta reveal">
+        <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick a task</a>
+        <a class="btn ghost" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener"><span class="k">›</span> open a codespace</a>
+      </div>
+      <p class="stats-note reveal">// prefer your own computer? fork, clone, <span class="mono">pip install -r requirements-dev.txt</span>, then <span class="mono">python -m lightning --demo</span> (Python 3.11+, opens at http://127.0.0.1:8766) · Codespaces are free within GitHub's monthly allowance; stop yours when you finish</p>
     </div>
   </section>
 
   <section class="s" id="words" aria-labelledby="t-words">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>01</b> / words</div>
+        <div class="s-num"><b>02</b> / words</div>
         <div>
           <h2 id="t-words">Six words, <span class="hi">in plain English.</span></h2>
           <p class="s-sub">GitHub has its own vocabulary. You only need these six.</p>
@@ -107,55 +160,6 @@
         <div class="step"><b>05</b><h3>Pull request</h3><p>A request that says: <i>here is my change, please add it to Lightning.</i> We read it, discuss it and, if it is good, merge it.</p></div>
         <div class="step"><b>06</b><h3>Merge</h3><p>Your change joins the official version. The task closes itself and your name stays in the history.</p></div>
       </div>
-    </div>
-  </section>
-
-  <section class="s" id="path" aria-labelledby="t-path">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>02</b> / path</div>
-        <div>
-          <h2 id="t-path">From a task <span class="hi">to a merge.</span></h2>
-          <p class="s-sub">Four steps. Each says what to click, what you should see and what to do if you don't.</p>
-        </div>
-      </div>
-      <div class="tracks">
-        <div class="lane reveal">
-          <h3>1 · pick a task<span>2 minutes</span></h3>
-          <ul class="items">
-          <li><span class="st done">[open]</span><p><b>Make a free GitHub account</b>At <a class="accent" href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>. That is the only account you need.</p></li>
-          <li><span class="st done">[find]</span><p><b>Open the list of good first issues</b><a class="accent" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">These tasks</a> are small, self-contained and nobody has them yet.</p></li>
-          <li><span class="st done">[read]</span><p><b>Read the title</b>It starts with a code like <span class="mono">[3C]</span>: milestone 3, item C of the plan. You don't need to understand the plan; the code only tells us where it belongs.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>2 · take it<span>10 seconds</span></h3>
-          <ul class="items">
-          <li><span class="st done">[type]</span><p><b>Comment <span class="mono">/take</span></b>Scroll to the comment box at the bottom of the issue, type <span class="mono">/take</span>, press Comment.</p></li>
-          <li><span class="st done">[bot]</span><p><b>A bot assigns it to you</b>Your name appears under <i>Assignees</i> within seconds. No one has to approve it.</p></li>
-          <li><span class="st gate">[rule]</span><p><b>One at a time</b><span class="mono">/drop</span> hands it back. If nothing happens for 14 days it is freed for someone else, unless your pull request is open.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>3 · change it<span>your pace</span></h3>
-          <ul class="items">
-          <li><span class="st done">[open]</span><p><b>Open a Codespace</b><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Click here</a> and press <i>Create codespace</i>. Wait about a minute while it installs.</p></li>
-          <li><span class="st done">[see]</span><p><b>The demo app opens in a preview tab</b>Mohab's household, with fictional data. It reloads when you save a file.</p></li>
-          <li><span class="st done">[edit]</span><p><b>Edit the file the issue names</b>Change only what the issue asks for. Smaller changes are reviewed faster.</p></li>
-          <li><span class="st done">[test]</span><p><b>Run its test</b>In the terminal at the bottom, for example <span class="mono">python -m pytest tests/test_charts.py</span>. You don't have to run everything: the pull request does that.</p></li>
-          <li><span class="st done">[save]</span><p><b>Commit and sync</b>Open <i>Source Control</i> (left bar), write a short message, press <i>Commit</i>, then <i>Sync</i> or <i>Publish Branch</i>. When GitHub offers to create your fork, say yes.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>4 · send it<span>1 minute</span></h3>
-          <ul class="items">
-          <li><span class="st done">[open]</span><p><b>Press <i>Compare &amp; pull request</i></b>GitHub shows the button on the repository page right after you sync.</p></li>
-          <li><span class="st done">[write]</span><p><b>Write two lines</b><span class="mono">Closes #123</span> with your issue's number, and one line on how you checked it.</p></li>
-          <li><span class="st gate">[wait]</span><p><b>Your first test run waits for the owner</b>GitHub holds a newcomer's first run until the owner approves it. It is a one-click step on our side, not a problem with your change.</p></li>
-          </ul>
-        </div>
-      </div>
-      <p class="stats-note reveal">// prefer your own computer? fork, clone, <span class="mono">pip install -r requirements-dev.txt</span>, then <span class="mono">python -m lightning --demo</span> (Python 3.11+, opens at http://127.0.0.1:8766) · Codespaces are free within GitHub's monthly allowance; stop yours when you finish</p>
     </div>
   </section>
 
@@ -223,14 +227,52 @@
         <div class="step"><b>03</b><h3>Money lives in Python</h3><p>Financial calculations stay in the Python services, never in templates or JavaScript.</p></div>
         <div class="step"><b>04</b><h3>You keep your copyright</h3><p>Lightning is source-available under PolyForm Noncommercial 1.0.0. By sending a pull request you confirm the work is yours to give and let the owner use, change and relicense it, including commercially, as part of Lightning.</p></div>
       </div>
-      <p class="stats-note reveal">// maintainers and AI teammates: <a class="accent" href="forgeeks-collaborate.html#who">who can do what</a> and <a class="accent" href="forgeeks-collaborate.html#gates">the merge gates</a></p>
+      <p class="stats-note reveal">// maintainers and AI teammates: <a class="accent" href="#team">who does what, and the gates before a merge ↓</a></p>
+    </div>
+  </section>
+
+  <section class="s" id="team" aria-labelledby="t-team">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <div class="s-num"><b>06</b> / team</div>
+        <div>
+          <h2 id="t-team">Who does what, <span class="hi">and how we work.</span></h2>
+          <p class="s-sub">The repository is the only channel, for people and AI teammates alike. You need none of this for a first pull request: it is how the team keeps one picture.</p>
+        </div>
+      </div>
+      <div class="tracks">
+        <div class="lane reveal">
+          <h3>who<span>people and ai</span></h3>
+          <ul class="items">
+          <li><span class="st done">[owner]</span><p><b>The owner</b>Controls the repository settings and merging, and may authorize AI sessions to review and merge through the connected owner account.</p></li>
+          <li><span class="st done">[you]</span><p><b>Contributors</b>Your own account, your fork, your branch. You never need the owner's account or write access.</p></li>
+          <li><span class="st done">[ai]</span><p><b>AI teammates</b>Claude, Codex and Luna work on branches and open pull requests like you, and merge only authorized work, under the same gates.</p></li>
+          <li><span class="st path">[never]</span><p><b>Nobody, ever</b>Pushes straight to <span class="mono">main</span>, skips a check, shares the owner's credentials, or publishes a release without the owner.</p></li>
+          </ul>
+        </div>
+        <div class="lane reveal">
+          <h3>gates<span>before any merge</span></h3>
+          <ul class="items">
+          <li><span class="st gate">[pr]</span><p><b>Pull request only</b>No pushes to <span class="mono">main</span>, no force-push, linear history.</p></li>
+          <li><span class="st gate">[ci]</span><p><b>Three green checks</b><span class="mono">tests</span>, <span class="mono">dependency-review</span> and <span class="mono">analyze</span> (CodeQL), up to date with <span class="mono">main</span>.</p></li>
+          <li><span class="st gate">[fresh]</span><p><b>The latest version, reviewed</b>New changes need another look, and every conversation is resolved first.</p></li>
+          <li><span class="st gate">[path]</span><p><b>Sensitive paths wait for the owner</b>Workflows and templates, <span class="mono">packaging/</span>, <span class="mono">android/</span>, <span class="mono">cloudflare/</span>, scripts, <span class="mono">tests/conftest.py</span>, AGENTS.md, CLAUDE.md, LICENSE, SECURITY.md and <span class="mono">v*</span> release tags.</p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><b>01</b><h3>Start from the repo</h3><p><span class="mono">NOW.md</span> is the hand-off, <span class="mono">issues/</span> the plan, <span class="mono">CHANGELOG.md</span> every change. Read NOW.md and the last 15 commits first.</p></div>
+        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in NOW.md's <i>Claimed</i> table first, so two people never edit the same files.</p></div>
+        <div class="step"><b>03</b><h3>Small finished steps</h3><p>Test, commit and push each step, with a changelog line of three lines at most.</p></div>
+        <div class="step"><b>04</b><h3>Hand off</h3><p>Update what you touched, drop your claim, add next steps with a <span class="mono">Read:</span> line, then open the pull request.</p></div>
+      </div>
     </div>
   </section>
 
   <section class="s" id="product" aria-labelledby="t-product">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>06</b> / product</div>
+        <div class="s-num"><b>07</b> / product</div>
         <div>
           <h2 id="t-product">What Lightning <span class="hi">is.</span></h2>
           <p class="s-sub">A local-first money app for salaried people in Egypt. It runs on your own computer and phone; your data never has to leave them.</p>
@@ -269,7 +311,7 @@
   <section class="s" id="built" aria-labelledby="t-built">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>07</b> / built</div>
+        <div class="s-num"><b>08</b> / built</div>
         <div>
           <h2 id="t-built">How it is <span class="hi">built.</span></h2>
           <p class="s-sub">A map before you open the code. Imports only point down, and a test fails the build if they don't.</p>
@@ -309,7 +351,7 @@ core/        dates, money, posting rules</pre>
   <section class="s" id="terms" aria-labelledby="t-terms">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>08</b> / terms</div>
+        <div class="s-num"><b>09</b> / terms</div>
         <div>
           <h2 id="t-terms">Lightning's own <span class="hi">words.</span></h2>
           <p class="s-sub">One name and one meaning per term. If a name needs explaining, we rename it.</p>
@@ -340,44 +382,6 @@ core/        dates, money, posting rules</pre>
     </div>
   </section>
 
-  <section class="s" id="team" aria-labelledby="t-team">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>09</b> / team</div>
-        <div>
-          <h2 id="t-team">How we work, and <span class="hi">what is next.</span></h2>
-          <p class="s-sub">The repository is the only channel, for people and AI teammates alike.</p>
-        </div>
-      </div>
-      <div class="steps reveal">
-        <div class="step"><b>01</b><h3>One file per fact</h3><p><span class="mono">NOW.md</span> is the hand-off, <span class="mono">issues/</span> is the plan, <span class="mono">CHANGELOG.md</span> records every change, and the docs hold the rest.</p></div>
-        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in the Claimed table first, so two people never edit the same files.</p></div>
-        <div class="step"><b>03</b><h3>Small finished steps</h3><p>Test, commit and push each step. Each change gets a changelog line of three lines at most.</p></div>
-        <div class="step"><b>04</b><h3>People first</h3><p>An issue with an assignee belongs to that person. Nobody starts on it.</p></div>
-      </div>
-      <div class="tracks">
-        <div class="lane reveal">
-          <h3>the plan<span>nine milestones</span></h3>
-          <ul class="items">
-          <li><span class="st done">[now]</span><p><b>1 · Easy to contribute</b>The workflow you just read, made smooth and safe.</p></li>
-          <li><span class="st done">[next]</span><p><b>2 · Safe for real money</b>Restore safety and promotion durability.</p></li>
-          <li><span class="st done">[next]</span><p><b>3 · Polish and Arabic</b>Tab-by-tab review and the owner's checks on PC and phone.</p></li>
-          <li><span class="st done">[next]</span><p><b>4 to 7</b>Edit journal and devices, investments, market data, planning and import.</p></li>
-          <li><span class="st done">[later]</span><p><b>8 and 9</b>Website, then later ideas.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>maintainers and ai<span>read next</span></h3>
-          <ul class="items">
-          <li><span class="st path">[merge]</span><p><b>Who can do what, and the merge gates</b>Read <a class="accent" href="forgeeks-collaborate.html">Collaborate</a>.</p></li>
-          <li><span class="st path">[map]</span><p><b>Milestones and the roadmap</b>Read <a class="accent" href="forgeeks-roadmap.html">Roadmap</a>.</p></li>
-          <li><span class="st path">[log]</span><p><b>Every change</b>The changelog lists them newest first, in the repository.</p></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="closing" id="closing" aria-labelledby="t-close">
     <div class="wrap">
       <div class="closing-grid reveal">
@@ -395,32 +399,32 @@ core/        dates, money, posting rules</pre>
 <footer>
   <div class="wrap">
     <div class="cols">
+      <div><h4>Start here</h4><ul>
+        <li><a href="forgeeks-guide.html">Contribute in three steps</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Good first issues</a></li>
+        <li><a href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open a Codespace</a></li>
+        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
+        <li><a href="app-feedback.html" target="_blank" rel="noopener">Not a coder? Send feedback</a></li>
+      </ul></div>
       <div><h4>System</h4><ul>
         <li><a href="forgeeks-guide.html#built">Architecture</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" rel="noopener" target="_blank">Figures registry</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" rel="noopener" target="_blank">Import contracts</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
         <li><a href="forgeeks-guide.html#terms">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
       </ul></div>
-      <div><h4>Docs</h4><ul>
-        <li><a href="forgeeks-guide.html#product">Project overview</a></li>
-        <li><a href="forgeeks-guide.html#team">Working rules</a></li>
-        <li><a href="forgeeks-guide.html#team">What's next</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" rel="noopener" target="_blank">Changelog</a></li>
+      <div><h4>Rules</h4><ul>
+        <li><a href="forgeeks-guide.html#product">What Lightning is</a></li>
+        <li><a href="forgeeks-guide.html#rules">Ground rules</a></li>
+        <li><a href="forgeeks-guide.html#team">Who does what</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">Licence</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/security/advisories/new" target="_blank" rel="noopener">Report a flaw privately</a></li>
       </ul></div>
       <div><h4>Community</h4><ul>
         <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
         <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/issues" rel="noopener" target="_blank">Issues</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/tree/main/report" rel="noopener" target="_blank">Known findings</a></li>
-        <li><a href="forgeeks-guide.html">Contribution guide</a></li>
         <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
-      </ul></div>
-      <div><h4>Get started</h4><ul>
-        <li><a href="forgeeks.html">For Geeks home</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">Clone the repo</a></li>
-        <li><a href="forgeeks-collaborate.html">Review and merge rules</a></li>
-        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" rel="noopener" target="_blank">Licence</a></li>
         <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
       </ul></div>
     </div>
@@ -430,6 +434,6 @@ core/        dates, money, posting rules</pre>
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261018-contribute"></script>
+<script src="js/forgeeks.js?v=20261019-1"></script>
 </body>
 </html>
