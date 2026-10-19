@@ -2,18 +2,15 @@
    layout by itself; this file swaps in the Arabic faces (guideline website-ar.html B04, app-ar.html A06.2) and the
    few movements on the x-axis. Load it last.
    The rule is the English design, not a second one: the same sizes and the same weights. Readex Pro stands in for
-   Bricolage Grotesque (titles, figures), IBM Plex Sans Arabic for Manrope (everything else). Readex Pro stops at
-   700, so the English 800 renders at 700 on its own; Plex has 400–700, so 800 lands on 700 too. What changes for
+   Bricolage Grotesque (titles, figures), Noto Sans Arabic for Manrope (everything else). Readex Pro stops at
+   700, so the English 800 renders at 700 on its own; Noto Sans Arabic is hosted at 400–700, so 800 lands on 700 too. What changes for
    Arabic is only what the script needs: taller lines, no letter spacing, no capitals, a gradient that starts
    where the line starts. */
 @font-face{font-family:"Readex Pro";src:url('../assets/fonts/ReadexPro-Arabic.woff2') format('woff2');font-style:normal;font-weight:160 700;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
-@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
-@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-500.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
-@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
-@font-face{font-family:"IBM Plex Sans Arabic";src:url('../assets/fonts/IBMPlexSansArabic-Arabic-700.woff2') format('woff2');font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Noto Sans Arabic";src:url('../assets/fonts/NotoSansArabic-Arabic.woff2') format('woff2');font-style:normal;font-weight:400 700;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFC}
 
 /* Two roles, as in English. Latin words inside Arabic (CIB, THNDR) keep Bricolage Grotesque and Manrope. */
-html[dir=rtl]{--display:"Bricolage Grotesque","Readex Pro","Segoe UI",system-ui,sans-serif;--body:Manrope,"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;font-synthesis:none}
+html[dir=rtl]{--display:"Bricolage Grotesque","Readex Pro","Segoe UI",system-ui,sans-serif;--body:Manrope,"Noto Sans Arabic","Segoe UI",system-ui,sans-serif;font-synthesis:none}
 html[dir=rtl] .sb{font-family:var(--body)}
 html[dir=rtl] .sb h2{font-family:var(--display)}
 

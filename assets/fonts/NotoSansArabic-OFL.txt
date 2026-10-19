@@ -1,4 +1,4 @@
-Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"
+Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 
