@@ -333,8 +333,9 @@ footer{padding:0 0 40px}
 .items .st.now{color:var(--accent2)}
 .items .st.now::after{content:"";display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:blink 1.4s steps(1) infinite;vertical-align:1px}
 .items p{margin:0;color:var(--dim);font-size:15px;text-shadow:0 0 4px var(--bg),0 0 12px var(--bg)}
-.items p b{display:block;color:var(--ink);font:500 14.5px var(--mono);margin-bottom:3px}
-.items li.is-done p b{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.items p>b:first-child{display:block;color:var(--ink);font:500 14.5px var(--mono);margin-bottom:3px}
+.items p b{color:var(--ink);font-weight:500}
+.items li.is-done p>b:first-child{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line-strong)}
 .legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0 0 30px;font:400 12px var(--mono);color:var(--dim)}
 .legend span b{font-weight:500}
 @media (max-width:1100px){.tracks.three{grid-template-columns:1fr 1fr}}
