@@ -87,7 +87,7 @@ def footer() -> str:
     <div class="cols">
 {cols}
     </div>
-    <div class="legal"><span>{mark}© 2026 Lightning · built in Egypt</span><span>source-available · PolyForm Noncommercial 1.0.0</span></div>
+    <div class="legal"><span>{mark}© 2026 Lightning · built in Egypt</span><span><a href="{GH}/blob/main/LICENSE" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></span></div>
   </div>
 </footer>'''
 
