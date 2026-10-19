@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-1">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-2">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -119,17 +119,17 @@
         <div class="lane reveal">
           <h3>2 · change it<span>your pace</span></h3>
           <ul class="items">
-          <li><span class="st done">[open]</span><p><b>Open a Codespace</b><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Click here</a> and press <i>Create codespace</i>. Wait about a minute while it installs.</p></li>
+          <li><span class="st done">[open]</span><p><b>Open a Codespace</b><a class="accent" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Click here</a> and press <span class="mono">Create codespace</span>. Wait about a minute while it installs.</p></li>
           <li><span class="st done">[see]</span><p><b>The demo opens in a preview tab</b>Mohab's household, with fictional data. It reloads when you save a file.</p></li>
           <li><span class="st done">[edit]</span><p><b>Edit the file the issue names</b>Change only what the issue asks for. Smaller changes are reviewed faster.</p></li>
           <li><span class="st done">[test]</span><p><b>Run its test</b>In the terminal at the bottom, for example <span class="mono">python -m pytest tests/test_charts.py</span>. The pull request runs everything else.</p></li>
-          <li><span class="st done">[save]</span><p><b>Commit and sync</b>Open <i>Source Control</i> (left bar), write a short message, press <i>Commit</i>, then <i>Sync</i> or <i>Publish Branch</i>. When GitHub offers to create your fork, say yes.</p></li>
+          <li><span class="st done">[save]</span><p><b>Commit and sync</b>Open <span class="mono">Source Control</span> (left bar), write a short message, press <span class="mono">Commit</span>, then <span class="mono">Sync</span> or <span class="mono">Publish Branch</span>. When GitHub offers to create your fork, say yes.</p></li>
           </ul>
         </div>
         <div class="lane reveal">
           <h3>3 · send it<span>1 minute</span></h3>
           <ul class="items">
-          <li><span class="st done">[open]</span><p><b>Press <i>Compare &amp; pull request</i></b>GitHub shows the button on the repository page right after you sync.</p></li>
+          <li><span class="st done">[open]</span><p><b>Press <span class="mono">Compare &amp; pull request</span></b>GitHub shows the button on the repository page right after you sync.</p></li>
           <li><span class="st done">[write]</span><p><b>Write two lines</b><span class="mono">Closes #123</span> with your issue's number, and one line on how you checked it.</p></li>
           <li><span class="st gate">[wait]</span><p><b>Your first test run waits for the owner</b>GitHub holds a newcomer's first run until the owner approves it. It is one click on our side, not a problem with your change.</p></li>
           </ul>
@@ -157,7 +157,7 @@
         <div class="step"><b>02</b><h3>Fork</h3><p>Your own copy of Lightning on your own GitHub account. You can change it freely; the original stays untouched.</p></div>
         <div class="step"><b>03</b><h3>Codespace</h3><p>A code editor that runs in your browser tab, with Lightning already installed. Nothing to set up on your computer.</p></div>
         <div class="step"><b>04</b><h3>Commit</h3><p>Saving your change with a short note on what you did. Like a named save point you can come back to.</p></div>
-        <div class="step"><b>05</b><h3>Pull request</h3><p>A request that says: <i>here is my change, please add it to Lightning.</i> We read it, discuss it and, if it is good, merge it.</p></div>
+        <div class="step"><b>05</b><h3>Pull request</h3><p>A request that says: “here is my change, please add it to Lightning.” We read it, discuss it and, if it is good, merge it.</p></div>
         <div class="step"><b>06</b><h3>Merge</h3><p>Your change joins the official version. The task closes itself and your name stays in the history.</p></div>
       </div>
     </div>
@@ -195,8 +195,8 @@
           <h3>common snags<span>and fixes</span></h3>
           <ul class="items">
           <li><span class="st gate">[bot]</span><p><b><span class="mono">/take</span> did nothing</b>Someone may already have it, or it has the <span class="mono">taken</span> label. Pick another; the list only shows unassigned ones.</p></li>
-          <li><span class="st gate">[tab]</span><p><b>The preview tab is blank</b>Give the install another minute. Still blank: open the <i>Ports</i> tab and open port 8766.</p></li>
-          <li><span class="st gate">[ci]</span><p><b>A check turned red</b>Open <i>Details</i> next to it, read the last lines, fix the file, commit and sync again. The pull request updates itself.</p></li>
+          <li><span class="st gate">[tab]</span><p><b>The preview tab is blank</b>Give the install another minute. Still blank: open the <span class="mono">Ports</span> tab and open port 8766.</p></li>
+          <li><span class="st gate">[ci]</span><p><b>A check turned red</b>Open <span class="mono">Details</span> next to it, read the last lines, fix the file, commit and sync again. The pull request updates itself.</p></li>
           <li><span class="st gate">[quiet]</span><p><b>No answer for days</b>AIs don't watch GitHub on their own. Leave a comment on the pull request and the owner will ask for a review.</p></li>
           </ul>
         </div>
@@ -262,7 +262,7 @@
       </div>
       <div class="steps reveal">
         <div class="step"><b>01</b><h3>Start from the repo</h3><p><span class="mono">NOW.md</span> is the hand-off, <span class="mono">issues/</span> the plan, <span class="mono">CHANGELOG.md</span> every change. Read NOW.md and the last 15 commits first.</p></div>
-        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in NOW.md's <i>Claimed</i> table first, so two people never edit the same files.</p></div>
+        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in NOW.md's <span class="mono">Claimed</span> table first, so two people never edit the same files.</p></div>
         <div class="step"><b>03</b><h3>Small finished steps</h3><p>Test, commit and push each step, with a changelog line of three lines at most.</p></div>
         <div class="step"><b>04</b><h3>Hand off</h3><p>Update what you touched, drop your claim, add next steps with a <span class="mono">Read:</span> line, then open the pull request.</p></div>
       </div>
@@ -280,7 +280,7 @@
       </div>
       <div class="steps reveal">
         <div class="step"><b>01</b><h3>The loop</h3><p>Record or import activity, sort out unclear names and categories, read the analysis, save towards goals.</p></div>
-        <div class="step"><b>02</b><h3>Where vs what</h3><p>Two questions stay apart: <i>where</i> value is held (CIB, the cash wallet, gold at home) and <i>what</i> is held (EGP, shares, fund units, gold grams, dollars).</p></div>
+        <div class="step"><b>02</b><h3>Where vs what</h3><p>Two questions stay apart: <b>where</b> value is held (CIB, the cash wallet, gold at home) and <b>what</b> is held (EGP, shares, fund units, gold grams, dollars).</p></div>
         <div class="step"><b>03</b><h3>Three layers</h3><p><b>Ledger</b> is real money. <b>Plan</b> is what-if and moves nothing. <b>Report</b> reads both and stores nothing. Every screen says which one a number comes from.</p></div>
         <div class="step"><b>04</b><h3>Where it ships</h3><p>Mainly a Windows app with encrypted profiles, plus an Android phone app that hands the ledger to the PC over local Wi-Fi. Arabic (Egyptian) and English throughout.</p></div>
       </div>
@@ -434,6 +434,6 @@ core/        dates, money, posting rules</pre>
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261019-1"></script>
+<script src="js/forgeeks.js?v=20261019-2"></script>
 </body>
 </html>

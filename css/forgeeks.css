@@ -1,4 +1,4 @@
-/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Its own design, guideline Part D (Coders). */
+/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Its own design: guideline Part D, Coders (guideline/coders.html), not Part B. */
 /* ---------- themes: every text pair is 4.5:1 or better on its background ---------- */
 :root{color-scheme:dark;--bg:#0a0a0a;--panel:#111;--well:#0d0d0d;--ink:#f2f2f2;--dim:#b8b8b8;--faint:#4a4a4a;--line:rgba(255,255,255,.12);--line-strong:rgba(255,255,255,.28);--accent:#fff;--accent2:#9aa0a6;--btn:#fff;--btn-ink:#0a0a0a;--particle:242,242,242;--glow:255,255,255;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -333,8 +333,9 @@ footer{padding:0 0 40px}
 .items .st.now{color:var(--accent2)}
 .items .st.now::after{content:"";display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:blink 1.4s steps(1) infinite;vertical-align:1px}
 .items p{margin:0;color:var(--dim);font-size:15px;text-shadow:0 0 4px var(--bg),0 0 12px var(--bg)}
-.items p b{display:block;color:var(--ink);font:500 14.5px var(--mono);margin-bottom:3px}
-.items li.is-done p b{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.items p>b:first-child{display:block;color:var(--ink);font:500 14.5px var(--mono);margin-bottom:3px}
+.items p b{color:var(--ink);font-weight:500}
+.items li.is-done p>b:first-child{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line-strong)}
 .legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0 0 30px;font:400 12px var(--mono);color:var(--dim)}
 .legend span b{font-weight:500}
 @media (max-width:1100px){.tracks.three{grid-template-columns:1fr 1fr}}
