@@ -1,4 +1,4 @@
-/* For Geeks: shared by forgeeks.html and forgeeks-roadmap.html. Its own design, no site guideline (owner, 2026-10-17). */
+/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Its own design, guideline Part D (Coders). */
 /* ---------- themes: every text pair is 4.5:1 or better on its background ---------- */
 :root{color-scheme:dark;--bg:#0a0a0a;--panel:#111;--well:#0d0d0d;--ink:#f2f2f2;--dim:#b8b8b8;--faint:#4a4a4a;--line:rgba(255,255,255,.12);--line-strong:rgba(255,255,255,.28);--accent:#fff;--accent2:#9aa0a6;--btn:#fff;--btn-ink:#0a0a0a;--particle:242,242,242;--glow:255,255,255;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -64,7 +64,7 @@ main,header,footer{position:relative;z-index:2}
 .dots i{width:10px;height:10px;border-radius:50%;border:1px solid rgba(var(--particle),.25);margin-left:-3px}
 .dots i:first-child{margin-left:0}
 .progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
-@media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.src{display:none}}
+@media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.links a.opt,.src{display:none}}
 @media (max-width:1040px){.crumb{display:none}}
 @media (max-width:760px){.chip .t-name{display:none}}
 @media (max-width:420px){.bar .wrap{gap:8px}.brand{gap:6px;font-size:12px}.links a{padding:6px 5px;font-size:12px}.tools .chip{padding:0 8px}}
@@ -105,9 +105,10 @@ h2{font:400 clamp(30px,4.2vw,54px)/1.12 var(--mono);letter-spacing:-.03em;margin
 h2 .hi{color:var(--ink);font-weight:500}
 .s-sub{max-width:640px;margin:18px 0 0;color:var(--dim)}
 @media (max-width:820px){section.s{padding:96px 0}.s-head{grid-template-columns:1fr;gap:12px;margin-bottom:36px}}
+@media (max-width:640px){section.s{padding:72px 0}.s-head{margin-bottom:28px}}
 
 /* grid children may shrink below their content, so a long code line scrolls inside its box instead of widening the page */
-.hero-grid>*,.mission>*,.proof-grid>*,.stack-grid>*,.closing-grid>*{min-width:0}
+.hero-grid>*,.mission>*,.proof-grid>*,.stack-grid>*,.closing-grid>*,.tracks>*{min-width:0}
 /* a soft halo in the page colour behind every line of text, so the dots never cut through a letter */
 h1,h2,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.closing h2{text-shadow:0 0 4px var(--bg),0 0 12px var(--bg),0 0 22px var(--bg)}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
@@ -174,7 +175,8 @@ h1,h2,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.closing h2
 .layers{list-style:none;margin:0;padding:0 0 0 34px;position:relative}
 .layers::before{content:"";position:absolute;left:10px;top:8px;bottom:8px;width:1px;background:linear-gradient(var(--line-strong),var(--line))}
 .layers::after{content:"";position:absolute;left:7px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px 3px rgba(var(--glow),.6);animation:pulse 3.6s cubic-bezier(.6,0,.4,1) infinite}
-@keyframes pulse{0%{transform:translateY(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(calc(var(--h,400px) - 16px));opacity:0}}
+/* top, not transform: the line is as tall as the list, whatever the fonts or the width */
+@keyframes pulse{0%{top:8px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:calc(100% - 15px);opacity:0}}
 .layers li{position:relative;display:grid;grid-template-columns:150px 1fr;gap:16px;padding:13px 16px;margin-bottom:6px;border:1px solid var(--line);border-radius:6px;background:color-mix(in srgb,var(--bg) 80%,transparent);font:400 13px var(--mono);transition:border-color .25s,transform .25s,background-color .25s}
 .layers li::before{content:"";position:absolute;left:-28px;top:50%;width:18px;height:1px;background:var(--line-strong)}
 .layers li:hover{border-color:var(--accent);transform:translateX(4px);background:rgba(var(--particle),.04)}
@@ -207,16 +209,20 @@ h1,h2,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.closing h2
 /* build */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:28px}
 .step{padding:24px 22px;background:color-mix(in srgb,var(--bg) 86%,transparent)}
-.step b{display:block;font:400 12px var(--mono);color:var(--accent);margin-bottom:28px}
+.step>b{display:block;font:400 12px var(--mono);color:var(--accent);margin-bottom:28px}
 .step h3{font:500 15px var(--mono);margin:0 0 8px;color:var(--ink)}
 .step p{margin:0;color:var(--dim);font-size:14.5px}
+.step p b{color:var(--ink);font-weight:500}
 .clone{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line-strong);border-radius:8px;background:color-mix(in srgb,var(--well) 90%,transparent);font:400 14px var(--mono);overflow-x:auto}
 .clone code{flex:1;white-space:nowrap}
 .clone .p{color:var(--accent)}
 .clone button{flex:none;background:none;border:1px solid var(--line);border-radius:4px;padding:6px 10px;font:400 12px var(--mono);color:var(--dim);cursor:pointer}
 .clone button:hover{color:var(--ink);border-color:var(--line-strong)}
-@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.steps{grid-template-columns:1fr}}
+.steps.three{grid-template-columns:repeat(3,1fr)}
+.gaps+.steps{margin-top:56px}
+@media (max-width:640px){.gaps+.steps{margin-top:40px}}
+@media (max-width:900px){.steps,.steps.three{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.steps,.steps.three{grid-template-columns:1fr}.step{padding:20px 18px}.step>b{margin-bottom:12px}}
 
 /* closing + footer, after the reference */
 .closing{padding:52vh 0 90px}
@@ -232,6 +238,7 @@ footer{padding:0 0 40px}
 .legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:22px;border-top:1px solid var(--line);font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .legal a{text-decoration:none}.legal a:hover{color:var(--ink)}
 @media (max-width:820px){.closing{padding-top:40vh}.closing-grid{grid-template-columns:1fr}.cols{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.closing{padding-top:30vh}.cols{padding:48px 0 56px}}
 
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,20px);opacity:0;padding:10px 16px;border:1px solid var(--line-strong);border-radius:6px;background:var(--panel);font:400 12.5px var(--mono);color:var(--ink);transition:opacity .25s,transform .25s;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -255,7 +262,16 @@ footer{padding:0 0 40px}
 .rail a.on em{color:var(--ink)}
 @media (min-width:1640px){.rail a.on em{opacity:1;transform:none}}
 .rail::before{content:"// on this page";font:400 10.5px var(--mono);letter-spacing:.08em;color:var(--dim);margin-bottom:8px;opacity:.8}
-@media (max-width:1299px){.rail{display:none}}
+@media (max-width:1299px){
+  html{scroll-padding-top:112px}
+  .rail{left:0;right:0;top:60px;flex-direction:row;gap:2px;padding:6px max(16px,calc((100% - 1180px)/2));overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;transform:translateY(-6px);background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:1px solid var(--line)}
+  .rail.show{transform:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rail::before,.rail a i,.rail a span{display:none}
+  .rail a{flex:none;padding:6px 10px;border-radius:4px;text-shadow:none}
+  .rail a em{opacity:1;transform:none;padding:0;margin:0;background:none}
+  .rail a.on{background:rgba(var(--particle),.07);box-shadow:inset 0 -1px 0 var(--accent)}
+}
 
 /* ---------- theme picker: a window in the middle of the screen ---------- */
 .tm{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px}
@@ -307,6 +323,7 @@ footer{padding:0 0 40px}
 .ms-meter i::before{content:"";display:block;height:100%;width:calc(var(--p,0)*100%);background:var(--accent);box-shadow:0 0 10px rgba(var(--glow),.7);transform-origin:0 50%;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
 .in .ms-meter i::before,.ms-meter.in i::before{transform:scaleX(1)}
 .tracks{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.tracks.three{grid-template-columns:repeat(3,1fr)}
 .lane h3{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line-strong);font:500 15px var(--mono);color:var(--ink)}
 .lane h3 span{font-weight:400;font-size:12px;color:var(--dim)}
 .items{list-style:none;margin:0;padding:0}
@@ -320,12 +337,11 @@ footer{padding:0 0 40px}
 .items li.is-done p b{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line-strong)}
 .legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0 0 30px;font:400 12px var(--mono);color:var(--dim)}
 .legend span b{font-weight:500}
-@media (max-width:900px){.tracks{grid-template-columns:1fr}}
-@media (max-width:520px){.items li{grid-template-columns:1fr;gap:4px}.ms-meter i{flex-basis:140px}}
+@media (max-width:1100px){.tracks.three{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){.tracks,.tracks.three{grid-template-columns:1fr}}
+@media (max-width:520px){.items li{grid-template-columns:1fr;gap:4px}.ms-meter i{flex-basis:140px}.lane h3{flex-direction:column;align-items:flex-start;gap:2px}}
 @media (prefers-reduced-motion:reduce){.track::after{display:none}.ms-meter i::before{transition:none;transform:none}.items .st.now::after{animation:none}}
 
 /* the build section: start contributing, under the four steps */
-.build-cta{margin:0 0 20px}
-/* the top bar keeps three pages on a narrow phone; "contribute" is in the page itself there */
-@media (max-width:520px){.links a.opt{display:none}}
+.build-cta{margin:0 0 20px;flex-wrap:wrap}
 @media (max-width:360px){.links{gap:0}.links a{padding:6px 4px}}
