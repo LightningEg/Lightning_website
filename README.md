@@ -4,7 +4,7 @@ The marketing site for **Lightning**, a personal wealth app made in Egypt.
 
 > Study Your Patterns. Control Your Future.
 
-Built in the **Meadow** identity: meadow green for growth, azure for clarity, and a deep Nile anchor for actions. Headings and big numbers use Bricolage Grotesque; text and figures use Manrope; on Arabic pages Readex Pro shows and IBM Plex Sans Arabic reads. Open the [Lightning guideline](guideline/) (3.27, three documents in `guideline/`) for the complete system: [app.html](guideline/app.html) is Part A, the app, [website.html](guideline/website.html) is Part B, this site, and [phone.html](guideline/phone.html) is Part C, the app on a phone. `app-ar.html`, `website-ar.html` and `phone-ar.html` are the same three documents in Egyptian Arabic: same sections, layout and drawings, mirrored right to left. The English documents stay the authority, except the Arabic type (B04) and words (B10) in `website-ar.html`, which govern the Arabic pages; change both copies, here and in the app repository.
+Built in the **Meadow** identity: meadow green for growth, azure for clarity, and a deep Nile anchor for actions. Headings and big numbers use Bricolage Grotesque; text and figures use Manrope; on Arabic pages Readex Pro shows and Noto Sans Arabic reads. Open the [Lightning guideline](guideline/) (3.27, three documents in `guideline/`) for the complete system: [app.html](guideline/app.html) is Part A, the app, [website.html](guideline/website.html) is Part B, this site, and [phone.html](guideline/phone.html) is Part C, the app on a phone. `app-ar.html`, `website-ar.html` and `phone-ar.html` are the same three documents in Egyptian Arabic: same sections, layout and drawings, mirrored right to left. The English documents stay the authority, except the Arabic type (B04) and words (B10) in `website-ar.html`, which govern the Arabic pages; change both copies, here and in the app repository.
 
 ## Licence
 
@@ -41,7 +41,7 @@ ar/                  Egyptian Arabic home page, Features, How It Works, Download
 blog.html           redirect to guides.html (the blog index is retired; the library is Guides). The five English articles (blog-*.html: salary-runs-out, budget-20000-egp, track-expenses, emergency-fund, irregular-income-budget); each has its own canonical URL, BlogPosting, BreadcrumbList and FAQPage data, and css/blog.css
 ar/blog.html         redirect to ar/guides.html; the five articles in Egyptian Arabic (same file names under ar/); written for Egypt, not translated, with reciprocal hreflang and a language switch to the English page
 css/arabic.css       loaded last on ar/ pages: the Arabic faces at the English sizes and weights (B04, A06.2), the right-to-left gradient and the few x-axis movements that dir="rtl" can't flip
-assets/fonts/       Readex Pro (variable, to 700) and IBM Plex Sans Arabic 400–700 (Arabic subset only) and their OFL licenses, for the Arabic pages
+assets/fonts/       Readex Pro (variable, to 700) and Noto Sans Arabic (variable, 400–700, Arabic subset only) and their OFL licenses, for the Arabic pages
 robots.txt          crawl rules and the sitemap's address
 sitemap.xml         every page that should be in search, and nothing else
 css/styles.css      old shared styles, kept for archived snapshots only (no live page loads it)
@@ -86,7 +86,7 @@ assets/brand/       the two-leaf logo and icons (see Logo below); social-card.pn
 guideline/            Lightning guideline 3.30 in four documents: app.html (A, the PC app), website.html (B, Normal: this site except For Geeks), phone.html (C, the phone) and coders.html (D, Coders: the For Geeks pages); same folder as the app's guideline/
 ```
 
-It's a static site with no build step and no dependencies. Fonts load from Google Fonts; the Arabic pages add Readex Pro and IBM Plex Sans Arabic, hosted here.
+It's a static site with no build step and no dependencies. Fonts load from Google Fonts; the Arabic pages add Readex Pro and Noto Sans Arabic, hosted here.
 
 **Arabic pages are built for Egypt, not translated.** An `ar/` page uses the English page's design system (the same stylesheets, components and class names, with `lang="ar-EG" dir="rtl"`, `../` paths and `css/arabic.css` last; no Testing panel), but its words, examples, order and number of sections are written for an Egyptian reader, in Egyptian Arabic, with the same facts and screens. The voice, fixed words and Arabic type are in `guideline/website-ar.html` B04 and B10. The shared stylesheets write left and right as logical properties (`margin-inline-start`, `inset-inline-end`, `text-align:start`), so the same CSS lays out both directions: keep it that way. When an English page's facts change, change its `ar/` page too. Visible numbers use Arabic-Indic digits (٢١٥٬٦٥٧ جنيه); the scripts read and write them on `lang="ar-EG"` pages. Dates stay yyyy-mm-dd inside `<bdo dir="ltr">` (٢٠٢٦-١٠-٠٤), so the Arabic-Indic digits are not reversed. Keep URLs, IDs, attribute values and technical color codes unchanged.
 
