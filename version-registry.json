@@ -2400,20 +2400,34 @@
       "id": "UX-2026.10.19.01",
       "name": "Lightning · Help build Lightning",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.19.01.html"
     },
     {
       "id": "UX-2026.10.19.02",
       "name": "Version Archive · Contribute page",
       "page": "versions.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.19.02.html"
     },
     {
       "id": "UX-2026.10.19.03",
       "name": "Contribute · Help with one small task",
       "page": "contribute.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.19.04",
+      "name": "Lightning · Fewer home promises",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.19.05",
+      "name": "Version Archive · Fewer home promises",
+      "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
