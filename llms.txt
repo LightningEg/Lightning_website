@@ -30,6 +30,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 
 ## Guides
 
+- [Net worth, budget and expense tracker for Egypt](https://lightningeg.com/net-worth-budget-expense-tracker.html): one free app for net worth across bank accounts, wallets, cash, gold, certificates, EGX and US shares and dollars, a monthly budget by category and expense tracking, all in EGP from one ledger, with no bank login.
 - [How to calculate your net worth in Egypt](https://lightningeg.com/net-worth-tracker.html): count bank accounts, cash, gold, certificates and shares in EGP, and leave out money held for others.
 - [Budget app for Egypt](https://lightningeg.com/budget-app-egypt.html): plan a monthly budget in EGP around your salary.
 - [Expense tracker for Egypt](https://lightningeg.com/expense-tracker-egypt.html): see where your salary went, by category and month.
@@ -68,6 +69,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [طريقة الاستخدام](https://lightningeg.com/ar/how-it-works.html)
 - [التنزيل](https://lightningeg.com/ar/current-status.html)
 - [مقالات](https://lightningeg.com/ar/guides.html)
+- [صافي الثروة والميزانية والمصاريف في تطبيق واحد](https://lightningeg.com/ar/net-worth-budget-expense-tracker.html)
 - [صافي الثروة](https://lightningeg.com/ar/net-worth-tracker.html)
 - [الميزانية](https://lightningeg.com/ar/budget-app-egypt.html)
 - [تتبع المصاريف](https://lightningeg.com/ar/expense-tracker-egypt.html)
