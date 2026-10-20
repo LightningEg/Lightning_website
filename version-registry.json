@@ -2309,8 +2309,8 @@
       "id": "UX-2026.10.15.69",
       "name": "Guides · Windows and Android",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.69.html"
     },
     {
       "id": "UX-2026.10.15.70",
@@ -2427,6 +2427,27 @@
     {
       "id": "UX-2026.10.19.05",
       "name": "Version Archive · Fewer home promises",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.19.05.html"
+    },
+    {
+      "id": "UX-2026.10.20.01",
+      "name": "Net Worth, Budget and Expense Tracker · New page",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.20.02",
+      "name": "Guides · All-in-one tracker guide",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.20.03",
+      "name": "Version Archive · All-in-one tracker page",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
