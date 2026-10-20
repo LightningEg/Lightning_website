@@ -2421,8 +2421,8 @@
       "id": "UX-2026.10.19.04",
       "name": "Lightning · Fewer home promises",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.19.04.html"
     },
     {
       "id": "UX-2026.10.19.05",
@@ -2435,8 +2435,8 @@
       "id": "UX-2026.10.20.01",
       "name": "Net Worth, Budget and Expense Tracker · New page",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.01.html"
     },
     {
       "id": "UX-2026.10.20.02",
@@ -2448,6 +2448,27 @@
     {
       "id": "UX-2026.10.20.03",
       "name": "Version Archive · All-in-one tracker page",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.03.html"
+    },
+    {
+      "id": "UX-2026.10.20.04",
+      "name": "Home · Comprehensive planning line",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.20.05",
+      "name": "Net Worth, Budget and Expense Tracker · What Lightning is first",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.20.06",
+      "name": "Version Archive · Hero line and what-is answer",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
