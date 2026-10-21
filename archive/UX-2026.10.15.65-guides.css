@@ -1,0 +1,18 @@
+/* Guides (guides.html and each guide page): only what css/landing.css and css/home.css lack. Loads after both. */
+/* a guide card is the whole link: the card header (B02), no underline */
+.g-link{color:inherit;text-decoration:none;transition:border-color .2s,transform .2s}
+.g-link:hover{border-color:var(--line-ctl);transform:translateY(-2px)}
+.g-link:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.g-link h3{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.g-link,.g-link:hover{transition:none;transform:none}}
+/* the trace on a guide stands alone, without the home page's tabs */
+.d-section > .c-trace{margin-top:0}
+/* the Guides library: two cards, each a short title over a list of readers' questions, every question a link */
+.g-lib{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
+.g-lib h2{font-size:clamp(24px,2.6vw,30px);line-height:1.1;letter-spacing:-.03em}
+.g-lib ul{list-style:none;margin:16px 0 0;padding:0}
+.g-lib li{border-top:1px solid var(--line)}
+.g-lib li a{display:block;padding:13px 0;font-weight:600;line-height:1.35;color:var(--ink);text-decoration:none}
+.g-lib li a:hover{color:var(--green)}
+.g-lib li a:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:4px}
+@media (max-width:860px){.g-lib{grid-template-columns:minmax(0,1fr)}}

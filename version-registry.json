@@ -2092,36 +2092,36 @@
       "id": "UX-2026.10.15.38",
       "name": "Article · 20,000 EGP budget · Get build news",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.38.html"
     },
     {
       "id": "UX-2026.10.15.39",
       "name": "Article · Emergency fund · Get build news",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.39.html"
     },
     {
       "id": "UX-2026.10.15.40",
       "name": "Article · Irregular income · Get build news",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.40.html"
     },
     {
       "id": "UX-2026.10.15.41",
       "name": "Article · Salary runs out · Get build news",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.41.html"
     },
     {
       "id": "UX-2026.10.15.42",
       "name": "Article · Track expenses · Get build news",
       "page": "blog-track-expenses.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.42.html"
     },
     {
       "id": "UX-2026.10.15.43",
@@ -2267,36 +2267,36 @@
       "id": "UX-2026.10.15.63",
       "name": "Dollar Savings Tracker · New guide",
       "page": "dollar-savings-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.63.html"
     },
     {
       "id": "UX-2026.10.15.64",
       "name": "Bank Statement Budgeting · Windows and Android",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.64.html"
     },
     {
       "id": "UX-2026.10.15.65",
       "name": "Budget App · Windows and Android",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.65.html"
     },
     {
       "id": "UX-2026.10.15.66",
       "name": "Cash Flow Planner · Windows and Android",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.66.html"
     },
     {
       "id": "UX-2026.10.15.67",
       "name": "Expense Tracker · Windows and Android",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.67.html"
     },
     {
       "id": "UX-2026.10.15.68",
@@ -2323,36 +2323,36 @@
       "id": "UX-2026.10.15.71",
       "name": "Investment Tracker · Windows and Android",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.71.html"
     },
     {
       "id": "UX-2026.10.15.72",
       "name": "Net Worth Tracker · Windows and Android",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.72.html"
     },
     {
       "id": "UX-2026.10.15.73",
       "name": "Offline Finance App · Windows and Android",
       "page": "offline-personal-finance-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.73.html"
     },
     {
       "id": "UX-2026.10.15.74",
       "name": "Sync Phone and PC · Windows and Android",
       "page": "sync-phone-and-pc-without-cloud.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.74.html"
     },
     {
       "id": "UX-2026.10.15.75",
       "name": "Money Held for Others · Windows and Android",
       "page": "track-money-you-hold-for-others.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.75.html"
     },
     {
       "id": "UX-2026.10.15.76",
@@ -2442,8 +2442,8 @@
       "id": "UX-2026.10.20.02",
       "name": "Guides · All-in-one tracker guide",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.02.html"
     },
     {
       "id": "UX-2026.10.20.03",
@@ -2463,13 +2463,160 @@
       "id": "UX-2026.10.20.05",
       "name": "Net Worth, Budget and Expense Tracker · What Lightning is first",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.05.html"
     },
     {
       "id": "UX-2026.10.20.06",
       "name": "Version Archive · Hero line and what-is answer",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.06.html"
+    },
+    {
+      "id": "UX-2026.10.21.01",
+      "name": "Guides · Four topics, one picture each",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.02",
+      "name": "Monthly Budget guide · Part of its topic",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.03",
+      "name": "Split 20,000 EGP guide · Part of its topic",
+      "page": "blog-budget-20000-egp.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.04",
+      "name": "Salary Runs Out guide · Part of its topic",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.05",
+      "name": "Irregular Income guide · Part of its topic",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.06",
+      "name": "Safe to Spend guide · Part of its topic",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.07",
+      "name": "Emergency Fund guide · Part of its topic",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.08",
+      "name": "Expense Tracker guide · Part of its topic",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.09",
+      "name": "Bank Statement guide · Part of its topic",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.10",
+      "name": "Net Worth guide · Part of its topic",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.11",
+      "name": "Investments guide · Part of its topic",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.12",
+      "name": "Dollar Savings guide · Part of its topic",
+      "page": "dollar-savings-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.13",
+      "name": "Money Held for Others guide · Part of its topic",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.14",
+      "name": "All-in-one tracker · One home for each question",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.15",
+      "name": "Where Your Data Lives guide · Part of its topic",
+      "page": "offline-personal-finance-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.16",
+      "name": "Sync Without Cloud guide · Part of its topic",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.18",
+      "name": "Version Archive · Guides topics",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.19",
+      "name": "Budget Your Salary · Topic page",
+      "page": "budget-your-salary.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.20",
+      "name": "Know What You Own · Topic page",
+      "page": "know-what-you-own.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.21",
+      "name": "See Where It Goes · Topic page",
+      "page": "see-where-your-money-goes.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.22",
+      "name": "Your Data and Devices · Topic page",
+      "page": "your-data-and-devices.html",
       "status": "current",
       "archive_url": null
     }
