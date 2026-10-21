@@ -23,8 +23,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261021-1">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261021-2">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -76,8 +76,9 @@
 
 <main id="main">
   <!-- ===== hero ===== -->
-  <section class="hero" id="top" aria-labelledby="h1">
+  <section class="hero arrive" id="top" aria-labelledby="h1">
     <div class="wrap">
+      <p class="hello"><span class="sr">Welcome to Lightning.</span><span aria-hidden="true"><span class="k">$</span> <span id="hello">welcome to lightning</span><span class="caret"></span></span></p>
       <h1 id="h1" aria-label="Financial planning every Egyptian can afford, read, run and trust.">
             <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford.</span></span>
       </h1>
@@ -348,12 +349,16 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261021-1"></script>
+<script src="js/forgeeks.js?v=20261021-2"></script>
 <script>
 (function(){
   'use strict';
   var doc=document,LG=window.LG,reduce=LG.reduce,THEMES=LG.THEMES,keep=LG.keep,copy=LG.copy;
   var $=function(s){return doc.querySelector(s)};
+
+  /* ===================== hero: the greeting types itself once (D07 .hello) ===================== */
+  var hello=$('#hello');
+  if(!reduce){var greet=hello.textContent,gi=0;hello.textContent='';setTimeout(function type(){hello.textContent=greet.slice(0,++gi);if(gi<greet.length)setTimeout(type,40+Math.random()*30)},250)}
 
   /* ===================== hero: decoding word ===================== */
   /* the box is as wide as the longest word, set once: the word decodes inside it and nothing on the line moves (D08) */

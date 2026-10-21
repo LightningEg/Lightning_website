@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261021-1"  # css/forgeeks.css and js/forgeeks.js; bump it when either changes
+VERSION = "20261021-2"  # css/forgeeks.css and js/forgeeks.js; bump it when either changes
 
 GH = "https://github.com/LightningEg/Lightning"
 TASKS = f"{GH}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee"

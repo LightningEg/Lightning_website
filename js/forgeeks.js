@@ -179,7 +179,7 @@
     var e=p.pts[p.pts.length-1];return [e[0],e[1],p.pts.length];
   }
   /* the current never crosses a heading or its lead line (D06: a dot never cuts a letter): it is drawn clipped around them */
-  var TEXT=$$('h1,h2,.lede,.s-sub');
+  var TEXT=$$('.hello,h1,h2,.lede,.s-sub');
   function drawPulses(dt){
     ctx.lineWidth=1;
     ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);
