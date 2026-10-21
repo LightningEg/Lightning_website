@@ -7,6 +7,16 @@
 
   document.querySelectorAll('[data-home-link]').forEach(link => { link.href = home; });
 
+  // On lightningeg.com the tab is for testers only: open any page once with ?testing (remembered; ?testing=off hides it).
+  // Previews and local copies always show it (README › Header and testing panel).
+  let tester = false;
+  try {
+    const flag = new URLSearchParams(location.search).get('testing');
+    if (flag !== null) localStorage.setItem('lightning-tester', flag === 'off' ? '0' : '1');
+    tester = localStorage.getItem('lightning-tester') === '1';
+  } catch (_) {}
+  if (/(^|\.)lightningeg\.com$/.test(location.hostname) && !tester) return;
+
   const dock = document.createElement('div');
   dock.className = 'dev-dock';
   const hasUx = Boolean(document.body.dataset.uxEndpoint);
