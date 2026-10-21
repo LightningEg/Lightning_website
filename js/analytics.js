@@ -292,7 +292,7 @@
   if (!choice && !gpc && !document.querySelector("[data-consent]")) { // privacy.html has its own buttons
     const css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = new URL('css/consent.css?v=20261013-1', root).href;
+    css.href = new URL('css/consent.css?v=20261021-1', root).href;
     document.head.append(css);
     bar = document.createElement('div');
     bar.className = 'lc-bar';

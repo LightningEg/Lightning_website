@@ -41,3 +41,6 @@
   .profile{grid-template-columns:1fr;gap:16px;padding:22px}
   .profile-question{grid-column:auto;padding:20px}
 }
+
+/* The download under the stories (audit 2026-10-21), centred like the hero. */
+.profiles .c-free{margin-top:14px;text-align:center}

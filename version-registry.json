@@ -2211,8 +2211,8 @@
       "id": "UX-2026.10.15.55",
       "name": "Sample Profiles · Get build news",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.55.html"
     },
     {
       "id": "UX-2026.10.15.56",
@@ -2302,8 +2302,8 @@
       "id": "UX-2026.10.15.68",
       "name": "Features · Windows and Android",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.68.html"
     },
     {
       "id": "UX-2026.10.15.69",
@@ -2316,8 +2316,8 @@
       "id": "UX-2026.10.15.70",
       "name": "How It Works · Windows and Android",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.70.html"
     },
     {
       "id": "UX-2026.10.15.71",
@@ -2456,8 +2456,8 @@
       "id": "UX-2026.10.20.04",
       "name": "Home · Comprehensive planning line",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.20.04.html"
     },
     {
       "id": "UX-2026.10.20.05",
@@ -2617,6 +2617,34 @@
       "id": "UX-2026.10.21.22",
       "name": "Your Data and Devices · Topic page",
       "page": "your-data-and-devices.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.23",
+      "name": "Home · Download note and the PC shown before the demo",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.24",
+      "name": "Features · Download note",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.25",
+      "name": "Sample Profiles · Download button",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.26",
+      "name": "How It Works · Slim consent bar",
+      "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
     }
