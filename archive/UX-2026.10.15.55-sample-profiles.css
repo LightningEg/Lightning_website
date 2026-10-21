@@ -1,0 +1,43 @@
+/* Sample Profiles (sample-profiles.html): only what css/landing.css and css/home.css lack. Loads after both. */
+/* jump to a story: four pills, wraps and never scrolls sideways */
+.profile-jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:860px;margin:40px auto 0}
+.profile-jump a{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px 0 8px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:700 14px/1 var(--body);text-decoration:none}
+.profile-jump a:hover{background:var(--white);border-color:var(--green)}
+.profile-jump a:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.profile-jump span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 12px/1 var(--body)}
+.profile-jump small{color:var(--muted);font:700 13px/1 var(--body)}
+
+/* how to load a profile: three steps */
+.profile-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.profile-steps li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start}
+.profile-steps li>span{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 14px/1 var(--body)}
+.profile-steps h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.profile-steps p{margin-top:8px;color:var(--ink2);font-size:16px;line-height:1.5}
+.profile-steps b{color:var(--ink)}
+
+/* the four stories: number, the story, the question to explore */
+.profile{display:grid;grid-template-columns:56px minmax(0,1.25fr) minmax(260px,.75fr);gap:28px;align-items:start;margin-top:16px;padding:32px;scroll-margin-top:92px}
+.profile:first-of-type{margin-top:0}
+.profile-number{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--nile);color:var(--on-nile);font:800 16px/1 var(--display)}
+.profile-label{margin-bottom:8px;color:var(--muted);font:800 13px/1.2 var(--body)}
+.profile h3{font-size:clamp(24px,2.8vw,30px);line-height:1.15;letter-spacing:-.02em}
+.profile-copy>p:last-child{margin-top:14px;color:var(--ink2)}
+.profile-question{padding:22px;border-radius:16px;background:var(--t-green)}
+.steady .profile-question,.reserve .profile-question{background:var(--t-azure)}
+.profile-question>span{display:block;color:var(--green-text);font:800 13px/1.2 var(--body)}
+.steady .profile-question>span,.reserve .profile-question>span{color:var(--azure-d)}
+.profile-question b{display:block;margin-top:8px;color:var(--ink);font:800 19px/1.35 var(--display);letter-spacing:-.018em}
+.profile-question small{display:block;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink2);font:600 14px/1.45 var(--body)}
+.profile-question strong{color:var(--ink);font-weight:800}
+
+
+@media (max-width:900px){
+  .profile-steps{grid-template-columns:1fr}
+  .profile{grid-template-columns:44px minmax(0,1fr);gap:20px}
+  .profile-question{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .profile-jump a{padding-inline-end:14px;font-size:13px}
+  .profile{grid-template-columns:1fr;gap:16px;padding:22px}
+  .profile-question{grid-column:auto;padding:20px}
+}
