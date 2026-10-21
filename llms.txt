@@ -30,10 +30,19 @@ Lightning is a different product from anything else called "Lightning": it is th
 
 ## Guides
 
+Four topics, each the whole picture on one page, with the guides under it:
+
+- [Budget Your Salary](https://lightningeg.com/budget-your-salary.html): Pay the bills first, plan each category, keep a cushion, and spend what is safe.
+- [See Where It Goes](https://lightningeg.com/see-where-your-money-goes.html): Bring in a statement once a month and the month reads itself.
+- [Know What You Own](https://lightningeg.com/know-what-you-own.html): Add up every place your money sits, take off what you owe, and that is your net worth.
+- [Your Data and Devices](https://lightningeg.com/your-data-and-devices.html): Everything stays encrypted on your PC and phone, which meet over your own Wi-Fi.
+
+The guides:
+
 - [Net worth, budget and expense tracker for Egypt](https://lightningeg.com/net-worth-budget-expense-tracker.html): one free app for net worth across bank accounts, wallets, cash, gold, certificates, EGX and US shares and dollars, a monthly budget by category and expense tracking, all in EGP from one ledger, with no bank login.
 - [How to calculate your net worth in Egypt](https://lightningeg.com/net-worth-tracker.html): count bank accounts, cash, gold, certificates and shares in EGP, and leave out money held for others.
 - [Budget app for Egypt](https://lightningeg.com/budget-app-egypt.html): plan a monthly budget in EGP around your salary.
-- [Expense tracker for Egypt](https://lightningeg.com/expense-tracker-egypt.html): see where your salary went, by category and month.
+- [Expense tracker for Egypt](https://lightningeg.com/expense-tracker-egypt.html): see where your money goes each month, by category (the old article on tracking expenses is merged into it).
 - [Investment tracker for Egypt](https://lightningeg.com/investment-tracker-egypt.html): gold, bank certificates, EGX and US shares and funds in one EGP portfolio, with what the dollar rate earned you.
 - [Dollar savings and US shares tracker](https://lightningeg.com/dollar-savings-tracker-egypt.html): dollar cash and US shares kept in their own currency and counted in EGP at the day's rate, with a holding's gain split into the price part and the exchange-rate part.
 - [Cash flow planner](https://lightningeg.com/cash-flow-planner.html): how much is safe to spend before payday, and a three-month forecast.
@@ -44,20 +53,18 @@ Lightning is a different product from anything else called "Lightning": it is th
 
 ## Guides (English)
 
-- [Guides](https://lightningeg.com/guides.html): the library: the readers' questions, each linked to the page that answers it, from using Lightning to budgeting basics. The five articles below sit under it.
+- [Guides](https://lightningeg.com/guides.html): the map: start here, then four topics (budget your salary, see where it goes, know what you own, your data and devices), each linked to its page and to the guides under it. The four articles below sit under it.
 - [Why your salary runs out before the month ends](https://lightningeg.com/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
 - [How to split a 20,000 EGP salary in Egypt](https://lightningeg.com/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.
-- [How to see where your money goes each month](https://lightningeg.com/blog-track-expenses.html): track bank, cash and wallet spending without double-counting transfers.
 - [Emergency fund in EGP](https://lightningeg.com/blog-emergency-fund.html): calculate a reserve from essential household spending.
 - [How to budget when your income is irregular](https://lightningeg.com/blog-irregular-income-budget.html): plan around money received and seasonal changes.
 
 ## Guides articles (Arabic)
 
 - [Sample profiles, Arabic](https://lightningeg.com/ar/sample-profiles.html): the four sample households in Egyptian Arabic.
-- [مقالات](https://lightningeg.com/ar/guides.html): the Arabic library of questions and answers; the five articles below sit under it.
+- [مقالات](https://lightningeg.com/ar/guides.html): the Arabic map: four topics, each with its guides; the four articles below sit under it.
 - [ليه المرتب بيخلص قبل آخر الشهر؟](https://lightningeg.com/ar/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
 - [إزاي تقسّم مرتب ٢٠٬٠٠٠ جنيه؟](https://lightningeg.com/ar/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.
-- [إزاي تعرف فلوسك بتروح فين كل شهر؟](https://lightningeg.com/ar/blog-track-expenses.html): track bank, cash and wallet spending without double-counting transfers.
 - [صندوق الطوارئ محتاج كام؟](https://lightningeg.com/ar/blog-emergency-fund.html): calculate a reserve from essential household spending.
 - [ميزانية الدخل غير الثابت](https://lightningeg.com/ar/blog-irregular-income-budget.html): plan around money received and seasonal changes.
 
@@ -69,6 +76,10 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [طريقة الاستخدام](https://lightningeg.com/ar/how-it-works.html)
 - [التنزيل](https://lightningeg.com/ar/current-status.html)
 - [مقالات](https://lightningeg.com/ar/guides.html)
+- [ميزانية المرتب](https://lightningeg.com/ar/budget-your-salary.html)
+- [فلوسك بتروح فين](https://lightningeg.com/ar/see-where-your-money-goes.html)
+- [إنت تملك إيه](https://lightningeg.com/ar/know-what-you-own.html)
+- [بياناتك وأجهزتك](https://lightningeg.com/ar/your-data-and-devices.html)
 - [صافي الثروة والميزانية والمصاريف في تطبيق واحد](https://lightningeg.com/ar/net-worth-budget-expense-tracker.html)
 - [صافي الثروة](https://lightningeg.com/ar/net-worth-tracker.html)
 - [الميزانية](https://lightningeg.com/ar/budget-app-egypt.html)
