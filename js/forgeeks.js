@@ -178,8 +178,13 @@
     for(var i=1;i<p.pts.length;i++){var a=p.pts[i-1],b=p.pts[i],l=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]);if(d<=l){var t=d/l;return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,i]}d-=l}
     var e=p.pts[p.pts.length-1];return [e[0],e[1],p.pts.length];
   }
+  /* the current never crosses a heading or its lead line (D06: a dot never cuts a letter): it is drawn clipped around them */
+  var TEXT=$$('h1,h2,.lede,.s-sub');
   function drawPulses(dt){
     ctx.lineWidth=1;
+    ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);
+    for(var r=0;r<TEXT.length;r++){var b=TEXT[r].getBoundingClientRect();if(b.bottom>-8&&b.top<H+8&&b.width)ctx.rect(b.left-8,b.top-8,b.width+16,b.height+16)}
+    ctx.clip('evenodd');
     for(var k=PULSES.length-1;k>=0;k--){
       var p=PULSES[k];p.d+=p.v*dt;
       if(p.d-p.trail>p.len){PULSES.splice(k,1);continue}
@@ -193,6 +198,7 @@
       }
       if(p.d<p.len){var h=at(p,head);ctx.fillStyle='rgba('+CORE+','+p.a+')';ctx.fillRect(h[0]-1.5,h[1]-1.5,3,3)}
     }
+    ctx.restore();
   }
 
   /* ---- lightning: midpoint displacement with a few branches ---- */
