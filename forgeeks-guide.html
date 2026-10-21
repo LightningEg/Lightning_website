@@ -22,9 +22,9 @@
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-4">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261021-2">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -65,7 +65,6 @@
       <a href="#team"><span>06</span><i></i><em>team</em></a>
       <a href="#product"><span>07</span><i></i><em>product</em></a>
       <a href="#built"><span>08</span><i></i><em>built</em></a>
-      <a href="#terms"><span>09</span><i></i><em>terms</em></a>
 </nav>
 
 <div class="tm" id="themes" hidden>
@@ -260,12 +259,7 @@
           </ul>
         </div>
       </div>
-      <div class="steps reveal">
-        <div class="step"><b>01</b><h3>Start from the repo</h3><p><span class="mono">NOW.md</span> is the hand-off, <span class="mono">issues/</span> the plan, <span class="mono">CHANGELOG.md</span> every change. Read NOW.md and the last 15 commits first.</p></div>
-        <div class="step"><b>02</b><h3>Claim long work</h3><p>Anything longer than one sitting goes in NOW.md's <span class="mono">Claimed</span> table first, so two people never edit the same files.</p></div>
-        <div class="step"><b>03</b><h3>Small finished steps</h3><p>Test, commit and push each step, with a changelog line of three lines at most.</p></div>
-        <div class="step"><b>04</b><h3>Hand off</h3><p>Update what you touched, drop your claim, add next steps with a <span class="mono">Read:</span> line, then open the pull request.</p></div>
-      </div>
+      <p class="stats-note reveal">// how the team works day to day (NOW.md, claims, small steps, hand-off): <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/AGENTS.md" target="_blank" rel="noopener">AGENTS.md ↗</a> · every term: <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener">docs/GLOSSARY.md ↗</a></p>
     </div>
   </section>
 
@@ -314,29 +308,7 @@
         <div class="s-num"><b>08</b> / built</div>
         <div>
           <h2 id="t-built">How it is <span class="hi">built.</span></h2>
-          <p class="s-sub">A map before you open the code. Imports only point down, and a test fails the build if they don't.</p>
-        </div>
-      </div>
-      <div class="tracks">
-        <div class="lane reveal">
-          <h3>the stack<span>no frontend build</span></h3>
-          <ul class="items">
-          <li><span class="st done">[py]</span><p><b>Python 3.11+, FastAPI</b>Server-rendered Jinja pages with plain JavaScript and CSS.</p></li>
-          <li><span class="st done">[db]</span><p><b>One SQLite file</b>Ordered migrations and local backups; encrypted profiles with SQLCipher on the desktop.</p></li>
-          <li><span class="st done">[math]</span><p><b>Money is never a float</b><span class="mono">Decimal</span> in Python, scaled integers (<span class="mono">_e6</span>) in SQLite.</p></li>
-          <li><span class="st done">[net]</span><p><b>Local only</b>The server listens on <span class="mono">127.0.0.1</span> and nothing else.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>where things live<span>top depends on bottom</span></h3>
-<pre class="code"><span class="c"># imports only point down</span>
-ui/          routes, templates; no SQL, no maths
-workflows/   use-cases across modules
-planning/    bills, loans, forecast
-services/    accounts, transactions, investments
-reporting/   read-only queries
-database/    SQLite, migrations, backups
-core/        dates, money, posting rules</pre>
+          <p class="s-sub">The layers, the stack and the posting rule live on the home page: <a class="accent" href="forgeeks.html#stack">› one process, one file</a>. Here are the four things to know before you open the code.</p>
         </div>
       </div>
       <div class="steps reveal">
@@ -348,47 +320,13 @@ core/        dates, money, posting rules</pre>
     </div>
   </section>
 
-  <section class="s" id="terms" aria-labelledby="t-terms">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <div class="s-num"><b>09</b> / terms</div>
-        <div>
-          <h2 id="t-terms">Lightning's own <span class="hi">words.</span></h2>
-          <p class="s-sub">One name and one meaning per term. If a name needs explaining, we rename it.</p>
-        </div>
-      </div>
-      <div class="tracks">
-        <div class="lane reveal">
-          <h3>the basics<span>glossary</span></h3>
-          <ul class="items">
-          <li><span class="st done">[ledger]</span><p><b>Account</b>Where value is held: CIB, the cash wallet, a brokerage.</p></li>
-          <li><span class="st done">[ledger]</span><p><b>Financial asset</b>What an account holds: EGP cash, a COMI share, a fund unit, a CD, a gram of gold.</p></li>
-          <li><span class="st done">[ledger]</span><p><b>Holding / position</b>The calculated quantity of one asset in one account on a date.</p></li>
-          <li><span class="st done">[ledger]</span><p><b>Balance</b>Always calculated from the ledger, never typed in.</p></li>
-          <li><span class="st done">[plan]</span><p><b>Payday</b>The day your salary usually arrives. The plan expects it then; nothing is recorded until the money lands.</p></li>
-          </ul>
-        </div>
-        <div class="lane reveal">
-          <h3>made for egypt<span>and gold</span></h3>
-          <ul class="items">
-          <li><span class="st done">[ledger]</span><p><b>Gam'eya</b>A rotating savings circle: one account per circle. Instalments and your payout are internal transfers, never income or spending.</p></li>
-          <li><span class="st done">[ledger]</span><p><b>Physical item</b>A tangible asset such as a gold piece, tracked by weight, karat, cost and valuation.</p></li>
-          <li><span class="st done">[plan]</span><p><b>Zakat day</b>The date you pick once for counting zakat; the next is 354 days later. An estimate, never a ruling.</p></li>
-          <li><span class="st done">[plan]</span><p><b>Instalment purchase (taqseet)</b>A loan plan for an outstanding purchase. Creating it records no cash.</p></li>
-          <li><span class="st done">[report]</span><p><b>Adjust balance</b>Set an account to a balance you know on a date; the difference is saved as one adjustment.</p></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="closing" id="closing" aria-labelledby="t-close">
     <div class="wrap">
       <div class="closing-grid reveal">
         <h2 id="t-close">Ready? Take a good first issue.<br><span class="hi">We'll help you through it.</span></h2>
         <div class="cta">
           <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" rel="noopener" target="_blank">Pick a task</a>
-          <a class="btn ghost" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">open a codespace</a>
+          <a class="btn ghost" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener"><span class="k">›</span> open a codespace</a>
         </div>
       </div>
     </div>
@@ -410,7 +348,7 @@ core/        dates, money, posting rules</pre>
         <li><a href="forgeeks-guide.html#built">Architecture</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
-        <li><a href="forgeeks-guide.html#terms">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener">Glossary</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
       </ul></div>
       <div><h4>Rules</h4><ul>
@@ -434,6 +372,6 @@ core/        dates, money, posting rules</pre>
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261019-4"></script>
+<script src="js/forgeeks.js?v=20261021-2"></script>
 </body>
 </html>

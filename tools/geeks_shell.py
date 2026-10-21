@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261019-4"  # css/forgeeks.css and js/forgeeks.js; bump it when either changes
+VERSION = "20261021-2"  # css/forgeeks.css and js/forgeeks.js; bump it when either changes
 
 GH = "https://github.com/LightningEg/Lightning"
 TASKS = f"{GH}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee"
@@ -31,7 +31,7 @@ FOOTER_COLUMNS = [
                     (CODESPACE, "Open a Codespace"), ("forgeeks-roadmap.html", "Roadmap"),
                     ("app-feedback.html", "Not a coder? Send feedback")]),
     ("System", [("forgeeks-guide.html#built", "Architecture"), (f"{GH}/blob/main/lightning/core/figures.py", "Figures registry"),
-                (f"{GH}/blob/main/pyproject.toml", "Import contracts"), ("forgeeks-guide.html#terms", "Glossary"),
+                (f"{GH}/blob/main/pyproject.toml", "Import contracts"), (f"{GH}/blob/main/docs/GLOSSARY.md", "Glossary"),
                 (f"{GH}/blob/main/CHANGELOG.md", "Changelog")]),
     ("Rules", [("forgeeks-guide.html#product", "What Lightning is"), ("forgeeks-guide.html#rules", "Ground rules"),
                ("forgeeks-guide.html#team", "Who does what"), (f"{GH}/blob/main/LICENSE", "Licence"),

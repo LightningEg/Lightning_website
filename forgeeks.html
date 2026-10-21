@@ -22,9 +22,9 @@
   <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261019-4">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261021-2">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -76,10 +76,11 @@
 
 <main id="main">
   <!-- ===== hero ===== -->
-  <section class="hero" id="top" aria-labelledby="h1">
+  <section class="hero arrive" id="top" aria-labelledby="h1">
     <div class="wrap">
+      <p class="hello"><span class="sr">Welcome to Lightning.</span><span aria-hidden="true"><span class="k">$</span> <span id="hello">welcome to lightning</span><span class="caret"></span></span></p>
       <h1 id="h1" aria-label="Financial planning every Egyptian can afford, read, run and trust.">
-            <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford</span>.</span>
+            <span aria-hidden="true">Financial planning<br><span class="hi">every Egyptian</span> can <span class="word" id="word">afford.</span></span>
       </h1>
       <div class="hero-grid">
         <p class="lede">Lightning is a free, local-first money app for salaried people in Egypt. <b>The code is public</b>, so every claim here comes with the file or command that proves it. <b>Pick one small task and build it with us</b>, in your browser.</p>
@@ -143,9 +144,9 @@
           <p>Lightning shows a salaried person in Egypt <b>where their money stands, what is coming, and why</b>. Bank, wallet, cash at home, certificates, THNDR and gold, in EGP, on their own PC and phone.</p>
           <p>A money app asks for trust. We would rather <b>show our working</b>. With the source public, anyone can check how a figure is calculated, how the data is locked, and what happens when something breaks.</p>
           <p>And the more people can read it, the faster it gets better <b>for every Egyptian</b> who plans with it.</p>
-          <p><b>Who we are.</b> Lightning started with one person who logged every pound by hand for years, and wanted a tool that showed it all in one place (<a class="accent" href="current-status.html" target="_blank" rel="noopener">the story</a>). Today the founder, a small team and three AI teammates build it in public, through the same pull requests you would open.</p>
         </div>
         <div class="reveal">
+          <p><b>Who we are.</b> Lightning started with one person who logged every pound by hand for years, and wanted a tool that showed it all in one place (<a class="accent" href="current-status.html" target="_blank" rel="noopener">the story</a>). Today the founder, a small team and three AI teammates build it in public, through the same pull requests you would open.</p>
           <ul class="pillars">
             <li><span>[free]</span><span>Free to download and use<small>no account, no subscription</small></span></li>
             <li><span>[local]</span><span>Your ledger stays on your devices<small>phone and PC pair directly, no cloud</small></span></li>
@@ -154,7 +155,7 @@
           <details class="secret">
             <summary><span>[secret]</span> the other reason</summary>
             <div>
-              <p>Everything on the left is true. This is also true.</p>
+              <p>Everything above is true. This is also true.</p>
               <p>I work in finance. I can price a three-year certificate in my head and tell you what a gram of 21-karat did last March. What I can't tell you is why a test that passed at 11 p.m. fails at 2 a.m. with no change in between.</p>
               <p>After enough of those nights, opening the code stopped being a principle and became a plan: if more people can read it, fewer of the bugs are mine to find alone.</p>
               <p>So yes, transparency. And also: please send help. Pull requests are cheaper than therapy.</p>
@@ -197,7 +198,7 @@
           <h3>secure <span>03</span></h3>
           <div class="big"><span data-count="256">256</span><small>-bit</small></div>
           <p>SQLCipher encryption at rest, with the key held under <b>Argon2id</b> locks. The app serves on <b>127.0.0.1</b> only, and needs no account.</p>
-          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" rel="noopener" target="_blank">architecture › encrypted profiles ↗</a><br>found a flaw? geeks@lightningeg.com</div>
+          <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/security/keys.py" rel="noopener" target="_blank">lightning/security/keys.py ↗</a><br>tests/test_desktop_crypto.py · found a flaw? geeks@lightningeg.com</div>
         </article>
       </div>
     </div>
@@ -216,21 +217,22 @@
       <div class="proof-grid">
         <div class="term reveal" id="term">
           <div class="term-top"><i></i><i></i><i></i><span>geek@lightning: ~/Lightning</span><button type="button" id="term-skip">skip ⏭</button></div>
-          <div class="term-body" id="term-body" role="log" aria-live="polite" aria-label="Lightning terminal">
+          <div class="term-body" id="term-body" role="log" aria-live="off" aria-busy="true" aria-label="Lightning terminal">
             <div id="term-out"></div>
             <label class="term-in" id="term-in" hidden><span class="p">❯</span><span class="sr">Command</span><input id="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send"></label>
           </div>
+          <p class="sr" id="term-status" role="status"></p>
         </div>
         <div class="reveal">
           <div class="stats">
-            <div class="stat"><b data-count="55672">55,672</b><span>lines of Python</span></div>
-            <div class="stat"><b data-count="1638">1,638</b><span>test functions</span></div>
-            <div class="stat"><b data-count="198">198</b><span>test files</span></div>
+            <div class="stat"><b data-count="56993">56,993</b><span>lines of Python</span></div>
+            <div class="stat"><b data-count="1737">1,737</b><span>test functions</span></div>
+            <div class="stat"><b data-count="211">211</b><span>test files</span></div>
             <div class="stat"><b data-count="67">67</b><span>append-only migrations</span></div>
             <div class="stat"><b data-count="4">4</b><span>import contracts, all kept</span></div>
             <div class="stat"><b>0</b><span>frontend build steps</span></div>
           </div>
-          <p class="stats-note">// counted 2026-10-17 on main. Clone it and run the same commands: if a number is wrong, that's an issue we want.</p>
+          <p class="stats-note">// counted 2026-10-21 on main. Clone it and run the same commands: if a number is wrong, that's an issue we want.</p>
         </div>
       </div>
     </div>
@@ -323,7 +325,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <li><a href="forgeeks-guide.html#built">Architecture</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
-        <li><a href="forgeeks-guide.html#terms">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener">Glossary</a></li>
         <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
       </ul></div>
       <div><h4>Rules</h4><ul>
@@ -347,20 +349,24 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261019-4"></script>
+<script src="js/forgeeks.js?v=20261021-2"></script>
 <script>
 (function(){
   'use strict';
   var doc=document,LG=window.LG,reduce=LG.reduce,THEMES=LG.THEMES,keep=LG.keep,copy=LG.copy;
   var $=function(s){return doc.querySelector(s)};
 
+  /* ===================== hero: the greeting types itself once (D07 .hello) ===================== */
+  var hello=$('#hello');
+  if(!reduce){var greet=hello.textContent,gi=0;hello.textContent='';setTimeout(function type(){hello.textContent=greet.slice(0,++gi);if(gi<greet.length)setTimeout(type,40+Math.random()*30)},250)}
+
   /* ===================== hero: decoding word ===================== */
-  var words=['afford','read','run','trust'],wi=0,word=$('#word'),GL='01<>/\\{}[]#$%&*+=_ABCDEFGHJKLMNPQRSTUVWXYZ';
-  function setW(w){word.style.width='calc('+w.length+'ch - '+(w.length*.035).toFixed(3)+'em)'}
-  setW(words[0]);
+  /* the box is as wide as the longest word, set once: the word decodes inside it and nothing on the line moves (D08) */
+  var words=['afford.','read.','run.','trust.'],wi=0,word=$('#word'),GL='01<>/\\{}[]#$%&*+=_ABCDEFGHJKLMNPQRSTUVWXYZ';
+  var longest=Math.max.apply(null,words.map(function(w){return w.length}));
+  word.style.width='calc('+longest+'ch - '+(longest*.035).toFixed(3)+'em)';
   function decode(to){
     var from=word.textContent,len=Math.max(from.length,to.length),frame=0,total=18;
-    setW(to);
     (function tick(){
       var out='';
       for(var i=0;i<len;i++){
@@ -383,8 +389,8 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   function prompt(cmd){return '<span class="p">❯</span> '+esc(cmd)}
   var SCRIPT=[
     {c:'git clone https://github.com/LightningEg/Lightning.git && cd Lightning',o:['<span class="d">Cloning into \'Lightning\'... done.</span>']},
-    {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['55672']},
-    {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1638']},
+    {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['56993']},
+    {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1737']},
     {c:'ls lightning/database/migrations | wc -l',o:['67']},
     {c:'cat .notes',o:['<span class="d">found something strange. type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
     {c:'lint-imports',o:['<span class="d">Layers: each layer may only import the layers below it</span> <span class="ok">KEPT</span>','<span class="d">… 3 more contracts</span> <span class="ok">KEPT</span>','','Contracts: <span class="ok">4 kept</span>, 0 broken.']},
@@ -428,7 +434,8 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     res.forEach(function(r){line(r)});
   }
   function ready(){
-    skipBtn.hidden=true;inWrap.hidden=false;
+    skipBtn.hidden=true;inWrap.hidden=false;body.setAttribute('aria-live','polite');body.removeAttribute('aria-busy');
+    $('#term-status').textContent='Replay finished: '+[].map.call(doc.querySelectorAll('.stat'),function(st){var n=st.querySelector('b');return (n.dataset.count?(+n.dataset.count).toLocaleString('en-US'):n.textContent)+' '+st.querySelector('span').textContent}).join(', ')+'. The terminal is yours: type help.';
     line('<span class="d">— your turn. type</span> <span class="ok">help</span><span class="d">.</span>');
   }
   function playScript(){
