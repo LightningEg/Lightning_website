@@ -31,7 +31,7 @@ FOOTER_COLUMNS = [
                     (CODESPACE, "Open a Codespace"), ("forgeeks-roadmap.html", "Roadmap"),
                     ("app-feedback.html", "Not a coder? Send feedback")]),
     ("System", [("forgeeks-guide.html#built", "Architecture"), (f"{GH}/blob/main/lightning/core/figures.py", "Figures registry"),
-                (f"{GH}/blob/main/pyproject.toml", "Import contracts"), ("forgeeks-guide.html#terms", "Glossary"),
+                (f"{GH}/blob/main/pyproject.toml", "Import contracts"), (f"{GH}/blob/main/docs/GLOSSARY.md", "Glossary"),
                 (f"{GH}/blob/main/CHANGELOG.md", "Changelog")]),
     ("Rules", [("forgeeks-guide.html#product", "What Lightning is"), ("forgeeks-guide.html#rules", "Ground rules"),
                ("forgeeks-guide.html#team", "Who does what"), (f"{GH}/blob/main/LICENSE", "Licence"),
