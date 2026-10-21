@@ -2365,15 +2365,15 @@
       "id": "UX-2026.10.17.01",
       "name": "Downloads · Lightning 1.3",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.17.01.html"
     },
     {
       "id": "UX-2026.10.17.02",
       "name": "Release Log · Lightning 1.3.0",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.17.02.html"
     },
     {
       "id": "UX-2026.10.17.03",
@@ -2386,8 +2386,8 @@
       "id": "UX-2026.10.17.04",
       "name": "App feedback · Lightning 1.3.0 build selector",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.17.04.html"
     },
     {
       "id": "UX-2026.10.17.05",
@@ -2638,8 +2638,8 @@
       "id": "UX-2026.10.21.25",
       "name": "Sample Profiles · Download button",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.25.html"
     },
     {
       "id": "UX-2026.10.21.26",
@@ -2652,15 +2652,15 @@
       "id": "UX-2026.10.21.27",
       "name": "Home · Recaptured figures",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.27.html"
     },
     {
       "id": "UX-2026.10.21.28",
       "name": "How It Works · Recaptured figures",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.28.html"
     },
     {
       "id": "UX-2026.10.21.29",
@@ -2694,8 +2694,8 @@
       "id": "UX-2026.10.21.33",
       "name": "Budget App Egypt · Budget screen kept",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.33.html"
     },
     {
       "id": "UX-2026.10.21.34",
@@ -2729,8 +2729,8 @@
       "id": "UX-2026.10.21.38",
       "name": "Net Worth, Budget and Expense Tracker · Recaptured figures",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.38.html"
     },
     {
       "id": "UX-2026.10.21.39",
@@ -2743,8 +2743,8 @@
       "id": "UX-2026.10.21.40",
       "name": "Features · Recaptured figures",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.40.html"
     },
     {
       "id": "UX-2026.10.21.41",
@@ -2763,6 +2763,76 @@
     {
       "id": "UX-2026.10.21.43",
       "name": "Version Archive · Held for others",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.43.html"
+    },
+    {
+      "id": "UX-2026.10.21.44",
+      "name": "Downloads · Lightning 1.4.0",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.45",
+      "name": "Release Log · Lightning 1.4.0",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.46",
+      "name": "App feedback · Lightning 1.4.0",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.47",
+      "name": "Home · Lightning 1.4.0",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.48",
+      "name": "Features · Lightning 1.4.0",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.49",
+      "name": "Sample profiles · Lightning 1.4.0",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.50",
+      "name": "How It Works · Budget 1.4.0",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.51",
+      "name": "Budget App Egypt · Budget 1.4.0",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.52",
+      "name": "Net Worth, Budget and Expense Tracker · Budget 1.4.0",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.21.53",
+      "name": "Version Archive · Lightning 1.4.0",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

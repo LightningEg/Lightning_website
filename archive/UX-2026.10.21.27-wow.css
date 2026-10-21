@@ -1,0 +1,13 @@
+/* The wow moment (home UX-2026.10.06.05, test.html). As you scroll, the six money tiles pour into one figure
+   that adds them up, then the breakdown takes it to net worth. js/wow.js adds .is-live when it plays;
+   until then the card shows the total and nothing sticks. */
+.t-stage{position:relative}
+.t-count{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px;margin-bottom:16px;transform-origin:50% 0}
+.t-count .chead{margin:0;padding:0;border:0}
+.t-count .lead-fig{font-size:clamp(34px,4.6vw,56px)}
+.t-after{margin-top:16px}
+.t-stage.is-live .t-count{position:sticky;top:var(--t-top,86px);z-index:5}
+.t-stage.is-live .kpi{will-change:transform,opacity}
+@media (min-width:1001px){.t-stage .d-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* The seventh place (the dollar brokerage) takes the whole last row, in every layout */
+.t-stage .d-tiles .t-wide{grid-column:1/-1}

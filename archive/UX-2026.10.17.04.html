@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="../">
+<meta name="robots" content="noindex,follow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>App Feedback · Lightning Beta</title>
+<meta name="description" content="Send clear, actionable feedback about the Lightning beta.">
+<link rel="alternate" hreflang="en" href="https://lightningeg.com/app-feedback.html">
+<link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/app-feedback.html">
+<meta name="theme-color" content="#E3F6EC">
+<link rel="icon" href="assets/brand/lightning-app-icon.svg?v=20261003-1" type="image/svg+xml">
+<link rel="icon" href="assets/brand/lightning-icon-64.png?v=20261003-1" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/brand/lightning-icon-180.png?v=20261003-1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/version-c.css?v=20261002-3">
+<link rel="stylesheet" href="archive/UX-2026.10.17.04-current-status.css">
+<link rel="stylesheet" href="css/theme.css?v=20260930-1">
+<script src="js/theme.js?v=20260930-1"></script>
+<link rel="stylesheet" href="css/dev-dock.css?v=20261002-2">
+<script src="js/dev-dock.js?v=20261004-3" defer></script>
+<script src="js/form-security.js?v=20261018-1" defer></script>
+<script src="archive/UX-2026.10.17.04-current-status.js" defer></script>
+<script src="js/analytics.js?v=20261007-1" defer></script>
+<link rel="stylesheet" href="css/footer.css?v=20261015-1">
+</head>
+<body data-ux-version="UX-2026.10.17.04" data-app-feedback-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<div class="c-nav">
+  <div class="wrap">
+    <a class="logo" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
+    <nav class="c-nav-links" aria-label="Main"><a class="nav-home" href="index.html" data-home-link>Home</a><a href="features.html">Features</a><a href="how-it-works.html">How It Works</a><a href="current-status.html">Downloads</a><a href="contribute.html">Contribute</a></nav>
+    <button data-theme-toggle aria-label="Dark mode"></button>
+    <a class="lang-switch" href="ar/app-feedback.html" lang="ar-EG" dir="rtl">العربية</a>
+    <a class="btn btn-primary nav-cta" href="#feedback-form">Send feedback</a>
+  </div>
+</div>
+
+<main class="wrap feedback-page">
+  <header class="feedback-page__head">
+    <div class="eyebrow">Lightning beta</div>
+    <h1>Make the App <span class="grad-text">Better.</span></h1>
+    <p>Send a bug, a confusing moment, or an idea. Each ticket is saved separately so the team can sort, reproduce and act on it.</p>
+  </header>
+
+  <section class="status-feedback card" id="feedback-form" aria-labelledby="feedback-title">
+    <div class="status-feedback__intro">
+      <div class="eyebrow">App feedback</div>
+      <h2 id="feedback-title">What happened?</h2>
+      <p>Add as many tickets as you need. Attach up to five screenshots to each ticket, either with the upload button or by pasting into its description. PNG screenshots are optimized without reducing image quality when possible.</p>
+      <ul><li>Tell us where you were.</li><li>Choose bug or improvement.</li><li>Choose visual or technical.</li><li>Describe what you expected and what happened.</li></ul>
+    </div>
+    <form class="status-feedback__form" id="app-feedback-form" novalidate>
+      <div class="feedback-identity" aria-labelledby="identity-title">
+        <label class="status-field"><span id="identity-title">Your name <em>(optional)</em></span><input type="text" name="reporter_name" maxlength="100" autocomplete="name" placeholder="e.g. Mohab"></label>
+        <label class="status-field"><span>Email for a follow-up <em>(optional)</em></span><input type="email" name="reporter_email" maxlength="254" autocomplete="email" placeholder="you@example.com"></label>
+      </div>
+      <p class="feedback-privacy">Leave these blank to stay anonymous. If you share an email, we will only use it to clarify this feedback. Screenshots are stored in a private Drive folder and are visible only to its authorized reviewers. Check them for account details before sending.</p>
+      <label class="status-field"><span>Which build did you test?</span><select name="app_build" required><option value="" selected disabled>Choose the version</option><option value="1.3.0-windows">Lightning 1.3.0 · Windows</option><option value="1.3.0-android">Lightning 1.3.0 · Android</option><option value="1.1.0-beta.1-windows">Lightning 1.1 Beta · Windows</option><option value="1.1.0-beta.1-android">Lightning 1.1 Beta · Android</option><option value="1.0.0-beta.1-windows">Lightning 1 Beta · Windows</option><option value="1.0.0-beta.1-android">Lightning 1 Beta · Android</option><option value="0.5.0-beta.1">Lightning 0.5.0 beta 1 · development</option><option value="0.4.0-beta.1">Lightning 0.4.0 beta 1</option><option value="Not sure">I’m not sure</option></select></label>
+      <div class="status-tickets" data-ticket-list></div>
+      <div class="status-feedback__actions"><button class="btn btn-secondary" type="button" data-add-ticket>+ Add another ticket</button><button class="btn btn-primary" type="submit">Submit app feedback</button></div>
+      <p class="status-feedback__status" role="status" aria-live="polite"></p>
+    </form>
+    <template id="ticket-template"><fieldset class="status-ticket"><legend>Ticket <span data-ticket-number></span></legend><button class="status-ticket__remove" type="button" data-remove-ticket aria-label="Remove this ticket">Remove</button><div class="status-ticket__grid"><label class="status-field"><span>Section or page</span><select name="section" required><option value="" selected disabled>Choose where</option><option>Overview</option><option>Account register</option><option>Import CSV</option><option>Review import</option><option>Budget</option><option>Expense analysis</option><option>Investments</option><option>Cash planning</option><option>Profile or settings</option><option>Something else</option></select></label><div class="status-choice"><span>What is it?</span><div><label><input type="radio" name="type" value="Bug" required> Bug</label><label><input type="radio" name="type" value="Improvement"> Improvement</label></div></div><div class="status-choice"><span>Which kind?</span><div><label><input type="radio" name="area" value="Visual" required> Visual</label><label><input type="radio" name="area" value="Technical"> Technical</label></div></div></div><label class="status-field"><span>Describe what you saw, expected, or would change</span><textarea name="description" rows="4" maxlength="1000" required placeholder="Example: On Review import, I expected the amount column to be detected. I could not tell which column to choose."></textarea></label><div class="status-attachments"><input class="status-attachments__input" type="file" accept="image/png,image/jpeg,image/webp" multiple data-attachment-input><button class="btn btn-secondary status-attachments__add" type="button" data-attach-trigger>+ Add screenshots</button><span class="status-attachments__hint">Up to 5 images per ticket, 10 per submission · PNG, JPEG or WebP · PNG is optimized losslessly when smaller; JPEG and WebP keep original quality</span><div class="status-attachments__list" data-attachment-list aria-live="polite"></div></div></fieldset></template>
+  </section>
+</main>
+
+<div class="wrap"><div class="c-motto" aria-label="Lightning motto"><div class="c-motto-brand"><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="" aria-hidden="true"><span>Lightning</span></div><div>Study Your Patterns. <span class="grad-text">Control Your Future.</span></div></div><footer class="sf"><section class="sf-contact" aria-labelledby="sf-contact-title"><div><h2 id="sf-contact-title">Contact Us</h2><p>Questions, ideas or something not working? Write to us.</p></div><ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><small>General questions</small><span><a href="mailto:hello@lightningeg.com"><bdi>hello@lightningeg.com</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><small>Feedback on the app</small><span><a href="mailto:feedback@lightningeg.com"><bdi>feedback@lightningeg.com</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><small>Community</small><span><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener"><bdi>r/LightningEg on Reddit</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><small>Chat with other testers</small><span><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a> · <a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></span></li></ul></section><div class="sf-main"><div class="sf-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><p>Made in Egypt. Your money stays on your devices.</p></div><nav class="sf-col" aria-label="Explore"><h3>Explore</h3><ul><li><a href="features.html">Features</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="current-status.html">Downloads</a></li><li><a href="guides.html">Guides</a></li><li><a href="contribute.html">Contribute</a></li></ul></nav><nav class="sf-col" aria-label="More"><h3>More</h3><ul><li><a href="release-log.html">Release Log</a></li><li><a href="survey.html">Survey</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="forgeeks.html">For Geeks</a></li></ul></nav></div></footer></div>
+</body>
+</html>
