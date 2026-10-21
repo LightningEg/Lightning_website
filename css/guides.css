@@ -9,10 +9,33 @@
 .d-section > .c-trace{margin-top:0}
 /* the Guides library: two cards, each a short title over a list of readers' questions, every question a link */
 .g-lib{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
-.g-lib h2{font-size:clamp(24px,2.6vw,30px);line-height:1.1;letter-spacing:-.03em}
+.g-lib h3{font-size:clamp(24px,2.6vw,30px);line-height:1.1;letter-spacing:-.03em}
 .g-lib ul{list-style:none;margin:16px 0 0;padding:0}
 .g-lib li{border-top:1px solid var(--line)}
 .g-lib li a{display:block;padding:13px 0;font-weight:600;line-height:1.35;color:var(--ink);text-decoration:none}
 .g-lib li a:hover{color:var(--green)}
 .g-lib li a:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:4px}
 @media (max-width:860px){.g-lib{grid-template-columns:minmax(0,1fr)}}
+
+/* Guides as a map (2026-10-21): a topic card = its name, one answer line, its guides as rows, a link to the whole topic */
+.g-lib .card{display:flex;flex-direction:column}
+.g-lib h3 a{color:var(--ink);text-decoration:none}
+.g-lib h3 a:hover{color:var(--green-text)}
+.g-lib .g-answer{margin-top:10px;color:var(--ink2);text-wrap:pretty}
+.g-lib li a span{display:block}
+.g-lib li a small{display:block;margin-top:2px;color:var(--muted);font-size:14px;font-weight:600;line-height:1.4}
+.g-lib ul{margin-bottom:16px}
+/* the link that closes a card or a piece, and the line that says which topic a guide belongs to */
+.g-go{margin-top:auto;padding-top:4px;font-weight:700;color:var(--green-text);text-decoration:none}
+.g-go::after{content:" \2192"}
+html[dir=rtl] .g-go::after{content:" \2190"}
+.g-go:hover{text-decoration:underline}
+.g-go:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:4px}
+.g-up{margin:0 0 14px;color:var(--muted);font-size:14px;font-weight:600}
+.g-up a{color:var(--green-text);font-weight:700;text-decoration:none}
+.g-up a:hover{text-decoration:underline}
+/* a topic page: the picture's rows link to their guides; four or two pieces sit in pairs */
+.g-row-link{color:inherit;text-decoration:underline;text-decoration-color:var(--line-ctl);text-underline-offset:3px}
+.g-row-link:hover{color:var(--green-text)}
+.c-promise.g-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:1000px){.c-promise.g-two{grid-template-columns:minmax(0,1fr)}}
