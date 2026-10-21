@@ -270,7 +270,7 @@ Lightning aims to be found first for **free personal finance for Egypt**, then f
 
 ## Version identity and archive
 
-Current app release: **v1.3.0** (2026-10-17), matched Windows x64 ZIP and signed Android arm64 APK from `47dba419`. Download links, checksums, build record, release notes and feedback options are current in English and Arabic; v1.1 and earlier downloads remain in the archive.
+Current app release: **v1.4.2** (2026-10-21), matched Windows x64 ZIP and signed Android arm64 APK from `641d9f27`. Download links, checksums, build record, release notes and feedback options are current in English and Arabic; v1.3.0 and earlier downloads remain in the archive.
 
 Every testable web experience has one visible immutable release ID, in the form `UX-YYYY.MM.DD.NN`. Current IDs appear in the Testing panel and on [Version Archive](versions.html); feedback records that same ID. Before a live page changes, copy it and its page-specific CSS/JS to `archive/RELEASE-ID.html` and matching resource snapshots, add the permanent link to `version-registry.json` and `versions.html`, then allocate a new ID to the changed page. Never reuse an ID or overwrite an archived snapshot. `python tools/release.py spec.json` does all of it (its docstring shows the spec); `python tools/site_check.py` confirms the registry and the Version Archive agree. 56 snapshots from 2026-10-09 to 2026-10-13 were saved without `<base href="../">` and show unstyled; repairing them is the owner's call (2026-10-15).
 
