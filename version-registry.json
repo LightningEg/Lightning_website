@@ -2771,8 +2771,8 @@
       "id": "UX-2026.10.21.44",
       "name": "Downloads · Lightning 1.4.0",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.44.html"
     },
     {
       "id": "UX-2026.10.21.45",
@@ -2875,6 +2875,20 @@
     {
       "id": "UX-2026.10.22.06",
       "name": "Version Archive · August expenses",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.06.html"
+    },
+    {
+      "id": "UX-2026.10.22.07",
+      "name": "Lightning · Download",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.08",
+      "name": "Version Archive · Download page",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
