@@ -1,0 +1,9 @@
+{
+  "about": "Which folder under assets/app/ holds each screen the live pages show. Edit here, then: python tools/shots.py apply. See tools/shots.py.",
+  "folders": {"en": "mohab-year-2026-10-21", "ar": "ar-2026-10-21"},
+  "shots": {
+    "budget": {"en": "mohab-year-2026-10-21-v14", "ar": "ar-2026-10-21-v14"},
+    "b-budget": {"en": "mohab-year-2026-10-21-v14", "ar": "ar-2026-10-21-v14"}
+  },
+  "pages": {"test.html": "mohab-year-2026-10-07"}
+}
