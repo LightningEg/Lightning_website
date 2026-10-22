@@ -2673,8 +2673,8 @@
       "id": "UX-2026.10.21.30",
       "name": "See Where Your Money Goes · Recaptured figures",
       "page": "see-where-your-money-goes.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.30.html"
     },
     {
       "id": "UX-2026.10.21.31",
@@ -2701,8 +2701,8 @@
       "id": "UX-2026.10.21.34",
       "name": "Expense Tracker Egypt · Recaptured figures",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.34.html"
     },
     {
       "id": "UX-2026.10.21.35",
@@ -2792,8 +2792,8 @@
       "id": "UX-2026.10.21.47",
       "name": "Home · Lightning 1.4.0",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.47.html"
     },
     {
       "id": "UX-2026.10.21.48",
@@ -2813,8 +2813,8 @@
       "id": "UX-2026.10.21.50",
       "name": "How It Works · Budget 1.4.0",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.50.html"
     },
     {
       "id": "UX-2026.10.21.51",
@@ -2827,12 +2827,54 @@
       "id": "UX-2026.10.21.52",
       "name": "Net Worth, Budget and Expense Tracker · Budget 1.4.0",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.52.html"
     },
     {
       "id": "UX-2026.10.21.53",
       "name": "Version Archive · Lightning 1.4.0",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.53.html"
+    },
+    {
+      "id": "UX-2026.10.22.01",
+      "name": "Home · August expenses",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.02",
+      "name": "Expense Tracker Egypt · August expenses",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.03",
+      "name": "How It Works · August expenses",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.04",
+      "name": "Net Worth, Budget and Expense Tracker · August expenses",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.05",
+      "name": "See Where Your Money Goes · August expenses",
+      "page": "see-where-your-money-goes.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.22.06",
+      "name": "Version Archive · August expenses",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

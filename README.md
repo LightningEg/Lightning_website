@@ -356,7 +356,7 @@ All product images come from Mohab's full 2026 in the app (the sample CSVs), loa
 python -m lightning --sample
 ```
 
-Pick the period that shows each tab at its best: YTD for the Overview, Investments and Budget, a whole month for Expense analysis, today for Cash planning.
+Pick the period that shows each tab at its best: YTD for the Overview and Investments, the month in progress (2026-10) for Budget, where the plan's pace chart is, August 2026 for Expense analysis (one payment of 14,200, 9.5 times the average, Entertainment above its usual range, spending up 21%; September is flat), today for Cash planning. `tools/site_shots.py` in the app repository captures exactly these.
 
 - Full-window screens (2000 × 1250) are used in tours and steps. Content crops without the sidebar (1800 × 1125, named `a-*.webp`) are used where the chart is the message: the hero trio on every version and the analysis grid on How It Works.
 - The hero on A shows the trio: Overview in the middle, Investments and Expense analysis beside it. B shows the Overview beside its six corners.
