@@ -1,9 +1,8 @@
-// Lightning theme: follows the system setting until the visitor picks one, then remembers it.
+// Lightning theme: light by default, whatever the browser or system setting; dark only when the visitor picks it, then remembered.
 // Load in <head> without defer so the right theme is set before the first paint.
 (() => {
   const KEY = 'lightning-theme';
   const root = document.documentElement;
-  const media = window.matchMedia('(prefers-color-scheme: dark)');
   let saved = null;
   try { saved = localStorage.getItem(KEY); } catch (_) {}
   if (saved !== 'light' && saved !== 'dark') saved = null;
@@ -30,8 +29,7 @@
     button.innerHTML = `<span class="theme-toggle__track" aria-hidden="true">${SUN}${MOON}<span class="theme-toggle__thumb">${SUN}${MOON}</span></span>`;
   }
 
-  apply(saved || (media.matches ? 'dark' : 'light'));
-  media.addEventListener?.('change', event => { if (!saved) apply(event.matches ? 'dark' : 'light'); });
+  apply(saved || 'light');
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-theme-toggle]').forEach(build);
     apply(root.dataset.theme);

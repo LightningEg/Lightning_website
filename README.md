@@ -303,7 +303,7 @@ The home page, Features, How It Works, Downloads, Guides and every guide load `c
 
 Both landing pages, How It Works and the brand guidelines support light and dark ("Meadow Night"). The full spec is in section B09 Dark mode of `guideline/website.html`.
 
-- The page follows the device setting until the visitor uses the switch; the choice is then remembered in `localStorage` (`lightning-theme`).
+- The page is light by default, whatever the device or browser setting; it turns dark only when the visitor uses the switch, and the choice is then remembered in `localStorage` (`lightning-theme`).
 - To add dark mode to another page: include `css/theme.css` and `js/theme.js` (in `<head>`, not deferred), add `<button data-theme-toggle></button>` to the top bar, and define the page's dark colors under `:root[data-theme="dark"]`.
 - The survey is still light only.
 
