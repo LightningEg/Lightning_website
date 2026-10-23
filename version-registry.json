@@ -2778,15 +2778,15 @@
       "id": "UX-2026.10.21.45",
       "name": "Release Log · Lightning 1.4.0",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.45.html"
     },
     {
       "id": "UX-2026.10.21.46",
       "name": "App feedback · Lightning 1.4.0",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.46.html"
     },
     {
       "id": "UX-2026.10.21.47",
@@ -2799,15 +2799,15 @@
       "id": "UX-2026.10.21.48",
       "name": "Features · Lightning 1.4.0",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.48.html"
     },
     {
       "id": "UX-2026.10.21.49",
       "name": "Sample profiles · Lightning 1.4.0",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.49.html"
     },
     {
       "id": "UX-2026.10.21.50",
@@ -2841,8 +2841,8 @@
       "id": "UX-2026.10.22.01",
       "name": "Home · August expenses",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.01.html"
     },
     {
       "id": "UX-2026.10.22.02",
@@ -2883,8 +2883,8 @@
       "id": "UX-2026.10.22.07",
       "name": "Lightning · Download",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.07.html"
     },
     {
       "id": "UX-2026.10.22.08",
@@ -2967,8 +2967,76 @@
       "id": "UX-2026.10.23.11",
       "name": "Version Archive · Blog questions and feature links",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.11.html"
+    },
+    {
+      "id": "UX-2026.10.23.12",
+      "name": "Downloads · Lightning 1.4.4",
+      "page": "current-status.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.13",
+      "name": "Release Log · Lightning 1.4.4",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.14",
+      "name": "Version Archive · Lightning 1.4.4",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.14.html"
+    },
+    {
+      "id": "UX-2026.10.23.15",
+      "name": "Home · Lightning 1.4.4",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.16",
+      "name": "Features · Lightning 1.4.4",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.17",
+      "name": "Sample Profiles · Lightning 1.4.4",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.18",
+      "name": "App Feedback · Lightning 1.4.4",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.19",
+      "name": "Version Archive · Current v1.4.4 references",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    }
+  ],
+  "app_releases": [
+    {
+      "version": "v1.4.4",
+      "date": "2026-10-23",
+      "commit": "f4a52abbf4d4c925122a6089908b4ca074ab80bc",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v1.4.4",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/Lightning-v1.4.4-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/Lightning-Test-1.4.4-845-f4a52abb.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/BUILD.json"
     }
   ]
 }
