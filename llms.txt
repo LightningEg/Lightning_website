@@ -7,7 +7,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 ## Key facts
 
 - Who it is for: salaried people in Egypt who want one clear picture of their money in EGP.
-- Platform: Windows and Android. The current release is v1.4.2: a Windows ZIP to unzip and open and a signed Lightning Test Android APK (Google Play comes later). The phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review.
+- Platform: Windows and Android. The current release is v1.4.4: a Windows ZIP to unzip and open and a signed Lightning Test Android APK (Google Play comes later). The phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review.
 - Price: free to download and use, and nothing is ever locked. After seven days, Lightning asks now and then for a one-time payment; you pay when it is worth it to you and own it forever.
 - Currencies and markets: each account keeps its own currency (dollars, euros, riyals and others), counted in EGP at the day's rate or a rate you type, with the gain or loss from the exchange rate shown apart. About 400 US stocks and 70 ETFs on Nasdaq, NYSE and NYSE Arca are priced automatically in dollars. Gulf and European shares can be held with prices you type.
 - Bank connection: none. Download a CSV from any bank or wallet, match its columns once, and review each row before it is saved.

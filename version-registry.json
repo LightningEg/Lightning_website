@@ -2785,8 +2785,8 @@
       "id": "UX-2026.10.21.46",
       "name": "App feedback · Lightning 1.4.0",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.46.html"
     },
     {
       "id": "UX-2026.10.21.47",
@@ -2799,15 +2799,15 @@
       "id": "UX-2026.10.21.48",
       "name": "Features · Lightning 1.4.0",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.48.html"
     },
     {
       "id": "UX-2026.10.21.49",
       "name": "Sample profiles · Lightning 1.4.0",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.49.html"
     },
     {
       "id": "UX-2026.10.21.50",
@@ -2841,8 +2841,8 @@
       "id": "UX-2026.10.22.01",
       "name": "Home · August expenses",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.01.html"
     },
     {
       "id": "UX-2026.10.22.02",
@@ -2987,6 +2987,41 @@
     {
       "id": "UX-2026.10.23.14",
       "name": "Version Archive · Lightning 1.4.4",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.14.html"
+    },
+    {
+      "id": "UX-2026.10.23.15",
+      "name": "Home · Lightning 1.4.4",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.16",
+      "name": "Features · Lightning 1.4.4",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.17",
+      "name": "Sample Profiles · Lightning 1.4.4",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.18",
+      "name": "App Feedback · Lightning 1.4.4",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.19",
+      "name": "Version Archive · Current v1.4.4 references",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
