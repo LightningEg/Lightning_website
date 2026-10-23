@@ -94,3 +94,17 @@ html .blog-body ol.viz-steps li{display:flex;align-items:center;gap:14px;margin:
 .viz-cap{margin:12px 0 0;color:var(--muted);font-size:13px;font-weight:600;line-height:1.5}
 .blog-body .viz-bars+.viz-cap{margin-top:12px}
 .blog-faq .d-faq summary{font:700 17px/1.45 var(--body);letter-spacing:0}
+
+/* The question people ask leads the page (the answer sits under it), and "Do This in Lightning" links an article to the features that do the work. */
+.blog-answer strong.blog-q{margin-bottom:8px;color:var(--ink);font:800 20px/1.35 var(--display);letter-spacing:-.02em}
+.blog-lightning{margin:0 0 24px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+.blog-lightning h2{margin:0 0 8px;font-size:20px}
+.blog-lightning .blog-lead{margin:0 0 6px;color:var(--ink2);font-size:16px;line-height:1.6}
+.blog-lightning ul{list-style:none;margin:0;padding:0}
+.blog-lightning li{margin:0;padding:12px 0;border-top:1px solid var(--line)}
+.blog-lightning li:first-child{border-top:0}
+.blog-lightning a{display:block;color:var(--ink);text-decoration:none}
+.blog-lightning a b{display:block;color:var(--green-text);font-weight:700;font-size:16px}
+.blog-lightning a b::after{content:" \2192"}
+html[dir="rtl"] .blog-lightning a b::after{content:" \2190"}
+.blog-lightning a span{display:block;margin-top:2px;color:var(--muted);font-size:14px;line-height:1.5}

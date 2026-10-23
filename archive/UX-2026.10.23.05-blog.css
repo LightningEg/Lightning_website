@@ -1,0 +1,96 @@
+/* Editorial pages use the Lightning landing-page tokens and Arabic type scale. */
+.blog-main{padding-bottom:72px}
+.blog-hero{max-width:820px;margin-inline:auto;padding:68px 0 32px;text-align:center}
+.blog-hero h1{margin-top:16px;font:600 clamp(38px,6vw,68px)/1.3 var(--display);color:var(--ink);text-wrap:balance}
+.blog-hero h1 span{background:var(--punch);-webkit-background-clip:text;background-clip:text;color:transparent}
+.blog-hero p{max-width:700px;margin:16px auto 0;color:var(--ink2);font-size:19px;line-height:1.85}
+.blog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}
+.blog-card{display:flex;flex-direction:column;gap:10px;min-height:190px;padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--paper);box-shadow:var(--shadow);color:var(--ink);text-decoration:none}
+.blog-card:hover{border-color:var(--green);transform:translateY(-2px)}
+.blog-card .label{margin-bottom:2px}
+.blog-card h2{font:600 23px/1.5 var(--display)}
+.blog-card p{color:var(--ink2);font-size:16px;line-height:1.8}
+.blog-card .read-more{margin-top:auto;color:var(--green-text);font-size:14px;font-weight:600}
+.blog-article{max-width:780px;margin:0 auto;padding:62px 0 80px}
+.blog-article header{margin-bottom:32px}
+.blog-article h1{margin-top:14px;font:600 clamp(36px,5.5vw,58px)/1.35 var(--display);text-wrap:balance}
+.blog-deck{margin-top:16px;color:var(--ink2);font-size:19px;line-height:1.9}
+.blog-meta{margin-top:14px;color:var(--muted);font-size:13px}
+.blog-body{font-size:18px;line-height:2}
+.blog-body h2{margin:42px 0 12px;font:600 clamp(25px,3.4vw,34px)/1.5 var(--display)}
+.blog-body h3{margin:26px 0 8px;font:600 21px/1.5 var(--display)}
+.blog-body p{margin:0 0 16px;color:var(--ink2)}
+.blog-body strong{color:var(--ink);font-weight:600}
+.blog-body ul,.blog-body ol{margin:0 0 20px;padding-inline-start:24px;color:var(--ink2)}
+.blog-body li{margin:8px 0;padding-inline-start:4px}
+.blog-answer{margin:0 0 24px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:var(--paper);color:var(--ink2);font-size:18px;line-height:1.95}
+.blog-answer strong{display:block;margin-bottom:4px;color:var(--green-text);font-size:14px;font-weight:600}
+.blog-toc{margin:0 0 36px;padding:18px 22px;border-radius:18px;background:var(--t-green)}
+.blog-toc strong{display:block;margin-bottom:6px;color:var(--ink);font-size:14px;font-weight:600}
+.blog-toc ol{margin:0;padding:0;list-style:none;color:var(--ink2);font-size:16px;line-height:2}
+.blog-toc a{color:inherit;text-decoration:none}
+.blog-toc a:hover{color:var(--green-text)}
+.blog-body h2{scroll-margin-top:84px}
+.blog-body ol{list-style-type:arabic-indic}
+.blog-note{margin:24px 0;padding:20px 22px;border-inline-start:4px solid var(--green);border-radius:14px;background:var(--t-green);color:var(--ink2);line-height:1.9}
+.blog-example{margin:24px 0;padding:22px 24px;border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
+.blog-example h3{margin-top:0}
+.blog-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
+.blog-links a{display:inline-flex;align-items:center;min-height:42px;padding:8px 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);font-size:14px;font-weight:600;text-decoration:none}
+.blog-links a:hover{border-color:var(--green)}
+.blog-faq{margin-top:44px}
+.blog-faq h2{margin-bottom:16px;font:600 30px/1.5 var(--display)}
+.blog-faq .d-faq{grid-template-columns:1fr}
+@media(max-width:760px){.blog-grid{grid-template-columns:1fr}.blog-hero{padding-top:48px}.blog-article{padding-top:40px}.blog-body{font-size:17px}}
+/* English editorial pages: Latin type scale and plain numbered lists. */
+html[lang="en"] .blog-body ol{list-style-type:decimal}
+html[lang="en"] .blog-body{font-size:17px;line-height:1.8}
+html[lang="en"] .blog-deck,html[lang="en"] .blog-answer,html[lang="en"] .blog-hero p{line-height:1.7}
+html[lang="en"] .blog-article h1,html[lang="en"] .blog-hero h1{line-height:1.15}
+html[lang="en"] .blog-body h2,html[lang="en"] .blog-faq h2,html[lang="en"] .blog-card h2{line-height:1.25}
+html[lang="en"] .blog-card p{line-height:1.6}
+html[lang="en"] .blog-toc ol{line-height:1.9}
+html[lang="en"] .blog-article .blog-links,html[lang="en"] .blog-article .blog-faq{margin-top:36px}
+
+/* one voice with the landing pages: English article titles and headings in the same weight and tracking (the Arabic sizes stay as css/arabic.css sets them) */
+html[lang="en"] .blog-article h1,html[lang="en"] .blog-hero h1{font-weight:800;letter-spacing:-.035em}
+html[lang="en"] .blog-body h2,html[lang="en"] .blog-faq h2,html[lang="en"] .blog-card h2{font-weight:800;letter-spacing:-.03em}
+
+/* Worked-example visuals (guideline A12): ranked bars from zero with the value on the mark (A12.2.1), a breakdown list for a change (A12.4.3, the site's .rows), a share bar of equal parts (A12.3.2) and Nile-badge steps (B06). Colour means money only (B03): soft rose = spent, green = kept. Every figure is also text in the HTML. */
+.viz-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0 0 4px;color:var(--muted);font-size:13px;font-weight:700}
+.viz-key span{display:inline-flex;align-items:center;gap:6px}
+.viz-key span::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--rose)}
+.viz-key .kept::before{background:var(--green)}
+.blog-body .viz-bars{list-style:none;margin:0;padding:0}
+.blog-body .viz-bars li{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:14px;row-gap:8px;align-items:baseline;margin:0;padding:13px 0;border-top:1px solid var(--line)}
+.blog-body .viz-bars li:first-child{border-top:0}
+.viz-name{color:var(--ink);font-size:16px;font-weight:600;line-height:1.4}
+.viz-name small{display:block;margin-top:2px;color:var(--muted);font-size:13px;font-weight:600;line-height:1.4}
+.viz-val{display:flex;gap:6px;align-items:baseline;color:var(--ink);font:800 18px/1 var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz-val small{color:var(--muted);font:700 13px/1 var(--body)}
+.viz-track{grid-column:1/-1;display:block;height:10px;overflow:hidden;border-radius:999px;background:var(--track)}
+.viz-track i{display:block;height:100%;width:var(--w);border-radius:999px;background:var(--rose)}
+.viz-bars .kept .viz-track i{background:var(--green)}
+.viz-bars+.rows{margin-top:10px}
+.viz-shift .rows{margin-top:6px}
+.blog-body .viz-weeks{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;margin:12px 0 0;padding:0}
+.blog-body .viz-weeks li{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;text-align:center}
+.viz-weeks i{display:block;height:22px;margin-bottom:8px;background:var(--rose)}
+.viz-weeks li:first-child i{border-start-start-radius:11px;border-end-start-radius:11px}
+.viz-weeks li:last-child i{border-start-end-radius:11px;border-end-end-radius:11px}
+.viz-weeks span{color:var(--muted);font-size:13px;font-weight:700}
+.viz-weeks b{color:var(--ink);font:800 18px/1.2 var(--display);font-variant-numeric:tabular-nums}
+.viz-weeks small{color:var(--muted);font-size:12px;font-weight:700}
+html .blog-body ol.viz-steps{display:grid;gap:10px;margin:0 0 20px;padding:0;list-style:none}
+html .blog-body ol.viz-steps li{display:flex;align-items:center;gap:14px;margin:0;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper);line-height:1.5}
+.viz-steps .num{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 15px/1 var(--display)}
+
+/* Meter for progress to a target (A12.5.2: 8px track), a caption under a visual, and the questions in the body face (Manrope / Noto Sans Arabic, B04) instead of the heavy headline face. */
+.viz-meter{display:block;height:8px;margin-top:12px;overflow:hidden;border-radius:999px;background:var(--track)}
+.viz-meter i{display:block;height:100%;width:var(--w);border-radius:999px;background:var(--green)}
+.viz-meter-labels{display:flex;justify-content:space-between;gap:12px;margin:8px 0 0;color:var(--muted);font-size:13px;font-weight:700}
+.viz-meter-labels b{color:var(--ink);font-variant-numeric:tabular-nums}
+.viz-meter+.rows{margin-top:14px}
+.viz-cap{margin:12px 0 0;color:var(--muted);font-size:13px;font-weight:600;line-height:1.5}
+.blog-body .viz-bars+.viz-cap{margin-top:12px}
+.blog-faq .d-faq summary{font:700 17px/1.45 var(--body);letter-spacing:0}
