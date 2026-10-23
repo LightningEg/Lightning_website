@@ -2498,15 +2498,15 @@
       "id": "UX-2026.10.21.04",
       "name": "Salary Runs Out guide · Part of its topic",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.04.html"
     },
     {
       "id": "UX-2026.10.21.05",
       "name": "Irregular Income guide · Part of its topic",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.05.html"
     },
     {
       "id": "UX-2026.10.21.06",
@@ -2519,8 +2519,8 @@
       "id": "UX-2026.10.21.07",
       "name": "Emergency Fund guide · Part of its topic",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.07.html"
     },
     {
       "id": "UX-2026.10.21.08",
@@ -2903,6 +2903,34 @@
     {
       "id": "UX-2026.10.23.02",
       "name": "Version Archive · Visual 20,000 EGP budget",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.02.html"
+    },
+    {
+      "id": "UX-2026.10.23.03",
+      "name": "Emergency Fund · Visual target",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.04",
+      "name": "Irregular Income · Visual example",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.05",
+      "name": "Salary Runs Out · Visual examples",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.06",
+      "name": "Version Archive · Visual blog examples",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
