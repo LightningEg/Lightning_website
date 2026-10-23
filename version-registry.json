@@ -2897,8 +2897,8 @@
       "id": "UX-2026.10.23.01",
       "name": "20,000 EGP Budget · Visual split",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.01.html"
     },
     {
       "id": "UX-2026.10.23.02",
@@ -2911,26 +2911,61 @@
       "id": "UX-2026.10.23.03",
       "name": "Emergency Fund · Visual target",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.03.html"
     },
     {
       "id": "UX-2026.10.23.04",
       "name": "Irregular Income · Visual example",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.04.html"
     },
     {
       "id": "UX-2026.10.23.05",
       "name": "Salary Runs Out · Visual examples",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.05.html"
     },
     {
       "id": "UX-2026.10.23.06",
       "name": "Version Archive · Visual blog examples",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.06.html"
+    },
+    {
+      "id": "UX-2026.10.23.07",
+      "name": "Blog · 20,000 EGP budget · question and features",
+      "page": "blog-budget-20000-egp.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.08",
+      "name": "Blog · Emergency fund · question and features",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.09",
+      "name": "Blog · Irregular income · question and features",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.10",
+      "name": "Blog · Salary runs out · question and features",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.11",
+      "name": "Version Archive · Blog questions and feature links",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
