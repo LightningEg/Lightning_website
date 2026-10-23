@@ -2778,8 +2778,8 @@
       "id": "UX-2026.10.21.45",
       "name": "Release Log · Lightning 1.4.0",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.45.html"
     },
     {
       "id": "UX-2026.10.21.46",
@@ -2883,8 +2883,8 @@
       "id": "UX-2026.10.22.07",
       "name": "Lightning · Download",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.07.html"
     },
     {
       "id": "UX-2026.10.22.08",
@@ -2967,8 +2967,41 @@
       "id": "UX-2026.10.23.11",
       "name": "Version Archive · Blog questions and feature links",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.11.html"
+    },
+    {
+      "id": "UX-2026.10.23.12",
+      "name": "Downloads · Lightning 1.4.4",
+      "page": "current-status.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.13",
+      "name": "Release Log · Lightning 1.4.4",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.23.14",
+      "name": "Version Archive · Lightning 1.4.4",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    }
+  ],
+  "app_releases": [
+    {
+      "version": "v1.4.4",
+      "date": "2026-10-23",
+      "commit": "f4a52abbf4d4c925122a6089908b4ca074ab80bc",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v1.4.4",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/Lightning-v1.4.4-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/Lightning-Test-1.4.4-845-f4a52abb.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.4.4/BUILD.json"
     }
   ]
 }
