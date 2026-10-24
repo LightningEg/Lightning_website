@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { signInventory } from '../functions/restore-purchases/license.mjs';
+const pair=await crypto.subtle.generateKey('Ed25519',true,['sign','verify']);
+const privateJwk=await crypto.subtle.exportKey('jwk',pair.privateKey);
+const inventory={schema_version:1,account_id:crypto.randomUUID(),items:[{item_id:'test-only',asset_version:1,deliveries:[]}]};
+const signed=await signInventory(inventory,privateJwk,'test-key');
+const sig=Buffer.from(signed.signature,'base64url');
+const verify=payload=>crypto.subtle.verify('Ed25519',pair.publicKey,sig,new TextEncoder().encode(payload));
+assert.ok(await verify(signed.payload));
+assert.equal(await verify(signed.payload.replace('test-only','another-item')),false);
+assert.equal(JSON.parse(signed.payload).account_id,inventory.account_id);
+assert.equal(/device|expires|activation/.test(signed.payload),false);
+assert.equal(signed.payload.includes(privateJwk.d),false);
+await assert.rejects(signInventory(inventory,privateJwk,''),/key id/);
+await assert.rejects(signInventory(inventory,await crypto.subtle.exportKey('jwk',pair.publicKey),'test'),/Private/);
+console.log('7 signature/portability checks passed (no live keys)');

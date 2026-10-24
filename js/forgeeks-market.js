@@ -43,6 +43,10 @@
   }
   // Apply a theme now and remember it here; the picker does the same if it is loaded.
   function applyTheme(id) {
+    if (doc.body.dataset.mainStore) {
+      try { root.localStorage.setItem("lightning-geeks-theme", id); } catch (_) {}
+      return; // Website cosmetics belong to For Geeks; preserve the main site light/dark setting.
+    }
     if (LG && LG.use) { LG.use(id); return; }
     var r = doc.documentElement;
     if (id === 'mono') delete r.dataset.theme; else r.dataset.theme = id;

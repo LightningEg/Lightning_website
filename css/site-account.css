@@ -1,0 +1,37 @@
+/* Main-site account surfaces: Part B tokens, shared account/market behaviour. */
+body[data-main-store]{--sans:var(--body);--mono:var(--body);--dim:var(--muted);--soft:var(--panel);--line-strong:var(--line-ctl);--accent:var(--azure);--bg:var(--paper)}
+body[data-main-store] .acct-top{padding:64px 0;min-height:65vh}
+body[data-main-store] .acct-top h1{font-family:var(--display);color:var(--ink)}
+body[data-main-store] .lede{max-width:66ch;color:var(--muted);line-height:1.65}
+body[data-main-store] .panel,body[data-main-store] .mkt-item,body[data-main-store] .mkt-win{border-radius:22px}
+body[data-main-store] .panel h2,body[data-main-store] .panel h3{font:700 20px var(--display);margin-block-end:12px}
+body[data-main-store] .acct input,body[data-main-store] .acct select,body[data-main-store] .acct textarea{background:var(--field);border-radius:10px;min-height:48px}
+body[data-main-store] .acct .btn{background:var(--nile);color:var(--on-nile);border:1px solid var(--nile);border-radius:999px;padding:10px 20px;min-height:44px;font:700 14px var(--body)}
+body[data-main-store] .acct .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-ctl)}
+body[data-main-store] .acct .k{display:none}
+body[data-main-store] .chip{display:inline-flex;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
+body[data-main-store] .mkt-win{background:var(--paper);color:var(--ink)}
+body[data-main-store] .tm-pv{position:relative;min-height:100px;padding:18px;border-radius:14px;display:grid;gap:12px}
+body[data-main-store] .tm-pv i{display:block;height:6px;border-radius:999px}
+body[data-main-store] .tm-pv b{display:block;width:25%;height:14px;border-radius:999px}
+.site-invite{width:min(820px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:28px;border:1px solid var(--line);border-radius:22px;background:var(--paper);color:var(--ink);font-family:var(--body);box-shadow:var(--shadow-screen);overflow:auto}
+.site-invite::backdrop{background:rgba(10,36,66,.6)}
+.site-invite h2{font:800 clamp(25px,4vw,38px)/1.15 var(--display);color:var(--ink);margin:12px 44px 12px 0}
+.site-invite p{color:var(--muted);line-height:1.6}
+.site-invite-close{position:absolute;inset-inline-end:14px;top:14px;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:24px}
+.site-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-block:24px}
+.site-benefits figure{margin:0;min-width:0}
+.site-benefits img{width:100%;height:auto;border-radius:16px;display:block}
+.site-benefits h3{font:700 17px var(--display);margin:12px 0 6px;color:var(--ink)}
+.site-benefits p{font-size:13px;margin:0}
+.site-invite-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.site-invite :focus-visible{outline:3px solid var(--azure);outline-offset:3px}
+.site-invite [data-later]{background:none;border:0;min-height:44px;color:var(--ink);font:700 14px var(--body);cursor:pointer;text-decoration:underline}
+@media(max-width:600px){.site-invite{padding:20px}.site-benefits{grid-template-columns:1fr;gap:14px}.site-benefits figure{display:grid;grid-template-columns:90px 1fr;column-gap:14px}.site-benefits img{grid-row:span 2;align-self:center}.site-benefits h3{margin:0 0 4px}.site-invite-actions .btn{width:100%}}
+/* Eight destinations use the existing menu at tablet/laptop widths. Downloads remains a nav link. */
+@media(min-width:981px) and (max-width:1280px){
+ .d-menu-btn{display:inline-flex}.d-bar .wrap{position:relative}
+ .d-links{display:none;position:absolute;top:100%;inset-inline:0;margin:0;padding:8px;flex-direction:column;gap:2px;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+ .d-bar.d-menu-open .d-links{display:flex}.d-links a{padding:14px 16px;font-size:16px;border-radius:12px}
+}
+@media(min-width:1281px){.d-bar .nav-cta{display:none}.d-links a{padding-inline:9px}}

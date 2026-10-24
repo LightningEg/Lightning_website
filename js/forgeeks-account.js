@@ -351,7 +351,7 @@
     $('form-link').addEventListener('submit', addLink);
     $('form-public').elements.visibility.addEventListener('change', syncVisibilityNote);
     $('sign-out').addEventListener('click', signOut);
-    setMode('in');
+    setMode(new URLSearchParams(root.location.search).get('signup') === '1' ? 'up' : 'in');
     // Supabase advises not to call it from inside this callback, so hand off on the next tick.
     sb.auth.onAuthStateChange(function (event, s) {
       session = s;

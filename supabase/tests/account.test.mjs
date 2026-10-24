@@ -104,14 +104,15 @@ await test('say maps database and auth errors to plain words', () => {
   assert.match(rules.say({ message: 'insufficient coins' }), /Not enough coins/);
 });
 
-await test('safeNext only allows For Geeks pages on this site, never the account page or another site', () => {
+await test('safeNext allows explicit main-site and For Geeks routes, never an account page or another site', () => {
   assert.equal(auth.safeNext('forgeeks-roadmap.html'), 'forgeeks-roadmap.html');
   assert.equal(auth.safeNext('/forgeeks-profile.html?u=Ada%20L#work'), 'forgeeks-profile.html?u=Ada%20L#work');
-  for (const bad of ['https://evil.test/forgeeks.html', '//evil.test/x', 'javascript:alert(1)', 'index.html', 'forgeeks-account.html',
+  for (const bad of ['https://evil.test/forgeeks.html', '//evil.test/x', 'javascript:alert(1)', 'unknown.html', 'account.html', 'forgeeks-account.html',
     'forgeeks-account.html?next=x', 'forgeeks.html"><script>', 'forgeeks.html\nx', '', null, 42]) assert.equal(auth.safeNext(bad), null, String(bad));
   assert.equal(auth.signInHref('/forgeeks-guide.html', '?a=1', '#rules'), 'forgeeks-account.html?next=forgeeks-guide.html%3Fa%3D1%23rules');
   assert.equal(auth.signInHref('/forgeeks-account.html', '', ''), 'forgeeks-account.html');
-  assert.equal(auth.signInHref('/index.html', '', ''), 'forgeeks-account.html');
+  assert.equal(auth.safeNext('marketplace.html'), 'marketplace.html');
+  assert.equal(auth.signInHref('/index.html', '', ''), 'forgeeks-account.html?next=index.html');
   assert.equal(auth.initial(' ada'), 'A');
   assert.equal(auth.initial(''), '?');
 });
@@ -422,7 +423,7 @@ await test('return to page: ?next is kept, removed from the address bar, and use
 });
 
 await test('return to page: a foreign or account-page next is dropped', async () => {
-  for (const bad of ['https%3A%2F%2Fevil.test%2F', 'forgeeks-account.html', 'index.html']) {
+  for (const bad of ['https%3A%2F%2Fevil.test%2F', 'forgeeks-account.html', 'account.html', 'unknown.html']) {
     const p = await boot(account(), 'https://lightningeg.com/forgeeks-account.html?next=' + bad);
     assert.equal(p.w.sessionStorage.getItem('lightning-geeks-next'), null, bad);
     await p.fire('INITIAL_SESSION', session); await tick(30);
