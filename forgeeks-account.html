@@ -1,0 +1,221 @@
+<!doctype html>
+<!-- For Geeks · account · 2026-10-24 · sign in, profile and links (FG-03). Not linked from the top bar and not indexed until launch (docs/proposals/forgeeks-accounts-lightning-coins.md). Shell: tools/geeks_shell.py. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Sign in to your For Geeks account and edit your profile.">
+  <title>Account · For Geeks · Lightning</title>
+  <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261021-2">
+  <link rel="stylesheet" href="css/forgeeks-account.css?v=20261024-1">
+</head>
+<body class="no-js">
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="grid" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="forgeeks.html" aria-label="Lightning, For Geeks home">
+      <img class="geeks-mark-dark" src="assets/brand/lightning-mark-white.svg" alt="" width="15" height="21"><img class="geeks-mark-light" src="assets/brand/lightning-mark-nile.svg" alt="" width="15" height="21">
+      lightning
+    </a>
+    <span class="crumb" aria-hidden="true">~/root/for-geeks/<b>account</b><span class="caret"></span></span>
+    <nav class="links" aria-label="For Geeks">
+      <a href="forgeeks.html">home</a>
+      <a href="forgeeks-guide.html">contribute</a>
+      <a href="forgeeks-roadmap.html">roadmap</a>
+      <a class="opt" href="index.html" target="_blank" rel="noopener">app</a>
+    </nav>
+    <div class="tools">
+      <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
+        <span class="dots" aria-hidden="true"><i style="background:var(--bg)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i></span>
+        <span class="t-name">theme: <span id="theme-name">mono</span></span>
+      </button>
+      <a class="chip src" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">source ↗</a>
+    </div>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<div class="tm" id="themes" hidden>
+  <div class="tm-back" data-close></div>
+  <div class="tm-win" role="dialog" aria-modal="true" aria-labelledby="tm-title">
+    <div class="tm-head"><span class="d" aria-hidden="true"><i></i><i></i><i></i></span><span id="tm-title"><b>$</b> theme --pick</span><button class="tm-x" type="button" data-close>esc ✕</button></div>
+    <div class="tm-grid" role="listbox" id="theme-list" aria-label="Themes" tabindex="0"></div>
+    <div class="tm-foot"><span><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> preview</span><span><kbd>enter</kbd> keep</span><span><kbd>esc</kbd> cancel</span><span><kbd>T</kbd> opens this anywhere</span></div>
+  </div>
+</div>
+
+<main id="main">
+  <section class="s acct-top" aria-labelledby="h1">
+    <div class="wrap">
+      <h1 id="h1">Your <span class="hi">account.</span></h1>
+      <p class="lede">Sign in to build a profile and show what you made. Lightning, the app, never needs an account. Tasks, coins and the marketplace are not live yet; today you can create an account and fill in your profile.</p>
+
+      <div class="acct">
+        <p id="acct-msg" class="acct-msg" role="status" aria-live="polite" hidden></p>
+
+        <p id="view-loading" class="acct-loading">loading…</p>
+
+        <div id="view-out" hidden>
+          <div class="panel">
+            <h2 id="auth-title">sign in</h2>
+            <p class="why">Email is the only thing we need. Everything else is optional and yours to change or remove.</p>
+            <div class="oauth">
+              <button class="btn" id="auth-google" type="button"><span class="k">$</span> continue with Google</button>
+            </div>
+            <div class="or" aria-hidden="true">or use email</div>
+            <form id="auth-form" novalidate>
+              <div class="fields">
+                <div class="f"><label for="auth-email">email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+                <div class="f"><label for="auth-password">password</label><input id="auth-password" name="password" type="password" autocomplete="current-password" required>
+                  <span id="auth-hint" class="fine" hidden style="margin:0">At least 8 characters.</span></div>
+              </div>
+              <div class="row">
+                <button class="btn ghost" id="auth-submit" type="submit">sign in</button>
+                <button class="linkish" id="auth-switch" type="button">I need an account</button>
+                <button class="linkish" id="auth-forgot" type="button">forgot password</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="view-recover" hidden>
+          <div class="panel">
+            <h2>choose a new password</h2>
+            <form id="recover-form" novalidate>
+              <div class="fields"><div class="f"><label for="new-password">new password</label><input id="new-password" name="password" type="password" autocomplete="new-password" required></div></div>
+              <div class="row"><button class="btn" type="submit">save password</button></div>
+            </form>
+          </div>
+        </div>
+
+        <div id="view-in" hidden>
+          <div class="bar-user">
+            <span class="who" id="who"></span>
+            <span class="nums"><span class="chip">coins <b id="coins">0</b></span><span class="chip">score <b id="score">0</b></span></span>
+            <button class="btn ghost" id="sign-out" type="button">sign out</button>
+          </div>
+
+          <form class="panel" id="form-public" novalidate>
+            <h2>public profile</h2>
+            <p class="why">New profiles are <b>private</b>. Pick who can see it, then choose which parts to show.</p>
+            <div class="fields two">
+              <div class="f"><label for="display_name">display name</label><input id="display_name" name="display_name" type="text" maxlength="40" autocomplete="nickname"></div>
+              <div class="f"><label for="visibility">who can see it</label>
+                <select id="visibility" name="visibility"><option value="private">only me</option><option value="members">signed-in members</option><option value="public">anyone</option></select></div>
+              <div class="f wide"><label for="bio">bio <span class="opt">optional</span></label><textarea id="bio" name="bio" maxlength="500" rows="3"></textarea></div>
+              <div class="f wide"><label for="avatar_url">avatar link <span class="opt">optional, https</span></label><input id="avatar_url" name="avatar_url" type="url" placeholder="https://" autocomplete="off"></div>
+            </div>
+            <div class="checks">
+              <label class="chk"><input type="checkbox" name="adult_confirmed"><span>I am 18 or older<small>Needed to be public or on the leaderboard.</small></span></label>
+              <label class="chk"><input type="checkbox" name="show_on_leaderboard"><span>Show me on the leaderboard<small>Shows your display name, avatar and score.</small></span></label>
+            </div>
+            <p class="fine" id="vis-note"></p>
+            <div class="row"><button class="btn" type="submit">save profile</button><span class="acct-status" id="status-public" role="status"></span></div>
+          </form>
+
+          <form class="panel" id="form-setup" novalidate>
+            <h2>git setup and work</h2>
+            <p class="why">Show how you work. These only appear if you switch them on and your profile is visible.</p>
+            <div class="fields two">
+              <div class="f"><label for="setup_editor">editor <span class="opt">optional</span></label><input id="setup_editor" name="setup_editor" type="text" maxlength="80" placeholder="Neovim"></div>
+              <div class="f"><label for="setup_os">operating system <span class="opt">optional</span></label><input id="setup_os" name="setup_os" type="text" maxlength="80" placeholder="Arch Linux"></div>
+              <div class="f"><label for="setup_languages">languages <span class="opt">comma separated</span></label><input id="setup_languages" name="setup_languages" type="text" placeholder="Python, SQL"></div>
+              <div class="f"><label for="setup_tools">tools <span class="opt">comma separated</span></label><input id="setup_tools" name="setup_tools" type="text" placeholder="git, tmux, ruff"></div>
+              <div class="f wide"><label for="setup_notes">notes <span class="opt">optional</span></label><textarea id="setup_notes" name="setup_notes" maxlength="500" rows="3"></textarea></div>
+              <div class="f"><label for="dotfiles_url">dotfiles link <span class="opt">optional, https</span></label><input id="dotfiles_url" name="dotfiles_url" type="url" placeholder="https://" autocomplete="off"></div>
+              <div class="f"><label for="portfolio_url">portfolio link <span class="opt">optional, https</span></label><input id="portfolio_url" name="portfolio_url" type="url" placeholder="https://" autocomplete="off"></div>
+            </div>
+            <div class="checks">
+              <label class="chk"><input type="checkbox" name="show_setup"><span>Show my setup on my profile</span></label>
+              <label class="chk"><input type="checkbox" name="show_work"><span>Show my work on my profile<small>Merged pull requests we verified, and the links below.</small></span></label>
+            </div>
+            <div class="row"><button class="btn" type="submit">save setup</button><span class="acct-status" id="status-setup" role="status"></span></div>
+          </form>
+
+          <div class="panel">
+            <h2>links</h2>
+            <p class="why">Other things you built. Shown as self-reported, apart from work we verified. Up to 12.</p>
+            <ul class="links-list" id="links-list"></ul>
+            <p class="links-empty" id="links-empty">No links yet.</p>
+            <form id="form-link" novalidate>
+              <div class="fields two">
+                <div class="f"><label for="link-label">name</label><input id="link-label" name="label" type="text" maxlength="60"></div>
+                <div class="f"><label for="link-url">link <span class="opt">https</span></label><input id="link-url" name="url" type="url" placeholder="https://" autocomplete="off"></div>
+              </div>
+              <div class="row"><button class="btn ghost" type="submit">add link</button><span class="acct-status" id="status-links" role="status"></span></div>
+            </form>
+          </div>
+
+          <form class="panel" id="form-private" novalidate>
+            <h2>private details</h2>
+            <p class="why">Only you can see these. Nothing here is shown to anyone. Leave any of it empty. Your <b>birth date</b> is used only to keep profiles of people under 18 private. Your <b>phone</b> is used only to reach you about your account.</p>
+            <div class="fields two">
+              <div class="f"><label for="full_name">name <span class="opt">optional</span></label><input id="full_name" name="full_name" type="text" maxlength="120" autocomplete="name"></div>
+              <div class="f"><label for="phone">phone <span class="opt">optional</span></label><input id="phone" name="phone" type="tel" maxlength="24" autocomplete="tel"></div>
+              <div class="f"><label for="birth_date">birth date <span class="opt">optional</span></label><input id="birth_date" name="birth_date" type="date" autocomplete="bday"></div>
+            </div>
+            <div class="checks"><label class="chk"><input type="checkbox" name="marketing_consent"><span>Email me about Lightning<small>Off unless you switch it on. Separate from your account.</small></span></label></div>
+            <div class="row"><button class="btn" type="submit">save details</button><span class="acct-status" id="status-private" role="status"></span></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>Start here</h4><ul>
+        <li><a href="forgeeks-guide.html">Contribute in three steps</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Good first issues</a></li>
+        <li><a href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open a Codespace</a></li>
+        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
+        <li><a href="app-feedback.html" target="_blank" rel="noopener">Not a coder? Send feedback</a></li>
+      </ul></div>
+      <div><h4>System</h4><ul>
+        <li><a href="forgeeks-guide.html#built">Architecture</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
+      </ul></div>
+      <div><h4>Rules</h4><ul>
+        <li><a href="forgeeks-guide.html#product">What Lightning is</a></li>
+        <li><a href="forgeeks-guide.html#rules">Ground rules</a></li>
+        <li><a href="forgeeks-guide.html#team">Who does what</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">Licence</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/security/advisories/new" target="_blank" rel="noopener">Report a flaw privately</a></li>
+      </ul></div>
+      <div><h4>Community</h4><ul>
+        <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
+        <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
+        <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
+      </ul></div>
+    </div>
+    <div class="legal"><span><img class="geeks-mark-dark" src="assets/brand/lightning-mark-white.svg" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px"><img class="geeks-mark-light" src="assets/brand/lightning-mark-nile.svg" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px">© 2026 Lightning · built in Egypt</span><span><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/forgeeks.js?v=20261021-2"></script>
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/forgeeks-config.js"></script>
+<script src="js/forgeeks-account.js?v=20261024-1"></script>
+</body>
+</html>
