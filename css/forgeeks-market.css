@@ -1,0 +1,67 @@
+/* For Geeks market page only (forgeeks-market.html). Tokens from forgeeks.css, form pieces from forgeeks-account.css,
+   banners from forgeeks-cosmetics.css. Guideline D07: hairline cells (no box in a box), radii 2 buttons, 4 controls,
+   6 chips and rows, 12 windows. Nothing here moves. */
+.mkt.acct{max-width:none}
+.mkt kbd{font:400 12px var(--mono);padding:1px 6px;border:1px solid var(--line-strong);border-radius:4px}
+
+.mkt-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin:0 0 40px}
+.mkt-bar .chip b{font-weight:500}
+.mkt-bar .fine{margin:0;flex:1 1 320px}
+
+.mkt-sec{margin:0 0 64px}
+.mkt-sec>h2{font:500 13px var(--mono);letter-spacing:0;margin:0 0 6px;color:var(--ink);text-shadow:none}
+.mkt-sec .why{margin:0 0 22px;color:var(--dim);font-size:14.5px;max-width:62ch}
+.mkt-sub{font:500 13px var(--mono);margin:36px 0 14px;color:var(--ink)}
+
+/* the cells: a grid with hairlines between them */
+.mkt-grid,.mkt-free{list-style:none;margin:0;padding:0;display:grid;gap:0;overflow:hidden;border:1px solid var(--line)}
+.mkt-grid.themes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mkt-grid.banners{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mkt-free{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mkt-cell{display:flex;flex-direction:column;gap:10px;min-width:0;padding:18px;background:var(--soft);box-shadow:1px 0 0 var(--line),0 1px 0 var(--line)}
+.mkt-cell.compact{gap:6px;padding:14px 16px}
+.mkt-cell.equipped{box-shadow:1px 0 0 var(--line),0 1px 0 var(--line),inset 0 2px 0 var(--accent)}
+
+.mkt-pv{height:96px}
+.mkt-cell .fg-banner{height:96px;border-radius:4px;border-bottom:1px solid var(--line)}
+.mkt-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.mkt-name{margin:0;font:500 14px var(--mono);color:var(--ink);overflow-wrap:anywhere}
+.mkt-tag{flex:none;font:400 12px var(--mono);color:var(--dim)}
+.mkt-note{margin:0;color:var(--dim);font-size:14px;line-height:1.5}
+.mkt-cell.compact .mkt-head{flex-direction:column;align-items:flex-start;gap:0}
+.mkt-cell.compact .dots{margin-bottom:2px}
+
+.mkt-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:auto;padding-top:6px;min-height:34px}
+.mkt-state{font:500 12.5px var(--mono);color:var(--accent)}
+.mkt-mini{min-height:34px;padding:0 12px;border:1px solid var(--line-strong);border-radius:4px;background:transparent;color:var(--ink);font:400 12.5px var(--mono);cursor:pointer}
+.mkt-mini:hover{border-color:var(--accent)}
+.mkt-cell button[disabled]{opacity:.55;cursor:default}
+
+/* the buy dialog: a window like the theme picker, above the page, below the picker */
+.mkt-dlg{position:fixed;inset:0;z-index:66;display:grid;place-items:center;padding:16px}
+.mkt-dlg[hidden],.mkt-win [hidden],.mkt [hidden]{display:none!important}
+.mkt-back{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.mkt-win{position:relative;width:min(440px,100%);max-height:calc(100svh - 32px);overflow:auto;padding:24px;background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.25);outline:0}
+.mkt-win h2{font:500 15px var(--mono);letter-spacing:0;margin:0 0 14px;color:var(--ink);text-shadow:none}
+.mkt-dlg-pv .mkt-pv,.mkt-dlg-pv .fg-banner{height:80px;border-radius:4px;border-bottom:1px solid var(--line)}
+.mkt-dlg-note{margin:12px 0 0;color:var(--dim);font-size:14px}
+.mkt-dlg-note:empty{display:none}
+.mkt-sum{margin:18px 0 0;border-top:1px solid var(--line)}
+.mkt-sum div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line);font:400 13px var(--mono)}
+.mkt-sum div:last-child dt:empty,.mkt-sum div:last-child dd:empty{display:none}
+.mkt-sum dt{color:var(--dim)}
+.mkt-sum dd{margin:0;color:var(--ink);text-align:right}
+.mkt-win .acct-status{margin:12px 0 0;min-height:1.4em;overflow-wrap:anywhere}
+.mkt-win .row{margin-top:16px}
+
+@media (max-width:900px){
+  .mkt-grid.themes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mkt-free{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .mkt-grid.themes,.mkt-grid.banners{grid-template-columns:minmax(0,1fr)}
+  .mkt-free{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mkt-cell{padding:16px}
+  .mkt-sec{margin-bottom:48px}
+  .mkt-win{padding:20px}
+}

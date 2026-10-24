@@ -12,7 +12,11 @@
   var $=function(s){return doc.querySelector(s)},$$=function(s){return [].slice.call(doc.querySelectorAll(s))};
   var fmt=function(n){return Math.round(n).toLocaleString('en-US')};
   var toastEl=$('#toast'),toastT;
-  function toast(msg){toastEl.textContent=msg;toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('on')},1800)}
+  function toast(msg,link){
+    toastEl.textContent=msg;toastEl.classList.toggle('link',!!link);
+    if(link){var a=doc.createElement('a');a.href=link.href;a.textContent=link.text;toastEl.appendChild(doc.createTextNode(' '));toastEl.appendChild(a)}
+    toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('on')},link?7000:1800)
+  }
   function copy(text){
     var done=function(){toast('copied to clipboard')};
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
@@ -23,7 +27,7 @@
   /* ===================== themes: a window in the middle of the screen ===================== */
   var THEMES=[
     {id:'mono',name:'Mono',note:'white on black, the default',c:['#0a0a0a','#f2f2f2','#b8b8b8','#ffffff']},
-    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c']},
+    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true},
     {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93']},
     {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450']},
     {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0']},
@@ -33,27 +37,54 @@
     {id:'synthwave',name:'Synthwave',note:'neon magenta and cyan',c:['#12061f','#f6e9ff','#c6a9df','#ff3ea5']},
     {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88']},
     {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000']},
-    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017']}
+    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017']},
+    /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
+       catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
+    {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150},
+    {id:'garnet',name:'Garnet',note:'wine red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:200},
+    {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:250}
   ];
   var btn=$('#theme-btn'),tm=$('#themes'),grid=$('#theme-list'),nameEl=$('#theme-name'),meta=doc.querySelector('meta[name="theme-color"]');
   var saved=root.dataset.theme||'mono',cursor=0,listeners=[],lastFocus=null;
   if(!THEMES.some(function(t){return t.id===saved}))saved='mono';
+  var own={},LOCK='<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.2" y="5.4" width="7.6" height="5" rx="1"/><path d="M4 5.4V3.9a2 2 0 0 1 4 0v1.5"/></svg>';
   function onTheme(fn){listeners.push(fn)}
+  function find(id){return THEMES.filter(function(x){return x.id===id})[0]}
   function apply(id){
     if(id==='mono')delete root.dataset.theme;else root.dataset.theme=id;
-    var t=THEMES.filter(function(x){return x.id===id})[0];
+    var t=find(id);
     if(nameEl)nameEl.textContent=id;if(meta)meta.setAttribute('content',t.c[0]);
     listeners.forEach(function(fn){fn(id)});
   }
-  function keep(id){saved=id;apply(id);try{localStorage.setItem('lightning-geeks-theme',id)}catch(_){}}
+  function store(id){try{localStorage.setItem('lightning-geeks-theme',id)}catch(_){}}
+  /* use: apply and remember a theme the caller knows is allowed (free, owned, or chosen by the server). keep: the picker's rule. */
+  function use(id){saved=id;apply(id);store(id)}
+  function locked(t){return !!t.paid&&!own[t.id]}
+  function equipOnServer(id){
+    var F=window.FG;if(!F||!F.sb||!F.session||!F.session())return;
+    try{F.sb.rpc('equip_item',{p_item_id:id}).then(function(){},function(){})}catch(_){}
+  }
+  /* Preview is free for everyone (cosmetics are not DRM); keeping a paid theme you do not own is not: the saved theme stays and the toast points to the market. */
+  function keep(id){
+    var t=find(id);if(!t)return false;
+    if(locked(t)){apply(saved);toast(t.name.toLowerCase()+' is a paid theme, '+t.price+' coins.',{href:'forgeeks-market.html',text:'open the market'});return false}
+    use(id);equipOnServer(id);return true;
+  }
+  function mark(t){
+    var o=t.paid&&doc.getElementById('th-'+t.id);if(!o)return;
+    var lk=locked(t),p=o.querySelector('.tm-price');
+    o.classList.toggle('lk',lk);
+    if(lk)p.innerHTML=LOCK+'<span class="sr">locked, </span>'+(Math.round(+t.price)||0)+' coins';else p.textContent='owned';
+  }
   THEMES.forEach(function(t,i){
     var o=doc.createElement('div');o.className='tm-card';o.setAttribute('role','option');o.id='th-'+t.id;o.dataset.id=t.id;
     o.innerHTML='<div class="tm-pv" style="background:'+t.c[0]+';color:'+t.c[1]+'" aria-hidden="true"><i style="width:72%;background:'+t.c[1]+'"></i><i style="width:52%;background:'+t.c[2]+';opacity:.85"></i><i style="width:34%;background:'+t.c[3]+'"></i><b style="background:'+t.c[3]+'"></b></div>'
-      +'<div class="tm-name">'+t.name+'<span aria-hidden="true">✓ in use</span></div><p class="tm-note">'+t.note+'</p>';
+      +'<div class="tm-name">'+t.name+'<span aria-hidden="true">✓ in use</span>'+(t.paid?'<span class="tm-price"></span>':'')+'</div><p class="tm-note">'+t.note+'</p>';
     o.addEventListener('mouseenter',function(){move(i,true)});
     o.addEventListener('click',function(){keep(t.id);close()});
     grid.appendChild(o);
   });
+  THEMES.forEach(mark);
   function cols(){return innerWidth<=640?2:3}
   function move(i,noScroll){
     cursor=Math.max(0,Math.min(THEMES.length-1,i));
@@ -95,6 +126,32 @@
   });
   apply(saved);
 
+  /* Signed in: the catalog says which paid themes you own and which theme follows you. window.FG loads after this file, so it is read once the page is ready. */
+  var catalogFor=null;
+  function loadOwned(){
+    var F=window.FG,s=F&&F.sb&&F.session&&F.session();
+    if(!s||catalogFor===s.user.id)return;
+    var uid=s.user.id;catalogFor=uid;
+    function same(){var n=F.session();return !!n&&n.user.id===uid}
+    try{F.sb.rpc('market_catalog').then(function(r){
+      if(r.error||!r.data||!same()){catalogFor=null;return}
+      var eq=null;own={};
+      r.data.forEach(function(it){
+        var t=it.type==='theme'&&find(it.id);if(!t)return;
+        if(t.paid){if(it.owned)own[t.id]=true;if(it.price>0)t.price=it.price}
+        if(it.equipped)eq=t.id;
+      });
+      THEMES.forEach(mark);
+      if(eq&&eq!==saved){saved=eq;store(eq);if(tm.hidden)apply(eq)}
+    },function(){catalogFor=null})}catch(_){catalogFor=null}
+  }
+  function startAccount(){
+    var F=window.FG;if(!F||!F.ready)return;
+    F.ready.then(loadOwned,function(){});
+    if(F.onAuth)F.onAuth(function(s){if(s)loadOwned();else{catalogFor=null;own={};THEMES.forEach(mark)}});
+  }
+  if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',startAccount);else startAccount();
+
   /* ===================== top bar: solid on scroll, progress; the rail: sections of this page ===================== */
   var bar=$('#bar'),prog=$('#progress'),rail=$('#rail'),railLinks=$$('#rail a');
   function onScroll(){
@@ -126,7 +183,7 @@
   /* card spotlight */
   $$('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
 
-  window.LG={THEMES:THEMES,keep:keep,current:function(){return saved},open:open,onTheme:onTheme,copy:copy,toast:toast,reduce:reduce};
+  window.LG={THEMES:THEMES,keep:keep,use:use,own:function(id,yes){var t=find(id);if(t&&t.paid){own[id]=!!yes;mark(t)}},current:function(){return saved},open:open,onTheme:onTheme,copy:copy,toast:toast,reduce:reduce};
 
   /* ===================== the field: a terrain of light, current in the grid, and lightning =====================
      The terrain stays behind the page, faint between the hero and the closing; a faint current runs through
@@ -136,7 +193,7 @@
   var W=0,H=0,DPR=1,N=0,small=false,U,Z,SEED,px,py,pa,ps,BI,ORD,BK=7,CNT=new Int32Array(8);
   var STARS=[],PULSES=[],BOLTS=[],GLOWS=[],GRID=24;
   var PART='242,242,242',GLOWC='255,255,255',CORE='255,255,255',LIGHT=false;
-  function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=root.dataset.theme==='paper';CORE=LIGHT?GLOWC:'255,255,255'}
+  function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=!!(find(root.dataset.theme)||{}).light;CORE=LIGHT?GLOWC:'255,255,255'}
   onTheme(function(){readColors();if(reduce)frame(performance.now())});
   var hero=$('#top'),closing=$('#closing'),heroH1=$('#top h1');
   function rnd(){return Math.random()}

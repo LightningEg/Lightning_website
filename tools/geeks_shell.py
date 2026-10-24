@@ -13,11 +13,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261025-1"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
+VERSION = "20261025-2"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
 SUPABASE_JS = "js/vendor/supabase-2.118.0.js"  # pinned; a new version is a new file name
 
 # Themes the head script may apply before first paint (js/forgeeks.js lists their names and colours).
-THEME_IDS = ["mono", "paper", "meadow", "nile", "ocean", "tokyo", "dracula", "rose", "synthwave", "phosphor", "amber", "solarized"]
+THEME_IDS = ["mono", "paper", "meadow", "nile", "ocean", "tokyo", "dracula", "rose", "synthwave", "phosphor", "amber", "solarized", "moss", "garnet", "frost"]
 
 GH = "https://github.com/LightningEg/Lightning"
 TASKS = f"{GH}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee"
@@ -35,6 +35,7 @@ EXTRA = [
     ("forgeeks-account.html", "~/root/for-geeks/<b>account</b>"),
     ("forgeeks-leaderboard.html", "~/root/for-geeks/<b>leaderboard</b>"),
     ("forgeeks-profile.html", "~/root/for-geeks/<b>profile</b>"),
+    ("forgeeks-market.html", "~/root/for-geeks/<b>market</b>"),
 ]
 
 FOOTER_COLUMNS = [

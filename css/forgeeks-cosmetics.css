@@ -7,3 +7,61 @@
 @media (prefers-reduced-motion:reduce){.fg-banner,.fg-banner *{animation:none!important;transition:none!important}}
 
 /* ---- items (added by the market) ---- */
+/* Banners are drawn with gradients only: no images, no text. Each has its own ground, so it reads the same
+   on a dark theme and on a light one (the hairline border comes from the base rule). Sizes are in px so the
+   pattern is the same at every width. Only borealis moves, slowly; the rule above stops it under reduced motion. */
+
+/* halo: follows the colours of the theme it is seen in */
+.fg-banner[data-item="banner-halo"]{background:
+  radial-gradient(70% 150% at 12% -10%,rgba(var(--glow),.42),transparent 70%),
+  radial-gradient(55% 130% at 92% 115%,color-mix(in srgb,var(--accent2) 40%,transparent),transparent 72%),
+  linear-gradient(120deg,var(--well),var(--panel))}
+
+/* blueprint: a fine grid, a heavier one every 40px, on deep blue */
+.fg-banner[data-item="banner-blueprint"]{background:
+  linear-gradient(rgba(150,205,255,.34) 1px,transparent 1px) 0 0/40px 40px,
+  linear-gradient(90deg,rgba(150,205,255,.34) 1px,transparent 1px) 0 0/40px 40px,
+  linear-gradient(rgba(150,205,255,.13) 1px,transparent 1px) 0 0/8px 8px,
+  linear-gradient(90deg,rgba(150,205,255,.13) 1px,transparent 1px) 0 0/8px 8px,
+  radial-gradient(120% 160% at 85% 0%,#215aa8 0%,#143774 45%,#0b2250 100%)}
+
+/* dusk: indigo sky down to a low orange sun, a few horizon bands */
+.fg-banner[data-item="banner-dusk"]{background:
+  radial-gradient(circle at 74% 100%,#fff0c8 0 14px,rgba(255,196,120,.85) 15px 30px,rgba(255,150,90,.28) 31px 78px,transparent 79px),
+  repeating-linear-gradient(180deg,transparent 0 9px,rgba(40,16,70,.16) 9px 10px) 0 62%/100% 38% no-repeat,
+  linear-gradient(180deg,#171446 0%,#40226a 36%,#a9416f 66%,#ee8a4d 88%,#ffc47c 100%)}
+
+/* circuit: copper traces and pads on graphite, two tiles of different size so the pattern does not repeat in step */
+.fg-banner[data-item="banner-circuit"]{background:
+  radial-gradient(circle at 25px 15px,#e7a566 0 2.6px,transparent 3.2px) 0 0/72px 60px,
+  radial-gradient(circle at 10px 45px,rgba(231,165,102,.75) 0 2px,transparent 2.6px) 0 0/48px 60px,
+  linear-gradient(90deg,transparent 0 25px,rgba(231,165,102,.5) 25px 26px,transparent 26px) 0 0/72px 60px,
+  linear-gradient(0deg,transparent 0 14px,rgba(231,165,102,.38) 14px 15px,transparent 15px) 0 0/72px 60px,
+  linear-gradient(0deg,transparent 0 44px,rgba(231,165,102,.28) 44px 45px,transparent 45px) 0 0/48px 60px,
+  linear-gradient(135deg,#1c1815,#12100e)}
+
+/* dunes: three overlapping sand dunes, the nearest darkest, under a pale sun */
+.fg-banner[data-item="banner-dunes"]{background:
+  radial-gradient(ellipse 70% 58% at 8% 122%,#7d3a20 0 97%,transparent 100%),
+  radial-gradient(ellipse 62% 62% at 78% 130%,#b05a2c 0 97%,transparent 100%),
+  radial-gradient(ellipse 80% 56% at 42% 126%,#d98f4e 0 97%,transparent 100%),
+  radial-gradient(circle at 80% 30%,rgba(255,244,214,.95) 0 9px,rgba(255,244,214,.3) 10px 26px,transparent 27px),
+  linear-gradient(180deg,#f6dfb4 0%,#f0c68d 70%,#e8ac70 100%)}
+
+/* borealis: soft bands of teal and violet over a night sky, drifting slowly */
+.fg-banner[data-item="banner-borealis"]{
+  background:
+    radial-gradient(1px 1px at 9% 24%,rgba(255,255,255,.85),transparent),
+    radial-gradient(1px 1px at 27% 12%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 46% 30%,rgba(255,255,255,.75),transparent),
+    radial-gradient(1px 1px at 63% 14%,rgba(255,255,255,.55),transparent),
+    radial-gradient(1px 1px at 81% 26%,rgba(255,255,255,.8),transparent),
+    radial-gradient(1px 1px at 94% 10%,rgba(255,255,255,.6),transparent),
+    radial-gradient(60% 130% at 20% 120%,rgba(64,226,176,.6),transparent 70%),
+    radial-gradient(50% 125% at 58% 118%,rgba(138,110,255,.8),transparent 70%),
+    radial-gradient(42% 110% at 90% 125%,rgba(64,186,255,.55),transparent 70%),
+    linear-gradient(180deg,#050a1c,#0a1632 70%,#0d2338);
+  background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,150% 100%,170% 100%,160% 100%,100% 100%;
+  background-position:0 0,0 0,0 0,0 0,0 0,0 0,0% 0,100% 0,50% 0,0 0;
+  animation:fg-drift 60s ease-in-out infinite alternate}
+@keyframes fg-drift{to{background-position:0 0,0 0,0 0,0 0,0 0,0 0,100% 0,0% 0,100% 0,0 0}}
