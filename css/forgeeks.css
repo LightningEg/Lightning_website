@@ -65,10 +65,24 @@ main,header,footer{position:relative;z-index:2}
 .dots i{width:10px;height:10px;border-radius:50%;border:1px solid var(--line-strong);margin-left:-3px}
 .dots i:first-child{margin-left:0;border-color:var(--dim)}
 .progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+/* account chip and menu (js/forgeeks-auth.js); signed out it is a plain "sign in" link */
+.me-wrap{position:relative}
+.chip.me.in{padding:0 12px 0 4px}
+.me-av{width:26px;height:26px;flex:none;display:inline-grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--well);border:1px solid var(--line-strong);font:500 12px var(--mono);color:var(--ink)}
+.me-av img{width:100%;height:100%;object-fit:cover;display:block}
+.me-name{max-width:14ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:60;min-width:228px;max-width:calc(100vw - 32px);padding:6px;background:var(--panel);border:1px solid var(--line-strong);border-radius:8px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.me-menu[hidden]{display:none}
+.me-head{display:grid;gap:2px;padding:10px 12px 10px;margin:0 0 6px;border-bottom:1px solid var(--line);font:400 12px var(--mono);color:var(--dim);overflow-wrap:anywhere}
+.me-head b{color:var(--ink);font-weight:500;font-size:13px}
+.me-menu [role=menuitem]{display:flex;align-items:center;width:100%;min-height:38px;padding:0 12px;border:0;border-radius:4px;background:none;font:400 13px var(--mono);color:var(--dim);text-align:left;text-decoration:none;cursor:pointer}
+.me-menu [role=menuitem]:hover,.me-menu [role=menuitem]:focus-visible{color:var(--ink);background:rgba(var(--particle),.06)}
+.me-menu .me-out{margin-top:6px;border-top:1px solid var(--line);border-radius:0 0 4px 4px}
+@media (max-width:760px){.me-name{display:none}.chip.me.in{padding:0 4px}}
 @media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.links a.opt,.src{display:none}}
 @media (max-width:1040px){.crumb{display:none}}
 @media (max-width:760px){.chip .t-name{display:none}}
-@media (max-width:420px){.bar .wrap{gap:8px}.brand{gap:6px;font-size:12px}.links a{padding:6px 5px;font-size:12px}.tools .chip{padding:0 8px}}
+@media (max-width:420px){.bar .wrap{gap:8px}.brand{gap:0;font-size:0}.links a{padding:6px 5px;font-size:12px}.tools .chip{padding:0 8px}.tools .chip.me.in{padding:0 3px}}
 
 /* ---------- hero ---------- */
 .hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 48px}

@@ -1,0 +1,23 @@
+name: For Geeks account tests
+# Runs every supabase/tests/*.test.mjs: the database rules on a real Postgres engine (PGlite) and the
+# account pages in jsdom with a fake Supabase client. Nothing here reaches the live project or needs a secret.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  account-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with: {node-version: '24'}
+      - run: npm install --no-save --no-package-lock --ignore-scripts @electric-sql/pglite@0.5.11 jsdom@30.1.3
+      - run: |
+          set -e
+          for f in supabase/tests/*.test.mjs; do echo "== $f"; node "$f"; done

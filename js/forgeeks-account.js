@@ -105,31 +105,18 @@
     return { data: { email: email, password: password } };
   }
 
-  /* Plain words for what Supabase and Postgres report. */
-  function say(err) {
-    var m = String((err && (err.message || err.error_description)) || err || '');
-    var c = err && err.code;
-    if (/member_profiles_display_name_key/.test(m)) return 'That display name is taken. Try another.';
-    if (/public_needs_adult|leaderboard_needs_adult/.test(m)) return 'Confirm you are 18 or older to be public or on the leaderboard.';
-    if (/under 18|minor/i.test(m)) return 'A profile for someone under 18 stays private.';
-    if (/at most 12/.test(m)) return 'You can keep up to 12 links.';
-    if (/Invalid login credentials/i.test(m)) return 'Wrong email or password.';
-    if (/Email not confirmed/i.test(m)) return 'Confirm your email first: open the link we sent you.';
-    if (/rate limit|too many/i.test(m) || err && err.status === 429) return 'Too many tries. Wait a few minutes and try again.';
-    if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Cannot reach the server. Check your connection.';
-    if (c === '42501' || /permission denied|row-level security/i.test(m)) return 'That is not allowed for your account.';
-    if (c === '23514') return 'One of the values is not allowed. Check the form.';
-    return 'Something went wrong. Try again.';
-  }
+  /* Plain words for errors: one wording for every page, kept in js/forgeeks-auth.js. */
+  var shared = (typeof module !== 'undefined' && module.exports) ? require('./forgeeks-auth.js') : root.FG;
+  function say(err) { return shared && shared.say ? shared.say(err) : 'Something went wrong. Try again.'; }
 
   var rules = { ageOn: ageOn, memberUpdate: memberUpdate, privateUpdate: privateUpdate, linkUpdate: linkUpdate, credentials: credentials, say: say };
   if (typeof module !== 'undefined' && module.exports) { module.exports = rules; return; }
 
   /* ---------- page ---------- */
   var doc = root.document;
-  var cfg = root.FORGEEKS;
   var $ = function (id) { return doc.getElementById(id); };
   var PAGE = root.location.origin + root.location.pathname;
+  var NEXT_KEY = 'lightning-geeks-next';
   var sb, session, loadedUid = null, recovering = false, birthDate = null, mode = 'in';
 
   function show(view) {
@@ -251,6 +238,7 @@
     var u = await sb.from('member_profiles').update(r.data).eq('user_id', session.user.id);
     busy(btn, false);
     flash(sid, u.error ? say(u.error) : 'saved', !!u.error);
+    if (!u.error && shared.refreshMe) shared.refreshMe();
   }
 
   async function savePrivate(ev) {
@@ -331,11 +319,26 @@
     note('Signed out.', 'ok');
   }
 
+  /* After signing in, go back to the For Geeks page that sent you here (?next=, kept across the Google round trip). */
+  function store(k, v) { try { if (v == null) root.sessionStorage.removeItem(k); else root.sessionStorage.setItem(k, v); } catch (_) {} }
+  function stored(k) { try { return root.sessionStorage.getItem(k); } catch (_) { return null; } }
+  function keepNext() {
+    var q = new URLSearchParams(root.location.search);
+    var next = shared.safeNext ? shared.safeNext(q.get('next')) : null;
+    if (next) { store(NEXT_KEY, next); q.delete('next'); var rest = q.toString(); root.history.replaceState(null, '', PAGE + (rest ? '?' + rest : '') + root.location.hash); }
+    else if (!q.has('code')) store(NEXT_KEY, null);
+  }
+  function goNext() {
+    var next = shared.safeNext ? shared.safeNext(stored(NEXT_KEY)) : null;
+    store(NEXT_KEY, null);
+    if (next) { root.location.replace(next); return true; }
+    return false;
+  }
+
   function init() {
-    if (!cfg || !root.supabase || !root.supabase.createClient) { show('out'); note('Sign-in is not available right now.', 'bad'); return; }
-    sb = root.supabase.createClient(cfg.supabaseUrl, cfg.anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' }
-    });
+    sb = shared && shared.sb;
+    if (!sb) { show('out'); note('Sign-in is not available right now.', 'bad'); return; }
+    keepNext();
     readUrlError();
     $('auth-form').addEventListener('submit', submitAuth);
     $('auth-switch').addEventListener('click', function () { setMode(mode === 'up' ? 'in' : 'up'); });
@@ -356,6 +359,7 @@
         if (event === 'PASSWORD_RECOVERY') { recovering = true; show('recover'); return; }
         if (!s) { recovering = false; loadedUid = null; show('out'); return; }
         if (recovering) return;
+        if (goNext()) return;
         // Returning to the tab fires SIGNED_IN again: keep the form as it is so nothing typed is lost.
         if (loadedUid === s.user.id) return;
         loadAccount();

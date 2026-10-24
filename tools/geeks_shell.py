@@ -13,7 +13,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261021-2"  # css/forgeeks.css and js/forgeeks.js; bump it when either changes
+VERSION = "20261025-1"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
+SUPABASE_JS = "js/vendor/supabase-2.118.0.js"  # pinned; a new version is a new file name
+
+# Themes the head script may apply before first paint (js/forgeeks.js lists their names and colours).
+THEME_IDS = ["mono", "paper", "meadow", "nile", "ocean", "tokyo", "dracula", "rose", "synthwave", "phosphor", "amber", "solarized"]
 
 GH = "https://github.com/LightningEg/Lightning"
 TASKS = f"{GH}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee"
@@ -76,6 +80,7 @@ def header(current: str) -> str:
         <span class="t-name">theme: <span id="theme-name">mono</span></span>
       </button>
       <a class="chip src" href="{GH}" rel="noopener" target="_blank">source ↗</a>
+      <a class="chip me" id="me" href="forgeeks-account.html">sign in</a>
     </div>
   </div>
   <div class="progress" id="progress" aria-hidden="true"></div>
@@ -101,7 +106,15 @@ def build(text: str, name: str) -> str:
     text = re.sub(r'<header class="bar" id="bar">.*?</header>', lambda m: header(name), text, count=1, flags=re.S)
     text = re.sub(r"<footer>.*?</footer>", lambda m: footer(), text, count=1, flags=re.S)
     text = re.sub(r"css/forgeeks\.css\?v=[\w-]+", f"css/forgeeks.css?v={VERSION}", text)
-    return re.sub(r"js/forgeeks\.js\?v=[\w-]+", f"js/forgeeks.js?v={VERSION}", text)
+    # The theme boot script in <head> applies a saved theme before first paint; it knows every theme id.
+    text = re.sub(r"(localStorage\.getItem\('lightning-geeks-theme'\);if\(/\^\()[a-z0-9|-]+(\)\$/)",
+                  lambda m: m.group(1) + "|".join(THEME_IDS) + m.group(2), text, count=1)
+    # Every page loads the same scripts, in this order: page behaviour, Supabase, its settings, the sign-in.
+    bundle = (f'<script src="js/forgeeks.js?v={VERSION}"></script>\n<script src="{SUPABASE_JS}"></script>\n'
+              f'<script src="js/forgeeks-config.js?v={VERSION}"></script>\n<script src="js/forgeeks-auth.js?v={VERSION}"></script>')
+    return re.sub(r'<script src="js/forgeeks\.js\?v=[\w-]+"></script>'
+                  r'(\n<script src="js/(?:vendor/supabase-[\d.]+|forgeeks-config|forgeeks-auth)\.js(?:\?v=[\w-]+)?"></script>)*',
+                  lambda m: bundle, text, count=1)
 
 
 def main() -> int:
@@ -110,7 +123,7 @@ def main() -> int:
     for name in [f for f, _, _ in PAGES] + [f for f, _ in EXTRA]:
         path = ROOT / name
         old = path.read_text(encoding="utf-8")
-        if '<header class="bar" id="bar">' not in old or "<footer>" not in old:
+        if '<header class="bar" id="bar">' not in old or "<footer>" not in old or "lightning-geeks-theme" not in old:
             print(f"{name}: no top bar or footer to replace")
             return 1
         new = build(old, name)

@@ -12,7 +12,8 @@ import { pathToFileURL } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const rules = require('../../js/forgeeks-account.js');
-const { JSDOM } = process.env.JSDOM_PATH ? await import(pathToFileURL(process.env.JSDOM_PATH).href).then(m => m.default ?? m) : await import('jsdom');
+const auth = require('../../js/forgeeks-auth.js');
+const { JSDOM, VirtualConsole } = process.env.JSDOM_PATH ? await import(pathToFileURL(process.env.JSDOM_PATH).href).then(m => m.default ?? m) : await import('jsdom');
 
 let passed = 0, failed = 0;
 async function test(name, fn) {
@@ -100,20 +101,37 @@ await test('say maps database and auth errors to plain words', () => {
   assert.match(rules.say({ message: 'permission denied for table wallets', code: '42501' }), /not allowed/);
   assert.match(rules.say(new Error('Failed to fetch')), /Cannot reach/);
   assert.doesNotMatch(rules.say({ message: 'secret internal detail xyz' }), /xyz/);
+  assert.match(rules.say({ message: 'insufficient coins' }), /Not enough coins/);
+});
+
+await test('safeNext only allows For Geeks pages on this site, never the account page or another site', () => {
+  assert.equal(auth.safeNext('forgeeks-roadmap.html'), 'forgeeks-roadmap.html');
+  assert.equal(auth.safeNext('/forgeeks-profile.html?u=Ada%20L#work'), 'forgeeks-profile.html?u=Ada%20L#work');
+  for (const bad of ['https://evil.test/forgeeks.html', '//evil.test/x', 'javascript:alert(1)', 'index.html', 'forgeeks-account.html',
+    'forgeeks-account.html?next=x', 'forgeeks.html"><script>', 'forgeeks.html\nx', '', null, 42]) assert.equal(auth.safeNext(bad), null, String(bad));
+  assert.equal(auth.signInHref('/forgeeks-guide.html', '?a=1', '#rules'), 'forgeeks-account.html?next=forgeeks-guide.html%3Fa%3D1%23rules');
+  assert.equal(auth.signInHref('/forgeeks-account.html', '', ''), 'forgeeks-account.html');
+  assert.equal(auth.signInHref('/index.html', '', ''), 'forgeeks-account.html');
+  assert.equal(auth.initial(' ada'), 'A');
+  assert.equal(auth.initial(''), '?');
 });
 
 // ------------------------------------------------------------ the page, with a fake Supabase client
 const html = readFileSync(new URL('../../forgeeks-account.html', import.meta.url), 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
 const code = readFileSync(new URL('../../js/forgeeks-account.js', import.meta.url), 'utf8');
+const authCode = readFileSync(new URL('../../js/forgeeks-auth.js', import.meta.url), 'utf8');
 const UID = '11111111-1111-4111-8111-111111111111';
 const plain = v => JSON.parse(JSON.stringify(v)); // objects made inside the simulated browser have their own prototypes
 const tick = (ms = 5) => new Promise(r => setTimeout(r, ms));
 
-async function boot(handle = () => ({ data: null, error: null })) {
-  const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/forgeeks-account.html' });
+async function boot(handle = () => ({ data: null, error: null }), url = 'https://lightningeg.com/forgeeks-account.html') {
+  const navs = [];
+  const vc = new VirtualConsole();
+  vc.on('jsdomError', e => { if (/navigation/i.test(e.message)) navs.push(e.message); });
+  const dom = new JSDOM(html, { runScripts: 'outside-only', url, virtualConsole: vc });
   const w = dom.window;
   const calls = [];
-  let cb;
+  const cbs = [];
   const builder = (table) => {
     const q = { table, op: 'select', filters: {}, payload: null };
     const b = {
@@ -127,7 +145,7 @@ async function boot(handle = () => ({ data: null, error: null })) {
     return b;
   };
   const auth = {
-    onAuthStateChange(f) { cb = f; return { data: { subscription: { unsubscribe() {} } } }; },
+    onAuthStateChange(f) { cbs.push(f); return { data: { subscription: { unsubscribe() {} } } }; },
     signInWithPassword: async a => { calls.push({ fn: 'signInWithPassword', a }); return auth._in ?? { data: {}, error: null }; },
     signUp: async a => { calls.push({ fn: 'signUp', a }); return { data: { session: null }, error: null }; },
     signInWithOAuth: async a => { calls.push({ fn: 'signInWithOAuth', a }); return { error: null }; },
@@ -137,15 +155,16 @@ async function boot(handle = () => ({ data: null, error: null })) {
   };
   w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder }; } };
   w.FORGEEKS = { supabaseUrl: 'https://x.supabase.co', anonKey: 'anon' };
+  w.eval(authCode);
   w.eval(code);
   const $ = id => w.document.getElementById(id);
-  const fire = async (event, session) => { cb(event, session); await tick(); };
+  const fire = async (event, session) => { cbs.forEach(f => f(event, session)); await tick(20); };
   const submit = async id => { $(id).dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true })); await tick(20); };
   const click = async id => { $(id).dispatchEvent(new w.MouseEvent('click', { bubbles: true })); await tick(20); };
   const set = (id, v) => { const e = $(id) ?? w.document.querySelector(`[name="${id}"]`); if (e.type === 'checkbox') e.checked = v; else e.value = v; };
   const views = () => ['loading', 'out', 'recover', 'in'].filter(v => !$('view-' + v).hidden);
   await tick(30); // the page starts once the document has finished loading
-  return { w, $, calls, fire, submit, click, set, views };
+  return { w, $, calls, fire, submit, click, set, views, navs };
 }
 const session = { user: { id: UID, email: 'ada@example.test' } };
 const account = (extra = {}) => q => {
@@ -171,6 +190,7 @@ await test('page: signed out shows only sign in; switching to sign up changes th
   assert.equal(p.$('auth-hint').hidden, false);
   assert.equal(p.$('auth-forgot').hidden, true);
   assert.equal(p.$('auth-password').autocomplete, 'new-password');
+  assert.equal(p.calls.filter(c => c.fn === 'createClient').length, 1);
   const cc = p.calls.find(c => c.fn === 'createClient');
   assert.equal(cc.o.auth.persistSession, true);
   assert.equal(cc.o.auth.autoRefreshToken, true);
@@ -214,7 +234,7 @@ await test('page: signed in loads only the member own rows and fills the forms',
   await tick(30);
   assert.deepEqual(p.views(), ['in']);
   const reads = p.calls.filter(c => c.table);
-  assert.deepEqual(reads.map(c => c.table).sort(), ['member_profiles', 'profile_links', 'profiles', 'wallets']);
+  assert.deepEqual([...new Set(reads.map(c => c.table))].sort(), ['member_profiles', 'profile_links', 'profiles', 'wallets']);
   assert.ok(reads.every(c => c.filters.user_id === UID));
   assert.equal(p.$('display_name').value, 'geek-1a2b3c4d');
   assert.equal(p.$('setup_languages').value, 'Python, SQL');
@@ -325,10 +345,96 @@ await test('page: sign out returns to the sign in view', async () => {
 await test('page: if the client library is missing the page says so instead of failing silently', async () => {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/forgeeks-account.html' });
   dom.window.FORGEEKS = { supabaseUrl: 'x', anonKey: 'y' };
+  dom.window.eval(authCode);
   dom.window.eval(code);
   await tick(30);
   assert.match(dom.window.document.getElementById('acct-msg').textContent, /not available/);
   assert.equal(dom.window.document.getElementById('view-out').hidden, false);
+});
+
+await test('top bar: signed out the chip is a sign-in link; signed in it is an account menu that opens, moves and closes by keyboard', async () => {
+  const p = await boot(account());
+  await p.fire('INITIAL_SESSION', null);
+  let me = p.$('me');
+  assert.equal(me.tagName, 'A');
+  assert.equal(me.textContent, 'sign in');
+  assert.equal(me.getAttribute('href'), 'forgeeks-account.html');
+  await p.fire('SIGNED_IN', session); await tick(30);
+  me = p.$('me');
+  const btn = me.querySelector('button.me');
+  assert.equal(btn.getAttribute('aria-expanded'), 'false');
+  assert.equal(me.querySelector('.me-name').textContent, 'geek-1a2b3c4d');
+  assert.equal(me.querySelector('.me-av').textContent, 'G');
+  btn.dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+  const menu = p.$('me-menu');
+  assert.equal(menu.hidden, false);
+  assert.equal(btn.getAttribute('aria-expanded'), 'true');
+  const items = [...menu.querySelectorAll('[role=menuitem]')];
+  assert.deepEqual(items.map(i => i.textContent), ['profile settings', 'sign out']);
+  assert.equal(items[0].getAttribute('href'), 'forgeeks-account.html');
+  assert.equal(p.w.document.activeElement, items[0]);
+  menu.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+  assert.equal(p.w.document.activeElement, items[1]);
+  menu.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  assert.equal(menu.hidden, true);
+  assert.equal(p.w.document.activeElement, btn);
+  btn.dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+  p.w.document.body.dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+  assert.equal(menu.hidden, true);
+});
+
+await test('top bar: member text in the chip is text only; a bad avatar link is ignored', async () => {
+  const evil = '<img src=x onerror=alert(1)>';
+  const p = await boot(account({ member_profiles: { user_id: UID, display_name: evil, avatar_url: 'javascript:alert(1)', visibility: 'private' } }));
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  const me = p.$('me');
+  assert.equal(me.querySelector('.me-name').textContent, evil);
+  assert.equal(me.querySelector('.me-av img'), null);
+  assert.equal(me.querySelectorAll('img').length, 0);
+});
+
+await test('top bar: sign out from the menu calls Supabase once', async () => {
+  const p = await boot(account());
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  p.$('me').querySelector('button.me').dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+  p.$('me-menu').querySelector('.me-out').dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+  await tick(20);
+  assert.equal(p.calls.filter(c => c.fn === 'signOut').length, 1);
+});
+
+await test('return to page: ?next is kept, removed from the address bar, and used once after signing in', async () => {
+  const p = await boot(account(), 'https://lightningeg.com/forgeeks-account.html?next=forgeeks-roadmap.html%23play');
+  assert.equal(p.w.location.search, '');
+  assert.equal(p.w.sessionStorage.getItem('lightning-geeks-next'), 'forgeeks-roadmap.html#play');
+  await p.fire('INITIAL_SESSION', null);
+  assert.equal(p.navs.length, 0);
+  await p.fire('SIGNED_IN', session); await tick(30);
+  assert.equal(p.w.sessionStorage.getItem('lightning-geeks-next'), null);
+  assert.equal(p.navs.length, 1, 'navigated away');
+  assert.ok(!p.calls.some(c => c.table === 'profiles'), 'did not load the account it is leaving');
+});
+
+await test('return to page: a foreign or account-page next is dropped', async () => {
+  for (const bad of ['https%3A%2F%2Fevil.test%2F', 'forgeeks-account.html', 'index.html']) {
+    const p = await boot(account(), 'https://lightningeg.com/forgeeks-account.html?next=' + bad);
+    assert.equal(p.w.sessionStorage.getItem('lightning-geeks-next'), null, bad);
+    await p.fire('INITIAL_SESSION', session); await tick(30);
+    assert.equal(p.navs.length, 0, bad);
+    assert.deepEqual(p.views(), ['in']);
+  }
+});
+
+await test('saving the profile refreshes the name in the top bar', async () => {
+  let name = 'geek-1a2b3c4d';
+  const p = await boot(q => {
+    if (q.table === 'member_profiles' && q.op === 'select') return { data: { user_id: UID, display_name: name, visibility: 'private' }, error: null };
+    if (q.table === 'member_profiles' && q.op === 'update') { name = q.payload.display_name; return { data: null, error: null }; }
+    return account()(q);
+  });
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  p.set('display_name', 'Ada');
+  await p.submit('form-public'); await tick(30);
+  assert.equal(p.$('me').querySelector('.me-name').textContent, 'Ada');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
