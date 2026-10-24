@@ -95,7 +95,7 @@ It's a static site with no build step and no dependencies. Fonts load from Googl
 
 ## Proposed community features
 
-[For Geeks accounts, Lightning Coins and cosmetics](docs/proposals/forgeeks-accounts-lightning-coins.md) records the proposed member access, per-issue rewards, leaderboard and cosmetics marketplace, with implementation milestones and open decisions. Status: proposed; owner decisions recorded. The database schema and its tests are in `supabase/` (FG-02, not yet applied); the account page `forgeeks-account.html` (FG-03) is built but not linked or indexed yet.
+[For Geeks accounts, Lightning Coins and cosmetics](docs/proposals/forgeeks-accounts-lightning-coins.md) records the proposed member access, per-issue rewards, leaderboard and cosmetics marketplace, with implementation milestones and open decisions. Status: built. Member pages: `forgeeks-account.html`, `forgeeks-tasks.html`, `forgeeks-market.html`, `forgeeks-leaderboard.html` (indexed), `forgeeks-profile.html`, `forgeeks-admin.html` (owner); shared sign-in `js/forgeeks-auth.js`; database and setup in `supabase/`.
 
 ## Run it locally
 

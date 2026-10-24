@@ -216,6 +216,8 @@
   function anchor(){return {top:0,hz:H*(small?.1:.17),fa:H*(small?.2:.33),fb:H*(small?.3:.5)}}
   var TA=1;
   function targetTA(){
+    // Pages without a full-screen hero or a closing section (account, market, tasks) keep the field quiet.
+    if(!hero||!closing)return .16;
     var hr=hero.getBoundingClientRect(),cr=closing.getBoundingClientRect();
     return Math.max(.16,Math.min(1,Math.max(0,hr.bottom/H-.25)/.5),cr.top<H*.9?1:0);
   }

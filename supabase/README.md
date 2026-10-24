@@ -8,6 +8,20 @@ Supabase dashboard → SQL Editor → New query → paste one file from `migrati
 
 1. `20261024190000_forgeeks_core.sql`: tables, ledger, wallet, purchases, rules.
 2. `20261024210000_forgeeks_minors_guard.sql`: a birth date under 18 keeps the profile private.
+3. `20261025090000_forgeeks_account_lifecycle.sql`: download your data, delete your account.
+4. `20261025100000_forgeeks_rewards.sql`: GitHub link, claims, merge and pending awards, feedback, task board, owner console helpers.
+5. `20261025110000_forgeeks_showcase.sql`: public profiles, members directory, profile reports.
+6. `20261025120000_forgeeks_market.sql`: the paid themes and banners, market catalog.
+
+## Rewards from the app repository
+
+`LightningEg/Lightning` runs `.github/workflows/rewards.yml` and the claim steps in `contributors.yml`: `/take` records a claim that locks the offered coins, and a merged pull request that says `Closes #n` pays the issue's coins to its author (held until they link GitHub on the account page). Bots and the owner's own account earn nothing. Both need the repository secret `SUPABASE_SERVICE_ROLE_KEY`; without it they print a notice and do nothing.
+
+GitHub linking needs, once: a GitHub OAuth App whose callback is `https://etecxblerynmkgppdfac.supabase.co/auth/v1/callback`, its client id and secret in Supabase → Authentication → Providers → GitHub, and Authentication → "Allow manual linking" switched on.
+
+## Keep-alive
+
+`.github/workflows/supabase-keepalive.yml` reads one public row every two days so the free project never pauses. A red run means the project is paused: restore it in the Supabase dashboard.
 
 ## Make yourself the administrator
 

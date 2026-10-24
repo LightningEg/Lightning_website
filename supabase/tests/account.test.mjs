@@ -374,11 +374,14 @@ await test('top bar: signed out the chip is a sign-in link; signed in it is an a
   assert.equal(menu.hidden, false);
   assert.equal(btn.getAttribute('aria-expanded'), 'true');
   const items = [...menu.querySelectorAll('[role=menuitem]')];
-  assert.deepEqual(items.map(i => i.textContent), ['profile settings', 'sign out']);
-  assert.equal(items[0].getAttribute('href'), 'forgeeks-account.html');
+  assert.deepEqual(items.map(i => i.textContent), ['my profile', 'tasks', 'market', 'leaderboard', 'profile settings', 'sign out']);
+  assert.equal(items[0].getAttribute('href'), 'forgeeks-profile.html?u=geek-1a2b3c4d');
+  assert.equal(items[4].getAttribute('href'), 'forgeeks-account.html');
   assert.equal(p.w.document.activeElement, items[0]);
   menu.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
   assert.equal(p.w.document.activeElement, items[1]);
+  menu.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+  assert.equal(p.w.document.activeElement, items[5]);
   menu.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
   assert.equal(menu.hidden, true);
   assert.equal(p.w.document.activeElement, btn);
