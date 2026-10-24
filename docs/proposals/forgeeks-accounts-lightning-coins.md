@@ -1,10 +1,10 @@
 # Proposal: For Geeks accounts, Lightning Coins and cosmetics
 
 Date: 2026-10-24
-Status: Proposed; implementation has not started
+Status: Proposed; owner decisions recorded 2026-10-24; Supabase project created; implementation has not started
 Product: https://lightningeg.com/forgeeks.html
 Tracking ID: FG-ACCOUNTS
-Owner: To assign
+Owner: Mohamed (reward authority and final decisions)
 
 ## Purpose and confirmed requirements
 
@@ -141,7 +141,7 @@ All items start unassigned and not started. Create linked implementation issues 
 
 | ID | Deliverable | Depends on | Status |
 | --- | --- | --- | --- |
-| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | Not started |
+| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | In progress: policies decided 2026-10-24; hosting boundary assumed (public shells, gated data), pending owner confirmation |
 | FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | Not started |
 | FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Not started |
 | FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
@@ -170,15 +170,27 @@ Suggested releases: accounts/access first (FG-01–04); rewards and rankings nex
 - [ ] Mobile, keyboard, screen-reader and reduced-motion flows work across login, marketplace and leaderboard.
 - [ ] Production email, OAuth callbacks, secret configuration, backups and provider limits are reviewed before rollout.
 
-## Decisions to resolve
+## Decisions
 
-1. Same-domain session gateway/hosting plan and the complete protected URL list; treatment of historical variants.
-2. Eligible repositories: app, website, other Lightning repositories; reward start date and historical contribution policy.
-3. Reward authority, amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
-4. Leaderboard timezone, privacy defaults and reversal/debt treatment after spending.
-5. Final coin name, starter cosmetics, catalog prices, refunds and item retirement policy.
-6. Purpose/retention for phone and date of birth, account deletion handling and age policy.
-7. Supabase region, current free-tier limits, production email provider, hosting budget and operational owner.
+Decided by the owner on 2026-10-24:
+
+- **Eligible repository:** only `LightningEg/Lightning` (the app) earns coins. The website repository does not.
+- **Reward authority:** only the owner sets issue rewards.
+- **Leaderboard timezone:** Africa/Cairo.
+- **Profile data:** collect all optional fields (phone, date of birth, name, avatar), each skippable, each with its purpose shown at collection. An age policy for date of birth is still needed; draft it before launch.
+- **Reverts:** no automatic reversal of a merged-PR award in the first release. An authorized administrator may still post a linked correction entry for a clear error, such as a wrong amount. This narrows the reversal rules above for the first release.
+- **Coin name:** "Lightning Coins" stays the working name. Keep it as a single configuration value so a rename is one change.
+- **Hosting:** Supabase free plan, Europe region, project created. No payment method attached.
+
+Assumed, pending owner confirmation: For Geeks pages stay static and public on GitHub Pages as empty shells, and all member data (tasks with rewards, profiles, wallet, inventory, leaderboard) is gated by Supabase sessions and row-level security. This avoids a gateway and its quota. A Cloudflare Worker is a later option only if guide and roadmap pages must be hidden; it must fail closed.
+
+Still open:
+
+1. Amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
+2. Starter cosmetics, catalog prices, refunds and item retirement policy.
+3. Account deletion handling, retention periods and the date-of-birth age policy.
+4. Production email provider (the built-in Supabase email is rate-limited), current free-tier overage behavior, and operational owner.
+5. Historical contribution policy and reward start date for the app repository.
 
 ## Scope and operating costs
 
@@ -188,4 +200,5 @@ Start with free allowances where suitable, but do not promise permanent zero cos
 
 ## Change log
 
+- 2026-10-24: Owner decisions recorded (app repository only, owner-set rewards, Cairo timezone, collect all optional profile fields, no reverts in first release); Supabase project created; hosting boundary assumed pending confirmation.
 - 2026-10-24: Initial proposal records account gating, optional profile data, Google authentication, feedback/PR recognition, per-issue Lightning Coin rewards and a cosmetics-only marketplace.
