@@ -2,6 +2,8 @@
 
 These are data-only design manifests, not executable CSS packs or finished app deliveries. The first two test previews interpret the supplied Nile Nocturne and Royal Obsidian & Gold guidelines. Prices are intentionally unset. No app version is advertised as compatible until its bundled registry and acceptance checks exist.
 
+**Payment policy:** every Lightning financial feature is free. Optional in-app cosmetics such as themes may be bought to support development; they change appearance only. The in-app purchase/claim flow is still under development, so this document does not announce availability or set prices/provider details.
+
 `slots.json` is the slot inventory and per-part guideline. `component-inventory.json` maps those slots to the current PC/phone source files and records hard-coded styles that still need migration. A theme explicitly declares its changed parts; omitted parts resolve to the default. Unknown slots, keys, token references, CSS text, URLs and motions are rejected. An invalid manifest falls back as a whole before anything is applied. A valid missing part falls back individually. Removing an active theme always returns to the default without changing financial data.
 
 The reference PDFs use ten grouped parts. We split palette and brand mark into independent slots, making eleven explicit compartments. A full theme is a preset over these slots. Keep each theme manifest as its own guideline: its `parts` state exactly what it changes. Decorative motion is intentionally `none` for this first test. Do not animate money figures, change fonts, inject logo artwork, use gradients for financial meaning or accept arbitrary CSS.
