@@ -1,0 +1,191 @@
+# Proposal: For Geeks accounts, Lightning Coins and cosmetics
+
+Date: 2026-10-24
+Status: Proposed; implementation has not started
+Product: https://lightningeg.com/forgeeks.html
+Tracking ID: FG-ACCOUNTS
+Owner: To assign
+
+## Purpose and confirmed requirements
+
+Turn For Geeks into a member community where contributors can find issues, give useful feedback, earn recognition and spend earned Lightning Coins on cosmetic items. Lightning Coins is a working name.
+
+- Require an account for the For Geeks experience within the existing Lightning website.
+- Support email registration/login and direct Google sign-in, preferably using Supabase's free plan initially.
+- Require email only. Name, phone number and date of birth are optional; profile completion must be skippable.
+- Recognize useful feedback and successful merged pull requests through a leaderboard.
+- Assign each issued task its own explicit Lightning Coin reward. A flat payment for every merged PR is superseded by this requirement.
+- Offer a marketplace for themes, banners and other aesthetic items. Purchases never unlock functionality, permissions, contribution opportunities or better ranking.
+
+The sections below recommend implementation policies. Reward amounts, catalog prices and unresolved decisions remain proposals until agreed.
+
+## Existing repository evidence
+
+The website is static HTML/CSS/JavaScript published from `main` through GitHub Pages (README, Structure and Publish with GitHub Pages). Relevant files:
+
+- `forgeeks.html`: developer home.
+- `forgeeks-guide.html`: contribution instructions and current `/take` workflow.
+- `forgeeks-roadmap.html`: developer roadmap.
+- `forgeeks-collaborate.html` and `for-geeks.html`: legacy redirects.
+- `js/forgeeks.js` and `css/forgeeks.css`: shared behavior and styling.
+- `tools/geeks_shell.py`: shared developer navigation/footer generation.
+- `guideline/coders.html`: For Geeks design system.
+
+The current theme picker offers twelve themes and remembers selection in `localStorage` under `lightning-geeks-theme`. It has no account ownership model. The pages link to `LightningEg/Lightning` for contribution tasks; `LightningEg/Lightning_website` is the website source repository. Eligibility of each repository needs an explicit decision.
+
+## User journeys
+
+1. Visitor opens a For Geeks URL, sees login and chooses Google or email/password.
+2. Email/password users verify their address; both methods create one stable member identity. Password reset, logout, expired-link recovery and account linking are supported.
+3. The member may add optional profile details or skip directly to the community.
+4. They optionally connect GitHub to receive verified PR rewards. Users giving website feedback do not need GitHub.
+5. They browse issues showing scope, acceptance criteria, availability and a published coin reward; the existing `/take` and `/drop` workflow remains authoritative until changed deliberately.
+6. An accepted contribution creates an explainable award in their activity history. A merged PR is verified by the backend and matched to the rewarded issue.
+7. Their earned contribution score appears on the leaderboard, and their spendable wallet increases.
+8. They preview a cosmetic, confirm its cost, buy it using earned coins and equip it across devices.
+
+## Identity and privacy
+
+Use Supabase Auth for verified email/password and Google OAuth. Request Google's basic identity scopes only. Phone and date of birth are optional manual fields, not reasons to request additional Google permissions.
+
+| Field | Required | Visibility and behavior |
+| --- | --- | --- |
+| Email | Yes | Private; verification and account recovery |
+| Name | No | Private by default; never automatically published |
+| Display name | No | Member-visible; generated alias when blank |
+| Phone | No | Private, editable/removable; not a login requirement |
+| Date of birth | No | Private, editable/removable; explain purpose before collection |
+| Avatar | No | Member-visible if selected |
+| GitHub identity | For PR attribution only | Verified immutable GitHub ID; show linkage visibility clearly |
+
+Never derive a public alias from an email address. Optional personal data must not appear in leaderboard responses, browser analytics, webhook logs or public GitHub issues. If full date of birth has no product purpose, defer collection or use birthday month/day only. Marketing consent is separate and optional.
+
+Users can edit/delete optional data, request account deletion and choose whether to appear on the member leaderboard. Define retention and anonymization for historical awards and purchases before launch. Define an age policy before collecting birth dates; do not infer one from this proposal.
+
+A Google account and a GitHub account must link through authenticated provider flows. Never accept a typed GitHub handle as ownership proof or merge accounts merely because an unverified email matches. One GitHub identity belongs to one member at a time; unlink/relink events need history to prevent claiming the same rewards again.
+
+## Access boundary and hosting
+
+Gate the For Geeks community, member profiles, task dashboard, leaderboard, wallet, inventory and marketplace. Authentication callbacks, login/reset flows and legal information remain publicly reachable. Ordinary Lightning marketing pages remain public; this proposal introduces community accounts, not an account requirement for the financial app.
+
+**GitHub Pages cannot enforce authenticated delivery of HTML.** A JavaScript redirect can improve navigation but cannot make a public static document private. Supabase row-level security protects database records, not HTML already served by Pages.
+
+Recommended architecture: retain the existing domain and public marketing site; route the developer area through a server/edge gateway that verifies sessions before serving protected content. Evaluate a Cloudflare Worker or equivalent routing layer. Preserving same-domain path routing requires a hosting/DNS decision; a separate community subdomain is a fallback requiring an explicit scope decision.
+
+Do not mark gating complete while the same protected HTML is still reachable through the Pages origin, a legacy URL or an archive. Inventory all For Geeks variants, redirects, generated pages and origin addresses. Decide what can remain public as historical material. Public source code and GitHub issues will still be public; account gating cannot make an open repository confidential.
+
+Protected responses use appropriate private/no-store caching. Validate sessions at every protected server endpoint. Redirect only to approved internal paths after login. Remove gated URLs from sitemap/search discovery as appropriate; robots directives are not authorization controls. Update `sitemap.xml`, `robots.txt`, `llms.txt`, public links and indexing metadata during rollout.
+
+## Issue rewards and feedback
+
+Each published reward has a repository ID, issue ID, integer coin amount, acceptance criteria, version, editor and timestamp. Show the amount before a contributor takes the task. Zero denotes an explicitly unpaid task; missing configuration means not yet reward eligible.
+
+Proposed policy:
+
+- Maintainers publish rewards; contributors cannot edit them.
+- Lock the offered reward at assignment/accepted claim time. Changes to an active offer require a visible change history and contributor agreement; no silent retrospective reductions.
+- Closing an issue, opening a PR, passing checks or merging an unrelated PR does not independently earn a reward.
+- Award the issue budget once after a qualifying merge and maintainer acceptance. A PR can reference multiple issues, but each award requires validated linkage and completed acceptance criteria.
+- Multiple PRs completing one issue share its existing budget. Multiple contributors require a recorded split whose sum does not exceed that budget; the default is one accepted recipient.
+- Duplicate issues, reopened issues and webhook replays cannot mint another budget. A materially new task requires a new reward allocation.
+- PRs without a rewarded issue need a maintainer-approved allocation before payout.
+- Feedback enters a moderation queue. Useful feedback and accepted bug reports receive a documented reward determined by the feedback policy or a resulting rewarded task. Avoid paying twice for the same report and task unless explicitly approved as separate work.
+- Feedback submissions alone earn nothing. Rejected, duplicate and spam reports receive no award. Non-code work remains eligible when it has accepted deliverables.
+
+Illustrative values only: a small task might offer 25 coins, a medium task 75, and a larger task 200. These are examples, not an automatic formula or committed economy. Set feedback amounts, catalog prices and initial supply together before launch.
+
+## Coins, ranking and corrections
+
+Maintain two separate quantities:
+
+- **Contribution score:** qualifying earned awards minus contribution reversals. Drives monthly/all-time rankings.
+- **Spendable Lightning Coins:** posted wallet credits minus purchases and other wallet debits, including approved reversals/refunds.
+
+Example: earn 150 coins, buy a 60-coin banner, keep a contribution score of 150 and a wallet balance of 90. Spending never reduces rank. Refunds restore spendable coins but do not create contribution score. Administrative gifts, if introduced, do not count as contributions.
+
+Use an append-only ledger with award source, amount, recipient, reason, timestamp and idempotency key. Correct errors with linked reversing entries rather than rewriting history. Restrict score adjustments to authorized administrators and record every action. Proposed baseline: coins are earned, nontransferable, have no cash value, cannot be bought for money and cannot be withdrawn. Any future change needs a separate proposal.
+
+Record earn time separately from event processing time so delayed delivery cannot distort monthly rankings. Define the leaderboard timezone before launch. Equal scores share a rank; ordering within a tie is stable. Show display name, avatar, contribution counts and score only. Members can inspect their own full award history and appeal an incorrect decision.
+
+Reverts require review rather than an automatic penalty for every reverted merge. Confirm attribution and reason before reversing an award. If coins have already been spent, record an explicit debt/hold and block further spending until reconciled, or apply another documented policy; never silently delete owned cosmetics. Finalize this policy before marketplace launch.
+
+## Cosmetic marketplace
+
+Initial catalog: For Geeks themes and profile banners; possible later items include avatar frames and decorative badges. All are visual. No paid visibility boosts, functional tools, private task access, higher reward multipliers or moderation privileges.
+
+Keep a free default, a readable light/dark option and accessibility settings. Recommendation: retain the existing twelve themes as the starter set and sell newly designed cosmetics; confirm before introducing scarcity to existing choices. Motion reduction, contrast and keyboard access must remain free and available with every theme.
+
+Each item has a stable ID, type, preview, description, coin price, active status and asset version. Provide owned/equipped states, a price confirmation, insufficient-funds feedback and persistent inventory. Retired items remain usable for owners unless removed for a documented reason with a refund policy.
+
+Purchasing is one server-side database transaction: verify session and catalog price, lock the wallet, verify funds and non-ownership, debit the wallet, insert purchase and grant inventory. Enforce unique ownership and request idempotency. Concurrent requests cannot overspend or charge twice. The browser never supplies an authoritative price or balance.
+
+Equipping validates ownership on the server and saves the selected item per slot. `localStorage` may cache display preferences; it grants no ownership. Cosmetics are not DRM: CSS and public artwork can be copied; ownership controls official account selection and profile rendering.
+
+## Proposed technical components
+
+- Existing site frontend and Part D design system, extended with accessible account/community screens.
+- Supabase Auth and Postgres with row-level security; trusted Edge Functions/server endpoints for awarding, spending and administration.
+- Session-aware hosting/gateway for protected developer pages.
+- GitHub App/webhook integration with the smallest suitable read permissions on an explicit repository allowlist.
+- Production email provider for verification and reset delivery; assess free allowances and delivery limits before launch.
+
+Logical records: private profiles, member display profiles, GitHub links, administrator roles, repository eligibility, reward offers/versions/claims, feedback/moderation, contribution events, award allocations, ledger entries, wallet state, catalog items, purchases, inventory, equipped items, webhook deliveries and audit history. Use database constraints for nonnegative prices, positive rewards, unique identities, unique source awards and unique inventory. Clients cannot write roles, balances, award entries or inventory directly. Private and member-visible fields use separate tables or deliberately constrained APIs.
+
+Validate GitHub webhook signatures against the raw body and deduplicate delivery IDs. Then verify repository eligibility, merge status, stable author identity, issue linkage and reward acceptance. Award issuance and ledger posting must be atomic and independently idempotent by source allocation. Queue retries, record failures without personal payloads, and provide reconciliation for missed/out-of-order events. Contributions predating GitHub linkage may be claimed only after verified ownership and the agreed historical cutoff.
+
+Secrets stay in managed backend configuration; no Supabase privileged key, Google secret or webhook secret in browser assets or Git history. Apply least privilege, authenticated admin operations, safe rendering of feedback, request limits and OAuth callback allowlists. Back up durable records and document restore/reconciliation procedures.
+
+## Delivery tracker
+
+All items start unassigned and not started. Create linked implementation issues from these IDs; record their URLs, owner and evidence here as work begins.
+
+| ID | Deliverable | Depends on | Status |
+| --- | --- | --- | --- |
+| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | Not started |
+| FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | Not started |
+| FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Not started |
+| FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
+| FG-05 | Verified GitHub linkage, issue reward publishing and claim snapshots | FG-02, FG-03 | Not started |
+| FG-06 | Feedback moderation, signed webhooks, accepted awards and ledger | FG-05 | Not started |
+| FG-07 | Member leaderboard, activity history and wallet | FG-06 | Not started |
+| FG-08 | Cosmetic catalog, atomic purchases, inventory and equip flows | FG-07 | Not started |
+| FG-09 | Admin audit, reversals, reconciliation and deletion/export procedures | FG-06, FG-08 | Not started |
+| FG-10 | Security/accessibility verification, staged launch and operations guide | FG-04, FG-09 | Not started |
+
+Suggested releases: accounts/access first (FG-01–04); rewards and rankings next (FG-05–07); cosmetics and operations last (FG-08–10). Do not enable spending before transaction integrity and reversal rules are verified.
+
+## Acceptance criteria
+
+- [ ] Email/password and Google users can register, recover access and return to their intended page without creating duplicate member identities.
+- [ ] Email is required; all requested personal profile fields can be skipped, edited and removed.
+- [ ] Signed-out requests cannot retrieve protected HTML or member data through canonical, legacy or origin routes.
+- [ ] Users cannot read another member's private details, assign roles, forge awards or change wallet state directly.
+- [ ] Each eligible issue displays an explicit reward; assignment preserves its agreed version.
+- [ ] Verified eligible merges and approved feedback produce the intended allocation once, including retries, delayed deliveries and multiple PRs per issue.
+- [ ] Incorrect identity claims, unsigned webhooks and non-allowlisted repositories cannot award coins.
+- [ ] Spending leaves contribution ranking unchanged; refunds and reversals follow the documented rules.
+- [ ] Concurrent purchases cannot overspend; repeated requests cannot double-charge or grant duplicate ownership.
+- [ ] Only owned cosmetics can be officially equipped; choices persist across devices, with free accessible defaults.
+- [ ] Moderation, awards, purchases and corrections have an auditable history and a reconciliation path.
+- [ ] Mobile, keyboard, screen-reader and reduced-motion flows work across login, marketplace and leaderboard.
+- [ ] Production email, OAuth callbacks, secret configuration, backups and provider limits are reviewed before rollout.
+
+## Decisions to resolve
+
+1. Same-domain session gateway/hosting plan and the complete protected URL list; treatment of historical variants.
+2. Eligible repositories: app, website, other Lightning repositories; reward start date and historical contribution policy.
+3. Reward authority, amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
+4. Leaderboard timezone, privacy defaults and reversal/debt treatment after spending.
+5. Final coin name, starter cosmetics, catalog prices, refunds and item retirement policy.
+6. Purpose/retention for phone and date of birth, account deletion handling and age policy.
+7. Supabase region, current free-tier limits, production email provider, hosting budget and operational owner.
+
+## Scope and operating costs
+
+This document authorizes tracking of the proposal; it does not indicate that authentication, rewards or a marketplace are deployed. No real-money payments, cash redemption, trading, random loot boxes or functional purchases are proposed. Existing financial data remains outside community storage.
+
+Start with free allowances where suitable, but do not promise permanent zero cost. Verify Supabase quotas, database/storage/egress limits, inactivity behavior, backups, email limits and gateway hosting costs against current provider plans when implementing. Add usage alerts and a recovery plan rather than relying on a free tier indefinitely.
+
+## Change log
+
+- 2026-10-24: Initial proposal records account gating, optional profile data, Google authentication, feedback/PR recognition, per-issue Lightning Coin rewards and a cosmetics-only marketplace.
