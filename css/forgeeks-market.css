@@ -20,7 +20,7 @@
 .mkt-free{grid-template-columns:repeat(4,minmax(0,1fr))}
 .mkt-cell{display:flex;flex-direction:column;gap:10px;min-width:0;padding:18px;background:var(--soft);box-shadow:1px 0 0 var(--line),0 1px 0 var(--line)}
 .mkt-cell.compact{gap:6px;padding:14px 16px}
-.mkt-cell.equipped{box-shadow:1px 0 0 var(--line),0 1px 0 var(--line),inset 0 0 0 1px var(--accent)}
+.mkt-cell.equipped{box-shadow:1px 0 0 var(--line),0 1px 0 var(--line),inset 0 2px 0 var(--accent)}
 
 .mkt-pv{height:96px}
 .mkt-cell .fg-banner{height:96px;border-radius:4px;border-bottom:1px solid var(--line)}
@@ -39,7 +39,7 @@
 
 /* the buy dialog: a window like the theme picker, above the page, below the picker */
 .mkt-dlg{position:fixed;inset:0;z-index:66;display:grid;place-items:center;padding:16px}
-.mkt-dlg[hidden]{display:none}
+.mkt-dlg[hidden],.mkt-win [hidden],.mkt [hidden]{display:none!important}
 .mkt-back{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .mkt-win{position:relative;width:min(440px,100%);max-height:calc(100svh - 32px);overflow:auto;padding:24px;background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.25);outline:0}
 .mkt-win h2{font:500 15px var(--mono);letter-spacing:0;margin:0 0 14px;color:var(--ink);text-shadow:none}

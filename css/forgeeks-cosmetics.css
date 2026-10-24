@@ -40,11 +40,11 @@
   linear-gradient(0deg,transparent 0 44px,rgba(231,165,102,.28) 44px 45px,transparent 45px) 0 0/48px 60px,
   linear-gradient(135deg,#1c1815,#12100e)}
 
-/* dunes: three overlapping sand dunes, the nearest darkest */
+/* dunes: three overlapping sand dunes, the nearest darkest, under a pale sun */
 .fg-banner[data-item="banner-dunes"]{background:
-  radial-gradient(90% 85% at 12% 135%,#7d3a20 0 58%,transparent 59%),
-  radial-gradient(80% 80% at 78% 150%,#b05a2c 0 56%,transparent 57%),
-  radial-gradient(95% 75% at 40% 160%,#d98f4e 0 54%,transparent 55%),
+  radial-gradient(ellipse 70% 58% at 8% 122%,#7d3a20 0 97%,transparent 100%),
+  radial-gradient(ellipse 62% 62% at 78% 130%,#b05a2c 0 97%,transparent 100%),
+  radial-gradient(ellipse 80% 56% at 42% 126%,#d98f4e 0 97%,transparent 100%),
   radial-gradient(circle at 80% 30%,rgba(255,244,214,.95) 0 9px,rgba(255,244,214,.3) 10px 26px,transparent 27px),
   linear-gradient(180deg,#f6dfb4 0%,#f0c68d 70%,#e8ac70 100%)}
 
@@ -58,8 +58,8 @@
     radial-gradient(1px 1px at 81% 26%,rgba(255,255,255,.8),transparent),
     radial-gradient(1px 1px at 94% 10%,rgba(255,255,255,.6),transparent),
     radial-gradient(60% 130% at 20% 120%,rgba(64,226,176,.6),transparent 70%),
-    radial-gradient(50% 120% at 58% 115%,rgba(132,104,255,.55),transparent 70%),
-    radial-gradient(42% 110% at 90% 125%,rgba(64,186,255,.5),transparent 70%),
+    radial-gradient(50% 125% at 58% 118%,rgba(138,110,255,.8),transparent 70%),
+    radial-gradient(42% 110% at 90% 125%,rgba(64,186,255,.55),transparent 70%),
     linear-gradient(180deg,#050a1c,#0a1632 70%,#0d2338);
   background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,150% 100%,170% 100%,160% 100%,100% 100%;
   background-position:0 0,0 0,0 0,0 0,0 0,0 0,0% 0,100% 0,50% 0,0 0;

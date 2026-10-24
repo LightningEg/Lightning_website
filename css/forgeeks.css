@@ -330,7 +330,7 @@ footer{padding:0 0 40px}
 .tm-card[aria-selected="true"] .tm-name span{visibility:visible}
 .tm-note{margin:0 3px 3px;font:400 11.5px/1.4 var(--mono);color:var(--dim)}
 /* paid themes: a small lock and the price while locked ("owned" once bought); nothing else about the card changes */
-.tm-name .tm-price{display:inline-flex;align-items:center;gap:5px;margin-left:auto;visibility:visible;color:var(--dim);font:400 11px var(--mono);white-space:nowrap}
+.tm-name .tm-price{display:inline-flex;align-items:center;gap:5px;margin-left:auto;padding-left:8px;visibility:visible;color:var(--dim);font:400 11px var(--mono);white-space:nowrap}
 .tm-name .tm-price span{visibility:visible;color:inherit}
 .tm-name .tm-price svg{flex:none}
 .tm-card.lk:not([aria-selected="true"]) .tm-name span:not(.tm-price){display:none}
