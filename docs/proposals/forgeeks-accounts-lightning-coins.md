@@ -23,7 +23,7 @@ The sections below recommend implementation policies. Reward amounts, catalog pr
 
 ## App price and support policy
 
-Owner decision (2026-10-24): every Lightning app feature is free indefinitely, with no expiring trial, licence fee, subscription or functional paywall. Optional in-app cosmetics, starting with themes, may be purchased to support development. Purchases change appearance only and never unlock a financial feature. The app store and claim flow are not yet released; no in-app payment provider, destination or production package is selected. The For Geeks InstaPay coin top-up is a separate website flow. Do not describe the in-app shop as available until it passes native acceptance.
+Owner decision (2026-10-24): every Lightning app feature is free indefinitely, with no expiring trial, licence fee, subscription or functional paywall. Optional in-app cosmetics, starting with themes, may be purchased to support development. Purchases change appearance only and never unlock any app feature. The app store and claim flow are not yet released; no in-app payment provider, destination or production package is selected. The For Geeks InstaPay coin top-up is a separate website flow. Do not describe the in-app shop as available until it passes native acceptance.
 
 ## Existing repository evidence
 
