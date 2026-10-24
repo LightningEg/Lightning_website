@@ -36,6 +36,8 @@ EXTRA = [
     ("forgeeks-leaderboard.html", "~/root/for-geeks/<b>leaderboard</b>"),
     ("forgeeks-profile.html", "~/root/for-geeks/<b>profile</b>"),
     ("forgeeks-market.html", "~/root/for-geeks/<b>market</b>"),
+    ("forgeeks-tasks.html", "~/root/for-geeks/<b>tasks</b>"),
+    ("forgeeks-admin.html", "~/root/for-geeks/<b>admin</b>"),
 ]
 
 FOOTER_COLUMNS = [
