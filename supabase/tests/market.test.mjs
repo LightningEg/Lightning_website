@@ -63,14 +63,14 @@ await q(`insert into auth.users (id, email) values ($1, 'owner@example.test'), (
 const paid = (await q(`select id, type, price from public.catalog_items where not is_default order by type, price`)).rows;
 
 // ------------------------------------------------------------ the seed
-await test('seed: 3 paid themes and 6 paid banners, each active, priced in whole coins, with a note', async () => {
-  assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['frost', 'garnet', 'moss']);
+await test('seed: 14 paid themes and 6 paid banners, each active, priced in whole coins, with a note', async () => {
+  assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['amber','dracula','frost','garnet','meadow','moss','nile','ocean','paper','phosphor','rose','solarized','synthwave','tokyo']);
   assert.equal(paid.filter(p => p.type === 'banner').length, 6);
-  assert.equal(paid.length, 9);
+  assert.equal(paid.length, 20);
   for (const p of paid) {
     assert.match(p.id, p.type === 'banner' ? /^banner-[a-z]+$/ : /^[a-z]+$/, p.id);
     assert.ok(p.price > 0 && Number.isInteger(p.price), p.id);
-    if (p.type === 'theme') assert.ok(p.price >= 150 && p.price <= 250, p.id);
+    if (p.type === 'theme') assert.ok(p.price >= 100 && p.price <= 250, p.id);
     else assert.ok(p.price >= 40 && p.price <= 120, p.id);
   }
   const rows = (await q(`select * from public.catalog_items where not is_default`)).rows;
@@ -78,9 +78,9 @@ await test('seed: 3 paid themes and 6 paid banners, each active, priced in whole
   assert.equal(new Set(rows.map(r => r.name)).size, rows.length, 'names are distinct');
 });
 
-await test('seed: the twelve original themes are still free, default and active', async () => {
+await test('seed: Mono alone is free, default and active', async () => {
   const r = (await q(`select id, price, is_default, active from public.catalog_items where is_default order by id`)).rows;
-  assert.deepEqual(r.map(x => x.id), ['amber', 'dracula', 'meadow', 'mono', 'nile', 'ocean', 'paper', 'phosphor', 'rose', 'solarized', 'synthwave', 'tokyo']);
+  assert.deepEqual(r.map(x => x.id), ['mono']);
   assert.ok(r.every(x => x.price === 0 && x.active));
 });
 
@@ -138,7 +138,7 @@ await test('anonymous visitors cannot buy or equip; members cannot buy free or u
   });
   const u = await newUser();
   await award(u, 100, 'free-try');
-  await assert.rejects(buy(u, 'nile', 'free-key-0001'), /free/);
+  await assert.rejects(buy(u, 'mono', 'free-key-0001'), /free/);
   await assert.rejects(buy(u, 'banner-nope', 'free-key-0002'), /not available/);
 });
 
@@ -181,7 +181,7 @@ await test('a bought theme and a bought banner can be equipped, swapped and remo
 
 await test('free themes equip with no purchase and no coins', async () => {
   const u = await newUser();
-  for (const id of ['paper', 'meadow', 'solarized']) {
+  for (const id of ['mono']) {
     assert.equal((await equip(u, id)).rows[0].item_id, id);
   }
   assert.equal((await q(`select count(*)::int c from public.purchases where user_id = $1`, [u])).rows[0].c, 0);
@@ -238,14 +238,14 @@ await test('market_catalog: anon sees every active item, nothing owned or equipp
   }
   assert.deepEqual(rows.filter(r => r.type === 'banner').map(r => r.id),
     ['banner-halo', 'banner-blueprint', 'banner-dusk', 'banner-circuit', 'banner-dunes', 'banner-borealis']);
-  assert.deepEqual(rows.filter(r => r.type === 'theme' && !r.is_default).map(r => r.id), ['moss', 'garnet', 'frost']);
+  assert.deepEqual(rows.filter(r => r.type === 'theme' && !r.is_default).map(r => r.id).sort(), ['amber','dracula','frost','garnet','meadow','moss','nile','ocean','paper','phosphor','rose','solarized','synthwave','tokyo']);
 });
 
 await test('market_catalog: the owner sees what they own (free items count) and what is equipped; another member sees none of it', async () => {
   const rows = await catalog('authenticated', OWNER); // owns nothing yet
   assert.ok(rows.filter(r => r.is_default).every(r => r.owned));
   assert.ok(rows.filter(r => !r.is_default).every(r => !r.owned && !r.equipped));
-  await award(OWNER, 350, 'owner-1');
+  await award(OWNER, 450, 'owner-1');
   await buy(OWNER, 'frost', 'owner-key-0001');
   await buy(OWNER, 'banner-dunes', 'owner-key-0002');
   await equip(OWNER, 'frost');
@@ -255,6 +255,7 @@ await test('market_catalog: the owner sees what they own (free items count) and 
   assert.deepEqual([mine['banner-dunes'].owned, mine['banner-dunes'].equipped], [true, true]);
   assert.deepEqual([mine.moss.owned, mine.moss.equipped], [false, false]);
   assert.deepEqual([mine.mono.owned, mine.mono.equipped], [true, false]);
+  await buy(OWNER, 'nile', 'owner-key-0003');
   await equip(OWNER, 'nile');
   const after = Object.fromEntries((await catalog('authenticated', OWNER)).map(r => [r.id, r]));
   assert.deepEqual([after.nile.equipped, after.frost.equipped, after.frost.owned], [true, false, true]);

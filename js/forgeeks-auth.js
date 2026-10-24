@@ -7,7 +7,8 @@
 
   /* ---------- pure helpers (tested in node: supabase/tests/auth.test.mjs) ---------- */
   var ACCOUNT = root.document && root.document.body && root.document.body.dataset.accountPage === 'account.html' ? 'account.html' : 'forgeeks-account.html';
-  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
+  var MAIN_ACCOUNT = ACCOUNT === 'account.html';
+  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|stories|topup|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
 
   // Return only to explicitly supported main-site/For Geeks routes; never another origin or an account page.
   function safeNext(next) {
@@ -32,6 +33,11 @@
   function say(err) {
     var m = String((err && (err.message || err.error_description)) || err || '');
     var c = err && err.code;
+    if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
+    if (/public adult profile/i.test(m)) return 'Set your profile to public and confirm you are 18 or older before publishing.';
+    if (/sharing consent/i.test(m)) return 'Add a title, at least 100 characters, and confirm sharing consent.';
+    if (/source already accepted/i.test(m)) return 'That LinkedIn post has already been accepted for another story.';
+    if (/account not found/i.test(m)) return 'No account matches that email.';
     if (/member_profiles_display_name_key/.test(m)) return 'That display name is taken. Try another.';
     if (/public_needs_adult|leaderboard_needs_adult/.test(m)) return 'Confirm you are 18 or older to be public or on the leaderboard.';
     if (/under 18|minor/i.test(m)) return 'A profile for someone under 18 stays private.';
@@ -78,7 +84,7 @@
       return meCache;
     },
     refreshMe: function () { meCache = null; return FG.me().then(function (m) { render(m); return m; }); },
-    signInHref: function () { return signInHref(root.location.pathname, root.location.search, root.location.hash); },
+    signInHref: function () { return (MAIN_ACCOUNT && root.location.pathname.indexOf('/ar/') >= 0 ? '../' : '') + signInHref(root.location.pathname, root.location.search, root.location.hash); },
     say: say,
     safeNext: safeNext,
     available: false
@@ -108,7 +114,10 @@
     a.className = 'chip me';
     a.id = 'me';
     a.href = FG.signInHref();
-    a.textContent = 'sign in';
+    if (MAIN_ACCOUNT) {
+      a.setAttribute('aria-label', 'Sign in to your account');
+      a.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg>';
+    } else a.textContent = 'sign in';
     return a;
   }
 
@@ -162,7 +171,7 @@
     MENU.forEach(function (it) {
       var a = doc.createElement('a');
       a.setAttribute('role', 'menuitem');
-      a.href = typeof it.href === 'function' ? it.href(m) : it.href;
+      a.href = (MAIN_ACCOUNT && root.location.pathname.indexOf('/ar/') >= 0 ? '../' : '') + (typeof it.href === 'function' ? it.href(m) : it.href);
       a.textContent = it.label;
       menu.appendChild(a);
     });
@@ -201,13 +210,16 @@
   var MENU = [
     { label: 'my profile', href: function (m) { return m && m.display_name ? 'forgeeks-profile.html?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
     { label: 'tasks', href: 'forgeeks-tasks.html' },
-    { label: 'market', href: 'forgeeks-market.html' },
+    { label: 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
+    { label: 'community stories', href: 'stories.html' },
+    { label: 'top up wallet', href: 'topup.html' },
     { label: 'leaderboard', href: 'forgeeks-leaderboard.html' },
     { label: 'profile settings', href: ACCOUNT }
   ];
   FG.menu = MENU;
 
   function render(m) {
+    if(m && current && m.user_id && m.user_id !== current.user.id) return;
     slot = doc.getElementById('me');
     if (!slot) return;
     var next = current ? signedInChip(m) : signedOutChip();

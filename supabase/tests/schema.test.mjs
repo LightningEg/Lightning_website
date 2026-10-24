@@ -187,7 +187,7 @@ await test('purchase: debits wallet, keeps score, is idempotent, and owns once',
     await assert.rejects(q(`select * from public.purchase_item('banner-aurora', 'purchase-key-0002')`), /already owned/);
     await assert.rejects(q(`select * from public.purchase_item('banner-gold', 'purchase-key-0001')`), /different item/);
     await assert.rejects(q(`select * from public.purchase_item('banner-gold', 'purchase-key-0003')`), /insufficient coins/);
-    await assert.rejects(q(`select * from public.purchase_item('meadow', 'purchase-key-0004')`), /free/);
+    await assert.rejects(q(`select * from public.purchase_item('mono', 'purchase-key-0004')`), /free/);
     await assert.rejects(q(`select * from public.purchase_item('no-such-item', 'purchase-key-0005')`), /not available/);
   });
   assert.equal((await q(`select balance from public.wallets where user_id = $1`, [A])).rows[0].balance, 90);
@@ -201,9 +201,9 @@ await test('a member with no coins cannot buy; the database refuses a negative w
 await test('equip: only owned or free default items, one per slot, signed in only', async () => {
   await as('authenticated', A, async () => {
     await q(`select * from public.equip_item('banner-aurora')`);
-    await q(`select * from public.equip_item('meadow')`);
-    await q(`select * from public.equip_item('paper')`);
-    assert.deepEqual((await q(`select slot, item_id from public.equipped_items order by slot`)).rows.map(r => r.item_id), ['banner-aurora', 'paper']);
+    await q(`select * from public.equip_item('mono')`);
+    await q(`select * from public.equip_item('mono')`);
+    assert.deepEqual((await q(`select slot, item_id from public.equipped_items order by slot`)).rows.map(r => r.item_id), ['banner-aurora', 'mono']);
   });
   await as('authenticated', B, async () => assert.rejects(q(`select * from public.equip_item('banner-aurora')`), /not owned/));
   await as('anon', null, async () => assert.rejects(q(`select * from public.equip_item('mono')`), /permission denied/));
@@ -281,7 +281,7 @@ await test('github identity: one active link per account and per GitHub id, hist
 });
 
 await test('catalog: free defaults are always listed, retired items stay visible to owners', async () => {
-  await as('anon', null, async () => assert.equal((await q(`select count(*)::int c from public.catalog_items where is_default`)).rows[0].c, 12));
+  await as('anon', null, async () => assert.equal((await q(`select count(*)::int c from public.catalog_items where is_default`)).rows[0].c, 1));
   await q(`update public.catalog_items set active = false where id = 'banner-aurora'`);
   await as('anon', null, async () => assert.equal((await q(`select * from public.catalog_items where id = 'banner-aurora'`)).rows.length, 0));
   await as('authenticated', A, async () => assert.equal((await q(`select * from public.catalog_items where id = 'banner-aurora'`)).rows.length, 1));

@@ -44,3 +44,12 @@ body[data-main-store] .tm-pv b{display:block;width:25%;height:14px;border-radius
 .parts-scene{background:var(--part-background,var(--field));color:var(--part-text,var(--ink));padding:24px;border-radius:16px;display:grid;gap:14px}
 .parts-scene strong{font:700 26px var(--display);color:var(--part-hero,var(--ink))}
 .parts-scene p{color:var(--part-muted,var(--muted));margin:0}.parts-scene button{background:var(--part-accent,var(--nile));color:var(--part-onAccent,var(--on-nile));border:2px solid var(--part-focus,var(--azure));border-radius:999px;padding:12px 18px;justify-self:start;opacity:1}
+.site-account-slot{display:inline-flex;position:relative;flex:none;--ink:inherit}
+.site-account-slot .chip.me{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--line-ctl);border-radius:50%;background:var(--field);color:var(--ink);cursor:pointer;padding:0;text-decoration:none}
+.site-account-slot .me-wrap{position:relative}.site-account-slot .me-name{display:none}
+.site-account-slot .me-av{width:28px;height:28px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font:700 13px var(--body)}
+.site-account-slot .me-av img{width:100%;height:100%;object-fit:cover}
+.site-account-slot .me-menu{position:absolute;inset-inline-end:0;top:calc(100% + 10px);z-index:70;width:240px;max-width:calc(100vw - 32px);padding:8px;background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-screen)}
+.site-account-slot .me-menu[hidden]{display:none}.site-account-slot .me-head{display:grid;gap:4px;padding:12px;color:var(--muted);font:500 12px var(--body);overflow-wrap:anywhere;border-bottom:1px solid var(--line)}
+.site-account-slot .me-menu [role=menuitem]{display:flex;width:100%;align-items:center;min-height:44px;padding:10px 12px;border:0;border-radius:10px;background:none;color:var(--ink);font:600 14px var(--body);text-align:start;text-decoration:none;cursor:pointer}
+.site-account-slot .me-menu [role=menuitem]:hover,.site-account-slot .me-menu [role=menuitem]:focus-visible{background:var(--field)}

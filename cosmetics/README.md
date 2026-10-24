@@ -8,7 +8,7 @@ The reference PDFs use ten grouped parts. We split palette and brand mark into i
 
 Fixed: layout, dimensions, spacing, border widths, fonts, routes, labels, financial calculations, data access, focus order and touch target sizes. The contract reduces risk; only tests can establish that a specific version is safe. Verify text at 4.5:1, non-text controls/focus at 3:1, semantic states, keyboard access, reduced motion, RTL, all pages and both native platforms. Decorative borders need not meet control contrast and cannot act as the sole control boundary.
 
-The Thread/spool currency and textile rarity guide is optional brand exploration. Keep Lightning Coins for now; do not apply its proposed prices, rarity or claims of universal contrast as policy. The nine additional theme ideas, frames, badges and landscapes are design backlog until real assets and compatibility checks exist. Contributor achievement badges must be earned, not sold as achievements. Keep the twelve existing free themes free.
+The Thread/spool currency and textile rarity guide is optional brand exploration. Keep Lightning Coins for now; do not apply its proposed prices, rarity or claims of universal contrast as policy. The nine additional theme ideas, frames, badges and landscapes are design backlog until real assets and compatibility checks exist. Contributor achievement badges must be earned, not sold as achievements. Owner revision: only Mono is free. Other palettes require account ownership; existing purchases and previously equipped free palettes are preserved.
 
 ## Bundled themes and codes
 
