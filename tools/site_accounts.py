@@ -52,8 +52,7 @@ def connect_public_pages():
         def nav_links(m):
             inner=re.sub(r'<a\b[^>]*href="features[.]html"[^>]*>.*?</a>', '', m[2], flags=re.S)
             inner=re.sub(r'<a\b[^>]*data-site-account[^>]*>.*?</a>', '', inner, flags=re.S)
-            if 'marketplace.html' not in inner:
-                inner+=f'<a href="{up}marketplace.html">'+('المتجر' if ar else 'Marketplace')+'</a>'
+            inner=re.sub(r'<a\b[^>]*href="(?:[.][.]/)?marketplace[.]html"[^>]*>.*?</a>', '', inner, flags=re.S)
             return m[1]+inner+m[3]
         text=re.sub(r'(<nav class="d-links"[^>]*>)(.*?)(</nav>)',nav_links,text,count=1,flags=re.S)
         if 'class="site-account-slot"' not in text:
@@ -69,7 +68,8 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-community-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-account-2\2', text)
+        text=re.sub(r'(css/site-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-account-2\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
