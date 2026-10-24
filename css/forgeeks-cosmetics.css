@@ -1,0 +1,9 @@
+/* For Geeks cosmetics: banners and other purely visual items bought in the market (forgeeks-market.html).
+   Base rules only here; each item adds a .fg-banner[data-item="<catalog id>"] rule below.
+   Cosmetics never carry text, so they cannot hurt contrast; they sit behind or above content. */
+.fg-banner{display:block;height:120px;border-radius:8px 8px 0 0;background:var(--well);border:1px solid var(--line);border-bottom:0;overflow:hidden;position:relative}
+.fg-banner:not([data-item]),.fg-banner[data-item=""]{background:linear-gradient(120deg,var(--well),var(--panel))}
+@media (max-width:640px){.fg-banner{height:88px}}
+@media (prefers-reduced-motion:reduce){.fg-banner,.fg-banner *{animation:none!important;transition:none!important}}
+
+/* ---- items (added by the market) ---- */
