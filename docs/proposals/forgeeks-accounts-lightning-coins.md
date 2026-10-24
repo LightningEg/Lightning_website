@@ -183,7 +183,7 @@ All items start unassigned and not started. Create linked implementation issues 
 | ID | Deliverable | Depends on | Status |
 | --- | --- | --- | --- |
 | FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | In progress: policies decided 2026-10-24; hosting boundary assumed (public shells, gated data), pending owner confirmation |
-| FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | Not started |
+| FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | In review: `supabase/migrations/20261024190000_forgeeks_core.sql` with 21 passing tests; not yet applied to the Supabase project. Feedback tables and GitHub claim sync follow in FG-05/FG-06 |
 | FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Not started |
 | FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
 | FG-05 | Verified GitHub linkage, issue reward publishing and claim snapshots | FG-02, FG-03 | Not started |
