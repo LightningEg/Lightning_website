@@ -43,7 +43,7 @@ WORDS = {
         "explore": "Explore",
         "more": "More",
         "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("contribute", "Contribute")],
-        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("forgeeks", "For Geeks")],
+        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("forgeeks", "For Geeks"), ("account", "Account"), ("marketplace", "Marketplace")],
         "mark": "Lightning",
     },
     "ar": {

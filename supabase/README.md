@@ -52,3 +52,54 @@ node supabase/tests/account.test.mjs   # the account page, with a fake Supabase 
 ```
 
 The tests run the migration on a real Postgres engine with Supabase's roles stubbed and check the access rules as each role. They cannot run truly parallel purchases (one connection); overspend protection rests on the wallet row lock plus `CHECK (balance >= 0)`.
+
+## InstaPay and permanent purchase infrastructure (FG-12)
+
+Apply `20261025130000_insta_pay_topups.sql` after migrations 1–6. It is additive and does not seed packages, prices, payment addresses or assets. Existing website cosmetics are untouched. This is backend infrastructure, not a live checkout or a finished PC/phone claim screen.
+
+- Trusted configuration creates `coin_packages`; rows are inactive by default. Prices are integer piastres and coins are integers. New requests snapshot the agreed amounts.
+- A member calls `request_topup(package_id, request_key)` with a UUID retry key. The returned request UUID is the support/payment reference. `cancel_topup(request_id)` only cancels that member’s pending request. Customers cannot approve or write payment tables.
+- An administrator calls `admin_review_topup(request_id, decision, received_piastres, payment_reference, note)` after checking the actual incoming transfer. Their Supabase session must have MFA assurance `aal2`. No service key or typed browser MFA flag is accepted as proof. Duplicate payment references are normalized to uppercase and rejected across requests; retries of the same approval return the original credit.
+- Paid coins post `paid_topup` entries to the existing ledger; the trigger updates the existing wallet, with contribution delta zero. Existing `purchase_item` spends them normally. Corrections remain linked ledger entries; an approved payment record describes the original settlement, even if a later ledger correction reverses it.
+- `admin_wallet_reconciliation()` returns each balance, ledger sum and difference. Use this for private CSV/Sheets reporting; it grants no spreadsheet write authority. Automated Sheets export and bank-transfer matching are still to build.
+- Payment history is included in `export_my_data`. Account deletion anonymizes top-up ownership while retaining the provider reference against duplicate credit. It deliberately deletes online inventory as the existing account-deletion policy does; users must export purchases before deletion. A portable offline package cannot be revoked immediately.
+- `item_deliveries` registers supplied assets by item, platform, version, minimum app version, HTTPS URL and SHA-256. No rows are seeded. An owned item may have no app delivery yet: it remains website-only, and must not be advertised as usable in the app. Only trusted configuration writes deliveries. Desktop/phone clients must still validate allowed asset hosts, safe package contents and compatibility before installing.
+- `restore_store_inventory()` returns only the authenticated account’s permanent owned items (including retired items) and delivery metadata. Calling it does not consume or charge ownership. It is not itself a signed offline license.
+
+### Signed restoration endpoint
+
+`functions/restore-purchases/index.ts` is a Supabase Edge Function. Deploy it with JWT verification enabled, and configure these backend secrets first:
+
+- `STORE_SIGNING_PRIVATE_JWK`: an Ed25519 private JWK, generated and backed up outside Git.
+- `STORE_SIGNING_KEY_ID`: a stable identifier. Ship its corresponding public verification key with app clients; retain old public keys through rotation.
+- `STORE_ALLOWED_ORIGINS`: comma-separated exact browser origins, such as the production website. Native clients can omit Origin; they still need a valid authenticated user token.
+
+The standard Supabase URL and anon key come from the function runtime. No service-role key is required: the function verifies the user token, then calls the inventory RPC under that user’s identity. A missing signing configuration returns 503, with no secret details. POST returns `{algorithm, key_id, payload, signature}`. The Ed25519 signature covers the exact UTF-8 payload string; signature encoding is base64url. Clients must reject unknown keys/algorithms, verify before parsing, and check the expected account. There is no license expiry, hardware identifier or activation quota. Signing does not prevent an owner copying a portable cosmetic license.
+
+The signing primitive is tested with disposable generated keys. The Deno HTTP wrapper still needs staged Supabase deployment tests (JWT rejection, CORS, outages and secret configuration) before release. Apply provider rate limits for restore/download traffic before enabling sales. Store credentials separately from ledger/profile backups. Do not load remote store pages into the privileged local WebView.
+
+### Still required before accepting payments
+
+Owner payment details/QR and coin packages; checkout and WhatsApp instructions; MFA-enabled admin review UI; bank reconciliation and Sheets exporter; app account connection; license verification/import and theme renderer on PC/phone; asset publication and actual prices; live end-to-end acceptance. No example assets or coin packages should be treated as production data. Existing twelve free website themes remain free.
+
+## Main-site account and marketplace
+
+`account.html` and `marketplace.html` use the Part B main-site design with the same forms, auth client, wallet, catalog and inventory as For Geeks. `tools/site_accounts.py` generates their markup and theme preview registry from the existing community pages; run it and then `python tools/footer.py` after changes. Main-site navigation includes both destinations. The home-page invitation has three explanatory illustrations, English/Arabic copy, native modal focus handling, signed-in suppression and a seven-day dismissal preference. These illustrations are not catalog assets.
+
+Add `https://lightningeg.com/account.html` (and the localhost equivalent for development) to Supabase Authentication redirect allowlists before using Google signup, email verification or password recovery on the new page. Keep existing For Geeks callback URLs. Main account/market screens are English; Arabic navigation and the invitation point to those shared screens and state this in the invitation.
+
+Automated acceptance: all `supabase/tests/*.test.mjs`; optional real Chromium: install `playwright-core@1.58.2`, run `python -m http.server 8000 --bind 127.0.0.1`, then `node supabase/tests/main-site-browser.mjs`. Browser tests intercept authentication and never use the live Supabase project. The test currently uses `/usr/bin/chromium`.
+
+## Swappable parts, activation codes and proof policy
+
+Apply `20261025140000_activation_and_payment_proof.sql` next. No bundled app versions are enabled by this migration. `cosmetics/slots.json` inventories eleven appearance compartments; each theme JSON is its per-part guideline. The supplied PDFs are references, not executable assets or binding policy. The two new designs are sandbox previews on the main marketplace, unpriced and unavailable for paid app delivery until integration/acceptance. Textile products and currency naming remain optional design backlog. See [parts contract](../cosmetics/README.md) and [manual payment policy](../cosmetics/payment-policy.md).
+
+Only after an app release bundles and supports a specific item/version should trusted configuration enable its `bundled_item_versions` row. Owners then get a **Get app unlock code** button on the main marketplace. `issue_activation_code(item_id, asset_version)` returns a 122-bit random UUID code, displayed in four copyable groups. The database keeps only its SHA-256 hash, expires it after ten minutes and caps issuance at twenty per account/hour. Redemption is serialized and single-use. Codes and private signing material never enter audit logs. An account purchase has no expiry/device cap; another PC/phone gets another code free.
+
+`functions/redeem-purchase` exchanges the ticket for the same Ed25519 envelope used by restoration. Deploy this endpoint with JWT verification **disabled for this endpoint only**, because a native app presents a random bearer code rather than a member JWT; it uses the backend service key for the narrowly granted redemption RPC. Keep restore-purchases JWT verification enabled. Add gateway request limits before enabling this endpoint; code entropy is not a substitute for abuse control. The redeem wrapper bounds body size, rejects browser Origin requests, validates signing configuration before consumption and never logs the code. Expired/used/unsupported codes fail closed. If a response is lost, the owner issues a new code without repurchasing; no automatic reuse of spent tickets. An old app must supply the exact locally supported item/version and refuse an unsupported response before saving a license.
+
+The app-side companion branch bundles both data manifests and implements offline signature verification. It does not yet add an activation screen, cache persistence, the part-to-component renderer or a release public-key registry. Those remain release gates. Do not enable bundled versions based only on the data manifests being present. A short random code cannot be reliably redeemed once entirely offline; offer signed-file import as the offline alternative. A portable signed license is copyable; this accepted cosmetic limitation must not be described as strong DRM.
+
+Before showing QR/address, checkout must show `manual-final-v1` and call `accept_topup_terms`. The member later calls `submit_topup_reference`, then sends their own payment receipt to WhatsApp Business. An MFA administrator records visual receipt review with `admin_record_topup_proof`, then separately checks the actual incoming transfer and calls `admin_review_topup`. Approval now refuses missing terms/customer reference/screenshot review. WhatsApp image handling is still private and manual; no receipt upload bucket or OCR is implied. Customer/sender references may differ from the receiving bank reference, so do not require literal equality between them.
+
+The no-discretionary-refunds policy is stated before payment with an explicit acceptance timestamp. Mandatory rights and manual correction of payment/delivery errors remain available; no refund feature or automatic clawback is added. Checkout/admin UI and live endpoint acceptance remain outstanding.

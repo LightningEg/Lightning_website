@@ -6,14 +6,14 @@
   'use strict';
 
   /* ---------- pure helpers (tested in node: supabase/tests/auth.test.mjs) ---------- */
-  var ACCOUNT = 'forgeeks-account.html';
-  var NEXT_RE = /^forgeeks[a-z0-9-]*\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
+  var ACCOUNT = root.document && root.document.body && root.document.body.dataset.accountPage === 'account.html' ? 'account.html' : 'forgeeks-account.html';
+  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
 
-  // Where to go after signing in: only a For Geeks page on this site, never the account page itself.
+  // Return only to explicitly supported main-site/For Geeks routes; never another origin or an account page.
   function safeNext(next) {
     if (typeof next !== 'string') return null;
     next = next.replace(/^\/+/, '');
-    if (!NEXT_RE.test(next) || next.split(/[?#]/)[0] === ACCOUNT) return null;
+    if (!NEXT_RE.test(next) || ['account.html', 'forgeeks-account.html'].indexOf(next.split(/[?#]/)[0]) >= 0) return null;
     return next;
   }
 

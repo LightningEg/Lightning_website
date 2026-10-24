@@ -144,7 +144,7 @@ Maintain two separate quantities:
 
 Example: earn 150 coins, buy a 60-coin banner, keep a contribution score of 150 and a wallet balance of 90. Spending never reduces rank. Refunds restore spendable coins but do not create contribution score. Administrative gifts, if introduced, do not count as contributions.
 
-Use an append-only ledger with award source, amount, recipient, reason, timestamp and idempotency key. Correct errors with linked reversing entries rather than rewriting history. Restrict score adjustments to authorized administrators and record every action. Proposed baseline: coins are earned, nontransferable, have no cash value, cannot be bought for money and cannot be withdrawn. Any future change needs a separate proposal.
+Use an append-only ledger with award source, amount, recipient, reason, timestamp and idempotency key. Correct errors with linked reversing entries rather than rewriting history. Restrict score adjustments to authorized administrators and record every action. Owner revision (2026-10-24): coins may be earned or purchased through manually verified InstaPay top-ups. Purchased coins do not increase contribution score. Coins remain nontransferable and cannot be withdrawn. Supabase is authoritative; Google Sheets is a reporting/reconciliation copy.
 
 Record earn time separately from event processing time so delayed delivery cannot distort monthly rankings. Define the leaderboard timezone before launch. Equal scores share a rank; ordering within a tie is stable. Show display name, avatar, contribution counts and score only. Members can inspect their own full award history and appeal an incorrect decision.
 
@@ -175,6 +175,24 @@ Logical records: private profiles, member display profiles, GitHub links, admini
 Validate GitHub webhook signatures against the raw body and deduplicate delivery IDs. Then verify repository eligibility, merge status, stable author identity, issue linkage and reward acceptance. Award issuance and ledger posting must be atomic and independently idempotent by source allocation. Queue retries, record failures without personal payloads, and provide reconciliation for missed/out-of-order events. Contributions predating GitHub linkage may be claimed only after verified ownership and the agreed historical cutoff.
 
 Secrets stay in managed backend configuration; no Supabase privileged key, Google secret or webhook secret in browser assets or Git history. Apply least privilege, authenticated admin operations, safe rendering of feedback, request limits and OAuth callback allowlists. Back up durable records and document restore/reconciliation procedures.
+
+## Main-site membership revision
+
+Account and marketplace are product-wide surfaces, not exclusive to For Geeks. `account.html` and `marketplace.html` reuse the same identity and commerce records with the main-site design. Public navigation exposes them. A dismissible home-page invitation illustrates profile, website cosmetics and accepted contribution benefits. Signed-in visitors do not see it; dismissal pauses it for seven days. App assets and InstaPay top-ups are described as upcoming, not available. Add the new account URL to the auth redirect allowlist before live sign-in acceptance. Assets and packages are still supplied by the owner later.
+
+## Payment and app ownership revision (FG-12)
+
+The owner requests infrastructure first; assets, badges, coin packages and prices will be supplied later. Reuse the existing accounts, ledger, wallet, purchases and inventory. No second wallet or device-bound entitlement system.
+
+Audit follow-up: the earlier Google Doc described the older 58c5f58 snapshot. Current main already includes account/community/market implementation. FG-12 adds payment support rather than rebuilding those features. Implementation evidence and deployment instructions: [Supabase README](../../supabase/README.md#instapay-and-permanent-purchase-infrastructure-fg-12).
+
+Gaps resolved in the backend: immutable request price snapshots; duplicate provider reference and retry protection; paid credits excluded from contribution ranking; MFA for payment approval; bounded pending requests; payment privacy export/anonymization; account-only inventory restoration without expiry/device limits; an empty delivery registry and server-only signing service.
+
+Ownership is permanent for the account, across supported devices. Restoration never charges or consumes it. Deliberate account deletion still destroys online identity/inventory; provide export and explain recovery consequences. Portable non-expiring licenses are copyable and cannot be immediately revoked after a refund. A signature prevents editing, not sharing.
+
+Gaps still open: checkout/WhatsApp and MFA admin UI; Sheets export queue/retries; asset metadata/compatibility shown in the market; native external-browser account connection; public-key distribution and package verification/import; appearance engine and platform acceptance; staged signing-endpoint tests, rate limits, key backup/rotation and live payment reconciliation. Do not sell app items before working PC/phone claiming exists. Packages and deliveries have no production seeds.
+
+Build sequence: top-up/restore backend → checkout/admin/reporting → app identity and offline verification → asset renderer/compatibility → staged acceptance and launch. Contribution features already built remain independent.
 
 ## Delivery tracker
 
@@ -241,14 +259,24 @@ Still open:
 
 ## Scope and operating costs
 
-This document authorizes tracking of the proposal; it does not indicate that authentication, rewards or a marketplace are deployed. No real-money payments, cash redemption, trading, random loot boxes or functional purchases are proposed. Existing financial data remains outside community storage.
+This document authorizes tracking of the proposal; it does not indicate that authentication, rewards or a marketplace are deployed. Manual InstaPay top-ups are now authorized for infrastructure development; cash redemption, trading, random loot boxes and functional purchases remain outside scope. Checkout stays disabled until real owner configuration and end-to-end acceptance. Existing financial data remains outside community storage.
 
 Start with free allowances where suitable, but do not promise permanent zero cost. Verify Supabase quotas, database/storage/egress limits, inactivity behavior, backups, email limits and gateway hosting costs against current provider plans when implementing. Add usage alerts and a recovery plan rather than relying on a free tier indefinitely.
 
 ## Change log
+
+- 2026-10-24 · Codex: main-site account/market surfaces and illustrated membership invitation added; FG-12 starts additive InstaPay top-up, reconciliation, delivery registry and signed restoration infrastructure; assets/packages remain unconfigured.
 
 - 2026-10-25: Built FG-04 to FG-09 and FG-11 (#63–#70, app #119): account menu, data export and deletion, privacy notice v3, keep-alive, leaderboard and profiles, market, rewards pipeline and owner console. Tracker updated.
 - 2026-10-24: FG-03 built: account page (unlinked, noindex), vendored Supabase client, minors guard migration. A birth date under 18 keeps a profile strictly private, in the page and in the database.
 - 2026-10-24: Added access map (app download always public), opt-in public member showcase and FG-11; Supabase and Google sign-in setup reported complete.
 - 2026-10-24: Owner decisions recorded (app repository only, owner-set rewards, Cairo timezone, collect all optional profile fields, no reverts in first release); Supabase project created; hosting boundary assumed pending confirmation.
 - 2026-10-24: Initial proposal records account gating, optional profile data, Google authentication, feedback/PR recognition, per-issue Lightning Coin rewards and a cosmetics-only marketplace.
+
+## Owner revision: parts, first test designs and one-time codes
+
+The uploaded cosmetics PDFs are design references, not mandatory specifications. Inventory/guidelines now live in `cosmetics/slots.json` and each theme manifest. The main marketplace includes Nile Nocturne and Royal Obsidian & Gold as bounded first-test previews, with all changed parts visible. They have no committed price or paid app availability. Existing free themes remain free; proposed Threads naming, rarities, textile catalog and decorative animations are deferred. A parts contract cannot by itself prove a theme cannot break layout; cross-platform/RTL/accessibility and geometry tests remain gates.
+
+Themes are intended to ship as approved data/components in the app. Ownership is account-wide; a code is only a ten-minute, single-use delivery ticket exchanged online for a signed offline entitlement. Other devices get new codes free. No signing keys or universal passwords enter the app, and no device activation quota is introduced. Offline random-code redemption is not promised. See the Supabase README for the server RPC/endpoint and the app companion branch for bundled data/offline verification. Do not enable a bundled item before a complete app version supports and tests it.
+
+Payment proof is the customer's reference plus the image from their own payment app sent through WhatsApp Business; the owner records image review and separately verifies settlement in their own account. No screenshot or typed reference credits money automatically. Checkout must record explicit agreement to the versioned no-discretionary-refunds policy before displaying payment instructions. See `cosmetics/payment-policy.md`; required legal rights and manual correction of mistakes are preserved.

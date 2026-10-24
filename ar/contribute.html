@@ -42,8 +42,9 @@
 </script>
 <link rel="stylesheet" href="../css/arabic.css?v=20261019-1">
 <link rel="stylesheet" href="../css/footer.css?v=20261015-1">
+<link rel="stylesheet" href="../css/site-account.css">
 </head>
-<body>
+<body data-account-page="account.html">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
   <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
@@ -61,7 +62,7 @@
       <a href="guides.html">مقالات</a>
       <a href="current-status.html">التنزيل</a>
       <a href="contribute.html" aria-current="page">ساهم معانا</a>
-    </nav>
+    <a href="../marketplace.html">المتجر</a><a href="../account.html" data-site-account>حساب</a></nav>
     <div class="d-bar-end">
         <button data-theme-toggle aria-label="الوضع الداكن"></button>
         <a class="lang-switch" href="../contribute.html" lang="en" dir="ltr">English</a>
@@ -144,5 +145,6 @@
 
 <script src="../js/form-security.js?v=20261018-1" defer></script>
 <script src="../js/landing.js?v=20261010-1"></script>
+<script src="../js/vendor/supabase-2.118.0.js" defer></script><script src="../js/forgeeks-config.js" defer></script><script src="../js/forgeeks-auth.js" defer></script><script src="../js/site-membership.js" defer></script>
 </body>
 </html>

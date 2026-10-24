@@ -93,6 +93,10 @@ It's a static site with no build step and no dependencies. Fonts load from Googl
 
 **Arabic pages are built for Egypt, not translated.** An `ar/` page uses the English page's design system (the same stylesheets, components and class names, with `lang="ar-EG" dir="rtl"`, `../` paths and `css/arabic.css` last; no Testing panel), but its words, examples, order and number of sections are written for an Egyptian reader, in Egyptian Arabic, with the same facts and screens. The voice, fixed words and Arabic type are in `guideline/website-ar.html` B04 and B10. The shared stylesheets write left and right as logical properties (`margin-inline-start`, `inset-inline-end`, `text-align:start`), so the same CSS lays out both directions: keep it that way. When an English page's facts change, change its `ar/` page too. Visible numbers use Arabic-Indic digits (٢١٥٬٦٥٧ جنيه); the scripts read and write them on `lang="ar-EG"` pages. Dates stay yyyy-mm-dd inside `<bdo dir="ltr">` (٢٠٢٦-١٠-٠٤), so the Arabic-Indic digits are not reversed. Keep URLs, IDs, attribute values and technical color codes unchanged.
 
+## Main-site membership
+
+Account and marketplace are available as main-site surfaces at `account.html` and `marketplace.html`, using the same identity and wallet as For Geeks. Public navigation links both. The home invitation is dismissible and never required to download or use the app. Backend top-up and signed-restore setup, current limits and remaining launch requirements: [Supabase README](supabase/README.md).
+
 ## Proposed community features
 
 [For Geeks accounts, Lightning Coins and cosmetics](docs/proposals/forgeeks-accounts-lightning-coins.md) records the proposed member access, per-issue rewards, leaderboard and cosmetics marketplace, with implementation milestones and open decisions. Status: built. Member pages: `forgeeks-account.html`, `forgeeks-tasks.html`, `forgeeks-market.html`, `forgeeks-leaderboard.html` (indexed), `forgeeks-profile.html`, `forgeeks-admin.html` (owner); shared sign-in `js/forgeeks-auth.js`; database and setup in `supabase/`.
