@@ -1,7 +1,7 @@
 # Proposal: For Geeks accounts, Lightning Coins and cosmetics
 
 Date: 2026-10-24
-Status: Website infrastructure built; production database migrations applied 2026-10-24. The app remains free; optional in-app cosmetics are the only planned app purchases. Payment destination/packages and native claim/render acceptance remain owner/release gates.
+Status: Website infrastructure built; production database migrations applied 2026-10-24. The app remains free; optional in-app cosmetics are the only planned app purchases. The existing manually reviewed InstaPay top-up flow funds For Geeks coins and is separate from the future in-app checkout. Payment destination/packages and native claim/render acceptance remain owner/release gates.
 Product: https://lightningeg.com/forgeeks.html
 Tracking ID: FG-ACCOUNTS
 Owner: Mohamed (reward authority and final decisions)
@@ -23,7 +23,7 @@ The sections below recommend implementation policies. Reward amounts, catalog pr
 
 ## App price and support policy
 
-Owner decision (2026-10-24): every Lightning app feature is free indefinitely, with no expiring trial, licence fee, subscription or functional paywall. Optional in-app cosmetics, starting with themes, may be purchased to support development. Purchases change appearance only and never unlock a financial feature. The app store and claim flow are not yet released; keep payment provider, destination and packages as open release decisions, and do not describe the shop as available until it passes native acceptance.
+Owner decision (2026-10-24): every Lightning app feature is free indefinitely, with no expiring trial, licence fee, subscription or functional paywall. Optional in-app cosmetics, starting with themes, may be purchased to support development. Purchases change appearance only and never unlock a financial feature. The app store and claim flow are not yet released; no in-app payment provider, destination or production package is selected. The For Geeks InstaPay coin top-up is a separate website flow. Do not describe the in-app shop as available until it passes native acceptance.
 
 ## Existing repository evidence
 
@@ -148,7 +148,7 @@ Maintain two separate quantities:
 
 Example: earn 150 coins, buy a 60-coin banner, keep a contribution score of 150 and a wallet balance of 90. Spending never reduces rank. Refunds restore spendable coins but do not create contribution score. Administrative gifts, if introduced, do not count as contributions.
 
-Use an append-only ledger with award source, amount, recipient, reason, timestamp and idempotency key. Correct errors with linked reversing entries rather than rewriting history. Restrict score adjustments to authorized administrators and record every action. Owner revision (2026-10-24): coins may be earned or purchased through manually verified InstaPay top-ups. Purchased coins do not increase contribution score and are spent only on optional cosmetics. They never pay for app access or a financial feature. Coins remain nontransferable and cannot be withdrawn. Supabase is authoritative; Google Sheets is a reporting/reconciliation copy.
+Use an append-only ledger with award source, amount, recipient, reason, timestamp and idempotency key. Correct errors with linked reversing entries rather than rewriting history. Restrict score adjustments to authorized administrators and record every action. Owner revision (2026-10-24): coins may be earned or purchased through manually verified InstaPay top-ups. Purchased coins do not increase contribution score and are spent only on optional cosmetics. They never pay for app access or a financial feature. This website coin top-up flow is separate from the future in-app cosmetic checkout. Coins remain nontransferable and cannot be withdrawn. Supabase is authoritative; Google Sheets is a reporting/reconciliation copy.
 
 Record earn time separately from event processing time so delayed delivery cannot distort monthly rankings. Define the leaderboard timezone before launch. Equal scores share a rank; ordering within a tie is stable. Show display name, avatar, contribution counts and score only. Members can inspect their own full award history and appeal an incorrect decision.
 
