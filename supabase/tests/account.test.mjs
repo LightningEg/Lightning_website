@@ -120,6 +120,8 @@ await test('safeNext only allows For Geeks pages on this site, never the account
 const html = readFileSync(new URL('../../forgeeks-account.html', import.meta.url), 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
 const code = readFileSync(new URL('../../js/forgeeks-account.js', import.meta.url), 'utf8');
 const authCode = readFileSync(new URL('../../js/forgeeks-auth.js', import.meta.url), 'utf8');
+const dataCode = readFileSync(new URL('../../js/forgeeks-account-data.js', import.meta.url), 'utf8');
+const data = require('../../js/forgeeks-account-data.js');
 const UID = '11111111-1111-4111-8111-111111111111';
 const plain = v => JSON.parse(JSON.stringify(v)); // objects made inside the simulated browser have their own prototypes
 const tick = (ms = 5) => new Promise(r => setTimeout(r, ms));
@@ -151,12 +153,14 @@ async function boot(handle = () => ({ data: null, error: null }), url = 'https:/
     signInWithOAuth: async a => { calls.push({ fn: 'signInWithOAuth', a }); return { error: null }; },
     resetPasswordForEmail: async (e, o) => { calls.push({ fn: 'reset', e, o }); return { error: null }; },
     updateUser: async a => { calls.push({ fn: 'updateUser', a }); return { error: null }; },
-    signOut: async () => { calls.push({ fn: 'signOut' }); return { error: null }; }
+    signOut: async o => { calls.push({ fn: 'signOut', o }); return { error: null }; }
   };
-  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder }; } };
+  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder, rpc: (name, args) => { calls.push({ fn: 'rpc', name, args }); return Promise.resolve(handle({ op: 'rpc', name, args, filters: {} })); } }; } };
   w.FORGEEKS = { supabaseUrl: 'https://x.supabase.co', anonKey: 'anon' };
   w.eval(authCode);
+  w.URL.createObjectURL = () => 'blob:test'; w.URL.revokeObjectURL = () => {};
   w.eval(code);
+  w.eval(dataCode);
   const $ = id => w.document.getElementById(id);
   const fire = async (event, session) => { cbs.forEach(f => f(event, session)); await tick(20); };
   const submit = async id => { $(id).dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true })); await tick(20); };
@@ -435,6 +439,49 @@ await test('saving the profile refreshes the name in the top bar', async () => {
   p.set('display_name', 'Ada');
   await p.submit('form-public'); await tick(30);
   assert.equal(p.$('me').querySelector('.me-name').textContent, 'Ada');
+});
+
+await test('your data: the file name uses the Cairo date and the phrase check is exact', () => {
+  assert.equal(data.fileName(Date.UTC(2026, 9, 24, 22, 30)), 'lightning-geeks-data-2026-10-25.json');
+  assert.equal(data.confirmed(' Delete my account '), true);
+  assert.equal(data.confirmed('delete account'), false);
+  assert.equal(data.confirmed(''), false);
+});
+
+await test('your data: download asks for your export and says when it is done or why not', async () => {
+  const p = await boot(q => q.op === 'rpc' && q.name === 'export_my_data' ? { data: { account: { email: 'ada@example.test' } }, error: null } : account()(q));
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  await p.click('data-download');
+  assert.equal(p.calls.filter(c => c.fn === 'rpc' && c.name === 'export_my_data').length, 1);
+  assert.equal(p.$('status-data').textContent, 'downloaded');
+  const q = await boot(r => r.op === 'rpc' ? { data: null, error: { message: 'Failed to fetch' } } : account()(r));
+  await q.fire('INITIAL_SESSION', session); await tick(30);
+  await q.click('data-download');
+  assert.match(q.$('status-data').textContent, /Cannot reach/);
+});
+
+await test('your data: delete needs the exact phrase, then deletes, clears this browser and says so', async () => {
+  const p = await boot(q => q.op === 'rpc' ? { data: null, error: null } : account()(q));
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  p.set('delete-confirm', 'yes please');
+  await p.submit('form-delete');
+  assert.match(p.$('status-delete').textContent, /delete my account/);
+  assert.equal(p.calls.filter(c => c.name === 'delete_my_account').length, 0);
+  p.set('delete-confirm', 'delete my account');
+  await p.submit('form-delete'); await tick(30);
+  const d = p.calls.find(c => c.name === 'delete_my_account');
+  assert.deepEqual(plain(d.args), { p_confirm: 'delete my account' });
+  assert.deepEqual(plain(p.calls.find(c => c.fn === 'signOut').o), { scope: 'local' });
+  assert.match(p.$('acct-msg').textContent, /deleted/);
+});
+
+await test('your data: the owner account is refused in plain words', async () => {
+  const p = await boot(q => q.op === 'rpc' ? { data: null, error: { message: 'an administrator account cannot be deleted here', code: '42501' } } : account()(q));
+  await p.fire('INITIAL_SESSION', session); await tick(30);
+  p.set('delete-confirm', 'delete my account');
+  await p.submit('form-delete'); await tick(20);
+  assert.match(p.$('status-delete').textContent, /owner account/);
+  assert.equal(p.calls.filter(c => c.fn === 'signOut').length, 0);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
