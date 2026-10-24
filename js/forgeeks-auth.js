@@ -140,7 +140,7 @@
 
   function signedInChip(m) {
     var wrap = doc.createElement('div');
-    wrap.className = 'me-wrap';
+    wrap.className = MAIN_ACCOUNT ? 'me-wrap site-account-slot' : 'me-wrap';
     wrap.id = 'me';
     var name = (m && m.display_name) || 'account';
     btn = doc.createElement('button');
@@ -210,7 +210,7 @@
   var MENU = [
     { label: 'my profile', href: function (m) { return m && m.display_name ? 'forgeeks-profile.html?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
     { label: 'tasks', href: 'forgeeks-tasks.html' },
-    { label: 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
+    { label: MAIN_ACCOUNT ? 'Marketplace' : 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
     { label: 'community stories', href: 'stories.html' },
     { label: 'top up wallet', href: 'topup.html' },
     { label: 'leaderboard', href: 'forgeeks-leaderboard.html' },
