@@ -199,6 +199,10 @@
 
   // Menu entries. Pages that are not live yet are added here when they ship.
   var MENU = [
+    { label: 'my profile', href: function (m) { return m && m.display_name ? 'forgeeks-profile.html?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
+    { label: 'tasks', href: 'forgeeks-tasks.html' },
+    { label: 'market', href: 'forgeeks-market.html' },
+    { label: 'leaderboard', href: 'forgeeks-leaderboard.html' },
     { label: 'profile settings', href: ACCOUNT }
   ];
   FG.menu = MENU;

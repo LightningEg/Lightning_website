@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261025-2">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261025-3">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -350,10 +350,10 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261025-2"></script>
+<script src="js/forgeeks.js?v=20261025-3"></script>
 <script src="js/vendor/supabase-2.118.0.js"></script>
-<script src="js/forgeeks-config.js?v=20261025-2"></script>
-<script src="js/forgeeks-auth.js?v=20261025-2"></script>
+<script src="js/forgeeks-config.js?v=20261025-3"></script>
+<script src="js/forgeeks-auth.js?v=20261025-3"></script>
 <script>
 (function(){
   'use strict';
@@ -422,7 +422,8 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
       if(!arg)return ['themes: '+THEMES.map(function(t){return t.id===LG.current()?'<span class="ok">'+t.id+'</span>':t.id}).join(' · '),'<span class="d">theme &lt;name&gt; to switch, or press T anywhere</span>'];
       var hit=THEMES.filter(function(t){return t.id===arg.toLowerCase()})[0];
       if(!hit)return ['no theme "'+esc(arg)+'". try: '+THEMES.map(function(t){return t.id}).join(', ')];
-      keep(hit.id);return ['theme set to <span class="ok">'+hit.id+'</span>'];
+      if(!keep(hit.id))return ['<span class="d">'+hit.id+' is a paid theme: get it in the market (forgeeks-market.html)</span>'];
+      return ['theme set to <span class="ok">'+hit.id+'</span>'];
     }
   };
   CMDS.licence=CMDS.license;CMDS['?']=CMDS.help;

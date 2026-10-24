@@ -1,7 +1,7 @@
 # Proposal: For Geeks accounts, Lightning Coins and cosmetics
 
 Date: 2026-10-24
-Status: Proposed; owner decisions recorded 2026-10-24; Supabase project created; implementation has not started
+Status: Built 2026-10-25 (FG-01 to FG-09, FG-11); live once the owner applies migrations 3–6 and the GitHub setup in supabase/README.md
 Product: https://lightningeg.com/forgeeks.html
 Tracking ID: FG-ACCOUNTS
 Owner: Mohamed (reward authority and final decisions)
@@ -182,17 +182,17 @@ All items start unassigned and not started. Create linked implementation issues 
 
 | ID | Deliverable | Depends on | Status |
 | --- | --- | --- | --- |
-| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | In progress: policies decided 2026-10-24; hosting boundary assumed (public shells, gated data), pending owner confirmation |
-| FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | In review: `supabase/migrations/20261024190000_forgeeks_core.sql` with 21 passing tests; not yet applied to the Supabase project. Feedback tables and GitHub claim sync follow in FG-05/FG-06 |
-| FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | In review: `forgeeks-account.html` (sign in, sign up, reset, profile, setup, links, private details), `supabase/migrations/20261024210000_forgeeks_minors_guard.sql`, 20 page tests. Unlinked and noindex until FG-04; not yet tested against the live project |
-| FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
-| FG-05 | Verified GitHub linkage, issue reward publishing and claim snapshots | FG-02, FG-03 | Not started |
-| FG-06 | Feedback moderation, signed webhooks, accepted awards and ledger | FG-05 | Not started |
-| FG-07 | Member leaderboard, activity history and wallet | FG-06 | Not started |
-| FG-08 | Cosmetic catalog, atomic purchases, inventory and equip flows | FG-07 | Not started |
-| FG-09 | Admin audit, reversals, reconciliation and deletion/export procedures | FG-06, FG-08 | Not started |
-| FG-10 | Security/accessibility verification, staged launch and operations guide | FG-04, FG-09, FG-11 | Not started |
-| FG-11 | Public member showcase: visibility levels, work and git setup sections, public view, report and takedown | FG-03, FG-06 | Not started |
+| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | Done: policies 2026-10-24; boundary: static public shells, member data behind Supabase sessions and row-level security |
+| FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | Done (#61): core schema, 22 tests |
+| FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Done (#62, #63): account page, top-bar account menu, return to page, minors guard |
+| FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Done by design: no gateway; member pages are noindex shells that show nothing without a session; leaderboard indexed (sitemap, llms.txt) |
+| FG-05 | Verified GitHub linkage, issue reward publishing and claim snapshots | FG-02, FG-03 | Done (#70, app #119): GitHub link through Supabase identities, rewards published in the owner console, claims locked at /take |
+| FG-06 | Feedback moderation, signed webhooks, accepted awards and ledger | FG-05 | Done (#70, app #119): merge awards from GitHub Actions (no webhook), pending awards until GitHub is linked, feedback queue and awards |
+| FG-07 | Member leaderboard, activity history and wallet | FG-06 | Done (#68, #70): leaderboard (month in Cairo time, all time), activity on the account page, wallet chip |
+| FG-08 | Cosmetic catalog, atomic purchases, inventory and equip flows | FG-07 | Done (#69): 3 paid themes, 6 banners, market page, atomic purchase, equip synced across devices |
+| FG-09 | Admin audit, reversals, reconciliation and deletion/export procedures | FG-06, FG-08 | Done (#65, #70): owner console (rewards, feedback, corrections, moderation, reports, audit), data export and account deletion |
+| FG-10 | Security/accessibility verification, staged launch and operations guide | FG-04, FG-09, FG-11 | Partly: 241 automated tests in CI, Chromium checks at 360/1280 px; still open: a signed-in run against the live project after the migrations |
+| FG-11 | Public member showcase: visibility levels, work and git setup sections, public view, report and takedown | FG-03, FG-06 | Done (#68): public profiles with verified and self-reported work, setup, report and takedown |
 
 Suggested releases: accounts/access first (FG-01–04); rewards and rankings next (FG-05–07); cosmetics and operations last (FG-08–10). Do not enable spending before transaction integrity and reversal rules are verified.
 
@@ -232,12 +232,12 @@ Assumed, pending owner confirmation: For Geeks pages stay static and public on G
 Still open:
 
 1. Amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
-2. Starter cosmetics, catalog prices, refunds and item retirement policy.
-3. Account deletion handling, retention periods and the date-of-birth age policy.
+2. Refunds and item retirement policy (prices set: themes Moss 150, Garnet 200, Frost 250; banners 40–120).
+3. Retention periods (deletion is built: personal rows go at once, the ledger is kept without a name).
 4. Production email provider (the built-in Supabase email is rate-limited), current free-tier overage behavior, and operational owner.
 5. Historical contribution policy and reward start date for the app repository.
 6. Public showcase: confirm the 18+ confirmation rule, whether to add static pages for search indexing later, and which git-setup fields to offer.
-7. Before launch: add accounts to the privacy page, and approve the purposes written on the account page for phone (reaching you about your account) and birth date (keeping profiles of people under 18 private).
+7. Owner review of privacy notice section 6 (published 2026-10-25, version 3).
 
 ## Scope and operating costs
 
@@ -247,6 +247,7 @@ Start with free allowances where suitable, but do not promise permanent zero cos
 
 ## Change log
 
+- 2026-10-25: Built FG-04 to FG-09 and FG-11 (#63–#70, app #119): account menu, data export and deletion, privacy notice v3, keep-alive, leaderboard and profiles, market, rewards pipeline and owner console. Tracker updated.
 - 2026-10-24: FG-03 built: account page (unlinked, noindex), vendored Supabase client, minors guard migration. A birth date under 18 keeps a profile strictly private, in the page and in the database.
 - 2026-10-24: Added access map (app download always public), opt-in public member showcase and FG-11; Supabase and Google sign-in setup reported complete.
 - 2026-10-24: Owner decisions recorded (app repository only, owner-set rewards, Cairo timezone, collect all optional profile fields, no reverts in first release); Supabase project created; hosting boundary assumed pending confirmation.
