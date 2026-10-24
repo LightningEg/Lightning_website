@@ -1,0 +1,87 @@
+/* For Geeks leaderboard and members directory (forgeeks-leaderboard.html). Theme tokens from forgeeks.css only.
+   Radii follow guideline D07: 2 buttons, 4 small controls, 6 chips and rows, 8 panels. Cells are hairline cells (D06). */
+main [hidden]{display:none!important}
+main :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.lb-top{padding:132px 0 72px}
+.lb-top h1{font-size:clamp(30px,4vw,52px);margin:0 0 14px}
+.lb-top .lede{max-width:60ch}
+
+/* tabs: this month / all time */
+.lb-tabs{display:flex;gap:8px;margin:40px 0 12px}
+.lb-tab{min-height:40px;padding:0 16px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--dim);font:400 13px var(--mono);cursor:pointer;transition:border-color .2s,color .2s}
+.lb-tab:hover{border-color:var(--line-strong);color:var(--ink)}
+.lb-tab[aria-selected=true]{border-color:var(--accent);color:var(--ink);font-weight:500}
+.lb-note{margin:0 0 22px;font:400 12.5px var(--mono);color:var(--dim)}
+
+.lb-status{margin:0 0 14px;font:400 13px var(--mono);color:var(--dim)}
+.linkish{background:none;border:0;padding:6px 0;color:var(--dim);font:400 12.5px var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:34px}
+.linkish:hover{color:var(--ink)}
+
+/* the ruled list: rank, avatar, name, contributions, score */
+.lb-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);background:var(--soft)}
+.lb-row{display:grid;grid-template-columns:44px 40px minmax(0,1fr) 140px 100px;grid-template-areas:"rk av nm ct sc";column-gap:16px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);text-shadow:0 0 4px var(--bg),0 0 12px var(--bg)}
+.lb-row:last-child{border-bottom:0}
+.lb-row>*{min-width:0}
+.rk{grid-area:rk;font:400 15px var(--mono);color:var(--dim)}
+.rk.top{color:var(--ink);font-weight:500}
+.lb-row .av{grid-area:av}
+.nm{grid-area:nm;display:block;padding:8px 0;color:var(--ink);font:500 15px var(--mono);text-decoration:none;overflow-wrap:anywhere}
+.nm:hover{text-decoration:underline;text-underline-offset:4px}
+.ct,.sc{font:400 12px var(--mono);color:var(--dim);text-align:right;white-space:nowrap}
+.ct{grid-area:ct}
+.sc{grid-area:sc}
+.ct b,.sc b{color:var(--ink);font:500 15px var(--mono);margin-right:6px}
+
+/* avatar: the picture, or the first letter */
+.av{width:36px;height:36px;flex:none;display:inline-grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--well);border:1px solid var(--line-strong);font:500 14px var(--mono);color:var(--ink);text-shadow:none}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.lg{width:48px;height:48px;font-size:17px}
+
+@media (max-width:640px){
+  .lb-row{grid-template-columns:32px 36px minmax(0,1fr) auto;grid-template-areas:"rk av nm sc" ". . ct sc";column-gap:12px;padding:10px 14px}
+  .ct{text-align:left;margin-top:-6px;padding-bottom:4px}
+  .ct b,.sc b{font-size:14px}
+  .ct b{margin-right:4px}
+}
+
+/* empty */
+.lb-empty{border:1px solid var(--line);background:var(--soft);padding:28px 24px}
+.lb-empty p{margin:0;color:var(--dim);max-width:60ch}
+.lb-empty .lb-empty-title{color:var(--ink);font:500 15px var(--mono);margin-bottom:8px}
+.lb-empty a{color:var(--ink);text-underline-offset:4px}
+
+/* members */
+.lb-members{padding:24px 0 96px}
+.lb-members h2,.lb-next h2{font-size:clamp(26px,3.4vw,40px);margin:0 0 14px}
+.lb-sub{margin:0 0 10px;color:var(--dim);max-width:62ch}
+.lb-how{margin:0 0 32px;color:var(--dim);font-size:14.5px;max-width:70ch}
+.lb-how b{color:var(--ink);font-weight:500}
+.lb-how a{color:var(--ink);text-underline-offset:4px}
+
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;overflow:hidden;border:1px solid var(--line);margin-bottom:18px}
+.mgrid:empty{display:none}
+.mc{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--soft);box-shadow:1px 0 0 var(--line),0 1px 0 var(--line)}
+.mc .fg-banner{height:56px;border:0;border-bottom:1px solid var(--line);border-radius:0}
+.mc-body{display:flex;flex-direction:column;gap:6px;min-width:0;padding:0 20px 20px}
+.mc-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:-24px;margin-bottom:6px}
+.mc .av.lg{position:relative;box-shadow:0 0 0 3px var(--bg)}
+.mc-sc{font:400 12px var(--mono);color:var(--dim);padding-bottom:2px}
+.mc-name{margin:0;font:500 15px var(--mono);overflow-wrap:anywhere}
+.mc-name a{color:var(--ink);text-decoration:none}
+.mc-name a::after{content:"";position:absolute;inset:0}
+.mc-name a:hover{text-decoration:underline;text-underline-offset:4px}
+.mc-name a:focus-visible{outline:none}
+.mc-name a:focus-visible::after{outline:2px solid var(--accent);outline-offset:-4px}
+.mc-bio{margin:0;color:var(--dim);font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-tags{display:flex;flex-wrap:wrap;list-style:none;margin:4px 0 0;padding:0;font:400 12px var(--mono);color:var(--dim)}
+.mc-tags li{min-width:0;overflow-wrap:anywhere}
+.mc-tags li+li::before{content:"·";margin:0 8px}
+@media (max-width:900px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.mgrid{grid-template-columns:minmax(0,1fr)}}
+.lb-more{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+
+/* closing */
+.lb-next{padding:48px 0 120px}
+.lb-next .cta{flex-wrap:wrap}
+@media (max-width:640px){.lb-top{padding-top:104px}.lb-next{padding-bottom:88px}}
