@@ -16,6 +16,7 @@
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
   <link rel="stylesheet" href="css/forgeeks.css?v=20261025-2">
   <link rel="stylesheet" href="css/forgeeks-account.css?v=20261024-1">
+  <link rel="stylesheet" href="css/forgeeks-rewards.css?v=20261025-1">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -159,6 +160,40 @@
             </form>
           </div>
 
+          <div class="panel" id="rw-github">
+            <h2>github</h2>
+            <p class="why">Coins for a merged pull request go to the GitHub account linked here. GitHub itself confirms the account, so a typed username is never used.</p>
+            <p class="gh-line dim" id="gh-status" role="status">loading…</p>
+            <p class="fine" id="gh-hint" hidden></p>
+            <div class="row">
+              <button class="btn ghost" id="gh-connect" type="button" hidden>connect github</button>
+              <button class="btn ghost" id="gh-unlink" type="button" hidden>unlink github</button>
+              <span class="acct-status" id="status-github" role="status"></span>
+            </div>
+          </div>
+
+          <div class="panel" id="rw-activity">
+            <h2>activity</h2>
+            <p class="why">Every coin you earned or spent, newest first. Dates are Cairo time.</p>
+            <ul class="rows" id="act-list"></ul>
+            <p class="links-empty" id="act-empty" hidden>Nothing yet. Coins show up here when a pull request for a task is merged or your feedback is accepted.</p>
+          </div>
+
+          <div class="panel" id="rw-feedback">
+            <h2>feedback</h2>
+            <p class="why">Tell us what to fix or build. Feedback alone earns nothing; a useful, accepted report can earn coins. Up to 5 a day.</p>
+            <form id="form-feedback" novalidate>
+              <div class="fields">
+                <div class="f"><label for="fb-body">message</label><textarea id="fb-body" name="body" maxlength="4000" rows="4"></textarea></div>
+                <div class="f"><label for="fb-context">where <span class="opt">optional</span></label><input id="fb-context" name="context" type="text" maxlength="200" placeholder="a page, a screen or an issue" autocomplete="off"></div>
+              </div>
+              <div class="row"><button class="btn" type="submit">send feedback</button><span class="acct-status" id="status-feedback" role="status"></span></div>
+            </form>
+            <h3 class="sub" id="fb-head" hidden>your messages</h3>
+            <ul class="rows" id="fb-list"></ul>
+            <p class="links-empty" id="fb-empty" hidden>You have not sent any feedback yet.</p>
+          </div>
+
           <form class="panel" id="form-private" novalidate>
             <h2>private details</h2>
             <p class="why">Only you can see these. Nothing here is shown to anyone. Leave any of it empty. Your <b>birth date</b> is used only to keep profiles of people under 18 private. Your <b>phone</b> is used only to reach you about your account.</p>
@@ -234,6 +269,7 @@
 <script src="js/forgeeks-config.js?v=20261025-2"></script>
 <script src="js/forgeeks-auth.js?v=20261025-2"></script>
 <script src="js/forgeeks-account.js?v=20261025-1"></script>
+<script src="js/forgeeks-account-rewards.js?v=20261025-1"></script>
 <script src="js/forgeeks-account-data.js?v=20261025-1"></script>
 </body>
 </html>
