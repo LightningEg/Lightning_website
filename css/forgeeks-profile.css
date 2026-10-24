@@ -1,0 +1,79 @@
+/* For Geeks member profile (forgeeks-profile.html). Theme tokens from forgeeks.css only; the banner comes from
+   forgeeks-cosmetics.css. Radii follow guideline D07: 2 buttons, 4 small controls, 6 chips and rows, 8 panels. */
+main [hidden]{display:none!important}
+main :focus-visible,.rp :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.pf-top{padding:132px 0 120px}
+.pf{max-width:880px}
+/* the banner and the card under it read as one panel */
+.pf .fg-banner{margin:0}
+.pf-card{border:1px solid var(--line);border-radius:0 0 8px 8px;background:var(--soft);padding:0 28px 28px}
+#pf-banner[hidden]+.pf-card{border-radius:8px}
+.pf-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 22px;align-items:start;padding-top:0}
+.pf-head>*{min-width:0}
+.pf-id{padding-top:24px}
+.pf-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;padding-top:24px}
+.pf-actions .btn{height:40px;padding:0 16px;cursor:pointer}
+
+.pf h1{font-size:clamp(28px,3.6vw,44px);margin:0;overflow-wrap:anywhere}
+.pf-bio{margin:10px 0 0;color:var(--dim);font-size:16px;max-width:62ch;white-space:pre-wrap;overflow-wrap:anywhere}
+.pf-ranks{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:16px 0 0;padding:0}
+.pf-ranks li{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:6px;font:400 12.5px var(--mono);color:var(--dim)}
+.pf-status{margin:24px 0 0;font:400 13px var(--mono);color:var(--dim)}
+.pf-missing{margin:18px 0 0}
+.pf-missing a{color:var(--ink);font:400 13px var(--mono);text-underline-offset:4px}
+.pf-card>.linkish{margin-top:6px}
+.linkish{background:none;border:0;padding:6px 0;color:var(--dim);font:400 12.5px var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:34px}
+.linkish:hover{color:var(--ink)}
+
+/* avatar overlaps the banner */
+.av{width:36px;height:36px;flex:none;display:inline-grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--well);border:1px solid var(--line-strong);font:500 14px var(--mono);color:var(--ink)}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.xl{width:88px;height:88px;margin-top:-44px;font-size:32px;box-shadow:0 0 0 4px var(--bg);position:relative}
+
+/* sections */
+.pf-sec{margin-top:32px;padding-top:28px;border-top:1px solid var(--line)}
+.pf-sec h2{font-size:clamp(22px,2.6vw,30px);margin:0 0 14px}
+.pf-work,.pf-setup{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.pf-work li{display:grid;grid-template-columns:116px minmax(0,1fr);gap:4px 20px;padding:16px 0;border-bottom:1px solid var(--line);text-shadow:0 0 4px var(--bg),0 0 12px var(--bg)}
+.pf-work .tag{font:500 12px var(--mono);color:var(--accent);padding-top:3px}
+.pf-work .tag.self{color:var(--dim)}
+.pf-work .wk{min-width:0}
+.pf-work .t{display:block;color:var(--ink);font:500 14.5px var(--mono);overflow-wrap:anywhere;text-underline-offset:4px}
+.pf-work .m{margin:4px 0 0;color:var(--dim);font:400 12.5px var(--mono);overflow-wrap:anywhere}
+.pf-work .m a{color:var(--dim);text-underline-offset:3px}
+.pf-work .m a:hover{color:var(--ink)}
+.pf-work .note{display:block;color:var(--dim);font-size:14.5px}
+.pf-setup{margin:0;display:grid;grid-template-columns:116px minmax(0,1fr);column-gap:20px}
+.pf-setup dt,.pf-setup dd{margin:0;padding:14px 0;border-bottom:1px solid var(--line);text-shadow:0 0 4px var(--bg),0 0 12px var(--bg)}
+.pf-setup dt{font:500 12px var(--mono);color:var(--dim);padding-top:17px}
+.pf-setup dd{color:var(--ink);font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+.pf-setup dd a{color:var(--ink);text-underline-offset:4px;white-space:normal}
+
+@media (max-width:640px){
+  .pf-top{padding-top:104px;padding-bottom:88px}
+  .pf-card{padding:0 18px 22px}
+  .pf-head{grid-template-columns:minmax(0,1fr);gap:0}
+  .pf-id{padding-top:14px}
+  .pf-actions{justify-content:flex-start;padding-top:18px}
+  .av.xl{width:72px;height:72px;margin-top:-36px;font-size:28px}
+  .pf-work li{grid-template-columns:minmax(0,1fr);gap:2px}
+  .pf-setup{grid-template-columns:minmax(0,1fr)}
+  .pf-setup dt{border-bottom:0;padding:14px 0 0}
+  .pf-setup dd{padding-top:2px}
+}
+
+/* the report dialog */
+.rp{width:min(480px,calc(100% - 32px));padding:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)}
+.rp::backdrop{background:color-mix(in srgb,var(--bg) 72%,transparent)}
+.rp form{padding:26px 24px 22px}
+.rp h2{font:500 13px var(--mono);letter-spacing:0;margin:0 0 6px;color:var(--ink)}
+.rp-why{margin:0 0 18px;color:var(--dim);font-size:14.5px}
+.rp label{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font:400 12.5px var(--mono);color:var(--dim)}
+.rp textarea{width:100%;min-height:120px;padding:10px 12px;background:transparent;color:var(--ink);border:1px solid var(--line-strong);border-radius:4px;font:400 15px var(--sans);resize:vertical}
+.rp-status{min-height:1.4em;margin:10px 0 0;font:400 12.5px var(--mono);color:var(--dim)}
+.rp-status.ok{color:var(--accent)}
+.rp-status.bad{color:var(--ink);border-left:2px solid var(--accent2);padding-left:10px}
+.rp-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.rp .btn{cursor:pointer}
+.rp .btn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none}

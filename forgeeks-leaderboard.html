@@ -1,0 +1,168 @@
+<!doctype html>
+<!-- For Geeks · leaderboard · 2026-10-24 · ranking for this month and all time, and the members directory (FG-07, FG-11). Reads public database functions only. Not linked from the top bar yet. Shell: tools/geeks_shell.py. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://lightningeg.com/forgeeks-leaderboard.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Lightning">
+  <meta property="og:title" content="Leaderboard · For Geeks · Lightning">
+  <meta property="og:description" content="Who is building Lightning this month and all time, and the members who chose to show their work and setup.">
+  <meta property="og:url" content="https://lightningeg.com/forgeeks-leaderboard.html">
+  <meta property="og:image" content="https://lightningeg.com/assets/brand/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Who is building Lightning this month and all time, and the members who chose to show their work and setup.">
+  <title>Leaderboard · For Geeks · Lightning</title>
+  <link rel="icon" href="assets/brand/lightning-app-icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261025-1">
+  <link rel="stylesheet" href="css/forgeeks-cosmetics.css?v=20261024-1">
+  <link rel="stylesheet" href="css/forgeeks-leaderboard.css?v=20261024-1">
+</head>
+<body class="no-js">
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="grid" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="forgeeks.html" aria-label="Lightning, For Geeks home">
+      <img class="geeks-mark-dark" src="assets/brand/lightning-mark-white.svg" alt="" width="15" height="21"><img class="geeks-mark-light" src="assets/brand/lightning-mark-nile.svg" alt="" width="15" height="21">
+      lightning
+    </a>
+    <span class="crumb" aria-hidden="true">~/root/for-geeks/<b>leaderboard</b><span class="caret"></span></span>
+    <nav class="links" aria-label="For Geeks">
+      <a href="forgeeks.html">home</a>
+      <a href="forgeeks-guide.html">contribute</a>
+      <a href="forgeeks-roadmap.html">roadmap</a>
+      <a class="opt" href="index.html" target="_blank" rel="noopener">app</a>
+    </nav>
+    <div class="tools">
+      <button class="chip" id="theme-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themes" title="Change theme (T)">
+        <span class="dots" aria-hidden="true"><i style="background:var(--bg)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i></span>
+        <span class="t-name">theme: <span id="theme-name">mono</span></span>
+      </button>
+      <a class="chip src" href="https://github.com/LightningEg/Lightning" rel="noopener" target="_blank">source ↗</a>
+      <a class="chip me" id="me" href="forgeeks-account.html">sign in</a>
+    </div>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<div class="tm" id="themes" hidden>
+  <div class="tm-back" data-close></div>
+  <div class="tm-win" role="dialog" aria-modal="true" aria-labelledby="tm-title">
+    <div class="tm-head"><span class="d" aria-hidden="true"><i></i><i></i><i></i></span><span id="tm-title"><b>$</b> theme --pick</span><button class="tm-x" type="button" data-close>esc ✕</button></div>
+    <div class="tm-grid" role="listbox" id="theme-list" aria-label="Themes" tabindex="0"></div>
+    <div class="tm-foot"><span><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> preview</span><span><kbd>enter</kbd> keep</span><span><kbd>esc</kbd> cancel</span><span><kbd>T</kbd> opens this anywhere</span></div>
+  </div>
+</div>
+
+<main id="main">
+  <section class="lb-top" id="top" aria-labelledby="h1">
+    <div class="wrap">
+      <h1 id="h1">The people who <span class="hi">build Lightning.</span></h1>
+      <p class="lede">A contribution score comes from work merged into the app. Only members who switched the leaderboard on are listed.</p>
+
+      <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Period">
+        <button class="lb-tab" id="tab-month" type="button" role="tab" aria-selected="true" aria-controls="lb-panel" data-period="month">this month</button>
+        <button class="lb-tab" id="tab-all" type="button" role="tab" aria-selected="false" aria-controls="lb-panel" data-period="all" tabindex="-1">all time</button>
+      </div>
+      <p class="lb-note">Months run on Cairo time: they start on the 1st at 00:00.</p>
+
+      <div id="lb-panel" role="tabpanel" aria-labelledby="tab-month">
+        <p class="lb-status" id="lb-status" role="status" aria-live="polite">loading…</p>
+        <button class="linkish" id="lb-retry" type="button" hidden>try again</button>
+        <ol class="lb-list" id="lb-list" hidden></ol>
+        <div class="lb-empty" id="lb-empty" hidden>
+          <p class="lb-empty-title" id="lb-empty-title">Nobody is ranked yet.</p>
+          <p>A merged pull request to the app earns a score. <a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Pick a task</a> to start, or <a href="forgeeks-guide.html">read how to contribute</a>.</p>
+        </div>
+        <noscript><p class="lb-status">The leaderboard needs JavaScript.</p></noscript>
+      </div>
+    </div>
+  </section>
+
+  <section class="lb-members" id="members" aria-labelledby="t-members">
+    <div class="wrap">
+      <h2 id="t-members">Meet the <span class="hi">members.</span></h2>
+      <p class="lb-sub">Profiles members chose to show: the work they shipped and how they set up their machine.</p>
+      <p class="lb-how">To appear, open your <a href="forgeeks-account.html">account</a>, set <b>who can see it</b> to anyone or signed-in members, and switch on <b>show me on the leaderboard</b> to be ranked above.</p>
+      <div class="mgrid" id="mem-grid"></div>
+      <p class="lb-status" id="mem-status" role="status" aria-live="polite">loading…</p>
+      <div class="lb-more">
+        <button class="linkish" id="mem-retry" type="button" hidden>try again</button>
+        <button class="btn ghost" id="mem-more" type="button" hidden><span class="k">$</span> show more</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="lb-next" id="closing" aria-labelledby="t-next">
+    <div class="wrap">
+      <h2 id="t-next">Want your name <span class="hi">here.</span></h2>
+      <div class="cta">
+        <a class="btn" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Pick a task</a>
+        <a class="btn ghost" href="forgeeks-guide.html"><span class="k">$</span> how to contribute</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>Start here</h4><ul>
+        <li><a href="forgeeks-guide.html">Contribute in three steps</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Good first issues</a></li>
+        <li><a href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">Open a Codespace</a></li>
+        <li><a href="forgeeks-roadmap.html">Roadmap</a></li>
+        <li><a href="app-feedback.html" target="_blank" rel="noopener">Not a coder? Send feedback</a></li>
+      </ul></div>
+      <div><h4>System</h4><ul>
+        <li><a href="forgeeks-guide.html#built">Architecture</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/figures.py" target="_blank" rel="noopener">Figures registry</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/pyproject.toml" target="_blank" rel="noopener">Import contracts</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener">Glossary</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></li>
+      </ul></div>
+      <div><h4>Rules</h4><ul>
+        <li><a href="forgeeks-guide.html#product">What Lightning is</a></li>
+        <li><a href="forgeeks-guide.html#rules">Ground rules</a></li>
+        <li><a href="forgeeks-guide.html#team">Who does what</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">Licence</a></li>
+        <li><a href="https://github.com/LightningEg/Lightning/security/advisories/new" target="_blank" rel="noopener">Report a flaw privately</a></li>
+      </ul></div>
+      <div><h4>Community</h4><ul>
+        <li><a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener">r/LightningEg</a></li>
+        <li><a href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a></li>
+        <li><a href="index.html" target="_blank" rel="noopener">Lightning, the app</a></li>
+      </ul></div>
+    </div>
+    <div class="legal"><span><img class="geeks-mark-dark" src="assets/brand/lightning-mark-white.svg" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px"><img class="geeks-mark-light" src="assets/brand/lightning-mark-nile.svg" alt="" width="10" height="14" style="vertical-align:-2px;margin-right:8px">© 2026 Lightning · built in Egypt</span><span><a href="https://github.com/LightningEg/Lightning/blob/main/LICENSE" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/forgeeks.js?v=20261025-1"></script>
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/forgeeks-config.js?v=20261025-1"></script>
+<script src="js/forgeeks-auth.js?v=20261025-1"></script>
+<script src="js/forgeeks-showcase.js?v=20261024-1"></script>
+<script src="js/forgeeks-leaderboard.js?v=20261024-1"></script>
+</body>
+</html>

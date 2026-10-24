@@ -33,6 +33,8 @@ PAGES = [
 # Pages that wear the same shell but are not in the top bar yet (not linked or indexed until launch).
 EXTRA = [
     ("forgeeks-account.html", "~/root/for-geeks/<b>account</b>"),
+    ("forgeeks-leaderboard.html", "~/root/for-geeks/<b>leaderboard</b>"),
+    ("forgeeks-profile.html", "~/root/for-geeks/<b>profile</b>"),
 ]
 
 FOOTER_COLUMNS = [
