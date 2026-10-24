@@ -1,6 +1,6 @@
 # Supabase (For Geeks accounts and Lightning Coins)
 
-Design and status: [docs/proposals/forgeeks-accounts-lightning-coins.md](../docs/proposals/forgeeks-accounts-lightning-coins.md). The only page that uses this database is `forgeeks-account.html` (sign in and profile); it is not linked or indexed yet.
+Design and status: [docs/proposals/forgeeks-accounts-lightning-coins.md](../docs/proposals/forgeeks-accounts-lightning-coins.md). The main site and For Geeks share this database for accounts, wallet, marketplace, stories and owner operations. Financial app records stay on devices.
 
 ## Apply the migrations
 
@@ -36,7 +36,7 @@ Do not commit your address. Administrators publish rewards (`publish_reward`), c
 
 ## Sign-in settings
 
-Authentication → URL Configuration. Site URL: `https://lightningeg.com`. Redirect URLs: add `https://lightningeg.com/forgeeks-account.html` (and `http://localhost:8000/forgeeks-account.html` to test on your computer). Google sign-in uses the callback URL Supabase shows in its Google provider settings.
+Authentication → URL Configuration. Site URL: `https://lightningeg.com`. Redirect URLs: add `https://lightningeg.com/account.html` and `https://lightningeg.com/forgeeks-account.html` (and `http://localhost:8000/forgeeks-account.html` to test on your computer). Google sign-in uses the callback URL Supabase shows in its Google provider settings.
 
 ## Keys
 
