@@ -1,0 +1,125 @@
+{
+  "auditDate": "2026-10-24",
+  "scope": "Unlocked PC/Android app only. Chooser/lock screens remain unchanged.",
+  "status": "inventory-complete-for-initial-slots; component-mapping-and-native-acceptance-open",
+  "parts": [
+    {
+      "slot": "palette",
+      "sourceFiles": [
+        "lightning/ui/static/style.css",
+        "lightning/ui/static/phone.css"
+      ],
+      "selectorExamples": [
+        ":root"
+      ],
+      "implementationNote": "Root variables coexist with literal colours; token replacement alone is insufficient."
+    },
+    {
+      "slot": "brand",
+      "sourceFiles": [
+        "lightning/ui/templates/base.html",
+        "lightning/ui/templates/phone/base.html"
+      ],
+      "selectorExamples": [
+        ".brand-mark"
+      ],
+      "implementationNote": "Choose approved dark/light mark. No uploaded logo or altered hit target."
+    },
+    {
+      "slot": "header",
+      "sourceFiles": [
+        "lightning/ui/templates/base.html",
+        "lightning/ui/templates/phone/base.html",
+        "lightning/ui/static/style.css"
+      ],
+      "selectorExamples": [
+        ".topbar"
+      ],
+      "implementationNote": "Paint seams/surfaces only; header structure is fixed."
+    },
+    {
+      "slot": "navigation",
+      "sourceFiles": [
+        "lightning/ui/templates/base.html",
+        "lightning/ui/templates/phone/base.html",
+        "lightning/ui/static/style.css"
+      ],
+      "selectorExamples": [
+        ".nav",
+        ".phone-tabbar"
+      ],
+      "implementationNote": "Preserve account shortcuts, active state and phone tab order."
+    },
+    {
+      "slot": "hero",
+      "sourceFiles": [
+        "lightning/ui/templates/partials/charts.html",
+        "lightning/ui/static/style.css"
+      ],
+      "selectorExamples": [
+        ".lead-card"
+      ],
+      "implementationNote": "Keep figure, comparison and working; never animate changing financial values."
+    },
+    {
+      "slot": "cards",
+      "sourceFiles": [
+        "lightning/ui/templates/partials/macros.html",
+        "lightning/ui/static/style.css"
+      ],
+      "selectorExamples": [
+        ".card"
+      ],
+      "implementationNote": "Existing .card has a literal light gradient; map it explicitly before dark themes."
+    },
+    {
+      "slot": "charts",
+      "sourceFiles": [
+        "lightning/ui/templates/partials/charts.html",
+        "lightning/ui/static/app.js"
+      ],
+      "selectorExamples": [],
+      "implementationNote": "Audit SVG/JS colour literals and semantic series before enabling a theme."
+    },
+    {
+      "slot": "controls",
+      "sourceFiles": [
+        "lightning/ui/static/style.css",
+        "lightning/ui/static/phone.css"
+      ],
+      "selectorExamples": [
+        ".btn",
+        ".btn.primary"
+      ],
+      "implementationNote": "Primary button currently uses a gradient token and literal white text; on-accent must map explicitly."
+    },
+    {
+      "slot": "overlays",
+      "sourceFiles": [
+        "lightning/ui/static/app.js",
+        "lightning/ui/static/phone.css"
+      ],
+      "selectorExamples": [],
+      "implementationNote": "Map popup/sheet surfaces without changing focus handling, layering or dismissal."
+    },
+    {
+      "slot": "menus",
+      "sourceFiles": [
+        "lightning/ui/templates/partials/section_tabs.html",
+        "lightning/ui/templates/phone/base.html",
+        "lightning/ui/static/app.js"
+      ],
+      "selectorExamples": [],
+      "implementationNote": "Preserve tab settings, navigation actions and keyboard behaviour."
+    },
+    {
+      "slot": "decoration",
+      "sourceFiles": [
+        "lightning/ui/static/style.css",
+        "lightning/ui/static/phone.css"
+      ],
+      "selectorExamples": [],
+      "implementationNote": "No texture or animation in first test; decorative elements remain inert and behind content."
+    }
+  ]
+}

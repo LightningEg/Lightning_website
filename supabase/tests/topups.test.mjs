@@ -58,6 +58,12 @@ const key = () => crypto.randomUUID();
 const request = (u,p,k=key()) => as('authenticated',u,async () => (await q(`select * from public.request_topup($1,$2)`,[p,k])).rows[0]);
 const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=ADMIN,aal='aal2') => {
  await q(`select set_config('request.jwt.claims',$1,false)`,[JSON.stringify({aal})]);
+ const row=(await q(`select * from public.topup_requests where id=$1`,[r])).rows[0];
+ if(who===ADMIN && aal==='aal2' && row?.status==='pending' && decision==='approved'){
+  await as('authenticated',row.user_id,()=>q(`select public.accept_topup_terms($1,'manual-final-v1')`,[r]));
+  await as('authenticated',row.user_id,()=>q(`select public.submit_topup_reference($1,'CUSTOMER-REF','manual-final-v1')`,[r]));
+  await as('authenticated',ADMIN,()=>q(`select public.admin_record_topup_proof($1,'Reviewed customer receipt in WhatsApp')`,[r]));
+ }
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };
 const P = await pkg();
@@ -100,7 +106,7 @@ await test('verified approval posts once, normalizes bank reference, and never i
  const b=await review(r.id,'approved',10000,'BANK-00002');
  assert.equal(a.ledger_entry_id,b.ledger_entry_id);
  assert.deepEqual(await wallet(u),{balance:500,contribution_score:0});
- assert.equal((await q(`select count(*)::int c from public.audit_log where target_id=$1`,[r.id])).rows[0].c,1);
+ assert.equal((await q(`select count(*)::int c from public.audit_log where target_id=$1 and action='topup.approved'`,[r.id])).rows[0].c,1);
  await assert.rejects(review(r.id,'approved',10000,'BANK-CHANGED'),/already reviewed/);
  await assert.rejects(review(r.id,'rejected'),/already reviewed/);
 });

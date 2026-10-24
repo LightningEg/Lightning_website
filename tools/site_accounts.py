@@ -21,10 +21,12 @@ def build():
             main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
         else:
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
+        if name=='marketplace':
+            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, send your payment reference and your receipt through our official WhatsApp Business contact. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
-        else:scripts+=['js/site-theme-previews.js','js/forgeeks-market.js']
+        else:scripts+=['js/site-theme-previews.js','js/forgeeks-market.js','js/cosmetic-parts.js','js/cosmetic-preview.js','js/activation-codes.js']
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
         if name=='marketplace':css+=['css/forgeeks-cosmetics.css','css/forgeeks-market.css']
         css+=['css/site-account.css','css/footer.css']

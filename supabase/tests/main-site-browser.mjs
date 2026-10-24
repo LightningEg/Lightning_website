@@ -25,6 +25,17 @@ for(const width of [390,1280]) {
   await page.screenshot({path:'/workspace/work/'+name+'-'+width+'.png'});
   const overflow=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(e=>[e.tagName,e.className,e.getBoundingClientRect().width]));
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow '+name+' '+width+JSON.stringify(overflow));
+  if(name==='marketplace') {
+   await page.locator('.parts-test').nth(1).waitFor();
+   const scene=page.locator('.parts-scene').first();
+   const geometry=()=>scene.evaluate(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height,x:r.left+scrollX,y:r.top+scrollY};});
+   const before=await geometry();
+   await page.getByRole('button',{name:'Try these parts'}).first().click();
+   assert.match(await scene.getAttribute('style'),/--part-background/);
+   assert.deepEqual(await geometry(),before,'preview must preserve its document geometry');
+   await page.getByRole('button',{name:'Reset preview'}).first().click();
+   assert.equal(await scene.getAttribute('style'),null);
+  }
   if(name==='account')assert.match(await page.locator('#auth-title').textContent(),/create|sign up/i);
   await page.screenshot({path:'/workspace/work/'+name+'-'+width+'.png'});
  }
