@@ -2043,8 +2043,8 @@
       "id": "UX-2026.10.15.31",
       "name": "Privacy · Download in the header",
       "page": "privacy.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.15.31.html"
     },
     {
       "id": "UX-2026.10.15.32",
@@ -3022,6 +3022,20 @@
     {
       "id": "UX-2026.10.23.19",
       "name": "Version Archive · Current v1.4.4 references",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.19.html"
+    },
+    {
+      "id": "UX-2026.10.25.01",
+      "name": "Privacy · For Geeks accounts",
+      "page": "privacy.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.25.02",
+      "name": "Version Archive · Privacy for accounts",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
