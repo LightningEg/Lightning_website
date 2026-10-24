@@ -1,5 +1,6 @@
 // Manual payment security and wallet integration; isolated Postgres, no live payments.
 import assert from 'node:assert/strict';
+import {setupStorage} from './helpers/storage.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
@@ -24,6 +25,7 @@ await db.exec(`
   grant usage on schema auth to anon, authenticated, service_role;
   grant execute on function auth.uid() to anon, authenticated, service_role;
 `);
+await setupStorage(db);
 for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) {
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
@@ -62,7 +64,10 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
  if(who===ADMIN && aal==='aal2' && row?.status==='pending' && decision==='approved'){
   await as('authenticated',row.user_id,()=>q(`select public.accept_topup_terms($1,'manual-final-v1')`,[r]));
   await as('authenticated',row.user_id,()=>q(`select public.submit_topup_reference($1,'CUSTOMER-REF','manual-final-v1')`,[r]));
-  await as('authenticated',ADMIN,()=>q(`select public.admin_record_topup_proof($1,'Reviewed customer receipt in WhatsApp')`,[r]));
+  const receipt=row.user_id+'/'+r+'/receipt.png';
+  await q(`insert into storage.objects(bucket_id,name) values ('topup-receipts',$1) on conflict do nothing`,[receipt]);
+  await as('authenticated',row.user_id,()=>q(`select public.attach_topup_receipt($1,'customer@instapay','CUSTOMER-REF',$2)`,[r,receipt]));
+  await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1))`,[r]));
  }
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };

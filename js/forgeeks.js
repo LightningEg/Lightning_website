@@ -27,17 +27,17 @@
   /* ===================== themes: a window in the middle of the screen ===================== */
   var THEMES=[
     {id:'mono',name:'Mono',note:'white on black, the default',c:['#0a0a0a','#f2f2f2','#b8b8b8','#ffffff']},
-    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true},
-    {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93']},
-    {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450']},
-    {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0']},
-    {id:'tokyo',name:'Tokyo',note:'cool blue and violet',c:['#13141c','#c0caf5','#aab2d8','#7aa2f7']},
-    {id:'dracula',name:'Dracula',note:'purple and pink',c:['#191a21','#f8f8f2','#c6cae4','#bd93f9']},
-    {id:'rose',name:'Rose',note:'dusk pink and peach',c:['#140a10','#ffe4ee','#dcaabe','#ff6fa0']},
-    {id:'synthwave',name:'Synthwave',note:'neon magenta and cyan',c:['#12061f','#f6e9ff','#c6a9df','#ff3ea5']},
-    {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88']},
-    {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000']},
-    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017']},
+    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,paid:true,price:100},
+    {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93'],paid:true,price:100},
+    {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],paid:true,price:100},
+    {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0'],paid:true,price:100},
+    {id:'tokyo',name:'Tokyo',note:'cool blue and violet',c:['#13141c','#c0caf5','#aab2d8','#7aa2f7'],paid:true,price:100},
+    {id:'dracula',name:'Dracula',note:'purple and pink',c:['#191a21','#f8f8f2','#c6cae4','#bd93f9'],paid:true,price:100},
+    {id:'rose',name:'Rose',note:'dusk pink and peach',c:['#140a10','#ffe4ee','#dcaabe','#ff6fa0'],paid:true,price:100},
+    {id:'synthwave',name:'Synthwave',note:'neon magenta and cyan',c:['#12061f','#f6e9ff','#c6a9df','#ff3ea5'],paid:true,price:100},
+    {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88'],paid:true,price:100},
+    {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000'],paid:true,price:100},
+    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017'],paid:true,price:100},
     /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
        catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
     {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150},
@@ -47,6 +47,7 @@
   var btn=$('#theme-btn'),tm=$('#themes'),grid=$('#theme-list'),nameEl=$('#theme-name'),meta=doc.querySelector('meta[name="theme-color"]');
   var saved=root.dataset.theme||'mono',cursor=0,listeners=[],lastFocus=null;
   if(!THEMES.some(function(t){return t.id===saved}))saved='mono';
+  var requestedTheme=saved;
   var own={},LOCK='<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.2" y="5.4" width="7.6" height="5" rx="1"/><path d="M4 5.4V3.9a2 2 0 0 1 4 0v1.5"/></svg>';
   function onTheme(fn){listeners.push(fn)}
   function find(id){return THEMES.filter(function(x){return x.id===id})[0]}
@@ -124,6 +125,7 @@
     var tag=(e.target.tagName||'').toLowerCase();
     if((e.key==='t'||e.key==='T')&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&tag!=='input'&&tag!=='textarea'&&tm.hidden){e.preventDefault();open()}
   });
+  if(find(saved)&&find(saved).paid){saved='mono';store(saved);}
   apply(saved);
 
   /* Signed in: the catalog says which paid themes you own and which theme follows you. window.FG loads after this file, so it is read once the page is ready. */
@@ -142,13 +144,14 @@
         if(it.equipped)eq=t.id;
       });
       THEMES.forEach(mark);
-      if(eq&&eq!==saved){saved=eq;store(eq);if(tm.hidden)apply(eq)}
+      var selected=eq||((own[requestedTheme]||requestedTheme==='mono')?requestedTheme:'mono');
+      if(selected!==saved){saved=selected;store(selected);if(tm.hidden)apply(selected)}
     },function(){catalogFor=null})}catch(_){catalogFor=null}
   }
   function startAccount(){
     var F=window.FG;if(!F||!F.ready)return;
     F.ready.then(loadOwned,function(){});
-    if(F.onAuth)F.onAuth(function(s){if(s)loadOwned();else{catalogFor=null;own={};THEMES.forEach(mark)}});
+    if(F.onAuth)F.onAuth(function(s){if(s)loadOwned();else{catalogFor=null;own={};use('mono');THEMES.forEach(mark)}});
   }
   if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',startAccount);else startAccount();
 

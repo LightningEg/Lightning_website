@@ -29,8 +29,9 @@ const tick = (ms = 5) => new Promise(r => setTimeout(r, ms));
 const UID = '11111111-1111-4111-8111-111111111111';
 const session = { user: { id: UID, email: 'ada@example.test' } };
 
-const FREE = ['mono', 'paper', 'meadow', 'nile'];
+const FREE = ['mono'];
 const baseCatalog = () => [
+  ...['paper','meadow','nile'].map(id=>({id,type:'theme',name:id,description:'Paid palette',price:100,is_default:false,asset_version:1})),
   ...FREE.map(id => ({ id, type: 'theme', name: id[0].toUpperCase() + id.slice(1), description: 'free ' + id, price: 0, is_default: true, asset_version: 1 })),
   { id: 'moss', type: 'theme', name: 'Moss', description: 'Dark olive and lime', price: 150, is_default: false, asset_version: 1 },
   { id: 'frost', type: 'theme', name: 'Frost', description: 'Cool light, slate and indigo', price: 250, is_default: false, asset_version: 1 },
@@ -147,12 +148,12 @@ await test('market: signed in shows the wallet and one action per item: buy, equ
   assert.equal(p.cell('frost').querySelector('.mkt-tag').textContent, 'owned');
   assert.deepEqual([...p.cell('banner-dusk').querySelectorAll('button')].map(b => b.textContent), ['remove banner']);
   assert.deepEqual([...p.cell('banner-halo').querySelectorAll('button')].map(b => b.textContent), ['buy']);
-  assert.deepEqual([...p.cell('paper').querySelectorAll('button')].map(b => b.textContent), ['equip']); // free themes: equip only
-  assert.ok(!p.btn('buy', 'paper'), 'a free item is never bought');
+  assert.deepEqual([...p.cell('mono').querySelectorAll('button')].map(b => b.textContent), ['equip']); // free themes: equip only
+  assert.ok(!p.btn('buy', 'mono'), 'a free item is never bought');
   assert.equal(p.w.document.querySelectorAll('#list-banners .fg-banner').length, 2);
   assert.equal(p.cell('banner-halo').querySelector('.fg-banner').dataset.item, 'banner-halo');
-  assert.equal(p.w.document.querySelectorAll('#list-themes .mkt-cell').length, 2);
-  assert.equal(p.w.document.querySelectorAll('#list-free .mkt-cell').length, 4);
+  assert.equal(p.w.document.querySelectorAll('#list-themes .mkt-cell').length, 5);
+  assert.equal(p.w.document.querySelectorAll('#list-free .mkt-cell').length, 1);
 });
 
 await test('market: the buy dialog shows price, balance now and balance after, and Esc closes it and returns focus', async () => {
@@ -361,9 +362,9 @@ await test('picker: signed out, keeping a paid theme keeps nothing, restores the
   const p = await pickerPage({ signedIn: false, storedTheme: 'nile' });
   p.w.LG.open();
   await p.click(card(p, 'moss'));
-  assert.equal(p.w.LG.current(), 'nile');
-  assert.equal(p.w.document.documentElement.dataset.theme, 'nile');
-  assert.equal(p.w.localStorage.getItem('lightning-geeks-theme'), 'nile');
+  assert.equal(p.w.LG.current(), 'mono');
+  assert.equal(p.w.document.documentElement.dataset.theme, undefined);
+  assert.equal(p.w.localStorage.getItem('lightning-geeks-theme'), 'mono');
   assert.equal(p.w.document.getElementById('themes').hidden, true);
   const toast = p.w.document.getElementById('toast');
   assert.ok(toast.classList.contains('on'));
@@ -377,18 +378,18 @@ await test('picker: signed out, keeping a paid theme keeps nothing, restores the
   await p.key(grid, 'End');
   assert.equal(p.w.document.documentElement.dataset.theme, 'frost', 'preview is allowed for everyone');
   await p.key(grid, 'Enter');
-  assert.equal(p.w.document.documentElement.dataset.theme, 'nile', 'but keeping is not');
-  assert.equal(p.w.LG.current(), 'nile');
+  assert.equal(p.w.document.documentElement.dataset.theme, undefined, 'but keeping is not');
+  assert.equal(p.w.LG.current(), 'mono');
   assert.match(toast.textContent, /frost is a paid theme, 250 coins\./);
 });
 
 await test('picker: a free theme keeps with no account, no network call and no toast link', async () => {
   const p = await pickerPage({ signedIn: false });
   p.w.LG.open();
-  await p.click(card(p, 'paper'));
-  assert.equal(p.w.LG.current(), 'paper');
-  assert.equal(p.w.document.documentElement.dataset.theme, 'paper');
-  assert.equal(p.w.localStorage.getItem('lightning-geeks-theme'), 'paper');
+  await p.click(card(p, 'mono'));
+  assert.equal(p.w.LG.current(), 'mono');
+  assert.equal(p.w.document.documentElement.dataset.theme, undefined);
+  assert.equal(p.w.localStorage.getItem('lightning-geeks-theme'), 'mono');
   assert.equal(p.rpcs('equip_item').length, 0);
   assert.equal(p.w.document.getElementById('toast').querySelector('a'), null);
 });
@@ -409,8 +410,8 @@ await test('picker: signed in, owned paid themes keep and follow the account; un
   assert.equal(p.w.LG.current(), 'moss');
   assert.equal(p.rpcs('equip_item').length, 1, 'a refused theme is never sent');
   p.w.LG.open();
-  await p.click(card(p, 'meadow')); // free themes follow the account too
-  assert.deepEqual(p.rpcs('equip_item').map(c => c.args.p_item_id), ['moss', 'meadow']);
+  await p.click(card(p, 'mono')); // free themes follow the account too
+  assert.deepEqual(p.rpcs('equip_item').map(c => c.args.p_item_id), ['moss', 'mono']);
 });
 
 await test('picker: on load the theme equipped on the account replaces the local one and is stored', async () => {
@@ -422,21 +423,21 @@ await test('picker: on load the theme equipped on the account replaces the local
   assert.equal(p.rpcs('equip_item').length, 0, 'loading writes nothing');
   // nothing equipped on the account: the local theme stays
   const q = await pickerPage({ equipped: {}, storedTheme: 'ocean' });
-  assert.equal(q.w.document.documentElement.dataset.theme, 'ocean');
+  assert.equal(q.w.document.documentElement.dataset.theme, undefined);
   // an equipped id this page does not know is ignored
   const r = await pickerPage({ owned: ['zebra'], equipped: { theme: 'zebra' }, storedTheme: 'ocean', catalog: [...baseCatalog(), { id: 'zebra', type: 'theme', name: 'Zebra', description: 'x', price: 10, is_default: false, asset_version: 1 }] });
-  assert.equal(r.w.document.documentElement.dataset.theme, 'ocean');
+  assert.equal(r.w.document.documentElement.dataset.theme, undefined);
 });
 
-await test('picker: signing out locks paid themes again and leaves the current theme alone', async () => {
+await test('picker: signing out locks paid themes again and restores Mono', async () => {
   const p = await pickerPage({ owned: ['moss'], equipped: { theme: 'moss' } });
   assert.equal(p.w.document.documentElement.dataset.theme, 'moss');
   await p.w.FG.sb.auth.signOut(); await tick(60);
   assert.ok(card(p, 'moss').classList.contains('lk'));
-  assert.equal(p.w.document.documentElement.dataset.theme, 'moss', 'nothing breaks: a stored paid theme stays');
+  assert.equal(p.w.document.documentElement.dataset.theme, undefined, 'signed-out sessions return to the free palette');
   p.w.LG.open();
   await p.click(card(p, 'garnet'));
-  assert.equal(p.w.LG.current(), 'moss');
+  assert.equal(p.w.LG.current(), 'mono');
   assert.equal(p.rpcs('equip_item').length, 0);
 });
 
@@ -454,11 +455,11 @@ await test('picker: bought on the market page, a theme unlocks in the picker wit
 await test('picker: without the account scripts it works exactly as before for free themes and refuses paid ones', async () => {
   const p = await pickerPage({ noFG: true });
   p.w.LG.open();
-  await p.click(card(p, 'meadow'));
-  assert.equal(p.w.LG.current(), 'meadow');
+  await p.click(card(p, 'mono'));
+  assert.equal(p.w.LG.current(), 'mono');
   p.w.LG.open();
   await p.click(card(p, 'moss'));
-  assert.equal(p.w.LG.current(), 'meadow');
+  assert.equal(p.w.LG.current(), 'mono');
   assert.equal(p.w.LG.keep('frost'), false);
   assert.equal(p.w.LG.keep('mono'), true);
   assert.equal(p.w.document.documentElement.dataset.theme, undefined);

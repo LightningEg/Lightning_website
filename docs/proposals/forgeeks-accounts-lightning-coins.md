@@ -1,7 +1,7 @@
 # Proposal: For Geeks accounts, Lightning Coins and cosmetics
 
 Date: 2026-10-24
-Status: Built 2026-10-25 (FG-01 to FG-09, FG-11); live once the owner applies migrations 3–6 and the GitHub setup in supabase/README.md
+Status: Website infrastructure built; production database migrations applied 2026-10-24. Payment destination/packages and native claim/render release acceptance remain owner/release gates.
 Product: https://lightningeg.com/forgeeks.html
 Tracking ID: FG-ACCOUNTS
 Owner: Mohamed (reward authority and final decisions)
@@ -280,3 +280,21 @@ The uploaded cosmetics PDFs are design references, not mandatory specifications.
 Themes are intended to ship as approved data/components in the app. Ownership is account-wide; a code is only a ten-minute, single-use delivery ticket exchanged online for a signed offline entitlement. Other devices get new codes free. No signing keys or universal passwords enter the app, and no device activation quota is introduced. Offline random-code redemption is not promised. See the Supabase README for the server RPC/endpoint and the app companion branch for bundled data/offline verification. Do not enable a bundled item before a complete app version supports and tests it.
 
 Payment proof is the customer's reference plus the image from their own payment app sent through WhatsApp Business; the owner records image review and separately verifies settlement in their own account. No screenshot or typed reference credits money automatically. Checkout must record explicit agreement to the versioned no-discretionary-refunds policy before displaying payment instructions. See `cosmetics/payment-policy.md`; required legal rights and manual correction of mistakes are preserved.
+
+
+## Latest owner revision and operational workflow — October 24
+
+This section supersedes the earlier free-palette and WhatsApp receipt proposals. Main-site accounts use a compact avatar menu. Marketplace and account share the For Geeks identity and ledger. Guides contains Features and Community Stories cards. Only Mono is free; other palettes require permanent account ownership. Previously purchased/equipped items are preserved.
+
+1. Owner signs into the admin page and verifies an authenticator. Configure the real InstaPay destination, recipient name, HTTPS QR and coin packages. These start disabled/unconfigured; no invented payment details.
+2. Member creates a website account, chooses a package and explicitly accepts the final-purchase terms before receiving instructions. Checkout records the quoted amount and destination.
+3. Copy the account email into the InstaPay note. Send the exact EGP amount. On the website, enter the sending InstaPay address and payment reference and upload the original receipt image. The request remains pending.
+4. Owner opens the private receipt and independently confirms the transfer in their bank. Record the received amount, bank reference and reconciliation note, then approve. Replaced evidence needs another review. Duplicate references and retries cannot issue coins twice.
+5. Member spends the account wallet on compatible catalog items. Ownership lives in Supabase and restores under the same account on other website devices; Sheets is optional reconciliation/export, never the balance authority.
+6. Native PC/phone claim remains a release gate: bundled assets, online one-time-code exchange, trusted signature keys, persistent verified entitlement and compatible render/import UI all need acceptance together. Existing code infrastructure must not be presented as a released native unlock experience.
+
+Routine owner credits, palette prices, package configuration, receipt approval and story moderation have admin forms; SQL is not the recurring workflow. Recognition and spendable coins are separate. The requested owner leaderboard test grants 200 points without adding wallet coins.
+
+Community workflow: draft a plain-text story, optionally copy it to LinkedIn yourself and attach that post URL. Publishing requires an adult-confirmed public profile and explicit sharing consent. Admin reviews before publication and may grant points once. Edits/withdrawal hide the public story; repeated approvals and accepted LinkedIn source reuse do not earn repeated points. No automated LinkedIn posting.
+
+Before opening paid checkout publicly: supply real payment details and package prices; establish processing hours, retention and support; perform a real small transfer/reconciliation test; confirm actual item availability and delivery. Test theme manifests are previews until native compatibility is released.

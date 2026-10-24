@@ -17,12 +17,12 @@ def build():
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Browse website themes and banners below. App themes and badges, InstaPay top-ups and PC/phone claiming are being built; they are not available yet.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. <a href="topup.html">Top up your wallet</a> and browse website themes and banners below. App themes and badges, PC/phone claiming is still being built. Website top-ups need the owner to configure payment details first.</p>',main,count=1,flags=re.S)
             main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
         else:
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
-            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, send your payment reference and your receipt through our official WhatsApp Business contact. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
+            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
@@ -49,9 +49,16 @@ def connect_public_pages():
         if '<div class="d-bar">' not in text or p.name.startswith(('forgeeks','for-geeks')): continue
         up='../' if p.parent.name=='ar' else ''
         ar=bool(up)
-        if 'data-site-account' not in text:
-            links=f'<a href="{up}marketplace.html">'+('المتجر' if ar else 'Marketplace')+f'</a><a href="{up}account.html" data-site-account>'+('حساب' if ar else 'Account')+'</a>'
-            text=re.sub(r'(<nav class="d-links"[^>]*>)(.*?)(</nav>)',lambda m:m[1]+m[2]+links+m[3],text,count=1,flags=re.S)
+        def nav_links(m):
+            inner=re.sub(r'<a\b[^>]*href="features[.]html"[^>]*>.*?</a>', '', m[2], flags=re.S)
+            inner=re.sub(r'<a\b[^>]*data-site-account[^>]*>.*?</a>', '', inner, flags=re.S)
+            if 'marketplace.html' not in inner:
+                inner+=f'<a href="{up}marketplace.html">'+('المتجر' if ar else 'Marketplace')+'</a>'
+            return m[1]+inner+m[3]
+        text=re.sub(r'(<nav class="d-links"[^>]*>)(.*?)(</nav>)',nav_links,text,count=1,flags=re.S)
+        if 'class="site-account-slot"' not in text:
+            icon=f'<span class="site-account-slot"><a class="chip me" id="me" data-site-account href="{up}account.html" aria-label="'+('حسابك' if ar else 'Your account')+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></a></span>'
+            text=re.sub(r'<a class="btn btn-primary nav-cta".*?</a>',lambda _:icon,text,count=1,flags=re.S)
         if 'data-account-page=' not in text:
             text=text.replace('<body','<body data-account-page="account.html"',1)
         if 'js/site-membership.js' not in text:
@@ -62,6 +69,8 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-community-1\2', text)
+        text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
 if __name__=='__main__':
