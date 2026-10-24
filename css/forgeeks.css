@@ -13,6 +13,10 @@
 :root[data-theme="synthwave"]{--bg:#12061f;--panel:#1b0b2e;--well:#160826;--ink:#f6e9ff;--dim:#c6a9df;--faint:#3d2357;--line:rgba(255,62,165,.15);--line-strong:rgba(255,62,165,.36);--accent:#ff3ea5;--accent2:#36f9f6;--btn:#ff3ea5;--btn-ink:#14051f;--particle:230,200,255;--glow:255,62,165}
 :root[data-theme="meadow"]{--bg:#08192A;--panel:#0F2233;--well:#0b1d2e;--ink:#EAF4F1;--dim:#B8CAD2;--faint:#243A4C;--line:rgba(63,203,147,.16);--line-strong:rgba(63,203,147,.38);--accent:#3FCB93;--accent2:#5AA9FF;--btn:#3FCB93;--btn-ink:#0A2442;--particle:200,232,222;--glow:63,203,147}
 :root[data-theme="paper"]{color-scheme:light dark;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
+/* paid themes (the market, forgeeks-market.html): the same fourteen tokens, same contrast rules (tools/theme_contrast.py) */
+:root[data-theme="moss"]{--bg:#0b0e08;--panel:#12170d;--well:#0e120a;--ink:#eef3dc;--dim:#bcc7a0;--faint:#2f3a20;--line:rgba(185,217,74,.15);--line-strong:rgba(185,217,74,.36);--accent:#b9d94a;--accent2:#e0a84a;--btn:#b9d94a;--btn-ink:#10160a;--particle:222,236,170;--glow:185,217,74}
+:root[data-theme="garnet"]{--bg:#1a0608;--panel:#250a0f;--well:#1e070b;--ink:#fbeee4;--dim:#e0b9ab;--faint:#4f2428;--line:rgba(255,107,87,.16);--line-strong:rgba(255,107,87,.38);--accent:#ff6b57;--accent2:#f2c27a;--btn:#ff6b57;--btn-ink:#1c0505;--particle:255,205,190;--glow:255,107,87}
+:root[data-theme="frost"]{color-scheme:light dark;--bg:#eef2f7;--panel:#f8fafc;--well:#e4eaf2;--ink:#0f1722;--dim:#3b475a;--faint:#c3cddb;--line:rgba(15,23,34,.13);--line-strong:rgba(15,23,34,.32);--accent:#3340c4;--accent2:#0b7a75;--btn:#3340c4;--btn-ink:#f4f7ff;--particle:30,40,70;--glow:51,64,196}
 
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
@@ -30,7 +34,7 @@ b,strong{font-weight:500}
 #field{position:fixed;left:0;top:0;width:100%;height:100vh;height:100lvh;z-index:0;pointer-events:none}
 .grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(var(--particle),.09) 1px,transparent 1.2px);background-size:24px 24px;mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%)}
 .scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.06) 0 1px,transparent 1px 3px);opacity:.5}
-:root[data-theme="paper"] .scan{opacity:.15}
+:root[data-theme="paper"] .scan,:root[data-theme="frost"] .scan{opacity:.15}
 main,header,footer{position:relative;z-index:2}
 
 .wrap{width:min(1180px,100% - 32px);margin-inline:auto}
@@ -46,8 +50,8 @@ main,header,footer{position:relative;z-index:2}
 .brand img{width:15px;height:21px;display:block}
 /* Match the mark to the palette, including its saved state and live preview. */
 :root .geeks-mark-light{display:none}
-:root[data-theme="paper"] .geeks-mark-dark{display:none}
-:root[data-theme="paper"] .geeks-mark-light{display:inline}
+:root[data-theme="paper"] .geeks-mark-dark,:root[data-theme="frost"] .geeks-mark-dark{display:none}
+:root[data-theme="paper"] .geeks-mark-light,:root[data-theme="frost"] .geeks-mark-light{display:inline}
 .crumb{color:var(--dim);font:400 13px var(--mono);white-space:nowrap}
 .crumb b{color:var(--ink);font-weight:500}
 .caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--accent);animation:blink 1.06s steps(1) infinite}
@@ -266,6 +270,8 @@ footer{padding:0 0 40px}
 
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,20px);opacity:0;padding:10px 16px;border:1px solid var(--line-strong);border-radius:6px;background:var(--panel);font:400 12.5px var(--mono);color:var(--ink);transition:opacity .25s,transform .25s;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.link{pointer-events:auto}
+.toast a{color:var(--accent);margin-left:2px}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -323,6 +329,12 @@ footer{padding:0 0 40px}
 .tm-name span{color:var(--accent);visibility:hidden}
 .tm-card[aria-selected="true"] .tm-name span{visibility:visible}
 .tm-note{margin:0 3px 3px;font:400 11.5px/1.4 var(--mono);color:var(--dim)}
+/* paid themes: a small lock and the price while locked ("owned" once bought); nothing else about the card changes */
+.tm-name .tm-price{display:inline-flex;align-items:center;gap:5px;margin-left:auto;visibility:visible;color:var(--dim);font:400 11px var(--mono);white-space:nowrap}
+.tm-name .tm-price span{visibility:visible;color:inherit}
+.tm-name .tm-price svg{flex:none}
+.tm-card.lk:not([aria-selected="true"]) .tm-name span:not(.tm-price){display:none}
+.tm-card[aria-selected="true"] .tm-name .tm-price{display:none}
 .tm-foot{display:flex;flex-wrap:wrap;gap:8px 16px;padding:10px 14px;border-top:1px solid var(--line);font:400 11px var(--mono);color:var(--dim)}
 @media (max-width:420px){.tm-head .d{display:none}.tm-head span{margin-left:0}}
 @media (max-width:640px){.tm-grid{grid-template-columns:1fr 1fr;gap:8px;padding:10px}.tm-pv{height:56px}.tm-foot{display:none}}
