@@ -1,10 +1,10 @@
 # Proposal: For Geeks accounts, Lightning Coins and cosmetics
 
 Date: 2026-10-24
-Status: Proposed; implementation has not started
+Status: Proposed; owner decisions recorded 2026-10-24; Supabase project created; implementation has not started
 Product: https://lightningeg.com/forgeeks.html
 Tracking ID: FG-ACCOUNTS
-Owner: To assign
+Owner: Mohamed (reward authority and final decisions)
 
 ## Purpose and confirmed requirements
 
@@ -15,6 +15,8 @@ Turn For Geeks into a member community where contributors can find issues, give 
 - Require email only. Name, phone number and date of birth are optional; profile completion must be skippable.
 - Recognize useful feedback and successful merged pull requests through a leaderboard.
 - Assign each issued task its own explicit Lightning Coin reward. A flat payment for every merged PR is superseded by this requirement.
+- Never put the Lightning app download or the app itself behind an account.
+- Let members build an opt-in public profile that showcases their verified work and their git setup, so For Geeks also markets its contributors.
 - Offer a marketplace for themes, banners and other aesthetic items. Purchases never unlock functionality, permissions, contribution opportunities or better ranking.
 
 The sections below recommend implementation policies. Reward amounts, catalog prices and unresolved decisions remain proposals until agreed.
@@ -64,6 +66,25 @@ Users can edit/delete optional data, request account deletion and choose whether
 
 A Google account and a GitHub account must link through authenticated provider flows. Never accept a typed GitHub handle as ownership proof or merge accounts merely because an unverified email matches. One GitHub identity belongs to one member at a time; unlink/relink events need history to prevent claiming the same rewards again.
 
+## Public member showcase
+
+For Geeks doubles as marketing for the people who build Lightning. A member may publish a profile that presents who they are and what they worked on. Publishing is opt-in per section; a new profile is private.
+
+Visibility levels per profile: private (default), members only, public.
+
+Public sections a member may fill in:
+
+- Display name, avatar, optional cosmetic banner and a short bio.
+- **Work:** verified contributions listed automatically from the ledger (merged PR title, link to the rewarded issue, date). The member may hide individual entries. Self-described work (for example other projects) can be added as links and is labelled self-reported.
+- **Git setup:** editor, operating system, languages, tools, a dotfiles or portfolio link, plus their GitHub profile link. Structured fields plus short free text.
+- Contribution score and rank. Never the wallet balance or purchase history.
+
+Never public: email, phone, date of birth, real name (unless the member chooses it as their display name), or anything the member left private. Free text is rendered as plain text, links must be https, and every public profile has a report control and moderator takedown.
+
+Public profile pages render client-side from a public database view that exposes only opted-in fields. A later build step could generate static pages for search indexing, but that would copy profile data into the public repository history and make deletion slower, so it needs a separate decision.
+
+Age rule (proposal): publishing a public profile requires the member to confirm they are 18 or older. Date of birth is not needed for this.
+
 ## Access boundary and hosting
 
 Gate the For Geeks community, member profiles, task dashboard, leaderboard, wallet, inventory and marketplace. Authentication callbacks, login/reset flows and legal information remain publicly reachable. Ordinary Lightning marketing pages remain public; this proposal introduces community accounts, not an account requirement for the financial app.
@@ -75,6 +96,26 @@ Recommended architecture: retain the existing domain and public marketing site; 
 Do not mark gating complete while the same protected HTML is still reachable through the Pages origin, a legacy URL or an archive. Inventory all For Geeks variants, redirects, generated pages and origin addresses. Decide what can remain public as historical material. Public source code and GitHub issues will still be public; account gating cannot make an open repository confidential.
 
 Protected responses use appropriate private/no-store caching. Validate sessions at every protected server endpoint. Redirect only to approved internal paths after login. Remove gated URLs from sitemap/search discovery as appropriate; robots directives are not authorization controls. Update `sitemap.xml`, `robots.txt`, `llms.txt`, public links and indexing metadata during rollout.
+
+### Access map
+
+Because pages are static and public on GitHub Pages, "gated" means the member data and actions behind a Supabase session, not the HTML shell.
+
+| Area | Access | Reason |
+| --- | --- | --- |
+| Lightning app download and install, release log, privacy, feedback and survey forms | Public, always | The app never requires an account; downloads are never behind sign-in |
+| Marketing, guides, blog, features, how it works | Public | Acquisition |
+| `forgeeks.html`, `forgeeks-guide.html`, `forgeeks-roadmap.html`, `contribute.html` | Public | They recruit contributors; the repository is public anyway |
+| GitHub issues, `/take`, pull requests | Public on GitHub | Anyone may contribute without an account; coins need an account with a verified GitHub link |
+| Login, signup, reset, auth callback, legal pages | Public | Required to sign in |
+| Public showcase profiles and leaderboard entries of members who opted in | Public | Marketing for contributors and the project |
+| Member task board with coin rewards and claims | Signed in | Reward amounts belong to the member experience; the GitHub issue keeps its normal text |
+| Own profile editor, visibility settings, activity history, wallet | Signed in, own data only | Personal data |
+| Marketplace, inventory, equip | Signed in | Spends coins |
+| Members-only profiles | Signed in | Visibility level chosen by the member |
+| Reward publishing, moderation queue, ledger corrections | Administrator only | Owner authority |
+
+Legacy design variants (`for-geeks-2.html`, `for-geeks-4.html`, `for-geeks-test.html`, `test.html`, `version-b.html`, `version-c.html`, `versions.html`) contain no member data. Decide at FG-04 whether to keep them, mark them noindex or remove them.
 
 ## Issue rewards and feedback
 
@@ -141,7 +182,7 @@ All items start unassigned and not started. Create linked implementation issues 
 
 | ID | Deliverable | Depends on | Status |
 | --- | --- | --- | --- |
-| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | Not started |
+| FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | In progress: policies decided 2026-10-24; hosting boundary assumed (public shells, gated data), pending owner confirmation |
 | FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | Not started |
 | FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Not started |
 | FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
@@ -150,7 +191,8 @@ All items start unassigned and not started. Create linked implementation issues 
 | FG-07 | Member leaderboard, activity history and wallet | FG-06 | Not started |
 | FG-08 | Cosmetic catalog, atomic purchases, inventory and equip flows | FG-07 | Not started |
 | FG-09 | Admin audit, reversals, reconciliation and deletion/export procedures | FG-06, FG-08 | Not started |
-| FG-10 | Security/accessibility verification, staged launch and operations guide | FG-04, FG-09 | Not started |
+| FG-10 | Security/accessibility verification, staged launch and operations guide | FG-04, FG-09, FG-11 | Not started |
+| FG-11 | Public member showcase: visibility levels, work and git setup sections, public view, report and takedown | FG-03, FG-06 | Not started |
 
 Suggested releases: accounts/access first (FG-01–04); rewards and rankings next (FG-05–07); cosmetics and operations last (FG-08–10). Do not enable spending before transaction integrity and reversal rules are verified.
 
@@ -168,17 +210,33 @@ Suggested releases: accounts/access first (FG-01–04); rewards and rankings nex
 - [ ] Only owned cosmetics can be officially equipped; choices persist across devices, with free accessible defaults.
 - [ ] Moderation, awards, purchases and corrections have an auditable history and a reconciliation path.
 - [ ] Mobile, keyboard, screen-reader and reduced-motion flows work across login, marketplace and leaderboard.
+- [ ] App download and install links work signed out on every page.
+- [ ] A new profile is private; only opted-in sections appear publicly, and email, phone, date of birth and wallet never do.
+- [ ] Public profiles list verified work from the ledger separately from self-reported work, render free text safely, and can be reported and taken down.
 - [ ] Production email, OAuth callbacks, secret configuration, backups and provider limits are reviewed before rollout.
 
-## Decisions to resolve
+## Decisions
 
-1. Same-domain session gateway/hosting plan and the complete protected URL list; treatment of historical variants.
-2. Eligible repositories: app, website, other Lightning repositories; reward start date and historical contribution policy.
-3. Reward authority, amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
-4. Leaderboard timezone, privacy defaults and reversal/debt treatment after spending.
-5. Final coin name, starter cosmetics, catalog prices, refunds and item retirement policy.
-6. Purpose/retention for phone and date of birth, account deletion handling and age policy.
-7. Supabase region, current free-tier limits, production email provider, hosting budget and operational owner.
+Decided by the owner on 2026-10-24:
+
+- **Eligible repository:** only `LightningEg/Lightning` (the app) earns coins. The website repository does not.
+- **Reward authority:** only the owner sets issue rewards.
+- **Leaderboard timezone:** Africa/Cairo.
+- **Profile data:** collect all optional fields (phone, date of birth, name, avatar), each skippable, each with its purpose shown at collection. An age policy for date of birth is still needed; draft it before launch.
+- **Reverts:** no automatic reversal of a merged-PR award in the first release. An authorized administrator may still post a linked correction entry for a clear error, such as a wrong amount. This narrows the reversal rules above for the first release.
+- **Coin name:** "Lightning Coins" stays the working name. Keep it as a single configuration value so a rename is one change.
+- **Hosting:** Supabase free plan, Europe region, project created. No payment method attached.
+
+Assumed, pending owner confirmation: For Geeks pages stay static and public on GitHub Pages as empty shells, and all member data (tasks with rewards, profiles, wallet, inventory, leaderboard) is gated by Supabase sessions and row-level security. This avoids a gateway and its quota. A Cloudflare Worker is a later option only if guide and roadmap pages must be hidden; it must fail closed.
+
+Still open:
+
+1. Amount ranges, claim expiry, shared-work splits, feedback rules and appeals.
+2. Starter cosmetics, catalog prices, refunds and item retirement policy.
+3. Account deletion handling, retention periods and the date-of-birth age policy.
+4. Production email provider (the built-in Supabase email is rate-limited), current free-tier overage behavior, and operational owner.
+5. Historical contribution policy and reward start date for the app repository.
+6. Public showcase: confirm the 18+ confirmation rule, whether to add static pages for search indexing later, and which git-setup fields to offer.
 
 ## Scope and operating costs
 
@@ -188,4 +246,6 @@ Start with free allowances where suitable, but do not promise permanent zero cos
 
 ## Change log
 
+- 2026-10-24: Added access map (app download always public), opt-in public member showcase and FG-11; Supabase and Google sign-in setup reported complete.
+- 2026-10-24: Owner decisions recorded (app repository only, owner-set rewards, Cairo timezone, collect all optional profile fields, no reverts in first release); Supabase project created; hosting boundary assumed pending confirmation.
 - 2026-10-24: Initial proposal records account gating, optional profile data, Google authentication, feedback/PR recognition, per-issue Lightning Coin rewards and a cosmetics-only marketplace.
