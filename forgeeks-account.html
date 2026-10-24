@@ -170,6 +170,21 @@
             <div class="checks"><label class="chk"><input type="checkbox" name="marketing_consent"><span>Email me about Lightning<small>Off unless you switch it on. Separate from your account.</small></span></label></div>
             <div class="row"><button class="btn" type="submit">save details</button><span class="acct-status" id="status-private" role="status"></span></div>
           </form>
+
+          <div class="panel" id="your-data">
+            <h2>your data</h2>
+            <p class="why">Download everything your account holds, as a JSON file. Delete your account and your profile, links and private details go at once; your coin history stays without your name so rankings stay correct.</p>
+            <div class="row" style="margin-top:0"><button class="btn ghost" id="data-download" type="button"><span class="k">$</span> download my data</button><span class="acct-status" id="status-data" role="status"></span></div>
+            <details class="secret" id="delete-box">
+              <summary><span>›</span> delete my account</summary>
+              <div>
+                <form id="form-delete" novalidate>
+                  <div class="fields"><div class="f"><label for="delete-confirm">type <b>delete my account</b> to confirm</label><input id="delete-confirm" name="confirm" type="text" autocomplete="off" spellcheck="false"></div></div>
+                  <div class="row"><button class="btn ghost" type="submit">delete account</button><span class="acct-status" id="status-delete" role="status"></span></div>
+                </form>
+              </div>
+            </details>
+          </div>
         </div>
       </div>
     </div>
@@ -218,6 +233,7 @@
 <script src="js/vendor/supabase-2.118.0.js"></script>
 <script src="js/forgeeks-config.js?v=20261025-1"></script>
 <script src="js/forgeeks-auth.js?v=20261025-1"></script>
-<script src="js/forgeeks-account.js?v=20261024-1"></script>
+<script src="js/forgeeks-account.js?v=20261025-1"></script>
+<script src="js/forgeeks-account-data.js?v=20261025-1"></script>
 </body>
 </html>
