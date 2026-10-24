@@ -1,4 +1,4 @@
-// Tests for supabase/migrations/20261024190000_forgeeks_core.sql
+// Tests for supabase/migrations/ (all files, in order)
 //
 // Runs the migration on PGlite (Postgres compiled to WebAssembly) with Supabase's roles
 // and auth.uid() stubbed, then checks the access rules as each role.
@@ -11,7 +11,7 @@
 // sequential tests below prove the check and the idempotency rules.
 
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const mod = process.env.PGLITE_PATH
@@ -35,7 +35,9 @@ await db.exec(`
   grant usage on schema auth to anon, authenticated, service_role;
   grant execute on function auth.uid() to anon, authenticated, service_role;
 `);
-await db.exec(readFileSync(new URL('../migrations/20261024190000_forgeeks_core.sql', import.meta.url), 'utf8'));
+for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) {
+  await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
+}
 
 async function as(role, uid, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid ?? ''}', false); set role ${role};`);
@@ -283,6 +285,36 @@ await test('catalog: free defaults are always listed, retired items stay visible
   await as('authenticated', A, async () => q(`select * from public.equip_item('banner-aurora')`));
 });
 
+await test('minors: a birth date under 18 keeps the profile private, in the database as well as the page', async () => {
+  const D = '00000000-0000-4000-8000-00000000000d';
+  await q(`insert into auth.users (id, email) values ($1, 'd@example.test')`, [D]);
+  await as('authenticated', D, async () => {
+    await q(`update public.profiles set birth_date = current_date - interval '15 years' where user_id = $1`, [D]);
+    await assert.rejects(q(`update public.member_profiles set visibility = 'public', adult_confirmed = true where user_id = $1`, [D]), /under 18/);
+    await assert.rejects(q(`update public.member_profiles set adult_confirmed = true where user_id = $1`, [D]), /under 18/);
+    await assert.rejects(q(`update public.member_profiles set show_on_leaderboard = true where user_id = $1`, [D]), /under 18|leaderboard_needs_adult/);
+    await assert.rejects(q(`update public.member_profiles set visibility = 'members' where user_id = $1`, [D]), /under 18/);
+    await q(`update public.member_profiles set bio = 'hi' where user_id = $1`, [D]); // private edits are fine
+  });
+  // An adult who is already public, then enters a birth date under 18, is made private at once.
+  const E = '00000000-0000-4000-8000-00000000000e';
+  await q(`insert into auth.users (id, email) values ($1, 'e@example.test')`, [E]);
+  await as('authenticated', E, async () => {
+    await q(`update public.member_profiles set adult_confirmed = true, visibility = 'public', show_on_leaderboard = true where user_id = $1`, [E]);
+    await q(`update public.profiles set birth_date = current_date - interval '17 years' where user_id = $1`, [E]);
+    const r = (await q(`select visibility, show_on_leaderboard, adult_confirmed from public.member_profiles where user_id = $1`, [E])).rows[0];
+    assert.deepEqual([r.visibility, r.show_on_leaderboard, r.adult_confirmed], ['private', false, false]);
+  });
+  // An adult birth date changes nothing.
+  const F = '00000000-0000-4000-8000-00000000000f';
+  await q(`insert into auth.users (id, email) values ($1, 'f@example.test')`, [F]);
+  await as('authenticated', F, async () => {
+    await q(`update public.profiles set birth_date = '1990-05-05' where user_id = $1`, [F]);
+    await q(`update public.member_profiles set adult_confirmed = true, visibility = 'public' where user_id = $1`, [F]);
+    assert.equal((await q(`select visibility from public.member_profiles where user_id = $1`, [F])).rows[0].visibility, 'public');
+  });
+});
+
 await test('deleting an account removes personal data but keeps anonymized ledger history', async () => {
   const before = (await q(`select count(*)::int c from public.ledger_entries where user_id = $1`, [A])).rows[0].c;
   assert.ok(before >= 2);
@@ -291,7 +323,7 @@ await test('deleting an account removes personal data but keeps anonymized ledge
   assert.equal((await q(`select count(*)::int c from public.wallets where user_id = $1`, [A])).rows[0].c, 0);
   assert.equal((await q(`select count(*)::int c from public.member_profiles where user_id = $1`, [A])).rows[0].c, 0);
   assert.equal((await q(`select count(*)::int c from public.ledger_entries where user_id is null`)).rows[0].c, before);
-  await as('anon', null, async () => assert.equal((await q(`select * from public.profile_directory`)).rows.length, 0));
+  await as('anon', null, async () => assert.ok((await q(`select display_name from public.profile_directory`)).rows.every(r => r.display_name !== 'Ada')));
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

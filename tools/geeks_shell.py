@@ -1,4 +1,4 @@
-"""Write the For Geeks top bar and footer into its three pages, from one source.
+"""Write the For Geeks top bar and footer into its pages, from one source.
 
     python tools/geeks_shell.py          # rewrite the top bar and footer of every For Geeks page
     python tools/geeks_shell.py --check  # list the pages whose shell is out of date; change nothing
@@ -24,6 +24,11 @@ PAGES = [
     ("forgeeks.html", "home", "~/root/<b>for-geeks</b>"),
     ("forgeeks-guide.html", "contribute", "~/root/for-geeks/<b>contribute</b>"),
     ("forgeeks-roadmap.html", "roadmap", "~/root/for-geeks/<b>roadmap</b>"),
+]
+
+# Pages that wear the same shell but are not in the top bar yet (not linked or indexed until launch).
+EXTRA = [
+    ("forgeeks-account.html", "~/root/for-geeks/<b>account</b>"),
 ]
 
 FOOTER_COLUMNS = [
@@ -52,7 +57,7 @@ def link(href: str, text: str) -> str:
 
 
 def header(current: str) -> str:
-    crumb = next(c for f, _, c in PAGES if f == current)
+    crumb = next(c for f, c in [(f, c) for f, _, c in PAGES] + EXTRA if f == current)
     links = "\n".join(f'      <a href="{f}"{" aria-current=\"page\"" if f == current else ""}>{n}</a>' for f, n, _ in PAGES)
     return f'''<header class="bar" id="bar">
   <div class="wrap">
@@ -102,7 +107,7 @@ def build(text: str, name: str) -> str:
 def main() -> int:
     check = "--check" in sys.argv
     stale = []
-    for name, _, _ in PAGES:
+    for name in [f for f, _, _ in PAGES] + [f for f, _ in EXTRA]:
         path = ROOT / name
         old = path.read_text(encoding="utf-8")
         if '<header class="bar" id="bar">' not in old or "<footer>" not in old:

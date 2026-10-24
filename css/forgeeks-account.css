@@ -1,0 +1,54 @@
+/* For Geeks account page only (forgeeks-account.html). Uses the theme tokens from forgeeks.css.
+   Radii follow guideline D07: 2 buttons, 4 small controls, 6 chips and rows, 8 panels. */
+.acct-top{padding:132px 0 96px}
+.acct-top h1{font-size:clamp(30px,4vw,52px);margin:0 0 14px}
+.acct{max-width:880px;margin-top:40px}
+.acct [hidden]{display:none!important}
+.acct-msg{margin:0 0 22px;padding:12px 14px;border:1px solid var(--line-strong);border-radius:6px;font:400 14px/1.5 var(--sans);color:var(--ink);background:var(--soft)}
+.acct-msg.ok{border-color:var(--accent)}
+.acct-msg.bad{border-color:color-mix(in srgb,#e0607e 70%,var(--ink));color:color-mix(in srgb,#e0607e 55%,var(--ink))}
+.acct-loading{font:400 13px var(--mono);color:var(--dim)}
+
+.panel{border:1px solid var(--line);border-radius:8px;background:var(--soft);padding:26px 24px;margin:0 0 20px}
+.panel h2,.panel h3{font:500 13px var(--mono);letter-spacing:0;margin:0 0 6px;color:var(--ink);text-shadow:none}
+.panel .why{margin:0 0 20px;color:var(--dim);font-size:14.5px;max-width:62ch}
+.panel .why b{color:var(--ink);font-weight:500}
+
+.fields{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:700px){.fields.two{grid-template-columns:1fr 1fr}.fields .wide{grid-column:1/-1}}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f>label,.f>.lab{font:400 12.5px var(--mono);color:var(--dim)}
+.f .opt{color:var(--dim);opacity:.75}
+.acct input[type=text],.acct input[type=email],.acct input[type=password],.acct input[type=tel],.acct input[type=url],.acct input[type=date],.acct select,.acct textarea{
+  width:100%;min-height:44px;padding:10px 12px;background:transparent;color:var(--ink);border:1px solid var(--line-strong);border-radius:4px;font:400 15px var(--sans)}
+.acct textarea{min-height:96px;resize:vertical}
+.acct select{appearance:auto}
+.acct input:focus-visible,.acct select:focus-visible,.acct textarea:focus-visible,.acct button:focus-visible,.acct a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.acct ::placeholder{color:var(--dim);opacity:.6}
+.chk{display:flex;gap:12px;align-items:flex-start;font:400 14.5px/1.5 var(--sans);color:var(--ink)}
+.chk input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--accent)}
+.chk small{display:block;color:var(--dim);font-size:13px}
+.checks{display:grid;gap:14px;margin-top:6px}
+
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:22px}
+.acct .btn{cursor:pointer}
+.acct .btn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none}
+.acct-status{font:400 12.5px var(--mono);color:var(--accent);min-height:1.2em}
+.acct-status.bad{color:color-mix(in srgb,#e0607e 55%,var(--ink))}
+.linkish{background:none;border:0;padding:6px 0;color:var(--dim);font:400 12.5px var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:34px}
+.linkish:hover{color:var(--ink)}
+
+.oauth{display:flex;flex-direction:column;gap:14px}
+.or{display:flex;align-items:center;gap:14px;margin:22px 0;color:var(--dim);font:400 12.5px var(--mono)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.bar-user{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;justify-content:space-between;margin:0 0 20px}
+.bar-user .who{font:400 13px var(--mono);color:var(--dim);overflow-wrap:anywhere}
+.nums{display:flex;gap:10px;flex-wrap:wrap}
+.nums .chip b{color:var(--ink);font-weight:500}
+
+.links-list{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:8px}
+.links-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:6px}
+.links-list a{overflow-wrap:anywhere;color:var(--ink)}
+.links-empty{margin:0 0 14px;color:var(--dim);font-size:14.5px}
+.fine{margin:18px 0 0;color:var(--dim);font-size:13.5px}

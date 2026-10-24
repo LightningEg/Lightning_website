@@ -184,7 +184,7 @@ All items start unassigned and not started. Create linked implementation issues 
 | --- | --- | --- | --- |
 | FG-01 | Confirm hosting/access boundary, repository allowlist and economy policies | — | In progress: policies decided 2026-10-24; hosting boundary assumed (public shells, gated data), pending owner confirmation |
 | FG-02 | Design schema, migrations, RLS and private/member API contracts | FG-01 | In review: `supabase/migrations/20261024190000_forgeeks_core.sql` with 21 passing tests; not yet applied to the Supabase project. Feedback tables and GitHub claim sync follow in FG-05/FG-06 |
-| FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | Not started |
+| FG-03 | Email/Google signup, verification, recovery and optional profile | FG-02 | In review: `forgeeks-account.html` (sign in, sign up, reset, profile, setup, links, private details), `supabase/migrations/20261024210000_forgeeks_minors_guard.sql`, 20 page tests. Unlinked and noindex until FG-04; not yet tested against the live project |
 | FG-04 | Server session gate, legacy/origin audit and indexing migration | FG-01, FG-03 | Not started |
 | FG-05 | Verified GitHub linkage, issue reward publishing and claim snapshots | FG-02, FG-03 | Not started |
 | FG-06 | Feedback moderation, signed webhooks, accepted awards and ledger | FG-05 | Not started |
@@ -237,6 +237,7 @@ Still open:
 4. Production email provider (the built-in Supabase email is rate-limited), current free-tier overage behavior, and operational owner.
 5. Historical contribution policy and reward start date for the app repository.
 6. Public showcase: confirm the 18+ confirmation rule, whether to add static pages for search indexing later, and which git-setup fields to offer.
+7. Before launch: add accounts to the privacy page, and approve the purposes written on the account page for phone (reaching you about your account) and birth date (keeping profiles of people under 18 private).
 
 ## Scope and operating costs
 
@@ -246,6 +247,7 @@ Start with free allowances where suitable, but do not promise permanent zero cos
 
 ## Change log
 
+- 2026-10-24: FG-03 built: account page (unlinked, noindex), vendored Supabase client, minors guard migration. A birth date under 18 keeps a profile strictly private, in the page and in the database.
 - 2026-10-24: Added access map (app download always public), opt-in public member showcase and FG-11; Supabase and Google sign-in setup reported complete.
 - 2026-10-24: Owner decisions recorded (app repository only, owner-set rewards, Cairo timezone, collect all optional profile fields, no reverts in first release); Supabase project created; hosting boundary assumed pending confirmation.
 - 2026-10-24: Initial proposal records account gating, optional profile data, Google authentication, feedback/PR recognition, per-issue Lightning Coin rewards and a cosmetics-only marketplace.
