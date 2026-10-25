@@ -114,7 +114,7 @@ def build(text: str, name: str) -> str:
     # The theme boot script in <head> applies a saved theme before first paint; it knows every theme id.
     text = re.sub(r"(localStorage\.getItem\('lightning-geeks-theme'\);if\(/\^\()[a-z0-9|-]+(\)\$/)",
                   lambda m: m.group(1) + "|".join(THEME_IDS) + m.group(2), text, count=1)
-    text = re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|admin-operations)[.]js)(?:[?]v=[\w-]+)?', lambda m: m[1] + '?v=' + VERSION, text)
+    text = re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|admin-operations)[.]js)(?:[?]v=[\w-]+)?', lambda m: m[1] + '?v=' + ('20261025-mfa-1' if m[1]=='js/admin-operations.js' else VERSION), text)
     # Every page loads the same scripts, in this order: page behaviour, Supabase, its settings, the sign-in.
     bundle = (f'<script src="js/forgeeks.js?v={VERSION}"></script>\n<script src="{SUPABASE_JS}"></script>\n'
               f'<script src="js/forgeeks-config.js?v={VERSION}"></script>\n<script src="js/forgeeks-auth.js?v={VERSION}"></script>')

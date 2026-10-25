@@ -90,6 +90,7 @@ def connect_public_pages():
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
         text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|topup|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/(?:admin-operations|store-admin)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(css/(?:site-account|site-community|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
