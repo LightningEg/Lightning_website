@@ -12,6 +12,8 @@
     if(!spec.allowed.includes(key)||typeof value!=='string')throw Error('Unsupported part property');
     if(slot==='palette'){if(!hex.test(value))throw Error('Invalid colour');}
     else if(key==='logoVariant'){if(!['on-dark','on-light'].includes(value))throw Error('Unsupported logo');}
+    else if(slot==='decoration'&&key==='pattern'){if(!(spec.patterns||['none']).includes(value))throw Error('Unsupported decoration');}
+    else if(slot==='decoration'&&key==='motion'){if(!(spec.motions||['none']).includes(value))throw Error('Unsupported decoration');}
     else if(['pattern','motion','decoration'].includes(key)){if(value!=='none')throw Error('Unsupported decoration');}
     else if(!tokens.has(value))throw Error('Unknown palette reference');
    }

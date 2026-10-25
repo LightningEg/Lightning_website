@@ -142,12 +142,12 @@ await test('market: signed in shows the wallet and one action per item: buy, equ
   assert.equal(p.$('mkt-signin').hidden, true);
   assert.deepEqual(p.calls.filter(c => c.table === 'wallets').map(c => c.filters), [{ user_id: UID }]);
   assert.equal(p.cell('moss').dataset.state, 'for-sale');
-  assert.deepEqual([...p.cell('moss').querySelectorAll('button')].map(b => b.textContent), ['buy']);
+  assert.deepEqual([...p.cell('moss').querySelectorAll('button')].map(b => b.textContent), ['buy', 'gift']);
   assert.equal(p.cell('frost').dataset.state, 'equipped');
   assert.match(p.cell('frost').querySelector('.mkt-acts').textContent, /equipped/);
   assert.equal(p.cell('frost').querySelector('.mkt-tag').textContent, 'owned');
-  assert.deepEqual([...p.cell('banner-dusk').querySelectorAll('button')].map(b => b.textContent), ['remove banner']);
-  assert.deepEqual([...p.cell('banner-halo').querySelectorAll('button')].map(b => b.textContent), ['buy']);
+  assert.deepEqual([...p.cell('banner-dusk').querySelectorAll('button')].map(b => b.textContent), ['remove banner', 'gift']);
+  assert.deepEqual([...p.cell('banner-halo').querySelectorAll('button')].map(b => b.textContent), ['buy', 'gift'], 'anything on sale can also be given');
   assert.deepEqual([...p.cell('mono').querySelectorAll('button')].map(b => b.textContent), ['equip']); // free themes: equip only
   assert.ok(!p.btn('buy', 'mono'), 'a free item is never bought');
   assert.equal(p.w.document.querySelectorAll('#list-banners .fg-banner').length, 2);

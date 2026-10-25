@@ -13,7 +13,7 @@
   function ui(name) { var U = root.MarketUI; return U && typeof U[name] === 'function' ? U[name].bind(U) : null; }
 
   var state = { items: [], signedIn: false, uid: null, balance: 0, busy: false, run: 0 };
-  var dlg = { item: null, key: null, trigger: null, busy: false, done: false };
+  var dlg = { item: null, key: null, trigger: null, busy: false, done: false, gift: false };
 
   /* ---------- small helpers ---------- */
   function el(tag, cls, text) {
@@ -23,6 +23,19 @@
     return e;
   }
   function coins(n) { return n + (n === 1 ? ' coin' : ' coins'); }
+  // What a cell costs this member: a set is 80% of the parts they do not own yet (set_price, from the server).
+  function priceOf(it) { return it.type === 'set' ? Number(it.set_price) || 0 : it.price; }
+  // Gifts: anything on sale that is not a set, an earned badge or a free default.
+  function giftable(it) {
+    var t = it.type === 'theme' ? theme(it.id) : null, ended = it.available_until && !daysLeft(it);
+    return state.signedIn && !it.award && it.type !== 'set' && !it.is_default && it.price > 0 && !(t && t.archived) && !ended;
+  }
+  // Seasonal: whole days left in the window, counted up (an item leaving tonight says 1 day).
+  function daysLeft(it) {
+    if (!it.available_until) return null;
+    var ms = new Date(it.available_until).getTime() - Date.now();
+    return isFinite(ms) && ms > 0 ? Math.ceil(ms / 864e5) : null;
+  }
   function say(err) { return FG && FG.say ? FG.say(err) : 'Something went wrong. Try again.'; }
   function note(msg, kind) {
     var m = $('mkt-msg');
@@ -102,10 +115,38 @@
     if (b) w.appendChild(b);
     return w;
   }
+  function namePreview(it) {
+    var w = el('div', 'mkt-pv mkt-pv-item');
+    w.setAttribute('aria-hidden', 'true');
+    var n = el('span', 'mkt-pv-name mkt-pv-styled', 'Your name');
+    var S = root.FGShow;
+    if (S && S.nameStyle) S.nameStyle(n, it.id);
+    w.appendChild(n);
+    return w;
+  }
+  // A set: its banner, with the theme's colours and the other parts' marks laid over it.
+  function setPreview(it) {
+    var w = el('div', 'mkt-pv mkt-pv-set');
+    w.setAttribute('aria-hidden', 'true');
+    var parts = Array.isArray(it.parts) ? it.parts : [];
+    var find = function (type) { for (var i = 0; i < parts.length; i++) { var x = byId(parts[i]); if (x && x.type === type) return x; } return null; };
+    var b = find('banner'), f = find('frame'), n = find('name'), g = find('badge');
+    if (b) w.appendChild(bannerPreview(b));
+    var who = el('div', 'mkt-set-who');
+    var av = el('span', 'av', 'L'); if (f) av.setAttribute('data-frame', f.id); who.appendChild(av);
+    var nm = el('span', 'mkt-pv-name', 'Your name'); var S = root.FGShow;
+    if (n && S && S.nameStyle) S.nameStyle(nm, n.id);
+    who.appendChild(nm);
+    if (g && S && S.badge) { var bd = S.badge(g.id); if (bd) who.appendChild(bd); }
+    w.appendChild(who);
+    return w;
+  }
+  function byId(id) { for (var i = 0; i < state.items.length; i++) if (state.items[i].id === id) return state.items[i]; return null; }
   function preview(it, compact) {
     var own = ui('preview'), node = own ? own(it, compact) : null;
     if (node) return node;
-    return it.type === 'banner' ? bannerPreview(it) : it.type === 'frame' ? framePreview(it) : it.type === 'badge' ? badgePreview(it) : themePreview(it, compact);
+    return it.type === 'banner' ? bannerPreview(it) : it.type === 'frame' ? framePreview(it) : it.type === 'badge' ? badgePreview(it)
+      : it.type === 'name' ? namePreview(it) : it.type === 'set' ? setPreview(it) : themePreview(it, compact);
   }
 
   /* ---------- cells ---------- */
@@ -123,14 +164,23 @@
     var row = el('div', 'mkt-acts');
     if (!state.signedIn) return row; // signed out: browse only, the sign-in link is at the top
     var ghost = compact ? 'mkt-mini' : 'btn ghost';
+    if (it.type === 'set') {
+      if (it.owned || priceOf(it) <= 0) row.appendChild(el('span', 'mkt-state', '✓ yours'));
+      else row.appendChild(button(ghost, 'buy set', 'buy', it));
+      return row;
+    }
     if (it.equipped) {
       row.appendChild(el('span', 'mkt-state', '✓ equipped'));
       if (it.type === 'banner') row.appendChild(button('mkt-mini', 'remove banner', 'remove', it, 'remove banner ' + it.name));
+      if (it.type === 'name') row.appendChild(button('mkt-mini', 'plain name', 'remove', it, 'wear a plain name instead of ' + it.name));
     } else if (it.owned) {
       row.appendChild(button(ghost, 'equip', 'equip', it));
+    } else if (it.award) {
+      row.appendChild(el('span', 'mkt-state mkt-earn', it.award === 'founding' ? 'first 100 to top up' : 'earned by topping up'));
     } else {
       row.appendChild(button(ghost, 'buy', 'buy', it));
     }
+    if (giftable(it)) row.appendChild(button('mkt-mini', 'gift', 'gift', it, 'give ' + it.name + ' to another member'));
     return row;
   }
 
@@ -143,9 +193,13 @@
     li.appendChild(preview(it, compact));
     var head = el('div', 'mkt-head');
     head.appendChild(el('h3', 'mkt-name', it.name));
-    head.appendChild(el('span', 'mkt-tag', free ? 'free' : (it.owned ? 'owned' : coins(it.price))));
+    head.appendChild(el('span', 'mkt-tag', free ? 'free' : it.owned ? (it.award ? 'earned' : 'owned')
+      : it.award ? '' : coins(priceOf(it))));
     li.appendChild(head);
     if (!compact && it.description) li.appendChild(el('p', 'mkt-note', it.description));
+    var left = daysLeft(it);
+    if (left) li.appendChild(el('p', 'mkt-season', left === 1 ? 'last day on sale' : 'on sale for ' + left + ' more days'));
+    if (it.type === 'set' && !it.owned && priceOf(it) > 0 && priceOf(it) < it.price) li.appendChild(el('p', 'mkt-season mkt-save', 'instead of ' + coins(it.price)));
     li.appendChild(actions(it, compact));
     var hook = ui('cell');
     if (hook) hook(li, it, state);
@@ -172,7 +226,9 @@
     fill('list-banners', state.items.filter(function (i) { return i.type === 'banner'; }));
     if ($('list-frames')) fill('list-frames', state.items.filter(function (i) { return i.type === 'frame'; }));
     if ($('list-badges')) fill('list-badges', state.items.filter(function (i) { return i.type === 'badge'; }));
-    ['frames', 'badges'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
+    if ($('list-names')) fill('list-names', state.items.filter(function (i) { return i.type === 'name'; }));
+    if ($('list-sets')) fill('list-sets', state.items.filter(function (i) { return i.type === 'set'; }));
+    ['frames', 'badges', 'names', 'sets'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
     $('h-free').hidden = $('list-free').children.length === 0;
     var done = ui('rendered');
     if (done) done(state);
@@ -248,16 +304,16 @@
   function onAct(act, it, btn) {
     if (state.busy) return;
     if (act === 'buy') { openBuy(it, btn); return; }
+    if (act === 'gift') { openBuy(it, btn, true); return; }
     setBusy(true);
     var run = state.run;
     var p = act === 'equip'
       ? equip(it).then(function (r) { if (run === state.run && !r.error) note(it.name + ' is equipped.', 'ok'); return r; })
-      : Promise.resolve(FG.sb.rpc('unequip_slot', { p_slot: 'banner' })).then(function (r) {
+      : Promise.resolve(FG.sb.rpc('unequip_slot', { p_slot: it.type })).then(function (r) {
           if (run !== state.run) return { stale: true };
           if (r.error) return { error: r.error };
-          state.items.forEach(function (x) { if (x.type === 'banner') x.equipped = false; });
-          announce(null);
-          note('Banner removed.', 'ok');
+          state.items.forEach(function (x) { if (x.type === it.type) x.equipped = false; });
+          if (it.type === 'banner') { announce(null); note('Banner removed.', 'ok'); } else note('Your name is plain again.', 'ok');
           return {};
         }, function (e) { return { error: e }; });
     p.then(function (r) {
@@ -274,10 +330,12 @@
   var win = function () { return $('buy').querySelector('.mkt-win'); };
   function dstatus(msg, bad) { var s = $('buy-status'); s.textContent = msg || ''; s.className = 'acct-status' + (bad ? ' bad' : ''); }
 
-  function openBuy(it, trigger) {
+  function openBuy(it, trigger, gift) {
     if(dlg.busy) { note('Your current purchase or equip action is still processing. Wait for its result before choosing another item.'); return; }
-    dlg.item = it; dlg.key = newKey(); dlg.trigger = trigger; dlg.busy = false; dlg.done = false;
-    $('buy-title').textContent = 'buy ' + it.name.toLowerCase();
+    dlg.item = it; dlg.key = newKey(); dlg.trigger = trigger; dlg.busy = false; dlg.done = false; dlg.gift = !!gift;
+    $('buy-title').textContent = (gift ? 'gift ' : 'buy ') + it.name.toLowerCase();
+    var to = $('buy-gift');
+    if (to) { to.hidden = !gift; $('buy-gift-name').value = ''; }
     var pv = $('buy-pv');
     while (pv.firstChild) pv.removeChild(pv.firstChild);
     pv.appendChild(preview(it, false));
@@ -285,16 +343,17 @@
     $('buy-l1').textContent = 'price';
     $('buy-l2').textContent = 'balance now';
     $('buy-l3').textContent = 'balance after';
-    $('buy-price').textContent = coins(it.price);
+    var cost = priceOf(it);
+    $('buy-price').textContent = coins(cost);
     $('buy-now').textContent = coins(state.balance);
-    var after = state.balance - it.price;
+    var after = state.balance - cost;
     $('buy-after').textContent = after >= 0 ? coins(after) : '−' + coins(-after);
     dstatus(after < 0 ? 'You have ' + coins(state.balance) + '. The server decides if this goes through.' : '');
     $('buy-ok').hidden = false; $('buy-ok').disabled = false;
     $('buy-equip').hidden = true; $('buy-cancel').textContent = 'cancel';
     $('buy').hidden = false;
     doc.documentElement.style.overflow = 'hidden';
-    $('buy-ok').focus();
+    if (gift && to) $('buy-gift-name').focus(); else $('buy-ok').focus();
     var opened = ui('buyOpened');
     if (opened) opened(it, state.balance);
   }
@@ -314,14 +373,21 @@
     if (ev && ev.detail > 1) return; // the second click of a double click
     if (dlg.busy || dlg.done || !dlg.item) return;
     var it = dlg.item, key = dlg.key, run = state.run;
+    if (dlg.gift) { confirmGift(it, key, run); return; }
     dlg.busy = true;
     $('buy-ok').disabled = true;
     dstatus('');
-    Promise.resolve(FG.sb.rpc('purchase_item_at_price', { p_item_id: it.id, p_expected_price: it.price, p_idempotency_key: key })).then(function (r) { return r; }, function (e) { return { error: e }; })
+    var call = it.type === 'set'
+      ? FG.sb.rpc('purchase_set', { p_set_id: it.id, p_expected_price: priceOf(it), p_idempotency_key: key })
+      : FG.sb.rpc('purchase_item_at_price', { p_item_id: it.id, p_expected_price: it.price, p_idempotency_key: key });
+    Promise.resolve(call).then(function (r) { return r; }, function (e) { return { error: e }; })
       .then(function (r) {
         if (run !== state.run) return;
         dlg.busy = false;
         if (r.error) { buyFailed(it, r.error); return; }
+        if (it.type === 'set') { // every part is now yours: read the market again, then say so
+          dlg.done = true; closeBuy(); load(); note(it.name + ' is yours: every part is in Owned.', 'ok'); return;
+        }
         var paid = r.data && typeof r.data.price_paid === 'number' ? r.data.price_paid : it.price;
         dlg.done = true;
         it.owned = true;
@@ -342,6 +408,39 @@
         if ($('buy').hidden) note('Bought ' + it.name + ' for ' + coins(paid) + '.', 'ok'); // the dialog was closed while the request ran
         else $('buy-equip').focus();
         refreshWallet();
+      });
+  }
+
+  // A gift: the server checks the name, the price and that they do not have it yet; nothing is equipped for them.
+  function confirmGift(it, key, run) {
+    var name = ($('buy-gift-name').value || '').trim();
+    if (!name) { dstatus('Type their display name, as it shows on their profile.', true); $('buy-gift-name').focus(); return; }
+    dlg.busy = true;
+    $('buy-ok').disabled = true;
+    dstatus('');
+    Promise.resolve(FG.sb.rpc('gift_item', { p_item_id: it.id, p_recipient: name, p_expected_price: it.price, p_idempotency_key: key }))
+      .then(function (r) { return r; }, function (e) { return { error: e }; })
+      .then(function (r) {
+        if (run !== state.run) return;
+        dlg.busy = false;
+        if (r.error) {
+          if (/price changed/i.test(String((r.error && r.error.message) || ''))) { closeBuy(); load(); note('The price changed. Check the updated price before giving it.', 'bad'); return; }
+          dstatus(say(r.error), true); $('buy-ok').disabled = false; return;
+        }
+        dlg.done = true;
+        state.balance = Math.max(0, state.balance - it.price);
+        var who = r.data && typeof r.data.to === 'string' ? r.data.to : name;
+        $('buy-title').textContent = 'sent to ' + who;
+        $('buy-l1').textContent = 'paid'; $('buy-price').textContent = coins(it.price);
+        $('buy-l2').textContent = 'balance'; $('buy-now').textContent = coins(state.balance);
+        $('buy-l3').textContent = ''; $('buy-after').textContent = '';
+        $('buy-gift').hidden = true;
+        dstatus(it.name + ' is in their collection now.');
+        $('buy-ok').hidden = true;
+        $('buy-cancel').textContent = 'close';
+        render();
+        refreshWallet();
+        $('buy-cancel').focus();
       });
   }
 
@@ -380,7 +479,7 @@
   function trap(ev) {
     if (ev.key === 'Escape') { ev.preventDefault(); closeBuy(); return; }
     if (ev.key !== 'Tab') return;
-    var f = Array.prototype.filter.call(win().querySelectorAll('button'), function (b) { return !b.disabled && !b.hidden; });
+    var f = Array.prototype.filter.call(win().querySelectorAll('button,input'), function (b) { return !b.disabled && !b.hidden && !(b.closest && b.closest('[hidden]')); });
     if (!f.length) { ev.preventDefault(); win().focus(); return; }
     var first = f[0], last = f[f.length - 1], at = doc.activeElement;
     if (ev.shiftKey && (at === first || !win().contains(at))) { ev.preventDefault(); last.focus(); }
@@ -399,6 +498,7 @@
     $('buy-cancel').addEventListener('click', closeBuy);
     $('buy').querySelector('[data-close]').addEventListener('click', closeBuy);
     $('buy').addEventListener('keydown', trap);
+    if ($('buy-gift-name')) $('buy-gift-name').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); confirmBuy(); } });
     if (!FG || !FG.ready) { unavailable(); return; }
     FG.ready.then(function () {
       if (!FG.sb) { unavailable(); return; }

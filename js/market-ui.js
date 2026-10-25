@@ -19,9 +19,10 @@
   var SLOT = ['palette', 'header', 'navigation', 'hero', 'cards', 'charts', 'controls', 'overlays', 'menus', 'decoration'];
   var APP = [
     { id: 'nile-nocturne', line: 'Egyptian night river. Deep water, one glowing current.' },
-    { id: 'royal-obsidian-gold', line: 'Basalt and gold. Quiet luxury for tracking what you own.' }
+    { id: 'royal-obsidian-gold', line: 'Basalt and gold. Quiet luxury for tracking what you own.' },
+    { id: 'nile-papyrus-guilloche', line: 'Papyrus fibres, a guilloché rosette and one slow gold thread along the header.' }
   ];
-  var VIEWS = [['themes', 'Themes'], ['banners', 'Banners'], ['frames', 'Frames'], ['badges', 'Badges'], ['owned', 'Owned']];
+  var VIEWS = [['themes', 'Themes'], ['sets', 'Sets'], ['banners', 'Banners'], ['frames', 'Frames'], ['names', 'Names'], ['badges', 'Badges'], ['owned', 'Owned']];
 
   var ms = null;            // the market's state, handed over on every render
   var view = 'themes';
@@ -62,7 +63,7 @@
   // a theme's tier (guideline/themes.md section 7): from the catalog, else from the seed
   function tierOf(it) { if (it.tier) return it.tier; var t = siteTheme(it.id); return t && t.tex ? 'texture' : 'palette'; }
   var TIER_WORD = { palette: 'Palette', texture: 'Textured', motion: 'Animated' };
-  function coinsWord(n) { return n + (n === 1 ? ' coin' : ' coins'); }
+  function coinsWord(n) { return Number(n).toLocaleString('en-US') + (n === 1 ? ' coin' : ' coins'); }
   function siteTheme(id) { var l = (LG && LG.THEMES) || []; for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
   function items(type) { return ms ? ms.items.filter(function (i) { return i.type === type; }) : []; }
   function equippedOf(type) { var l = items(type); for (var i = 0; i < l.length; i++) if (l[i].equipped) return l[i]; return null; }
@@ -81,7 +82,7 @@
   /* ---------- the page around the cells ---------- */
   function sections() {
     var get = function (id) { var l = $(id); return l ? l.closest('.mkt-sec') : null; };
-    return { themes: get('list-themes'), banners: get('list-banners'), frames: get('list-frames'), badges: get('list-badges') };
+    return { themes: get('list-themes'), sets: get('list-sets'), banners: get('list-banners'), frames: get('list-frames'), names: get('list-names'), badges: get('list-badges') };
   }
 
   function build() {
@@ -193,6 +194,9 @@
     $('h-textured').hidden = !$('list-textured').querySelector('.mkt-cell:not([hidden])');
     $('h-palettes').hidden = !$('list-themes').querySelector('.mkt-cell:not([hidden])');
     $('mkt-tiers').hidden = view !== 'themes';
+    if ($('mkt-vote')) $('mkt-vote').hidden = view !== 'themes' || !poll;
+    if ($('mkt-gifts')) $('mkt-gifts').hidden = view !== 'owned' || !$('mkt-gifts').getAttribute('data-has');
+    if ($('mkt-supporter')) $('mkt-supporter').hidden = !$('mkt-supporter').firstChild;
     $('mkt-empty').hidden = any;
   }
 
@@ -203,7 +207,7 @@
     var pick = function (type) { return lookOverride[type] !== undefined ? lookOverride[type] : (equippedOf(type) || {}).id; };
     while (card.firstChild) card.removeChild(card.firstChild);
     var name = me && me.display_name ? me.display_name : (ms && ms.signedIn ? 'You' : 'Your name');
-    card.appendChild(PV.profile({ name: name, banner: pick('banner'), frame: pick('frame'), badge: pick('badge') }));
+    card.appendChild(PV.profile({ name: name, banner: pick('banner'), frame: pick('frame'), badge: pick('badge'), nameStyle: pick('name') }));
     var th = trying && trying.kind === 'theme' ? trying : null, eq = equippedOf('theme');
     var line = doc.querySelector('.mkt-look-line');
     line.textContent = th ? 'Trying ' + th.name + ' for this visit.' : ms && ms.signedIn
@@ -249,8 +253,8 @@
     var feat = $('mkt-feat');
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
-    add(feat, [el('h3', 'mkt-sub', ui('Coming to the app')), el('p', 'mkt-feat-why', MAIN ? 'Two themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
-      : 'Two app themes in testing, cosmetics/nile-nocturne.json and cosmetics/royal-obsidian-gold.json, checked against cosmetics/slots.json. Try them here; a price comes when the app can wear them.')]);
+    add(feat, [el('h3', 'mkt-sub', ui('Coming to the app')), el('p', 'mkt-feat-why', MAIN ? 'Three themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
+      : 'Three app themes in testing, in cosmetics/*.json, checked against cosmetics/slots.json. Try them here; a price comes when the app can wear them.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
       var e = appEntry(m);
@@ -271,11 +275,19 @@
   }
 
   /* ---------- cells: Try it and Details ---------- */
-  var WORDS = { 'buy': 'Buy', 'equip': 'Equip', 'remove banner': 'Remove banner', '✓ equipped': '✓ Equipped', 'owned': 'Owned', 'free': 'Free' };
+  var WORDS = { 'buy': 'Buy', 'equip': 'Equip', 'remove banner': 'Remove banner', '✓ equipped': '✓ Equipped', 'owned': 'Owned', 'free': 'Free',
+    'buy set': 'Buy set', 'gift': 'Gift', 'plain name': 'Plain name', '✓ yours': '✓ Yours', 'earned': 'Earned', 'earned by topping up': 'Earned by topping up', 'first 100 to top up': 'First 100 to top up' };
   function cellHook(li, it) {
     var acts = li.querySelector('.mkt-acts');
     // Part B writes sentence case; the shared cells come in For Geeks' lower case
     if (MAIN) Array.prototype.forEach.call(li.querySelectorAll('.mkt-acts button,.mkt-state,.mkt-tag'), function (n) { if (WORDS[n.textContent]) n.textContent = WORDS[n.textContent]; });
+    if (MAIN) Array.prototype.forEach.call(li.querySelectorAll('.mkt-season'), function (n) { n.textContent = n.textContent.charAt(0).toUpperCase() + n.textContent.slice(1); });
+    if (it.type === 'set') { // a set is bought whole: its price in EGP too, no try-on
+      var st0 = li.querySelector('.mkt-tag');
+      if (st0 && !it.owned && Number(it.set_price) > 0) { while (st0.firstChild) st0.removeChild(st0.firstChild); st0.appendChild(priced(Number(it.set_price))); }
+      var sb = acts.querySelector('[data-act="buy"]'); if (sb) sb.classList.add('mkt-buy');
+      return;
+    }
     var buy = acts.querySelector('[data-act="buy"]');
     if (buy) buy.classList.add('mkt-buy');
     if (it.is_default && it.type === 'theme') return;
@@ -287,7 +299,8 @@
       btn('mkt-mini mkt-try-btn', 'Try it', function () { tryOn(e); }, 'Try ' + it.name),
       btn('mkt-mini ghost', 'Details', function (ev) { openDetail(e, ev.currentTarget); }, it.name + ' details')]);
     var tag = li.querySelector('.mkt-tag');
-    if (tag && !it.owned && it.price > 0) { while (tag.firstChild) tag.removeChild(tag.firstChild); tag.appendChild(priced(it.price)); }
+    if (tag && !it.owned && it.price > 0 && !it.award) { while (tag.firstChild) tag.removeChild(tag.firstChild); tag.appendChild(priced(it.price)); }
+    if (it.tier === 'motion' && it.type !== 'theme') li.insertBefore(el('span', 'mkt-tier mkt-tier-motion', ui('Animated')), li.querySelector('.mkt-head'));
   }
 
   /* ---------- Try it ---------- */
@@ -457,7 +470,7 @@
       parts.appendChild(el('h3', 'mkt-parts-h', ui('What this theme changes')));
       var dl = el('dl', 'mkt-parts-list');
       PARTS.forEach(function (name, i) {
-        var changes = e.app ? !!e.app.parts[SLOT[i]] && !(SLOT[i] === 'decoration') : i === 9 ? !!e.tex : i < 9 && i !== 3;
+        var changes = e.app ? !!e.app.parts[SLOT[i]] && (SLOT[i] !== 'decoration' || e.app.parts.decoration.pattern !== 'none' || e.app.parts.decoration.motion !== 'none') : i === 9 ? !!e.tex : i < 9 && i !== 3;
         add(dl, [add(el('div', changes ? 'on' : null), [el('dt', null, name), el('dd', null, changes ? 'changes' : 'stays')])]);
       });
       parts.appendChild(dl);
@@ -535,6 +548,96 @@
   }
   function buyClosed() { var s = $('buy-short'); if (s) s.hidden = true; }
 
+  /* ---------- supporters: earned badges, the theme vote, gifts received ---------- */
+  var extrasRun = null, poll = null;
+  function rpcData(name) {
+    return FG && FG.sb ? Promise.resolve(FG.sb.rpc(name)).then(function (r) { return r && !r.error ? r.data : null; }, function () { return null; }) : Promise.resolve(null);
+  }
+  function loadExtras(state) {
+    if (extrasRun === state.run) return;
+    extrasRun = state.run;
+    var run = state.run;
+    rpcData('supporter_status').then(function (s) { if (run === extrasRun) drawSupporter(s, state); });
+    rpcData('theme_poll').then(function (p) { if (run === extrasRun) { poll = p; drawVote(); } });
+    if (state.signedIn) rpcData('my_gifts').then(function (g) { if (run === extrasRun) drawGifts(g); }); else drawGifts(null);
+  }
+  // Badges tab: how far this member is from the next supporter badge, and how many Founding places are left.
+  function drawSupporter(s, state) {
+    var box = $('mkt-supporter');
+    if (!box) return;
+    while (box.firstChild) box.removeChild(box.firstChild);
+    if (!s || !Array.isArray(s.tiers)) { box.hidden = true; return; }
+    var got = Number(s.topped_up_coins) || 0, next = s.tiers.filter(function (t) { return !t.owned; })[0];
+    var line = el('p', 'mkt-sup-line');
+    if (!state.signedIn) line.textContent = MAIN ? 'Top up once and a supporter badge is yours. It grows with you: Bronze, Silver, then Gold.' : 'top up once and a supporter badge is yours: bronze, silver, then gold.';
+    else if (next) add(line, [el('b', null, coinsWord(got) + ' topped up. '), el('span', null, next.name + ' at ' + coinsWord(next.coins) + ': ' + coinsWord(next.coins - got) + ' to go.')]);
+    else line.textContent = 'Gold supporter. Thank you for keeping Lightning free.';
+    var top = s.tiers.length ? s.tiers[s.tiers.length - 1].coins : 1;
+    var meter = el('div', 'mkt-sup-meter');
+    meter.setAttribute('role', 'meter'); meter.setAttribute('aria-label', 'Coins topped up toward Gold supporter');
+    meter.setAttribute('aria-valuemin', '0'); meter.setAttribute('aria-valuemax', String(top)); meter.setAttribute('aria-valuenow', String(Math.min(got, top)));
+    var fill = el('i'); fill.style.width = Math.min(100, Math.round(got / top * 100)) + '%'; meter.appendChild(fill);
+    var legend = el('p', 'mkt-sup-legend');
+    s.tiers.forEach(function (t) {
+      var tick = el('span', 'mkt-sup-tick' + (t.owned ? ' on' : '')); tick.style.left = Math.round(t.coins / top * 100) + '%'; meter.appendChild(tick);
+      legend.appendChild(el(t.owned ? 'b' : 'span', null, ui(t.name.split(' ')[0]) + ' ' + Number(t.coins).toLocaleString('en-US')));
+    });
+    var found = el('p', 'mkt-sup-found', s.founding_owned ? 'You are a Founding supporter: one of the first 100.'
+      : Number(s.founding_left) > 0 ? 'Founding supporter: ' + s.founding_left + ' of 100 places left, for the first members to top up.' : 'All 100 Founding supporter places are taken.');
+    var go = state.signedIn && next ? link('topup.html', 'Top up') : null;
+    if (!MAIN) { found.textContent = found.textContent.toLowerCase(); if (go) go.href = 'topup.html'; }
+    add(box, [line, meter, legend, found, go]);
+    box.hidden = false;
+  }
+  // Themes tab, last: supporters choose the next theme. Everyone sees the count.
+  function drawVote() {
+    var sec = sections().themes, box = $('mkt-vote');
+    if (!sec) return;
+    if (!box) { box = el('section', 'mkt-vote'); box.id = 'mkt-vote'; box.setAttribute('aria-labelledby', 'vote-h'); sec.appendChild(box); }
+    while (box.firstChild) box.removeChild(box.firstChild);
+    if (!poll || !Array.isArray(poll.options) || !poll.options.length) { box.hidden = true; return; }
+    var h = el('h3', 'mkt-sub', ui('Choose the next theme')); h.id = 'vote-h';
+    var total = poll.options.reduce(function (a, o) { return a + (Number(o.votes) || 0); }, 0);
+    var ul = el('ul', 'mkt-vote-list');
+    poll.options.forEach(function (o) {
+      var n = Number(o.votes) || 0, li = el('li', 'mkt-vote-opt' + (poll.my_vote === o.id ? ' mine' : ''));
+      var bar = el('i', 'mkt-vote-bar'); bar.style.width = (total ? Math.round(n / total * 100) : 0) + '%';
+      add(li, [add(el('div', 'mkt-vote-text'), [el('b', null, o.name), el('span', null, o.description)]), bar, el('span', 'mkt-vote-n', n + (n === 1 ? ' vote' : ' votes'))]);
+      if (poll.can_vote) {
+        var b = btn('mkt-mini', poll.my_vote === o.id ? 'Your vote' : 'Vote', function () {
+          b.disabled = true;
+          Promise.resolve(FG.sb.rpc('vote_theme', { p_option: o.id })).then(function (r) { if (!r.error && r.data) { poll = r.data; drawVote(); } else b.disabled = false; }, function () { b.disabled = false; });
+        }, 'Vote for ' + o.name);
+        if (poll.my_vote === o.id) b.disabled = true;
+        li.appendChild(b);
+      }
+      ul.appendChild(li);
+    });
+    var why = el('p', 'mkt-vote-why', poll.can_vote ? (MAIN ? 'Supporters choose. You can change your vote until the theme ships.' : 'supporters choose. you can change your vote until the theme ships.')
+      : (MAIN ? 'Supporters choose: top up once to earn a supporter badge and a vote.' : 'supporters choose: top up once to earn a supporter badge and a vote.'));
+    add(box, [h, why, ul]);
+    box.hidden = view !== 'themes';
+  }
+  // Owned tab, first: what other members gave you.
+  function drawGifts(g) {
+    var box = $('mkt-gifts');
+    if (!box) {
+      box = el('section', 'mkt-gifts'); box.id = 'mkt-gifts'; box.setAttribute('aria-labelledby', 'gifts-h');
+      var tabs = doc.querySelector('.mkt-tabs'); if (!tabs) return;
+      tabs.parentNode.insertBefore(box, tabs.nextSibling);
+    }
+    while (box.firstChild) box.removeChild(box.firstChild);
+    var got = g && Array.isArray(g.received) ? g.received : [];
+    box.setAttribute('data-has', got.length ? '1' : '');
+    if (got.length) {
+      var h = el('h2', 'mkt-sub', ui('Gifts for you')); h.id = 'gifts-h';
+      var ul = el('ul', 'mkt-gift-list');
+      got.slice(0, 8).forEach(function (x) { var li = el('li'); add(li, [el('b', null, x.item), el('span', null, (MAIN ? 'From ' : 'from ') + x.from)]); ul.appendChild(li); });
+      add(box, [h, ul]);
+    }
+    box.hidden = view !== 'owned' || !got.length;
+  }
+
   /* ---------- hooks for js/forgeeks-market.js ---------- */
   root.MarketUI = {
     preview: function (it, compact) {
@@ -562,6 +665,7 @@
         if (it && tierOf(it) === 'texture') tex.appendChild(li);
       });
       drawTiers(state);
+      loadExtras(state);
       arrange();
       drawLook();
       syncSkin(false);

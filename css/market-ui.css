@@ -210,3 +210,45 @@ body:not([data-main-store]) .mkt-wallet .mkt-bar .chip b{font-size:16px;font-wei
 body[data-main-store] .mkt-cell:not(.compact){transition:transform .2s,box-shadow .2s}
 body[data-main-store] .mkt-cell:not(.compact):hover{transform:translateY(-2px);box-shadow:var(--shadow)}
 @media (prefers-reduced-motion:reduce){body[data-main-store] .mkt-cell:not(.compact){transition:none}body[data-main-store] .mkt-cell:hover{transform:none}}
+
+/* Supporter release: seasonal days left, sets, names, earned badges, the theme vote and gifts. Same tokens, both sites. */
+.mkt-season{margin:0;color:var(--mk-ink);font:var(--mk-b) 13px var(--mk-font)}
+.mkt-season::before{content:"";display:inline-block;width:6px;height:6px;margin-inline-end:8px;border-radius:50%;background:var(--mk-accent);vertical-align:.12em}
+.mkt-save{color:var(--mk-dim);font-weight:500;text-decoration:line-through}
+.mkt-save::before{display:none}
+.mkt-earn{color:var(--mk-dim)!important}
+.mkt-pv-styled{font:var(--mk-xb) 22px/1.2 var(--mk-head)}
+.mkt-pv-set{position:relative;display:grid;align-content:end;min-height:120px;padding:0;overflow:hidden;border:1px solid var(--mk-line);border-radius:calc(var(--mk-card) / 2)}
+.mkt-pv-set .fg-banner{position:absolute;inset:0;height:auto;border:0;border-radius:0}
+.mkt-set-who{position:relative;display:flex;align-items:center;gap:10px;margin:12px;padding:8px 12px;border-radius:var(--mk-pill);background:var(--mk-panel);justify-self:start}
+.mkt-set-who .mkt-pv-name{font:var(--mk-b) 14px var(--mk-font);color:var(--mk-ink)}
+.mkt-set-who .av{width:28px;height:28px;border-radius:50%;font-size:12px}
+.mkt-supporter{display:grid;gap:12px;margin:0 0 22px;padding:18px 20px;border:1px solid var(--mk-line);border-radius:var(--mk-card);background:var(--mk-panel)}
+.mkt-sup-line,.mkt-sup-found{margin:0;color:var(--mk-dim);font:500 14px/1.5 var(--mk-font)}
+.mkt-sup-line b{color:var(--mk-ink);font-weight:var(--mk-b)}
+.mkt-sup-meter{position:relative;height:8px;margin:6px 0 0;border-radius:999px;background:var(--mk-well)}
+.mkt-sup-meter>i{display:block;height:100%;border-radius:inherit;background:var(--mk-accent)}
+.mkt-sup-tick{position:absolute;top:-3px;width:2px;height:14px;translate:-1px 0;border-radius:1px;background:var(--mk-dim)}
+.mkt-sup-tick.on{background:var(--mk-accent)}
+.mkt-sup-legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0;color:var(--mk-dim);font:500 13px var(--mk-font)}
+.mkt-sup-legend b{color:var(--mk-ink);font-weight:var(--mk-b)}
+.mkt-supporter .mkt-link{justify-self:start}
+.mkt-vote{margin-top:36px}
+.mkt-vote-why{margin:0 0 14px;color:var(--mk-dim);font:500 14px/1.5 var(--mk-font)}
+.mkt-vote-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.mkt-vote-opt{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--mk-line);border-radius:calc(var(--mk-card) / 2);background:var(--mk-panel);overflow:hidden;isolation:isolate}
+.mkt-vote-opt.mine{border-color:var(--mk-accent)}
+.mkt-vote-text{display:grid;gap:2px}
+.mkt-vote-text b{color:var(--mk-ink);font:var(--mk-b) 15px var(--mk-font)}
+.mkt-vote-text span{color:var(--mk-dim);font:500 13px var(--mk-font)}
+.mkt-vote-bar{position:absolute;inset:0 auto 0 0;z-index:-1;background:color-mix(in srgb,var(--mk-accent) 12%,transparent)}
+.mkt-vote-n{color:var(--mk-ink);font:var(--mk-b) 14px var(--mk-font);font-variant-numeric:tabular-nums}
+.mkt-gifts{margin:0 0 24px}
+.mkt-gift-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.mkt-gift-list li{display:grid;gap:2px;padding:12px 16px;border:1px solid var(--mk-line);border-radius:calc(var(--mk-card) / 2);background:var(--mk-panel)}
+.mkt-gift-list b{color:var(--mk-ink);font:var(--mk-b) 14px var(--mk-font)}
+.mkt-gift-list span{color:var(--mk-dim);font:500 13px var(--mk-font)}
+.mkt-gift-to{display:grid;gap:6px;margin:0 0 12px;color:var(--mk-ink);font:var(--mk-b) 14px var(--mk-font)}
+.mkt-gift-to input{min-height:44px;padding:0 14px;border:1px solid var(--mk-line);border-radius:var(--mk-pill);background:var(--mk-well);color:var(--mk-ink);font:500 15px var(--mk-font)}
+@media (max-width:640px){.mkt-vote-opt{grid-template-columns:minmax(0,1fr) auto}.mkt-vote-opt .mkt-mini{grid-column:1/-1;justify-self:start}}
+.mkt-tag:empty{display:none}

@@ -154,6 +154,8 @@
     current = p;
     doc.title = p.display_name + SUFFIX;
     $('pf-name').textContent = p.display_name;
+    $('pf-name').removeAttribute('data-name-style');
+    if (S.nameStyle) S.nameStyle($('pf-name'), p.name_item_id);
     var oldBadge = $('pf-name').parentNode.querySelector('.fg-badge');
     if (oldBadge) oldBadge.remove();
     var pb = S.badge(p.badge_item_id);

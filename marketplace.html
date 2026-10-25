@@ -5,12 +5,12 @@
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/forgeeks-account.css">
 <link rel="stylesheet" href="css/forgeeks-rewards.css">
-<link rel="stylesheet" href="css/forgeeks-cosmetics.css?v=20261025-table-2">
+<link rel="stylesheet" href="css/forgeeks-cosmetics.css?v=20261025-supporter-1">
 <link rel="stylesheet" href="css/forgeeks-market.css">
-<link rel="stylesheet" href="css/theme-preview.css?v=20261025-tiers-1">
-<link rel="stylesheet" href="css/market-ui.css?v=20261025-tiers-1">
+<link rel="stylesheet" href="css/theme-preview.css?v=20261025-supporter-1">
+<link rel="stylesheet" href="css/market-ui.css?v=20261025-supporter-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">
-<link rel="stylesheet" href="css/site-community.css?v=20261025-table-2">
+<link rel="stylesheet" href="css/site-community.css?v=20261025-supporter-1">
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <script src="js/theme.js"></script></head>
 <body data-account-page="account.html" data-main-store="true"><div class="d-bar">
@@ -55,6 +55,12 @@
             <ul class="mkt-free" id="list-free" aria-labelledby="h-free"></ul>
           </section>
 
+          <section class="mkt-sec" id="sec-sets" aria-labelledby="h-sets" hidden>
+            <h2 id="h-sets">sets</h2>
+            <p class="why">A theme, a banner, a frame and a fourth piece that belong together, for 80% of the parts you do not own yet.</p>
+            <ul class="mkt-grid sets" id="list-sets"></ul>
+          </section>
+
           <section class="mkt-sec" aria-labelledby="h-banners">
             <h2 id="h-banners">Banners</h2>
             <p class="why">A strip across the top of your profile and your account page. No text, no links.</p>
@@ -67,9 +73,16 @@
             <ul class="mkt-grid frames" id="list-frames"></ul>
           </section>
 
+          <section class="mkt-sec" id="sec-names" aria-labelledby="h-names" hidden>
+            <h2 id="h-names">names</h2>
+            <p class="why">Your display name in a colour of its own on your profile, the leaderboard and members. Still readable in light and dark.</p>
+            <ul class="mkt-grid names" id="list-names"></ul>
+          </section>
+
           <section class="mkt-sec" id="sec-badges" aria-labelledby="h-badges" hidden>
             <h2 id="h-badges">Badges</h2>
-            <p class="why">A small mark beside your name. Looks only: it never changes your rank.</p>
+            <p class="why">A small mark beside your name. Looks only: it never changes your rank. Supporter badges are earned by topping up, never sold.</p>
+            <div class="mkt-supporter" id="mkt-supporter" hidden></div>
             <ul class="mkt-grid badges" id="list-badges"></ul>
           </section>
         </div>
@@ -87,6 +100,7 @@
       <div><dt id="buy-l2">balance now</dt><dd id="buy-now"></dd></div>
       <div><dt id="buy-l3">balance after</dt><dd id="buy-after"></dd></div>
     </dl>
+    <label class="mkt-gift-to" id="buy-gift" hidden>their display name<input id="buy-gift-name" type="text" autocomplete="off" maxlength="40"></label>
     <p class="acct-status" id="buy-status" role="status"></p>
     <div class="row">
       <button class="btn" id="buy-ok" type="button">confirm</button>
@@ -100,13 +114,13 @@
 
 <script src="js/vendor/supabase-2.118.0.js"></script>
 <script src="js/forgeeks-config.js"></script>
-<script src="js/forgeeks-auth.js?v=20261025-reaudit-1"></script>
+<script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>
 <script src="js/site-theme-previews.js"></script>
-<script src="js/forgeeks-showcase.js"></script>
-<script src="js/theme-preview.js?v=20261025-tiers-1"></script>
+<script src="js/forgeeks-showcase.js?v=20261025-supporter-1"></script>
+<script src="js/theme-preview.js?v=20261025-supporter-1"></script>
 <script src="js/cosmetic-parts.js"></script>
-<script src="js/market-ui.js?v=20261025-tiers-1"></script>
-<script src="js/forgeeks-market.js?v=20261025-shop-1"></script>
+<script src="js/market-ui.js?v=20261025-supporter-1"></script>
+<script src="js/forgeeks-market.js?v=20261025-supporter-1"></script>
 <script src="js/activation-codes.js"></script>
 <script src="js/site-words.js"></script><script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script>
 </body></html>

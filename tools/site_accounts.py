@@ -50,7 +50,7 @@ def build():
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
         # the market's own files change often: a version so browsers fetch the new copy
-        SHOP='?v=20261025-tiers-1'
+        SHOP='?v=20261025-supporter-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
         scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
@@ -93,12 +93,12 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
         text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-ticket-1\2', text)
-        text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-table-2\2', text)
-        text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-shop-1\2', text)
+        text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js|js/forgeeks-showcase[.]js|js/forgeeks-profile[.]js|js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
+        text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/admin-operations[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)

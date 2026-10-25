@@ -184,8 +184,10 @@
     b.setAttribute('aria-hidden', 'true');
     var av = el('span', 'av lg', (opts.name || 'Y').trim().charAt(0).toUpperCase() || 'Y');
     if (opts.frame && ID.test(opts.frame)) av.setAttribute('data-frame', opts.frame);
-    var who = add(el('div', 'pv-who'), [el('b', 'pv-name', opts.name || 'Your name')]);
+    var nm = el('b', 'pv-name', opts.name || 'Your name');
     var S = root.FGShow;
+    if (opts.nameStyle && ID.test(opts.nameStyle) && S && S.nameStyle) S.nameStyle(nm, opts.nameStyle);
+    var who = add(el('div', 'pv-who'), [nm]);
     if (opts.badge && ID.test(opts.badge) && S && S.badge) { var bd = S.badge(opts.badge); if (bd) who.appendChild(bd); }
     add(c, [b, add(el('div', 'pv-id'), [av, who])]);
     return c;

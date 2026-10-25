@@ -46,6 +46,7 @@
     var td = S.el('td', 'nm-c');
     var a = S.el(sample ? 'span' : 'a', 'nm', r.display_name);
     if (!sample) a.href = S.profileHref(r.display_name);
+    if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     td.appendChild(a);
     tr.appendChild(td);
     tr.appendChild(S.el('td', 'ct', S.num(Number(r.contribution_count) || 0)));
@@ -58,12 +59,13 @@
     'Farida Nabil', 'Ziad Ashraf', 'Laila Hassan', 'Ahmed Tarek', 'Malak Sherif', 'Hassan Wael', 'Rana Magdy', 'Mostafa Said',
     'Jana Ibrahim', 'Adham Reda', 'Yasmin Gamal', 'Seif Amr', 'Hana Lotfy', 'Marwan Ehab', 'Dina Kamal', 'Tamer Fouad', 'Aya Mahmoud'];
   var SAMPLE_BANNERS = ['banner-dusk', 'banner-blueprint', null, 'banner-borealis', 'banner-circuit', null, 'banner-dunes', 'banner-halo', null];
+  var SAMPLE_NAMES_STYLE = ['name-shimmer', null, 'name-gold', null, 'name-nile', null, null, 'name-sunset', null, null];
   function sampleBoard(p) {
     var n = p === 'month' ? 14 : SAMPLE_NAMES.length, rows = [], score = p === 'month' ? 420 : 3150;
     for (var i = 0; i < n; i++) {
       var name = SAMPLE_NAMES[(i * 7 + (p === 'month' ? 3 : 0)) % SAMPLE_NAMES.length];
       var count = Math.max(1, Math.round(score / (p === 'month' ? 60 : 85)));
-      rows.push({ display_name: name, contribution_count: count, score: score, banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length] });
+      rows.push({ display_name: name, contribution_count: count, score: score, banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length], name_item_id: SAMPLE_NAMES_STYLE[i % SAMPLE_NAMES_STYLE.length] });
       score = Math.max(10, score - (i % 3 === 1 ? 0 : (p === 'month' ? 30 : 130) - i * 2));
     }
     // equal scores share a rank, as the server ranks them
@@ -141,6 +143,7 @@
     var h = S.el('h3', 'mc-name');
     var a = S.el('a', '', r.display_name);
     a.href = S.profileHref(r.display_name);
+    if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     var mb = S.badge(r.badge_item_id);
     if (mb) a.appendChild(mb);
     h.appendChild(a);
