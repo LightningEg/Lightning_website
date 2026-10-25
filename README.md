@@ -4,7 +4,7 @@ The marketing site for **Lightning**, a personal wealth app made in Egypt.
 
 > Study Your Patterns. Control Your Future.
 
-Built in the **Meadow** identity: meadow green for growth, azure for clarity, and a deep Nile anchor for actions. Headings and big numbers use Bricolage Grotesque; text and figures use Manrope; on Arabic pages Readex Pro shows and Noto Sans Arabic reads. Open the [Lightning guideline](guideline/) (3.33, three documents in `guideline/`) for the complete system: [app.html](guideline/app.html) is Part A, the app, [website.html](guideline/website.html) is Part B, this site, and [phone.html](guideline/phone.html) is Part C, the app on a phone. `app-ar.html`, `website-ar.html` and `phone-ar.html` are the same three documents in Egyptian Arabic: same sections, layout and drawings, mirrored right to left. The English documents stay the authority, except the Arabic type (B04) and words (B10) in `website-ar.html`, which govern the Arabic pages; change both copies, here and in the app repository.
+Built in the **Meadow** identity: meadow green for growth, azure for clarity, and a deep Nile anchor for actions. Headings and big numbers use Bricolage Grotesque; text and figures use Manrope; on Arabic pages Readex Pro shows and Noto Sans Arabic reads. Open the [Lightning guideline](guideline/) (3.34, four documents in `guideline/`) for the complete system: [app.html](guideline/app.html) is Part A, the app, [website.html](guideline/website.html) is Part B, this site, and [phone.html](guideline/phone.html) is Part C, the app on a phone. `app-ar.html`, `website-ar.html` and `phone-ar.html` are the same three documents in Egyptian Arabic: same sections, layout and drawings, mirrored right to left. The English documents stay the authority, except the Arabic type (B04) and words (B10) in `website-ar.html`, which govern the Arabic pages; change both copies, here and in the app repository.
 
 ## Licence
 
@@ -99,7 +99,7 @@ Account and marketplace are available as main-site surfaces at `account.html` an
 
 ## Proposed community features
 
-[For Geeks accounts, Lightning Coins and cosmetics](docs/proposals/forgeeks-accounts-lightning-coins.md) records the proposed member access, per-issue rewards, leaderboard and cosmetics marketplace, with implementation milestones and open decisions. Status: built. Member pages: `forgeeks-account.html`, `forgeeks-tasks.html`, `forgeeks-market.html`, `forgeeks-leaderboard.html` (indexed), `forgeeks-profile.html`, `forgeeks-admin.html` (owner); shared sign-in `js/forgeeks-auth.js`; database and setup in `supabase/`.
+[For Geeks accounts, Lightning Coins and cosmetics](docs/proposals/forgeeks-accounts-lightning-coins.md) records the requirements, implementation and remaining owner decisions for member access, per-issue rewards, the leaderboard and cosmetics marketplace. Website infrastructure is built and the production database migrations are applied; payment details and native claim/render acceptance remain launch gates. Member pages: `forgeeks-account.html`, `forgeeks-tasks.html`, `forgeeks-market.html`, `forgeeks-leaderboard.html` (indexed), `forgeeks-profile.html`, `forgeeks-admin.html` (owner); shared sign-in `js/forgeeks-auth.js`; database and setup in `supabase/`.
 
 ## Run it locally
 
