@@ -182,3 +182,7 @@ body[data-main-store] .lb-row.has-banner .nm,body[data-main-store] .lb-row.has-b
 .wal-packs em{font:700 12px var(--body);font-style:normal;color:var(--green-text)}
 .wal-packs em:empty{display:none}
 @media(max-width:640px){.wal-packs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wal-hint{display:block;margin:4px 0 0;color:var(--muted);font:500 13px/1.5 var(--body)}
+#topup-details dt{color:var(--muted);font:700 13px var(--body)}
+#topup-details dd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:700 16px var(--body);color:var(--ink)}
+#topup-details dd .btn{margin:0;min-height:36px;height:36px}

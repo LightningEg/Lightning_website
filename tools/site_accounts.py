@@ -94,12 +94,12 @@ def connect_public_pages():
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
         text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
-        text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
-        text=re.sub(r'(js/topup[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-tiers-1\2', text)
+        text=re.sub(r'(js/topup[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-ticket-1\2', text)
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-shop-1\2', text)
-        text=re.sub(r'(css/(?:site-account|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
-        text=re.sub(r'(js/(?:admin-operations|store-admin)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
+        text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/admin-operations[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
