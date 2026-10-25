@@ -190,8 +190,13 @@
     state.busy = on;
     Array.prototype.forEach.call(doc.querySelectorAll('.mkt-cell button'), function (b) { b.disabled = on; });
   }
+  // Tell the page's banner strip (js/site-banner.js) that the equipped banner changed.
+  function announce(id) {
+    try { doc.dispatchEvent(new root.CustomEvent('lightning:banner', { detail: id })); } catch (e) {}
+  }
   function mark(it) {
     state.items.forEach(function (x) { if (x.type === it.type) x.equipped = x.id === it.id; });
+    if (it.type === 'banner') announce(it.id);
   }
 
   function equip(it) {
@@ -212,6 +217,7 @@
       : Promise.resolve(FG.sb.rpc('unequip_slot', { p_slot: 'banner' })).then(function (r) {
           if (r.error) return { error: r.error };
           state.items.forEach(function (x) { if (x.type === 'banner') x.equipped = false; });
+          announce(null);
           note('Banner removed.', 'ok');
           return {};
         }, function (e) { return { error: e }; });

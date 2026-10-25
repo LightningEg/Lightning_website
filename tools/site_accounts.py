@@ -8,9 +8,17 @@ ROOT=Path(__file__).resolve().parents[1]
 def build():
     home=(ROOT/'index.html').read_text()
     nav=re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>',home,re.S).group().replace(' aria-current="page"','')
-    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace')]:
+    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace'),('leaderboard','forgeeks-leaderboard','Lightning leaderboard')]:
         text=(ROOT/(src+'.html')).read_text()
         main=re.search(r'<main\b.*?</main>',text,re.S).group()
+        if name=='leaderboard':
+            main=main.replace('The people who <span class="hi">build Lightning.</span>','The people who build Lightning.')
+            main=main.replace('Meet the <span class="hi">members.</span>','Meet the members.').replace('Want your name <span class="hi">here.</span>','Want your name here.')
+            main=main.replace('<span class="k">$</span> ','').replace('forgeeks-account.html','account.html').replace('forgeeks-guide.html','contribute.html')
+            main=main.replace('</main>\n\n</main>','</main>')
+        # The banner a member equipped, drawn above the page heading (js/site-banner.js).
+        if name in ('account','marketplace'):
+            main=main.replace('<div class="wrap">','<div class="wrap"><div class="fg-banner site-banner" data-banner-strip aria-hidden="true" hidden></div>',1)
         # Market purchase dialog lives after the For Geeks footer.
         dialog=''
         if name=='marketplace':
@@ -18,19 +26,25 @@ def build():
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. <a href="topup.html">Top up your wallet</a> and browse website themes and banners below. App themes and badges, PC/phone claiming is still being built. Website top-ups need the owner to configure payment details first.</p>',main,count=1,flags=re.S)
+            main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>')
+            main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
-        else:
+        elif name=='account':
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
             main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
+        elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
         else:scripts+=['js/site-theme-previews.js','js/forgeeks-market.js','js/cosmetic-parts.js','js/cosmetic-preview.js','js/activation-codes.js']
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
-        if name=='marketplace':css+=['css/forgeeks-cosmetics.css','css/forgeeks-market.css']
-        css+=['css/site-account.css','css/footer.css']
+        if name in('marketplace','leaderboard','account'):css+=['css/forgeeks-cosmetics.css']
+        if name=='marketplace':css+=['css/forgeeks-market.css']
+        if name=='leaderboard':css+=['css/forgeeks-leaderboard.css']
+        css+=['css/site-account.css','css/site-community.css','css/footer.css']
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
+        if name in ('account','marketplace'):scripts+=['js/site-banner.js']
         tail='\n'.join(f'<script src="{p}"></script>' for p in scripts)
         page=f'''<!doctype html>
 <!-- Generated by tools/site_accounts.py; shared forms, auth and catalog. -->
