@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261025-pipeline-1"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
+VERSION = "20261025-reaudit-1"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
 SUPABASE_JS = "js/vendor/supabase-2.118.0.js"  # pinned; a new version is a new file name
 
 # Themes the head script may apply before first paint (js/forgeeks.js lists their names and colours).
@@ -114,7 +114,7 @@ def build(text: str, name: str) -> str:
     # The theme boot script in <head> applies a saved theme before first paint; it knows every theme id.
     text = re.sub(r"(localStorage\.getItem\('lightning-geeks-theme'\);if\(/\^\()[a-z0-9|-]+(\)\$/)",
                   lambda m: m.group(1) + "|".join(THEME_IDS) + m.group(2), text, count=1)
-    text = re.sub(r'(js/(?:forgeeks-market|forgeeks-account-data|admin-operations)[.]js)(?:[?]v=[\w-]+)?', lambda m: m[1] + '?v=' + VERSION, text)
+    text = re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|admin-operations)[.]js)(?:[?]v=[\w-]+)?', lambda m: m[1] + '?v=' + VERSION, text)
     # Every page loads the same scripts, in this order: page behaviour, Supabase, its settings, the sign-in.
     bundle = (f'<script src="js/forgeeks.js?v={VERSION}"></script>\n<script src="{SUPABASE_JS}"></script>\n'
               f'<script src="js/forgeeks-config.js?v={VERSION}"></script>\n<script src="js/forgeeks-auth.js?v={VERSION}"></script>')

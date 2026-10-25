@@ -95,6 +95,19 @@ await test('a matched payment without an uploaded receipt cannot be cancelled or
  await assert.rejects(as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id])),/received funds must be reconciled/);
  assert.equal((await q(`select status from public.topup_requests where id=$1`,[r.id])).rows[0].status,'pending');
 });
+await test('late payments can reopen an accepted checkout without changing its quote or crediting twice',async()=>{
+ const u=await newUser(),r=await amountCheckout(u);
+ await as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id]));
+ await assert.rejects(as('authenticated',u,()=>q(`select public.admin_reopen_topup($1,'Payment arrived late')`,[r.id])),/administrator/);
+ await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
+ await assert.rejects(asAdmin(()=>q(`select public.admin_reopen_topup($1,'Payment arrived late')`,[r.id])),/MFA/);
+ await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+ const reopened=(await asAdmin(()=>q(`select * from public.admin_reopen_topup($1,'Customer cancelled before bank funds arrived')`,[r.id]))).rows[0];
+ assert.equal(reopened.id,r.id);assert.equal(reopened.coins,r.coins);assert.equal(reopened.price_piastres,r.price_piastres);assert.equal(reopened.proof_reviewed_at,null);
+ const current=await proof(u,reopened);await capture(r.id,'LATE-PAYMENT-REOPEN',10000);await settle(current);await settle(current);
+ assert.equal((await wallet(u)).balance,525);
+ await assert.rejects(asAdmin(()=>q(`select public.admin_reopen_topup($1,'Cannot reopen an approved payment')`,[r.id])),/credited request/);
+});
 await test('amount quotes survive retries and pricing changes; a stale fresh quote cannot open payment instructions',async()=>{
  const u=await newUser(),old=await quote(10000),r=await amountCheckout(u,10000,key(),old);
  await asAdmin(()=>q(`select public.admin_set_coin_pricing(6,10,10000,true,'[]'::jsonb)`));
@@ -140,12 +153,27 @@ await test('declined changes and externally returned payments cannot be credited
  const outgoing='RETURNED-'+key();await assert.rejects(asAdmin(()=>q(`select public.admin_record_payment_return($1,$2,'Bank return completed',false)`,[r.id,outgoing])),/confirm the external/);
  await asAdmin(()=>q(`select public.admin_record_payment_return($1,$2,'Bank return completed',true)`,[r.id,outgoing]));
  await asAdmin(()=>q(`select public.admin_record_payment_return($1,$2,'Retry lost response',true)`,[r.id,outgoing]));
+ await assert.rejects(asAdmin(()=>q(`select public.admin_reopen_topup($1,'Try reopening a returned payment')`,[r.id])),/returned payment/);
  assert.equal((await wallet(u)).balance,0);await assert.rejects(asAdmin(()=>q(`select public.admin_correct_bank_transfer($1,5000,null,false,'Try to reuse returned funds')`,[incoming])),/returned transfer/);
  await assert.rejects(capture(null,outgoing,5000),/outgoing return/);
  await as('authenticated',u,()=>q(`select public.prepare_account_deletion('delete my account')`));
  await as('authenticated',u,()=>q(`delete from storage.objects where split_part(name,'/',1)=$1`,[u]));
  await as('authenticated',u,()=>q(`select public.delete_my_account('delete my account')`));
  const kept=(await q(`select sender_address,email_note,amount_piastres from public.bank_transfers where reference=$1`,[incoming.toUpperCase()])).rows[0];assert.equal(kept.sender_address,null);assert.equal(kept.email_note,null);assert.equal(kept.amount_piastres,5000);
+});
+await test('stray payments can be returned without a checkout and cannot later fund a wallet',async()=>{
+ const u=await newUser(),email=(await q(`select email from auth.users where id=$1`,[u])).rows[0].email;
+ await capture(null,'STRAY-INCOMING',3000,email);
+ await assert.rejects(as('authenticated',u,()=>q(`select public.prepare_account_deletion('delete my account')`)),/resolve pending payments/);
+ await assert.rejects(asAdmin(()=>q(`select public.admin_record_unmatched_payment_return('STRAY-INCOMING','STRAY-OUTGOING','Original payment returned externally',false)`)),/confirm the actual/);
+ await asAdmin(()=>q(`select public.admin_record_unmatched_payment_return('STRAY-INCOMING','STRAY-OUTGOING','Original payment returned externally',true)`));
+ await asAdmin(()=>q(`select public.admin_record_unmatched_payment_return('STRAY-INCOMING','STRAY-OUTGOING','Retry a lost successful response',true)`));
+ const r=await amountCheckout(u);
+ await assert.rejects(asAdmin(()=>q(`select public.admin_correct_bank_transfer('STRAY-INCOMING',3000,$1,false,'Cannot fund a purchase with returned money')`,[r.id])),/returned transfer/);
+ await assert.rejects(capture(null,'STRAY-OUTGOING',3000),/outgoing return/);
+ assert.equal((await wallet(u)).balance,0);
+ await as('authenticated',u,()=>q(`select public.prepare_account_deletion('delete my account')`));
+ assert.equal((await q(`select return_reference from public.bank_transfers where reference='STRAY-INCOMING'`)).rows[0].return_reference,'STRAY-OUTGOING');
 });
 await test('social awards require verified ownership, backlink, current consent and a stable post revision',async()=>{
  const u=await newUser();await as('authenticated',u,()=>q(`update public.member_profiles set adult_confirmed=true,visibility='public'where user_id=$1`,[u]));
@@ -154,6 +182,9 @@ await test('social awards require verified ownership, backlink, current consent 
  const first=await make(1);await assert.rejects(approve(first,false,true),/verify the post/);await assert.rejects(approve(first,true,false),/verify the post/);assert.equal((await wallet(u)).balance,0);
  await approve(first);await approve(first);assert.deepEqual(await wallet(u),{balance:50,contribution_score:0});
  await as('authenticated',u,()=>q(`select public.withdraw_story($1)`,[first.id]));
+ const resubmitted=(await as('authenticated',u,()=>q(`select * from public.submit_story($1,true)`,[first.id]))).rows[0];
+ await assert.rejects(asAdmin(()=>q(`select public.admin_moderate_story($1,true,0,60,'Do not silently change a prior reward',true,true,$2,true)`,[first.id,resubmitted.submission_revision])),/retain its original awards/);
+ await approve(resubmitted);assert.equal((await wallet(u)).balance,50);
  for(let i=2;i<=3;i++){const r=await make(i);await approve(r);await as('authenticated',u,()=>q(`select public.withdraw_story($1)`,[r.id]));}
  assert.equal((await wallet(u)).balance,150);const fourth=await make(4);await assert.rejects(approve(fourth),/3 stories in 30 days/);
  const revised=(await as('authenticated',u,()=>q(`select * from public.save_story($1,'Revised money habit',$2,$3,null)`,[fourth.id,'A clearer summary of a general money-management routine.',fourth.linkedin_url]))).rows[0];
@@ -162,6 +193,6 @@ await test('social awards require verified ownership, backlink, current consent 
  await assert.rejects(as('authenticated',u,()=>q(`select public.submit_story($1,true)`,[fourth.id])),/community access is restricted/);
  assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed(null,null)`))).rows.length,0);
  await asAdmin(()=>q(`select public.admin_restore_community_member($1,'Reviewed the appeal and restored community access')`,[u]));
- await as('authenticated',u,()=>q(`select public.submit_story($1,true)`,[fourth.id]));assert.equal((await wallet(u)).balance,150);
+ await assert.rejects(as('authenticated',u,()=>q(`select public.submit_story($1,true)`,[fourth.id])),/submission limit reached/);assert.equal((await wallet(u)).balance,150); // Restoration does not reset the daily anti-spam quota.
 });
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;

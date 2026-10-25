@@ -50,8 +50,8 @@
     if (/post changed/i.test(m)) return 'This post changed after you opened it. Reload it and verify the current links and code.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
     if (/public adult profile/i.test(m)) return 'Set your profile to public and confirm you are 18 or older before publishing.';
-    if (/sharing consent/i.test(m)) return 'Add a title, at least 100 characters, and confirm sharing consent.';
-    if (/source already accepted/i.test(m)) return 'That LinkedIn post has already been accepted for another story.';
+    if (/sharing consent/i.test(m)) return 'Add a title, a summary of 20–400 characters, and confirm sharing consent.';
+    if (/source already accepted/i.test(m)) return 'That social post has already been accepted for another story.';
     if (/account not found/i.test(m)) return 'No account matches that email.';
     if (/member_profiles_display_name_key/.test(m)) return 'That display name is taken. Try another.';
     if (/public_needs_adult|leaderboard_needs_adult/.test(m)) return 'Confirm you are 18 or older to be public or on the leaderboard.';

@@ -7,8 +7,8 @@
   for(const [name,url]of[['LinkedIn',s.linkedin_url],['Reddit',s.reddit_url]])if(url&&/^https:\/\/www\.(linkedin|reddit)\.com\//.test(url)){const link=el('a','Open '+name+' post');link.href=url;link.target='_blank';link.rel='noopener noreferrer';a.append(link);}
   const check=text=>{const input=el('input');input.type='checkbox';const label=el('label');label.className='chk';label.append(input,el('span',text));a.append(label);return input;};
   const owner=check('I opened the post and verified this member’s code in it.'),backlink=check('I confirmed the post links back to lightningeg.com.'),rules=check('I confirmed this is general money-management content, with no solicitation, financial-service offers or personalized advice.');
-  const coins=el('input');coins.type='number';coins.min=0;coins.max=500;coins.value='0';coins.setAttribute('aria-label','Spendable coins');
-  const points=el('input');points.type='number';points.min=0;points.max=500;points.value='0';points.setAttribute('aria-label','Leaderboard points');
+  const coins=el('input');coins.type='number';coins.min=0;coins.max=500;coins.value=String(s.awarded_coins||0);coins.setAttribute('aria-label','Spendable coins');
+  const points=el('input');points.type='number';points.min=0;points.max=500;points.value=String(s.awarded_points||0);points.setAttribute('aria-label','Leaderboard points');
   const note=el('textarea');note.maxLength=500;note.placeholder='Review note';note.setAttribute('aria-label','Review note');
   const label=(text,input)=>{const l=el('label',text);l.append(input);return l;};a.append(label('Coins for the marketplace',coins),label('Leaderboard points',points),label('Review note',note));
   const status=el('p');status.setAttribute('role','status');

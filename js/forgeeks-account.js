@@ -117,7 +117,7 @@
   var $ = function (id) { return doc.getElementById(id); };
   var PAGE = root.location.origin + root.location.pathname;
   var NEXT_KEY = 'lightning-geeks-next';
-  var sb, session, loadedUid = null, recovering = false, birthDate = null, mode = 'in';
+  var sb, session, loadedUid = null, recovering = false, birthDate = null, mode = 'in', accountRun = 0;
 
   function show(view) {
     ['loading', 'out', 'recover', 'in'].forEach(function (v) { $('view-' + v).hidden = v !== view; });
@@ -170,14 +170,22 @@
     }
   }
 
+  function clearAccount() {
+    ['form-public','form-setup','form-private','form-link'].forEach(function(id) { $(id).reset(); });
+    ['who','coins','score','links-list'].forEach(function(id) { if($(id)) $(id).textContent = ''; });
+    birthDate = null; loadedUid = null;
+  }
+
   async function loadAccount() {
-    var uid = session.user.id;
+    if(!session) return;
+    var uid = session.user.id, run = ++accountRun;
     var res = await Promise.all([
       sb.from('profiles').select('*').eq('user_id', uid).maybeSingle(),
       sb.from('member_profiles').select('*').eq('user_id', uid).maybeSingle(),
       sb.from('profile_links').select('id,label,url').eq('user_id', uid).order('id'),
       sb.from('wallets').select('balance,contribution_score').eq('user_id', uid).maybeSingle()
     ]);
+    if(run !== accountRun || !session || session.user.id !== uid) return;
     for (var i = 0; i < res.length; i++) if (res[i].error) { note(say(res[i].error), 'bad'); return; }
     var priv = res[0].data, pub = res[1].data;
     if (!priv || !pub) { note('Your account is not ready yet. Reload in a minute.', 'bad'); return; }
@@ -313,7 +321,9 @@
   }
 
   async function signOut() {
-    await sb.auth.signOut();
+    var out = await sb.auth.signOut();
+    if(out.error) { note(say(out.error), 'bad'); return; }
+    session = null; accountRun++; clearAccount();
     loadedUid = null;
     show('out');
     note('Signed out.', 'ok');
@@ -354,15 +364,18 @@
     setMode(new URLSearchParams(root.location.search).get('signup') === '1' ? 'up' : 'in');
     // Supabase advises not to call it from inside this callback, so hand off on the next tick.
     sb.auth.onAuthStateChange(function (event, s) {
+      var previousUid = session && session.user.id;
       session = s;
+      if(previousUid !== (s && s.user.id)) { accountRun++; clearAccount(); }
       root.setTimeout(function () {
+        if(session !== s) return;
         if (event === 'PASSWORD_RECOVERY') { recovering = true; show('recover'); return; }
         if (!s) { recovering = false; loadedUid = null; show('out'); return; }
         if (recovering) return;
         if (goNext()) return;
         // Returning to the tab fires SIGNED_IN again: keep the form as it is so nothing typed is lost.
         if (loadedUid === s.user.id) return;
-        loadAccount();
+        loadAccount().catch(function(e) { note(say(e), 'bad'); });
       }, 0);
     });
   }

@@ -275,6 +275,18 @@ await test('market: a double click on confirm is one request', async () => {
   assert.equal(p.rpcs('purchase_item_at_price').length, 1);
 });
 
+await test('market: an in-flight purchase cannot be replaced by another item dialog',async()=>{
+ let done;const delayed=new Promise(r=>done=r);
+ const p=await boot({balance:500,rpc:name=>name==='purchase_item_at_price'?delayed:null});
+ await p.click(p.btn('buy','moss'));await p.click(p.$('buy-ok'));await p.click(p.$('buy-cancel'));await p.click(p.btn('buy','frost'));
+ assert.match(p.$('buy-title').textContent,/moss/);assert.match(p.$('mkt-msg').textContent,/still processing/);
+ done({data:{price_paid:150},error:null});await tick(30);assert.equal(p.cell('moss').dataset.state,'owned');assert.equal(p.cell('frost').dataset.state,'for-sale');p.w.close();
+});
+
+await test('market: returning to a tab refreshes coins credited on another page',async()=>{
+ const p=await boot({balance:0});p.fake.srv.balance=525;p.w.dispatchEvent(new p.w.Event('focus'));await tick(30);assert.equal(p.$('coins').textContent,'525');p.w.close();
+});
+
 await test('market: equipping a theme calls equip_item, applies the theme now and remembers it', async () => {
   const p = await boot({ owned: ['frost'] });
   await p.click(p.btn('equip', 'frost'));
