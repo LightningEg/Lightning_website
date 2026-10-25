@@ -62,23 +62,23 @@ const wallet = async user => (await q(`select balance, contribution_score from p
 
 await q(`insert into auth.users (id, email) values ($1, 'owner@example.test'), ($2, 'other@example.test')`, [OWNER, OTHER]);
 
-const paid = (await q(`select id, type, price from public.catalog_items where not is_default order by type, price`)).rows;
+const paid = (await q(`select id, type, price from public.catalog_items where not is_default and active order by type, price`)).rows;
 
 // ------------------------------------------------------------ the seed
-await test('seed: 14 paid themes, 6 paid banners, 4 frames and 4 badges, each active, priced in whole coins, with a note', async () => {
-  assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['amber','dracula','frost','garnet','meadow','moss','nile','ocean','paper','phosphor','rose','solarized','synthwave','tokyo']);
+await test('seed: 7 paid themes on sale (5 palettes, 2 textured), 6 paid banners, 4 frames and 4 badges, priced in whole coins, with a note', async () => {
+  assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['cotton','frost','garnet','meadow','nile','paper','papyrus']);
   assert.equal(paid.filter(p => p.type === 'banner').length, 6);
   assert.equal(paid.filter(p => p.type === 'frame').length, 4);
   assert.equal(paid.filter(p => p.type === 'badge').length, 4);
-  assert.equal(paid.length, 28);
+  assert.equal(paid.length, 21);
   for (const p of paid) {
     assert.match(p.id, p.type === 'theme' ? /^[a-z]+$/ : /^(banner|frame|badge)-[a-z]+$/, p.id);
     assert.ok(p.price > 0 && Number.isInteger(p.price), p.id);
-    if (p.type === 'theme') assert.ok(p.price >= 100 && p.price <= 250, p.id);
-    else assert.ok(p.price >= 30 && p.price <= 120, p.id);
+    if (p.type === 'theme') assert.ok(p.price >= 300 && p.price <= 1000, p.id);
+    else assert.ok(p.price >= 60 && p.price <= 200, p.id);
   }
   const rows = (await q(`select * from public.catalog_items where not is_default`)).rows;
-  assert.ok(rows.every(r => r.active && r.description.length > 0 && r.description.length <= 300 && r.name.length > 0), 'active, with a note');
+  assert.ok(rows.every(r => (r.active || r.type === 'theme') && r.description.length > 0 && r.description.length <= 300 && r.name.length > 0), 'active, with a note');
   assert.equal(new Set(rows.map(r => r.name)).size, rows.length, 'names are distinct');
 });
 
@@ -90,10 +90,28 @@ await test('seed: Mono alone is free, default and active', async () => {
 
 await test('seed: the theme list in js/forgeeks.js matches the catalog (ids, paid flag, price)', async () => {
   const js = readFileSync(new URL('../../js/forgeeks.js', import.meta.url), 'utf8');
-  const entries = [...js.matchAll(/\{id:'([a-z0-9-]+)',name:'[^']*',note:'(?:[^'\\]|\\.)*',c:\[[^\]]*\](?:,light:true)?(?:,paid:true,price:(\d+))?\}/g)]
+  const entries = [...js.matchAll(/\{id:'([a-z0-9-]+)',name:'[^']*',note:'(?:[^'\\]|\\.)*',c:\[[^\]]*\](?:,light:true)?(?:,tex:'[a-z]+')?(?:,paid:true,price:(\d+))?(?:,archived:true)?\}/g)]
     .map(m => ({ id: m[1], price: m[2] ? +m[2] : 0 }));
   const db_ = (await q(`select id, price from public.catalog_items where type = 'theme' order by id`)).rows;
   assert.deepEqual(entries.sort((a, b) => a.id.localeCompare(b.id)), db_.map(r => ({ id: r.id, price: r.price })));
+});
+
+await test('seed: five palettes are sold, the rest archived, and js/forgeeks.js marks the same ones archived', async () => {
+  const sold = (await q(`select id from public.catalog_items where type = 'theme' and active and not is_default and tier = 'palette' order by id`)).rows.map(r => r.id);
+  assert.deepEqual(sold, ['frost', 'garnet', 'meadow', 'nile', 'paper']);
+  const js = readFileSync(new URL('../../js/forgeeks.js', import.meta.url), 'utf8');
+  const archivedJs = [...js.matchAll(/\{id:'([a-z0-9-]+)'[^\n]*archived:true\}/g)].map(m => m[1]).sort();
+  const archivedDb = (await q(`select id from public.catalog_items where type = 'theme' and not active order by id`)).rows.map(r => r.id);
+  assert.deepEqual(archivedJs, archivedDb);
+});
+
+await test('tiers: every theme has one, palettes cost 300 and textured 600; coin_rate() tells anyone the rate', async () => {
+  const t = (await q(`select id, tier, price from public.catalog_items where type = 'theme' and active and not is_default`)).rows;
+  assert.ok(t.every(r => (r.tier === 'palette' && r.price === 300) || (r.tier === 'texture' && r.price === 600)), JSON.stringify(t));
+  assert.equal((await q(`select count(*)::int c from public.catalog_items where type <> 'theme' and tier is not null`)).rows[0].c, 0);
+  const rate = (await as('anon', null, () => q(`select public.coin_rate() r`))).rows[0].r;
+  assert.equal(rate.coins_per_egp, 5);
+  assert.ok(Array.isArray(rate.tiers));
 });
 
 // ------------------------------------------------------------ buying
@@ -128,10 +146,10 @@ await test('the same request twice buys once; a second item with the same key is
   const a = await buy(u, 'banner-dusk', 'same-dialog-key');
   const b = await buy(u, 'banner-dusk', 'same-dialog-key');
   assert.equal(a.rows[0].id, b.rows[0].id);
-  assert.equal((await wallet(u)).balance, 430);
+  assert.equal((await wallet(u)).balance, 350);
   await assert.rejects(buy(u, 'banner-dunes', 'same-dialog-key'), /different item/);
   await assert.rejects(buy(u, 'banner-dusk', 'another-key-0002'), /already owned/);
-  assert.equal((await wallet(u)).balance, 430);
+  assert.equal((await wallet(u)).balance, 350);
 });
 
 await test('anonymous visitors cannot buy or equip; members cannot buy free or unknown items', async () => {
@@ -166,7 +184,7 @@ await test('members cannot change prices, catalog rows or their own inventory', 
 // ------------------------------------------------------------ equipping
 await test('a bought theme and a bought banner can be equipped, swapped and removed', async () => {
   const u = await newUser();
-  await award(u, 400, 'equip');
+  await award(u, 1000, 'equip');
   await buy(u, 'garnet', 'equip-key-0001');
   await buy(u, 'banner-circuit', 'equip-key-0002');
   const t = (await equip(u, 'garnet')).rows[0];
@@ -203,22 +221,22 @@ await test('a theme can only sit in the theme slot and a banner in the banner sl
   // equip_item takes the slot from the item, so the browser cannot pick one
   const u = await newUser();
   await award(u, 400, 'slots');
-  await buy(u, 'moss', 'slot-key-0001');
+  await buy(u, 'garnet', 'slot-key-0001');
   await buy(u, 'banner-halo', 'slot-key-0002');
-  await equip(u, 'moss'); await equip(u, 'banner-halo');
+  await equip(u, 'garnet'); await equip(u, 'banner-halo');
   const rows = (await q(`select slot, item_id from public.equipped_items where user_id = $1 order by slot`, [u])).rows;
-  assert.deepEqual(rows, [{ slot: 'banner', item_id: 'banner-halo' }, { slot: 'theme', item_id: 'moss' }]);
+  assert.deepEqual(rows, [{ slot: 'banner', item_id: 'banner-halo' }, { slot: 'theme', item_id: 'garnet' }]);
   // and the table itself refuses a mismatch, even for the service role (a member with empty slots, so only the slot rule can fail)
   const w = await newUser();
-  await assert.rejects(as('service_role', null, () => q(`insert into public.equipped_items (user_id, slot, item_id) values ($1, 'banner', 'moss')`, [w])), /equipped_items_item_id_slot_fkey/);
+  await assert.rejects(as('service_role', null, () => q(`insert into public.equipped_items (user_id, slot, item_id) values ($1, 'banner', 'garnet')`, [w])), /equipped_items_item_id_slot_fkey/);
   await assert.rejects(as('service_role', null, () => q(`insert into public.equipped_items (user_id, slot, item_id) values ($1, 'theme', 'banner-halo')`, [w])), /equipped_items_item_id_slot_fkey/);
   // members cannot write the table at all
-  await assert.rejects(as('authenticated', u, () => q(`insert into public.equipped_items (user_id, slot, item_id) values ($1, 'banner', 'moss')`, [u])), /permission denied/);
+  await assert.rejects(as('authenticated', u, () => q(`insert into public.equipped_items (user_id, slot, item_id) values ($1, 'banner', 'garnet')`, [u])), /permission denied/);
 });
 
 await test('another member cannot equip, unequip or read what I own', async () => {
   const u = await newUser(), v = await newUser();
-  await award(u, 100, 'mine');
+  await award(u, 200, 'mine');
   await buy(u, 'banner-blueprint', 'mine-key-0001');
   await equip(u, 'banner-blueprint');
   await assert.rejects(equip(v, 'banner-blueprint'), /not owned/);
@@ -228,12 +246,24 @@ await test('another member cannot equip, unequip or read what I own', async () =
   assert.equal((await as('authenticated', v, async () => (await q(`select * from public.inventory`)).rows)).length, 0);
 });
 
+await test('archived: a theme already owned stays listed, owned and equippable; nobody can buy it', async () => {
+  const u = await newUser();
+  await q(`insert into public.inventory (user_id, item_id) values ($1, 'moss')`, [u]); // bought before it was archived
+  await equip(u, 'moss');
+  const mine = Object.fromEntries((await catalog('authenticated', u)).map(r => [r.id, r]));
+  assert.deepEqual([mine.moss.owned, mine.moss.equipped], [true, true]);
+  const v = await newUser();
+  await award(v, 500, 'archived-buy');
+  await assert.rejects(buy(v, 'tokyo', 'key-archived-0001'), /item not available/);
+  assert.equal((await wallet(v)).balance, 500, 'nothing charged');
+});
+
 // ------------------------------------------------------------ market_catalog()
 await test('market_catalog: anon sees every active item, nothing owned or equipped, themes first, then banners, frames and badges by price', async () => {
   const rows = await catalog('anon', null);
-  assert.equal(rows.length, 12 + 9 + 8);
+  assert.equal(rows.length, 8 + 6 + 4 + 4, 'Mono, five palettes, two textured, six banners, four frames, four badges');
   assert.ok(rows.every(r => r.owned === false && r.equipped === false));
-  assert.deepEqual(Object.keys(rows[0]).sort(), ['asset_version', 'description', 'equipped', 'id', 'is_default', 'name', 'owned', 'price', 'type']);
+  assert.deepEqual(Object.keys(rows[0]).sort(), ['asset_version', 'description', 'equipped', 'id', 'is_default', 'name', 'owned', 'price', 'tier', 'type']);
   const types = rows.map(r => r.type);
   assert.deepEqual(types, [...types].sort((a, b) => (a === 'theme' ? 0 : 1) - (b === 'theme' ? 0 : 1)));
   for (const t of ['theme', 'banner', 'frame', 'badge']) {
@@ -241,15 +271,15 @@ await test('market_catalog: anon sees every active item, nothing owned or equipp
     assert.deepEqual(prices, [...prices].sort((a, b) => a - b), t + ' cheapest first');
   }
   assert.deepEqual(rows.filter(r => r.type === 'banner').map(r => r.id),
-    ['banner-halo', 'banner-blueprint', 'banner-dusk', 'banner-circuit', 'banner-dunes', 'banner-borealis']);
-  assert.deepEqual(rows.filter(r => r.type === 'theme' && !r.is_default).map(r => r.id).sort(), ['amber','dracula','frost','garnet','meadow','moss','nile','ocean','paper','phosphor','rose','solarized','synthwave','tokyo']);
+    ['banner-halo', 'banner-blueprint', 'banner-circuit', 'banner-dunes', 'banner-dusk', 'banner-borealis']);
+  assert.deepEqual(rows.filter(r => r.type === 'theme' && !r.is_default).map(r => r.id).sort(), ['cotton','frost','garnet','meadow','nile','paper','papyrus']);
 });
 
 await test('market_catalog: the owner sees what they own (free items count) and what is equipped; another member sees none of it', async () => {
   const rows = await catalog('authenticated', OWNER); // owns nothing yet
   assert.ok(rows.filter(r => r.is_default).every(r => r.owned));
   assert.ok(rows.filter(r => !r.is_default).every(r => !r.owned && !r.equipped));
-  await award(OWNER, 450, 'owner-1');
+  await award(OWNER, 1200, 'owner-1');
   await buy(OWNER, 'frost', 'owner-key-0001');
   await buy(OWNER, 'banner-dunes', 'owner-key-0002');
   await equip(OWNER, 'frost');
@@ -257,7 +287,7 @@ await test('market_catalog: the owner sees what they own (free items count) and 
   const mine = Object.fromEntries((await catalog('authenticated', OWNER)).map(r => [r.id, r]));
   assert.deepEqual([mine.frost.owned, mine.frost.equipped], [true, true]);
   assert.deepEqual([mine['banner-dunes'].owned, mine['banner-dunes'].equipped], [true, true]);
-  assert.deepEqual([mine.moss.owned, mine.moss.equipped], [false, false]);
+  assert.equal(mine.moss, undefined, 'an archived theme is not listed to someone who does not own it');
   assert.deepEqual([mine.mono.owned, mine.mono.equipped], [true, false]);
   await buy(OWNER, 'nile', 'owner-key-0003');
   await equip(OWNER, 'nile');
@@ -294,7 +324,7 @@ await test('market_catalog: only anon, authenticated and service_role may call i
   const g = (await q(`select grantee from information_schema.routine_privileges
                       where routine_schema = 'public' and routine_name = 'market_catalog' order by grantee`)).rows.map(r => r.grantee);
   assert.deepEqual(g.filter(x => x !== 'postgres'), ['anon', 'authenticated', 'service_role']);
-  assert.equal((await catalog('service_role', null)).length, 29);
+  assert.equal((await catalog('service_role', null)).length, 22);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

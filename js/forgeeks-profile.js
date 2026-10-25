@@ -37,7 +37,7 @@
     doc.title = 'Profile' + SUFFIX;
   }
 
-  function status(text) { var s = $('pf-status'); s.textContent = text || ''; s.hidden = !text; }
+  function status(text) { var s = $('pf-status'); s.textContent = text || ''; s.hidden = !text; s.classList.remove('pf-own'); }
 
   function missing() {
     clear();
@@ -172,17 +172,34 @@
     actions(p, me);
     work(workRes);
     setup(p);
+    // the owner sees a private or members-only profile; say who else can, and where to change it
+    if (me && same(me.display_name, p.display_name) && p.visibility !== 'public') {
+      var note = $('pf-status');
+      note.textContent = p.visibility === 'members' ? 'Only signed-in members can see this profile. ' : 'Only you can see this profile. ';
+      var a = doc.createElement('a');
+      a.href = $('pf-edit').getAttribute('href') || 'account.html';
+      a.textContent = 'Change who can see it';
+      note.appendChild(a);
+      note.hidden = false;
+      note.classList.add('pf-own');
+    }
   }
 
   /* ---------- load ---------- */
   function load() {
     var mine = ++token;
     var name = wanted();
-    if (!name) { missing(); return; }
     clear();
     status('loading…');
     S.ready(FG).then(function () {
       if (mine !== token) return null;
+      // No name in the address: a signed-in member sees their own profile (owner, 2026-10-25)
+      if (name) return name;
+      return FG.session && FG.session() && FG.me ? FG.me().then(function (m) { return m && m.display_name ? m.display_name : null; }) : null;
+    }).then(function (n) {
+      if (mine !== token) return null;
+      if (!n) { missing(); return null; }
+      name = n;
       return FG.sb.rpc('get_profile', { p_name: name });
     }).then(function (res) {
       if (!res || mine !== token) return null;

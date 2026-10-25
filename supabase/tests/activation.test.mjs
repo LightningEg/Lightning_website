@@ -75,23 +75,23 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };
 const P=await pkg();
-const issue=(u,item='moss',version=1)=>as('authenticated',u,async()=>(await q(`select public.issue_activation_code($1,$2) d`,[item,version])).rows[0].d);
-const redeem=(code,item='moss',version=1,role='service_role')=>as(role,null,async()=>(await q(`select public.redeem_activation_code($1,$2,$3) d`,[code,item,version])).rows[0].d);
-await award(OWNER,1000,'claim-test');await buy(OWNER,'moss','claim-buy-0001');
+const issue=(u,item='garnet',version=1)=>as('authenticated',u,async()=>(await q(`select public.issue_activation_code($1,$2) d`,[item,version])).rows[0].d);
+const redeem=(code,item='garnet',version=1,role='service_role')=>as(role,null,async()=>(await q(`select public.redeem_activation_code($1,$2,$3) d`,[code,item,version])).rows[0].d);
+await award(OWNER,1000,'claim-test');await buy(OWNER,'garnet','claim-buy-0001');
 await test('unshipped theme cannot issue codes; buying does not create a device limit',async()=>{
  await assert.rejects(issue(OWNER),/not available/);
- await q(`insert into public.bundled_item_versions(item_id,asset_version,enabled) values ('moss',1,true)`);
+ await q(`insert into public.bundled_item_versions(item_id,asset_version,enabled) values ('garnet',1,true)`);
  await assert.rejects(issue(OTHER),/not owned/);
 });
 await test('strong one-time code, private hashed storage, no browser redemption',async()=>{
  const a=await issue(OWNER);assert.match(a.code,/^[A-F0-9]{8}(-[A-F0-9]{8}){3}$/);
  await as('authenticated',OWNER,async()=>{
   await assert.rejects(q(`select * from private.activation_tickets`),/permission denied/);
-  await assert.rejects(q(`select public.redeem_activation_code($1,'moss',1)`,[a.code]),/permission denied/);
+  await assert.rejects(q(`select public.redeem_activation_code($1,'garnet',1)`,[a.code]),/permission denied/);
  });
  const row=(await q(`select * from private.activation_tickets`)).rows[0];
  assert.equal(row.code_hash.length,64);assert.ok(!JSON.stringify(row).includes(a.code));
- const inv=await redeem(a.code.toLowerCase());assert.equal(inv.account_id,OWNER);assert.deepEqual(inv.items,[{item_id:'moss',asset_version:1,deliveries:[]}]);
+ const inv=await redeem(a.code.toLowerCase());assert.equal(inv.account_id,OWNER);assert.deepEqual(inv.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
  await assert.rejects(redeem(a.code),/invalid or expired/);
 });
 await test('another device gets a fresh code without repurchase or wallet debit',async()=>{
@@ -100,7 +100,7 @@ await test('another device gets a fresh code without repurchase or wallet debit'
  assert.deepEqual(await wallet(OWNER),before);
 });
 await test('old app does not spend a code; expiry and disabled bundles fail closed',async()=>{
- const a=await issue(OWNER);await assert.rejects(redeem(a.code,'moss',2),/unsupported/);
+ const a=await issue(OWNER);await assert.rejects(redeem(a.code,'garnet',2),/unsupported/);
  await redeem(a.code);
  const b=await issue(OWNER);await q(`update private.activation_tickets set expires_at=now()-interval '1 second' where redeemed_at is null`);
  await assert.rejects(redeem(b.code),/invalid or expired/);

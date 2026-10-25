@@ -21,7 +21,7 @@ def build():
             main=main.replace('<div id="closing" aria-hidden="true"></div>','<section class="wrap pf-stories" data-story-strip data-by-profile data-limit="6" hidden><h2 class="com-h">Stories</h2><div class="story-grid" data-story-list></div></section><div id="closing" aria-hidden="true"></div>')
         main=main.replace('forgeeks-leaderboard.html','leaderboard.html')
         # The banner a member equipped, drawn above the page heading (js/site-banner.js).
-        if name in ('account','marketplace'):
+        if name=='account':
             main=main.replace('<div class="wrap">','<div class="wrap"><div class="fg-banner site-banner" data-banner-strip aria-hidden="true" hidden></div>',1)
         # Market purchase dialog lives after the For Geeks footer.
         dialog=''
@@ -29,28 +29,33 @@ def build():
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Earn coins by <a href="stories.html">sharing a story</a>, or <a href="topup.html">top up your wallet</a>, then pick your look below. Website themes apply to For Geeks; app themes and PC/phone claiming are still being built.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Try anything on first: themes on this page, banners, frames and badges on your look. Buy with coins from <a href="topup.html">your wallet</a> or <a href="stories.html">a story you share</a>. A theme you own can dress this website and For Geeks; app themes are in testing.</p>',main,count=1,flags=re.S)
             main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
-            main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
+            main=main.replace('Try any theme on this page, or open details to see it on the website, the computer and the phone.','Try any theme on this page, or open Details to see it on the website, the computer and the phone.')
         elif name=='account':
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
-            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
+            main=main.replace('</main>','<section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
         elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
         elif name=='profile':scripts+=['js/forgeeks-showcase.js','js/forgeeks-profile.js','js/story-card.js','js/story-strip.js']
-        else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/forgeeks-market.js','js/cosmetic-parts.js','js/cosmetic-preview.js','js/activation-codes.js']
+        else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
         if name in('marketplace','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
-        if name=='marketplace':css+=['css/forgeeks-market.css']
+        if name=='marketplace':css+=['css/forgeeks-market.css','css/theme-preview.css','css/market-ui.css']
         if name=='leaderboard':css+=['css/forgeeks-leaderboard.css']
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
+        # the market's own files change often: a version so browsers fetch the new copy
+        SHOP='?v=20261025-tiers-1'
+        css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
+        scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
-        if name in ('account','marketplace'):scripts+=['js/site-banner.js']
+        if name=='account':scripts+=['js/site-banner.js']
+        scripts+=['js/site-words.js']
         tail='\n'.join(f'<script src="{p}"></script>' for p in scripts)
         page=f'''<!doctype html>
 <!-- Generated by tools/site_accounts.py; shared forms, auth and catalog. -->
@@ -89,9 +94,12 @@ def connect_public_pages():
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
         text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
-        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|topup|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        # changed with the community tabs pass (owner, 2026-10-25)
+        text=re.sub(r'(js/topup[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-tiers-1\2', text)
+        text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-shop-1\2', text)
+        text=re.sub(r'(css/(?:site-account|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/(?:admin-operations|store-admin)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
-        text=re.sub(r'(css/(?:site-account|site-community|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 

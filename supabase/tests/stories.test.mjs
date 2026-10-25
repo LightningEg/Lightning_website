@@ -84,7 +84,7 @@ await test('recognition raises score only, retries are idempotent and only MFA a
 await test('only Mono is free; locked palettes cannot equip without ownership',async()=>{
  const defaults=(await q(`select id from public.catalog_items where is_default`)).rows;assert.deepEqual(defaults,[{id:'mono'}]);
  await assert.rejects(equip(OTHER,'paper'),/not owned/);await equip(OTHER,'mono');
- await credit(key(),0,100);await buy(OWNER,'paper','new-paper-0001');await equip(OWNER,'paper');
+ await credit(key(),0,300);await buy(OWNER,'paper','new-paper-0001');await equip(OWNER,'paper');
  assert.equal((await wallet(OWNER)).balance,0);
 });
 let story;
@@ -152,7 +152,7 @@ await test('Reddit sources, spendable story coins, disclosure flag, caps and fra
  for(const n of [2,3]){const s=await mk(n);await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,10,'Good',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[s.id]));}
  const fourth=await mk(4);await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,10,'Good',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[fourth.id])),/3 stories in 30 days/);
  assert.equal((await wallet(W)).balance,80);
- await as('authenticated',W,()=>q(`select * from public.purchase_item_at_price('badge-pen',50,'pen-badge-0001')`));await as('authenticated',W,()=>q(`select public.equip_item('badge-pen')`));
+ await as('authenticated',W,()=>q(`select * from public.purchase_item_at_price('badge-pen',80,'pen-badge-0001')`));await as('authenticated',W,()=>q(`select public.equip_item('badge-pen')`));
  await assert.rejects(as('authenticated',W,()=>q(`select public.equip_item('frame-gold')`)),/not owned/);
  const pf=(await as('anon',null,()=>q(`select badge_item_id,frame_item_id from public.member_directory(60,0)`))).rows;assert.ok(pf.some(r=>r.badge_item_id==='badge-pen'));
  assert.ok(!(await as('anon',null,()=>q(`select * from public.leaderboard('all',5)`))).fields.every(x=>x.name!=='frame_item_id'));

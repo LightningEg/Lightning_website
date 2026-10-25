@@ -102,12 +102,13 @@ const profile = (name) => q(`select * from public.get_profile($1)`, [name]).then
 const work = (name) => q(`select * from public.get_profile_work($1)`, [name]).then(r => r.rows);
 
 // ------------------------------------------------------------ visibility
-await test('get_profile: private never shows, members need sign-in, public shows to everyone (anon, other member, self)', async () => {
+await test('get_profile: private shows only to its owner, members need sign-in, public shows to everyone (anon, other member, self)', async () => {
   const seen = async (role, uid, name) => (await as(role, uid, () => profile(name))).length;
-  // private (Cy): nobody, the owner included, the same as profile_directory
+  // private (Cy): nobody but Cy, so their own Profile page is never blank (owner, 2026-10-25)
   assert.equal(await seen('anon', null, 'Cy'), 0);
   assert.equal(await seen('authenticated', BEN, 'Cy'), 0);
-  assert.equal(await seen('authenticated', CY, 'Cy'), 0);
+  assert.equal(await seen('authenticated', CY, 'Cy'), 1);
+  assert.equal((await as('authenticated', CY, () => profile('Cy')))[0].visibility, 'private');
   // members (Ben)
   assert.equal(await seen('anon', null, 'Ben'), 0);
   assert.equal(await seen('authenticated', ADA, 'Ben'), 1);
@@ -254,6 +255,17 @@ await test('ranks agree with leaderboard() for every member on it, both periods'
       }
     }
   });
+});
+
+await test('leaderboard: each row carries the member\'s equipped banner, and counts every entry that raised the score', async () => {
+  const rows = (await anon(() => q(`select * from public.leaderboard('all')`))).rows;
+  assert.ok(rows.length && rows.every(r => 'banner_item_id' in r));
+  const equipped = (await q(`select m.display_name, e.item_id from public.equipped_items e join public.member_profiles m using (user_id) where e.slot = 'banner'`)).rows;
+  for (const e of equipped) { const r = rows.find(x => x.display_name === e.display_name); if (r) assert.equal(r.banner_item_id, e.item_id); }
+  for (const r of rows) {
+    const n = (await q(`select count(*)::int c from public.ledger_entries l join public.member_profiles m using (user_id) where m.display_name = $1 and l.contribution_delta > 0`, [r.display_name])).rows[0].c;
+    assert.equal(Number(r.contribution_count), n, r.display_name);
+  }
 });
 
 await test('spending coins never changes a rank', async () => {
