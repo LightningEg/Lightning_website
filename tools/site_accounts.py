@@ -68,7 +68,8 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-account-2\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-audit-1\2', text)
+        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account-data|topup)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-audit-1\2', text)
         text=re.sub(r'(css/site-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-account-2\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)

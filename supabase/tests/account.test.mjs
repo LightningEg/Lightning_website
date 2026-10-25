@@ -156,7 +156,7 @@ async function boot(handle = () => ({ data: null, error: null }), url = 'https:/
     updateUser: async a => { calls.push({ fn: 'updateUser', a }); return { error: null }; },
     signOut: async o => { calls.push({ fn: 'signOut', o }); return { error: null }; }
   };
-  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder, rpc: (name, args) => { calls.push({ fn: 'rpc', name, args }); return Promise.resolve(handle({ op: 'rpc', name, args, filters: {} })); } }; } };
+  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder, functions: { invoke: (name, options) => { calls.push({fn:'invoke',name,args:options.body}); return Promise.resolve(handle({op:'invoke',name,args:options.body,filters:{}})); } }, rpc: (name, args) => { calls.push({ fn: 'rpc', name, args }); return Promise.resolve(handle({ op: 'rpc', name, args, filters: {} })); } }; } };
   w.FORGEEKS = { supabaseUrl: 'https://x.supabase.co', anonKey: 'anon' };
   w.eval(authCode);
   w.URL.createObjectURL = () => 'blob:test'; w.URL.revokeObjectURL = () => {};
@@ -465,22 +465,22 @@ await test('your data: download asks for your export and says when it is done or
 });
 
 await test('your data: delete needs the exact phrase, then deletes, clears this browser and says so', async () => {
-  const p = await boot(q => q.op === 'rpc' ? { data: null, error: null } : account()(q));
+  const p = await boot(q => q.op === 'invoke' ? { data: {deleted:true}, error: null } : account()(q));
   await p.fire('INITIAL_SESSION', session); await tick(30);
   p.set('delete-confirm', 'yes please');
   await p.submit('form-delete');
   assert.match(p.$('status-delete').textContent, /delete my account/);
-  assert.equal(p.calls.filter(c => c.name === 'delete_my_account').length, 0);
+  assert.equal(p.calls.filter(c => c.name === 'delete-account').length, 0);
   p.set('delete-confirm', 'delete my account');
   await p.submit('form-delete'); await tick(30);
-  const d = p.calls.find(c => c.name === 'delete_my_account');
+  const d = p.calls.find(c => c.name === 'delete-account');
   assert.deepEqual(plain(d.args), { p_confirm: 'delete my account' });
   assert.deepEqual(plain(p.calls.find(c => c.fn === 'signOut').o), { scope: 'local' });
   assert.match(p.$('acct-msg').textContent, /deleted/);
 });
 
 await test('your data: the owner account is refused in plain words', async () => {
-  const p = await boot(q => q.op === 'rpc' ? { data: null, error: { message: 'an administrator account cannot be deleted here', code: '42501' } } : account()(q));
+  const p = await boot(q => q.op === 'invoke' ? { data: null, error: { message: 'an administrator account cannot be deleted here', code: '42501' } } : account()(q));
   await p.fire('INITIAL_SESSION', session); await tick(30);
   p.set('delete-confirm', 'delete my account');
   await p.submit('form-delete'); await tick(20);

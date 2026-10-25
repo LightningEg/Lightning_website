@@ -34,6 +34,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, uid, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -55,7 +57,7 @@ await as('authenticated', A, async () => {
   await q(`insert into public.profile_links (user_id, label, url) values ($1, 'CLI', 'https://example.test/cli')`, [A]);
 });
 await as('service_role', null, () => q(`select public.award_coins($1, 'contribution_award', 120, 'issue', 'LightningEg/Lightning#5', 'Merged PR')`, [A]));
-await as('authenticated', A, () => q(`select public.purchase_item('banner-test', 'lifecycle-key-1')`));
+await as('authenticated', A, () => q(`select public.purchase_item_at_price('banner-test',coalesce((select price from public.catalog_items where id='banner-test'),0),'lifecycle-key-1')`));
 await as('authenticated', A, () => q(`select public.equip_item('banner-test')`));
 
 await test('export: only signed-in members, and only their own rows', async () => {

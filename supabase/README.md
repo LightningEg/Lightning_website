@@ -107,7 +107,7 @@ The no-discretionary-refunds policy is stated before payment with an explicit ac
 
 ## Website operations and community stories (owner revision, October 24)
 
-Apply migrations 1500, 1600, 1700 and 1800 after the existing eight migrations. Production was inspected and these four were applied through the Supabase connector; do not replay the older manually applied migrations simply because their migration history is empty.
+Apply migrations 1500, 1600, 1700 and 1800 after the existing eight migrations. Production was inspected and these four were applied through the Supabase connector; The earlier manual migrations were subsequently verified and their history baselined; do not replay applied files.
 
 - Open `forgeeks-admin.html`, sign in with the administrator account, enroll an authenticator and verify its code. The backend requires an actual AAL2 session for credits, configuration, moderation and payment approval. The credit form accepts an account email, separate coins and recognition points, and a reason. A retry key prevents double credits; New request starts another credit.
 - Configure the real InstaPay address, recipient name, HTTPS QR image and enabled state, then create coin packages with an exact EGP amount. Configuration starts disabled. Do not use a personal transfer test as proof that all production payment cases have been accepted.
@@ -118,3 +118,9 @@ Apply migrations 1500, 1600, 1700 and 1800 after the existing eight migrations. 
 - Only Mono is free. The eleven formerly free non-Mono starter palettes initially cost 100 coins each; the original three paid palettes retain their prices. Existing inventory and previously equipped free palettes are preserved. Admin can change paid prices; Mono stays free.
 
 The owner test award is 200 recognition points and no wallet coins. Production tests use a fixed idempotency key; never replay an unkeyed manual insert. Receipts require an owner retention/deletion process before public paid launch; do not expose their URLs in public feeds or ledger text.
+
+## Full flow audit and finalization
+
+See [the start-to-finish audit](../docs/audits/marketplace-flow-2026-10-24.md) for fixes, evidence and launch requirements. Migrations 1900/2000 add quoted-price purchases, atomic evidence-revision approval, bounded receipt reservations, package retirement/idempotency, stricter admin MFA/session checks and Storage-aware account deletion. Deploy the authenticated `delete-account` Edge Function before publishing the account script. Its explicit `getUser` validation requires `verify_jwt=false` at the gateway; its RLS-scoped client uses no service-role key. Migration 2100 retires obsolete endpoints after the browser deployment. Every changed browser script receives a new version URL.
+
+Owner operations now include unpaid cancellation, rejection notes, package availability, wallet reconciliation and receipt cleanup. Run the receipt cleanup control periodically: eligible images older than 90 days can be deleted, while pending payment evidence is protected. File deletion always uses the Storage API. Account deletion removes receipt files first, blocks unresolved pending payments and clears retained sender identity; interrupted cleanup can be retried or its preparation cancelled.

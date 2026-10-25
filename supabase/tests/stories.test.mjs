@@ -30,6 +30,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, user, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${user ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -46,7 +48,7 @@ let n = 100;
 const newUser = async () => { const id = uid(++n); await q(`insert into auth.users (id, email) values ($1, $2)`, [id, `u${n}@example.test`]); return id; };
 const award = (user, amount, source) => as('service_role', null, () => q(
   `select * from public.award_coins($1, 'contribution_award', $2, 'pr', $3, 'Merged PR')`, [user, amount, source]));
-const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item($1, $2)`, [item, key]));
+const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item_at_price($1, coalesce((select price from public.catalog_items where id=$1),0), $2)`, [item, key]));
 const equip = (user, item) => as('authenticated', user, () => q(`select * from public.equip_item($1)`, [item]));
 const catalog = (role, user) => as(role, user, async () => (await q(`select * from public.market_catalog()`)).rows);
 const wallet = async user => (await q(`select balance, contribution_score from public.wallets where user_id = $1`, [user])).rows[0];
@@ -67,7 +69,7 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
   const receipt=row.user_id+'/'+r+'/receipt.png';
   await q(`insert into storage.objects(bucket_id,name) values ('topup-receipts',$1) on conflict do nothing`,[receipt]);
   await as('authenticated',row.user_id,()=>q(`select public.attach_topup_receipt($1,'customer@instapay','CUSTOMER-REF',$2)`,[r,receipt]));
-  await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1))`,[r]));
+  await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[r]));
  }
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };

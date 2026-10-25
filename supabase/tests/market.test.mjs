@@ -37,6 +37,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, user, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${user ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -53,7 +55,7 @@ let n = 100;
 const newUser = async () => { const id = uid(++n); await q(`insert into auth.users (id, email) values ($1, $2)`, [id, `u${n}@example.test`]); return id; };
 const award = (user, amount, source) => as('service_role', null, () => q(
   `select * from public.award_coins($1, 'contribution_award', $2, 'pr', $3, 'Merged PR')`, [user, amount, source]));
-const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item($1, $2)`, [item, key]));
+const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item_at_price($1, coalesce((select price from public.catalog_items where id=$1),0), $2)`, [item, key]));
 const equip = (user, item) => as('authenticated', user, () => q(`select * from public.equip_item($1)`, [item]));
 const catalog = (role, user) => as(role, user, async () => (await q(`select * from public.market_catalog()`)).rows);
 const wallet = async user => (await q(`select balance, contribution_score from public.wallets where user_id = $1`, [user])).rows[0];
@@ -132,7 +134,7 @@ await test('the same request twice buys once; a second item with the same key is
 
 await test('anonymous visitors cannot buy or equip; members cannot buy free or unknown items', async () => {
   await as('anon', null, async () => {
-    await assert.rejects(q(`select * from public.purchase_item('moss', 'anon-key-0001')`), /permission denied/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('moss',coalesce((select price from public.catalog_items where id='moss'),0),'anon-key-0001')`), /permission denied/);
     await assert.rejects(q(`select * from public.equip_item('mono')`), /permission denied/);
     await assert.rejects(q(`select public.unequip_slot('banner')`), /permission denied/);
   });

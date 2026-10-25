@@ -36,6 +36,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, uid, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -429,8 +431,8 @@ await test('reports are read by administrators only: not by the reporter, the ta
 
 await test('admin_resolve_report: administrators only (42501); the status must be actioned or dismissed', async () => {
   const open = (await openReports()).find(r => r.status === 'open');
-  await member(RAE, () => refused(q(`select * from public.admin_resolve_report($1, 'actioned')`, [open.id]), /administrator only/, '42501'));
-  await member(ADA, () => refused(q(`select * from public.admin_resolve_report($1, 'dismissed')`, [open.id]), /administrator only/, '42501'));
+  await member(RAE, () => refused(q(`select * from public.admin_resolve_report($1, 'actioned')`, [open.id]), /administrator/, '42501'));
+  await member(ADA, () => refused(q(`select * from public.admin_resolve_report($1, 'dismissed')`, [open.id]), /administrator/, '42501'));
   await anon(() => refused(q(`select * from public.admin_resolve_report($1, 'dismissed')`, [open.id]), /permission denied/));
   assert.equal((await q(`select status from public.profile_reports where id = $1`, [open.id])).rows[0].status, 'open');
   await member(OPS, async () => {
