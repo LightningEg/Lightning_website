@@ -265,6 +265,7 @@
   function dstatus(msg, bad) { var s = $('buy-status'); s.textContent = msg || ''; s.className = 'acct-status' + (bad ? ' bad' : ''); }
 
   function openBuy(it, trigger) {
+    if(dlg.busy) { note('Your current purchase or equip action is still processing. Wait for its result before choosing another item.'); return; }
     dlg.item = it; dlg.key = newKey(); dlg.trigger = trigger; dlg.busy = false; dlg.done = false;
     $('buy-title').textContent = 'buy ' + it.name.toLowerCase();
     var pv = $('buy-pv');
@@ -389,6 +390,9 @@
       if (!FG.sb) { unavailable(); return; }
       load();
       FG.onAuth(function () { closeBuy(); load(); });
+      function resume() { if(!doc.hidden && $('buy').hidden && !dlg.busy && !state.busy) load(); }
+      root.addEventListener('focus', resume);
+      doc.addEventListener('visibilitychange', resume);
     });
   }
 

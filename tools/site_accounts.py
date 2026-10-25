@@ -29,14 +29,14 @@ def build():
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Earn coins by <a href="stories.html">sharing a story</a>, or <a href="topup.html">top up your wallet</a> once payments open, then pick your look below. Website themes apply to For Geeks; app themes and PC/phone claiming are still being built.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Earn coins by <a href="stories.html">sharing a story</a>, or <a href="topup.html">top up your wallet</a>, then pick your look below. Website themes apply to For Geeks; app themes and PC/phone claiming are still being built.</p>',main,count=1,flags=re.S)
             main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
         elif name=='account':
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
-            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
+            main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
@@ -88,9 +88,9 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
-        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account-data|topup|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
-        text=re.sub(r'(css/(?:site-account|site-community|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account|forgeeks-account-data|topup|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(css/(?:site-account|site-community|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
@@ -113,13 +113,13 @@ STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <div class="stories-layout"><div class="stories-content"><h2 class="com-h">Latest posts</h2>
 <div id="story-feed" class="story-grid"></div>
 <section class="acct" id="story-member" hidden><h2 class="com-h">Share your post</h2>
-<p class="com-lead">Drafts are private. Listing needs your consent and a public, adult-confirmed <a href="profile.html">profile</a>. Editing a listed post takes it down until it is reviewed again.</p>
+<p class="com-lead">Drafts are private. Listing needs your consent and a public, adult-confirmed <a href="account.html">profile</a>. Editing a listed post takes it down until it is reviewed again.</p>
 <form id="story-form" class="panel"><input name="id" type="hidden"><div class="fields">
 <label>Title<input name="title" maxlength="140" required></label>
 <label>Short summary (20 to 400 characters)<textarea name="body" rows="4" maxlength="400" required></textarea></label>
 <label>LinkedIn post link<input name="linkedin" type="url" placeholder="https://www.linkedin.com/posts/..."></label>
 <label>Reddit post link<input name="reddit" type="url" placeholder="https://www.reddit.com/r/.../comments/..."></label></div>
-<p class="com-lead">Add at least one link. Your draft gets a verification code: paste it into your post together with a link to Lightning.</p>
+<p class="com-lead">Save a draft before adding your post link. Before submitting, add at least one link. Your draft gets a verification code: paste it into your post together with a link to Lightning.</p>
 <div class="row"><button class="btn" type="submit">Save draft</button><button class="btn ghost" id="story-copy" type="button">Copy verification code and link</button><button class="btn ghost" id="story-new" type="button">New draft</button></div></form>
 <ul class="com-rules"><li>Coins reward the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
 <li>Up to 3 rewarded posts in any 30 days. Add your verification code and a link to Lightning so we can review your submission.</li>

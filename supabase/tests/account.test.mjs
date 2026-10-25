@@ -184,6 +184,15 @@ const account = (extra = {}) => q => {
   return { data: null, error: extra.error?.[q.table + ':' + q.op] ?? null };
 };
 
+await test('account: a delayed private profile never reappears after sign-out', async()=>{
+ let done;const pending=new Promise(r=>done=r),normal=account();
+ const p=await boot(q=>q.table==='profiles'&&q.op==='select'?pending:normal(q));
+ await p.fire('INITIAL_SESSION',session);await p.fire('SIGNED_OUT',null);
+ done({data:{user_id:UID,full_name:'Private previous user',phone:'+20123456789'},error:null});await tick(30);
+ assert.deepEqual(p.views(),['out']);assert.equal(p.$('form-private').elements.full_name.value,'');assert.equal(p.$('who').textContent,'');
+ p.w.close();
+});
+
 await test('page: signed out shows only sign in; switching to sign up changes the labels', async () => {
   const p = await boot();
   assert.deepEqual(p.views(), ['loading']);

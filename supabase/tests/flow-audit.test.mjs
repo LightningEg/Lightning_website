@@ -165,7 +165,17 @@ await test('legacy financial mutations require MFA and revoked administrator ses
  const sid=key();await q(`insert into auth.sessions(id,user_id)values($1,$2)`,[sid,ADMIN]);
  await q(`select set_config('request.jwt.claims',$1,false)`,[JSON.stringify({aal:'aal2',session_id:sid})]);
  await as('authenticated',ADMIN,()=>q(`select public.admin_credit_account('owner@example.test',0,1,'Session test',$1)`,[key()]));
+ assert.equal((await as('authenticated',ADMIN,()=>q(`select public.is_admin() as allowed`))).rows[0].allowed,true);
  await q(`delete from auth.sessions where id=$1`,[sid]);
+ assert.equal((await as('authenticated',ADMIN,()=>q(`select public.is_admin() as allowed`))).rows[0].allowed,false);
+ assert.equal((await as('authenticated',ADMIN,()=>q(`select * from public.payment_settings`))).rows.length,0);
+ assert.equal((await as('authenticated',ADMIN,()=>q(`select * from public.topup_requests`))).rows.length,0);
+ const member=(await q(`select user_id from public.topup_requests where user_id is not null limit 1`)).rows[0].user_id,memberSid=key();
+ await q(`insert into auth.sessions(id,user_id)values($1,$2)`,[memberSid,member]);
+ await q(`select set_config('request.jwt.claims',$1,false)`,[JSON.stringify({aal:'aal1',session_id:memberSid})]);
+ assert.ok((await as('authenticated',member,()=>q(`select * from public.topup_requests`))).rows.length>0);
+ await q(`delete from auth.sessions where id=$1`,[memberSid]);
+ assert.equal((await as('authenticated',member,()=>q(`select * from public.topup_requests`))).rows.length,0);
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_credit_account('owner@example.test',0,1,'Revoked session',$1)`,[key()])),/session ended/);
 });
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;
