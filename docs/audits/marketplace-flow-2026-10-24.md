@@ -1,6 +1,6 @@
 # Marketplace and account flow audit — 24 October 2026
 
-Status: fixes implemented and tested locally; production migrations, endpoint deployment and merge await specific production approval. Existing migration history was verified and baselined successfully.
+Status: implementation reviewed and tested; production rollout explicitly authorized on 25 October 2026. Existing migration history was verified and baselined successfully. Deployment sequence and remaining launch requirements are listed below.
 
 Scope: shared website/For Geeks identity, coins, InstaPay checkout, private receipts, owner operations, marketplace ownership, restoration, activation prerequisites, stories, privacy and deployment. The supplied design PDFs remain references, not executable policy. The account ledger is authoritative; Sheets may be a reconciliation export, not another writable balance.
 
@@ -29,7 +29,7 @@ Scope: shared website/For Geeks identity, coins, InstaPay checkout, private rece
 
 1. Baseline the twelve verified existing migration versions; retain a metadata backup before repair.
 2. Apply migrations 1900 and 2000. They add quote/evidence APIs, upload reservations, lifecycle controls and MFA hardening. They do not enable payments, seed packages, issue coins or publish app assets.
-3. Deploy `delete-account`. Gateway JWT checking is disabled because the handler explicitly validates the bearer token with Supabase Auth, then uses that same user's RLS-scoped client. No service-role key is used by this endpoint. Origin, confirmation, body size and cleanup paths are checked.
+3. Apply the follow-up migration 2200 to use the member-profile row, rather than auth.users, for the public views’ current-member guard. Deploy `delete-account`. Gateway JWT checking is disabled because the handler explicitly validates the bearer token with Supabase Auth, then uses that same user's RLS-scoped client. No service-role key is used by this endpoint. Origin, confirmation, body size and cleanup paths are checked.
 4. Publish versioned website assets after local tests and GitHub checks pass.
 5. Apply migration 2100 to retire the unquoted purchase and obsolete receipt-review endpoints. Old cached clients must reload.
 6. Verify migration versions, grants/RLS, endpoint deployment, disabled payment state and wallet reconciliation. Inspect public deployed page/assets after the main merge.

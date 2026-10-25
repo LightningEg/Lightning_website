@@ -151,6 +151,10 @@ await test('deleting an account cancels its unpaid requests instead of leaving u
  const kept=(await q(`select user_id,status from public.topup_requests where id=$1`,[r.id])).rows[0];
  assert.deepEqual(kept,{user_id:null,status:'cancelled'});
 });
+await test('public profile views have no dependency on the Auth users table',async()=>{
+ const dependency=(await q(`select count(*)::int n from pg_depend d join pg_rewrite r on r.oid=d.objid where d.classid='pg_rewrite'::regclass and d.refobjid='auth.users'::regclass and r.ev_class in ('public.profile_directory'::regclass,'public.profile_work'::regclass)`)).rows[0];
+ assert.equal(dependency.n,0);
+});
 await test('legacy financial mutations require MFA and revoked administrator sessions fail closed',async()=>{
  await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_correct_entry(0,'Test correction')`)),/MFA/);
