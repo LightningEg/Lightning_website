@@ -30,7 +30,7 @@
     var on = contrast(acc, bg) >= contrast(acc, ink) ? bg : ink;
     return { background: bg, surface: mix(ink, bg, light ? 0.03 : 0.05), raised: mix(ink, bg, light ? 0.06 : 0.09), text: ink, muted: quiet,
       border: mix(ink, bg, 0.15), accent: acc, onAccent: on, income: light ? '#097852' : '#4FD8A4', expense: light ? '#C93D72' : '#FF9393',
-      transfer: quiet, warning: light ? '#8A5A00' : '#F2C86B', focus: acc, hero: ink };
+      transfer: quiet, warning: light ? '#8A5A00' : '#F2C86B', focus: acc, hero: ink, tex: t.tex };
   }
   // The main site's own version of a theme, light or dark: the same rule as variant() in js/theme.js.
   function variant(c, mode) {
@@ -40,14 +40,16 @@
     var readable = function (start) { var x = start; for (var t = 0.1; contrast(x, ground) < 4.5 && t < 1; t += 0.1) x = mix(text, start, t); return x; };
     return [ground, text, readable(own ? quiet : mix(text, ground, 0.62)), readable(acc)];
   }
-  function fromSite(t, mode) { return t && t.c ? fromWebsite({ c: variant(t.c, mode) }) : DEFAULT; }
+  function fromSite(t, mode) { return t && t.c ? fromWebsite({ c: variant(t.c, mode), tex: t.tex }) : DEFAULT; }
   function clean(p) {
     var out = {};
     KEYS.forEach(function (k) { out[k] = p && HEX.test(p[k] || '') ? p[k] : DEFAULT[k]; });
     return out;
   }
+  var TEX = /^(papyrus|cotton)$/; // css/textures.css
   function paint(node, palette) {
     var p = clean(palette);
+    if (palette && TEX.test(palette.tex || '')) node.setAttribute('data-tex', palette.tex); else node.removeAttribute('data-tex');
     KEYS.forEach(function (k) { node.style.setProperty('--pv-' + k, p[k]); });
     node.setAttribute('data-tone', isLight(p.background) ? 'light' : 'dark');
     return node;

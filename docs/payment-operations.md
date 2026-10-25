@@ -46,17 +46,33 @@ Content changes invalidate verification. An outdated moderation screen cannot ap
 
 ## Pricing and operational economics
 
-| EGP paid | Base coins | Bonus | Total coins |
+Owner revision (2026-10-25): about 3,000 EGP of fixed cost a month, 5 coins per EGP, and buyers who pay once rather than monthly. Coins are fixed prices; the market also shows each price in EGP (`coin_rate()`).
+
+| Tier | What it is | Coins | EGP |
 | --- | --- | --- | --- |
-| 10 | 50 | 0% | 50 |
-| 50 | 250 | 0% | 250 |
-| 100 | 500 | 5% | 525 |
-| 500 | 2,500 | 10% | 2,750 |
-| 1,000 | 5,000 | 15% | 5,750 |
+| Palette | New colours on both sites, light and dark sides | 300 | 60 |
+| Textured | The palette plus a woven texture behind every page | 600 | 120 |
+| Animated (later) | Texture plus one quiet signature motion, still under reduced motion | 1,000 | 200 |
+| Banner | Strip on your profile, leaderboard row and account | 100–200 | 20–40 |
+| Frame · badge | Ring round your picture · mark beside your name | 60–100 | 12–20 |
 
-Bonuses use the highest qualifying percentage, are not cumulative, and round down to whole coins. The maximum bonus is deliberately bounded at 15%; the owner can change future pricing. At the current 100-coin starter-palette price, a 20 EGP top-up buys one; Mono remains free. Track outstanding coins and reward issuance as obligations to deliver cosmetics, not cash profit.
+Top-up bonuses stay as configured (5% from 100 EGP, 10% from 500, 15% from 1,000; not cumulative), so a buyer's effective price per coin falls from 0.20 to about 0.17 EGP at the top step.
 
-Illustration only: at an average 50 EGP purchase, two minutes of manual review valued at 100 EGP/hour costs about 3.33 EGP per order. With 2,000 EGP monthly fixed costs and no other variable cost, break-even is about 43 paid orders/month before tax, asset production, payment charges and support. With 1,000 users this requires about 4.3% buying monthly; with 10,000, about 0.43%. Neither user count nor the coin exchange rate guarantees profit. Measure actual conversion, support time, revenue, cosmetic development costs and payment-provider terms before scaling. Manual review becomes a staffing constraint as order volume grows.
+**Why these numbers.** At the old 100-coin palette (20 EGP), covering 3,000 EGP needed about 150 palette sales a month, which a young community cannot produce. Selling once means every month's revenue must come from new buyers or from something new for earlier buyers, so the price of a single item has to carry real weight:
+
+- A typical first top-up buys a palette and a banner, or one textured theme: about 120–150 EGP. Less about 4 EGP of manual review per top-up, that is roughly 115–145 EGP net.
+- Break-even is therefore about 21–26 paid top-ups a month (3,000 ÷ 115–145), before tax and payment charges.
+- One buyer is worth more than one top-up when there is something new to buy: if a buyer returns for one drop in three months, a year is worth about 250 EGP. Covering 36,000 EGP a year then needs about 145 paying members a year, about 12 new ones a month plus their returns.
+- At 2–5% of signed-in members paying, that means roughly 250–600 new members a month. Measure the real rate before trusting any of this.
+
+**What keeps it profitable without a subscription:**
+
+- One new textured theme a month (the drop), so earlier buyers have a reason to return. A palette is cheap to make; a texture costs one CSS pattern and its checks (guideline/themes.md).
+- Seasonal items for a limited time (Ramadan, Eid, Coptic Christmas, Sham el-Nessim) at the same tier prices.
+- A one-time Founder pack, proposed and not built: all palettes, Papyrus and a Founder badge for about 1,500 coins (300 EGP), offered to the first members only. Fifty founders would cover about five months of fixed cost up front.
+- Bonuses on larger top-ups, so one trip through InstaPay and review buys more.
+
+Count coins only when they are spent: unspent coins are an obligation to deliver cosmetics, not profit. Review time grows with the number of top-ups, so larger, rarer top-ups are cheaper to run than many small ones.
 
 ## Deployment and acceptance
 

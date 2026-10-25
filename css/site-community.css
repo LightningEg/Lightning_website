@@ -174,3 +174,11 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
 }
 
 body[data-main-store] .lb-row.has-banner .nm,body[data-main-store] .lb-row.has-banner .sc,body[data-main-store] .lb-row.has-banner .ct{border-radius:999px}
+.wal-packs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}
+.wal-packs button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:72px;padding:12px 14px;border:1px solid var(--line-ctl);border-radius:16px;background:var(--white);color:var(--ink);text-align:start;cursor:pointer}
+.wal-packs button:hover{border-color:var(--green)}
+.wal-packs b{font:800 17px var(--display)}
+.wal-packs small{color:var(--muted);font:600 12.5px var(--body)}
+.wal-packs em{font:700 12px var(--body);font-style:normal;color:var(--green-text)}
+.wal-packs em:empty{display:none}
+@media(max-width:640px){.wal-packs{grid-template-columns:repeat(2,minmax(0,1fr))}}
