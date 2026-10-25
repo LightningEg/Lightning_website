@@ -70,7 +70,8 @@
 .pv-tabs .pv-add{justify-self:center;display:grid;place-items:center;width:3.6em;height:3.6em;padding:0;margin-top:-1.6em;border-radius:50%;background:var(--pv-accent);color:var(--pv-on-accent);font-size:1.4em;font-weight:800}
 
 /* the website */
-.pv-site{border-radius:12px;font-size:1.6cqi}
+.pv-site{border-radius:12px}
+.pv-site>*{font-size:2.6cqi}
 .pv-topbar{display:flex;justify-content:space-between;align-items:center;padding:.9em 1.6em;border-bottom:1px solid var(--pv-border);background:var(--pv-surface)}
 .pv-links{display:flex;gap:1.4em;font-size:.82em;font-weight:600;color:var(--pv-muted)}
 .pv-site-hero{padding:2.2em 1.6em 1.4em}
@@ -80,6 +81,32 @@
 .pv-btn{display:inline-flex;align-items:center;height:2.6em;padding:0 1.3em;border-radius:2em;background:var(--pv-accent);color:var(--pv-on-accent);font-size:.85em;font-weight:700}
 .pv-btn.ghost{background:transparent;color:var(--pv-text);border:1px solid var(--pv-muted)}
 .pv-site .pv-tiles{padding:0 1.6em 1.8em;gap:1em}
+
+/* For Geeks: mono, weights 400 and 500, hairline cells (D04, D06, D07) */
+.pv-geek{border-radius:12px;font:400 16px/1.5 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pv-geek>*{font-size:1.5cqi}
+.pv-geek b{font-weight:500}
+.pv-geek .pv-brand{font-family:inherit;font-weight:500}
+.pv-gbar{display:flex;align-items:center;gap:1.2em;padding:.9em 1.6em;border-bottom:1px solid var(--pv-border)}
+.pv-gbar .pv-links{margin-inline-start:auto;display:flex;gap:1.4em;color:var(--pv-muted)}
+.pv-dim{color:var(--pv-muted)}
+.pv-k{color:var(--pv-accent)}
+.pv-label{display:block;margin-bottom:.6em}
+.pv-ghero{padding:2em 1.6em 1.4em}
+.pv-gh{display:block;font-size:2.6em;line-height:1.1;letter-spacing:-.03em;margin-bottom:.6em}
+.pv-term{border:1px solid var(--pv-border);border-radius:.8em;background:var(--pv-surface);overflow:hidden}
+.pv-term p{margin:0;padding:.25em 1em}
+.pv-term p:nth-child(2){padding-top:.8em}.pv-term p:last-child{padding-bottom:.9em}
+.pv-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 1.6em 1.8em;border:1px solid var(--pv-border)}
+.pv-cell{display:flex;flex-direction:column;gap:.3em;padding:1em;box-shadow:1px 0 0 var(--pv-border)}
+.pv-cell b{font-size:2em;letter-spacing:-.04em}
+.pv-cell small{font-size:.45em;font-weight:400}
+
+/* two sites side by side, or light and dark */
+.pv-duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.pv-duo figure{margin:0;min-width:0}
+.pv-duo figcaption{margin-top:6px;font-size:12.5px;color:var(--mk-dim,inherit)}
+@media (max-width:560px){.pv-duo{grid-template-columns:minmax(0,1fr)}}
 
 /* the card thumbnail */
 .pv-thumb{display:grid;grid-template-columns:18% 1fr;height:116px;border-radius:14px;font-size:1cqi}

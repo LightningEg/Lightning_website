@@ -32,6 +32,15 @@
       border: mix(ink, bg, 0.15), accent: acc, onAccent: on, income: light ? '#097852' : '#4FD8A4', expense: light ? '#C93D72' : '#FF9393',
       transfer: quiet, warning: light ? '#8A5A00' : '#F2C86B', focus: acc, hero: ink };
   }
+  // The main site's own version of a theme, light or dark: the same rule as variant() in js/theme.js.
+  function variant(c, mode) {
+    var bg = c[0], ink = c[1], quiet = c[2], acc = c[3], own = (lum(bg) > 0.4) === (mode === 'light');
+    var ground = own ? bg : mode === 'light' ? mix(acc, '#ffffff', 0.05) : mix(acc, ink, 0.07);
+    var text = own ? ink : bg;
+    var readable = function (start) { var x = start; for (var t = 0.1; contrast(x, ground) < 4.5 && t < 1; t += 0.1) x = mix(text, start, t); return x; };
+    return [ground, text, readable(own ? quiet : mix(text, ground, 0.62)), readable(acc)];
+  }
+  function fromSite(t, mode) { return t && t.c ? fromWebsite({ c: variant(t.c, mode) }) : DEFAULT; }
   function clean(p) {
     var out = {};
     KEYS.forEach(function (k) { out[k] = p && HEX.test(p[k] || '') ? p[k] : DEFAULT[k]; });
@@ -137,6 +146,22 @@
     return w;
   }
 
+  /* For Geeks in a theme: its own look (Part D), mono, a dim lead and an ink punch, a terminal, hairline cells. */
+  function geek(palette) {
+    var w = paint(el('div', 'pv pv-geek'), palette);
+    var term = add(el('div', 'pv-term'), [add(el('div', 'pv-win'), [el('i'), el('i'), el('i')]),
+      add(el('p'), [el('span', 'pv-k', '$ '), el('span', null, 'python -m lightning --demo')]),
+      el('p', 'pv-dim', "loading Mohab's year …"), add(el('p'), [el('span', 'pv-k', '✓ '), el('span', null, 'ready on 127.0.0.1:8766')])]);
+    add(w, [
+      add(el('div', 'pv-gbar'), [add(el('span', 'pv-brand'), [mark(), el('span', null, 'lightning')]), el('span', 'pv-dim', '~/root/for-geeks'),
+        add(el('span', 'pv-links'), [el('span', null, 'home'), el('span', null, 'contribute'), el('span', null, 'roadmap')])]),
+      add(el('div', 'pv-ghero'), [el('span', 'pv-k pv-label', '03 // proof'), add(el('b', 'pv-gh'), [el('span', 'pv-dim', "Don't trust us. "), el('span', null, 'Run it.')]), term]),
+      add(el('div', 'pv-cells'), [['163', 'ms', 'to open Overview'], ['1', 'formula', 'per figure'], ['256', '-bit', 'SQLCipher at rest']].map(function (x) {
+        return add(el('div', 'pv-cell'), [add(el('b', null, x[0]), [el('small', null, ' ' + x[1])]), el('span', 'pv-dim', x[2])]);
+      }))]);
+    return w;
+  }
+
   /* A small card thumbnail: the PC app at a glance. */
   function thumb(palette) {
     var w = paint(el('div', 'pv pv-thumb'), palette);
@@ -164,5 +189,5 @@
     return c;
   }
 
-  root.LightningPreview = { DEFAULT: DEFAULT, fromWebsite: fromWebsite, clean: clean, paint: paint, pc: pc, phone: phone, site: site, thumb: thumb, profile: profile, isLight: isLight, contrast: contrast, mix: mix };
+  root.LightningPreview = { DEFAULT: DEFAULT, fromWebsite: fromWebsite, fromSite: fromSite, variant: variant, geek: geek, clean: clean, paint: paint, pc: pc, phone: phone, site: site, thumb: thumb, profile: profile, isLight: isLight, contrast: contrast, mix: mix };
 })(window);

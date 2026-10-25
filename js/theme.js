@@ -1,6 +1,8 @@
 // Lightning theme: light by default, whatever the browser or system setting; dark only when the visitor picks it, then remembered.
-// A member may also wear a marketplace theme across the website (a "skin": four colours, chosen on marketplace.html,
-// remembered on this device). The skin repaints surfaces, text and buttons only; good and bad keep their colours.
+// A member may also wear a marketplace theme across the website (a "skin", chosen on marketplace.html, remembered on
+// this device). Themes are shared with For Geeks, but each site draws its own version: here a theme has a light side
+// and a dark side (variant below), so the light/dark switch keeps working. The skin repaints surfaces, text and buttons
+// only; good and bad keep their colours.
 // Load in <head> without defer so the right theme is set before the first paint.
 (() => {
   const KEY = 'lightning-theme';
@@ -21,6 +23,17 @@
   const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
   function validSkin(v) {
     return v && typeof v === 'object' && /^[a-z0-9-]{1,40}$/.test(v.id || '') && Array.isArray(v.c) && v.c.length === 4 && v.c.every(c => HEX.test(c)) ? v : null;
+  }
+  // The main site's version of a theme's four colours [ground, text, quiet text, accent] in light or dark mode.
+  // The theme's own side keeps its colours; the other side turns it over (its ground becomes the text) on a lightly
+  // tinted ground. Quiet text and the accent move toward the text until they read at 4.5:1.
+  // js/theme-preview.js holds the same rule for the previews; supabase/tests/market-ui-pages.test.mjs keeps them equal.
+  function variant(c, mode) {
+    const [bg, ink, quiet, acc] = c, own = (lum(bg) > 0.4) === (mode === 'light');
+    const ground = own ? bg : mode === 'light' ? mix(acc, '#ffffff', 0.05) : mix(acc, ink, 0.07);
+    const text = own ? ink : bg;
+    const readable = start => { let x = start; for (let t = 0.1; contrast(x, ground) < 4.5 && t < 1; t += 0.1) x = mix(text, start, t); return x; };
+    return [ground, text, readable(own ? quiet : mix(text, ground, 0.62)), readable(acc)];
   }
   function skinCss(c) {
     const [bg, ink, quiet, acc] = c, light = lum(bg) > 0.4;
@@ -46,9 +59,10 @@
     let tag = document.getElementById('site-skin');
     if (skin) {
       if (!tag) { tag = document.createElement('style'); tag.id = 'site-skin'; document.head.appendChild(tag); }
-      tag.textContent = skinCss(skin.c);
+      const mode = saved || 'light';
+      tag.textContent = skinCss(variant(skin.c, mode));
       root.dataset.skin = skin.id;
-      apply(lum(skin.c[0]) > 0.4 ? 'light' : 'dark');
+      apply(mode);
     } else {
       if (tag) tag.remove();
       delete root.dataset.skin;
@@ -69,7 +83,7 @@
     if (meta) meta.content = theme === 'dark' ? '#08192A' : '#E3F6EC';
     document.querySelectorAll('[data-theme-toggle]').forEach(button => {
       button.setAttribute('aria-checked', String(theme === 'dark'));
-      button.title = skin ? 'Back to the standard look' : theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+      button.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
     });
   }
   function build(button) {
@@ -92,7 +106,7 @@
     if (!event.target.closest('[data-theme-toggle]')) return;
     saved = root.dataset.theme === 'dark' ? 'light' : 'dark';
     try { localStorage.setItem(KEY, saved); } catch (_) {}
-    if (skin) setSkin(null); else apply(saved);
+    if (skin) setSkin(skin, false); else apply(saved);
   });
-  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin};
+  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin, variant};
 })();

@@ -143,12 +143,14 @@ await test('main: a worn theme the member no longer owns comes off', async () =>
   assert.equal(p.w.localStorage.getItem('lightning-site-skin'), null);
 });
 
-await test('main: Details shows the theme on the website, the computer and the phone, with its ten parts', async () => {
+await test('main: Details shows the theme on both sites (the main site light and dark), the computer and the phone, with its ten parts', async () => {
   const p = await boot({ balance: 300 });
   await p.click(p.byLabel('Paper details'));
   assert.equal(p.$('mkt-detail').hidden, false);
-  assert.deepEqual(p.qa('.mkt-view').map(b => b.textContent), ['Website', 'Computer', 'Phone']);
-  assert.ok(p.q('.mkt-stage .pv-site'));
+  assert.deepEqual(p.qa('.mkt-view').map(b => b.textContent), ['Website', 'For Geeks', 'Computer', 'Phone']);
+  assert.equal(p.qa('.mkt-stage .pv-duo .pv-site').length, 2, 'the main site shows its light and dark side');
+  await p.click(p.q('.mkt-view[data-mode="geeks"]'));
+  assert.ok(p.q('.mkt-stage .pv-geek'), 'the same theme in For Geeks\' own look');
   await p.click(p.q('.mkt-view[data-mode="phone"]'));
   assert.ok(p.q('.mkt-stage .pv-phone .pv-tabs'));
   assert.deepEqual(p.qa('.mkt-stage .pv-tabs span').map(s => s.textContent), ['Overview', 'Budget', '+', 'Transactions', 'More'], 'the phone keeps its five slots (C03.1)');
@@ -180,6 +182,12 @@ await test('For Geeks: the same structure in its own look; Try it switches the p
   assert.equal(p.root.dataset.theme, 'paper');
   assert.equal(p.w.localStorage.getItem('lightning-geeks-theme'), 'mono', 'Try it saves nothing');
   await p.click(p.q('.mkt-trybar-cancel'));
+  await p.click(p.byLabel('Paper details'));
+  assert.deepEqual(p.qa('.mkt-view').map(b => b.textContent), ['for geeks', 'main website', 'computer', 'phone'], 'For Geeks words are lower case (D10)');
+  assert.ok(p.q('.mkt-stage .pv-geek'), 'For Geeks opens on its own version');
+  await p.click(p.qa('.mkt-detail-acts button').find(b => b.textContent === 'close'));
+  await p.click(p.byLabel('Try Paper'));
+  await p.click(p.q('.mkt-trybar-cancel'));
   assert.notEqual(p.root.dataset.theme, 'paper');
 });
 
@@ -198,6 +206,19 @@ await test('previews: every website theme mixed for the app keeps text and butto
   assert.equal(bad.text, '#FFFFFF');
 });
 
+await test('skin: each theme has a readable light and dark side on the main site, the same in theme.js and the previews', async () => {
+  const dom = new JSDOM('<html><head></head><body></body></html>', { runScripts: 'outside-only', url: 'https://lightningeg.com/' });
+  const w = dom.window;
+  ['js/theme.js', 'js/site-theme-previews.js', 'js/theme-preview.js'].forEach(f => w.eval(code(f)));
+  const PV = w.LightningPreview;
+  for (const t of w.LG.THEMES) for (const mode of ['light', 'dark']) {
+    const v = w.LightningTheme.variant(t.c, mode);
+    assert.deepEqual([...PV.variant(t.c, mode)], [...v], t.id + ' ' + mode + ' agrees');
+    assert.equal(PV.isLight(v[0]), mode === 'light', t.id + ' ' + mode + ' ground');
+    assert.ok(PV.contrast(v[1], v[0]) >= 4.5 && PV.contrast(v[2], v[0]) >= 4.5 && PV.contrast(v[3], v[0]) >= 4.5, t.id + ' ' + mode + ' reads at 4.5:1');
+  }
+});
+
 await test('skin: theme.js refuses anything but four hex colours and an id', async () => {
   const dom = new JSDOM('<html><head></head><body></body></html>', { runScripts: 'outside-only', url: 'https://lightningeg.com/' });
   const w = dom.window;
@@ -206,14 +227,18 @@ await test('skin: theme.js refuses anything but four hex colours and an id', asy
   assert.equal(w.document.documentElement.dataset.skin, undefined);
   assert.equal(w.document.getElementById('site-skin'), null);
   w.LightningTheme.skin({ id: 'nile', c: ['#070b16', '#e9edf7', '#b7c0d8', '#e6b450'] });
-  assert.equal(w.document.documentElement.dataset.theme, 'dark');
-  assert.match(w.document.getElementById('site-skin').textContent, /--paper:#070b16/);
+  assert.equal(w.document.documentElement.dataset.theme, 'light', 'a dark theme gets the main site\'s light side by default');
+  assert.doesNotMatch(w.document.getElementById('site-skin').textContent, /--paper:#070b16/);
+  assert.match(w.document.getElementById('site-skin').textContent, /--ink:#070b16/, 'its night ground becomes the ink');
   const toggle = w.document.createElement('button');
   toggle.setAttribute('data-theme-toggle', '');
   w.document.body.appendChild(toggle);
   toggle.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-  assert.equal(w.document.getElementById('site-skin'), null, 'the light/dark switch goes back to the standard look');
-  assert.equal(w.localStorage.getItem('lightning-site-skin'), null);
+  assert.equal(w.document.documentElement.dataset.theme, 'dark');
+  assert.equal(w.document.documentElement.dataset.skin, 'nile', 'the light/dark switch keeps the theme');
+  assert.match(w.document.getElementById('site-skin').textContent, /--paper:#070b16/, 'and shows its dark side');
+  w.LightningTheme.skin(null);
+  assert.equal(w.document.getElementById('site-skin'), null);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

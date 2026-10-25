@@ -373,31 +373,41 @@
     } else if (mode === 'phone') {
       var wrap = add(el('div', 'mkt-stage-phone'), [PV.phone(e.palette)]);
       s.appendChild(wrap);
-    } else s.appendChild(mode === 'pc' ? PV.pc(e.palette) : PV.site(e.palette));
+    } else if (mode === 'website') {
+      // the main site's own version: a light side and a dark side, as the light/dark switch shows them
+      var duo = el('div', 'pv-duo');
+      [['light', 'Light'], ['dark', 'Dark']].forEach(function (m) {
+        duo.appendChild(add(el('figure'), [PV.site(PV.fromSite({ c: e.c }, m[0])), el('figcaption', null, ui(m[1]))]));
+      });
+      s.appendChild(duo);
+    } else if (mode === 'geeks') s.appendChild(PV.geek(PV.fromWebsite({ c: e.c })));
+    else s.appendChild(PV.pc(e.palette));
     Array.prototype.forEach.call(doc.querySelectorAll('.mkt-views button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === mode)); });
     var note = doc.querySelector('.mkt-stage-note');
     note.textContent = e.kind !== 'theme' ? 'How others see you on your profile, the leaderboard and your stories.'
-      : mode === 'website' ? 'Sample page in this palette. Layout, sizes and words never change.'
+      : mode === 'website' ? 'The main website\u2019s own version of this theme, light by default and dark with the switch. Layout, sizes and words never change.'
+      : mode === 'geeks' ? 'For Geeks\u2019 own version of the same theme. One purchase dresses both sites, each in its own look.'
       : 'Mohab’s sample year in this palette. Only colours change; every figure, label and place stays the same.';
   }
 
   function openDetail(e, trigger, mode) {
     detail.entry = e; detail.trigger = trigger;
     var it = e.item, win = doc.querySelector('.mkt-detail-win');
-    doc.querySelector('.mkt-detail-tag').textContent = ui(e.app ? 'App theme · in testing' : e.kind === 'theme' ? 'Theme · website, computer and phone' : e.kind[0].toUpperCase() + e.kind.slice(1));
+    doc.querySelector('.mkt-detail-tag').textContent = ui(e.app ? 'App theme · in testing' : e.kind === 'theme' ? 'Theme · both sites, computer and phone' : e.kind[0].toUpperCase() + e.kind.slice(1));
     $('detail-title').textContent = e.name;
     doc.querySelector('.mkt-detail-note').textContent = e.app ? e.app.line : (it && it.description) || '';
     var views = doc.querySelector('.mkt-views');
     while (views.firstChild) views.removeChild(views.firstChild);
     if (e.kind === 'theme') {
-      (e.app ? [['pc', 'Computer'], ['phone', 'Phone']] : [['website', 'Website'], ['pc', 'Computer'], ['phone', 'Phone']]).forEach(function (v) {
+      (e.app ? [['pc', 'Computer'], ['phone', 'Phone']] : MAIN ? [['website', 'Website'], ['geeks', 'For Geeks'], ['pc', 'Computer'], ['phone', 'Phone']]
+        : [['geeks', 'For Geeks'], ['website', 'Main website'], ['pc', 'Computer'], ['phone', 'Phone']]).forEach(function (v) {
         var b = btn('mkt-view', v[1], function () { stage(e, v[0]); });
         b.setAttribute('data-mode', v[0]);
         views.appendChild(b);
       });
     }
     views.hidden = e.kind !== 'theme';
-    stage(e, mode || (e.app ? 'pc' : 'website'));
+    stage(e, mode || (e.app ? 'pc' : MAIN ? 'website' : 'geeks'));
     // the ten parts
     var parts = doc.querySelector('.mkt-parts');
     while (parts.firstChild) parts.removeChild(parts.firstChild);
