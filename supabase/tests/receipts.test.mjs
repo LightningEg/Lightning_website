@@ -124,4 +124,33 @@ await test('a ticket: the owner confirms the amount that arrived; the right amou
  assert.equal((await confirm(10000)).status,'approved');
  assert.equal((await wallet(M)).balance,500,'confirming again never credits twice');
 });
+await test('a ticket takes money recorded without one: it lists the likely transfers and attaching the right one credits',async()=>{
+ const M=await newUser();
+ const c=(await as('authenticated',M,()=>q(`select * from public.create_checkout($1,$2,true)`,[P,key()]))).rows[0];
+ const k=(await as('authenticated',M,()=>q(`select public.reserve_topup_receipt($1) as path`,[c.id]))).rows[0].path;
+ await as('authenticated',M,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[k]));
+ const r=(await as('authenticated',M,()=>q(`select * from public.attach_topup_receipt($1,'01009998887',null,$2)`,[c.id,k]))).rows[0];
+ // the owner logged two incoming payments in the older journal before matching anything
+ await as('authenticated',ADMIN,()=>q(`select public.admin_record_bank_transfer('IPN-5551',4000,now(),null,'01009998887',null,'Seen in my InstaPay app',true)`));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_record_bank_transfer('IPN-5552',6000,now(),null,'01009998887',null,'Seen in my InstaPay app',true)`));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_record_bank_transfer('IPN-5553',3000,now(),null,'someone@instapay',null,'Seen in my InstaPay app',true)`));
+ await assert.rejects(as('authenticated',M,()=>q(`select public.admin_ticket_money($1)`,[c.id])),/admin|permission|MFA/i,'members cannot read the journal');
+ const money=(await as('authenticated',ADMIN,()=>q(`select public.admin_ticket_money($1) d`,[c.id]))).rows[0].d;
+ assert.deepEqual(money.candidates.map(x=>x.reference).sort(),['IPN-5551','IPN-5552'],'only money that looks like this ticket');
+ assert.ok(money.candidates[0].why.includes('same sender'));
+ assert.deepEqual(money.on_ticket,[]);
+ const attach=(ref,who=ADMIN)=>as('authenticated',who,async()=>(await q(`select public.admin_attach_transfer($1,$2,null,$3,$4) d`,[c.id,ref,k,r.receipt_revision])).rows[0].d);
+ await assert.rejects(attach('IPN-5551',M),/admin|permission|MFA/i);
+ const part=await attach('IPN-5551');
+ assert.equal(part.status,'amount_differs');assert.equal(Number(part.received_piastres),4000);
+ assert.equal((await wallet(M))?.balance??0,0,'part of the money credits nothing');
+ await assert.rejects(attach('IPN-5551'),/already on a ticket/);
+ const done=await attach('IPN-5552');
+ assert.equal(done.status,'approved');
+ assert.equal((await wallet(M)).balance,500,'both payments together match the quote: credited once');
+ assert.equal((await q(`select count(*)::int c from public.bank_transfers where reference like 'TKT-%' and request_id=$1`,[c.id])).rows[0].c,0,'no second record of the same money');
+ const after=(await as('authenticated',ADMIN,()=>q(`select public.admin_ticket_money($1) d`,[c.id]))).rows[0].d;
+ assert.deepEqual(after.on_ticket.map(x=>x.reference),['IPN-5551','IPN-5552']);
+ assert.deepEqual(after.candidates,[],'a credited ticket offers nothing more');
+});
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;

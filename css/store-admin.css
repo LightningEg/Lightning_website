@@ -117,6 +117,15 @@
 .ops-confirm label{margin-block:0 12px}
 .ops-confirm .row{margin-top:4px}
 .ops .ops-confirm .chk{font-weight:600}
+.ops-money{margin-top:16px;padding:12px 16px;border-radius:14px;background:var(--field)}
+.ops-money h4{margin:0 0 6px;color:var(--ink);font:700 14.5px var(--body)}
+.ops-money h4+ul+h4{margin-top:14px}
+.ops-money ul{list-style:none;margin:0;padding:0}
+.ops-money li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.ops-money li:last-child{border-bottom:0}
+.ops-money li>span{color:var(--ink);font:700 15px var(--body);font-variant-numeric:tabular-nums}
+.ops-money small{display:block;margin-top:2px;color:var(--muted);font:500 13px var(--body);overflow-wrap:anywhere}
+.ops-money li .btn{flex:none}
 .ops-ticket-status{margin:10px 0 0;color:var(--ink);font:600 14px/1.5 var(--body)}
 .ops-ticket-status:empty{display:none}
 .ops-ticket>p{margin:12px 0 0;color:var(--muted);font:500 14px var(--body)}
@@ -128,3 +137,4 @@
 .ops .panel>p,.ops .panel details>p{color:var(--muted);font:500 14.5px/1.55 var(--body)}
 @media(max-width:700px){.ops-ticket-body{grid-template-columns:minmax(0,1fr)}.ops-ticket{padding:16px}.ops-facts{grid-template-columns:minmax(0,1fr);gap:0}.ops-facts dd{margin-bottom:6px}}
 .ops .row{justify-content:flex-start}
+@media(max-width:560px){.ops-money li{flex-direction:column;align-items:stretch}.ops-money li .btn{width:100%}}

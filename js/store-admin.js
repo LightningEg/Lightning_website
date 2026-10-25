@@ -33,6 +33,22 @@
   for(const row of r.data)$('store-request-list').append(ticket(row,run));
   requestOffset+=r.data.length;$('store-request-more').hidden=r.data.length<15;
  }
+ // The money side of an open ticket (admin_ticket_money): what is already on it, and unmatched money that looks like
+ // it, taken with one click (admin_attach_transfer). Reconciling happens here, not in a second place.
+ function ticketMoney(row,run,status,receiptSeen){
+  const box=el('section');box.className='ops-money';box.setAttribute('aria-label','Money for this ticket');
+  const load=async()=>{const r=(await rpc('admin_ticket_money',{p_request_id:row.id}))||{};if(run!==generation)return;box.replaceChildren();
+   const on=r.on_ticket||[],cand=r.candidates||[],line=(t,extra)=>{const li=el('li');const main=el('span',egp(t.amount_piastres)+' · '+when(t.received_at));const sub=el('small',[t.reference,t.sender,extra].filter(Boolean).join(' · '));sub.dir='auto';main.append(sub);li.append(main);return li;};
+   if(on.length){const sum=on.reduce((a,t)=>a+Number(t.amount_piastres),0);box.append(el('h4','On this ticket: '+egp(sum)+' of '+egp(r.quote_piastres)));const ul=el('ul');on.forEach(t=>{const li=line(t,t.credited?'credited':'');
+     if(!t.credited)li.append(action('Not for this ticket',async()=>{await rpc('admin_correct_bank_transfer',{p_reference:t.reference,p_amount_piastres:t.amount_piastres,p_request_id:null,p_voided:false,p_note:'Taken off ticket '+String(row.id).slice(0,8)+' on the owner dashboard'});await load();},status));ul.append(li);});box.append(ul);}
+   if(cand.length){box.append(el('h4','Already recorded: may be this payment'));const ul=el('ul');cand.forEach(t=>{const li=line(t,(t.why||[]).join(', '));
+     li.append(action('Use for this ticket',async()=>{if(row.receipt_object_key&&!receiptSeen())throw Error('Show the receipt first.');const res=await rpc('admin_attach_transfer',{p_request_id:row.id,p_reference:t.reference,p_note:null,p_receipt_key:row.receipt_object_key,p_receipt_revision:row.receipt_revision});if(run!==generation)return;
+      if(res.status==='approved'){await Promise.all([requests(),overview()]);say('store-request-status','Credited '+row.coins+' coins to '+(row.transfer_note_email||'the member')+'.');return;}
+      await load();status.textContent=res.status==='waiting_receipt'?'The money matches. It credits once the member uploads the receipt.':'Now '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+'. Nothing was credited yet.';},status));ul.append(li);});box.append(ul);}
+   box.hidden=!on.length&&!cand.length;};
+  box.hidden=true;load().catch(e=>{if(run===generation){box.hidden=false;box.replaceChildren(el('p','The money for this ticket did not load: '+message(e)));}});
+  return box;
+ }
  function ticket(row,run){
   const c=el('article');c.className='ops-ticket';c.dataset.status=row.status;
   const head=el('header'),st=el('span',{pending:'Open',approved:'Credited',rejected:'Rejected',cancelled:'Cancelled'}[row.status]||row.status);st.className='ops-st ops-st-'+row.status;head.append(el('h3',egp(row.price_piastres)+' · '+row.coins+' coins'),st);c.append(head);
@@ -42,7 +58,7 @@
   fact('Opened',row.created_at?when(row.created_at):'');if(row.review_note)fact('Note',row.review_note);c.append(facts);
   const status=el('p');status.className='ops-ticket-status';status.setAttribute('role','status');
   if(row.status!=='pending'){if(['cancelled','rejected'].includes(row.status)&&row.user_id){const d=details('Reopen: the member paid after all'),reason=input('Why you are reopening it');d.append(reason.label,action('Reopen ticket',async()=>{await rpc('admin_reopen_topup',{p_request_id:row.id,p_note:reason.input.value});await Promise.all([requests(),overview()]);say('store-request-status','Reopened. Find it under Pending.');},status));c.append(d);}c.append(status);return c;}
-  if(!row.receipt_object_key){c.append(el('p','Waiting for the member to upload a receipt. Nothing to do yet.'),status);return c;}
+  if(!row.receipt_object_key){c.append(el('p','Waiting for the member to upload a receipt.'),ticketMoney(row,run,status,()=>false),status);return c;}
   let viewed=false;const shot=el('div');shot.className='ops-receipt';
   const show=action('Show receipt',async()=>{const image=await FG.sb.storage.from('topup-receipts').createSignedUrl(row.receipt_object_key,300);if(run!==generation)return;if(image.error)throw image.error;const img=el('img');img.alt='Member payment receipt';img.referrerPolicy='no-referrer';img.onload=()=>{viewed=true;};img.onerror=()=>{viewed=false;status.textContent='The receipt did not load. Show it again before confirming.';};img.src=image.data.signedUrl;shot.replaceChildren(img);},status);
   shot.append(show);
@@ -56,7 +72,7 @@
   const form=el('div');form.className='ops-confirm';form.append(amount.label,note.label,seen.label,btns,status);
   offer.append(el('p','The member accepts it on their wallet page; then confirm the ticket again.'),offerCoins.label,offerWhy.label,action('Send the offer',async()=>{await rpc('admin_propose_topup_adjustment',{p_request_id:row.id,p_coins:Number(offerCoins.input.value),p_note:offerWhy.input.value});status.textContent='Offer sent. Confirm again once the member accepts.';},status));
   const back=details('I sent the money back'),ref=input('Your outgoing transfer reference'),why=input('Reason'),done=check('I already returned the full amount outside this website.');back.append(ref.label,why.label,done.label,action('Record the return',async()=>{await rpc('admin_record_payment_return',{p_request_id:row.id,p_reference:ref.input.value,p_note:why.input.value,p_confirmed:done.input.checked});await Promise.all([requests(),overview()]);},status));
-  const body=el('div');body.className='ops-ticket-body';body.append(shot,form);c.append(body,offer,back);return c;
+  const body=el('div');body.className='ops-ticket-body';body.append(shot,form);c.append(ticketMoney(row,run,status,()=>viewed),body,offer,back);return c;
  }
  async function social(append=false){if(!append)socialOffset=0;const run=generation,view=++socialRun;const rows=await rpc('admin_social_queue',{p_status:$('store-social-filter').value,p_offset:socialOffset});if(run!==generation||view!==socialRun)return;if(!append)$('store-social-list').replaceChildren();if(!append&&!rows.length)$('store-social-list').append(el('p','No posts in this view.'));for(const s of rows)$('store-social-list').append(window.FGStoryModeration.card(s,async()=>{await Promise.all([social(),overview()]);}));socialOffset+=rows.length;$('store-social-more').hidden=rows.length<50;}
  function verification(verified){window.dispatchEvent(new CustomEvent('lightning:owner-access',{detail:{verified}}));}
