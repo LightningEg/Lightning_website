@@ -133,7 +133,7 @@ await test('coins buy existing marketplace items; repeat restores never debit or
  await q(`update public.catalog_items set active=false where id='garnet'`);
  for(let i=0;i<4;i++) {
   const data=(await as('authenticated',u,() => q(`select public.restore_store_inventory() d`))).rows[0].d;
-  assert.equal(data.account_id,u); assert.deepEqual(data.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
+  assert.equal(data.account_id,u); assert.deepEqual(data.items.map(i=>i.item_id).sort(),['badge-founding','badge-supporter-bronze','garnet'],'what was bought, and the badges the top-up earned');
  }
  const other=(await as('authenticated',OWNER,() => q(`select public.restore_store_inventory() d`))).rows[0].d;
  assert.deepEqual(other.items,[]);
