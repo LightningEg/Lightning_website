@@ -86,5 +86,71 @@
 .fg-badge{position:relative}
 .fg-badge.lg{width:44px;height:44px}.fg-badge.lg svg{width:24px;height:24px}
 
-/* Leaderboard rows (js/forgeeks-leaderboard.js) wear the member's banner behind them, on both sites. A scrim from the
-   panel keeps rank and avatar readable; name and score sit on solid chips so their contrast never depends on the banner. */
+/* ---- supporter release (supabase/migrations/20261025370000_supporter_release.sql) ---- */
+/* Earned badges: one shield, three metals; Founding in the brand gold. Never sold. */
+.fg-badge[data-item="badge-supporter-bronze"]{color:#A0612B}
+.fg-badge[data-item="badge-supporter-silver"]{color:#6F7C8A}
+.fg-badge[data-item="badge-supporter-gold"]{color:#B8860B}
+.fg-badge[data-item="badge-founding"]{color:#B8860B;box-shadow:0 0 0 1px #B8860B}
+.fg-badge[data-item="badge-cotton-boll"]{color:#8A7A5C}
+.fg-badge[data-item="badge-lantern"]{color:#C26A1B}
+
+/* Name styles paint the display name itself, over any page rule for names (hence !important). Each hue is mixed 60% with the page's own text colour, so the name keeps
+   4.5:1 or better on every theme, light and dark (checked against all eight seeds). */
+[data-name-style="name-gold"]{color:color-mix(in srgb,#C9971C 60%,var(--ink))!important}
+[data-name-style="name-nile"]{color:color-mix(in srgb,#1E88C8 60%,var(--ink))!important}
+[data-name-style="name-sunset"],[data-name-style="name-shimmer"]{-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;text-decoration-color:var(--ink)}
+[data-name-style="name-sunset"]{background-image:linear-gradient(90deg,color-mix(in srgb,#E8742A 60%,var(--ink)),color-mix(in srgb,#9B4DE0 60%,var(--ink)))}
+/* shimmer: one slow light across the name every 9 s; the light is nearer the text colour, so contrast only rises */
+[data-name-style="name-shimmer"]{background-image:linear-gradient(100deg,color-mix(in srgb,#C9971C 60%,var(--ink)) 0 40%,color-mix(in srgb,#C9971C 30%,var(--ink)) 50%,color-mix(in srgb,#C9971C 60%,var(--ink)) 60% 100%);
+  background-size:250% 100%;background-position:100% 0;animation:fg-shimmer 9s ease-in-out infinite}
+@keyframes fg-shimmer{0%,55%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){[data-name-style]{animation:none!important;background-position:100% 0!important}}
+
+/* Animated banners: one slow motion each, behind content; the base rule stops them under reduced motion. */
+/* nile at night: gold glints drifting on dark water */
+.fg-banner[data-item="banner-nile-flow"]{
+  background:
+    repeating-linear-gradient(176deg,transparent 0 10px,rgba(230,180,80,.16) 10px 11px,transparent 11px 23px) 0 58%/200% 42% repeat-x,
+    radial-gradient(40% 60% at 70% 60%,rgba(230,180,80,.35),transparent 70%),
+    radial-gradient(1px 1px at 12% 18%,rgba(255,240,200,.8),transparent),
+    radial-gradient(1px 1px at 38% 10%,rgba(255,240,200,.6),transparent),
+    radial-gradient(1px 1px at 84% 22%,rgba(255,240,200,.7),transparent),
+    linear-gradient(180deg,#070b16 0%,#0b1630 55%,#0e2340 100%);
+  animation:fg-flow 14s linear infinite}
+@keyframes fg-flow{to{background-position:-100% 58%,70% 60%,0 0,0 0,0 0,0 0}}
+/* drifting stars: a field of stars that turns very slowly */
+.fg-banner[data-item="banner-drift"]{
+  background:
+    radial-gradient(1.2px 1.2px at 10px 12px,rgba(255,255,255,.9),transparent) 0 0/90px 60px,
+    radial-gradient(1px 1px at 55px 40px,rgba(255,255,255,.65),transparent) 0 0/90px 60px,
+    radial-gradient(1px 1px at 30px 25px,rgba(190,210,255,.7),transparent) 0 0/130px 80px,
+    radial-gradient(80% 140% at 80% 120%,rgba(120,90,220,.45),transparent 70%),
+    linear-gradient(180deg,#04060f,#0b1027 70%,#151a3a);
+  animation:fg-stars 40s linear infinite}
+@keyframes fg-stars{to{background-position:90px 0,90px 0,-130px 0,0 0,0 0}}
+
+/* Seasonal banners: on sale in their window, kept for ever by their owners. */
+/* cotton harvest: open bolls over an autumn field */
+.fg-banner[data-item="banner-cotton-harvest"]{background:
+  radial-gradient(circle at 14px 14px,#fffaf0 0 6px,rgba(255,250,240,.0) 7px) 0 62%/46px 34px repeat-x,
+  radial-gradient(circle at 30px 20px,#f5ecd8 0 5px,rgba(245,236,216,0) 6px) 10px 78%/52px 30px repeat-x,
+  linear-gradient(180deg,transparent 0 55%,#5f6b2c 55% 100%),
+  linear-gradient(180deg,#f3d9a4,#e9b872 55%)}
+/* new year 2027: fireworks over the Nile */
+.fg-banner[data-item="banner-new-year-2027"]{background:
+  repeating-conic-gradient(from 0deg at 22% 40%,rgba(255,214,120,.85) 0 2deg,transparent 2deg 18deg) 0 0/100% 100% no-repeat,
+  radial-gradient(circle at 22% 40%,transparent 0 30px,#0b1430 31px),
+  repeating-conic-gradient(from 9deg at 74% 34%,rgba(120,220,255,.75) 0 2deg,transparent 2deg 20deg),
+  linear-gradient(180deg,#0b1430 0 78%,#1b2b55 78% 100%)}
+/* ramadan lanterns: warm fanous lights on a night street */
+.fg-banner[data-item="banner-ramadan-2027"]{background:
+  radial-gradient(circle at 20px 26px,#ffcf6b 0 7px,rgba(255,170,60,.35) 8px 18px,transparent 19px) 0 0/80px 70px,
+  linear-gradient(90deg,transparent 0 19px,rgba(255,207,107,.5) 19px 21px,transparent 21px) 0 0/80px 20px repeat-x,
+  linear-gradient(180deg,#160c2b,#2a1440 70%,#3a1d3f)}
+/* sham el-nessim: spring green, a pale sky and the river */
+.fg-banner[data-item="banner-sham-el-nessim-2027"]{background:
+  radial-gradient(ellipse 60% 40% at 30% 100%,#5cae5a 0 96%,transparent 100%),
+  radial-gradient(ellipse 70% 36% at 85% 104%,#3f9450 0 96%,transparent 100%),
+  linear-gradient(180deg,transparent 0 62%,#4aa3c8 62% 74%,transparent 74%),
+  linear-gradient(180deg,#d9f1ff,#bfe6f4)}

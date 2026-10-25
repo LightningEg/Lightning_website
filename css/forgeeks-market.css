@@ -17,7 +17,8 @@
 .mkt-grid,.mkt-free{list-style:none;margin:0;padding:0;display:grid;gap:0;overflow:hidden;border:1px solid var(--line)}
 .mkt-grid.themes{grid-template-columns:repeat(3,minmax(0,1fr))}
 .mkt-grid.banners{grid-template-columns:repeat(2,minmax(0,1fr))}
-.mkt-grid.frames,.mkt-grid.badges{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mkt-grid.frames,.mkt-grid.badges,.mkt-grid.names{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mkt-grid.sets{grid-template-columns:repeat(3,minmax(0,1fr))}
 .mkt-pv-item{display:flex;align-items:center;justify-content:center;gap:4px;background:var(--well);border:1px solid var(--line);border-radius:4px}
 .mkt-pv-name{font:500 14px var(--mono);color:var(--ink)}
 .mkt-free{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -58,12 +59,13 @@
 .mkt-win .row{margin-top:16px}
 
 @media (max-width:900px){
-  .mkt-grid.frames,.mkt-grid.badges{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mkt-grid.frames,.mkt-grid.badges,.mkt-grid.names{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mkt-grid.sets{grid-template-columns:minmax(0,1fr)}
   .mkt-grid.themes{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mkt-free{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (max-width:640px){
-  .mkt-grid.themes,.mkt-grid.banners,.mkt-grid.frames,.mkt-grid.badges{grid-template-columns:minmax(0,1fr)}
+  .mkt-grid.themes,.mkt-grid.banners,.mkt-grid.frames,.mkt-grid.badges,.mkt-grid.names,.mkt-grid.sets{grid-template-columns:minmax(0,1fr)}
   .mkt-free{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mkt-cell{padding:16px}
   .mkt-sec{margin-bottom:48px}

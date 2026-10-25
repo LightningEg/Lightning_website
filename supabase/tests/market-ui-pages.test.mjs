@@ -79,11 +79,11 @@ async function boot({ main = true, withFetch = false, stored = {}, ...opts } = {
   return { w, $, q, qa, click, byLabel, calls, root: w.document.documentElement };
 }
 
-await test('main: Your look pairs with the wallet, and five tabs switch the sections', async () => {
+await test('main: Your look pairs with the wallet, and seven tabs switch the sections', async () => {
   const p = await boot({ owned: ['meadow', 'banner-dusk'], equipped: { theme: 'meadow', banner: 'banner-dusk' } });
   assert.ok(p.q('.mkt-top .mkt-look') && p.q('.mkt-top .mkt-wallet #wallet'));
   assert.equal(p.q('.mkt-look .fg-banner').getAttribute('data-item'), 'banner-dusk');
-  assert.deepEqual(p.qa('.mkt-tab').map(b => b.textContent), ['Themes', 'Banners', 'Frames', 'Badges', 'Owned']);
+  assert.deepEqual(p.qa('.mkt-tab').map(b => b.textContent), ['Themes', 'Sets', 'Banners', 'Frames', 'Names', 'Badges', 'Owned']);
   assert.equal(p.q('#list-banners').closest('.mkt-sec').hidden, true);
   await p.click(p.q('.mkt-tab[data-view="banners"]'));
   assert.equal(p.q('#list-banners').closest('.mkt-sec').hidden, false);
@@ -172,8 +172,8 @@ await test('main: Details shows the theme on both sites (the main site light and
 await test('main: the app themes in testing are featured, tried and shown without a price', async () => {
   const p = await boot({ withFetch: true });
   await tick(80);
-  assert.deepEqual(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')), ['nile-nocturne', 'royal-obsidian-gold']);
-  assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 2 && p.qa('.mkt-feat-card .pv-phone').length === 2);
+  assert.deepEqual(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')), ['nile-nocturne', 'royal-obsidian-gold', 'nile-papyrus-guilloche']);
+  assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 3 && p.qa('.mkt-feat-card .pv-phone').length === 3);
   await p.click(p.byLabel('Try Nile Nocturne on this page'));
   assert.equal(p.root.dataset.skin, 'nile-nocturne');
   await p.click(p.q('.mkt-trybar-cancel'));
@@ -185,7 +185,7 @@ await test('main: the app themes in testing are featured, tried and shown withou
 
 await test('For Geeks: the same structure in its own look; Try it switches the page theme and puts it back', async () => {
   const p = await boot({ main: false, owned: [], stored: { 'lightning-geeks-theme': 'mono' } });
-  assert.equal(p.qa('.mkt-tab').length, 5);
+  assert.equal(p.qa('.mkt-tab').length, 7);
   assert.ok(p.q('.mkt-look'));
   assert.equal(p.q('.mkt-wear'), null, 'the website switch is the main site\'s');
   await p.click(p.byLabel('Try Paper'));

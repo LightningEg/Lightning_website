@@ -349,7 +349,7 @@ language sql stable security definer set search_path = '' as $$
   where (c.active and (c.available_from is null or now() >= c.available_from) and (c.available_until is null or now() < c.available_until))
      or exists (select 1 from me where me.item_id = c.id)
   order by case c.type when 'set' then 0 when 'theme' then 1 when 'banner' then 2 when 'frame' then 3 when 'name' then 4 else 5 end,
-           c.price, c.name;
+           c.price, coalesce(c.award_coins, 1), c.name;
 $$;
 revoke all on function public.market_catalog() from public;
 grant execute on function public.market_catalog() to anon, authenticated, service_role;

@@ -104,7 +104,15 @@
     'badge-bolt': ['Bolt', 'M13 2 4 14h6l-1 8 9-12h-6z'],
     'badge-coin': ['Coin', 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4v10m-3-7c0-1.4 1.3-2 3-2s3 .6 3 2-1.3 1.8-3 2-3 .6-3 2 1.3 2 3 2 3-.6 3-2'],
     'badge-pen': ['Writer', 'M4 20l1-4L16 5l3 3L8 19zM14 7l3 3'],
-    'badge-star': ['Star', 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z']
+    'badge-star': ['Star', 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z'],
+    // earned by topping up (supporter release): a heart in a shield, one shape, three metals
+    'badge-supporter-bronze': ['Bronze supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
+    'badge-supporter-silver': ['Silver supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
+    'badge-supporter-gold': ['Gold supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
+    'badge-founding': ['Founding supporter', 'M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8zM8 20h8'],
+    // seasonal
+    'badge-cotton-boll': ['Cotton boll', 'M12 21v-6m0 0c-3 0-5-2-5-4.5S9 6 12 8c3-2 5 0 5 2.5S15 15 12 15zM9 6.5a3 3 0 0 1 6 0'],
+    'badge-lantern': ['Fanous', 'M12 2v2m-3 2h6l1 3-1 8H9L8 9zm-1 3h8m-6 8 1 3h2l1-3']
   };
   function badge(id) {
     var item = itemId(id), def = item && BADGES[item];
@@ -122,6 +130,13 @@
     var t = el('span', 'sr', def[0] + ' badge');
     b.appendChild(t);
     return b;
+  }
+
+  // A name style (type 'name') paints the display name itself; only a well-formed name-* id reaches the attribute.
+  function nameStyle(node, id) {
+    var item = itemId(id);
+    if (node && item && /^name-/.test(item)) node.setAttribute('data-name-style', item);
+    return node;
   }
 
   function avatar(name, url, cls, frameId) {
@@ -164,6 +179,6 @@
 
   var api = {};
   for (var k in pure) api[k] = pure[k];
-  api.el = el; api.link = link; api.avatar = avatar; api.banner = banner; api.badge = badge; api.ready = ready;
+  api.el = el; api.link = link; api.avatar = avatar; api.banner = banner; api.badge = badge; api.nameStyle = nameStyle; api.ready = ready;
   root.FGShow = api;
 })(typeof window !== 'undefined' ? window : globalThis);

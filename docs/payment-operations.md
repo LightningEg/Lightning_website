@@ -56,6 +56,11 @@ Owner revision (2026-10-25): about 3,000 EGP of fixed cost a month, 5 coins per 
 | Animated (later) | Texture plus one quiet signature motion, still under reduced motion | 1,000 | 200 |
 | Banner | Strip on your profile, leaderboard row and account | 100–200 | 20–40 |
 | Frame · badge | Ring round your picture · mark beside your name | 60–100 | 12–20 |
+| Name style | Your display name in a colour (150), a gradient (300), or with one slow shimmer (500) | 150–500 | 30–100 |
+| Animated banner | One slow motion, still under reduced motion | 300–350 | 60–70 |
+| Seasonal | Banners and badges sold only in their window (harvest, New Year, Ramadan, Sham el-Nessim); owners keep them | 100–250 | 20–50 |
+| Set | A theme, banner, frame and a fourth piece at 80% of the parts not owned yet | 680–712 new | 136–142 |
+| Supporter badges | Earned at 500, 2,500 and 10,000 coins topped up; Founding for the first 100 payers. Never sold | — | — |
 
 Top-up bonuses stay as configured (5% from 100 EGP, 10% from 500, 15% from 1,000; not cumulative), so a buyer's effective price per coin falls from 0.20 to about 0.17 EGP at the top step.
 
@@ -70,7 +75,7 @@ Top-up bonuses stay as configured (5% from 100 EGP, 10% from 500, 15% from 1,000
 
 - One new textured theme a month (the drop), so earlier buyers have a reason to return. A palette is cheap to make; a texture costs one CSS pattern and its checks (guideline/themes.md).
 - Seasonal items for a limited time (Ramadan, Eid, Coptic Christmas, Sham el-Nessim) at the same tier prices.
-- A one-time Founder pack, proposed and not built: all palettes, Papyrus and a Founder badge for about 1,500 coins (300 EGP), offered to the first members only. Fifty founders would cover about five months of fixed cost up front.
+- **Supporter release (2026-10-25, built):** supporter badges reward total spend without a subscription; Founding supporter (first 100 payers, never again) rewards paying early; name styles are the cheapest thing everyone sees; sets raise the size of one purchase; seasonal drops and the monthly theme give earlier buyers a reason to return; gifts turn one buyer into two collections; supporters vote on the next theme. The Founder pack idea is replaced by the Founding badge plus sets.
 - Bonuses on larger top-ups, so one trip through InstaPay and review buys more.
 
 Count coins only when they are spent: unspent coins are an obligation to deliver cosmetics, not profit. Review time grows with the number of top-ups, so larger, rarer top-ups are cheaper to run than many small ones.

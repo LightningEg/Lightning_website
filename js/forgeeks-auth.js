@@ -34,6 +34,15 @@
     var m = String((err && (err.message || err.error_description)) || err || '');
     var c = err && err.code;
     if (/price changed/i.test(m)) return 'The price changed. Reload the market and check the new price before buying.';
+    // supporter release: gifts, sets, earned badges, seasonal drops and the vote
+    if (/no member with that display name/i.test(m)) return 'No member has that display name. Check it on their profile.';
+    if (/they already have it/i.test(m)) return 'They already have it. Pick something else for them.';
+    if (/buy it for yourself/i.test(m)) return 'That is you. Buy it from the market instead.';
+    if (/cannot be given now|gift limit/i.test(m)) return /gift limit/i.test(m) ? 'You have sent 20 gifts today. Send more tomorrow.' : 'This item cannot be given right now.';
+    if (/earned, not sold/i.test(m)) return 'Supporter badges are earned by topping up, never sold.';
+    if (/not on sale now|part of this set is not on sale/i.test(m)) return 'This is not on sale right now.';
+    if (/already own every part/i.test(m)) return 'You already own every part of this set.';
+    if (/supporters vote/i.test(m)) return 'Supporters choose the next theme. Top up once to earn a supporter badge and a vote.';
     if (/receipt changed/i.test(m)) return 'The payment evidence changed. Reload the queue and review it again.';
     if (/pending payments/i.test(m)) return 'Resolve pending payments with support before deleting your account.';
     if (/deletion in progress/i.test(m)) return 'Finish or cancel account deletion before making more changes.';
