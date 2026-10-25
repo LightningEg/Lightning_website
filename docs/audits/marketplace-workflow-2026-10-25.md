@@ -35,9 +35,9 @@ Scope: main-site sign-up/sign-in and sign-out, amount quoting, private checkout,
 
 ## Verification and limits
 
-The complete SQL/jsdom suite and the existing website/receiver/security checks are required for this change. Native Chromium acceptance covers phone and desktop layouts with fake transports; no production credentials or money are used. Regression tests cover the failures listed above, in addition to the earlier quoted-price, reference uniqueness, terms, receipt replacement, partial-payment, adjustment, return, moderation and deletion tests. Security advisors are reviewed after the migration. Existing definer projection/RPC and deny-by-default private-table notices are intentional and remain documented in the operator runbook.
+All 22 SQL/jsdom test files passed, along with the existing website/receiver/security checks. Phone and desktop Chromium acceptance passed. Production migrations 2700, 2800 and 2900 were applied and verified: payments remained enabled, no test top-ups or bank transfers were created, anonymous access to recovery actions stayed denied, and wallet discrepancies remained zero. Native Chromium acceptance covers phone and desktop layouts with fake transports; no production credentials or money are used. Regression tests cover the failures listed above, in addition to the earlier quoted-price, reference uniqueness, terms, receipt replacement, partial-payment, adjustment, return, moderation and deletion tests. Security advisors are reviewed after the migration. Existing definer projection/RPC and deny-by-default private-table notices are intentional and remain documented in the operator runbook.
 
-Migration `20261025270000_workflow_recovery_guards.sql` is additive and precedes the versioned frontend deployment. Real receiving details and QR bytes remain outside public source. The owner account's existing points and balance are not changed.
+Migrations 2700 (recovery), 2800 (social award review) and 2900 (session-bound payment reads) are additive and precede the versioned frontend deployment. Real receiving details and QR bytes remain outside public source. The owner account's existing points and balance are not changed.
 
 ### Remaining acceptance and release work
 

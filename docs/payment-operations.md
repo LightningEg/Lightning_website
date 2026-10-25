@@ -68,7 +68,7 @@ Security-advisor review: private QR/reference tables deliberately have RLS enabl
 
 ## Recovery and session-read safeguards
 
-Migration 2700 adds recovery for payments that arrive after a checkout was cancelled or rejected. In the request's original status filter, enter a clear reason and choose **Reopen for late payment review**. The quote and terms remain unchanged; the member is told not to pay again. Match actual funds and review the receipt before approving. Credited or returned requests cannot reopen.
+Migrations 2700–2900 add recovery for payments that arrive after a checkout was cancelled or rejected. In the request's original status filter, enter a clear reason and choose **Reopen for late payment review**. The quote and terms remain unchanged; the member is told not to pay again. Match actual funds and review the receipt before approving. Credited or returned requests cannot reopen.
 
 For an unknown sender or deleted account, use the unmatched bank-journal entry's **Record completed unmatched return** after actually returning the entire incoming amount outside the site. Record the outgoing bank reference and reason. The journal links both references and prevents returned funds from later funding a wallet; it does not create an account or credit coins. Resolved returns leave the unmatched queue and do not block account deletion.
 
