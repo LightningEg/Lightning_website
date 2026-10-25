@@ -26,15 +26,15 @@ for(const width of [390,1280]) {
   const overflow=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(e=>[e.tagName,e.className,e.getBoundingClientRect().width]));
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow '+name+' '+width+JSON.stringify(overflow));
   if(name==='marketplace') {
-   await page.locator('.parts-test').nth(1).waitFor();
-   const scene=page.locator('.parts-scene').first();
-   const geometry=()=>scene.evaluate(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height,x:r.left+scrollX,y:r.top+scrollY};});
+   await page.locator('.mkt-feat-card').nth(1).waitFor();
+   const look=page.locator('.mkt-look');
+   const geometry=()=>look.evaluate(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height,x:r.left+scrollX,y:r.top+scrollY};});
    const before=await geometry();
-   await page.getByRole('button',{name:'Try these parts'}).first().click();
-   assert.match(await scene.getAttribute('style'),/--part-background/);
-   assert.deepEqual(await geometry(),before,'preview must preserve its document geometry');
-   await page.getByRole('button',{name:'Reset preview'}).first().click();
-   assert.equal(await scene.getAttribute('style'),null);
+   await page.getByRole('button',{name:'Try Nile Nocturne on this page'}).click();
+   assert.equal(await page.evaluate(()=>document.documentElement.dataset.skin),'nile-nocturne');
+   assert.deepEqual(await geometry(),before,'a theme tried on never moves the layout');
+   await page.getByRole('button',{name:'Cancel'}).click();
+   assert.equal(await page.evaluate(()=>document.documentElement.dataset.skin),undefined);
   }
   if(name==='account')assert.match(await page.locator('#auth-title').textContent(),/create|sign up/i);
   await page.screenshot({path:'/workspace/work/'+name+'-'+width+'.png'});

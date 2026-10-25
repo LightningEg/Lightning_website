@@ -9,6 +9,8 @@
   var $ = function (id) { return doc.getElementById(id); };
   var FG = root.FG;
   var LG = root.LG; // the theme picker (js/forgeeks.js), if present
+  // The main-site marketplace adds tabs, previews and try-on through these hooks (js/site-market.js); For Geeks has none.
+  function ui(name) { var U = root.MarketUI; return U && typeof U[name] === 'function' ? U[name].bind(U) : null; }
 
   var state = { items: [], signedIn: false, uid: null, balance: 0, busy: false, run: 0 };
   var dlg = { item: null, key: null, trigger: null, busy: false, done: false };
@@ -101,6 +103,8 @@
     return w;
   }
   function preview(it, compact) {
+    var own = ui('preview'), node = own ? own(it, compact) : null;
+    if (node) return node;
     return it.type === 'banner' ? bannerPreview(it) : it.type === 'frame' ? framePreview(it) : it.type === 'badge' ? badgePreview(it) : themePreview(it, compact);
   }
 
@@ -143,6 +147,8 @@
     li.appendChild(head);
     if (!compact && it.description) li.appendChild(el('p', 'mkt-note', it.description));
     li.appendChild(actions(it, compact));
+    var hook = ui('cell');
+    if (hook) hook(li, it, state);
     return li;
   }
 
@@ -168,6 +174,8 @@
     if ($('list-badges')) fill('list-badges', state.items.filter(function (i) { return i.type === 'badge'; }));
     ['frames', 'badges'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
     $('h-free').hidden = $('list-free').children.length === 0;
+    var done = ui('rendered');
+    if (done) done(state);
   }
 
   /* ---------- loading ---------- */
@@ -231,6 +239,8 @@
       if (r.error) return { error: r.error };
       mark(it);
       if (it.type === 'theme') applyTheme(it.id);
+      var worn = ui('equipped');
+      if (worn) worn(it);
       return {};
     }, function (e) { return { error: e }; });
   }
@@ -285,10 +295,14 @@
     $('buy').hidden = false;
     doc.documentElement.style.overflow = 'hidden';
     $('buy-ok').focus();
+    var opened = ui('buyOpened');
+    if (opened) opened(it, state.balance);
   }
 
   function closeBuy() {
     if ($('buy').hidden) return;
+    var closed = ui('buyClosed');
+    if (closed) closed();
     $('buy').hidden = true;
     doc.documentElement.style.overflow = '';
     var back = dlg.item && doc.querySelector('.mkt-cell[data-item="' + dlg.item.id + '"] button');
@@ -395,6 +409,8 @@
       doc.addEventListener('visibilitychange', resume);
     });
   }
+
+  root.LightningMarket = { state: state, buy: function (it, b) { if (!state.busy) openBuy(it, b); }, act: onAct, render: render };
 
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 })(window);

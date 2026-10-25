@@ -1,0 +1,137 @@
+/* Theme previews (js/theme-preview.js): the website, the PC app and the phone, drawn small in a palette.
+   Everything inside reads the --pv-* colours set on .pv, and scales with its own width (container units),
+   so one drawing serves a card thumbnail, the preview window and the app-theme test. Nothing moves. */
+.pv{--pv-background:#F5F8F7;--pv-surface:#FFFFFF;--pv-raised:#F5F8F7;--pv-text:#0D2233;--pv-muted:#566E7E;--pv-border:#DDE9E6;
+  --pv-accent:#0B6DD6;--pv-on-accent:var(--pv-onAccent,#FFFFFF);--pv-income:#097852;--pv-expense:#C93D72;--pv-transfer:#566E7E;
+  container-type:inline-size;position:relative;display:block;overflow:hidden;background:var(--pv-background);color:var(--pv-text);
+  font-family:var(--body,Manrope,"Segoe UI",system-ui,sans-serif);border:1px solid var(--pv-border);user-select:none;-webkit-user-select:none}
+.pv *{box-sizing:border-box}
+.pv b{font-weight:700}
+.pv small{font-size:.62em;font-weight:600;color:var(--pv-muted)}
+.pv-mark{display:inline-block;width:1.1em;height:1.1em;flex:none;background:var(--pv-accent);
+  clip-path:polygon(58% 0,12% 58%,46% 58%,36% 100%,88% 38%,54% 38%)}
+.pv-win{display:flex;gap:.45em;align-items:center;height:2.2em;padding:0 .9em;background:var(--pv-surface);border-bottom:1px solid var(--pv-border)}
+.pv-win i{width:.6em;height:.6em;border-radius:50%;background:var(--pv-border)}
+.pv-sub{display:block;color:var(--pv-muted);font-size:.78em;font-weight:500}
+.pv-h1{display:block;font:800 1.55em/1.1 var(--display,"Bricolage Grotesque",system-ui,sans-serif)}
+.pv-h2{display:block;font-size:.95em}
+.pv-big{display:block;font:800 2em/1.1 var(--display,"Bricolage Grotesque",system-ui,sans-serif);margin:.2em 0 .3em;font-variant-numeric:tabular-nums}
+.pv-fig{display:block;font:800 1.45em/1.15 var(--display,"Bricolage Grotesque",system-ui,sans-serif);margin:.25em 0 .15em;font-variant-numeric:tabular-nums}
+.pv-kpi{display:flex;flex-direction:column;min-width:0;padding:.8em .9em;background:var(--pv-surface);border:1px solid var(--pv-border);border-radius:.9em}
+.pv-kpi-l{font-size:.74em;font-weight:700;color:var(--pv-text);white-space:nowrap;overflow:hidden;text-overflow:clip}
+.pv-kpi-n{font-size:.68em;font-weight:600;color:var(--pv-muted);white-space:nowrap;overflow:hidden}
+.pv-kpi-n.up{color:var(--pv-income)}
+.pv-meter{display:block;height:.35em;margin-top:.5em;border-radius:1em;background:var(--pv-raised);overflow:hidden}
+.pv-meter i{display:block;height:100%;border-radius:1em;background:var(--pv-accent)}
+.pv-row{display:flex;justify-content:space-between;gap:.8em;padding:.45em 0;border-bottom:1px solid var(--pv-border);font-size:.74em;font-weight:600;font-variant-numeric:tabular-nums}
+.pv-row:last-child{border-bottom:0}
+.pv-row b.in{color:var(--pv-income)}.pv-row b.out{color:var(--pv-expense)}.pv-row b.move{color:var(--pv-transfer)}
+.pv-side-h{display:block;margin:1em 0 .2em;font-size:.66em;font-weight:700;color:var(--pv-muted)}
+.pv-chart{display:block;width:100%;height:5.5em;margin-top:.6em}
+.pv-grid{stroke:var(--pv-border);stroke-width:.6;fill:none}
+.pv-area{fill:var(--pv-accent);opacity:.14}
+.pv-line{stroke:var(--pv-accent);stroke-width:1.6;fill:none;vector-effect:non-scaling-stroke}
+.pv-brand{display:flex;align-items:center;gap:.4em;font:800 1em var(--display,"Bricolage Grotesque",system-ui,sans-serif)}
+
+/* the PC app */
+.pv-pc{border-radius:12px}
+.pv-pc .pv-body{display:grid;grid-template-columns:24% 1fr;font-size:1.32cqi;min-height:0}
+.pv-pc .pv-side{padding:1.2em .9em;background:var(--pv-surface);border-inline-end:1px solid var(--pv-border)}
+.pv-pc .pv-brand{margin:0 0 1em .3em;font-size:1.15em}
+.pv-nav{display:block;padding:.5em .7em;margin-bottom:.15em;border-radius:.6em;font-size:.8em;font-weight:600;color:var(--pv-text);white-space:nowrap;overflow:hidden}
+.pv-nav.on{background:var(--pv-raised);box-shadow:inset .22em 0 0 var(--pv-accent)}
+.pv-pc .pv-main{padding:1.3em 1.5em;min-width:0}
+.pv-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1em}
+.pv-seg{display:flex;gap:.2em;padding:.2em;border-radius:2em;background:var(--pv-raised);font-size:.72em;font-weight:700}
+.pv-seg span{padding:.45em .9em;border-radius:2em;color:var(--pv-muted)}
+.pv-seg .on{background:var(--pv-accent);color:var(--pv-on-accent)}
+.pv-needs{display:flex;align-items:center;gap:.6em;margin:1em 0;padding:.75em 1em;border-radius:2em;background:var(--pv-surface);border:1px solid var(--pv-border);font-size:.78em;font-weight:600}
+.pv-needs i{width:.6em;height:.6em;border-radius:50%;background:var(--pv-income)}
+.pv-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8em}
+.pv-lead{display:grid;grid-template-columns:1fr 1fr;gap:1.4em;margin-top:1em;padding:1.1em 1.2em;background:var(--pv-surface);border:1px solid var(--pv-border);border-radius:1em}
+.pv-lead-b{padding-inline-start:1.2em;border-inline-start:1px solid var(--pv-border)}
+
+/* the phone */
+.pv-phone{width:100%;max-width:300px;aspect-ratio:9/18.5;border-radius:34px;border:8px solid #0b0f14;box-shadow:0 0 0 1px var(--pv-border)}
+.pv-phone .pv-screen{position:absolute;inset:0;display:flex;flex-direction:column;gap:.9em;padding:0 1.1em;font-size:4.4cqi}
+.pv-status{display:flex;justify-content:space-between;align-items:center;height:2.4em;font-size:.72em;font-weight:700}
+.pv-notch{width:30%;height:1.4em;border-radius:1em;background:#0b0f14;margin-inline-end:35%}
+.pv-appbar{display:flex;align-items:center;gap:.5em;font-size:1em}
+.pv-appbar b{font-size:1.05em}
+.pv-hero{padding:.2em 0}
+.pv-hero .pv-big{font-size:2.2em;margin:.15em 0}
+.pv-tiles{display:grid;grid-template-columns:1fr 1fr;gap:.6em}
+.pv-phone .pv-kpi{padding:.75em}
+.pv-list{padding:.2em .9em;background:var(--pv-surface);border:1px solid var(--pv-border);border-radius:1em}
+.pv-list .pv-side-h{margin-top:.6em}
+.pv-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;margin:auto -1.1em 0;padding:.6em .3em 1.3em;background:var(--pv-surface);border-top:1px solid var(--pv-border);font-size:.56em;font-weight:600;color:var(--pv-muted);text-align:center}
+.pv-tabs span{overflow:hidden;white-space:nowrap;padding-top:.5em}
+.pv-tabs .on{color:var(--pv-text);font-weight:800;box-shadow:inset 0 .25em 0 var(--pv-accent)}
+.pv-tabs .pv-add{justify-self:center;display:grid;place-items:center;width:3.6em;height:3.6em;padding:0;margin-top:-1.6em;border-radius:50%;background:var(--pv-accent);color:var(--pv-on-accent);font-size:1.4em;font-weight:800}
+
+/* the website */
+.pv-site{border-radius:12px}
+.pv-site>*{font-size:2.6cqi}
+.pv-topbar{display:flex;justify-content:space-between;align-items:center;padding:.9em 1.6em;border-bottom:1px solid var(--pv-border);background:var(--pv-surface)}
+.pv-links{display:flex;gap:1.4em;font-size:.82em;font-weight:600;color:var(--pv-muted)}
+.pv-site-hero{padding:2.2em 1.6em 1.4em}
+.pv-site-h{display:block;font:800 2.4em/1.08 var(--display,"Bricolage Grotesque",system-ui,sans-serif);max-width:14em;margin-bottom:.35em}
+.pv-site .pv-sub{font-size:.95em}
+.pv-btns{display:flex;gap:.8em;margin-top:1.3em}
+.pv-btn{display:inline-flex;align-items:center;height:2.6em;padding:0 1.3em;border-radius:2em;background:var(--pv-accent);color:var(--pv-on-accent);font-size:.85em;font-weight:700}
+.pv-btn.ghost{background:transparent;color:var(--pv-text);border:1px solid var(--pv-muted)}
+.pv-site .pv-tiles{padding:0 1.6em 1.8em;gap:1em}
+
+/* For Geeks: mono, weights 400 and 500, hairline cells (D04, D06, D07) */
+.pv-geek{border-radius:12px;font:400 16px/1.5 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pv-geek>*{font-size:1.5cqi}
+.pv-geek b{font-weight:500}
+.pv-geek .pv-brand{font-family:inherit;font-weight:500}
+.pv-gbar{display:flex;align-items:center;gap:1.2em;padding:.9em 1.6em;border-bottom:1px solid var(--pv-border)}
+.pv-gbar .pv-links{margin-inline-start:auto;display:flex;gap:1.4em;color:var(--pv-muted)}
+.pv-dim{color:var(--pv-muted)}
+.pv-k{color:var(--pv-accent)}
+.pv-label{display:block;margin-bottom:.6em}
+.pv-ghero{padding:2em 1.6em 1.4em}
+.pv-gh{display:block;font-size:2.6em;line-height:1.1;letter-spacing:-.03em;margin-bottom:.6em}
+.pv-term{border:1px solid var(--pv-border);border-radius:.8em;background:var(--pv-surface);overflow:hidden}
+.pv-term p{margin:0;padding:.25em 1em}
+.pv-term p:nth-child(2){padding-top:.8em}.pv-term p:last-child{padding-bottom:.9em}
+.pv-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 1.6em 1.8em;border:1px solid var(--pv-border)}
+.pv-cell{display:flex;flex-direction:column;gap:.3em;padding:1em;box-shadow:1px 0 0 var(--pv-border)}
+.pv-cell b{font-size:2em;letter-spacing:-.04em}
+.pv-cell small{font-size:.45em;font-weight:400}
+
+/* two sites side by side, or light and dark */
+.pv-duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.pv-duo figure{margin:0;min-width:0}
+.pv-duo figcaption{margin-top:6px;font-size:12.5px;color:var(--mk-dim,inherit)}
+@media (max-width:560px){.pv-duo{grid-template-columns:minmax(0,1fr)}}
+
+/* the card thumbnail */
+.pv-thumb{display:grid;grid-template-columns:18% 1fr;height:116px;border-radius:14px;font-size:1cqi}
+.pv-thumb .pv-side{display:flex;flex-direction:column;gap:7px;padding:10px 8px;background:var(--pv-surface);border-inline-end:1px solid var(--pv-border)}
+.pv-thumb .pv-mark{width:12px;height:12px;margin-bottom:4px}
+.pv-thumb .pv-side i:not(.pv-mark){display:block;height:5px;border-radius:3px;background:var(--pv-border)}
+.pv-thumb .pv-side i.on{background:var(--pv-accent)}
+.pv-thumb .pv-main{display:flex;flex-direction:column;gap:8px;padding:10px 12px;min-width:0}
+.pv-t-h{display:block;width:40%;height:7px;border-radius:4px;background:var(--pv-text)}
+.pv-thumb .pv-kpis{grid-template-columns:repeat(3,1fr);gap:6px}
+.pv-thumb .pv-kpis i{display:block;height:22px;border-radius:5px;background:var(--pv-surface);border:1px solid var(--pv-border)}
+.pv-thumb .pv-lead{flex:1;display:flex;align-items:flex-end;gap:10px;margin:0;padding:6px 8px;border-radius:6px}
+.pv-t-fig{display:block;flex:none;width:28%;height:8px;margin-bottom:6px;border-radius:4px;background:var(--pv-text)}
+.pv-thumb .pv-chart{height:28px;margin:0}
+
+/* the profile card: banner, framed picture, name and badge */
+.pv-profile{overflow:hidden;border:1px solid var(--line,#DDE9E6);border-radius:18px;background:var(--panel,#fff)}
+.pv-profile .fg-banner{height:96px;margin:0;border:0;border-bottom:1px solid var(--line,#DDE9E6);border-radius:0}
+.pv-id{display:flex;align-items:flex-end;gap:12px;padding:0 18px 14px;margin-top:-30px;position:relative}
+.pv-id .pv-who{height:30px}
+.pv-profile .pv-id .av{width:64px;height:64px;display:inline-grid;place-items:center;flex:none;border-radius:50%;background:var(--mk-well,var(--field,#EEF6F3));border:1px solid var(--line-ctl,var(--line-strong,#7E96A0));box-shadow:0 0 0 4px var(--mk-panel,var(--paper,#F8FCFA));font:800 24px var(--mk-head,var(--display,system-ui));color:var(--ink,#0D2233)}
+.pv-who{display:flex;align-items:center;gap:6px;min-width:0}
+.pv-name{font:800 18px var(--display,system-ui);color:var(--ink,#0D2233);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* a device pair: the PC with the phone in front of it */
+.pv-pair{position:relative;padding-inline-end:15%;padding-bottom:4%}
+.pv-pair .pv-phone{position:absolute;inset-inline-end:0;bottom:0;width:26%;border-width:5px;border-radius:22px;box-shadow:0 18px 40px -18px rgba(0,0,0,.55)}
+@media (max-width:560px){.pv-pair{padding-inline-end:0;padding-bottom:0}.pv-pair .pv-phone{position:relative;width:62%;margin:16px auto 0}}
