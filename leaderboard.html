@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/forgeeks-account.css">
 <link rel="stylesheet" href="css/forgeeks-rewards.css">
-<link rel="stylesheet" href="css/forgeeks-cosmetics.css">
-<link rel="stylesheet" href="css/forgeeks-leaderboard.css">
+<link rel="stylesheet" href="css/forgeeks-cosmetics.css?v=20261025-table-1">
+<link rel="stylesheet" href="css/forgeeks-leaderboard.css?v=20261025-table-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">
-<link rel="stylesheet" href="css/site-community.css?v=20261025-ticket-1">
+<link rel="stylesheet" href="css/site-community.css?v=20261025-table-1">
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <script src="js/theme.js"></script></head>
 <body data-account-page="account.html" data-main-store="true"><div class="d-bar">
@@ -43,7 +43,11 @@
       <div id="lb-panel" role="tabpanel" aria-labelledby="tab-month">
         <p class="lb-status" id="lb-status" role="status" aria-live="polite">loading…</p>
         <button class="linkish" id="lb-retry" type="button" hidden>try again</button>
-        <ol class="lb-list" id="lb-list" hidden></ol>
+        <p class="lb-sample" id="lb-sample" hidden>Sample people, so you can see the table. Nobody here is real.</p>
+        <table class="lb-list" id="lb-list" hidden>
+          <thead><tr><th class="rk" scope="col">rank</th><th class="nm-h" scope="col">member</th><th class="ct" scope="col">contributions</th><th class="sc" scope="col">score</th></tr></thead>
+          <tbody id="lb-body"></tbody>
+        </table>
         <div class="lb-empty" id="lb-empty" hidden>
           <p class="lb-empty-title" id="lb-empty-title">Nobody is ranked yet.</p>
           <p>A merged pull request to the app earns a score. <a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Pick a task</a> to start, or <a href="contribute.html">read how to contribute</a>.</p>
@@ -80,6 +84,6 @@
 <script src="js/forgeeks-config.js"></script>
 <script src="js/forgeeks-auth.js?v=20261025-reaudit-1"></script>
 <script src="js/forgeeks-showcase.js"></script>
-<script src="js/forgeeks-leaderboard.js"></script>
+<script src="js/forgeeks-leaderboard.js?v=20261025-table-1"></script>
 <script src="js/site-words.js"></script><script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script>
 </body></html>

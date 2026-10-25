@@ -1,4 +1,5 @@
 /* For Geeks leaderboard and members directory (forgeeks-leaderboard.html).
+   With ?sample the board shows made-up people instead (lb-sample says so).
    Reads two public database functions with the publishable key, signed in or not:
      leaderboard(p_period, p_limit)      members who switched the leaderboard on, ranked (ties share a rank)
      member_directory(p_limit, p_offset) profiles members chose to show (members-only ones need a session)
@@ -14,6 +15,7 @@
   var $ = function (id) { return doc.getElementById(id); };
 
   var period = 'month';
+  var sample = /[?&]sample(=|&|$)/.test(root.location.search);
   var boardCache = {};
   var boardToken = 0, dirToken = 0, shown = 0;
 
@@ -27,38 +29,42 @@
     if (text) { $('lb-list').hidden = true; $('lb-empty').hidden = true; }
   }
 
+  // One table row per member: rank, display name, contributions and score. Nothing else (owner, 2026-10-25).
   function row(r) {
     var rank = Number(r.rank);
-    var li = S.el('li', 'lb-row');
-    // the member's banner behind their row (owner, 2026-10-25); only a well-formed catalog id reaches the attribute
-    if (S.itemId(r.banner_item_id)) {
-      var bg = S.banner(r.banner_item_id);
-      bg.classList.add('lb-bg');
-      li.appendChild(bg);
-      li.classList.add('has-banner');
+    var tr = S.el('tr', 'lb-row' + (rank >= 1 && rank <= 3 ? ' top' : ''));
+    tr.appendChild(S.el('td', 'rk', String(rank)));
+    var td = S.el('td', 'nm-c');
+    var a = S.el(sample ? 'span' : 'a', 'nm', r.display_name);
+    if (!sample) a.href = S.profileHref(r.display_name);
+    td.appendChild(a);
+    tr.appendChild(td);
+    tr.appendChild(S.el('td', 'ct', S.num(Number(r.contribution_count) || 0)));
+    tr.appendChild(S.el('td', 'sc', S.num(r.score)));
+    return tr;
+  }
+
+  /* ---------- sample people (?sample): a filled table to look at, made in the page, never sent or saved ---------- */
+  var SAMPLE_NAMES = ['Mariam Adel', 'Youssef Hamdy', 'Nour El-Din', 'Salma Fathy', 'Omar Khaled', 'Habiba Samir', 'Karim Mostafa',
+    'Farida Nabil', 'Ziad Ashraf', 'Laila Hassan', 'Ahmed Tarek', 'Malak Sherif', 'Hassan Wael', 'Rana Magdy', 'Mostafa Said',
+    'Jana Ibrahim', 'Adham Reda', 'Yasmin Gamal', 'Seif Amr', 'Hana Lotfy', 'Marwan Ehab', 'Dina Kamal', 'Tamer Fouad', 'Aya Mahmoud'];
+  function sampleBoard(p) {
+    var n = p === 'month' ? 14 : SAMPLE_NAMES.length, rows = [], score = p === 'month' ? 420 : 3150;
+    for (var i = 0; i < n; i++) {
+      var name = SAMPLE_NAMES[(i * 7 + (p === 'month' ? 3 : 0)) % SAMPLE_NAMES.length];
+      var count = Math.max(1, Math.round(score / (p === 'month' ? 60 : 85)));
+      rows.push({ display_name: name, contribution_count: count, score: score });
+      score = Math.max(10, score - (i % 3 === 1 ? 0 : (p === 'month' ? 30 : 130) - i * 2));
     }
-    li.appendChild(S.el('span', 'rk' + (rank >= 1 && rank <= 3 ? ' top' : ''), String(rank)));
-    li.appendChild(S.avatar(r.display_name, r.avatar_url, 'av', r.frame_item_id));
-    var a = S.el('a', 'nm', r.display_name);
-    a.href = S.profileHref(r.display_name);
-    var bd = S.badge(r.badge_item_id);
-    if (bd) a.appendChild(bd);
-    li.appendChild(a);
-    var n = Number(r.contribution_count) || 0;
-    var ct = S.el('span', 'ct');
-    ct.appendChild(S.el('b', '', S.num(n)));
-    ct.appendChild(S.el('small', '', n === 1 ? 'contribution' : 'contributions'));
-    li.appendChild(ct);
-    var sc = S.el('span', 'sc');
-    sc.appendChild(S.el('b', '', S.num(r.score)));
-    sc.appendChild(S.el('small', '', 'score'));
-    li.appendChild(sc);
-    return li;
+    // equal scores share a rank, as the server ranks them
+    rows.forEach(function (r, i) { r.rank = i && r.score === rows[i - 1].score ? rows[i - 1].rank : i + 1; });
+    return rows;
   }
 
   function showBoard(rows) {
     var list = $('lb-list');
-    list.textContent = '';
+    var body = $('lb-body');
+    body.textContent = '';
     var good = (Array.isArray(rows) ? rows : []).filter(function (r) {
       return r && typeof r.display_name === 'string' && r.display_name && Number(r.rank) >= 1;
     });
@@ -69,7 +75,7 @@
       $('lb-empty').hidden = false;
       return;
     }
-    good.forEach(function (r) { list.appendChild(row(r)); });
+    good.forEach(function (r) { body.appendChild(row(r)); });
     $('lb-empty').hidden = true;
     list.hidden = false;
   }
@@ -78,6 +84,7 @@
     var mine = ++boardToken;
     var p = period;
     $('lb-panel').setAttribute('aria-labelledby', TAB_IDS[p]);
+    if (sample) boardCache[p] = boardCache[p] || sampleBoard(p);
     if (boardCache[p]) { showBoard(boardCache[p]); return; }
     boardState('loading…');
     FG.sb.rpc('leaderboard', { p_period: p, p_limit: BOARD_LIMIT }).then(function (res) {
@@ -188,6 +195,7 @@
     $('lb-retry').addEventListener('click', function () { delete boardCache[period]; loadBoard(); });
     $('mem-retry').addEventListener('click', function () { loadMembers(true); });
     $('mem-more').addEventListener('click', function () { loadMembers(false); });
+    $('lb-sample').hidden = !sample;
     pick('month');
     loadMembers(true);
     // Signing in or out changes which profiles are visible (members-only ones), so ask again.
