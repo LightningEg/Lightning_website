@@ -50,7 +50,7 @@ def build():
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
         # the market's own files change often: a version so browsers fetch the new copy
-        SHOP='?v=20261025-themes-1'
+        SHOP='?v=20261025-tiers-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
         scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
@@ -96,7 +96,7 @@ def connect_public_pages():
         text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
-        text=re.sub(r'(js/topup[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-tabs-1\2', text)
+        text=re.sub(r'(js/topup[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-tiers-1\2', text)
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-shop-1\2', text)
         text=re.sub(r'(css/(?:site-account|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)

@@ -50,17 +50,28 @@
     return b;
   }
   function coin() { var i = el('img', 'coin-i'); i.src = COIN; i.alt = ''; i.width = 16; i.height = 16; return i; }
-  function priced(n) { var s = el('span', 'mkt-price'); add(s, [coin(), el('span', null, String(n))]); s.setAttribute('aria-label', n + (n === 1 ? ' coin' : ' coins')); return s; }
+  var rate = null; // coins per EGP, from coin_rate(): prices also read in EGP
+  function egp(n) { return rate ? Math.round(n / rate) : null; }
+  function priced(n) {
+    var s = el('span', 'mkt-price'); add(s, [coin(), el('span', null, String(n))]);
+    var e = egp(n);
+    if (e) s.appendChild(el('small', 'mkt-egp', e + ' EGP'));
+    s.setAttribute('aria-label', n + (n === 1 ? ' coin' : ' coins') + (e ? ', about ' + e + ' EGP' : ''));
+    return s;
+  }
+  // a theme's tier (guideline/themes.md section 7): from the catalog, else from the seed
+  function tierOf(it) { if (it.tier) return it.tier; var t = siteTheme(it.id); return t && t.tex ? 'texture' : 'palette'; }
+  var TIER_WORD = { palette: 'Palette', texture: 'Textured', motion: 'Animated' };
   function coinsWord(n) { return n + (n === 1 ? ' coin' : ' coins'); }
   function siteTheme(id) { var l = (LG && LG.THEMES) || []; for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
   function items(type) { return ms ? ms.items.filter(function (i) { return i.type === type; }) : []; }
   function equippedOf(type) { var l = items(type); for (var i = 0; i < l.length; i++) if (l[i].equipped) return l[i]; return null; }
   function wearOn() { try { return root.localStorage.getItem(WEAR_OFF) !== '1'; } catch (_) { return true; } }
   function setWear(on) { try { if (on) root.localStorage.removeItem(WEAR_OFF); else root.localStorage.setItem(WEAR_OFF, '1'); } catch (_) {} }
-  function skinFor(it) { var t = siteTheme(it.id); return t && !it.is_default ? { id: t.id, name: t.name, c: t.c.slice(0, 4) } : null; }
+  function skinFor(it) { var t = siteTheme(it.id); return t && !it.is_default ? { id: t.id, name: t.name, c: t.c.slice(0, 4), tex: t.tex } : null; }
   function entryFor(it) {
     var t = it.type === 'theme' ? siteTheme(it.id) : null;
-    return { kind: it.type, id: it.id, name: it.name, item: it, c: t ? t.c.slice(0, 4) : null, palette: t ? PV.fromWebsite(t) : null };
+    return { kind: it.type, id: it.id, name: it.name, item: it, c: t ? t.c.slice(0, 4) : null, tex: t && t.tex, palette: t ? PV.fromWebsite(t) : null };
   }
   function appEntry(m) {
     var p = m.parts.palette;
@@ -103,6 +114,21 @@
     else add(earn, [link('forgeeks-tasks.html', 'Earn coins with open tasks')]);
     wallet.appendChild(earn);
 
+    // what a buyer gets, said once, beside the wallet
+    var trust = el('ul', 'mkt-trust');
+    trust.setAttribute('aria-label', ui('What you get'));
+    [['Pay once, keep it', 'No subscription. What you buy stays on your account.'],
+     ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app when themes ship there.' : 'Here and on the main site. The app when themes ship there.'],
+     ['Looks only', 'Every feature of Lightning stays free. Nothing here changes a number or a rank.'],
+     ['Paid in Egypt', 'InstaPay, checked by a person. Coins arrive once your transfer does.']].forEach(function (x) {
+      trust.appendChild(add(el('li'), [el('b', null, ui(x[0])), el('span', null, x[1])]));
+    });
+    top.parentNode.insertBefore(trust, top.nextSibling);
+    if (FG && FG.ready) FG.ready.then(function () { return FG.sb && FG.sb.rpc('coin_rate'); }).then(function (r) {
+      var n = r && !r.error && r.data && Number(r.data.coins_per_egp);
+      if (n > 0 && n <= 1000) { rate = n; if (ms) M().render(); }
+    }, function () {});
+
     // tabs
     var tabs = el('nav', 'mkt-tabs');
     tabs.setAttribute('aria-label', 'Market sections');
@@ -111,7 +137,7 @@
       b.setAttribute('data-view', v[0]);
       tabs.appendChild(b);
     });
-    body.insertBefore(tabs, top.nextSibling);
+    body.insertBefore(tabs, trust.nextSibling);
     var empty = el('p', 'mkt-empty', 'Nothing here yet. Buy something, or browse the other tabs.');
     empty.id = 'mkt-empty'; empty.hidden = true;
     body.appendChild(empty);
@@ -120,7 +146,15 @@
     var feat = el('div', 'mkt-feat');
     feat.id = 'mkt-feat'; feat.hidden = true;
     var themes = sections().themes;
-    themes.insertBefore(feat, themes.querySelector('.mkt-grid'));
+    themes.appendChild(feat);
+    // the tiers, side by side, then the textured tier as its own row of large cards, then the palettes
+    var tiers = el('ul', 'mkt-tiers'); tiers.id = 'mkt-tiers';
+    var texH = el('h3', 'mkt-sub', ui('Textured')); texH.id = 'h-textured';
+    var tex = el('ul', 'mkt-grid textured'); tex.id = 'list-textured'; tex.setAttribute('aria-labelledby', 'h-textured');
+    var palH = el('h3', 'mkt-sub', ui('Palettes')); palH.id = 'h-palettes';
+    var grid = $('list-themes');
+    grid.setAttribute('aria-labelledby', 'h-palettes');
+    themes.insertBefore(tiers, grid); themes.insertBefore(texH, grid); themes.insertBefore(tex, grid); themes.insertBefore(palH, grid);
     loadApps();
 
     buildDetail();
@@ -156,6 +190,9 @@
     });
     if ($('h-free')) $('h-free').hidden = !$('list-free').querySelector('.mkt-cell:not([hidden])');
     $('mkt-feat').hidden = view !== 'themes' || !apps.length;
+    $('h-textured').hidden = !$('list-textured').querySelector('.mkt-cell:not([hidden])');
+    $('h-palettes').hidden = !$('list-themes').querySelector('.mkt-cell:not([hidden])');
+    $('mkt-tiers').hidden = view !== 'themes';
     $('mkt-empty').hidden = any;
   }
 
@@ -212,7 +249,7 @@
     var feat = $('mkt-feat');
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
-    add(feat, [el('h3', 'mkt-sub', ui('New for the app')), el('p', 'mkt-feat-why', MAIN ? 'Two themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
+    add(feat, [el('h3', 'mkt-sub', ui('Coming to the app')), el('p', 'mkt-feat-why', MAIN ? 'Two themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
       : 'Two app themes in testing, cosmetics/nile-nocturne.json and cosmetics/royal-obsidian-gold.json, checked against cosmetics/slots.json. Try them here; a price comes when the app can wear them.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
@@ -243,6 +280,7 @@
     if (buy) buy.classList.add('mkt-buy');
     if (it.is_default && it.type === 'theme') return;
     var st = it.type === 'theme' ? siteTheme(it.id) : null;
+    if (it.type === 'theme') { var tr = el('span', 'mkt-tier mkt-tier-' + tierOf(it), ui(TIER_WORD[tierOf(it)])); li.insertBefore(tr, li.querySelector('.mkt-head')); }
     if (st && st.archived) li.insertBefore(el('p', 'mkt-archived', MAIN ? 'Archived: still yours, no longer sold.' : 'archived: still yours, no longer sold.'), acts);
     var e = entryFor(it);
     add(acts, [
@@ -265,9 +303,10 @@
   }
 
   function paintSite(e) {
-    if (MAIN) { var T = root.LightningTheme; if (T && T.skin) T.skin(e.c ? { id: e.id, name: e.name, c: e.c } : null, false); return; }
+    if (MAIN) { var T = root.LightningTheme; if (T && T.skin) T.skin(e.c ? { id: e.id, name: e.name, c: e.c, tex: e.tex } : null, false); return; }
     var r = doc.documentElement;
-    if (!fgTry) fgTry = { theme: r.dataset.theme || null };
+    if (!fgTry) fgTry = { theme: r.dataset.theme || null, texture: r.dataset.texture || null };
+    if (e.tex) r.dataset.texture = e.tex; else delete r.dataset.texture;
     clearFgVars();
     if (e.app) {
       var p = e.palette, v = { '--bg': p.background, '--panel': p.surface, '--well': p.raised, '--ink': p.text, '--dim': p.muted, '--faint': p.border,
@@ -289,6 +328,7 @@
     clearFgVars();
     var r = doc.documentElement;
     if (fgTry.theme) r.dataset.theme = fgTry.theme; else delete r.dataset.theme;
+    if (fgTry.texture) r.dataset.texture = fgTry.texture; else delete r.dataset.texture;
     fgTry = null;
   }
 
@@ -379,10 +419,10 @@
       // the main site's own version: a light side and a dark side, as the light/dark switch shows them
       var duo = el('div', 'pv-duo');
       [['light', 'Light'], ['dark', 'Dark']].forEach(function (m) {
-        duo.appendChild(add(el('figure'), [PV.site(PV.fromSite({ c: e.c }, m[0])), el('figcaption', null, ui(m[1]))]));
+        duo.appendChild(add(el('figure'), [PV.site(PV.fromSite({ c: e.c, tex: e.tex }, m[0])), el('figcaption', null, ui(m[1]))]));
       });
       s.appendChild(duo);
-    } else if (mode === 'geeks') s.appendChild(PV.geek(PV.fromWebsite({ c: e.c })));
+    } else if (mode === 'geeks') s.appendChild(PV.geek(PV.fromWebsite({ c: e.c, tex: e.tex })));
     else s.appendChild(PV.pc(e.palette));
     Array.prototype.forEach.call(doc.querySelectorAll('.mkt-views button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === mode)); });
     var note = doc.querySelector('.mkt-stage-note');
@@ -417,7 +457,7 @@
       parts.appendChild(el('h3', 'mkt-parts-h', ui('What this theme changes')));
       var dl = el('dl', 'mkt-parts-list');
       PARTS.forEach(function (name, i) {
-        var changes = e.app ? !!e.app.parts[SLOT[i]] && !(SLOT[i] === 'decoration') : i < 9 && i !== 3;
+        var changes = e.app ? !!e.app.parts[SLOT[i]] && !(SLOT[i] === 'decoration') : i === 9 ? !!e.tex : i < 9 && i !== 3;
         add(dl, [add(el('div', changes ? 'on' : null), [el('dt', null, name), el('dd', null, changes ? 'changes' : 'stays')])]);
       });
       parts.appendChild(dl);
@@ -458,6 +498,23 @@
     sum.parentNode.insertBefore(s, sum.nextSibling);
     return s;
   }
+  function drawTiers(state) {
+    var ul = $('mkt-tiers');
+    while (ul.firstChild) ul.removeChild(ul.firstChild);
+    var low = function (tier) {
+      var p = state.items.filter(function (i) { return i.type === 'theme' && !i.is_default && tierOf(i) === tier; }).map(function (i) { return i.price; });
+      return p.length ? Math.min.apply(null, p) : null;
+    };
+    [['palette', 'Palette', 'New colours on both sites, with a light and a dark side.'],
+     ['texture', 'Textured', 'The palette plus a woven texture behind every page.'],
+     ['motion', 'Animated', 'Texture plus one quiet signature motion. Coming later.']].forEach(function (x) {
+      var price = low(x[0]);
+      var li = add(el('li', 'mkt-tierc mkt-tier-' + x[0]), [el('span', 'mkt-tier mkt-tier-' + x[0], ui(x[1])), el('p', null, x[2])]);
+      li.appendChild(price ? add(el('p', 'mkt-tier-price'), [el('span', null, ui('From') + ' '), priced(price)]) : el('p', 'mkt-tier-price', ui('Coming soon')));
+      ul.appendChild(li);
+    });
+  }
+
   function buyOpened(it, balance) {
     var s = short();
     while (s.firstChild) s.removeChild(s.firstChild);
@@ -469,7 +526,7 @@
     $('buy-ok').hidden = true;
     $('buy-cancel').textContent = 'close';
     $('buy-cancel').focus();
-    add(s, [el('p', 'mkt-short-need', 'You need ' + coinsWord(missing) + ' more.'),
+    add(s, [el('p', 'mkt-short-need', 'You need ' + coinsWord(missing) + ' more' + (egp(missing) ? ', about ' + Math.max(1, egp(missing)) + ' EGP.' : '.')),
       el('p', 'mkt-short-how', MAIN ? 'Coins come from wallet top-ups and from stories you share. Your score stays as it is.' : 'Coins come from merged tasks and accepted feedback. Your score stays as it is.')]);
     var ways = el('div', 'mkt-short-ways');
     if (MAIN) add(ways, [link('topup.html', 'Top up your wallet'), link('stories.html', 'Share a story')]);
@@ -483,12 +540,28 @@
     preview: function (it, compact) {
       if (it.type !== 'theme' || compact) return null;
       var t = siteTheme(it.id);
-      return t ? PV.thumb(PV.fromWebsite(t)) : null;
+      if (!t) return null;
+      if (tierOf(it) === 'texture') {
+        // the textured tier shows itself large: the main site, the computer and the phone, all on its texture
+        var pal = MAIN ? PV.fromSite(t, root.LightningTheme && root.LightningTheme.get && root.LightningTheme.get() === 'dark' ? 'dark' : 'light') : PV.fromWebsite(t);
+        var pair = add(el('div', 'mkt-big-pv'), [PV.site(pal), add(el('div', 'pv-pair'), [PV.pc(PV.fromWebsite(t)), PV.phone(PV.fromWebsite(t))])]);
+        pair.setAttribute('aria-hidden', 'true');
+        return pair;
+      }
+      return PV.thumb(PV.fromWebsite(t));
     },
     cell: cellHook,
     rendered: function (state) {
       ms = state;
       build();
+      // textured cells move to their own row; the tier row says what each tier is and costs
+      var tex = $('list-textured');
+      while (tex.firstChild) tex.removeChild(tex.firstChild);
+      Array.prototype.forEach.call($('list-themes').querySelectorAll('.mkt-cell'), function (li) {
+        var it = state.items.filter(function (x) { return x.id === li.getAttribute('data-item'); })[0];
+        if (it && tierOf(it) === 'texture') tex.appendChild(li);
+      });
+      drawTiers(state);
       arrange();
       drawLook();
       syncSkin(false);

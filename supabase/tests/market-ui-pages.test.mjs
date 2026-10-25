@@ -29,7 +29,8 @@ const catalog = () => [
   { id: 'moss', type: 'theme', name: 'Moss', description: 'Dark olive and lime', price: 150, is_default: false },
   { id: 'banner-halo', type: 'banner', name: 'Halo', description: 'A soft glow.', price: 40, is_default: false },
   { id: 'banner-dusk', type: 'banner', name: 'Dusk', description: 'Indigo sky.', price: 70, is_default: false },
-  { id: 'frame-gold', type: 'frame', name: 'Gold ring', description: 'Warm gold.', price: 50, is_default: false }
+  { id: 'frame-gold', type: 'frame', name: 'Gold ring', description: 'Warm gold.', price: 50, is_default: false },
+  { id: 'papyrus', type: 'theme', name: 'Papyrus', description: 'Nile night and gold over papyrus fibres.', price: 600, is_default: false, tier: 'texture' }
 ];
 
 function fake(opts, calls) {
@@ -48,6 +49,7 @@ function fake(opts, calls) {
     calls.push({ fn: name, args });
     const item = catalog().find(i => i.id === args?.p_item_id);
     if (name === 'market_catalog') return thenable({ data: catalog().map(i => ({ ...i, owned: !!srv.session && (i.is_default || srv.owned.has(i.id)), equipped: !!srv.session && srv.equipped[i.type] === i.id })), error: null });
+    if (name === 'coin_rate') return thenable({ data: { coins_per_egp: 5, tiers: [] }, error: null });
     if (name === 'equip_item') { srv.equipped[item.type] = item.id; return thenable({ data: { slot: item.type, item_id: item.id }, error: null }); }
     if (name === 'purchase_item_at_price') return thenable({ data: null, error: { message: 'insufficient coins' } });
     return thenable({ data: null, error: null });
@@ -225,6 +227,33 @@ await test('skin: each theme has a readable light and dark side on the main site
     assert.equal(PV.isLight(v[0]), mode === 'light', t.id + ' ' + mode + ' ground');
     assert.ok(PV.contrast(v[1], v[0]) >= 4.5 && PV.contrast(v[2], v[0]) >= 4.5 && PV.contrast(v[3], v[0]) >= 4.5, t.id + ' ' + mode + ' reads at 4.5:1');
   }
+});
+
+await test('tiers: textured themes get their own row, every theme says its tier, prices also read in EGP', async () => {
+  const p = await boot({ balance: 100 });
+  await tick(40);
+  assert.ok(p.q('#list-textured .mkt-cell[data-item="papyrus"]'), 'the textured theme sits in its row');
+  assert.equal(p.q('#list-themes .mkt-cell[data-item="papyrus"]'), null);
+  assert.equal(p.q('.mkt-cell[data-item="papyrus"] .mkt-tier').textContent, 'Textured');
+  assert.equal(p.q('.mkt-cell[data-item="paper"] .mkt-tier').textContent, 'Palette');
+  assert.match(p.q('.mkt-cell[data-item="papyrus"] .mkt-tag').textContent, /600\s*120 EGP/);
+  assert.equal(p.qa('#mkt-tiers li').length, 3);
+  assert.match(p.q('#mkt-tiers .mkt-tier-motion').textContent, /Coming soon/);
+  assert.equal(p.qa('.mkt-trust li').length, 4);
+  await p.click(p.q('button[data-act="buy"][data-item="papyrus"]'));
+  assert.match(p.$('buy-short').textContent, /You need 500 coins more, about 100 EGP/);
+});
+
+await test('textures: a textured theme tried on the main site wears its texture, and Cancel takes it off', async () => {
+  const p = await boot({});
+  await p.click(p.byLabel('Try Papyrus'));
+  assert.equal(p.root.dataset.texture, 'papyrus');
+  await p.click(p.q('.mkt-trybar-cancel'));
+  assert.equal(p.root.dataset.texture, undefined);
+  const dom = new JSDOM('<html><head></head><body></body></html>', { runScripts: 'outside-only', url: 'https://lightningeg.com/' });
+  dom.window.eval(code('js/theme.js'));
+  dom.window.LightningTheme.skin({ id: 'x', c: ['#000000', '#ffffff', '#cccccc', '#ff0000'], tex: 'url(evil)' });
+  assert.equal(dom.window.document.documentElement.dataset.skin, undefined, 'only known textures');
 });
 
 await test('skin: theme.js refuses anything but four hex colours and an id', async () => {

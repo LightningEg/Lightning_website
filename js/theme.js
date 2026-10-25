@@ -21,8 +21,10 @@
   const mix = (a, b, share) => '#' + rgb(a).map((v, i) => Math.round(v * share + rgb(b)[i] * (1 - share)).toString(16).padStart(2, '0')).join('');
   const lum = h => rgb(h).map(v => (v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
   const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const TEXTURES = ['papyrus', 'cotton']; // css/textures.css
   function validSkin(v) {
-    return v && typeof v === 'object' && /^[a-z0-9-]{1,40}$/.test(v.id || '') && Array.isArray(v.c) && v.c.length === 4 && v.c.every(c => HEX.test(c)) ? v : null;
+    if (!(v && typeof v === 'object' && /^[a-z0-9-]{1,40}$/.test(v.id || '') && Array.isArray(v.c) && v.c.length === 4 && v.c.every(c => HEX.test(c)))) return null;
+    return v.tex == null || TEXTURES.includes(v.tex) ? v : null;
   }
   // The main site's version of a theme's four colours [ground, text, quiet text, accent] in light or dark mode.
   // The theme's own side keeps its colours; the other side turns it over (its ground becomes the text) on a lightly
@@ -71,10 +73,12 @@
       const mode = saved || 'light';
       tag.textContent = skinCss(variant(skin.c, mode));
       root.dataset.skin = skin.id;
+      if (skin.tex) root.dataset.texture = skin.tex; else delete root.dataset.texture;
       apply(mode);
     } else {
       if (tag) tag.remove();
       delete root.dataset.skin;
+      delete root.dataset.texture;
       apply(saved || 'light');
     }
     if (remember !== false) {

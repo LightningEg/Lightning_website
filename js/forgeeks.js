@@ -27,9 +27,9 @@
   /* ===================== themes: a window in the middle of the screen ===================== */
   var THEMES=[
     {id:'mono',name:'Mono',note:'white on black, the default',c:['#0a0a0a','#f2f2f2','#b8b8b8','#ffffff']},
-    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,paid:true,price:100},
-    {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93'],paid:true,price:100},
-    {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],paid:true,price:100},
+    {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,paid:true,price:300},
+    {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93'],paid:true,price:300},
+    {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],paid:true,price:300},
     {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0'],paid:true,price:100,archived:true},
     {id:'tokyo',name:'Tokyo',note:'cool blue and violet',c:['#13141c','#c0caf5','#aab2d8','#7aa2f7'],paid:true,price:100,archived:true},
     {id:'dracula',name:'Dracula',note:'purple and pink',c:['#191a21','#f8f8f2','#c6cae4','#bd93f9'],paid:true,price:100,archived:true},
@@ -41,8 +41,11 @@
     /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
        catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
     {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150,archived:true},
-    {id:'garnet',name:'Garnet',note:'wine red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:200},
-    {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:250}
+    {id:'garnet',name:'Garnet',note:'wine red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:300},
+    {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:300},
+    /* textured tier (guideline/themes.md section 7): a palette plus a woven texture behind the page, 600 coins */
+    {id:'papyrus',name:'Papyrus',note:'Nile night and gold over papyrus fibres',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],tex:'papyrus',paid:true,price:600},
+    {id:'cotton',name:'Cotton',note:'warm paper light over a cotton weave',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,tex:'cotton',paid:true,price:600}
   ];
   var btn=$('#theme-btn'),tm=$('#themes'),grid=$('#theme-list'),nameEl=$('#theme-name'),meta=doc.querySelector('meta[name="theme-color"]');
   var saved=root.dataset.theme||'mono',cursor=0,listeners=[],lastFocus=null;
@@ -54,6 +57,7 @@
   function apply(id){
     if(id==='mono')delete root.dataset.theme;else root.dataset.theme=id;
     var t=find(id);
+    if(t&&t.tex)root.dataset.texture=t.tex;else delete root.dataset.texture; // the textured tier (css/textures.css)
     if(nameEl)nameEl.textContent=id;if(meta)meta.setAttribute('content',t.c[0]);
     listeners.forEach(function(fn){fn(id)});
   }

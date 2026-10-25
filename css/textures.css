@@ -1,0 +1,24 @@
+/* Theme textures, part 10 of guideline/themes.md: the textured tier's woven ground. One file for every surface:
+   the main site and For Geeks draw it behind all content (:root[data-texture], set by js/theme.js and js/forgeeks.js),
+   and the previews draw it on their own ground (.pv[data-tex], js/theme-preview.js). Gradients only: no images, no motion.
+   Lines are the text colour at 3 to 7 percent, so they sit on the ground and never under a letter's contrast. */
+:root{--tex-ink:var(--ink)}
+.pv{--tex-ink:var(--pv-text)}
+:root[data-texture] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+
+/* papyrus: long horizontal fibres crossed by a looser vertical layer, the way the sheets are laid */
+:root[data-texture="papyrus"] body::before,.pv[data-tex="papyrus"]{background-image:
+  repeating-linear-gradient(0deg,color-mix(in srgb,var(--tex-ink) 6%,transparent) 0 1px,transparent 1px 7px),
+  repeating-linear-gradient(0deg,color-mix(in srgb,var(--tex-ink) 4%,transparent) 0 2px,transparent 2px 11px),
+  repeating-linear-gradient(0deg,transparent 0 13px,color-mix(in srgb,var(--tex-ink) 5%,transparent) 13px 14px,transparent 14px 17px),
+  repeating-linear-gradient(90deg,color-mix(in srgb,var(--tex-ink) 3%,transparent) 0 1px,transparent 1px 31px),
+  repeating-linear-gradient(90deg,transparent 0 19px,color-mix(in srgb,var(--tex-ink) 3%,transparent) 19px 21px,transparent 21px 47px),
+  radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,var(--tex-ink) 3%,transparent),transparent 70%)}
+
+/* cotton: a soft twill weave with a scatter of small bolls */
+:root[data-texture="cotton"] body::before,.pv[data-tex="cotton"]{background-image:
+  radial-gradient(circle at 30% 40%,color-mix(in srgb,var(--tex-ink) 7%,transparent) 0 1.6px,transparent 2.4px),
+  radial-gradient(circle at 75% 80%,color-mix(in srgb,var(--tex-ink) 5%,transparent) 0 1.2px,transparent 2px),
+  repeating-linear-gradient(45deg,color-mix(in srgb,var(--tex-ink) 5%,transparent) 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(-45deg,color-mix(in srgb,var(--tex-ink) 3%,transparent) 0 1px,transparent 1px 6px);
+  background-size:34px 34px,34px 34px,auto,auto}
