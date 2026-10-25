@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 ROOT=Path(__file__).resolve().parents[1]
-VERSION="20261025-dash-2"  # css/store-admin.css, js/store-admin.js, js/owner-dashboard.js
+VERSION="20261025-dash-3"  # css/store-admin.css, js/store-admin.js, js/owner-dashboard.js
 def build():
  home=(ROOT/'index.html').read_text();legacy=(ROOT/'forgeeks-admin.html').read_text()
  nav=re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>',home,re.S).group().replace(' aria-current="page"','')
