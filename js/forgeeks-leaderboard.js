@@ -30,6 +30,13 @@
   function row(r) {
     var rank = Number(r.rank);
     var li = S.el('li', 'lb-row');
+    // the member's banner behind their row (owner, 2026-10-25); only a well-formed catalog id reaches the attribute
+    if (S.itemId(r.banner_item_id)) {
+      var bg = S.banner(r.banner_item_id);
+      bg.classList.add('lb-bg');
+      li.appendChild(bg);
+      li.classList.add('has-banner');
+    }
     li.appendChild(S.el('span', 'rk' + (rank >= 1 && rank <= 3 ? ' top' : ''), String(rank)));
     li.appendChild(S.avatar(r.display_name, r.avatar_url, 'av', r.frame_item_id));
     var a = S.el('a', 'nm', r.display_name);
