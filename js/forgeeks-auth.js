@@ -33,6 +33,19 @@
   function say(err) {
     var m = String((err && (err.message || err.error_description)) || err || '');
     var c = err && err.code;
+    if (/price changed/i.test(m)) return 'The price changed. Reload the market and check the new price before buying.';
+    if (/receipt changed/i.test(m)) return 'The payment evidence changed. Reload the queue and review it again.';
+    if (/pending payments/i.test(m)) return 'Resolve pending payments with support before deleting your account.';
+    if (/deletion in progress/i.test(m)) return 'Finish or cancel account deletion before making more changes.';
+    if (/Deletion did not complete|Account deletion did not complete|Account deletion is unavailable|More receipt cleanup/i.test(m)) return 'Account deletion did not complete. Retry, or cancel deletion preparation from your account.';
+    if (/receipt upload limit/i.test(m)) return 'Receipt upload limit reached. Contact support before trying more uploads.';
+    if (/daily checkout limit/i.test(m)) return 'Today’s checkout limit is reached. Use an existing request or try again tomorrow.';
+    if (/checkout is not configured/i.test(m)) return 'New top-ups are currently closed. Existing requests remain available.';
+    if (/payment amount mismatch/i.test(m)) return 'The received amount does not match this checkout. Leave it pending and reconcile the transfer.';
+    if (/payment reference required/i.test(m)) return 'Enter the bank transaction reference, using 6–100 letters, digits or hyphens.';
+    if (/receipt submitted/i.test(m)) return 'A receipt was submitted. Contact support to review this payment.';
+    if (/Open the receipt|Add a reconciliation note|clear rejection reason|Enter an EGP price|Invalid price/i.test(m)) return 'Open and review the receipt, enter the exact EGP amount and bank reference, and add a clear note.';
+    if (/session ended/i.test(m)) return 'Your session ended. Sign in again and verify MFA if you are using owner controls.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
     if (/public adult profile/i.test(m)) return 'Set your profile to public and confirm you are 18 or older before publishing.';
     if (/sharing consent/i.test(m)) return 'Add a title, at least 100 characters, and confirm sharing consent.';

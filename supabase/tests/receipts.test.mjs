@@ -30,6 +30,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, user, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${user ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -46,7 +48,7 @@ let n = 100;
 const newUser = async () => { const id = uid(++n); await q(`insert into auth.users (id, email) values ($1, $2)`, [id, `u${n}@example.test`]); return id; };
 const award = (user, amount, source) => as('service_role', null, () => q(
   `select * from public.award_coins($1, 'contribution_award', $2, 'pr', $3, 'Merged PR')`, [user, amount, source]));
-const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item($1, $2)`, [item, key]));
+const buy = (user, item, key) => as('authenticated', user, () => q(`select * from public.purchase_item_at_price($1, coalesce((select price from public.catalog_items where id=$1),0), $2)`, [item, key]));
 const equip = (user, item) => as('authenticated', user, () => q(`select * from public.equip_item($1)`, [item]));
 const catalog = (role, user) => as(role, user, async () => (await q(`select * from public.market_catalog()`)).rows);
 const wallet = async user => (await q(`select balance, contribution_score from public.wallets where user_id = $1`, [user])).rows[0];
@@ -71,7 +73,7 @@ await test('checkout requires consent and snapshots email, destination and packa
 });
 await test('receipt bucket is private; other members cannot insert into or read my checkout',async()=>{
  const b=(await q(`select * from storage.buckets where id='topup-receipts'`)).rows[0];assert.equal(b.public,false);assert.equal(Number(b.file_size_limit),5242880);
- path=OWNER+'/'+checkout.id+'/one.png';
+ path=(await as('authenticated',OWNER,()=>q(`select public.reserve_topup_receipt($1) as path`,[checkout.id]))).rows[0].path;
  await assert.rejects(as('authenticated',OTHER,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[path])),/row-level security/);
  await as('authenticated',OWNER,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[path]));
  assert.equal((await as('authenticated',OTHER,()=>q(`select * from storage.objects`))).rows.length,0);
@@ -79,12 +81,12 @@ await test('receipt bucket is private; other members cannot insert into or read 
  assert.equal((await wallet(OWNER)).balance,0);
 });
 await test('replacement image invalidates prior review; only actual settlement approval credits coins',async()=>{
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Checked receipt image',(select receipt_object_key from public.topup_requests where id=$1))`,[checkout.id]));
- const second=OWNER+'/'+checkout.id+'/two.png';await as('authenticated',OWNER,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[second]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Checked receipt image',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[checkout.id]));
+ const second=(await as('authenticated',OWNER,()=>q(`select public.reserve_topup_receipt($1) as path`,[checkout.id]))).rows[0].path;await as('authenticated',OWNER,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[second]));
  await as('authenticated',OWNER,()=>q(`select public.attach_topup_receipt($1,'payer@instapay','PAYMENT-123',$2)`,[checkout.id,second]));
- await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Stale image',$2)`,[checkout.id,path])),/receipt changed/);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Stale image',$2,0)`,[checkout.id,path])),/receipt changed/);
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',10000,'SETTLED-123','Checked bank')`,[checkout.id])),/receipt review/);
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Rechecked replacement receipt',(select receipt_object_key from public.topup_requests where id=$1))`,[checkout.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Rechecked replacement receipt',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[checkout.id]));
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',9999,'SETTLED-123','Checked bank')`,[checkout.id])),/amount mismatch/);
  for(let n=0;n<2;n++)await as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',10000,'SETTLED-123','Confirmed actual incoming transfer')`,[checkout.id]));
  assert.deepEqual(await wallet(OWNER),{balance:500,contribution_score:0});

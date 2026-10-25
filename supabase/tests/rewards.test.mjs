@@ -39,6 +39,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, uid, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -576,7 +578,7 @@ await test('admin helpers refuse members with 42501 and anonymous callers outrig
   ];
   for (const sql of calls) {
     await as('authenticated', B, async () => {
-      await assert.rejects(q(sql), e => e.code === '42501' && /administrator only/.test(e.message), sql);
+      await assert.rejects(q(sql), e => e.code === '42501' && /administrator/.test(e.message), sql);
     });
     await as('anon', null, () => assert.rejects(q(sql), /permission denied/, sql));
   }

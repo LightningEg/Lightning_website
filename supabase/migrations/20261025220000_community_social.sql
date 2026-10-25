@@ -141,7 +141,7 @@ select m.display_name,m.avatar_url,m.bio,m.visibility,
   (select e.item_id from public.equipped_items e where e.user_id=m.user_id and e.slot='frame') as frame_item_id,
   (select e.item_id from public.equipped_items e where e.user_id=m.user_id and e.slot='badge') as badge_item_id
 from public.member_profiles m left join public.wallets w on w.user_id=m.user_id
-where not m.suspended and(m.visibility='public' or(m.visibility='members' and auth.uid() is not null));
+where not m.suspended and(m.visibility='public' or(m.visibility='members' and exists(select 1 from auth.users current_member where current_member.id=auth.uid())));
 
 drop function public.get_profile(text);
 create function public.get_profile(p_name text)

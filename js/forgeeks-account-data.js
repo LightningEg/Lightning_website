@@ -18,10 +18,13 @@
   function flash(id, s, bad) { var el = $(id); el.textContent = s; el.className = 'acct-status' + (bad ? ' bad' : ''); }
 
   async function download() {
+    var uid = FG.session() && FG.session().user.id;
     var btn = $('data-download');
     btn.disabled = true;
     flash('status-data', 'preparing…');
-    var r = await FG.sb.rpc('export_my_data');
+    var r;
+    try { r = await FG.sb.rpc('export_my_data'); } catch (error) { r = {error:error}; }
+    if (!FG.session() || FG.session().user.id !== uid) { btn.disabled = false; return; }
     btn.disabled = false;
     if (r.error) { flash('status-data', FG.say(r.error), true); return; }
     var blob = new Blob([JSON.stringify(r.data, null, 2)], { type: 'application/json' });
@@ -40,7 +43,16 @@
     var form = ev.target, btn = form.querySelector('button[type=submit]');
     if (!confirmed(form.elements.confirm.value)) { flash('status-delete', 'Type "' + PHRASE + '" to confirm.', true); return; }
     btn.disabled = true;
-    var r = await FG.sb.rpc('delete_my_account', { p_confirm: PHRASE });
+    var uid = FG.session() && FG.session().user.id;
+    var r;
+    try { r = await FG.sb.functions.invoke('delete-account', { body: { p_confirm: PHRASE } }); }
+    catch (error) { r = { error: error }; }
+    if (!FG.session() || FG.session().user.id !== uid) { btn.disabled = false; return; }
+    if (r.error && r.error.context && typeof r.error.context.json === 'function') {
+      try { var detail = await r.error.context.json(); if (detail.error) r.error = { message: detail.error }; } catch (_) {}
+    }
+    if (!r.error && r.data && r.data.error) r.error = { message: r.data.error };
+    if (!r.error && (!r.data || r.data.deleted !== true)) r.error = { message: 'Account deletion did not complete. Please retry.' };
     if (r.error) {
       btn.disabled = false;
       flash('status-delete', /administrator/i.test(r.error.message || '') ? 'The owner account cannot be deleted here.' : FG.say(r.error), true);
@@ -59,6 +71,10 @@
     if (!FG || !FG.sb || !$('your-data')) return;
     $('data-download').addEventListener('click', download);
     $('form-delete').addEventListener('submit', del);
+    $('delete-cancel-preparation').addEventListener('click', async function () {
+      try { var r = await FG.sb.rpc('cancel_account_deletion'); if (r.error) throw r.error; flash('status-delete', 'Deletion preparation cancelled. Any receipt files already removed cannot be restored.'); }
+      catch (e) { flash('status-delete', FG.say(e), true); }
+    });
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -176,13 +176,16 @@
   }
   function refreshWallet() {
     if (!state.signedIn) return Promise.resolve();
+    var run = state.run;
     return Promise.resolve(readWallet()).then(function (r) {
+      if (run !== state.run) return;
       if (!r.error) { state.balance = r.data ? r.data.balance : 0; $('coins').textContent = String(state.balance); }
     }, function () {});
   }
 
   function load() {
     var run = ++state.run;
+    state.busy = false;
     var s = FG.session();
     state.signedIn = !!s;
     state.uid = s ? s.user.id : null;
@@ -222,7 +225,9 @@
   }
 
   function equip(it) {
+    var run = state.run;
     return Promise.resolve(FG.sb.rpc('equip_item', { p_item_id: it.id })).then(function (r) {
+      if (run !== state.run) return { stale: true };
       if (r.error) return { error: r.error };
       mark(it);
       if (it.type === 'theme') applyTheme(it.id);
@@ -234,9 +239,11 @@
     if (state.busy) return;
     if (act === 'buy') { openBuy(it, btn); return; }
     setBusy(true);
+    var run = state.run;
     var p = act === 'equip'
-      ? equip(it).then(function (r) { if (!r.error) note(it.name + ' is equipped.', 'ok'); return r; })
+      ? equip(it).then(function (r) { if (run === state.run && !r.error) note(it.name + ' is equipped.', 'ok'); return r; })
       : Promise.resolve(FG.sb.rpc('unequip_slot', { p_slot: 'banner' })).then(function (r) {
+          if (run !== state.run) return { stale: true };
           if (r.error) return { error: r.error };
           state.items.forEach(function (x) { if (x.type === 'banner') x.equipped = false; });
           announce(null);
@@ -244,6 +251,7 @@
           return {};
         }, function (e) { return { error: e }; });
     p.then(function (r) {
+      if (run !== state.run) return;
       setBusy(false);
       if (r.error) note(say(r.error), 'bad');
       render();
@@ -290,12 +298,13 @@
   function confirmBuy(ev) {
     if (ev && ev.detail > 1) return; // the second click of a double click
     if (dlg.busy || dlg.done || !dlg.item) return;
-    var it = dlg.item, key = dlg.key;
+    var it = dlg.item, key = dlg.key, run = state.run;
     dlg.busy = true;
     $('buy-ok').disabled = true;
     dstatus('');
-    Promise.resolve(FG.sb.rpc('purchase_item', { p_item_id: it.id, p_idempotency_key: key })).then(function (r) { return r; }, function (e) { return { error: e }; })
+    Promise.resolve(FG.sb.rpc('purchase_item_at_price', { p_item_id: it.id, p_expected_price: it.price, p_idempotency_key: key })).then(function (r) { return r; }, function (e) { return { error: e }; })
       .then(function (r) {
+        if (run !== state.run) return;
         dlg.busy = false;
         if (r.error) { buyFailed(it, r.error); return; }
         var paid = r.data && typeof r.data.price_paid === 'number' ? r.data.price_paid : it.price;
@@ -323,6 +332,7 @@
 
   function buyFailed(it, err) {
     var msg = say(err);
+    if (/price changed/i.test(String((err && err.message) || ''))) { closeBuy(); load(); note('The price changed. Check the updated price before buying.', 'bad'); return; }
     if (/already owned/i.test(String((err && err.message) || ''))) {
       // The server says it is already yours: show it that way.
       it.owned = true;
@@ -337,11 +347,12 @@
   }
 
   function equipNow() {
-    var it = dlg.item;
+    var it = dlg.item, run = state.run;
     if (!it || dlg.busy) return;
     dlg.busy = true;
     $('buy-equip').disabled = true;
     equip(it).then(function (r) {
+      if (run !== state.run) return;
       dlg.busy = false;
       $('buy-equip').disabled = false;
       if (r.error) { dstatus(say(r.error), true); return; }

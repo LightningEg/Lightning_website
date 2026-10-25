@@ -42,6 +42,8 @@ for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) 
   await db.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
 }
 
+await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+
 async function as(role, uid, fn) {
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid ?? ''}', false); set role ${role};`);
   try { return await fn(); } finally { await db.exec('reset role'); }
@@ -177,24 +179,24 @@ await test('profile links: https only and at most 12', async () => {
 });
 
 await test('purchase: debits wallet, keeps score, is idempotent, and owns once', async () => {
-  const p = await as('authenticated', A, () => q(`select * from public.purchase_item('banner-aurora', 'purchase-key-0001')`));
+  const p = await as('authenticated', A, () => q(`select * from public.purchase_item_at_price('banner-aurora',coalesce((select price from public.catalog_items where id='banner-aurora'),0),'purchase-key-0001')`));
   const w = (await q(`select balance, contribution_score from public.wallets where user_id = $1`, [A])).rows[0];
   assert.deepEqual([w.balance, w.contribution_score], [90, 150]);
-  const replay = await as('authenticated', A, () => q(`select * from public.purchase_item('banner-aurora', 'purchase-key-0001')`));
+  const replay = await as('authenticated', A, () => q(`select * from public.purchase_item_at_price('banner-aurora',coalesce((select price from public.catalog_items where id='banner-aurora'),0),'purchase-key-0001')`));
   assert.equal(replay.rows[0].id, p.rows[0].id);
   assert.equal((await q(`select balance from public.wallets where user_id = $1`, [A])).rows[0].balance, 90);
   await as('authenticated', A, async () => {
-    await assert.rejects(q(`select * from public.purchase_item('banner-aurora', 'purchase-key-0002')`), /already owned/);
-    await assert.rejects(q(`select * from public.purchase_item('banner-gold', 'purchase-key-0001')`), /different item/);
-    await assert.rejects(q(`select * from public.purchase_item('banner-gold', 'purchase-key-0003')`), /insufficient coins/);
-    await assert.rejects(q(`select * from public.purchase_item('mono', 'purchase-key-0004')`), /free/);
-    await assert.rejects(q(`select * from public.purchase_item('no-such-item', 'purchase-key-0005')`), /not available/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('banner-aurora',coalesce((select price from public.catalog_items where id='banner-aurora'),0),'purchase-key-0002')`), /already owned/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('banner-gold',coalesce((select price from public.catalog_items where id='banner-gold'),0),'purchase-key-0001')`), /different item/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('banner-gold',coalesce((select price from public.catalog_items where id='banner-gold'),0),'purchase-key-0003')`), /insufficient coins/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('mono',coalesce((select price from public.catalog_items where id='mono'),0),'purchase-key-0004')`), /free/);
+    await assert.rejects(q(`select * from public.purchase_item_at_price('no-such-item',coalesce((select price from public.catalog_items where id='no-such-item'),0),'purchase-key-0005')`), /not available/);
   });
   assert.equal((await q(`select balance from public.wallets where user_id = $1`, [A])).rows[0].balance, 90);
 });
 
 await test('a member with no coins cannot buy; the database refuses a negative wallet', async () => {
-  await as('authenticated', B, async () => assert.rejects(q(`select * from public.purchase_item('banner-aurora', 'purchase-key-0006')`), /insufficient coins/));
+  await as('authenticated', B, async () => assert.rejects(q(`select * from public.purchase_item_at_price('banner-aurora',coalesce((select price from public.catalog_items where id='banner-aurora'),0),'purchase-key-0006')`), /insufficient coins/));
   await assert.rejects(q(`update public.wallets set balance = -1 where user_id = $1`, [B]), /wallets_balance_check/);
 });
 
@@ -228,7 +230,7 @@ await test('leaderboard: opt-in only, ties share a rank, spending never lowers r
 });
 
 await test('admin tools: rewards are versioned, ineligible repos refused, non-admins refused', async () => {
-  await as('authenticated', A, async () => assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning', 7, 75, 'Do it')`), /administrator only/));
+  await as('authenticated', A, async () => assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning', 7, 75, 'Do it')`), /administrator/));
   await q(`insert into public.admin_roles (user_id, role) values ($1, 'admin')`, [A]);
   await q(`insert into public.repositories (full_name, eligible) values ('LightningEg/Lightning_website', false)`);
   await as('authenticated', A, async () => {
@@ -265,7 +267,7 @@ await test('admin corrections: linked reversal, repeat is a no-op, blocked when 
 });
 
 await test('moderation: only an admin function can suspend a profile, and it leaves the public view', async () => {
-  await as('authenticated', B, async () => assert.rejects(q(`select public.admin_suspend_profile($1, true, 'x')`, [A]), /administrator only/));
+  await as('authenticated', B, async () => assert.rejects(q(`select public.admin_suspend_profile($1, true, 'x')`, [A]), /administrator/));
   await as('authenticated', A, () => q(`select public.admin_suspend_profile($1, true, 'Spam')`, [A]));
   await as('anon', null, async () => assert.equal((await q(`select * from public.profile_directory`)).rows.length, 0));
   await as('authenticated', A, () => q(`select public.admin_suspend_profile($1, false, 'Reviewed')`, [A]));

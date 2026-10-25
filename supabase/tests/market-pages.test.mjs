@@ -69,7 +69,7 @@ function fakeClient(w, opts, calls) {
     if (name === 'market_catalog') {
       return thenable({ data: srv.catalog.map(i => ({ ...i, owned: signedIn() && (i.is_default || srv.owned.has(i.id)), equipped: signedIn() && srv.equipped[i.type] === i.id })), error: null });
     }
-    if (name === 'purchase_item') {
+    if (name === 'purchase_item_at_price') {
       if (!item || srv.balance < item.price) return thenable({ data: null, error: { message: 'insufficient coins', code: 'P0001' } });
       if (srv.owned.has(item.id)) return thenable({ data: null, error: { message: 'already owned', code: 'P0001' } });
       srv.balance -= item.price; srv.owned.add(item.id);
@@ -132,7 +132,7 @@ await test('market: signed out shows the whole catalog, no buy or equip buttons,
   assert.equal(p.cell('moss').querySelector('.mkt-tag').textContent, '150 coins');
   assert.equal(p.cell('mono').querySelector('.mkt-tag').textContent, 'free');
   assert.ok(!p.calls.some(c => c.table === 'wallets'), 'no wallet read when signed out');
-  assert.equal(p.rpcs('purchase_item').length, 0);
+  assert.equal(p.rpcs('purchase_item_at_price').length, 0);
 });
 
 await test('market: signed in shows the wallet and one action per item: buy, equip or equipped', async () => {
@@ -165,12 +165,12 @@ await test('market: the buy dialog shows price, balance now and balance after, a
   assert.equal(p.$('buy-price').textContent, '150 coins');
   assert.equal(p.$('buy-now').textContent, '210 coins');
   assert.equal(p.$('buy-after').textContent, '60 coins');
-  assert.equal(p.rpcs('purchase_item').length, 0, 'opening the dialog buys nothing');
+  assert.equal(p.rpcs('purchase_item_at_price').length, 0, 'opening the dialog buys nothing');
   assert.equal(p.w.document.activeElement, p.$('buy-ok'));
   await p.key(p.$('buy'), 'Escape');
   assert.equal(dlg.hidden, true);
   assert.equal(p.w.document.activeElement, p.btn('buy', 'moss'));
-  assert.equal(p.rpcs('purchase_item').length, 0);
+  assert.equal(p.rpcs('purchase_item_at_price').length, 0);
 });
 
 await test('market: the dialog traps Tab and Shift+Tab inside itself', async () => {
@@ -193,11 +193,11 @@ await test('market: confirm sends purchase_item once, with the item id and a key
   await p.click(p.btn('buy', 'moss'));
   await p.click(p.$('buy-ok'));
   await p.click(p.$('buy-ok')); // a second click after success does nothing
-  const r = p.rpcs('purchase_item');
+  const r = p.rpcs('purchase_item_at_price');
   assert.equal(r.length, 1);
   assert.equal(r[0].args.p_item_id, 'moss');
   assert.match(r[0].args.p_idempotency_key, /^[0-9a-f-]{8,100}$/);
-  assert.deepEqual(Object.keys(r[0].args).sort(), ['p_idempotency_key', 'p_item_id'], 'no price or balance is sent');
+  assert.deepEqual(Object.keys(r[0].args).sort(), ['p_expected_price', 'p_idempotency_key', 'p_item_id'], 'the displayed price is asserted; no balance is sent');
   assert.equal(p.$('coins').textContent, '60');
   assert.equal(p.cell('moss').dataset.state, 'owned');
   assert.equal(p.$('buy-title').textContent, 'moss is yours');
@@ -216,7 +216,7 @@ await test('market: confirm sends purchase_item once, with the item id and a key
 
 await test('market: a retry in the same dialog reuses the same key; a new dialog makes a new one', async () => {
   let fail = true;
-  const p = await boot({ balance: 500, rpc: (name) => (name === 'purchase_item' && fail ? { data: null, error: { message: 'Failed to fetch' } } : null) });
+  const p = await boot({ balance: 500, rpc: (name) => (name === 'purchase_item_at_price' && fail ? { data: null, error: { message: 'Failed to fetch' } } : null) });
   await p.click(p.btn('buy', 'frost'));
   await p.click(p.$('buy-ok'));
   assert.match(p.$('buy-status').textContent, /Cannot reach the server/);
@@ -224,7 +224,7 @@ await test('market: a retry in the same dialog reuses the same key; a new dialog
   assert.equal(p.$('buy-ok').disabled, false);
   fail = false;
   await p.click(p.$('buy-ok'));
-  const r = p.rpcs('purchase_item');
+  const r = p.rpcs('purchase_item_at_price');
   assert.equal(r.length, 2);
   assert.equal(r[0].args.p_idempotency_key, r[1].args.p_idempotency_key);
   assert.equal(p.cell('frost').dataset.state, 'owned');
@@ -232,14 +232,14 @@ await test('market: a retry in the same dialog reuses the same key; a new dialog
   await p.click(p.$('buy-cancel'));
   await p.click(p.btn('buy', 'banner-halo'));
   await p.click(p.$('buy-ok'));
-  const keys = p.rpcs('purchase_item').map(c => c.args.p_idempotency_key);
+  const keys = p.rpcs('purchase_item_at_price').map(c => c.args.p_idempotency_key);
   assert.equal(new Set(keys).size, 2);
   // the same item in a reopened dialog also gets a fresh key
   const q = await boot({ balance: 10 });
   await q.click(q.btn('buy', 'moss')); await q.click(q.$('buy-ok'));
   await q.click(q.$('buy-cancel'));
   await q.click(q.btn('buy', 'moss')); await q.click(q.$('buy-ok'));
-  const k2 = q.rpcs('purchase_item').map(c => c.args.p_idempotency_key);
+  const k2 = q.rpcs('purchase_item_at_price').map(c => c.args.p_idempotency_key);
   assert.equal(k2.length, 2);
   assert.notEqual(k2[0], k2[1]);
 });
@@ -250,7 +250,7 @@ await test('market: not enough coins is said in plain words, charges nothing and
   assert.equal(p.$('buy-after').textContent, '−50 coins');
   assert.match(p.$('buy-status').textContent, /100 coins/);
   await p.click(p.$('buy-ok'));
-  assert.equal(p.rpcs('purchase_item').length, 1, 'the server is asked and decides');
+  assert.equal(p.rpcs('purchase_item_at_price').length, 1, 'the server is asked and decides');
   assert.equal(p.$('buy-status').textContent, 'Not enough coins for that yet.');
   assert.match(p.$('buy-status').className, /bad/);
   assert.equal(p.$('buy').hidden, false);
@@ -259,7 +259,7 @@ await test('market: not enough coins is said in plain words, charges nothing and
 });
 
 await test('market: "already owned" from the server marks the item owned and closes the dialog', async () => {
-  const p = await boot({ balance: 500, rpc: (name, args, srv) => { if (name === 'purchase_item') { srv.owned.add('moss'); return { data: null, error: { message: 'already owned', code: 'P0001' } }; } return null; } });
+  const p = await boot({ balance: 500, rpc: (name, args, srv) => { if (name === 'purchase_item_at_price') { srv.owned.add('moss'); return { data: null, error: { message: 'already owned', code: 'P0001' } }; } return null; } });
   await p.click(p.btn('buy', 'moss'));
   await p.click(p.$('buy-ok'));
   assert.equal(p.$('buy').hidden, true);
@@ -272,7 +272,7 @@ await test('market: a double click on confirm is one request', async () => {
   await p.click(p.btn('buy', 'moss'));
   await p.click(p.$('buy-ok'), { detail: 1 });
   await p.click(p.$('buy-ok'), { detail: 2 });
-  assert.equal(p.rpcs('purchase_item').length, 1);
+  assert.equal(p.rpcs('purchase_item_at_price').length, 1);
 });
 
 await test('market: equipping a theme calls equip_item, applies the theme now and remembers it', async () => {
@@ -479,5 +479,15 @@ await test('picker: the theme list, the head boot script and the stylesheet know
   assert.ok(css.includes('[data-theme="frost"] .geeks-mark-light'));
 });
 
+await test('market: a purchase response arriving after sign-out cannot restore the previous account UI',async()=>{
+ let finish;const pending=new Promise(r=>finish=r);
+ const p=await boot({balance:500,rpc:name=>name==='purchase_item_at_price'?pending:null});
+ await p.click(p.btn('buy','moss'));
+ p.$('buy-ok').click();await tick(10);
+ await p.w.FG.sb.auth.signOut();await tick(60);
+ finish({data:{price_paid:150},error:null});await tick(60);
+ assert.equal(p.$('buy').hidden,true);assert.equal(p.cell('moss').dataset.state,'for-sale');
+ assert.equal(p.$('wallet').hidden,true);
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

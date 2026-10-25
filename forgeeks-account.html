@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
-  <link rel="stylesheet" href="css/forgeeks.css?v=20261024-community-1">
+  <link rel="stylesheet" href="css/forgeeks.css?v=20261024-audit-1">
   <link rel="stylesheet" href="css/forgeeks-account.css?v=20261024-1">
   <link rel="stylesheet" href="css/forgeeks-rewards.css?v=20261025-1">
 </head>
@@ -213,7 +213,7 @@
             <details class="secret" id="delete-box">
               <summary><span>›</span> delete my account</summary>
               <div>
-                <form id="form-delete" novalidate>
+                <p class="why">Deleting your account permanently removes its online wallet, purchase inventory and receipt files. Resolve any pending payments with support first. Anonymized financial ledger entries remain. If cleanup is interrupted, retry deletion or cancel its preparation.</p><button class="btn ghost" type="button" id="delete-cancel-preparation">Cancel deletion preparation</button><form id="form-delete" novalidate>
                   <div class="fields"><div class="f"><label for="delete-confirm">type <b>delete my account</b> to confirm</label><input id="delete-confirm" name="confirm" type="text" autocomplete="off" spellcheck="false"></div></div>
                   <div class="row"><button class="btn ghost" type="submit">delete account</button><span class="acct-status" id="status-delete" role="status"></span></div>
                 </form>
@@ -264,12 +264,12 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/forgeeks.js?v=20261024-community-1"></script>
+<script src="js/forgeeks.js?v=20261024-audit-1"></script>
 <script src="js/vendor/supabase-2.118.0.js"></script>
-<script src="js/forgeeks-config.js?v=20261024-community-1"></script>
-<script src="js/forgeeks-auth.js?v=20261024-community-1"></script>
+<script src="js/forgeeks-config.js?v=20261024-audit-1"></script>
+<script src="js/forgeeks-auth.js?v=20261024-audit-1"></script>
 <script src="js/forgeeks-account.js?v=20261025-1"></script>
 <script src="js/forgeeks-account-rewards.js?v=20261025-1"></script>
-<script src="js/forgeeks-account-data.js?v=20261025-1"></script>
+<script src="js/forgeeks-account-data.js?v=20261024-audit-1"></script>
 </body>
 </html>
