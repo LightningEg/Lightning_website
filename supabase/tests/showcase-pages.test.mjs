@@ -125,7 +125,8 @@ await test('leaderboard: signed out, it asks for this month and shows ranked row
   assert.equal(rows[0].querySelector('.ct').textContent, '3');
   assert.equal(rows[1].querySelector('.ct').textContent, '1');
   assert.deepEqual([...p.doc.querySelectorAll('#lb-list thead th')].map(t => t.textContent), ['rank', 'member', 'contributions', 'score']);
-  assert.equal(p.doc.querySelectorAll('#lb-list .av, #lb-list img, #lb-list .fg-banner').length, 0, 'only the display name: no avatar, badge or banner');
+  assert.equal(p.doc.querySelectorAll('#lb-list .av, #lb-list img, #lb-list .fg-badge').length, 0, 'only the display name: no avatar or badge');
+  assert.equal(p.doc.querySelectorAll('#lb-list .lb-bg').length, 0, 'no banner, no background');
   assert.equal(p.$('lb-sample').hidden, true);
   assert.equal(p.$('lb-list').hidden, false);
   assert.equal(p.$('lb-empty').hidden, true);
@@ -141,6 +142,9 @@ await test('leaderboard: ?sample fills the table with made-up people, says so, a
   assert.match(p.$('lb-sample').textContent, /Nobody here is real/);
   const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
   assert.equal(rows.length, 14);
+  assert.equal(rows[0].querySelector('.lb-bg').getAttribute('data-item'), 'banner-dusk', 'each row carries its banner behind it');
+  assert.ok(rows[0].classList.contains('has-banner') && rows[0].querySelector('.lb-veil'));
+  assert.equal(rows[2].querySelector('.lb-bg'), null);
   assert.equal(p.doc.querySelectorAll('#lb-list a').length, 0, 'sample names link nowhere');
   const scores = rows.map(r => Number(r.querySelector('.sc').textContent.replace(/,/g, '')));
   assert.deepEqual(scores, [...scores].sort((a, b) => b - a));
@@ -203,12 +207,13 @@ await test('leaderboard: member text, avatar links and banner ids cannot inject 
     member('Plain', { avatar_url: 'http://example.test/a.png', banner_item_id: 'banner-aurora' }),
     member('Pic', { avatar_url: 'https://example.test/pic.png' })
   ];
-  const boards = { month: [{ rank: 1, display_name: EVIL, avatar_url: 'javascript:alert(1)', contribution_count: 1, score: 5 }] };
+  const boards = { month: [{ rank: 1, display_name: EVIL, avatar_url: 'javascript:alert(1)', contribution_count: 1, score: 5, banner_item_id: '"><script>alert(1)</script>' }] };
   const p = await boot('leaderboard', { rpc: lbRpc({ boards, members }) });
   const main = p.doc.getElementById('main');
   assert.equal(main.querySelectorAll('script').length, 0);
   assert.equal(main.querySelectorAll('[onerror]').length, 0);
   assert.equal(p.doc.querySelector('.lb-row .nm').textContent, EVIL);
+  assert.equal(p.doc.querySelector('.lb-row .lb-bg'), null, 'a malformed banner id draws nothing');
   const cards = [...p.doc.querySelectorAll('.mc')];
   assert.equal(cards.length, 3);
   assert.equal(cards[0].querySelector('.mc-name a').textContent, EVIL);

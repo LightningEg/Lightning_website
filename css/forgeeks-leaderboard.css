@@ -31,6 +31,10 @@ main :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .nm-c{min-width:0;overflow-wrap:anywhere}
 .nm{color:var(--ink);font-weight:500;text-decoration:none}
 a.nm:hover{text-decoration:underline;text-underline-offset:4px}
+.lb-row.has-banner{position:relative;isolation:isolate}
+.lb-row .lb-bg,.lb-veil{position:absolute;inset:0;z-index:-1;height:auto;margin:0;border:0;border-radius:0;pointer-events:none}
+/* a veil of the panel colour keeps every figure readable over any banner (banners draw their own ::after) */
+.lb-veil{background:linear-gradient(90deg,color-mix(in srgb,var(--bg) 84%,transparent) 0%,color-mix(in srgb,var(--bg) 66%,transparent) 22%,color-mix(in srgb,var(--bg) 25%,transparent) 50%,color-mix(in srgb,var(--bg) 66%,transparent) 76%,color-mix(in srgb,var(--bg) 84%,transparent) 100%)}
 .lb-sample{margin:0 0 12px;font:400 12.5px var(--mono);color:var(--dim)}
 @media (max-width:640px){
   .lb-list th,.lb-list td{padding:10px 12px}

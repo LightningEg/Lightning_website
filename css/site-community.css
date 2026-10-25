@@ -63,7 +63,8 @@ body[data-main-store] .lb-list .ct,body[data-main-store] .lb-list .sc{width:150p
 body[data-main-store] .lb-list td.ct{color:var(--muted)}
 body[data-main-store] .lb-list td.sc{font-weight:800}
 body[data-main-store] .nm{font-weight:700}
-body[data-main-store] .lb-list tbody tr:hover td{background:var(--track)}
+body[data-main-store] .lb-list tbody tr:not(.has-banner):hover td{background:var(--track)}
+body[data-main-store] .lb-veil{background:linear-gradient(90deg,color-mix(in srgb,var(--panel) 86%,transparent) 0%,color-mix(in srgb,var(--panel) 70%,transparent) 22%,color-mix(in srgb,var(--panel) 35%,transparent) 50%,color-mix(in srgb,var(--panel) 70%,transparent) 76%,color-mix(in srgb,var(--panel) 86%,transparent) 100%)}
 body[data-main-store] .lb-sample{font:500 14px/1.5 var(--body);color:var(--muted)}
 body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
 body[data-main-store] .av{background:var(--field);border:1px solid var(--line-ctl);font:700 14px var(--body)}
