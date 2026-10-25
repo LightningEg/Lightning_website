@@ -85,9 +85,15 @@ await test('the receiving QR stays private until this member accepts a pending c
  await assert.rejects(as('anon',null,()=>q(`select public.checkout_qr($1)`,[key()])),/permission denied/);
  const available=(await as('authenticated',u,()=>q(`select public.checkout_availability()d`))).rows[0].d;assert.equal(available.enabled,true);assert.equal('qr_asset_id'in available,false);assert.equal('instapay_address'in available,false);
  const r=await amountCheckout(u);assert.equal(r.destination_qr_asset_id,asset);assert.equal(r.destination_qr_url,null);
- const image=(await as('authenticated',u,()=>q(`select public.checkout_qr($1)d`,[r.id]))).rows[0].d;assert.equal(image.data_url,'data:image/png;base64,'+qrBytes);
+ const response=(await as('authenticated',u,()=>q(`select public.checkout_qr($1)d,current_setting('response.headers',true) h`,[r.id]))).rows[0];assert.equal(response.d.data_url,'data:image/png;base64,'+qrBytes);assert.match(response.h,/no-store/);
  await assert.rejects(as('authenticated',other,()=>q(`select public.checkout_qr($1)`,[r.id])),/only inside/);
  await as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id]));await assert.rejects(as('authenticated',u,()=>q(`select public.checkout_qr($1)`,[r.id])),/only inside/);
+});
+await test('a matched payment without an uploaded receipt cannot be cancelled or hidden',async()=>{
+ const u=await newUser(),r=await amountCheckout(u);
+ await capture(r.id,'NO-RECEIPT-CANCEL',10000);
+ await assert.rejects(as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id])),/received funds must be reconciled/);
+ assert.equal((await q(`select status from public.topup_requests where id=$1`,[r.id])).rows[0].status,'pending');
 });
 await test('amount quotes survive retries and pricing changes; a stale fresh quote cannot open payment instructions',async()=>{
  const u=await newUser(),old=await quote(10000),r=await amountCheckout(u,10000,key(),old);
