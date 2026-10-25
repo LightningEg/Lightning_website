@@ -1,0 +1,128 @@
+/* The market's shop floor (js/market-ui.js) on both sites: Your look with the wallet, tabs, the app themes in testing,
+   the detail window, the not-enough-coins block and the Try it bar. One structure; the --mk-* names below take
+   each site's own tokens: For Geeks (Part D, css/forgeeks.css) by default, the main site (Part B) on data-main-store. */
+body{--mk-ink:var(--ink);--mk-dim:var(--dim);--mk-panel:var(--panel);--mk-well:var(--well);--mk-line:var(--line);--mk-accent:var(--accent);
+  --mk-btn:var(--btn);--mk-btn-ink:var(--btn-ink);--mk-pill:4px;--mk-card:8px;--mk-font:var(--mono);--mk-head:var(--mono);--mk-bar:var(--panel)}
+body[data-main-store]{--mk-dim:var(--muted);--mk-well:var(--field);--mk-accent:var(--green);--mk-btn:var(--nile);--mk-btn-ink:var(--on-nile);
+  --mk-pill:999px;--mk-card:22px;--mk-font:var(--body);--mk-head:var(--display);--mk-bar:var(--white)}
+.coin-i{width:1.1em;height:1.1em;flex:none;image-rendering:pixelated;vertical-align:-.18em}
+.mkt-price{display:inline-flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums}
+
+/* Your look, paired with the wallet */
+.mkt-top{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;margin:0 0 28px}
+.mkt-look,.mkt-wallet{display:flex;flex-direction:column;gap:12px;min-width:0;padding:20px;border:1px solid var(--mk-line);border-radius:var(--mk-card);background:var(--mk-panel)}
+.mkt-look-h{margin:0;font:800 21px/1.2 var(--mk-head);color:var(--mk-ink)}
+.mkt-look-line{margin:0;color:var(--mk-dim);font:500 14px/1.5 var(--mk-font)}
+.mkt-look .pv-profile{border-color:var(--mk-line);background:var(--mk-well)}
+.mkt-look .mkt-wear{display:flex;align-items:center;gap:10px;min-height:44px;margin:0!important;font:700 14px var(--mk-font);color:var(--mk-ink);cursor:pointer}
+.mkt-wear[hidden]{display:none}
+.mkt-look .mkt-wear input{flex:none;margin:0;width:20px;height:20px;min-height:0;accent-color:var(--mk-btn)}
+.mkt-wallet{align-self:start}
+.mkt-wallet .mkt-bar .fine{flex:none}
+.mkt-wallet .mkt-bar{flex-direction:column;align-items:flex-start;margin:0!important;gap:12px}
+.mkt-wallet .mkt-bar .chip{display:inline-flex;align-items:center;gap:8px;font-size:16px}
+.mkt-wallet .mkt-bar .chip b{font-size:20px}
+.mkt-earn{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0}
+.mkt-link{color:var(--mk-ink);font:700 14px var(--mk-font);text-underline-offset:3px}
+
+/* tabs */
+.mkt-tabs{display:flex;gap:8px;margin:0 0 32px;padding:4px;overflow-x:auto;scrollbar-width:none;border:1px solid var(--mk-line);border-radius:var(--mk-pill);background:var(--mk-well);width:max-content;max-width:100%}
+.mkt-tabs::-webkit-scrollbar{display:none}
+.mkt-tab{flex:none;min-height:40px;padding:0 18px;border:0;border-radius:var(--mk-pill);background:transparent;color:var(--mk-dim);font:700 14px var(--mk-font);cursor:pointer}
+.mkt-tab:hover{color:var(--mk-ink)}
+.mkt-tab[aria-pressed=true]{background:var(--mk-btn);color:var(--mk-btn-ink)}
+.mkt-empty{color:var(--mk-dim);font:500 15px var(--mk-font)}
+.mkt-cell[hidden],.mkt-sec[hidden],.mkt-feat[hidden],.mkt-empty[hidden]{display:none!important}
+
+/* Buy, Try it and Details inside a cell: buying is the one filled button */
+.mkt-cell .mkt-acts{gap:8px}
+.mkt-mini.ghost{background:transparent}
+.mkt-cell .mkt-buy{order:-1;background:var(--mk-btn)!important;border-color:var(--mk-btn)!important;color:var(--mk-btn-ink)!important}
+.mkt-cell .pv-thumb{height:116px}
+
+/* the app themes in testing */
+.mkt-feat{margin:0 0 40px}
+.mkt-feat .mkt-sub{margin-top:0}
+.mkt-feat-why{margin:0 0 16px;color:var(--mk-dim);font:500 15px/1.55 var(--mk-font);max-width:62ch}
+.mkt-feat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.mkt-feat-card{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:16px;min-width:0;padding:20px;
+  border-radius:var(--mk-card);background:var(--pv-background);color:var(--pv-text);border:1px solid var(--pv-border);
+  box-shadow:inset 0 2px 0 var(--pv-accent)}
+.mkt-feat-words{display:flex;flex-direction:column;gap:6px;min-width:0}
+.mkt-feat-tag{align-self:flex-start;padding:3px 10px;border:1px solid var(--pv-border);border-radius:999px;color:var(--pv-muted);font:700 12px var(--mk-font)}
+.mkt-feat-name{margin:4px 0 0;font:800 22px/1.15 var(--mk-head);color:var(--pv-hero,var(--pv-text))}
+.mkt-feat-line{margin:0;color:var(--pv-muted);font:500 14px/1.5 var(--mk-font)}
+.mkt-feat-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.mkt-feat-acts button{min-height:40px;padding:0 16px;border-radius:var(--mk-pill);font:700 14px var(--mk-font);cursor:pointer}
+.mkt-feat-try{border:1px solid var(--pv-accent);background:var(--pv-accent);color:var(--pv-onAccent)}
+.mkt-feat-more{border:1px solid var(--pv-muted);background:transparent;color:var(--pv-text)}
+.mkt-feat-acts button:focus-visible{outline:3px solid var(--pv-focus,var(--pv-accent));outline-offset:2px}
+.mkt-feat-price{color:var(--pv-muted,var(--mk-dim));font:600 13px var(--mk-font)}
+.mkt-feat-shots{position:relative;padding:0 12% 6% 0;min-width:0}
+.mkt-feat-shots .pv-pc{box-shadow:0 20px 40px -24px rgba(0,0,0,.7)}
+.mkt-feat-shots .pv-phone{position:absolute;right:0;bottom:0;width:30%;border-width:4px;border-radius:16px}
+
+/* the detail window: wider than the buy window */
+.mkt-detail-win{width:min(880px,100%)!important}
+.mkt-detail-tag{margin:0 0 4px;color:var(--mk-dim);font:700 13px var(--mk-font)}
+.mkt-detail-win h2{margin:0 0 6px}
+.mkt-detail-note{margin:0 0 16px;color:var(--mk-dim);font:500 15px/1.5 var(--mk-font)}
+.mkt-detail-note:empty{display:none}
+.mkt-views{display:flex;gap:6px;margin:0 0 14px;padding:4px;width:max-content;max-width:100%;border:1px solid var(--mk-line);border-radius:var(--mk-pill);background:var(--mk-well)}
+.mkt-views[hidden]{display:none}
+.mkt-view{min-height:36px;padding:0 16px;border:0;border-radius:var(--mk-pill);background:transparent;color:var(--mk-dim);font:700 14px var(--mk-font);cursor:pointer}
+.mkt-view[aria-pressed=true]{background:var(--mk-btn);color:var(--mk-btn-ink)}
+.mkt-stage{display:flex;justify-content:center;padding:16px;border-radius:calc(var(--mk-card) - 6px);background:var(--mk-well);border:1px solid var(--mk-line)}
+.mkt-stage>.pv,.mkt-stage>.pv-profile{width:100%}
+.mkt-stage-phone{width:min(280px,72%)}
+.mkt-stage-note{margin:10px 0 0;color:var(--mk-dim);font:500 13px/1.5 var(--mk-font)}
+.mkt-parts[hidden]{display:none}
+.mkt-parts-h{margin:20px 0 8px;font:800 17px var(--mk-head);color:var(--mk-ink)}
+.mkt-parts-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;margin:0}
+.mkt-parts-list div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--mk-line);font:500 14px var(--mk-font)}
+.mkt-parts-list dt{color:var(--mk-ink)}
+.mkt-parts-list dd{margin:0;color:var(--mk-dim)}
+.mkt-parts-list .on dd{color:var(--mk-accent);font-weight:700}
+.mkt-parts-fine{margin:12px 0 0;color:var(--mk-dim);font:500 13px/1.5 var(--mk-font)}
+.mkt-detail-acts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
+.mkt-detail-acts .mkt-state{margin-inline:6px}
+
+/* buying with too few coins */
+.mkt-short{margin:16px 0 0}
+.mkt-short[hidden]{display:none}
+.mkt-short-need{margin:0;color:var(--rose-strong,#ff8f8f);font:700 15px var(--mk-font)}
+.mkt-short-how{margin:6px 0 10px;color:var(--mk-dim);font:500 14px/1.5 var(--mk-font)}
+.mkt-short-ways{display:flex;flex-wrap:wrap;gap:8px 18px}
+
+/* the Try it bar: above everything but the windows */
+.mkt-trybar{position:fixed;left:50%;bottom:16px;z-index:60;transform:translateX(-50%);display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;
+  width:max-content;max-width:calc(100% - 24px);padding:10px 10px 10px 20px;border:1px solid var(--mk-line);border-radius:var(--mk-pill);
+  background:var(--mk-bar);color:var(--mk-ink);box-shadow:0 18px 50px -12px rgba(0,0,0,.45)}
+.mkt-trybar[hidden]{display:none}
+.mkt-trybar-text{margin:0;font:500 14px var(--mk-font)}
+.mkt-trybar-acts{display:flex;gap:8px}
+.mkt-trybar-acts button,.mkt-trybar-acts a{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 16px;border-radius:var(--mk-pill);font:700 14px var(--mk-font);text-decoration:none;cursor:pointer}
+.mkt-trybar-buy{border:1px solid var(--mk-btn);background:var(--mk-btn);color:var(--mk-btn-ink)}
+.mkt-trybar-cancel{border:1px solid var(--mk-line);background:transparent;color:var(--mk-ink)}
+body.mkt-trying main{padding-bottom:80px}
+
+@media (max-width:900px){
+  .mkt-top{grid-template-columns:minmax(0,1fr)}
+  .mkt-feat-row{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .mkt-feat-card{grid-template-columns:minmax(0,1fr)}
+  .mkt-grid.themes .mkt-cell,.mkt-grid.banners .mkt-cell{display:grid;grid-template-columns:112px minmax(0,1fr);gap:4px 14px;align-content:start}
+  .mkt-grid.themes .mkt-cell>:first-child,.mkt-grid.banners .mkt-cell>:first-child{grid-row:1/span 3;height:84px!important;align-self:start}
+  .mkt-grid.themes .mkt-cell .mkt-acts,.mkt-grid.banners .mkt-cell .mkt-acts{grid-column:1/-1}
+  .mkt-grid.themes .mkt-cell .mkt-head,.mkt-grid.banners .mkt-cell .mkt-head{flex-direction:column;align-items:flex-start;gap:2px}
+  .mkt-cell .pv-thumb{grid-template-columns:16% 1fr}
+  .mkt-earn{margin-top:4px}
+  .mkt-parts-list{grid-template-columns:minmax(0,1fr)}
+  .mkt-trybar{left:12px;right:12px;transform:none;width:auto;border-radius:18px;padding:12px}
+  .mkt-trybar-acts{width:100%}
+  .mkt-trybar-acts>*{flex:1;justify-content:center}
+  .mkt-detail-win{padding:18px!important}
+  .mkt-stage{padding:10px}
+}
+@media (prefers-reduced-motion:reduce){.mkt-trybar,.mkt-tab,.mkt-view{transition:none}}
