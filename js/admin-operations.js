@@ -1,25 +1,27 @@
 (function(){
  const FG=window.FG,$=id=>document.getElementById(id);let factor=null,lastPayload='',requestKey=crypto.randomUUID(),adminUser=null;
  const status=(id,text)=>{$(id).textContent=text;};
- const error=e=>FG.say(e);
+ const error=e=>{const code=String(e?.code||''),message=String(e?.message||'');if(/mfa_verification_failed|invalid.*(totp|code)/i.test(code+' '+message))return 'That code was not accepted. Use the newest code from your Lightning authenticator entry and make sure your phone’s date and time are automatic.';if(/challenge.*expired|mfa_challenge_expired/i.test(code+' '+message))return 'That verification attempt expired. Enter the newest authenticator code and try again.';if(/over_request_rate_limit|too many/i.test(code+' '+message))return 'Too many verification attempts. Wait a moment, then use a fresh authenticator code.';return FG.say(e);};
+ function verified(on){$('admin-mfa-form').hidden=on;$('admin-mfa-start').hidden=on;const heading=$('admin-mfa-start').closest('section')?.querySelector('h2');if(heading)heading.textContent=on?'Administrator access verified':'Verify administrator access';if(on){$('admin-mfa-setup').replaceChildren();$('admin-mfa-form').reset();status('admin-mfa-status','Verified. The owner tools below are ready to use.');}}
+ window.addEventListener('lightning:owner-access',e=>verified(e.detail?.verified===true));
  async function call(name,params){const r=await FG.sb.rpc(name,params);if(r.error)throw r.error;return r.data;}
  function reset(){$('admin-credit-form').reset();lastPayload='';requestKey=crypto.randomUUID();status('admin-credit-status','');}
  async function init(){if(!FG.sb||!FG.session())return;try{if(!await call('is_admin',{}))return;}catch{return;}
- $('admin-mfa-start').onclick=async()=>{try{
+ $('admin-mfa-start').onclick=async()=>{const b=$('admin-mfa-start');b.disabled=true;try{
   if(factor&&$('admin-mfa-setup').childElementCount){status('admin-mfa-status','Scan the displayed QR code, then enter the authenticator code.');return;}
   const r=await FG.sb.auth.mfa.listFactors();if(r.error)throw r.error;
-  const current=r.data.totp.find(f=>f.status==='verified');
+  const current=(r.data?.totp||[]).find(f=>f.status==='verified');
   if(current){factor=current.id;status('admin-mfa-status','Enter a current authenticator code.');return;}
   for(const pending of (r.data.all||[]).filter(f=>f.factor_type==='totp'&&f.status==='unverified')){const removed=await FG.sb.auth.mfa.unenroll({factorId:pending.id});if(removed.error)throw removed.error;}
   const out=await FG.sb.auth.mfa.enroll({factorType:'totp',friendlyName:'Lightning admin'});if(out.error)throw out.error;factor=out.data.id;
   const img=document.createElement('img');img.alt='Scan this private QR code with your authenticator';img.width=200;img.height=200;img.src=out.data.totp.qr_code.startsWith('data:')?out.data.totp.qr_code:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(out.data.totp.qr_code);$('admin-mfa-setup').replaceChildren(img);status('admin-mfa-status','Scan the QR code, then enter the six-digit code.');
- }catch(e){status('admin-mfa-status',error(e));}};
- $('admin-mfa-form').onsubmit=async e=>{e.preventDefault();if(!factor){status('admin-mfa-status','Choose set up or verify first.');return;}const b=e.currentTarget.querySelector('button');b.disabled=true;try{const r=await FG.sb.auth.mfa.challengeAndVerify({factorId:factor,code:e.currentTarget.elements.code.value});if(r.error)throw r.error;$('admin-mfa-setup').replaceChildren();e.currentTarget.reset();status('admin-mfa-status','Administrator session verified.');window.dispatchEvent(new CustomEvent('lightning:mfa-verified'));}catch(e){status('admin-mfa-status',error(e));}finally{b.disabled=false;}};
+ }catch(e){status('admin-mfa-status',error(e));}finally{b.disabled=false;}};
+ $('admin-mfa-form').onsubmit=async e=>{e.preventDefault();if(!factor){status('admin-mfa-status','Choose set up or verify first.');return;}const f=e.currentTarget,b=f.querySelector('button'),uid=FG.session()?.user.id;b.disabled=true;try{const r=await FG.sb.auth.mfa.challengeAndVerify({factorId:factor,code:f.elements.code.value.trim()});if(r.error)throw r.error;if(FG.session()?.user.id!==uid)return;$('admin-mfa-setup').replaceChildren();f.reset();status('admin-mfa-status','Administrator session verified.');window.dispatchEvent(new CustomEvent('lightning:mfa-verified'));}catch(e){status('admin-mfa-status',error(e));}finally{b.disabled=false;}};
  $('admin-credit-new').onclick=reset;
  $('admin-credit-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,p={p_email:f.elements.email.value,p_coins:Number(f.elements.coins.value),p_points:Number(f.elements.points.value),p_reason:f.elements.reason.value};const text=JSON.stringify(p);if(text!==lastPayload){requestKey=crypto.randomUUID();lastPayload=text;}const b=f.querySelector('[type=submit]');b.disabled=true;try{const w=await call('admin_credit_account',{...p,p_key:requestKey});status('admin-credit-status','Saved. Wallet: '+w.balance+' coins. Recognition: '+w.contribution_score+' points. Repeating this request will not credit twice.');}catch(e){status('admin-credit-status',error(e));}finally{b.disabled=false;}};
  $('admin-price-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;try{await call('admin_set_palette_price',{p_item_id:f.elements.item.value,p_price:Number(f.elements.price.value)});status('admin-price-status','Price saved.');}catch(e){status('admin-price-status',error(e));}};
  }
- FG.ready.then(init);FG.onAuth(()=>{const uid=FG.session()?.user.id||null;if(uid!==adminUser){adminUser=uid;$('admin-mfa-setup').replaceChildren();factor=null;reset();}init();});
+ FG.ready.then(init);FG.onAuth(()=>{const uid=FG.session()?.user.id||null;if(uid!==adminUser){adminUser=uid;$('admin-mfa-setup').replaceChildren();factor=null;verified(false);status('admin-mfa-status','');reset();}init();});
 })();
 // All receipt actions bind to the exact evidence revision displayed in this queue.
 (function(){
