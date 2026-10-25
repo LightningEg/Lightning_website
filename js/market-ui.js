@@ -40,8 +40,10 @@
     return e;
   }
   function add(p, kids) { kids.forEach(function (k) { if (k) p.appendChild(k); }); return p; }
+  // UI words: sentence case on the main site (Part B), lower case like commands on For Geeks (D10)
+  function ui(t) { return MAIN || t == null ? t : t.toLowerCase(); }
   function btn(cls, text, fn, aria) {
-    var b = el('button', cls, text);
+    var b = el('button', cls, ui(text));
     b.type = 'button';
     if (aria) b.setAttribute('aria-label', aria);
     b.addEventListener('click', fn);
@@ -79,7 +81,7 @@
     var top = el('div', 'mkt-top');
     var look = el('section', 'mkt-look');
     look.setAttribute('aria-labelledby', 'look-h');
-    add(look, [el('h2', 'mkt-look-h', 'Your look'), el('div', 'mkt-look-card'), el('p', 'mkt-look-line')]);
+    add(look, [el('h2', 'mkt-look-h', ui('Your look')), el('div', 'mkt-look-card'), el('p', 'mkt-look-line')]);
     look.firstChild.id = 'look-h';
     if (MAIN) {
       var wear = el('label', 'mkt-wear chk');
@@ -126,7 +128,7 @@
     var h = (root.location.hash || '').slice(1);
     if (VIEWS.some(function (v) { return v[0] === h; })) view = h;
   }
-  function link(href, text) { var a = el('a', 'mkt-link', text); a.href = href; return a; }
+  function link(href, text) { var a = el('a', 'mkt-link', ui(text)); a.href = href; return a; }
 
   function show(next, focus) {
     view = next;
@@ -210,17 +212,18 @@
     var feat = $('mkt-feat');
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
-    add(feat, [el('h3', 'mkt-sub', 'New for the app'), el('p', 'mkt-feat-why', 'Two themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.')]);
+    add(feat, [el('h3', 'mkt-sub', ui('New for the app')), el('p', 'mkt-feat-why', MAIN ? 'Two themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
+      : 'Two app themes in testing, cosmetics/nile-nocturne.json and cosmetics/royal-obsidian-gold.json, checked against cosmetics/slots.json. Try them here; a price comes when the app can wear them.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
       var e = appEntry(m);
       var card = PV.paint(el('article', 'mkt-feat-card'), e.palette);
       card.setAttribute('data-app', m.id);
-      var words = add(el('div', 'mkt-feat-words'), [el('span', 'mkt-feat-tag', 'App theme · in testing'), el('h4', 'mkt-feat-name', m.name), el('p', 'mkt-feat-line', m.line)]);
+      var words = add(el('div', 'mkt-feat-words'), [el('span', 'mkt-feat-tag', ui('App theme · in testing')), el('h4', 'mkt-feat-name', m.name), el('p', 'mkt-feat-line', m.line)]);
       var acts = add(el('div', 'mkt-feat-acts'), [
         btn('mkt-feat-try', 'Try it', function () { tryOn(e); }, 'Try ' + m.name + ' on this page'),
         btn('mkt-feat-more', 'Details', function (ev) { openDetail(e, ev.currentTarget, 'pc'); }, m.name + ' details'),
-        el('span', 'mkt-feat-price', 'Price not set yet')]);
+        el('span', 'mkt-feat-price', ui('Price not set yet'))]);
       words.appendChild(acts);
       var shots = add(el('div', 'mkt-feat-shots'), [PV.pc(e.palette), PV.phone(e.palette)]);
       shots.setAttribute('aria-hidden', 'true');
@@ -309,7 +312,7 @@
     while (acts.firstChild) acts.removeChild(acts.firstChild);
     if (it && ms && ms.signedIn && !it.owned) {
       var b = btn('mkt-trybar-buy', '', function () { M().buy(it, b); });
-      add(b, [el('span', null, 'Buy · '), priced(it.price)]);
+      add(b, [el('span', null, ui('Buy · ')), priced(it.price)]);
       acts.appendChild(b);
     } else if (it && it.owned && !it.equipped) {
       acts.appendChild(btn('mkt-trybar-buy', 'Equip', function (ev) { M().act('equip', it, ev.currentTarget); }));
@@ -381,7 +384,7 @@
   function openDetail(e, trigger, mode) {
     detail.entry = e; detail.trigger = trigger;
     var it = e.item, win = doc.querySelector('.mkt-detail-win');
-    doc.querySelector('.mkt-detail-tag').textContent = e.app ? 'App theme · in testing' : e.kind === 'theme' ? 'Theme · website, computer and phone' : e.kind[0].toUpperCase() + e.kind.slice(1);
+    doc.querySelector('.mkt-detail-tag').textContent = ui(e.app ? 'App theme · in testing' : e.kind === 'theme' ? 'Theme · website, computer and phone' : e.kind[0].toUpperCase() + e.kind.slice(1));
     $('detail-title').textContent = e.name;
     doc.querySelector('.mkt-detail-note').textContent = e.app ? e.app.line : (it && it.description) || '';
     var views = doc.querySelector('.mkt-views');
@@ -399,7 +402,7 @@
     var parts = doc.querySelector('.mkt-parts');
     while (parts.firstChild) parts.removeChild(parts.firstChild);
     if (e.kind === 'theme') {
-      parts.appendChild(el('h3', 'mkt-parts-h', 'What this theme changes'));
+      parts.appendChild(el('h3', 'mkt-parts-h', ui('What this theme changes')));
       var dl = el('dl', 'mkt-parts-list');
       PARTS.forEach(function (name, i) {
         var changes = e.app ? !!e.app.parts[SLOT[i]] && !(SLOT[i] === 'decoration') : i < 9 && i !== 3;
@@ -414,12 +417,12 @@
     while (acts.firstChild) acts.removeChild(acts.firstChild);
     acts.appendChild(btn('btn', e.kind === 'theme' ? 'Try it on this page' : 'Try it on your look', function () { closeDetail(true); tryOn(e); }));
     if (it && ms && ms.signedIn) {
-      if (it.equipped) acts.appendChild(el('span', 'mkt-state', '✓ equipped'));
+      if (it.equipped) acts.appendChild(el('span', 'mkt-state', ui('✓ Equipped')));
       else if (it.owned) acts.appendChild(btn('btn ghost', 'Equip', function () { closeDetail(true); M().act('equip', it, trigger); }));
-      else { var b = btn('btn ghost', '', function () { closeDetail(true); M().buy(it, trigger); }); add(b, [el('span', null, 'Buy · '), priced(it.price)]); acts.appendChild(b); }
+      else { var b = btn('btn ghost', '', function () { closeDetail(true); M().buy(it, trigger); }); add(b, [el('span', null, ui('Buy · ')), priced(it.price)]); acts.appendChild(b); }
     } else if (it && it.price > 0) {
       var a = link(FG && FG.signInHref ? FG.signInHref() : 'account.html', 'Sign in to buy'); a.className = 'btn ghost'; acts.appendChild(a);
-    } else if (e.app) acts.appendChild(el('span', 'mkt-feat-price', 'Price not set yet'));
+    } else if (e.app) acts.appendChild(el('span', 'mkt-feat-price', ui('Price not set yet')));
     acts.appendChild(btn('btn ghost', 'Close', function () { closeDetail(); }));
     $('mkt-detail').hidden = false;
     doc.documentElement.style.overflow = 'hidden';
