@@ -143,6 +143,14 @@ await test('main: a worn theme the member no longer owns comes off', async () =>
   assert.equal(p.w.localStorage.getItem('lightning-site-skin'), null);
 });
 
+await test('main: an archived theme you own says so, and can still be worn', async () => {
+  const p = await boot({ owned: ['moss'] });
+  assert.match(p.q('.mkt-cell[data-item="moss"] .mkt-archived').textContent, /Archived: still yours/);
+  assert.equal(p.q('.mkt-cell[data-item="paper"] .mkt-archived'), null);
+  await p.click(p.q('button[data-act="equip"][data-item="moss"]'));
+  assert.equal(p.root.dataset.skin, 'moss');
+});
+
 await test('main: Details shows the theme on both sites (the main site light and dark), the computer and the phone, with its ten parts', async () => {
   const p = await boot({ balance: 300 });
   await p.click(p.byLabel('Paper details'));
@@ -230,6 +238,8 @@ await test('skin: theme.js refuses anything but four hex colours and an id', asy
   assert.equal(w.document.documentElement.dataset.theme, 'light', 'a dark theme gets the main site\'s light side by default');
   assert.doesNotMatch(w.document.getElementById('site-skin').textContent, /--paper:#070b16/);
   assert.match(w.document.getElementById('site-skin').textContent, /--ink:#070b16/, 'its night ground becomes the ink');
+  assert.match(w.document.getElementById('site-skin').textContent, /\.lc-bar[^{]*\{--lc-ink:#070b16/, 'the consent bar follows the theme too');
+  assert.deepEqual(Object.keys(w.LightningTheme.parts(['#070b16', '#e9edf7', '#b7c0d8', '#e6b450'])), ['colours', 'header', 'hero', 'cards', 'controls', 'footer', 'consent'], 'the parts of guideline/themes.md');
   const toggle = w.document.createElement('button');
   toggle.setAttribute('data-theme-toggle', '');
   w.document.body.appendChild(toggle);

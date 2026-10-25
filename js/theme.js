@@ -35,23 +35,32 @@
     const readable = start => { let x = start; for (let t = 0.1; contrast(x, ground) < 4.5 && t < 1; t += 0.1) x = mix(text, start, t); return x; };
     return [ground, text, readable(own ? quiet : mix(text, ground, 0.62)), readable(acc)];
   }
-  function skinCss(c) {
+  // The skin, part by part (guideline/themes.md): each part names the Part B tokens it may repaint, and nothing else
+  // changes. Text, surfaces and lines come from the theme's ground and text; buttons, links and focus from its accent.
+  function skinParts(c) {
     const [bg, ink, quiet, acc] = c, light = lum(bg) > 0.4;
     const on = contrast(acc, bg) >= contrast(acc, ink) ? bg : ink;
     const link = contrast(acc, bg) >= 3 ? acc : ink;
-    const v = {
-      '--ink': ink, '--ink2': mix(ink, quiet, 0.5), '--muted': quiet,
-      '--nile': acc, '--nile-2': mix(acc, ink, 0.82), '--on-nile': on, '--azure': link,
-      '--paper': bg, '--white': mix(ink, bg, light ? 0.02 : 0.06), '--panel': mix(ink, bg, light ? 0.03 : 0.04),
-      '--line': mix(ink, bg, 0.14), '--line-ctl': mix(ink, bg, 0.42), '--track': mix(ink, bg, 0.09),
-      '--field': mix(ink, bg, 0.07), '--field-focus': mix(ink, bg, 0.1),
-      '--canvas': `linear-gradient(160deg,${bg} 0%,${mix(acc, bg, 0.05)} 55%,${mix(acc, bg, 0.09)} 100%)`,
-      '--lead': `linear-gradient(135deg,${mix(acc, bg, 0.14)},${mix(acc, bg, 0.07)})`,
-      '--bar-bg': bg + 'e6'
+    const line = mix(ink, bg, 0.14);
+    return {
+      colours: { '--paper': bg, '--ink': ink, '--ink2': mix(ink, quiet, 0.5), '--muted': quiet,
+        '--canvas': `linear-gradient(160deg,${bg} 0%,${mix(acc, bg, 0.05)} 55%,${mix(acc, bg, 0.09)} 100%)` },
+      header: { '--bar-bg': bg + 'e6' },
+      hero: { '--lead': `linear-gradient(135deg,${mix(acc, bg, 0.14)},${mix(acc, bg, 0.07)})` },
+      cards: { '--white': mix(ink, bg, light ? 0.02 : 0.06), '--panel': mix(ink, bg, light ? 0.03 : 0.04), '--line': line, '--track': mix(ink, bg, 0.09) },
+      controls: { '--nile': acc, '--nile-2': mix(acc, ink, 0.82), '--on-nile': on, '--azure': link, '--line-ctl': mix(ink, bg, 0.42),
+        '--field': mix(ink, bg, 0.07), '--field-focus': mix(ink, bg, 0.1) },
+      footer: { '--sf-ink': ink, '--sf-ink2': mix(ink, quiet, 0.5), '--sf-muted': quiet, '--sf-line': line, '--sf-focus': link },
+      // the consent bar and choice buttons carry their own copy of the tokens (css/consent.css)
+      consent: { '--lc-ink': ink, '--lc-ink2': mix(ink, quiet, 0.5), '--lc-panel': mix(ink, bg, light ? 0.02 : 0.06), '--lc-line': line, '--lc-ctl': mix(ink, bg, 0.42), '--lc-focus': link }
     };
-    const tokens = Object.entries(v).map(([k, x]) => k + ':' + x).join(';');
-    return `:root[data-skin][data-theme]{${tokens}}:root[data-skin][data-theme] body{background-color:${bg}}` +
-      `:root[data-skin][data-theme] .sf{--sf-ink:${ink};--sf-ink2:${mix(ink, quiet, 0.5)};--sf-muted:${quiet};--sf-line:${v['--line']};--sf-focus:${link}}`;
+  }
+  function skinCss(c) {
+    const p = skinParts(c), list = o => Object.entries(o).map(([k, x]) => k + ':' + x).join(';');
+    const page = Object.assign({}, p.colours, p.header, p.hero, p.cards, p.controls);
+    return `:root[data-skin][data-theme]{${list(page)}}:root[data-skin][data-theme] body{background-color:${p.colours['--paper']}}` +
+      `:root[data-skin][data-theme] .sf{${list(p.footer)}}` +
+      `:root[data-skin][data-theme] .lc-bar,:root[data-skin][data-theme] .lc-choice{${list(p.consent)}}`;
   }
   // Wear a skin ({id, name, c: [ground, text, quiet text, accent]}) or none. remember: false is a try-on for this page only.
   function setSkin(next, remember) {
@@ -108,5 +117,5 @@
     try { localStorage.setItem(KEY, saved); } catch (_) {}
     if (skin) setSkin(skin, false); else apply(saved);
   });
-  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin, variant};
+  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin, variant, parts: skinParts};
 })();

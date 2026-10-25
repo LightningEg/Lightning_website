@@ -406,6 +406,20 @@ await test('picker: a free theme keeps with no account, no network call and no t
   assert.equal(p.w.document.getElementById('toast').querySelector('a'), null);
 });
 
+await test('picker: archived themes are hidden unless owned; arrow keys walk only the shown ones', async () => {
+  const p = await pickerPage({ signedIn: false });
+  const shown = [...p.w.document.querySelectorAll('.tm-card')].filter(c => !c.hidden).map(c => c.dataset.id);
+  assert.deepEqual(shown, ['mono', 'paper', 'meadow', 'nile', 'garnet', 'frost']);
+  p.w.LG.open();
+  const grid = p.w.document.getElementById('theme-list');
+  grid.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+  assert.equal(grid.getAttribute('aria-activedescendant'), 'th-frost');
+  const q = await pickerPage({ owned: ['moss'] });
+  await tick(60);
+  assert.equal(card(q, 'moss').hidden, false, 'an archived theme you own stays in your picker');
+  assert.equal(card(q, 'ocean').hidden, true);
+});
+
 await test('picker: signed in, owned paid themes keep and follow the account; unowned ones are still refused', async () => {
   const p = await pickerPage({ owned: ['moss'], equipped: {} });
   assert.deepEqual(p.rpcs('market_catalog').length, 1, 'the catalog is read once');

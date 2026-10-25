@@ -43,6 +43,8 @@ body[data-main-store]{--mk-dim:var(--muted);--mk-panel:var(--panel);--mk-well:va
 .mkt-cell .mkt-buy{order:-1;background:var(--mk-btn)!important;border-color:var(--mk-btn)!important;color:var(--mk-btn-ink)!important}
 .mkt-cell .pv-thumb{height:116px}
 
+.mkt-archived{margin:0;color:var(--mk-dim);font:var(--mk-b) 13px var(--mk-font)}
+
 /* the app themes in testing */
 .mkt-feat{margin:0 0 40px}
 .mkt-feat .mkt-sub{margin-top:0}

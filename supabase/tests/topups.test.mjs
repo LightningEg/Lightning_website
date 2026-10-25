@@ -128,17 +128,17 @@ await test('reusing a bank transfer on another request rolls back the whole cred
 await test('coins buy existing marketplace items; repeat restores never debit or expire ownership',async () => {
  const u=await newUser(),r=await request(u,P);
  await review(r.id,'approved',10000,'SPEND-00001');
- await buy(u,'moss','topup-purchase-001');
- assert.deepEqual(await wallet(u),{balance:350,contribution_score:0});
- await q(`update public.catalog_items set active=false where id='moss'`);
+ await buy(u,'garnet','topup-purchase-001');
+ assert.deepEqual(await wallet(u),{balance:300,contribution_score:0});
+ await q(`update public.catalog_items set active=false where id='garnet'`);
  for(let i=0;i<4;i++) {
   const data=(await as('authenticated',u,() => q(`select public.restore_store_inventory() d`))).rows[0].d;
-  assert.equal(data.account_id,u); assert.deepEqual(data.items,[{item_id:'moss',asset_version:1,deliveries:[]}]);
+  assert.equal(data.account_id,u); assert.deepEqual(data.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
  }
  const other=(await as('authenticated',OWNER,() => q(`select public.restore_store_inventory() d`))).rows[0].d;
  assert.deepEqual(other.items,[]);
- assert.deepEqual(await wallet(u),{balance:350,contribution_score:0});
- await q(`update public.catalog_items set active=true where id='moss'`);
+ assert.deepEqual(await wallet(u),{balance:300,contribution_score:0});
+ await q(`update public.catalog_items set active=true where id='garnet'`);
 });
 await test('cancellation and rejection cannot mint coins or later be approved',async () => {
  const u=await newUser(),r=await request(u,P);
