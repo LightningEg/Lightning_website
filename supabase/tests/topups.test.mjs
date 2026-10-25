@@ -177,5 +177,28 @@ await test('reconciliation is admin-only and reports zero drift',async () => {
  const rows=(await as('authenticated',ADMIN,() => q(`select * from public.admin_wallet_reconciliation()`))).rows;
  assert.ok(rows.every(r=>Number(r.difference)===0));
 });
+await test('owner dashboard: revenue, break-even, coin flow, best sellers and what needs the owner, for MFA admins only',async () => {
+ const dash=async(aal='aal2',who=ADMIN)=>{await q(`select set_config('request.jwt.claims',$1,false)`,[JSON.stringify({aal})]);return as('authenticated',who,async()=>(await q(`select public.admin_dashboard() d`)).rows[0].d);};
+ const before=await dash();
+ const u=await newUser(),r=await request(u,P);
+ await review(r.id,'approved',10000,'DASH-000001');
+ await buy(u,'paper','dash-buy-0001');
+ const d=await dash();
+ assert.equal(d.fixed_cost_egp,3000);
+ assert.equal(Number(d.revenue_month)-Number(before.revenue_month),10000,'100 EGP approved this month');
+ assert.equal(Number(d.topups_month)-Number(before.topups_month),1);
+ assert.equal(Number(d.coins_spent_month)-Number(before.coins_spent_month),300);
+ assert.ok(d.top_items.some(i=>i.id==='paper'&&Number(i.sold)>=1&&i.tier==='palette'));
+ assert.equal(d.daily.length,30,'thirty days of revenue');
+ assert.ok(Number(d.daily[29].piastres)>=10000,'today carries the approval');
+ assert.ok(['receipts','awaiting_receipt','unmatched','stories','mismatches'].every(k=>k in d.needs));
+ assert.equal(Number(d.needs.mismatches),0);
+ await assert.rejects(dash('aal1'),/MFA|verified|aal2|multi-factor/i,'needs a verified session');
+ await assert.rejects(dash('aal2',u),/admin|permission|not allowed/i,'members cannot read it');
+ await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+ await as('authenticated',ADMIN,()=>q(`select public.admin_set_fixed_cost(3500)`));
+ assert.equal((await dash()).fixed_cost_egp,3500);
+ await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();process.exitCode=failed?1:0;
