@@ -30,17 +30,17 @@
     {id:'paper',name:'Paper',note:'light, for daylight reading',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,paid:true,price:100},
     {id:'meadow',name:'Meadow',note:'Lightning\'s own: night blue and green',c:['#08192A','#EAF4F1','#B8CAD2','#3FCB93'],paid:true,price:100},
     {id:'nile',name:'Nile',note:'night blue and gold',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],paid:true,price:100},
-    {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0'],paid:true,price:100},
-    {id:'tokyo',name:'Tokyo',note:'cool blue and violet',c:['#13141c','#c0caf5','#aab2d8','#7aa2f7'],paid:true,price:100},
-    {id:'dracula',name:'Dracula',note:'purple and pink',c:['#191a21','#f8f8f2','#c6cae4','#bd93f9'],paid:true,price:100},
-    {id:'rose',name:'Rose',note:'dusk pink and peach',c:['#140a10','#ffe4ee','#dcaabe','#ff6fa0'],paid:true,price:100},
-    {id:'synthwave',name:'Synthwave',note:'neon magenta and cyan',c:['#12061f','#f6e9ff','#c6a9df','#ff3ea5'],paid:true,price:100},
-    {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88'],paid:true,price:100},
-    {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000'],paid:true,price:100},
-    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017'],paid:true,price:100},
+    {id:'ocean',name:'Ocean',note:'deep sea, cyan and mint',c:['#04121a','#dff6ff','#9fc9d9','#38c9f0'],paid:true,price:100,archived:true},
+    {id:'tokyo',name:'Tokyo',note:'cool blue and violet',c:['#13141c','#c0caf5','#aab2d8','#7aa2f7'],paid:true,price:100,archived:true},
+    {id:'dracula',name:'Dracula',note:'purple and pink',c:['#191a21','#f8f8f2','#c6cae4','#bd93f9'],paid:true,price:100,archived:true},
+    {id:'rose',name:'Rose',note:'dusk pink and peach',c:['#140a10','#ffe4ee','#dcaabe','#ff6fa0'],paid:true,price:100,archived:true},
+    {id:'synthwave',name:'Synthwave',note:'neon magenta and cyan',c:['#12061f','#f6e9ff','#c6a9df','#ff3ea5'],paid:true,price:100,archived:true},
+    {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88'],paid:true,price:100,archived:true},
+    {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000'],paid:true,price:100,archived:true},
+    {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017'],paid:true,price:100,archived:true},
     /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
        catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
-    {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150},
+    {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150,archived:true},
     {id:'garnet',name:'Garnet',note:'wine red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:200},
     {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:250}
   ];
@@ -71,8 +71,12 @@
     if(locked(t)){apply(saved);toast(t.name.toLowerCase()+' is a paid theme, '+t.price+' coins.',{href:'forgeeks-market.html',text:'open the market'});return false}
     use(id);equipOnServer(id);return true;
   }
+  /* Archived themes (owner, 2026-10-25) leave the picker unless you own one or wear it; the market no longer sells them. */
+  function shown(t){return !t.archived||!!own[t.id]||t.id===saved}
+  function vis(){return THEMES.filter(shown)}
   function mark(t){
     var o=t.paid&&doc.getElementById('th-'+t.id);if(!o)return;
+    o.hidden=!shown(t);
     var lk=locked(t),p=o.querySelector('.tm-price');
     o.classList.toggle('lk',lk);
     if(lk)p.innerHTML=LOCK+'<span class="sr">locked, </span>'+(Math.round(+t.price)||0)+' coins';else p.textContent='owned';
@@ -81,24 +85,27 @@
     var o=doc.createElement('div');o.className='tm-card';o.setAttribute('role','option');o.id='th-'+t.id;o.dataset.id=t.id;
     o.innerHTML='<div class="tm-pv" style="background:'+t.c[0]+';color:'+t.c[1]+'" aria-hidden="true"><i style="width:72%;background:'+t.c[1]+'"></i><i style="width:52%;background:'+t.c[2]+';opacity:.85"></i><i style="width:34%;background:'+t.c[3]+'"></i><b style="background:'+t.c[3]+'"></b></div>'
       +'<div class="tm-name">'+t.name+'<span aria-hidden="true">✓ in use</span>'+(t.paid?'<span class="tm-price"></span>':'')+'</div><p class="tm-note">'+t.note+'</p>';
-    o.addEventListener('mouseenter',function(){move(i,true)});
+    o.addEventListener('mouseenter',function(){move(vis().indexOf(t),true)});
     o.addEventListener('click',function(){keep(t.id);close()});
     grid.appendChild(o);
   });
   THEMES.forEach(mark);
   function cols(){return innerWidth<=640?2:3}
   function move(i,noScroll){
-    cursor=Math.max(0,Math.min(THEMES.length-1,i));
-    [].forEach.call(grid.children,function(c,k){c.classList.toggle('cur',k===cursor)});
-    grid.setAttribute('aria-activedescendant','th-'+THEMES[cursor].id);
-    if(!noScroll)grid.children[cursor].scrollIntoView({block:'nearest'});
-    apply(THEMES[cursor].id);
+    var list=vis();
+    cursor=Math.max(0,Math.min(list.length-1,i));
+    var id=list[cursor].id,card=doc.getElementById('th-'+id);
+    [].forEach.call(grid.children,function(c){c.classList.toggle('cur',c===card)});
+    grid.setAttribute('aria-activedescendant','th-'+id);
+    if(!noScroll)card.scrollIntoView({block:'nearest'});
+    apply(id);
   }
   function open(){
     lastFocus=doc.activeElement;
     [].forEach.call(grid.children,function(c){c.setAttribute('aria-selected',String(c.dataset.id===saved))});
     tm.hidden=false;btn.setAttribute('aria-expanded','true');root.style.overflow='hidden';
-    move(THEMES.map(function(t){return t.id}).indexOf(saved));grid.focus();
+    THEMES.forEach(mark);
+    move(vis().map(function(t){return t.id}).indexOf(saved));grid.focus();
   }
   function close(){
     if(tm.hidden)return;
@@ -117,8 +124,8 @@
     else if(k==='ArrowDown'){e.preventDefault();move(cursor+cols())}
     else if(k==='ArrowUp'){e.preventDefault();move(cursor-cols())}
     else if(k==='Home'){e.preventDefault();move(0)}
-    else if(k==='End'){e.preventDefault();move(THEMES.length-1)}
-    else if(k==='Enter'||k===' '){e.preventDefault();keep(THEMES[cursor].id);close()}
+    else if(k==='End'){e.preventDefault();move(vis().length-1)}
+    else if(k==='Enter'||k===' '){e.preventDefault();keep(vis()[cursor].id);close()}
   });
   grid.addEventListener('mouseleave',function(){if(!tm.hidden)apply(saved)});
   doc.addEventListener('keydown',function(e){

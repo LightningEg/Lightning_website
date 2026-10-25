@@ -242,6 +242,8 @@
     var buy = acts.querySelector('[data-act="buy"]');
     if (buy) buy.classList.add('mkt-buy');
     if (it.is_default && it.type === 'theme') return;
+    var st = it.type === 'theme' ? siteTheme(it.id) : null;
+    if (st && st.archived) li.insertBefore(el('p', 'mkt-archived', MAIN ? 'Archived: still yours, no longer sold.' : 'archived: still yours, no longer sold.'), acts);
     var e = entryFor(it);
     add(acts, [
       btn('mkt-mini mkt-try-btn', 'Try it', function () { tryOn(e); }, 'Try ' + it.name),
