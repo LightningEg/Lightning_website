@@ -39,8 +39,6 @@
         var l2 = el('a', 'story-src', x[2] + ' ↗'); l2.className = 'story-src btn-link'; l2.href = s[x[0]]; l2.target = '_blank'; l2.rel = 'noopener noreferrer'; foot.appendChild(l2);
       }
     });
-    // Readers can see when the author was rewarded for the story.
-    if (s.rewarded) foot.appendChild(el('span', 'story-flag', 'Rewarded: the author received Lightning Coins or points for this story.'));
     if (foot.childNodes.length) a.appendChild(foot);
     return a;
   }

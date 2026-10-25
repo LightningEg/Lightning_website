@@ -8,7 +8,7 @@
   /* ---------- pure helpers (tested in node: supabase/tests/auth.test.mjs) ---------- */
   var ACCOUNT = root.document && root.document.body && root.document.body.dataset.accountPage === 'account.html' ? 'account.html' : 'forgeeks-account.html';
   var MAIN_ACCOUNT = ACCOUNT === 'account.html';
-  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|leaderboard|stories|topup|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
+  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|leaderboard|stories|topup|admin|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
 
   // Return only to explicitly supported main-site/For Geeks routes; never another origin or an account page.
   function safeNext(next) {
@@ -46,6 +46,8 @@
     if (/receipt submitted/i.test(m)) return 'A receipt was submitted. Contact support to review this payment.';
     if (/Open the receipt|Add a reconciliation note|clear rejection reason|Enter an EGP price|Invalid price/i.test(m)) return 'Open and review the receipt, enter the exact EGP amount and bank reference, and add a clear note.';
     if (/session ended/i.test(m)) return 'Your session ended. Sign in again and verify MFA if you are using owner controls.';
+    if (/community access is restricted/i.test(m)) return 'Your community access is restricted. Contact hello@lightningeg.com to request a review.';
+    if (/post changed/i.test(m)) return 'This post changed after you opened it. Reload it and verify the current links and code.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
     if (/public adult profile/i.test(m)) return 'Set your profile to public and confirm you are 18 or older before publishing.';
     if (/sharing consent/i.test(m)) return 'Add a title, at least 100 characters, and confirm sharing consent.';
@@ -75,7 +77,7 @@
   var doc = root.document;
   var cfg = root.FORGEEKS;
   var listeners = [];
-  var current = null, meCache = null, meFor = null, resolveReady;
+  var current = null, meCache = null, meFor = null, resolveReady, ownerRole = false, roleFor = null;
   var ready = new Promise(function (r) { resolveReady = r; });
 
   var FG = root.FG = {
@@ -181,7 +183,7 @@
     var e = doc.createElement('span'); e.textContent = (current && current.user.email) || '';
     head.appendChild(b); head.appendChild(e);
     menu.appendChild(head);
-    MENU.forEach(function (it) {
+    (ownerRole ? MENU.concat([{label:'Owner console',href:'admin.html'}]) : MENU).forEach(function (it) {
       var a = doc.createElement('a');
       a.setAttribute('role', 'menuitem');
       a.href = (MAIN_ACCOUNT && root.location.pathname.indexOf('/ar/') >= 0 ? '../' : '') + (typeof it.href === 'function' ? it.href(m) : it.href);
@@ -263,8 +265,18 @@
         var changed = before !== (s && s.user.id);
         // Token refreshes and the repeat SIGNED_IN on returning to a tab change nothing on screen.
         if (event === 'INITIAL_SESSION' || changed || event === 'USER_UPDATED') {
-          if (changed) meCache = null;
-          if (s) FG.me().then(render); else render(null);
+          if (changed) { meCache = null; ownerRole = false; roleFor = null; }
+          if (s) {
+            FG.me().then(render);
+            if (roleFor !== s.user.id && typeof FG.sb.rpc === 'function') {
+              roleFor = s.user.id;
+              (function (uid) { Promise.resolve(FG.sb.rpc('is_admin')).then(function(r) {
+                if (!current || current.user.id !== uid || roleFor !== uid) return;
+                ownerRole = !!r && !r.error && r.data === true;
+                Promise.resolve(FG.me()).then(function(m) { if (current && current.user.id === uid && roleFor === uid) render(m); });
+              }, function () {}); })(s.user.id);
+            }
+          } else render(null);
         }
         if (changed && event !== 'INITIAL_SESSION') emit(s);
       }, 0);

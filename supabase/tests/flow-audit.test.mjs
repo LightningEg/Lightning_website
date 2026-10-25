@@ -108,14 +108,14 @@ await test('reference changes invalidate an opened image; settlement and review 
  const u=await newUser(),r=await checkoutFor(u),path=await reserve(u,r.id);await upload(u,path);const original=await attach(u,r.id,path);
  const edited=await attach(u,r.id,path,'EDITED-REFERENCE');assert.ok(Number(edited.receipt_revision)>Number(original.receipt_revision));
  await assert.rejects(settle(edited,original.receipt_revision),/receipt changed/);
- await assert.rejects(settle(edited,edited.receipt_revision,9999),/amount mismatch/);
+ await assert.rejects(settle(edited,edited.receipt_revision,9999),/amount mismatch|bank total/);
  assert.equal((await q(`select proof_reviewed_at from public.topup_requests where id=$1`,[r.id])).rows[0].proof_reviewed_at,null);
  await assert.rejects(as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id])),/receipt submitted/);
  await assert.rejects(as('authenticated',u,()=>q(`select * from public.prepare_account_deletion('delete my account')`)),/pending payments/);
  const bankRef='BANK-'+key();await settle(edited,edited.receipt_revision,10000,bankRef);await settle(edited,edited.receipt_revision,10000,bankRef);
  assert.deepEqual(await wallet(u),{balance:500,contribution_score:0});
  const other=await checkoutFor(u),path2=await reserve(u,other.id);await upload(u,path2);const proof=await attach(u,other.id,path2);
- await assert.rejects(settle(proof,proof.receipt_revision,10000,bankRef),/unique constraint/);assert.equal((await wallet(u)).balance,500);
+ await assert.rejects(settle(proof,proof.receipt_revision,10000,bankRef),/unique constraint|already recorded/);assert.equal((await wallet(u)).balance,500);
 });
 await test('deletion is blocked by receipts until Storage removal; deletion barriers prevent new files and scrub sender identity',async()=>{
  const u=await newUser(),r=await checkoutFor(u),path=await reserve(u,r.id);await upload(u,path);await attach(u,r.id,path);
@@ -150,6 +150,10 @@ await test('deleting an account cancels its unpaid requests instead of leaving u
  await as('authenticated',u,()=>q(`select public.delete_my_account('delete my account')`));
  const kept=(await q(`select user_id,status from public.topup_requests where id=$1`,[r.id])).rows[0];
  assert.deepEqual(kept,{user_id:null,status:'cancelled'});
+});
+await test('public profile views have no dependency on the Auth users table',async()=>{
+ const dependency=(await q(`select count(*)::int n from pg_depend d join pg_rewrite r on r.oid=d.objid where d.classid='pg_rewrite'::regclass and d.refobjid='auth.users'::regclass and r.ev_class in ('public.profile_directory'::regclass,'public.profile_work'::regclass)`)).rows[0];
+ assert.equal(dependency.n,0);
 });
 await test('legacy financial mutations require MFA and revoked administrator sessions fail closed',async()=>{
  await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);

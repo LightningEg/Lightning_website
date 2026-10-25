@@ -14,7 +14,7 @@
   const out=await FG.sb.auth.mfa.enroll({factorType:'totp',friendlyName:'Lightning admin'});if(out.error)throw out.error;factor=out.data.id;
   const img=document.createElement('img');img.alt='Scan this private QR code with your authenticator';img.width=200;img.height=200;img.src=out.data.totp.qr_code.startsWith('data:')?out.data.totp.qr_code:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(out.data.totp.qr_code);$('admin-mfa-setup').replaceChildren(img);status('admin-mfa-status','Scan the QR code, then enter the six-digit code.');
  }catch(e){status('admin-mfa-status',error(e));}};
- $('admin-mfa-form').onsubmit=async e=>{e.preventDefault();if(!factor){status('admin-mfa-status','Choose set up or verify first.');return;}const b=e.currentTarget.querySelector('button');b.disabled=true;try{const r=await FG.sb.auth.mfa.challengeAndVerify({factorId:factor,code:e.currentTarget.elements.code.value});if(r.error)throw r.error;$('admin-mfa-setup').replaceChildren();e.currentTarget.reset();status('admin-mfa-status','Administrator session verified.');}catch(e){status('admin-mfa-status',error(e));}finally{b.disabled=false;}};
+ $('admin-mfa-form').onsubmit=async e=>{e.preventDefault();if(!factor){status('admin-mfa-status','Choose set up or verify first.');return;}const b=e.currentTarget.querySelector('button');b.disabled=true;try{const r=await FG.sb.auth.mfa.challengeAndVerify({factorId:factor,code:e.currentTarget.elements.code.value});if(r.error)throw r.error;$('admin-mfa-setup').replaceChildren();e.currentTarget.reset();status('admin-mfa-status','Administrator session verified.');window.dispatchEvent(new CustomEvent('lightning:mfa-verified'));}catch(e){status('admin-mfa-status',error(e));}finally{b.disabled=false;}};
  $('admin-credit-new').onclick=reset;
  $('admin-credit-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,p={p_email:f.elements.email.value,p_coins:Number(f.elements.coins.value),p_points:Number(f.elements.points.value),p_reason:f.elements.reason.value};const text=JSON.stringify(p);if(text!==lastPayload){requestKey=crypto.randomUUID();lastPayload=text;}const b=f.querySelector('[type=submit]');b.disabled=true;try{const w=await call('admin_credit_account',{...p,p_key:requestKey});status('admin-credit-status','Saved. Wallet: '+w.balance+' coins. Recognition: '+w.contribution_score+' points. Repeating this request will not credit twice.');}catch(e){status('admin-credit-status',error(e));}finally{b.disabled=false;}};
  $('admin-price-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;try{await call('admin_set_palette_price',{p_item_id:f.elements.item.value,p_price:Number(f.elements.price.value)});status('admin-price-status','Price saved.');}catch(e){status('admin-price-status',error(e));}};
@@ -24,6 +24,7 @@
 // All receipt actions bind to the exact evidence revision displayed in this queue.
 (function(){
  'use strict';
+ if(document.body.dataset.ownerConsole==='amount')return;
  const FG=window.FG,$=id=>document.getElementById(id),say=(id,s)=>$(id).textContent=s;
  const el=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;return e;};
  let generation=0,owner=null,packageKey=crypto.randomUUID(),packagePayload='',packageBusy=false;

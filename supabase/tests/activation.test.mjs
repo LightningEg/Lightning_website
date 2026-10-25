@@ -71,6 +71,7 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
   await as('authenticated',row.user_id,()=>q(`select public.attach_topup_receipt($1,'customer@instapay','CUSTOMER-REF',$2)`,[r,receipt]));
   await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[r]));
  }
+ if(decision==='approved')return as('authenticated',who,async()=>(await q(`select * from public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),$2,$3,'Checked incoming transfer')`,[r,amount,ref])).rows[0]);
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };
 const P=await pkg();
@@ -122,7 +123,7 @@ await test('payment proof needs explicit terms and owner screenshot acknowledgme
  await as('authenticated',ADMIN,async()=>{
   await assert.rejects(q(`select public.admin_review_topup($1,'approved',10000,'BANK-001','Bank checked')`,[r.id]),/receipt review/);
   await q(`select public.admin_review_uploaded_receipt($1,'Saw image sent by customer in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[r.id]);
-  await q(`select public.admin_review_topup($1,'approved',10000,'BANK-001','Actual incoming transfer checked')`,[r.id]);
+  await q(`select public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),10000,'BANK-001','Actual incoming transfer checked')`,[r.id]);
  });
  assert.deepEqual(await wallet(OTHER),{balance:500,contribution_score:0});
 });

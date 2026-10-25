@@ -71,6 +71,7 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
   await as('authenticated',row.user_id,()=>q(`select public.attach_topup_receipt($1,'customer@instapay','CUSTOMER-REF',$2)`,[r,receipt]));
   await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[r]));
  }
+ if(decision==='approved')return as('authenticated',who,async()=>(await q(`select * from public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),$2,$3,'Checked incoming transfer')`,[r,amount,ref])).rows[0]);
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };
 const P = await pkg();
@@ -102,9 +103,9 @@ await test('only an MFA-verified administrator can credit a payment',async () =>
  const u=await newUser(),r=await request(u,P);
  await assert.rejects(review(r.id,'approved',10000,'AUTH-00001',u),/administrator/);
  await assert.rejects(review(r.id,'approved',10000,'AUTH-00001',ADMIN,'aal1'),/MFA/);
- await assert.rejects(review(r.id,'approved',9999,'AUTH-00001'),/amount mismatch/);
- await assert.rejects(review(r.id,'approved',null,'AUTH-00001'),/amount mismatch/);
- await assert.rejects(review(r.id,'approved',10000,''),/reference required/);
+ await assert.rejects(review(r.id,'approved',9999,'AUTH-00001'),/amount mismatch|bank total|confirm actual incoming funds/);
+ await assert.rejects(review(r.id,'approved',null,'AUTH-00001'),/amount mismatch|bank total|confirm actual incoming funds/);
+ await assert.rejects(review(r.id,'approved',10000,''),/reference required|check constraint/);
  assert.equal((await wallet(u)).balance,0);
 });
 await test('verified approval posts once, normalizes bank reference, and never increases rank',async () => {
@@ -114,12 +115,12 @@ await test('verified approval posts once, normalizes bank reference, and never i
  assert.equal(a.ledger_entry_id,b.ledger_entry_id);
  assert.deepEqual(await wallet(u),{balance:500,contribution_score:0});
  assert.equal((await q(`select count(*)::int c from public.audit_log where target_id=$1 and action='topup.approved'`,[r.id])).rows[0].c,1);
- await assert.rejects(review(r.id,'approved',10000,'BANK-CHANGED'),/already reviewed/);
- await assert.rejects(review(r.id,'rejected'),/already reviewed/);
+ await assert.rejects(review(r.id,'approved',10000,'BANK-CHANGED'),/already reviewed|already settled|pending member request/);
+ await assert.rejects(review(r.id,'rejected'),/already reviewed|already settled|pending member request/);
 });
 await test('reusing a bank transfer on another request rolls back the whole credit',async () => {
  const u=await newUser(),r=await request(u,P);
- await assert.rejects(review(r.id,'approved',10000,'bank-00002'),/unique/);
+ await assert.rejects(review(r.id,'approved',10000,'bank-00002'),/unique|already recorded/);
  assert.equal((await wallet(u)).balance,0);
  assert.equal((await q(`select status from public.topup_requests where id=$1`,[r.id])).rows[0].status,'pending');
  assert.equal((await q(`select count(*)::int c from public.ledger_entries where user_id=$1`,[u])).rows[0].c,0);
@@ -143,10 +144,10 @@ await test('cancellation and rejection cannot mint coins or later be approved',a
  const u=await newUser(),r=await request(u,P);
  await assert.rejects(as('authenticated',OTHER,() => q(`select public.cancel_topup($1)`,[r.id])),/not found/);
  await as('authenticated',u,() => q(`select public.cancel_topup($1)`,[r.id]));
- await assert.rejects(review(r.id),/already reviewed/);
+ await assert.rejects(review(r.id),/already reviewed|already settled|pending member request/);
  const s=await request(u,P);
  await review(s.id,'rejected'); await review(s.id,'rejected');
- await assert.rejects(review(s.id),/already reviewed/);
+ await assert.rejects(review(s.id),/already reviewed|already settled|pending member request/);
  assert.equal((await wallet(u)).balance,0);
 });
 await test('pending limit is enforced; cancellation makes room and retries still work',async () => {
