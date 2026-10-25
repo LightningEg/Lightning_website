@@ -85,3 +85,13 @@
 .fg-badge .sr,.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .fg-badge{position:relative}
 .fg-badge.lg{width:44px;height:44px}.fg-badge.lg svg{width:24px;height:24px}
+
+/* Leaderboard rows (js/forgeeks-leaderboard.js) wear the member's banner behind them, on both sites. A scrim from the
+   panel keeps rank and avatar readable; name and score sit on solid chips so their contrast never depends on the banner. */
+.lb-row{position:relative;isolation:isolate}
+.lb-row .lb-bg{position:absolute;inset:0;z-index:-1;height:auto;margin:0;border:0;border-radius:0}
+.lb-row .lb-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--panel) 0%,color-mix(in srgb,var(--panel) 72%,transparent) 45%,color-mix(in srgb,var(--panel) 18%,transparent) 100%)}
+.lb-row.has-banner{min-height:76px}
+.lb-row.has-banner .nm,.lb-row.has-banner .sc{justify-self:start;padding:4px 12px;border-radius:6px;background:var(--panel);box-shadow:0 0 0 1px var(--line)}
+.lb-row.has-banner .sc{justify-self:end}
+.lb-row.has-banner .ct{justify-self:start;padding:2px 10px;border-radius:6px;background:var(--panel);box-shadow:0 0 0 1px var(--line)}
