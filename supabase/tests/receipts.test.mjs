@@ -91,4 +91,37 @@ await test('replacement image invalidates prior review; only actual settlement a
  for(let n=0;n<2;n++)await as('authenticated',ADMIN,()=>q(`select public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),10000,'SETTLED-123','Confirmed actual incoming transfer')`,[checkout.id]));
  assert.deepEqual(await wallet(OWNER),{balance:500,contribution_score:0});
 });
+await test('a receipt needs no payment reference, and the sender may be a wallet phone number written any common way',async()=>{
+ const c=(await as('authenticated',OTHER,()=>q(`select * from public.create_checkout($1,$2,true)`,[P,key()]))).rows[0];
+ const p2=(await as('authenticated',OTHER,()=>q(`select public.reserve_topup_receipt($1) as path`,[c.id]))).rows[0].path;
+ await as('authenticated',OTHER,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[p2]));
+ for(const bad of ['hello','01234','abc@','+1 202 555 0100','01x0123456789'])
+  await assert.rejects(as('authenticated',OTHER,()=>q(`select public.attach_topup_receipt($1,$2,null,$3)`,[c.id,bad,p2])),/InstaPay address or wallet phone number/,bad);
+ const r=(await as('authenticated',OTHER,()=>q(`select * from public.attach_topup_receipt($1,'+20 100-123 4567',null,$2)`,[c.id,p2]))).rows[0];
+ assert.equal(r.payer_instapay_address,'01001234567');
+ assert.match(r.customer_payment_reference,/^WEB-[0-9A-F]{10}$/,'the request keeps a short id of its own');
+ const again=(await as('authenticated',OTHER,()=>q(`select * from public.attach_topup_receipt($1,'Sara.M@InstaPay','',$2)`,[c.id,p2]))).rows[0];
+ assert.equal(again.payer_instapay_address,'sara.m@instapay');
+ assert.equal(again.customer_payment_reference,r.customer_payment_reference,'the id stays the same when the sender changes');
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Matched sender and amount in my InstaPay app',$2,(select receipt_revision from public.topup_requests where id=$1))`,[c.id,p2]));
+});
+await test('a ticket: the owner confirms the amount that arrived; the right amount credits once, a different one credits nothing',async()=>{
+ const M=await newUser();
+ const c=(await as('authenticated',M,()=>q(`select * from public.create_checkout($1,$2,true)`,[P,key()]))).rows[0];
+ const k=(await as('authenticated',M,()=>q(`select public.reserve_topup_receipt($1) as path`,[c.id]))).rows[0].path;
+ await as('authenticated',M,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[k]));
+ const r=(await as('authenticated',M,()=>q(`select * from public.attach_topup_receipt($1,'01001234567',null,$2)`,[c.id,k]))).rows[0];
+ const confirm=(amount,note=null,rev=r.receipt_revision,who=ADMIN)=>as('authenticated',who,async()=>(await q(`select public.admin_confirm_topup($1,$2,$3,$4,$5) d`,[c.id,amount,note,k,rev])).rows[0].d);
+ await assert.rejects(confirm(10000,null,r.receipt_revision,M),/admin|permission|MFA|verified/i,'members cannot confirm');
+ await assert.rejects(confirm(10000,null,Number(r.receipt_revision)+1),/receipt changed/);
+ const short=await confirm(8000,'Only 80 arrived, ref IPN-1');
+ assert.equal(short.status,'amount_differs');assert.equal(Number(short.received_piastres),8000);
+ assert.equal((await wallet(M))?.balance??0,0,'nothing credited');
+ const ok=await confirm(10000,'Checked in my InstaPay app, ref IPN-1');
+ assert.equal(ok.status,'approved');
+ assert.equal((await wallet(M)).balance,500);
+ assert.equal((await q(`select count(*)::int c from public.bank_transfers where request_id=$1`,[c.id])).rows[0].c,1,'one transfer per ticket, corrected in place');
+ assert.equal((await confirm(10000)).status,'approved');
+ assert.equal((await wallet(M)).balance,500,'confirming again never credits twice');
+});
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;

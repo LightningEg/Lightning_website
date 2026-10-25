@@ -9,7 +9,7 @@
   var $ = function (id) { return doc.getElementById(id); };
   var host = $('ops-dash');
   if (!host || !FG) return;
-  var VIEWS = ['today', 'requests', 'bank', 'social', 'settings'];
+  var VIEWS = ['today', 'requests', 'social', 'settings'];
   var last = null, loading = false, again = false;
 
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -25,7 +25,8 @@
   /* ---------- one view at a time ---------- */
   function show() {
     var want = (location.hash || '').slice(1);
-    if (want === 'setup' || want === 'pricing' || want === 'credits' || want === 'retention') want = 'settings';
+    if (want === 'bank') { var b = $('bank'); if (b && b.querySelector('details')) b.querySelector('details').open = true; }
+    if (want === 'setup' || want === 'pricing' || want === 'credits' || want === 'retention' || want === 'bank') want = 'settings';
     if (VIEWS.indexOf(want) < 0) want = 'today';
     VIEWS.forEach(function (v) { var s = $(v); if (s) s.hidden = v !== want; });
     Array.prototype.forEach.call(doc.querySelectorAll('.ops-nav a'), function (a) {
@@ -89,12 +90,12 @@
     // what needs the owner, first
     var needs = el('div', 'ops-needs');
     add(needs, [
-      need(n.receipts, 'Receipts to review', n.receipts ? ago(n.oldest_receipt_at) : 'Nothing waiting', 'requests', 'warn'),
-      need(n.unmatched, 'Transfers to match', n.unmatched ? 'Money in with no request yet' : 'Every transfer matched', 'bank', 'warn'),
+      need(n.receipts, 'Tickets to confirm', n.receipts ? ago(n.oldest_receipt_at) : 'Nothing waiting', 'requests', 'warn'),
+      need(n.awaiting_receipt, 'Waiting for a receipt', n.awaiting_receipt ? 'The member has not uploaded yet' : 'None', 'requests', ''),
       need(n.stories, 'Stories to review', n.stories ? 'Check the code and the link' : 'Queue clear', 'social', 'warn'),
       need(n.mismatches, 'Ledger mismatches', n.mismatches ? 'A wallet differs from its ledger' : 'Wallets agree with the ledger', 'today', 'bad')]);
-    host.appendChild(add(el('section', 'ops-block'), [el('h3', null, 'Needs you'), needs,
-      el('p', 'ops-fine', num(n.awaiting_receipt) + ' top-up' + (Number(n.awaiting_receipt) === 1 ? '' : 's') + ' waiting for the member to upload a receipt.')]));
+    var loose = Number(n.unmatched) ? add(el('p', 'ops-fine'), [el('span', null, num(n.unmatched) + ' older transfer' + (Number(n.unmatched) === 1 ? '' : 's') + ' with no ticket. '), (function () { var a = el('a', null, 'Open Money without a ticket'); a.href = '#bank'; return a; })()]) : null;
+    host.appendChild(add(el('section', 'ops-block'), [el('h3', null, 'Needs you'), needs, loose]));
 
     // the month
     var fixed = Number(d.fixed_cost_egp) * 100, rev = Number(d.revenue_month), left = Math.max(0, fixed - rev);

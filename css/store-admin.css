@@ -93,3 +93,38 @@
 .ops-axis{display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font:600 12px var(--body)}
 .ops-kpi strong{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 6px}
 .ops .panel{max-width:none}
+
+/* ---- Top-up tickets and a calmer console (owner, 2026-10-25): one card per request, label and value pairs,
+   the receipt beside the confirm form, status as a chip; long explanations cut to one line ---- */
+.ops-lead{margin:-6px 0 18px;max-width:70ch;color:var(--muted);font:500 15px/1.55 var(--body)}
+.ops .row select,.ops .row input{width:auto;flex:1 1 180px;min-width:0}
+.ops input,.ops select,.ops textarea{border-radius:12px;padding:10px 12px}
+.ops label{font:600 13.5px var(--body);color:var(--ink)}
+#requests>.row,#social>.row{margin-bottom:16px}
+.ops-ticket{margin:0 0 14px;padding:18px 20px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+.ops-ticket header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ops-ticket h3{margin:0;font:800 20px var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.ops-st{display:inline-flex;align-items:center;min-height:26px;padding:0 12px;border-radius:999px;background:var(--field);color:var(--ink);font:700 12.5px var(--body)}
+.ops-st-pending{background:var(--t-azure);color:var(--azure)}
+.ops-st-approved{background:var(--t-green);color:var(--green-text)}
+.ops-st-rejected{background:var(--t-rose);color:var(--rose-strong)}
+.ops-facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 18px;margin:12px 0 0}
+.ops-facts dt{color:var(--muted);font:600 13.5px var(--body)}
+.ops-facts dd{margin:0;color:var(--ink);font:600 14px var(--body);overflow-wrap:anywhere}
+.ops-ticket-body{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:22px;align-items:start;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.ops-receipt{display:grid;place-items:center;min-height:160px;padding:8px;border:1px dashed var(--line-ctl);border-radius:14px;background:var(--field)}
+.ops .ops-receipt img{max-height:460px;width:auto;border-radius:10px}
+.ops-confirm label{margin-block:0 12px}
+.ops-confirm .row{margin-top:4px}
+.ops .ops-confirm .chk{font-weight:600}
+.ops-ticket-status{margin:10px 0 0;color:var(--ink);font:600 14px/1.5 var(--body)}
+.ops-ticket-status:empty{display:none}
+.ops-ticket>p{margin:12px 0 0;color:var(--muted);font:500 14px var(--body)}
+.ops .ops-ticket details{margin:12px 0 0;padding-top:4px;border-top:1px solid var(--line)}
+.ops .ops-ticket summary{display:flex;align-items:center;min-height:40px;color:var(--muted);font:700 14px var(--body)}
+.ops .ops-ticket details[open] summary{color:var(--ink)}
+.ops-settings details>summary h2{display:inline;margin:0;font:800 19px var(--display)}
+.ops .panel h2{font:800 19px var(--display);color:var(--ink)}
+.ops .panel>p,.ops .panel details>p{color:var(--muted);font:500 14.5px/1.55 var(--body)}
+@media(max-width:700px){.ops-ticket-body{grid-template-columns:minmax(0,1fr)}.ops-ticket{padding:16px}.ops-facts{grid-template-columns:minmax(0,1fr);gap:0}.ops-facts dd{margin-bottom:6px}}
+.ops .row{justify-content:flex-start}

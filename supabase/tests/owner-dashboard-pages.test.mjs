@@ -43,12 +43,16 @@ async function boot({ data = sample(), hash = '', fail = false } = {}) {
 await test('Today: what needs the owner first, each linking to its tab, with a badge on the tab', async () => {
   const p = await boot();
   const needs = p.qa('.ops-need');
-  assert.deepEqual(needs.map(a => a.getAttribute('href')), ['#requests', '#bank', '#social', '#today']);
-  assert.deepEqual(needs.map(a => a.querySelector('strong').textContent), ['2', '0', '3', '0']);
-  assert.ok(needs[0].classList.contains('on') && !needs[1].classList.contains('on'));
+  assert.deepEqual(needs.map(a => a.getAttribute('href')), ['#requests', '#requests', '#social', '#today']);
+  assert.deepEqual(needs.map(a => a.querySelector('b').textContent), ['Tickets to confirm', 'Waiting for a receipt', 'Stories to review', 'Ledger mismatches']);
+  assert.deepEqual(needs.map(a => a.querySelector('strong').textContent), ['2', '1', '3', '0']);
+  assert.ok(needs[0].classList.contains('on') && !needs[3].classList.contains('on'));
+  assert.equal(p.w.document.querySelector('a[href="#bank"]'), null, 'no older transfers, no link to them');
   assert.match(needs[0].textContent, /oldest 5 h ago/);
   assert.equal(p.w.document.querySelector('[data-badge="receipts"]').textContent, '2');
-  assert.equal(p.w.document.querySelector('[data-badge="unmatched"]').hidden, true, 'no badge for zero');
+  assert.equal(p.w.document.querySelector('[data-badge="stories"]').textContent, '3');
+  const loose = await boot({ data: sample({ needs: { ...sample().needs, unmatched: 2 } }) });
+  assert.match(loose.$('ops-dash').textContent, /2 older transfers with no ticket/);
 });
 
 await test('Today: the month in four figures, each compared, with break-even against the fixed cost', async () => {
@@ -84,10 +88,14 @@ await test('tabs: one view at a time, Today by default, old section links land i
   assert.equal(s.$('settings').hidden, false);
   assert.ok(s.$('settings').contains(s.$('pricing')), 'checkout, pricing and retention live in Settings');
   assert.ok(s.$('settings').contains(s.$('setup')) && s.$('settings').contains(s.$('retention')));
+  s.w.location.hash = '#requests';
+  s.w.dispatchEvent(new s.w.HashChangeEvent('hashchange'));
+  assert.equal(s.$('requests').hidden, false);
+  assert.equal(s.$('settings').hidden, true);
   s.w.location.hash = '#bank';
   s.w.dispatchEvent(new s.w.HashChangeEvent('hashchange'));
-  assert.equal(s.$('bank').hidden, false);
-  assert.equal(s.$('settings').hidden, true);
+  assert.equal(s.$('settings').hidden, false, 'the older bank journal lives folded in Settings');
+  assert.equal(s.$('bank').querySelector('details').open, true);
 });
 
 await test('Settings: the fixed cost is shown, saved through the server and Today reloads', async () => {
