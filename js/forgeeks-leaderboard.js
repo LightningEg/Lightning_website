@@ -29,11 +29,20 @@
     if (text) { $('lb-list').hidden = true; $('lb-empty').hidden = true; }
   }
 
-  // One table row per member: rank, display name, contributions and score. Nothing else (owner, 2026-10-25).
+  // One table row per member: rank, display name, contributions and score, over the member's banner (owner, 2026-10-25).
+  // Only a well-formed catalog id reaches the banner's attribute.
   function row(r) {
     var rank = Number(r.rank);
     var tr = S.el('tr', 'lb-row' + (rank >= 1 && rank <= 3 ? ' top' : ''));
-    tr.appendChild(S.el('td', 'rk', String(rank)));
+    var rk = S.el('td', 'rk', String(rank));
+    if (S.itemId(r.banner_item_id)) {
+      var bg = S.banner(r.banner_item_id);
+      bg.classList.add('lb-bg');
+      rk.appendChild(bg);
+      rk.appendChild(S.el('span', 'lb-veil'));
+      tr.classList.add('has-banner');
+    }
+    tr.appendChild(rk);
     var td = S.el('td', 'nm-c');
     var a = S.el(sample ? 'span' : 'a', 'nm', r.display_name);
     if (!sample) a.href = S.profileHref(r.display_name);
@@ -48,12 +57,13 @@
   var SAMPLE_NAMES = ['Mariam Adel', 'Youssef Hamdy', 'Nour El-Din', 'Salma Fathy', 'Omar Khaled', 'Habiba Samir', 'Karim Mostafa',
     'Farida Nabil', 'Ziad Ashraf', 'Laila Hassan', 'Ahmed Tarek', 'Malak Sherif', 'Hassan Wael', 'Rana Magdy', 'Mostafa Said',
     'Jana Ibrahim', 'Adham Reda', 'Yasmin Gamal', 'Seif Amr', 'Hana Lotfy', 'Marwan Ehab', 'Dina Kamal', 'Tamer Fouad', 'Aya Mahmoud'];
+  var SAMPLE_BANNERS = ['banner-dusk', 'banner-blueprint', null, 'banner-borealis', 'banner-circuit', null, 'banner-dunes', 'banner-halo', null];
   function sampleBoard(p) {
     var n = p === 'month' ? 14 : SAMPLE_NAMES.length, rows = [], score = p === 'month' ? 420 : 3150;
     for (var i = 0; i < n; i++) {
       var name = SAMPLE_NAMES[(i * 7 + (p === 'month' ? 3 : 0)) % SAMPLE_NAMES.length];
       var count = Math.max(1, Math.round(score / (p === 'month' ? 60 : 85)));
-      rows.push({ display_name: name, contribution_count: count, score: score });
+      rows.push({ display_name: name, contribution_count: count, score: score, banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length] });
       score = Math.max(10, score - (i % 3 === 1 ? 0 : (p === 'month' ? 30 : 130) - i * 2));
     }
     // equal scores share a rank, as the server ranks them
