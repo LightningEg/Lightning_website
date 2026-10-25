@@ -65,6 +65,7 @@ begin
  perform private.require_mfa_admin();
  if p_points is null or p_points<0 or p_points>500 or p_coins is null or p_coins<0 or p_coins>500 or p_publish is null or p_note is null
   or char_length(btrim(p_note)) not between 1 and 500 then raise exception 'valid decision, points, coins and review note required';end if;
+ perform 1 from public.wallets where user_id=(select user_id from public.community_stories where id=p_id) for update;
  select * into r from public.community_stories where id=p_id for update;
  if not found then raise exception 'story not found';end if;
  if r.status='published' and p_publish then return r;end if;
@@ -84,7 +85,7 @@ begin
    update public.community_stories set award_entry_id=e.id,awarded_points=p_points where id=r.id;
   end if;
   if r.coin_entry_id is null and p_coins>0 then
-   if(select count(*) from public.community_stories where user_id=r.user_id and coin_entry_id is not null and published_at>now()-interval '30 days')>=3 then
+   if(select count(*) from public.ledger_entries where user_id=r.user_id and kind='story_coins' and earned_at>now()-interval '30 days')>=3 then
     raise exception 'author already earned story coins for 3 stories in 30 days';end if;
    e:=private.post_ledger(r.user_id,'story_coins',0,p_coins,'community_story',r.id::text,'coins','Accepted community story','story-coins:'||r.id::text,now(),null,auth.uid());
    update public.community_stories set coin_entry_id=e.id,awarded_coins=p_coins where id=r.id;
@@ -141,7 +142,7 @@ select m.display_name,m.avatar_url,m.bio,m.visibility,
   (select e.item_id from public.equipped_items e where e.user_id=m.user_id and e.slot='frame') as frame_item_id,
   (select e.item_id from public.equipped_items e where e.user_id=m.user_id and e.slot='badge') as badge_item_id
 from public.member_profiles m left join public.wallets w on w.user_id=m.user_id
-where not m.suspended and(m.visibility='public' or(m.visibility='members' and exists(select 1 from auth.users current_member where current_member.id=auth.uid())));
+where not m.suspended and(m.visibility='public' or(m.visibility='members' and exists(select 1 from public.member_profiles current_member where current_member.user_id=auth.uid())));
 
 drop function public.get_profile(text);
 create function public.get_profile(p_name text)

@@ -488,5 +488,12 @@ await test('your data: the owner account is refused in plain words', async () =>
   assert.equal(p.calls.filter(c => c.fn === 'signOut').length, 0);
 });
 
+await test('owner account menu keeps the resolved profile and links to the main operations console',async()=>{
+ const profile=account();const p=await boot(q=>q.op==='rpc'&&q.name==='is_admin'?{data:true,error:null}:profile(q));
+ await p.fire('INITIAL_SESSION',session);await tick(30);
+ assert.equal(p.$('me').querySelector('.me-name').textContent,'geek-1a2b3c4d');
+ assert.ok(p.$('me-menu').querySelector('a[href="admin.html"]'));
+ await p.fire('SIGNED_OUT',null);assert.equal(p.$('me').tagName,'A');
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

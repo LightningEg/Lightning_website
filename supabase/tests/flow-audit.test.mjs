@@ -108,14 +108,14 @@ await test('reference changes invalidate an opened image; settlement and review 
  const u=await newUser(),r=await checkoutFor(u),path=await reserve(u,r.id);await upload(u,path);const original=await attach(u,r.id,path);
  const edited=await attach(u,r.id,path,'EDITED-REFERENCE');assert.ok(Number(edited.receipt_revision)>Number(original.receipt_revision));
  await assert.rejects(settle(edited,original.receipt_revision),/receipt changed/);
- await assert.rejects(settle(edited,edited.receipt_revision,9999),/amount mismatch/);
+ await assert.rejects(settle(edited,edited.receipt_revision,9999),/amount mismatch|bank total/);
  assert.equal((await q(`select proof_reviewed_at from public.topup_requests where id=$1`,[r.id])).rows[0].proof_reviewed_at,null);
  await assert.rejects(as('authenticated',u,()=>q(`select public.cancel_topup($1)`,[r.id])),/receipt submitted/);
  await assert.rejects(as('authenticated',u,()=>q(`select * from public.prepare_account_deletion('delete my account')`)),/pending payments/);
  const bankRef='BANK-'+key();await settle(edited,edited.receipt_revision,10000,bankRef);await settle(edited,edited.receipt_revision,10000,bankRef);
  assert.deepEqual(await wallet(u),{balance:500,contribution_score:0});
  const other=await checkoutFor(u),path2=await reserve(u,other.id);await upload(u,path2);const proof=await attach(u,other.id,path2);
- await assert.rejects(settle(proof,proof.receipt_revision,10000,bankRef),/unique constraint/);assert.equal((await wallet(u)).balance,500);
+ await assert.rejects(settle(proof,proof.receipt_revision,10000,bankRef),/unique constraint|already recorded/);assert.equal((await wallet(u)).balance,500);
 });
 await test('deletion is blocked by receipts until Storage removal; deletion barriers prevent new files and scrub sender identity',async()=>{
  const u=await newUser(),r=await checkoutFor(u),path=await reserve(u,r.id);await upload(u,path);await attach(u,r.id,path);

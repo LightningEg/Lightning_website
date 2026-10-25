@@ -87,8 +87,8 @@ await test('replacement image invalidates prior review; only actual settlement a
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Stale image',$2,0)`,[checkout.id,path])),/receipt changed/);
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',10000,'SETTLED-123','Checked bank')`,[checkout.id])),/receipt review/);
  await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Rechecked replacement receipt',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[checkout.id]));
- await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',9999,'SETTLED-123','Checked bank')`,[checkout.id])),/amount mismatch/);
- for(let n=0;n<2;n++)await as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',10000,'SETTLED-123','Confirmed actual incoming transfer')`,[checkout.id]));
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_topup($1,'approved',9999,'SETTLED-123','Checked bank')`,[checkout.id])),/amount mismatch|bank total/);
+ for(let n=0;n<2;n++)await as('authenticated',ADMIN,()=>q(`select public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),10000,'SETTLED-123','Confirmed actual incoming transfer')`,[checkout.id]));
  assert.deepEqual(await wallet(OWNER),{balance:500,contribution_score:0});
 });
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;

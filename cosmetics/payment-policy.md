@@ -6,7 +6,7 @@ Proposed checkout text, to be displayed before showing payment instructions and 
 
 The terms checkbox must be unchecked initially. Save the request ID, policy version and acceptance timestamp using `accept_topup_terms`. Show the InstaPay address/QR, amount and order reference only after acceptance. Do not label the agreement as a donation if it purchases coins/items. App and item compatibility must be shown before spending.
 
-Checkout copies the signed-in Lightning email for the InstaPay transfer note. After transferring, the customer supplies their sending InstaPay address and payment reference, then uploads the receipt from their own app on `topup.html`. WhatsApp Business is support only. Neither an image nor a typed reference credits coins. Never collect bank passwords or recovery keys.
+Checkout copies the signed-in Lightning email for the InstaPay transfer note. After transferring, the customer supplies their sending InstaPay address and payment reference, then uploads the receipt from their own app on `topup.html`. Payment support is available at hello@lightningeg.com. Neither an image nor a typed reference credits coins. Never collect bank passwords or recovery keys.
 
 The owner opens the private receipt in the MFA-protected admin page and records visual review. They separately check the incoming transfer in their own banking/InstaPay app, then enter the received amount and receiving account transaction reference to approve. Sender and receiver references can differ: reconcile amount, time, email note and sender address. Suspicious payments stay pending or are rejected. Duplicate references are blocked; replacement images require a fresh review.
 

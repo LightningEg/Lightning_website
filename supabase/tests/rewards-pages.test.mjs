@@ -503,7 +503,7 @@ await test('admin: signed out sees only the owner sentence and a sign-in link; n
 
 await test('admin: a signed-in member who is not the owner sees the sentence and nothing else', async () => {
   const p = await adminBoot({ 'rpc:is_admin': { data: false, error: null } });
-  assert.deepEqual(p.rpcs().map(c => c.fn), ['is_admin']);
+  assert.deepEqual(p.rpcs().map(c => c.fn), ['is_admin', 'is_admin']); // Header owner link and console independently check access.
   assert.equal(p.calls.filter(c => c.kind === 'from' && c.table !== 'member_profiles').length, 0, 'no data is requested');
   assert.equal(p.visible('view-no'), true);
   assert.equal(p.visible('view-admin'), false);
@@ -516,7 +516,7 @@ await test('admin: if the owner check fails, the page stays closed and says why'
   const p = await adminBoot({ 'rpc:is_admin': { data: null, error: { message: 'Failed to fetch' } } });
   assert.equal(p.visible('view-admin'), false);
   assert.match(p.text('acct-msg'), /Cannot reach the server/);
-  assert.deepEqual(p.rpcs().map(c => c.fn), ['is_admin']);
+  assert.deepEqual(p.rpcs().map(c => c.fn), ['is_admin', 'is_admin']); // Header owner link and console independently check access.
 });
 
 await test('admin: the owner gets every section loaded once', async () => {
@@ -524,7 +524,7 @@ await test('admin: the owner gets every section loaded once', async () => {
   assert.equal(p.visible('view-admin'), true);
   assert.equal(p.visible('view-no'), false);
   const fns = p.calls.map(c => c.fn ?? c.table);
-  for (const f of ['is_admin', 'admin_task_overview', 'admin_pending_awards', 'admin_feedback_queue', 'profile_reports', 'audit_log']) assert.equal(fns.filter(x => x === f).length, 1, f);
+  for (const f of ['is_admin', 'admin_task_overview', 'admin_pending_awards', 'admin_feedback_queue', 'profile_reports', 'audit_log']) assert.equal(fns.filter(x => x === f).length, f === 'is_admin' ? 2 : 1, f);
   assert.equal(p.$('tasks-list').children.length, 2);
   assert.match(p.$('tasks-list').children[0].textContent, /#12 Round money/);
   assert.match(p.$('tasks-list').children[0].textContent, /claim: bee, active, locked at 80 coins/);

@@ -71,6 +71,7 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
   await as('authenticated',row.user_id,()=>q(`select public.attach_topup_receipt($1,'customer@instapay','CUSTOMER-REF',$2)`,[r,receipt]));
   await as('authenticated',ADMIN,()=>q(`select public.admin_review_uploaded_receipt($1,'Reviewed customer receipt in WhatsApp',(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1))`,[r]));
  }
+ if(decision==='approved')return as('authenticated',who,async()=>(await q(`select * from public.admin_settle_topup($1,(select receipt_object_key from public.topup_requests where id=$1),(select receipt_revision from public.topup_requests where id=$1),$2,$3,'Checked incoming transfer')`,[r,amount,ref])).rows[0]);
  return as('authenticated',who, async () => (await q(`select * from public.admin_review_topup($1,$2,$3,$4,'Checked incoming transfer')`,[r,decision,amount,ref])).rows[0]);
 };
 await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
@@ -100,13 +101,13 @@ await test('drafts private and writing/submitting alone awards nothing',async()=
  assert.deepEqual(await wallet(OWNER),{balance:0,contribution_score:200});
 });
 await test('moderated publication awards once; edits unpublish and cannot farm points',async()=>{
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Useful specific budgeting experience')`,[story.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Repeated request')`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,50,0,'Useful specific budgeting experience',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,50,0,'Repeated request',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[story.id]));
  let feed=(await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows;assert.equal(feed.length,1);assert.ok(!('user_id'in feed[0]));assert.ok(!('review_note'in feed[0]));
  assert.deepEqual(await wallet(OWNER),{balance:0,contribution_score:250});
  await save(OWNER,story.id,undefined,'https://www.linkedin.com/posts/edited-1');assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[story.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Reviewed the revision')`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,50,0,'Reviewed the revision',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[story.id]));
  assert.equal((await wallet(OWNER)).contribution_score,250);
  await as('authenticated',OWNER,()=>q(`select public.withdraw_story($1)`,[story.id]));
  assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
@@ -120,10 +121,10 @@ await test('accepted LinkedIn sources cannot earn another award and AAL1 cannot 
  const link='https://www.linkedin.com/posts/source_unique-456';
  const a=await save(OWNER,null,undefined,link);
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[a.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,0,'Accepted original')`,[a.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,10,0,'Accepted original',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[a.id]));
  const b=await save(OWNER,null,undefined,link+'?tracking=2');
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[b.id]));
- await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,0,'Duplicate source')`,[b.id])),/already accepted/);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,10,0,'Duplicate source',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[b.id])),/already accepted/);
  assert.equal((await wallet(OWNER)).contribution_score,260);
  await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
  await assert.rejects(credit(key()),/MFA/);
@@ -139,17 +140,17 @@ await test('Reddit sources, spendable story coins, disclosure flag, caps and fra
  await assert.rejects(as('authenticated',W,()=>q(`select public.submit_story($1,true)`,[nolink.id])),/link to your LinkedIn or Reddit/);
  assert.match(nolink.verify_code,/^[0-9a-f]{8}$/);
  const a=await mk(1);assert.equal(a.reddit_url,'https://www.reddit.com/r/Egypt/comments/abc1/my_habit');
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Specific, useful habit')`,[a.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Repeat')`,[a.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,60,'Specific, useful habit',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[a.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,60,'Repeat',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[a.id]));
  assert.deepEqual(await wallet(W),{balance:60,contribution_score:0},'coins spend but never raise rank');
  const dn=(await q(`select display_name from public.member_profiles where user_id=$1`,[W])).rows[0].display_name;
  const f=(await as('anon',null,()=>q(`select * from public.stories_feed(null,$1)`,[dn]))).rows;
  assert.equal(f.length,1);assert.equal(f[0].rewarded,true);
  const dup=await as('authenticated',W,async()=>(await q(`select * from public.save_story(null,'Same again',$1,null,'https://www.reddit.com/r/Egypt/comments/abc1/my_habit/')`,['A real habit I keep. '.repeat(4)])).rows[0]);
  await as('authenticated',W,()=>q(`select public.submit_story($1,true)`,[dup.id]));
- await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Same source')`,[dup.id])),/already accepted/);
- for(const n of [2,3]){const s=await mk(n);await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,10,'Good')`,[s.id]));}
- const fourth=await mk(4);await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,10,'Good')`,[fourth.id])),/3 stories in 30 days/);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,60,'Same source',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[dup.id])),/already accepted/);
+ for(const n of [2,3]){const s=await mk(n);await as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,10,'Good',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[s.id]));}
+ const fourth=await mk(4);await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_moderate_story($1,true,0,10,'Good',true,true,(select submission_revision from public.community_stories where id=$1),true)`,[fourth.id])),/3 stories in 30 days/);
  assert.equal((await wallet(W)).balance,80);
  await as('authenticated',W,()=>q(`select * from public.purchase_item_at_price('badge-pen',50,'pen-badge-0001')`));await as('authenticated',W,()=>q(`select public.equip_item('badge-pen')`));
  await assert.rejects(as('authenticated',W,()=>q(`select public.equip_item('frame-gold')`)),/not owned/);

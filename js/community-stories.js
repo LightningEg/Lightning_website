@@ -13,12 +13,11 @@
   if(privateView){
    if(s.review_note)a.append(el('p','Review: '+s.review_note));
    a.append(action('Edit draft',()=>{const f=$('story-form');f.elements.id.value=s.id;f.elements.title.value=s.title;f.elements.body.value=s.body;f.elements.linkedin.value=s.linkedin_url||'';f.elements.reddit.value=s.reddit_url||'';window.__storyCode=s.verify_code;f.scrollIntoView();}));
-   const consent=el('label');const check=el('input');check.type='checkbox';consent.append(check,document.createTextNode(' I agree to publish this text under my public display name.'));a.append(consent);
+   const consent=el('label');const check=el('input');check.type='checkbox';consent.append(check,document.createTextNode(' I agree to the community rules and to publish this listing under my public display name.'));a.append(consent);
    a.append(action('Submit for review',async()=>{if(!check.checked){msg('Check the sharing consent first.');return;}await rpc('submit_story',{p_id:s.id,p_consent:true});await load();}));
    a.append(action('Withdraw',async()=>{await rpc('withdraw_story',{p_id:s.id});await load();}));
   }
-  if(review){const points=el('input');points.type='number';points.min=0;points.max=500;points.value='0';points.setAttribute('aria-label','Rank points (never spendable)');const coins=el('input');coins.type='number';coins.min=0;coins.max=500;coins.value='0';coins.setAttribute('aria-label','Coins (spendable)');const note=el('input');note.placeholder='Review note';note.setAttribute('aria-label','Review note');a.append(points,coins,note);
-   for(const [label,publish]of[['Publish',true],['Reject',false]])a.append(action(label,async()=>{await rpc('admin_review_story',{p_id:s.id,p_publish:publish,p_points:publish?Number(points.value):0,p_coins:publish?Number(coins.value):0,p_note:note.value});await load();}));}
+  if(review)return window.FGStoryModeration.card(s,load);
   return a;
  }
  async function load(){const run=++generation;$('story-mine').replaceChildren();$('story-queue').replaceChildren();$('story-member').hidden=true;$('story-review').hidden=true;try{
@@ -29,7 +28,8 @@
   msg('');
  }catch(e){msg('Stories are not available yet, or this action needs setup. '+FG.say(e));}}
  $('story-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,b=f.querySelector('[type=submit]'),uid=FG.session()?.user.id;b.disabled=true;try{const s=await rpc('save_story',{p_id:f.elements.id.value||null,p_title:f.elements.title.value,p_body:f.elements.body.value,p_linkedin_url:f.elements.linkedin.value||null,p_reddit_url:f.elements.reddit.value||null});if(FG.session()?.user.id!==uid)return;f.elements.id.value=s.id;window.__storyCode=s.verify_code;await load();msg('Draft saved. It is not public yet.');}catch(e){msg(FG.say(e));}finally{b.disabled=false;}};
- $('story-new').onclick=()=>{$('story-form').reset();$('story-form').elements.id.value='';};
- $('story-copy').onclick=async()=>{const f=$('story-form');try{await navigator.clipboard.writeText('Disclosure: Lightning may reward accepted community posts with Lightning Coins, a credit for app cosmetics. I wrote this myself.'+(f.elements.id.value?'\nVerification: '+(window.__storyCode||''):''));msg('Copied. Paste the disclosure line (and your verification code) at the end of your LinkedIn or Reddit post, then add its link here.');}catch{msg('Select your text and copy it manually.');}};
+ $('story-new').onclick=()=>{$('story-form').reset();$('story-form').elements.id.value='';window.__storyCode=null;};
+ $('story-copy').onclick=async()=>{const f=$('story-form');if(!f.elements.id.value||!window.__storyCode){msg('Save your draft first to get its verification code.');return;}try{await navigator.clipboard.writeText('https://lightningeg.com/\nLightning verification: '+window.__storyCode);msg('Copied. Add the Lightning link and verification code to your post, then paste its LinkedIn or Reddit link here.');}catch{msg('Copy the Lightning link and verification code from your draft.');}};
+
  FG.ready.then(()=>{if(FG.sb)load();else msg('Sign-in is not configured.');});FG.onAuth(()=>{$('story-form').reset();$('story-form').elements.id.value='';load();});
 })();

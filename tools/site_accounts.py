@@ -88,9 +88,9 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-audit-1\2', text)
-        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account-data|topup)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-audit-1\2', text)
-        text=re.sub(r'(css/site-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261024-account-2\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
+        text=re.sub(r'(js/(?:forgeeks-market|forgeeks-account-data|topup|admin-operations|store-admin|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
+        text=re.sub(r'(css/(?:site-account|site-community|store-admin)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-pipeline-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
@@ -108,14 +108,9 @@ def add_community_nav(path,active):
 STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <h1>Stories.</h1>
 <p class="lede">Real ways people run their money with Lightning, told on LinkedIn and Reddit. Read what they shared, or share your own and earn coins for the marketplace.</p>
-<ol class="com-steps" aria-label="How it works">
-<li><b>Post it</b><span>Write about your habit or tip on LinkedIn or Reddit, in your own words. The post stays there, not here.</span></li>
-<li><b>Add the link</b><span>Paste the link here with a short summary and tick consent. Drafts stay private.</span></li>
-<li><b>Send it for review</b><span>A person opens your post and checks it is yours using your verification code.</span></li>
-<li><b>Earn coins</b><span>Accepted posts are listed here and can earn Lightning Coins to spend in the <a href="marketplace.html">Marketplace</a>.</span></li>
-</ol>
+<ol class="com-steps" aria-label="How it works"><li><b>Save a draft</b><span>Add a title and short summary to get your verification code.</span></li><li><b>Write your post</b><span>Share a general money-management habit on LinkedIn or Reddit. Include your code and a link back to Lightning.</span></li><li><b>Submit the link</b><span>Paste the post link, accept the community rules and send your listing for review.</span></li><li><b>Earn coins</b><span>A moderator verifies the post and may award coins for your marketplace wallet.</span></li></ol>
 <p id="story-status" role="status"></p>
-<h2 class="com-h">Latest posts</h2>
+<div class="stories-layout"><div class="stories-content"><h2 class="com-h">Latest posts</h2>
 <div id="story-feed" class="story-grid"></div>
 <section class="acct" id="story-member" hidden><h2 class="com-h">Share your post</h2>
 <p class="com-lead">Drafts are private. Listing needs your consent and a public, adult-confirmed <a href="profile.html">profile</a>. Editing a listed post takes it down until it is reviewed again.</p>
@@ -124,15 +119,15 @@ STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <label>Short summary (20 to 400 characters)<textarea name="body" rows="4" maxlength="400" required></textarea></label>
 <label>LinkedIn post link<input name="linkedin" type="url" placeholder="https://www.linkedin.com/posts/..."></label>
 <label>Reddit post link<input name="reddit" type="url" placeholder="https://www.reddit.com/r/.../comments/..."></label></div>
-<p class="com-lead">Add at least one link. Your draft gets a verification code: paste it at the end of your post with the disclosure line.</p>
-<div class="row"><button class="btn" type="submit">Save draft</button><button class="btn ghost" id="story-copy" type="button">Copy disclosure and code</button><button class="btn ghost" id="story-new" type="button">New draft</button></div></form>
+<p class="com-lead">Add at least one link. Your draft gets a verification code: paste it into your post together with a link to Lightning.</p>
+<div class="row"><button class="btn" type="submit">Save draft</button><button class="btn ghost" id="story-copy" type="button">Copy verification code and link</button><button class="btn ghost" id="story-new" type="button">New draft</button></div></form>
 <ul class="com-rules"><li>Coins reward the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
-<li>Up to 3 rewarded posts in any 30 days. Listings of rewarded posts say so, and your post should carry the disclosure line.</li>
+<li>Up to 3 rewarded posts in any 30 days. Add your verification code and a link to Lightning so we can review your submission.</li>
 <li>Never include account numbers, balances you want private or anything identifying. Posts are personal experiences, not financial advice.</li></ul>
 <div id="story-mine"></div></section>
 <p class="com-lead"><a href="account.html">Sign in or manage your account</a></p>
 <section class="acct" id="story-review" hidden><h2 class="com-h">Moderation queue</h2><p class="com-lead">Open the external post yourself and look for the verification code. Rank points raise the leaderboard; coins are spendable and never raise rank. Each is paid once per post.</p><div id="story-queue"></div></section>
-</div></section></main>'''
+</div><aside class="community-rules" aria-labelledby="community-rules-title"><h2 id="community-rules-title">Community rules</h2><p>Only general money-management experiences and educational tips are accepted.</p><p>Solicitation, advertising or offering financial services, and personalized financial or investment advice are prohibited. Violations will result in removal of the content and a ban from the community.</p><h3>External platforms</h3><p>Posts may link to third-party platforms. Lightning does not control those platforms and is not responsible for communications, transactions, services or other interactions conducted outside this website, subject to applicable law. Official checkout purchases remain governed by our payment terms.</p><p><a href="mailto:hello@lightningeg.com">Report a concern</a></p></aside></div></div></section></main>'''
 
 def build_stories():
     path=ROOT/'stories.html'
@@ -164,8 +159,8 @@ def build_guides():
 
 if __name__=='__main__':
     build()
-    connect_public_pages()
     build_stories()
     build_guides()
+    connect_public_pages()
     for f,k in [('stories','stories'),('leaderboard','leaderboard'),('marketplace','marketplace'),('topup','wallet'),('account','account'),('profile','leaderboard')]:
         add_community_nav(ROOT/(f+'.html'),k)

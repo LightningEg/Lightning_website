@@ -18,7 +18,7 @@ assert.equal(await page.locator('.site-invite[open]').count(),0);
 await page.reload();assert.equal(await page.locator('.site-invite[open]').count(),0);
 for(const width of [390,1280]) {
  await page.setViewportSize({width,height:900});
- for(const name of ['account','marketplace','stories','topup']) {
+ for(const name of ['account','marketplace','stories','topup','admin']) {
   await page.goto('http://127.0.0.1:8000/'+name+'.html'+(name==='account'?'?signup=1':''));
   await page.waitForTimeout(100);
   assert.equal(await page.locator('.d-links a[href="marketplace.html"]').count(),0);
