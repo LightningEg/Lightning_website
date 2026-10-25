@@ -166,7 +166,7 @@ await test('suspended profiles disappear from every public function and come bac
 
 // ------------------------------------------------------------ nothing private leaks
 const SHOWN = ['display_name', 'avatar_url', 'bio', 'visibility', 'setup_editor', 'setup_os', 'setup_languages', 'setup_tools', 'setup_notes',
-  'dotfiles_url', 'portfolio_url', 'contribution_score', 'banner_item_id', 'rank_all', 'rank_month'];
+  'dotfiles_url', 'portfolio_url', 'contribution_score', 'banner_item_id', 'rank_all', 'rank_month', 'frame_item_id', 'badge_item_id'];
 const FORBIDDEN = /user_id|email|phone|birth|full_name|balance|wallet|purchase|inventory|suspended|marketing|adult_confirmed|show_|created_at|updated_at|reporter|ledger/i;
 
 await test('no private column or value is returned: exact key lists, and none of the private details appear in any output', async () => {
@@ -185,7 +185,7 @@ await test('no private column or value is returned: exact key lists, and none of
     assert.deepEqual(Object.keys((await profile('Ada'))[0]), SHOWN);
     assert.deepEqual(Object.keys((await work('Ada'))[0]), ['display_name', 'repository', 'issue_number', 'pr_number', 'title', 'url', 'merged_at', 'verified']);
     assert.deepEqual(Object.keys((await q(`select * from public.member_directory()`)).rows[0]),
-      ['display_name', 'avatar_url', 'bio', 'setup_editor', 'setup_os', 'setup_languages', 'setup_tools', 'contribution_score', 'banner_item_id']);
+      ['display_name', 'avatar_url', 'bio', 'setup_editor', 'setup_os', 'setup_languages', 'setup_tools', 'contribution_score', 'banner_item_id', 'frame_item_id', 'badge_item_id']);
   });
 });
 

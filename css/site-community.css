@@ -1,0 +1,130 @@
+/* Main-site marketplace, leaderboard and banner strip. Brand guideline Part B: Bricolage headings, Manrope body,
+   22px cards, pill buttons, soft wells, no card in a card. The For Geeks sheets give the structure; this one skins it. */
+body[data-main-store]{--well:var(--field);--soft:var(--panel);--glow:20,168,116;--accent2:var(--azure)}
+body[data-main-store] main :focus-visible{outline:3px solid var(--azure);outline-offset:3px}
+
+/* buttons: the same look as .btn-primary and .btn-secondary on every other page */
+body[data-main-store] .acct .btn,body[data-main-store] .lb-next .btn,body[data-main-store] .lb-more .btn,body[data-main-store] .mkt-win .btn{height:48px;min-height:48px;padding:0 22px;gap:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--nile);border-radius:999px;background:var(--nile);color:var(--on-nile);font:700 15px/1 var(--body);text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .2s,border-color .2s}
+body[data-main-store] .acct .btn:hover,body[data-main-store] .lb-next .btn:hover,body[data-main-store] .mkt-win .btn:hover{background:var(--nile-2);border-color:var(--nile-2)}
+body[data-main-store] .btn.ghost{background:var(--white);color:var(--ink);border-color:var(--line-ctl)}
+body[data-main-store] .btn.ghost:hover{background:var(--white);border-color:var(--green)}
+body[data-main-store] .btn:disabled,body[data-main-store] .mkt-cell button[disabled]{opacity:.65;cursor:default}
+body[data-main-store] .mkt-mini{height:36px;min-height:36px;padding:0 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:700 14px/1 var(--body)}
+body[data-main-store] .mkt-mini:hover{border-color:var(--green)}
+body[data-main-store] .lb-tab{min-height:44px;padding:0 20px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:700 14px var(--body)}
+body[data-main-store] .lb-tab:hover{border-color:var(--green);color:var(--ink)}
+body[data-main-store] .lb-tab[aria-selected=true]{background:var(--nile);border-color:var(--nile);color:var(--on-nile)}
+body[data-main-store] .linkish{color:var(--ink);font:600 14px var(--body)}
+
+/* the banner the member equipped, above the page heading */
+.site-banner{height:140px;border-radius:22px;margin:0 0 28px;border:1px solid var(--line)}
+.site-banner[hidden]{display:none}
+@media(max-width:640px){.site-banner{height:96px;border-radius:16px}}
+
+/* marketplace */
+body[data-main-store] .mkt-bar{margin-bottom:48px}
+body[data-main-store] .mkt .fine{color:var(--muted);font:500 14px/1.5 var(--body)}
+body[data-main-store] .mkt-bar .chip{background:var(--field);color:var(--ink);font:700 14px var(--body);min-height:44px;align-items:center}
+body[data-main-store] .mkt-sec>h2,body[data-main-store] .mkt-sub{font:800 clamp(26px,3.4vw,34px)/1.15 var(--display);color:var(--ink);margin:0 0 8px}
+body[data-main-store] .mkt-sub{font-size:21px;margin:40px 0 14px}
+body[data-main-store] .mkt-sec .why{color:var(--muted);font:500 16px/1.6 var(--body);max-width:62ch}
+body[data-main-store] .mkt-grid,body[data-main-store] .mkt-free{gap:20px;border:0;overflow:visible}
+body[data-main-store] .mkt-cell{gap:12px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:none}
+body[data-main-store] .mkt-cell.compact{padding:16px 18px}
+body[data-main-store] .mkt-cell.equipped{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+body[data-main-store] .mkt-cell .fg-banner,body[data-main-store] .mkt-pv{border-radius:14px;border:1px solid var(--line)}
+body[data-main-store] .mkt-name{font:700 18px var(--display);color:var(--ink)}
+body[data-main-store] .mkt-tag{font:700 13px var(--body);color:var(--muted)}
+body[data-main-store] .mkt-note{color:var(--muted);font:500 15px/1.55 var(--body)}
+body[data-main-store] .mkt-state{font:700 13px var(--body);color:var(--green)}
+body[data-main-store] .mkt-acts{min-height:36px}
+body[data-main-store] .mkt-sum div{font:500 14px var(--body)}
+body[data-main-store] .mkt-win h2{font:800 22px var(--display);color:var(--ink)}
+body[data-main-store] .mkt-dlg-pv .mkt-pv,body[data-main-store] .mkt-dlg-pv .fg-banner{border-radius:14px}
+body[data-main-store] .mkt-cell .dots i,body[data-main-store] .dots i{border-radius:50%}
+
+/* leaderboard */
+body[data-main-store] .lb-top{padding:64px 0 32px}
+body[data-main-store] .lb-top h1,body[data-main-store] .lb-members h2,body[data-main-store] .lb-next h2{font-family:var(--display);color:var(--ink);font-weight:800}
+body[data-main-store] .lb-members h2,body[data-main-store] .lb-next h2{font-size:clamp(26px,3.4vw,38px);margin:0 0 12px}
+body[data-main-store] .lb-top .lede{margin-bottom:0}
+body[data-main-store] .lb-note,body[data-main-store] .lb-status{font:500 14px/1.5 var(--body);color:var(--muted)}
+body[data-main-store] .lb-sub,body[data-main-store] .lb-how{color:var(--muted);font:500 16px/1.6 var(--body)}
+body[data-main-store] .lb-how b{color:var(--ink);font-weight:700}
+body[data-main-store] .lb-how a,body[data-main-store] .lb-empty a{color:var(--ink)}
+body[data-main-store] .lb-list,body[data-main-store] .lb-empty{border:1px solid var(--line);border-radius:22px;background:var(--panel);overflow:hidden}
+body[data-main-store] .lb-row{padding:14px 22px;text-shadow:none}
+body[data-main-store] .rk{font:700 16px var(--body);color:var(--muted)}
+body[data-main-store] .rk.top{color:var(--green)}
+body[data-main-store] .nm{font:700 16px var(--body)}
+body[data-main-store] .ct,body[data-main-store] .sc{font:500 13px var(--body);color:var(--muted)}
+body[data-main-store] .ct b,body[data-main-store] .sc b{font:800 16px var(--body)}
+body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
+body[data-main-store] .av{background:var(--field);border:1px solid var(--line-ctl);font:700 14px var(--body)}
+body[data-main-store] .lb-members{padding:32px 0 56px}
+body[data-main-store] .mgrid{gap:20px;border:0;overflow:visible}
+body[data-main-store] .mc{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:none;overflow:hidden}
+body[data-main-store] .mc .fg-banner{height:72px;border-radius:0;border:0;border-bottom:1px solid var(--line)}
+body[data-main-store] .mc .av.lg{box-shadow:0 0 0 3px var(--paper)}
+body[data-main-store] .mc-name{font:700 17px var(--display)}
+body[data-main-store] .mc-sc{font:700 13px var(--body);color:var(--muted)}
+body[data-main-store] .mc-bio{font:500 15px var(--body);color:var(--muted)}
+body[data-main-store] .mc-tags{font:500 13px var(--body);color:var(--muted)}
+body[data-main-store] .lb-next{padding:24px 0 72px}
+body[data-main-store] .lb-next .cta{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:640px){body[data-main-store] .lb-top{padding-top:40px}body[data-main-store] .lb-row{padding:12px 16px}body[data-main-store] .lb-next .btn,body[data-main-store] .mkt-win .btn{width:100%}}
+
+/* ---- one community area: shared sub-navigation, story cards, steps (all pages use these) ---- */
+.com-bar{border-bottom:1px solid var(--line);background:var(--paper)}
+.com-nav{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.com-nav::-webkit-scrollbar{display:none}
+.com-nav a{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 18px;border-radius:999px;border:1px solid transparent;color:var(--muted);font:700 14px var(--body);text-decoration:none;white-space:nowrap}
+.com-nav a:hover{color:var(--ink);background:var(--field)}
+.com-nav a[aria-current=page]{background:var(--nile);color:var(--on-nile)}
+.com-nav a:focus-visible{outline:3px solid var(--azure);outline-offset:2px}
+.com-h{font:800 clamp(24px,3vw,32px)/1.15 var(--display);color:var(--ink);margin:48px 0 16px}
+.com-lead{color:var(--muted);font:500 16px/1.6 var(--body);max-width:66ch}
+.com-lead a,.com-rules a,.com-steps a{color:var(--ink)}
+.com-steps{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;counter-reset:s}
+.com-steps li{counter-increment:s;display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid var(--line);border-radius:22px;background:var(--panel)}
+.com-steps li::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 14px var(--body)}
+.com-steps b{font:700 17px var(--display);color:var(--ink)}
+.com-steps span{color:var(--muted);font:500 14px/1.5 var(--body)}
+.com-rules{margin:20px 0 28px;padding-inline-start:20px;color:var(--muted);font:500 14px/1.6 var(--body);max-width:72ch}
+.com-rules li+li{margin-top:6px}
+@media(max-width:900px){.com-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.com-steps{grid-template-columns:1fr}}
+
+/* story cards: the same card on the stories page, the Guides strip and a profile */
+.story-card,.story-strip{--bg:var(--paper);--well:var(--field)}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px}
+.story-card{display:flex;flex-direction:column;gap:12px;min-width:0;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--panel);color:var(--ink)}
+.story-title{font:800 20px/1.25 var(--display);margin:0;color:var(--ink);overflow-wrap:anywhere}
+.story-title a{color:inherit;text-decoration:none}.story-title a:hover{text-decoration:underline}
+.story-by{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;font:600 14px var(--body)}
+.story-by .av{width:32px;height:32px;display:inline-grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--field);border:1px solid var(--line-ctl);font:700 13px var(--body);margin-inline-end:4px}
+.story-by .av img{width:100%;height:100%;object-fit:cover}
+.story-author{color:var(--ink);text-decoration:none}.story-author:hover{text-decoration:underline}
+.story-date{color:var(--muted);font:500 13px var(--body)}
+.story-body{margin:0;color:var(--muted);font:500 15px/1.6 var(--body);white-space:pre-wrap;overflow-wrap:anywhere}
+.story-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:auto;font:700 14px var(--body)}
+.story-foot a{color:var(--ink)}
+.story-flag{flex-basis:100%;padding:8px 12px;border-radius:12px;background:var(--field);color:var(--muted);font:600 13px/1.4 var(--body)}
+.story-strip .wrap{padding-block:56px}
+.story-strip h2{margin:6px 0 24px}
+.story-more{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.pf-stories{padding-block:0 56px}
+.pf-stories .story-grid{margin-top:8px}
+body[data-main-store] #story-feed:empty::after{content:"No published stories yet.";color:var(--muted)}
+body[data-main-store] #story-mine .panel,body[data-main-store] #story-queue .panel{margin-block:16px;padding:22px;border-radius:22px}
+body[data-main-store] #story-form{padding:24px;border-radius:22px}
+body[data-main-store] #story-form .fields{display:grid;gap:16px}
+body[data-main-store] #story-form label{display:grid;gap:6px;font:700 14px var(--body);color:var(--ink)}
+body[data-main-store] #story-status:empty{display:none}
+
+.story-grid{margin-bottom:8px}
+body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-lead{margin-top:32px}
+.d-label{font:700 14px var(--body);color:var(--muted)}
+.mkt-pv-item .av{width:52px;height:52px;display:inline-grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--field);border:1px solid var(--line-ctl);font:700 18px var(--body);color:var(--ink)}
+.story-foot .story-src{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);text-decoration:none}
+.story-foot .story-src:hover{border-color:var(--green)}

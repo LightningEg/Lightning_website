@@ -65,15 +65,17 @@ await q(`insert into auth.users (id, email) values ($1, 'owner@example.test'), (
 const paid = (await q(`select id, type, price from public.catalog_items where not is_default order by type, price`)).rows;
 
 // ------------------------------------------------------------ the seed
-await test('seed: 14 paid themes and 6 paid banners, each active, priced in whole coins, with a note', async () => {
+await test('seed: 14 paid themes, 6 paid banners, 4 frames and 4 badges, each active, priced in whole coins, with a note', async () => {
   assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['amber','dracula','frost','garnet','meadow','moss','nile','ocean','paper','phosphor','rose','solarized','synthwave','tokyo']);
   assert.equal(paid.filter(p => p.type === 'banner').length, 6);
-  assert.equal(paid.length, 20);
+  assert.equal(paid.filter(p => p.type === 'frame').length, 4);
+  assert.equal(paid.filter(p => p.type === 'badge').length, 4);
+  assert.equal(paid.length, 28);
   for (const p of paid) {
-    assert.match(p.id, p.type === 'banner' ? /^banner-[a-z]+$/ : /^[a-z]+$/, p.id);
+    assert.match(p.id, p.type === 'theme' ? /^[a-z]+$/ : /^(banner|frame|badge)-[a-z]+$/, p.id);
     assert.ok(p.price > 0 && Number.isInteger(p.price), p.id);
     if (p.type === 'theme') assert.ok(p.price >= 100 && p.price <= 250, p.id);
-    else assert.ok(p.price >= 40 && p.price <= 120, p.id);
+    else assert.ok(p.price >= 30 && p.price <= 120, p.id);
   }
   const rows = (await q(`select * from public.catalog_items where not is_default`)).rows;
   assert.ok(rows.every(r => r.active && r.description.length > 0 && r.description.length <= 300 && r.name.length > 0), 'active, with a note');
@@ -227,14 +229,14 @@ await test('another member cannot equip, unequip or read what I own', async () =
 });
 
 // ------------------------------------------------------------ market_catalog()
-await test('market_catalog: anon sees every active item, nothing owned or equipped, themes first then banners by price', async () => {
+await test('market_catalog: anon sees every active item, nothing owned or equipped, themes first, then banners, frames and badges by price', async () => {
   const rows = await catalog('anon', null);
-  assert.equal(rows.length, 12 + 9);
+  assert.equal(rows.length, 12 + 9 + 8);
   assert.ok(rows.every(r => r.owned === false && r.equipped === false));
   assert.deepEqual(Object.keys(rows[0]).sort(), ['asset_version', 'description', 'equipped', 'id', 'is_default', 'name', 'owned', 'price', 'type']);
   const types = rows.map(r => r.type);
   assert.deepEqual(types, [...types].sort((a, b) => (a === 'theme' ? 0 : 1) - (b === 'theme' ? 0 : 1)));
-  for (const t of ['theme', 'banner']) {
+  for (const t of ['theme', 'banner', 'frame', 'badge']) {
     const prices = rows.filter(r => r.type === t).map(r => r.price);
     assert.deepEqual(prices, [...prices].sort((a, b) => a - b), t + ' cheapest first');
   }
@@ -292,7 +294,7 @@ await test('market_catalog: only anon, authenticated and service_role may call i
   const g = (await q(`select grantee from information_schema.routine_privileges
                       where routine_schema = 'public' and routine_name = 'market_catalog' order by grantee`)).rows.map(r => r.grantee);
   assert.deepEqual(g.filter(x => x !== 'postgres'), ['anon', 'authenticated', 'service_role']);
-  assert.equal((await catalog('service_role', null)).length, 21);
+  assert.equal((await catalog('service_role', null)).length, 29);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

@@ -154,11 +154,15 @@
     current = p;
     doc.title = p.display_name + SUFFIX;
     $('pf-name').textContent = p.display_name;
+    var oldBadge = $('pf-name').parentNode.querySelector('.fg-badge');
+    if (oldBadge) oldBadge.remove();
+    var pb = S.badge(p.badge_item_id);
+    if (pb) $('pf-name').after(pb);
     var b = $('pf-banner');
     var item = S.itemId(p.banner_item_id);
     if (item) b.setAttribute('data-item', item); else b.removeAttribute('data-item');
     b.hidden = false;
-    var av = S.avatar(p.display_name, p.avatar_url, 'av xl');
+    var av = S.avatar(p.display_name, p.avatar_url, 'av xl', p.frame_item_id);
     av.id = 'pf-av';
     $('pf-av').replaceWith(av);
     var bio = $('pf-bio');

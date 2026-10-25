@@ -87,7 +87,7 @@ await test('only Mono is free; locked palettes cannot equip without ownership',a
  assert.equal((await wallet(OWNER)).balance,0);
 });
 let story;
-const save=(user,id=null,body='My private money habits. '.repeat(8),linkedin=null)=>as('authenticated',user,async()=>(await q(`select * from public.save_story($1,'How I budget',$2,$3)`,[id,body,linkedin])).rows[0]);
+const save=(user,id=null,body='My private money habits. '.repeat(4),linkedin='https://www.linkedin.com/posts/default-'+Math.random().toString(36).slice(2))=>as('authenticated',user,async()=>(await q(`select * from public.save_story($1,'How I budget',$2,$3)`,[id,body,linkedin])).rows[0]);
 await test('drafts private and writing/submitting alone awards nothing',async()=>{
  story=await save(OWNER);
  assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
@@ -100,13 +100,13 @@ await test('drafts private and writing/submitting alone awards nothing',async()=
  assert.deepEqual(await wallet(OWNER),{balance:0,contribution_score:200});
 });
 await test('moderated publication awards once; edits unpublish and cannot farm points',async()=>{
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,'Useful specific budgeting experience')`,[story.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,'Repeated request')`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Useful specific budgeting experience')`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Repeated request')`,[story.id]));
  let feed=(await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows;assert.equal(feed.length,1);assert.ok(!('user_id'in feed[0]));assert.ok(!('review_note'in feed[0]));
  assert.deepEqual(await wallet(OWNER),{balance:0,contribution_score:250});
- await save(OWNER,story.id);assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
+ await save(OWNER,story.id,undefined,'https://www.linkedin.com/posts/edited-1');assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[story.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,'Reviewed the revision')`,[story.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,50,0,'Reviewed the revision')`,[story.id]));
  assert.equal((await wallet(OWNER)).contribution_score,250);
  await as('authenticated',OWNER,()=>q(`select public.withdraw_story($1)`,[story.id]));
  assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
@@ -120,13 +120,40 @@ await test('accepted LinkedIn sources cannot earn another award and AAL1 cannot 
  const link='https://www.linkedin.com/posts/source_unique-456';
  const a=await save(OWNER,null,undefined,link);
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[a.id]));
- await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,'Accepted original')`,[a.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,0,'Accepted original')`,[a.id]));
  const b=await save(OWNER,null,undefined,link+'?tracking=2');
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[b.id]));
- await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,'Duplicate source')`,[b.id])),/already accepted/);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,10,0,'Duplicate source')`,[b.id])),/already accepted/);
  assert.equal((await wallet(OWNER)).contribution_score,260);
  await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
  await assert.rejects(credit(key()),/MFA/);
  await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+});
+await test('Reddit sources, spendable story coins, disclosure flag, caps and frames/badges',async()=>{
+ const W=await newUser();await as('authenticated',W,()=>q(`update public.member_profiles set adult_confirmed=true,visibility='public' where user_id=$1`,[W]));
+ await assert.rejects(as('authenticated',W,()=>q(`select public.save_story(null,'Bad link','x',null,'https://evil.example/r/a/comments/abc')`)),/check constraint/);
+ const mk=async(n)=>{const r=(await as('authenticated',W,()=>q(`select * from public.save_story(null,'Habit '||$1::text,$2,null,$3)`,[n,'A real habit I keep. '.repeat(4),`https://old.reddit.com/r/Egypt/comments/abc${n}/my_habit/?utm=1`]))).rows[0];
+  await as('authenticated',W,()=>q(`select public.submit_story($1,true)`,[r.id]));return r;};
+ await assert.rejects(as('authenticated',W,()=>q(`select public.save_story(null,'Too long',$1)`,['x'.repeat(401)])),/at most 400/);
+ const nolink=(await as('authenticated',W,()=>q(`select * from public.save_story(null,'No link yet',$1)`,['A real habit I keep. '.repeat(3)]))).rows[0];
+ await assert.rejects(as('authenticated',W,()=>q(`select public.submit_story($1,true)`,[nolink.id])),/link to your LinkedIn or Reddit/);
+ assert.match(nolink.verify_code,/^[0-9a-f]{8}$/);
+ const a=await mk(1);assert.equal(a.reddit_url,'https://www.reddit.com/r/Egypt/comments/abc1/my_habit');
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Specific, useful habit')`,[a.id]));
+ await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Repeat')`,[a.id]));
+ assert.deepEqual(await wallet(W),{balance:60,contribution_score:0},'coins spend but never raise rank');
+ const dn=(await q(`select display_name from public.member_profiles where user_id=$1`,[W])).rows[0].display_name;
+ const f=(await as('anon',null,()=>q(`select * from public.stories_feed(null,$1)`,[dn]))).rows;
+ assert.equal(f.length,1);assert.equal(f[0].rewarded,true);
+ const dup=await as('authenticated',W,async()=>(await q(`select * from public.save_story(null,'Same again',$1,null,'https://www.reddit.com/r/Egypt/comments/abc1/my_habit/')`,['A real habit I keep. '.repeat(4)])).rows[0]);
+ await as('authenticated',W,()=>q(`select public.submit_story($1,true)`,[dup.id]));
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,60,'Same source')`,[dup.id])),/already accepted/);
+ for(const n of [2,3]){const s=await mk(n);await as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,10,'Good')`,[s.id]));}
+ const fourth=await mk(4);await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_story($1,true,0,10,'Good')`,[fourth.id])),/3 stories in 30 days/);
+ assert.equal((await wallet(W)).balance,80);
+ await as('authenticated',W,()=>q(`select * from public.purchase_item_at_price('badge-pen',50,'pen-badge-0001')`));await as('authenticated',W,()=>q(`select public.equip_item('badge-pen')`));
+ await assert.rejects(as('authenticated',W,()=>q(`select public.equip_item('frame-gold')`)),/not owned/);
+ const pf=(await as('anon',null,()=>q(`select badge_item_id,frame_item_id from public.member_directory(60,0)`))).rows;assert.ok(pf.some(r=>r.badge_item_id==='badge-pen'));
+ assert.ok(!(await as('anon',null,()=>q(`select * from public.leaderboard('all',5)`))).fields.every(x=>x.name!=='frame_item_id'));
 });
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;
