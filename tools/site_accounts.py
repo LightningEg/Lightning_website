@@ -8,29 +8,49 @@ ROOT=Path(__file__).resolve().parents[1]
 def build():
     home=(ROOT/'index.html').read_text()
     nav=re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>',home,re.S).group().replace(' aria-current="page"','')
-    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace')]:
+    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace'),('leaderboard','forgeeks-leaderboard','Lightning leaderboard'),('profile','forgeeks-profile','Lightning member')]:
         text=(ROOT/(src+'.html')).read_text()
         main=re.search(r'<main\b.*?</main>',text,re.S).group()
+        if name=='leaderboard':
+            main=main.replace('The people who <span class="hi">build Lightning.</span>','The people who build Lightning.')
+            main=main.replace('Meet the <span class="hi">members.</span>','Meet the members.').replace('Want your name <span class="hi">here.</span>','Want your name here.')
+            main=main.replace('<span class="k">$</span> ','').replace('forgeeks-account.html','account.html').replace('forgeeks-guide.html','contribute.html')
+            main=main.replace('</main>\n\n</main>','</main>')
+        if name=='profile':
+            main=re.sub(r'<span class="hi">(.*?)</span>',r'\1',main).replace('<span class="hi" id="pf-name">','<span id="pf-name">')
+            main=main.replace('<div id="closing" aria-hidden="true"></div>','<section class="wrap pf-stories" data-story-strip data-by-profile data-limit="6" hidden><h2 class="com-h">Stories</h2><div class="story-grid" data-story-list></div></section><div id="closing" aria-hidden="true"></div>')
+        main=main.replace('forgeeks-leaderboard.html','leaderboard.html')
+        # The banner a member equipped, drawn above the page heading (js/site-banner.js).
+        if name in ('account','marketplace'):
+            main=main.replace('<div class="wrap">','<div class="wrap"><div class="fg-banner site-banner" data-banner-strip aria-hidden="true" hidden></div>',1)
         # Market purchase dialog lives after the For Geeks footer.
         dialog=''
         if name=='marketplace':
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. <a href="topup.html">Top up your wallet</a> and browse website themes and banners below. App themes and badges, PC/phone claiming is still being built. Website top-ups need the owner to configure payment details first.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Earn coins by <a href="stories.html">sharing a story</a>, or <a href="topup.html">top up your wallet</a> once payments open, then pick your look below. Website themes apply to For Geeks; app themes and PC/phone claiming are still being built.</p>',main,count=1,flags=re.S)
+            main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
+            main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Preview any theme from the picker (<kbd>T</kbd>) before you buy.','These designs apply to For Geeks. App assets will be listed separately when ready.')
-        else:
+        elif name=='account':
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
             main=main.replace('</main>','<section class="wrap" aria-labelledby="parts-lab-title"><h2 id="parts-lab-title">Test the first theme parts</h2><p>These designs are previews. Prices and app availability will be added after testing.</p><div id="parts-lab"></div><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>When InstaPay top-ups open, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
-        else:scripts+=['js/site-theme-previews.js','js/forgeeks-market.js','js/cosmetic-parts.js','js/cosmetic-preview.js','js/activation-codes.js']
+        elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
+        elif name=='profile':scripts+=['js/forgeeks-showcase.js','js/forgeeks-profile.js','js/story-card.js','js/story-strip.js']
+        else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/forgeeks-market.js','js/cosmetic-parts.js','js/cosmetic-preview.js','js/activation-codes.js']
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
-        if name=='marketplace':css+=['css/forgeeks-cosmetics.css','css/forgeeks-market.css']
-        css+=['css/site-account.css','css/footer.css']
+        if name in('marketplace','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
+        if name=='marketplace':css+=['css/forgeeks-market.css']
+        if name=='leaderboard':css+=['css/forgeeks-leaderboard.css']
+        if name=='profile':css+=['css/forgeeks-profile.css']
+        css+=['css/site-account.css','css/site-community.css','css/footer.css']
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
+        if name in ('account','marketplace'):scripts+=['js/site-banner.js']
         tail='\n'.join(f'<script src="{p}"></script>' for p in scripts)
         page=f'''<!doctype html>
 <!-- Generated by tools/site_accounts.py; shared forms, auth and catalog. -->
@@ -73,6 +93,78 @@ def connect_public_pages():
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
+NAV_ITEMS=[('stories','Stories','stories.html'),('leaderboard','Leaderboard','leaderboard.html'),('marketplace','Marketplace','marketplace.html'),('wallet','Wallet','topup.html'),('account','Account','account.html')]
+def community_nav(active):
+    links=''.join(f'<a href="{h}"'+(' aria-current="page"' if k==active else '')+f'>{t}</a>' for k,t,h in NAV_ITEMS)
+    return f'<div class="com-bar"><div class="wrap"><nav class="com-nav" aria-label="Community">{links}</nav></div></div>'
+
+def add_community_nav(path,active):
+    text=path.read_text()
+    text=re.sub(r'<div class="com-bar">.*?</nav></div></div>','',text,flags=re.S)
+    text=re.sub(r'(</div>)(<main\b)',lambda m:m[1]+community_nav(active)+m[2],text,count=1)
+    path.write_text(text)
+
+STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
+<h1>Stories.</h1>
+<p class="lede">Real ways people run their money with Lightning, told on LinkedIn and Reddit. Read what they shared, or share your own and earn coins for the marketplace.</p>
+<ol class="com-steps" aria-label="How it works">
+<li><b>Post it</b><span>Write about your habit or tip on LinkedIn or Reddit, in your own words. The post stays there, not here.</span></li>
+<li><b>Add the link</b><span>Paste the link here with a short summary and tick consent. Drafts stay private.</span></li>
+<li><b>Send it for review</b><span>A person opens your post and checks it is yours using your verification code.</span></li>
+<li><b>Earn coins</b><span>Accepted posts are listed here and can earn Lightning Coins to spend in the <a href="marketplace.html">Marketplace</a>.</span></li>
+</ol>
+<p id="story-status" role="status"></p>
+<h2 class="com-h">Latest posts</h2>
+<div id="story-feed" class="story-grid"></div>
+<section class="acct" id="story-member" hidden><h2 class="com-h">Share your post</h2>
+<p class="com-lead">Drafts are private. Listing needs your consent and a public, adult-confirmed <a href="profile.html">profile</a>. Editing a listed post takes it down until it is reviewed again.</p>
+<form id="story-form" class="panel"><input name="id" type="hidden"><div class="fields">
+<label>Title<input name="title" maxlength="140" required></label>
+<label>Short summary (20 to 400 characters)<textarea name="body" rows="4" maxlength="400" required></textarea></label>
+<label>LinkedIn post link<input name="linkedin" type="url" placeholder="https://www.linkedin.com/posts/..."></label>
+<label>Reddit post link<input name="reddit" type="url" placeholder="https://www.reddit.com/r/.../comments/..."></label></div>
+<p class="com-lead">Add at least one link. Your draft gets a verification code: paste it at the end of your post with the disclosure line.</p>
+<div class="row"><button class="btn" type="submit">Save draft</button><button class="btn ghost" id="story-copy" type="button">Copy disclosure and code</button><button class="btn ghost" id="story-new" type="button">New draft</button></div></form>
+<ul class="com-rules"><li>Coins reward the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
+<li>Up to 3 rewarded posts in any 30 days. Listings of rewarded posts say so, and your post should carry the disclosure line.</li>
+<li>Never include account numbers, balances you want private or anything identifying. Posts are personal experiences, not financial advice.</li></ul>
+<div id="story-mine"></div></section>
+<p class="com-lead"><a href="account.html">Sign in or manage your account</a></p>
+<section class="acct" id="story-review" hidden><h2 class="com-h">Moderation queue</h2><p class="com-lead">Open the external post yourself and look for the verification code. Rank points raise the leaderboard; coins are spendable and never raise rank. Each is paid once per post.</p><div id="story-queue"></div></section>
+</div></section></main>'''
+
+def build_stories():
+    path=ROOT/'stories.html'
+    text=path.read_text()
+    text=re.sub(r'<main\b.*?</main>',lambda _:STORIES_MAIN,text,count=1,flags=re.S)
+    text=text.replace('Your Lightning profile, collection and marketplace.','Read and write real stories about running your money with Lightning.')
+    for css in ['css/forgeeks-cosmetics.css','css/site-community.css']:
+        if css not in text:text=text.replace('<link rel="stylesheet" href="css/footer.css',f'<link rel="stylesheet" href="{css}">\n<link rel="stylesheet" href="css/footer.css',1)
+    for js in ['js/forgeeks-showcase.js','js/story-card.js']:
+        if js not in text:text=text.replace('<script src="js/community-stories.js',f'<script src="{js}"></script><script src="js/community-stories.js',1)
+    path.write_text(text)
+
+STRIP='''<section class="d-section story-strip" data-story-strip data-limit="3" hidden aria-labelledby="strip-title"><div class="wrap">
+<p class="d-label">From the community</p><h2 id="strip-title">How people manage their money with Lightning, in their own words.</h2><p class="com-lead">Posts on LinkedIn and Reddit by Lightning users. They open on those sites.</p>
+<div class="story-grid" data-story-list></div><p data-story-empty hidden>No stories yet. Yours could be the first.</p>
+<p class="story-more"><a class="btn btn-secondary" href="stories.html">See all posts</a> <a class="btn btn-primary" href="stories.html#story-member">Share yours and earn coins</a></p></div></section>
+'''
+
+def build_guides():
+    path=ROOT/'guides.html'
+    text=path.read_text()
+    text=re.sub(r'<section class="d-section story-strip".*?</section>\n','',text,flags=re.S)
+    text=text.replace('  <!-- Signup band',STRIP+'  <!-- Signup band',1)
+    for css in ['css/forgeeks-cosmetics.css','css/site-community.css']:
+        if css not in text:text=text.replace('<link rel="stylesheet" href="css/motion.css',f'<link rel="stylesheet" href="{css}">\n<link rel="stylesheet" href="css/motion.css',1)
+    if 'js/story-strip.js' not in text:
+        text=text.replace('<script src="js/site-membership.js','<script src="js/forgeeks-showcase.js" defer></script><script src="js/story-card.js" defer></script><script src="js/story-strip.js" defer></script><script src="js/site-membership.js',1)
+    path.write_text(text)
+
 if __name__=='__main__':
     build()
     connect_public_pages()
+    build_stories()
+    build_guides()
+    for f,k in [('stories','stories'),('leaderboard','leaderboard'),('marketplace','marketplace'),('topup','wallet'),('account','account'),('profile','leaderboard')]:
+        add_community_nav(ROOT/(f+'.html'),k)

@@ -8,7 +8,7 @@
   /* ---------- pure helpers (tested in node: supabase/tests/auth.test.mjs) ---------- */
   var ACCOUNT = root.document && root.document.body && root.document.body.dataset.accountPage === 'account.html' ? 'account.html' : 'forgeeks-account.html';
   var MAIN_ACCOUNT = ACCOUNT === 'account.html';
-  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|stories|topup|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
+  var NEXT_RE = /^(?:forgeeks[a-z0-9-]*|marketplace|leaderboard|stories|topup|index|features|guides|how-it-works|current-status)\.html(\?[^#\s<>"']*)?(#[^\s<>"']*)?$/;
 
   // Return only to explicitly supported main-site/For Geeks routes; never another origin or an account page.
   function safeNext(next) {
@@ -208,12 +208,12 @@
 
   // Menu entries. Pages that are not live yet are added here when they ship.
   var MENU = [
-    { label: 'my profile', href: function (m) { return m && m.display_name ? 'forgeeks-profile.html?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
+    { label: 'my profile', href: function (m) { return m && m.display_name ? (MAIN_ACCOUNT ? 'profile.html' : 'forgeeks-profile.html') + '?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
     { label: 'tasks', href: 'forgeeks-tasks.html' },
     { label: MAIN_ACCOUNT ? 'Marketplace' : 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
     { label: 'community stories', href: 'stories.html' },
     { label: 'top up wallet', href: 'topup.html' },
-    { label: 'leaderboard', href: 'forgeeks-leaderboard.html' },
+    { label: 'leaderboard', href: MAIN_ACCOUNT ? 'leaderboard.html' : 'forgeeks-leaderboard.html' },
     { label: 'profile settings', href: ACCOUNT }
   ];
   FG.menu = MENU;

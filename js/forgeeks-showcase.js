@@ -31,7 +31,11 @@
     return c ? c.toUpperCase() : '?';
   }
 
-  function profileHref(name) { return 'forgeeks-profile.html?u=' + encodeURIComponent(String(name)); }
+  // The main site has its own profile page; For Geeks keeps forgeeks-profile.html.
+  function profileHref(name) {
+    var main = root.document && root.document.body && root.document.body.hasAttribute('data-main-store');
+    return (main ? 'profile.html' : 'forgeeks-profile.html') + '?u=' + encodeURIComponent(String(name));
+  }
 
   function num(n) {
     n = Number(n);
@@ -95,8 +99,35 @@
     return a;
   }
 
-  function avatar(name, url, cls) {
+  // Frames and badges: purely visual catalog items. Only a well-formed catalog id reaches an attribute.
+  var BADGES = {
+    'badge-bolt': ['Bolt', 'M13 2 4 14h6l-1 8 9-12h-6z'],
+    'badge-coin': ['Coin', 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4v10m-3-7c0-1.4 1.3-2 3-2s3 .6 3 2-1.3 1.8-3 2-3 .6-3 2 1.3 2 3 2 3-.6 3-2'],
+    'badge-pen': ['Writer', 'M4 20l1-4L16 5l3 3L8 19zM14 7l3 3'],
+    'badge-star': ['Star', 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z']
+  };
+  function badge(id) {
+    var item = itemId(id), def = item && BADGES[item];
+    if (!def) return null;
+    var NS = 'http://www.w3.org/2000/svg';
+    var b = el('span', 'fg-badge');
+    b.setAttribute('data-item', item);
+    b.setAttribute('title', def[0]);
+    var svg = doc.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '14'); svg.setAttribute('height', '14');
+    svg.setAttribute('aria-hidden', 'true');
+    var path = doc.createElementNS(NS, 'path');
+    path.setAttribute('d', def[1]);
+    svg.appendChild(path); b.appendChild(svg);
+    var t = el('span', 'sr', def[0] + ' badge');
+    b.appendChild(t);
+    return b;
+  }
+
+  function avatar(name, url, cls, frameId) {
     var av = el('span', cls || 'av');
+    var fr = itemId(frameId);
+    if (fr) av.setAttribute('data-frame', fr);
     av.setAttribute('aria-hidden', 'true');
     var src = httpsUrl(url);
     if (src) {
@@ -133,6 +164,6 @@
 
   var api = {};
   for (var k in pure) api[k] = pure[k];
-  api.el = el; api.link = link; api.avatar = avatar; api.banner = banner; api.ready = ready;
+  api.el = el; api.link = link; api.avatar = avatar; api.banner = banner; api.badge = badge; api.ready = ready;
   root.FGShow = api;
 })(typeof window !== 'undefined' ? window : globalThis);
