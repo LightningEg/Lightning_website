@@ -31,9 +31,11 @@
     var rank = Number(r.rank);
     var li = S.el('li', 'lb-row');
     li.appendChild(S.el('span', 'rk' + (rank >= 1 && rank <= 3 ? ' top' : ''), String(rank)));
-    li.appendChild(S.avatar(r.display_name, r.avatar_url, 'av'));
+    li.appendChild(S.avatar(r.display_name, r.avatar_url, 'av', r.frame_item_id));
     var a = S.el('a', 'nm', r.display_name);
     a.href = S.profileHref(r.display_name);
+    var bd = S.badge(r.badge_item_id);
+    if (bd) a.appendChild(bd);
     li.appendChild(a);
     var n = Number(r.contribution_count) || 0;
     var ct = S.el('span', 'ct');
@@ -107,7 +109,7 @@
     c.appendChild(S.banner(r.banner_item_id));
     var body = S.el('div', 'mc-body');
     var top = S.el('div', 'mc-top');
-    top.appendChild(S.avatar(r.display_name, r.avatar_url, 'av lg'));
+    top.appendChild(S.avatar(r.display_name, r.avatar_url, 'av lg', r.frame_item_id));
     if (r.contribution_score != null && isFinite(Number(r.contribution_score))) {
       top.appendChild(S.el('span', 'mc-sc', S.num(r.contribution_score) + ' score'));
     }
@@ -115,6 +117,8 @@
     var h = S.el('h3', 'mc-name');
     var a = S.el('a', '', r.display_name);
     a.href = S.profileHref(r.display_name);
+    var mb = S.badge(r.badge_item_id);
+    if (mb) a.appendChild(mb);
     h.appendChild(a);
     body.appendChild(h);
     if (typeof r.bio === 'string' && r.bio.trim()) body.appendChild(S.el('p', 'mc-bio', r.bio.trim()));

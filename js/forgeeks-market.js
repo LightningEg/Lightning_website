@@ -83,7 +83,26 @@
     b.setAttribute('aria-hidden', 'true');
     return b;
   }
-  function preview(it, compact) { return it.type === 'banner' ? bannerPreview(it) : themePreview(it, compact); }
+  // A frame is shown on a sample avatar, a badge as itself beside a sample name. Both only set catalog ids.
+  function framePreview(it) {
+    var w = el('div', 'mkt-pv mkt-pv-item');
+    w.setAttribute('aria-hidden', 'true');
+    var av = el('span', 'av lg', 'L');
+    av.setAttribute('data-frame', it.id);
+    w.appendChild(av);
+    return w;
+  }
+  function badgePreview(it) {
+    var w = el('div', 'mkt-pv mkt-pv-item');
+    w.setAttribute('aria-hidden', 'true');
+    var S = root.FGShow, b = S && S.badge ? S.badge(it.id) : null;
+    w.appendChild(el('span', 'mkt-pv-name', 'Your name'));
+    if (b) w.appendChild(b);
+    return w;
+  }
+  function preview(it, compact) {
+    return it.type === 'banner' ? bannerPreview(it) : it.type === 'frame' ? framePreview(it) : it.type === 'badge' ? badgePreview(it) : themePreview(it, compact);
+  }
 
   /* ---------- cells ---------- */
   function button(cls, label, act, it, aria) {
@@ -145,6 +164,9 @@
     fill('list-themes', themes.filter(function (i) { return !i.is_default; }));
     fill('list-free', themes.filter(function (i) { return i.is_default; }));
     fill('list-banners', state.items.filter(function (i) { return i.type === 'banner'; }));
+    if ($('list-frames')) fill('list-frames', state.items.filter(function (i) { return i.type === 'frame'; }));
+    if ($('list-badges')) fill('list-badges', state.items.filter(function (i) { return i.type === 'badge'; }));
+    ['frames', 'badges'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
     $('h-free').hidden = $('list-free').children.length === 0;
   }
 

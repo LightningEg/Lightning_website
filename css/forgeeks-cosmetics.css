@@ -65,3 +65,23 @@
   background-position:0 0,0 0,0 0,0 0,0 0,0 0,0% 0,100% 0,50% 0,0 0;
   animation:fg-drift 60s ease-in-out infinite alternate}
 @keyframes fg-drift{to{background-position:0 0,0 0,0 0,0 0,0 0,0 0,100% 0,0% 0,100% 0,0 0}}
+
+/* ---- frames and badges (market items; drawn around the avatar and beside the name) ---- */
+/* Frames are rings made of box-shadows: they sit outside the picture, so they never hide a face and need no image.
+   The first ring is the page ground, so a frame reads the same on a light or a dark theme. */
+.av[data-frame="frame-halo"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #14A874,0 0 12px 4px rgba(20,168,116,.35)!important}
+.av[data-frame="frame-gold"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #C9A24B,0 0 0 5px rgba(120,86,10,.55)!important}
+.av[data-frame="frame-nile"]{box-shadow:0 0 0 2px var(--bg),0 0 0 5px #0A2442,0 0 0 6px #5BD3F2!important}
+.av[data-frame="frame-double"]{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--ink),0 0 0 6px var(--bg),0 0 0 7px var(--ink)!important}
+.av[data-frame].xl{margin-inline-start:6px}
+
+/* Badges: a small mark beside the name. The words for screen readers sit in .sr. */
+.fg-badge{display:inline-grid;place-items:center;width:20px;height:20px;margin-inline-start:8px;border-radius:50%;vertical-align:middle;background:var(--well);border:1px solid var(--line);color:var(--ink)}
+.fg-badge svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fg-badge[data-item="badge-bolt"]{color:#C28A00}
+.fg-badge[data-item="badge-coin"]{color:#9A6B12}
+.fg-badge[data-item="badge-pen"]{color:#0B7A57}
+.fg-badge[data-item="badge-star"]{color:#B8860B}
+.fg-badge .sr,.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fg-badge{position:relative}
+.fg-badge.lg{width:44px;height:44px}.fg-badge.lg svg{width:24px;height:24px}
