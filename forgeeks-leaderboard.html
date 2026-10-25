@@ -26,7 +26,7 @@
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost|papyrus|cotton)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
   <link rel="stylesheet" href="css/forgeeks.css?v=20261025-tiers-1">
   <link rel="stylesheet" href="css/forgeeks-cosmetics.css?v=20261024-1">
-  <link rel="stylesheet" href="css/forgeeks-leaderboard.css?v=20261024-1">
+  <link rel="stylesheet" href="css/forgeeks-leaderboard.css?v=20261025-table-1">
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
@@ -83,7 +83,11 @@
       <div id="lb-panel" role="tabpanel" aria-labelledby="tab-month">
         <p class="lb-status" id="lb-status" role="status" aria-live="polite">loading…</p>
         <button class="linkish" id="lb-retry" type="button" hidden>try again</button>
-        <ol class="lb-list" id="lb-list" hidden></ol>
+        <p class="lb-sample" id="lb-sample" hidden>Sample people, so you can see the table. Nobody here is real.</p>
+        <table class="lb-list" id="lb-list" hidden>
+          <thead><tr><th class="rk" scope="col">rank</th><th class="nm-h" scope="col">member</th><th class="ct" scope="col">contributions</th><th class="sc" scope="col">score</th></tr></thead>
+          <tbody id="lb-body"></tbody>
+        </table>
         <div class="lb-empty" id="lb-empty" hidden>
           <p class="lb-empty-title" id="lb-empty-title">Nobody is ranked yet.</p>
           <p>A merged pull request to the app earns a score. <a href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">Pick a task</a> to start, or <a href="forgeeks-guide.html">read how to contribute</a>.</p>
@@ -163,6 +167,6 @@
 <script src="js/forgeeks-config.js?v=20261025-tiers-1"></script>
 <script src="js/forgeeks-auth.js?v=20261025-tiers-1"></script>
 <script src="js/forgeeks-showcase.js?v=20261024-1"></script>
-<script src="js/forgeeks-leaderboard.js?v=20261024-1"></script>
+<script src="js/forgeeks-leaderboard.js?v=20261025-table-1"></script>
 </body>
 </html>

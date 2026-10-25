@@ -121,14 +121,33 @@ await test('leaderboard: signed out, it asks for this month and shows ranked row
   assert.deepEqual(rows.map(r => r.querySelector('.nm').textContent), ['Ada', 'Bo & Co', 'Cy']);
   assert.deepEqual(rows.map(r => r.querySelector('.nm').getAttribute('href')),
     ['forgeeks-profile.html?u=Ada', 'forgeeks-profile.html?u=Bo%20%26%20Co', 'forgeeks-profile.html?u=Cy']);
-  assert.equal(rows[0].querySelector('.sc').textContent, '1,450score');
-  assert.equal(rows[0].querySelector('.ct').textContent, '3contributions');
-  assert.equal(rows[1].querySelector('.ct').textContent, '1contribution');
+  assert.equal(rows[0].querySelector('.sc').textContent, '1,450');
+  assert.equal(rows[0].querySelector('.ct').textContent, '3');
+  assert.equal(rows[1].querySelector('.ct').textContent, '1');
+  assert.deepEqual([...p.doc.querySelectorAll('#lb-list thead th')].map(t => t.textContent), ['rank', 'member', 'contributions', 'score']);
+  assert.equal(p.doc.querySelectorAll('#lb-list .av, #lb-list img, #lb-list .fg-banner').length, 0, 'only the display name: no avatar, badge or banner');
+  assert.equal(p.$('lb-sample').hidden, true);
   assert.equal(p.$('lb-list').hidden, false);
   assert.equal(p.$('lb-empty').hidden, true);
   assert.equal(p.$('lb-status').hidden, true);
   assert.match(p.doc.querySelector('.lb-note').textContent, /Cairo time/);
   assert.equal(p.$('tab-month').getAttribute('aria-selected'), 'true');
+});
+
+await test('leaderboard: ?sample fills the table with made-up people, says so, and never asks the server for the board', async () => {
+  const p = await boot('leaderboard', { rpc: lbRpc(), search: '?sample' });
+  assert.equal(p.rpcs('leaderboard').length, 0);
+  assert.equal(p.$('lb-sample').hidden, false);
+  assert.match(p.$('lb-sample').textContent, /Nobody here is real/);
+  const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
+  assert.equal(rows.length, 14);
+  assert.equal(p.doc.querySelectorAll('#lb-list a').length, 0, 'sample names link nowhere');
+  const scores = rows.map(r => Number(r.querySelector('.sc').textContent.replace(/,/g, '')));
+  assert.deepEqual(scores, [...scores].sort((a, b) => b - a));
+  rows.forEach((r, i) => { if (i && scores[i] === scores[i - 1]) assert.equal(r.querySelector('.rk').textContent, rows[i - 1].querySelector('.rk').textContent); });
+  await p.click('tab-all');
+  assert.equal(p.doc.querySelectorAll('#lb-list .lb-row').length, 24);
+  assert.equal(p.rpcs('leaderboard').length, 0);
 });
 
 await test('leaderboard: the tabs call leaderboard for month and all, keep state, and work by keyboard', async () => {
@@ -140,7 +159,7 @@ await test('leaderboard: the tabs call leaderboard for month and all, keep state
   assert.equal(p.$('tab-all').tabIndex, 0);
   assert.equal(p.$('tab-month').tabIndex, -1);
   assert.equal(p.$('lb-panel').getAttribute('aria-labelledby'), 'tab-all');
-  assert.deepEqual([...p.doc.querySelectorAll('.lb-row .sc')].map(e => e.textContent), ['12,345score']);
+  assert.deepEqual([...p.doc.querySelectorAll('.lb-row .sc')].map(e => e.textContent), ['12,345']);
   await p.click('tab-month');
   assert.equal(p.doc.querySelectorAll('.lb-row').length, 3);
   p.$('lb-tabs').dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
@@ -190,8 +209,6 @@ await test('leaderboard: member text, avatar links and banner ids cannot inject 
   assert.equal(main.querySelectorAll('script').length, 0);
   assert.equal(main.querySelectorAll('[onerror]').length, 0);
   assert.equal(p.doc.querySelector('.lb-row .nm').textContent, EVIL);
-  assert.equal(p.doc.querySelector('.lb-row .av').textContent, '<');
-  assert.equal(p.doc.querySelector('.lb-row .av img'), null);
   const cards = [...p.doc.querySelectorAll('.mc')];
   assert.equal(cards.length, 3);
   assert.equal(cards[0].querySelector('.mc-name a').textContent, EVIL);

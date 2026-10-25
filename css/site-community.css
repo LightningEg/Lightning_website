@@ -53,12 +53,18 @@ body[data-main-store] .lb-sub,body[data-main-store] .lb-how{color:var(--muted);f
 body[data-main-store] .lb-how b{color:var(--ink);font-weight:700}
 body[data-main-store] .lb-how a,body[data-main-store] .lb-empty a{color:var(--ink)}
 body[data-main-store] .lb-list,body[data-main-store] .lb-empty{border:1px solid var(--line);border-radius:22px;background:var(--panel);overflow:hidden}
-body[data-main-store] .lb-row{padding:14px 22px;text-shadow:none}
-body[data-main-store] .rk{font:700 16px var(--body);color:var(--muted)}
-body[data-main-store] .rk.top{color:var(--green)}
-body[data-main-store] .nm{font:700 16px var(--body)}
-body[data-main-store] .ct,body[data-main-store] .sc{font:500 13px var(--body);color:var(--muted)}
-body[data-main-store] .ct b,body[data-main-store] .sc b{font:800 16px var(--body)}
+body[data-main-store] .lb-list{border-collapse:separate;border-spacing:0;font:500 16px var(--body)}
+body[data-main-store] .lb-list th{padding:14px 24px;border-bottom:1px solid var(--line);color:var(--muted);font:700 13px var(--body)}
+body[data-main-store] .lb-list td{padding:14px 24px;color:var(--ink)}
+body[data-main-store] .lb-list .rk{width:72px}
+body[data-main-store] .lb-list td.rk{color:var(--muted);font-weight:700}
+body[data-main-store] .lb-row.top td.rk{color:var(--ink);font-weight:800}
+body[data-main-store] .lb-list .ct,body[data-main-store] .lb-list .sc{width:150px}
+body[data-main-store] .lb-list td.ct{color:var(--muted)}
+body[data-main-store] .lb-list td.sc{font-weight:800}
+body[data-main-store] .nm{font-weight:700}
+body[data-main-store] .lb-list tbody tr:hover td{background:var(--track)}
+body[data-main-store] .lb-sample{font:500 14px/1.5 var(--body);color:var(--muted)}
 body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
 body[data-main-store] .av{background:var(--field);border:1px solid var(--line-ctl);font:700 14px var(--body)}
 body[data-main-store] .lb-members{padding:32px 0 56px}
@@ -72,7 +78,7 @@ body[data-main-store] .mc-bio{font:500 15px var(--body);color:var(--muted)}
 body[data-main-store] .mc-tags{font:500 13px var(--body);color:var(--muted)}
 body[data-main-store] .lb-next{padding:24px 0 72px}
 body[data-main-store] .lb-next .cta{display:flex;gap:12px;flex-wrap:wrap}
-@media(max-width:640px){body[data-main-store] .lb-top{padding-top:40px}body[data-main-store] .lb-row{padding:12px 16px}body[data-main-store] .lb-next .btn,body[data-main-store] .mkt-win .btn{width:100%}}
+@media(max-width:640px){body[data-main-store] .lb-top{padding-top:40px}body[data-main-store] .lb-list th,body[data-main-store] .lb-list td{padding:12px 14px}body[data-main-store] .lb-list .rk{width:44px}body[data-main-store] .lb-list .ct,body[data-main-store] .lb-list .sc{width:auto}body[data-main-store] .lb-next .btn,body[data-main-store] .mkt-win .btn{width:100%}}
 
 /* ---- one community area: shared sub-navigation, story cards, steps (all pages use these) ---- */
 .com-bar{border-bottom:1px solid var(--line);background:var(--paper)}
@@ -173,7 +179,6 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
   .com-steps li::before{grid-row:1/span 2}
 }
 
-body[data-main-store] .lb-row.has-banner .nm,body[data-main-store] .lb-row.has-banner .sc,body[data-main-store] .lb-row.has-banner .ct{border-radius:999px}
 .wal-packs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}
 .wal-packs button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:72px;padding:12px 14px;border:1px solid var(--line-ctl);border-radius:16px;background:var(--white);color:var(--ink);text-align:start;cursor:pointer}
 .wal-packs button:hover{border-color:var(--green)}
