@@ -34,72 +34,98 @@
   }bankOffset+=r.data.length;$('store-bank-more').hidden=r.data.length<25;
  }
  // Top-ups on one screen (owner, 2026-10-26: "For my own reconciliation, just make it better. I want to do it on one
-// screen"). Every open ticket is one row: what the member says they sent, when and from where, and beside it what
-// arrived, its reference and one button. Less used actions sit under "More" on the same row. The server records the
-// money and credits only when what is on the ticket equals the quote.
+// screen"). Every open ticket is one row, oldest first: what to look for in your InstaPay or bank app (amount, sender,
+// date, the email in the note), then one button. Money already in the journal that looks like it comes first, so the
+// same transfer is never recorded twice; the amount field starts at what is still owed. Less used actions sit under
+// "More". The server records the money and credits only when what is on the ticket equals the quote.
  const STATUS={pending:'Open',approved:'Credited',rejected:'Rejected',cancelled:'Cancelled'};
- async function requests(append=false){if(!append)requestOffset=0;const run=generation,view=++requestRun;let q=FG.sb.from('topup_requests').select('*').eq('status',$('store-request-filter').value).order('created_at',{ascending:false});const email=$('store-request-search').value.trim().toLowerCase();if(email)q=q.eq('transfer_note_email',email);const r=await q.range(requestOffset,requestOffset+14);if(run!==generation||view!==requestRun)return;if(r.error)throw r.error;if(!append)$('store-request-list').replaceChildren();
-  if(!append&&!r.data.length)$('store-request-list').append(el('p','No top-ups in this view.'));
+ const count=n=>Number(n).toLocaleString('en-US');
+ // Search by the member's email, the sender (InstaPay address or wallet phone, written any common way) or the amount.
+ function searchFilter(q,text){const raw=String(text||'').trim().toLowerCase();if(!raw)return q;
+  if(/^\d{1,6}(\.\d{1,2})?$/.test(raw))return q.eq('price_piastres',cents(raw));
+  let digits=raw.replace(/[^0-9]/g,'');if(!/[a-z@]/.test(raw)&&digits.length>=10){if(/^0020\d{10}$/.test(digits))digits='0'+digits.slice(4);else if(/^20\d{10}$/.test(digits))digits='0'+digits.slice(2);else if(/^1\d{9}$/.test(digits))digits='0'+digits;return q.ilike('payer_instapay_address','%'+digits+'%');}
+  const term=raw.replace(/[^a-z0-9@._+-]/g,'');if(!term)return q;return q.or('transfer_note_email.ilike.%'+term+'%,payer_instapay_address.ilike.%'+term+'%');}
+ const ready=row=>row.status==='pending'&&!!(row.receipt_object_key||row.details_submitted_at);
+ async function requests(append=false){if(!append)requestOffset=0;const run=generation,view=++requestRun,open=$('store-request-filter').value==='pending';let q=FG.sb.from('topup_requests').select('*').eq('status',$('store-request-filter').value).order('created_at',{ascending:open});try{q=searchFilter(q,$('store-request-search').value);}catch(e){say('store-request-status',message(e));return;}const r=await q.range(requestOffset,requestOffset+14);if(run!==generation||view!==requestRun)return;if(r.error)throw r.error;if(!append){$('store-request-list').replaceChildren();say('store-request-status','');}
+  if(!append&&!r.data.length)$('store-request-list').append(el('p',$('store-request-search').value.trim()?'No top-ups match that search.':open?'Nothing to confirm. New tickets show here, oldest first.':'No top-ups in this view.'));
   let ul=$('store-request-list').querySelector('ul');if(!ul&&r.data.length){ul=el('ul');ul.className='ops-recs';$('store-request-list').append(ul);}
-  for(const row of r.data)ul.append(ticket(row,run));
+  // tickets the member has confirmed come first; ones still waiting for their details follow, quieter
+  const rows=open?[...r.data.filter(ready),...r.data.filter(x=>!ready(x))]:r.data;
+  for(const row of rows)ul.append(ticket(row,run));
   requestOffset+=r.data.length;$('store-request-more').hidden=r.data.length<15;
  }
- async function settled(row,text){await Promise.all([requests(),overview()]);say('store-request-status',text||'Credited '+row.coins+' coins to '+(row.transfer_note_email||'the member')+'.');}
+ let searchTimer=null;$('store-request-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>requests().catch(e=>say('store-overview-status',message(e))),300);});
+ async function settled(row,text){await Promise.all([requests(),overview()]);say('store-request-status',text||'Credited '+count(row.coins)+' coins to '+(row.transfer_note_email||'the member')+'.');}
  const ownRef=row=>'TKT-'+String(row.id).replace(/-/g,'').slice(0,20).toUpperCase();
  const refOf=text=>String(text||'').replace(/\s/g,'').toUpperCase();
  function localNow(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes());}
+ function waited(ts){if(!ts)return '';const h=Math.max(0,(Date.now()-new Date(ts).getTime())/36e5);return h<1?'under 1 h':h<48?Math.round(h)+' h':Math.round(h/24)+' days';}
  // The money side of an open ticket (admin_ticket_money): what is already on it, and unmatched money that looks like
  // it, taken with one click (admin_attach_transfer). Reconciling happens here, not in a second place.
  function ticketMoney(row,run,status,receiptSeen,onMoney=()=>{}){
   const box=el('section');box.className='ops-money';box.setAttribute('aria-label','Money for this ticket');
   const load=async()=>{const r=(await rpc('admin_ticket_money',{p_request_id:row.id}))||{};if(run!==generation)return;box.replaceChildren();
    const on=r.on_ticket||[],cand=r.candidates||[],line=(t,extra)=>{const li=el('li');const main=el('span',egp(t.amount_piastres)+' · '+when(t.received_at));const sub=el('small',[t.reference,t.sender,extra].filter(Boolean).join(' · '));sub.dir='auto';main.append(sub);li.append(main);return li;};
-   onMoney(on);
-   if(on.length){const sum=on.reduce((a,t)=>a+Number(t.amount_piastres),0);box.append(el('h4','On this ticket: '+egp(sum)+' of '+egp(r.quote_piastres)));const ul=el('ul');on.forEach(t=>{const li=line(t,t.credited?'credited':'');
+   const held=on.filter(t=>!t.credited).reduce((a,t)=>a+Number(t.amount_piastres),0),owed=Number(row.price_piastres)-held;
+   if(on.length){const sum=on.reduce((a,t)=>a+Number(t.amount_piastres),0);box.append(el('h4','On this ticket: '+egp(sum)+' of '+egp(r.quote_piastres??row.price_piastres)));const ul=el('ul');on.forEach(t=>{const li=line(t,t.credited?'credited':'');
      if(!t.credited)li.append(action('Not for this ticket',async()=>{await rpc('admin_correct_bank_transfer',{p_reference:t.reference,p_amount_piastres:t.amount_piastres,p_request_id:null,p_voided:false,p_note:'Taken off ticket '+String(row.id).slice(0,8)+' on the owner dashboard'});await load();},status));ul.append(li);});box.append(ul);}
-   if(cand.length){box.append(el('h4','Already recorded: may be this payment'));const ul=el('ul');cand.forEach(t=>{const li=line(t,(t.why||[]).join(', '));
-     li.append(action('Use for this ticket',async()=>{if(row.receipt_object_key&&!receiptSeen())throw Error('Show the receipt first.');const res=await rpc('admin_attach_transfer',{p_request_id:row.id,p_reference:t.reference,p_note:null,p_receipt_key:row.receipt_object_key,p_receipt_revision:row.receipt_revision});if(run!==generation)return;
+   let completes=false;
+   if(cand.length){box.append(el('h4','Already in your money journal: is it this payment?'));const ul=el('ul');cand.forEach(t=>{const li=line(t,(t.why||[]).join(', ')),fits=Number(t.amount_piastres)===owed;completes=completes||fits;
+     const use=action(fits?'Use it · credit '+count(row.coins)+' coins':'Use for this ticket',async()=>{if(row.receipt_object_key&&!receiptSeen())throw Error('Show the receipt first.');const res=await rpc('admin_attach_transfer',{p_request_id:row.id,p_reference:t.reference,p_note:null,p_receipt_key:row.receipt_object_key,p_receipt_revision:row.receipt_revision});if(run!==generation)return;
       if(res.status==='approved'){await settled(row);return;}
-      await load();status.textContent=res.status==='waiting_receipt'?'The money matches. It credits once the member uploads the receipt.':'Now '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+'. Nothing was credited yet.';},status));ul.append(li);});box.append(ul);}
-   box.hidden=!on.length&&!cand.length;};
+      await load();status.textContent=res.status==='waiting_receipt'?'The money matches. It credits once the member uploads the receipt.':'Now '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+'. Nothing was credited yet.';},status);if(fits)use.className='btn';li.append(use);ul.append(li);});box.append(ul);}
+   box.hidden=!on.length&&!cand.length;onMoney(on,completes);};
   box.hidden=true;box.reload=()=>load().catch(e=>{if(run===generation){box.hidden=false;box.replaceChildren(el('p','The money for this ticket did not load: '+message(e)));}});box.reload();
   return box;
  }
  function ticket(row,run){
   const li=el('li');li.className='ops-rec';li.dataset.status=row.status;
-  const ready=row.status==='pending'&&!!(row.receipt_object_key||row.details_submitted_at);
-  const head=el('div');head.className='ops-rec-head';const st=el('span',row.status==='pending'&&!ready?'Waiting for details':STATUS[row.status]||row.status);st.className='ops-st ops-st-'+row.status;
-  const who=el('b',(row.transfer_note_email||'Deleted account')+' · '+egp(row.price_piastres)+' · '+row.coins+' coins');who.dir='auto';head.append(who,st);
-  const said=el('small',row.status!=='pending'?[row.payer_instapay_address&&'from '+row.payer_instapay_address,row.payment_reference,row.reviewed_at&&when(row.reviewed_at),row.review_note].filter(Boolean).join(' · '):row.details_submitted_at?'Says they sent '+egp(row.original_amount_piastres||row.price_piastres)+(row.member_sent_on?' on '+row.member_sent_on:'')+' from '+(row.payer_instapay_address||'?'):row.receipt_object_key?'Receipt uploaded'+(row.payer_instapay_address?', paid from '+row.payer_instapay_address:''):'Opened '+(row.created_at?when(row.created_at):'')+'; has not confirmed paying yet');said.dir='auto';
+  const open=row.status==='pending',isReady=ready(row);
+  const head=el('div');head.className='ops-rec-head';
+  const who=el('b',(row.transfer_note_email||'Deleted account')+' · '+egp(row.price_piastres)+' · '+count(row.coins)+' coins');who.dir='auto';head.append(who);
+  // in the Open list every row is open: the chip says what differs, how long it has waited or that it is not paid yet
+  const st=el('span',!open?STATUS[row.status]||row.status:isReady?waited(row.details_submitted_at||row.receipt_uploaded_at||row.created_at)+' waiting':'Waiting for details');st.className='ops-st ops-st-'+(open&&!isReady?'idle':row.status);if(open&&isReady)st.title='Since the member confirmed paying';head.append(st);
+  const said=el('small',!open?[row.payer_instapay_address&&'from '+row.payer_instapay_address,row.payment_reference,row.reviewed_at&&when(row.reviewed_at),row.review_note].filter(Boolean).join(' · '):row.details_submitted_at?'Look for '+egp(row.original_amount_piastres||row.price_piastres)+' from '+(row.payer_instapay_address||'?')+(row.member_sent_on?', sent '+row.member_sent_on:'')+(row.transfer_note_email?', note '+row.transfer_note_email:''):row.receipt_object_key?'Receipt uploaded'+(row.payer_instapay_address?', paid from '+row.payer_instapay_address:''):'Opened '+(row.created_at?when(row.created_at):'')+'; has not confirmed paying yet');said.dir='auto';
   li.append(head,said);
   const status=el('p');status.className='ops-ticket-status';status.setAttribute('role','status');
-  if(row.status!=='pending'){if(['cancelled','rejected'].includes(row.status)&&row.user_id){const d=details('Reopen: the member paid after all'),reason=input('Why you are reopening it');d.append(reason.label,action('Reopen ticket',async()=>{await rpc('admin_reopen_topup',{p_request_id:row.id,p_note:reason.input.value});await settled(row,'Reopened. Find it under Open.');},status));li.append(d);}li.append(status);return li;}
-  if(!ready){li.append(ticketMoney(row,run,status,()=>false),status);return li;}
+  if(!open){if(['cancelled','rejected'].includes(row.status)&&row.user_id){const d=details('Reopen: the member paid after all'),reason=input('Why you are reopening it');d.append(reason.label,action('Reopen ticket',async()=>{await rpc('admin_reopen_topup',{p_request_id:row.id,p_note:reason.input.value});await settled(row,'Reopened. Find it under Open.');},status));li.append(d);}li.append(status);return li;}
+  if(!isReady){li.classList.add('ops-rec-idle');li.append(ticketMoney(row,run,status,()=>false),status);return li;}
   // the receipt, only for tickets opened before receipts were dropped
-  let viewed=!row.receipt_object_key,others=[],ok=null;const shot=el('div');shot.className='ops-receipt';
+  let viewed=!row.receipt_object_key,others=[],ok=null,touched=false;const shot=el('div');shot.className='ops-receipt';
   const show=action('Show receipt',async()=>{const image=await FG.sb.storage.from('topup-receipts').createSignedUrl(row.receipt_object_key,300);if(run!==generation)return;if(image.error)throw image.error;const img=el('img');img.alt='Member payment receipt';img.referrerPolicy='no-referrer';img.onload=()=>{viewed=true;};img.onerror=()=>{viewed=false;shot.replaceChildren(show);status.textContent='The receipt did not load. Show it again before confirming.';};img.src=image.data.signedUrl;shot.replaceChildren(img);},status);
   const amount=input('Arrived (EGP)','number',String(row.price_piastres/100)),ref=input('Reference (optional)');amount.input.step='0.01';amount.input.min='0.01';ref.input.maxLength=100;ref.input.autocomplete='off';
   const at=input('When it arrived','datetime-local',localNow()),from=input('Sent from','text',row.payer_instapay_address||''),note=input('Note (optional)');at.input.max=localNow();from.input.maxLength=200;note.input.maxLength=500;
   const compare=el('p');compare.className='ops-compare';compare.setAttribute('aria-live','polite');
-  const draw=()=>{compare.replaceChildren();let typed;try{typed=cents(amount.input.value);}catch{compare.append(el('span','Type the amount that arrived.'));return;}
-   const mine=refOf(ref.input.value),own=ownRef(row),before=others.filter(t=>!t.credited&&t.reference!==own&&t.reference!==mine).reduce((a,t)=>a+Number(t.amount_piastres),0),total=before+typed,d=total-row.price_piastres;
-   if(ok)ok.textContent=d===0?'Arrived · credit '+row.coins+' coins':'Record what arrived';
+  // money already on the ticket, except the entry this confirm would correct in place (its own or the typed reference)
+  const before=()=>{const mine=refOf(ref.input.value),own=ownRef(row);return others.filter(t=>!t.credited&&t.reference!==own&&t.reference!==mine).reduce((a,t)=>a+Number(t.amount_piastres),0);};
+  const draw=()=>{compare.replaceChildren();let typed;try{typed=cents(amount.input.value);}catch{compare.append(el('span','Type the amount that arrived.'));if(ok)ok.textContent='Record what arrived';return;}
+   const b=before(),total=b+typed,d=total-row.price_piastres;
+   if(ok)ok.textContent=d===0?'Arrived · credit '+count(row.coins)+' coins':'Record what arrived';
+   // a match needs no words (the button says it); a difference says what it means
+   if(d===0&&!b)return;
    const chip=el('span',d===0?'Matches':egp(Math.abs(d))+(d<0?' short':' over'));chip.className='ops-chip '+(d===0?'good':'bad');
-   compare.append(chip,el('span',' '+(before?egp(before)+' already on it + '+egp(typed)+' = '+egp(total):egp(total))+' of '+egp(row.price_piastres)+(d===0?'':d<0?'. Credits nothing yet: wait for the rest, or offer fewer coins under More.':'. Credits nothing: send the extra back, or offer more coins under More.')));};
-  for(const i of[amount.input,ref.input])i.addEventListener('input',draw);
-  const money=ticketMoney(row,run,status,()=>viewed,on=>{others=on;draw();});
+   compare.append(chip,el('span',' '+(b?egp(b)+' already on it + '+egp(typed)+' = '+egp(total):egp(total))+' of '+egp(row.price_piastres)+(d===0?'':d<0?'. Credits nothing yet: wait for the rest, or offer fewer coins under More.':'. Credits nothing: send the extra back, or offer more coins under More.')));};
+  amount.input.addEventListener('input',()=>{touched=true;draw();});ref.input.addEventListener('input',draw);
+  const doRow=el('div');doRow.className='ops-rec-do';
+  const other=el('button','A different transfer? Type what arrived');other.type='button';other.className='ops-link';other.hidden=true;other.onclick=()=>{doRow.hidden=false;compare.hidden=false;other.hidden=true;amount.input.focus();};
+  const money=ticketMoney(row,run,status,()=>viewed,(on,completes)=>{others=on;
+   // start the field at what is still owed, unless the owner already typed
+   if(!touched){const owed=row.price_piastres-before();if(owed>0)amount.input.value=String(owed/100);}
+   // money already in the journal pays it: that is the one button, so the same transfer is not recorded twice
+   if(completes&&doRow.hidden===false&&!touched){doRow.hidden=true;compare.hidden=true;other.hidden=false;}
+   draw();});
   const more=details('More'),offer=details('Offer a revised amount'),offerCoins=input('Coins for what arrived','number'),offerWhy=input('Message to the member');offerCoins.input.min='1';
-  ok=action('Arrived · credit '+row.coins+' coins',async()=>{if(!viewed)throw Error('Show the receipt first.');if(!at.input.value)throw Error('Enter when the money arrived, under More.');
+  ok=action('Arrived · credit '+count(row.coins)+' coins',async()=>{if(!viewed)throw Error('Show the receipt first.');if(!at.input.value)throw Error('Enter when the money arrived, under More.');
    const res=await rpc('admin_confirm_topup',{p_request_id:row.id,p_received_piastres:cents(amount.input.value),p_note:note.input.value,p_receipt_key:row.receipt_object_key||null,p_receipt_revision:row.receipt_revision,p_received_at:new Date(at.input.value).toISOString(),p_sender:from.input.value,p_reference:ref.input.value.trim()||null});if(run!==generation)return;
-   if(res.status==='amount_differs'){status.textContent='Recorded. '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+' is on this ticket, so nothing was credited. Wait for the rest, or offer a revised amount.';more.open=true;offer.open=true;offerCoins.input.value=String(Math.max(1,Math.floor(row.coins*res.received_piastres/res.quote_piastres)));money.reload();return;}
+   if(res.status==='amount_differs'){status.textContent='Recorded. '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+' is on this ticket, so nothing was credited. Wait for the rest, or offer a revised amount.';more.open=true;offer.open=true;offerCoins.input.value=String(Math.max(1,Math.floor(row.coins*res.received_piastres/res.quote_piastres)));touched=false;money.reload();return;}
    await settled(row);},status);ok.className='btn';
   const no=action('Reject',async()=>{if(note.input.value.trim().length<5)throw Error('Write why in the note first.');await rpc('admin_review_topup',{p_request_id:row.id,p_decision:'rejected',p_received_piastres:null,p_payment_reference:null,p_note:note.input.value});await settled(row,'Rejected. Nothing was credited.');},status);
   offer.append(el('p','The member accepts it on their wallet page; then confirm again.'),offerCoins.label,offerWhy.label,action('Send the offer',async()=>{await rpc('admin_propose_topup_adjustment',{p_request_id:row.id,p_coins:Number(offerCoins.input.value),p_note:offerWhy.input.value});status.textContent='Offer sent. Confirm again once the member accepts.';},status));
   const back=details('I sent the money back'),rref=input('Your outgoing transfer reference'),why=input('Reason'),done=check('I already returned the full amount outside this website.');back.append(rref.label,why.label,done.label,action('Record the return',async()=>{await rpc('admin_record_payment_return',{p_request_id:row.id,p_reference:rref.input.value,p_note:why.input.value,p_confirmed:done.input.checked});await settled(row,'Return recorded.');},status));
   const fields=el('div');fields.className='fields two';fields.append(at.label,from.label);more.append(fields,note.label,no,offer,back);
-  const doRow=el('div');doRow.className='ops-rec-do';doRow.append(amount.label,ref.label,ok);
+  doRow.append(amount.label,ref.label,ok);
   if(row.receipt_object_key){shot.append(show);li.append(shot);}
-  li.append(doRow,compare,status,money,more);draw();return li;
+  li.append(money,other,doRow,compare,status,more);draw();return li;
  }
  async function social(append=false){if(!append)socialOffset=0;const run=generation,view=++socialRun;const rows=await rpc('admin_social_queue',{p_status:$('store-social-filter').value,p_offset:socialOffset});if(run!==generation||view!==socialRun)return;if(!append)$('store-social-list').replaceChildren();if(!append&&!rows.length)$('store-social-list').append(el('p','No posts in this view.'));for(const s of rows)$('store-social-list').append(window.FGStoryModeration.card(s,async()=>{await Promise.all([social(),overview()]);}));socialOffset+=rows.length;$('store-social-more').hidden=rows.length<50;}
  function verification(verified){window.dispatchEvent(new CustomEvent('lightning:owner-access',{detail:{verified}}));}

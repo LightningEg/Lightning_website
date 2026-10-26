@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261026-console-2"  # css/store-admin.css and every js/ file below
+VERSION = "20261026-console-3"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -57,9 +57,9 @@ def build():
     today = view('today', 'Overview', 'What needs you, how the month is going, and whether the store is ready to sell.',
                  '<div id="ops-dash"><p class="ops-empty">Verify your session to load the dashboard.</p></div>')
 
-    requests = view('requests', 'Top-ups', 'Find the money in your InstaPay or bank app, type what arrived, confirm. The server credits only when it matches the quote.',
+    requests = view('requests', 'Top-ups', 'Oldest first. Find each one in your InstaPay or bank app, then confirm what arrived. The server credits only when it matches the quote.',
         '<div class="oc-toolbar">' + seg('Request status', 'store-request-filter', [('pending', 'Open'), ('approved', 'Credited'), ('rejected', 'Rejected'), ('cancelled', 'Cancelled')])
-        + '<input id="store-request-search" class="oc-search" type="email" placeholder="Search by member email" aria-label="Member email">'
+        + '<input id="store-request-search" class="oc-search" type="search" autocomplete="off" placeholder="Email, sender or amount" aria-label="Search by email, sender or amount">'
         '<button class="btn ghost" type="button" id="store-request-refresh">Refresh</button></div>'
         '<p id="store-request-status" class="oc-status" role="status"></p><div id="store-request-list"></div>'
         '<button class="btn ghost oc-more" id="store-request-more" type="button" hidden>Load more</button>')
@@ -104,7 +104,7 @@ def build():
             f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
             f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
             f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
-            '<footer></footer><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>'
+            '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>'
             f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script></body></html>')
     (ROOT / 'admin.html').write_text(page)
 

@@ -161,7 +161,7 @@
     var needs = el('div', 'ops-needs');
     add(needs, [
       need(n.receipts, 'Tickets to confirm', n.receipts ? ago(n.oldest_receipt_at) : 'Nothing waiting', 'requests', 'warn'),
-      need(n.awaiting_receipt, 'Waiting for a receipt', n.awaiting_receipt ? 'The member has not uploaded yet' : 'None', 'requests', ''),
+      need(n.awaiting_receipt, 'Not paid yet', n.awaiting_receipt ? 'Opened, details not sent' : 'None', 'requests', ''),
       need(n.stories, 'Stories to review', n.stories ? 'Check the code and the link' : 'Queue clear', 'social', 'warn'),
       need(n.mismatches, 'Ledger mismatches', n.mismatches ? 'A wallet differs from its ledger' : 'Wallets agree with the ledger', 'today', 'bad')]);
     var loose = Number(n.unmatched) ? add(el('p', 'ops-fine'), [el('span', null, num(n.unmatched) + ' older transfer' + (Number(n.unmatched) === 1 ? '' : 's') + ' with no ticket. '), (function () { var a = el('a', null, 'Open the money journal'); a.href = '#bank'; return a; })()]) : null;
