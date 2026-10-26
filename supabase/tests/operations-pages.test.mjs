@@ -40,8 +40,14 @@ assert.equal(p.w.document.querySelector('input[type=file]'),null,'no receipt upl
 // step 2: date, amount, where they paid from
 await p.click(p.$('topup-sent'));assert.equal(p.$('topup-pay').hidden,true);assert.equal(p.$('topup-confirm').hidden,false);assert.equal(p.$('topup-confirm').elements.date.value,today);
 assert.equal(p.$('topup-send').disabled,true,'nothing to send before the coins show');await p.price();assert.match(p.$('topup-quote').textContent,/You receive 525 coins \(500 \+ 25 bonus\)/);
-const f=p.$('topup-confirm');f.elements.payer.value='bad';f.elements.terms.checked=true;await p.submit('topup-confirm');assert.equal(p.calls.some(c=>c.name==='submit_instapay_topup'),false);assert.match(p.$('topup-status').textContent,/InstaPay address or wallet phone/);
-f.elements.payer.value='+20 100 123 4567';p.$('topup-confirm').dispatchEvent(new p.w.Event('submit',{cancelable:true}));await p.submit('topup-confirm');
+const f=p.$('topup-confirm');f.elements.payer.value='1';f.elements.terms.checked=true;await p.submit('topup-confirm');
+assert.equal(p.calls.some(c=>c.name==='submit_instapay_topup'),false);
+assert.match(p.$('topup-status').textContent,/InstaPay address or wallet phone/);
+assert.match(p.$('topup-form-error').textContent,/InstaPay address or wallet phone/,'the error is visible beside the form');
+assert.equal(f.elements.payer.getAttribute('aria-invalid'),'true');
+f.elements.payer.value='+20 100 123 4567';f.elements.payer.dispatchEvent(new p.w.Event('input'));
+assert.equal(p.$('topup-form-error'),null,'correcting the field clears the error');
+p.$('topup-confirm').dispatchEvent(new p.w.Event('submit',{cancelable:true}));await p.submit('topup-confirm');
 const sends=p.calls.filter(c=>c.name==='submit_instapay_topup');assert.equal(sends.length,1,'a double click sends once');
 assert.deepEqual({...sends[0].args,p_request_key:undefined},{p_amount_piastres:10000,p_request_key:undefined,p_accept_terms:true,p_expected_coins:525,p_pricing_version:1,p_payer:'+20 100 123 4567',p_sent_on:today});
 assert.equal(p.$('topup-confirm').hidden,true);assert.match(p.$('topup-status').textContent,/add 525 coins once your 100 EGP shows/);assert.equal(p.$('topup-new').hidden,false);
