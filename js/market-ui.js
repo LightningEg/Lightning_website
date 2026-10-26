@@ -256,8 +256,8 @@
     var feat = $('mkt-feat');
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
-    add(feat, [el('h3', 'mkt-sub', ui('On your PC and phone too')), el('p', 'mkt-feat-why', MAIN ? 'Buy one of these once and it dresses this site, the PC app and the phone. The app unlocks it with a code from your account.'
-      : 'Bought once, worn on both sites, the PC and the phone (cosmetics/*.json, checked against cosmetics/slots.json). The app unlocks it with a one-time code.')]);
+    add(feat, [el('h3', 'mkt-sub', ui('Try these on your PC and phone')), el('p', 'mkt-feat-why',
+      'One purchase dresses both websites. The PC and phone previews are included in app 1.5.0; paid app unlocking needs a later app release.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
       var e = appEntry(m);
@@ -268,6 +268,10 @@
         btn('mkt-feat-try', 'Try it', function () { tryOn(e); }, 'Try ' + m.name + ' on this page'),
         btn('mkt-feat-more', 'Details', function (ev) { openDetail(e, ev.currentTarget, 'pc'); }, m.name + ' details'),
         e.item ? add(el('span', 'mkt-feat-price'), [priced(e.item.price)]) : el('span', 'mkt-feat-price', ui('Price not set yet'))]);
+      if (m.id === 'dendera') acts.appendChild(btn('mkt-feat-more', 'How to use', function () {
+        var guide = $('dendera-guide');
+        if (guide) { guide.scrollIntoView({ block: 'start' }); guide.focus({ preventScroll: true }); }
+      }, 'How to use Dendera'));
       words.appendChild(acts);
       var shots = add(el('div', 'mkt-feat-shots'), [PV.pc(e.palette), PV.phone(e.palette)]);
       shots.setAttribute('aria-hidden', 'true');

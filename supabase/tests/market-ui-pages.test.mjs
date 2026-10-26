@@ -30,6 +30,7 @@ const catalog = () => [
   { id: 'banner-halo', type: 'banner', name: 'Halo', description: 'A soft glow.', price: 40, is_default: false },
   { id: 'banner-dusk', type: 'banner', name: 'Dusk', description: 'Indigo sky.', price: 70, is_default: false },
   { id: 'frame-gold', type: 'frame', name: 'Gold ring', description: 'Warm gold.', price: 50, is_default: false },
+  { id: 'dendera', type: 'theme', name: 'Dendera', description: 'Temple pigments by day, stars by night.', price: 1000, is_default: false, tier: 'motion' },
   { id: 'papyrus', type: 'theme', name: 'Papyrus', description: 'Nile night and gold over papyrus fibres.', price: 600, is_default: false, tier: 'texture' }
 ];
 
@@ -174,6 +175,12 @@ await test('main: the themes that dress the app too are featured with their pric
   await tick(80);
   assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'dendera papyrus cotton nile');
   assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 4 && p.qa('.mkt-feat-card .pv-phone').length === 4);
+  const dendera = p.q('.mkt-feat-card[data-app="dendera"]');
+  assert.match(dendera.querySelector('.mkt-feat-price').textContent, /1000/);
+  assert.match(dendera.querySelector('.mkt-feat-price').textContent, /200 EGP/);
+  await p.click(p.byLabel('How to use Dendera'));
+  assert.equal(p.w.document.activeElement.id, 'dendera-guide');
+  assert.match(p.$('dendera-guide').closest('section').textContent, /Paid app unlocking is not available in 1\.5\.0 yet/);
   const papyrus = p.q('.mkt-feat-card[data-app="papyrus"]');
   assert.match(papyrus.querySelector('.mkt-feat-price').textContent, /600/, 'its catalogue price');
   assert.match(papyrus.querySelector('.mkt-feat-tag').textContent, /site and app/);
@@ -242,7 +249,7 @@ await test('tiers: textured themes get their own row, every theme says its tier,
   assert.equal(p.q('.mkt-cell[data-item="paper"] .mkt-tier').textContent, 'Palette');
   assert.match(p.q('.mkt-cell[data-item="papyrus"] .mkt-tag').textContent, /600\s*120 EGP/);
   assert.equal(p.qa('#mkt-tiers li').length, 3);
-  assert.match(p.q('#mkt-tiers .mkt-tier-motion').textContent, /Coming soon/);
+  assert.match(p.q('#mkt-tiers .mkt-tier-motion').textContent, /1000\s*200 EGP/);
   assert.equal(p.qa('.mkt-trust li').length, 4);
   await p.click(p.q('button[data-act="buy"][data-item="papyrus"]'));
   assert.match(p.$('buy-short').textContent, /You need 500 coins more, about 100 EGP/);

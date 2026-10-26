@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="meta">
-        <span>v1.4.4</span>
+        <span>v1.5.0</span>
         <span>python · sqlite · no frontend build</span>
         <span>code on github</span>
         <span>built in Egypt</span>
@@ -226,14 +226,14 @@
         </div>
         <div class="reveal">
           <div class="stats">
-            <div class="stat"><b data-count="57136">57,136</b><span>lines of Python</span></div>
-            <div class="stat"><b data-count="1753">1,753</b><span>test functions</span></div>
-            <div class="stat"><b data-count="212">212</b><span>test files</span></div>
-            <div class="stat"><b data-count="67">67</b><span>append-only migrations</span></div>
+            <div class="stat"><b data-count="64581">64,581</b><span>lines of Python</span></div>
+            <div class="stat"><b data-count="2066">2,066</b><span>test functions</span></div>
+            <div class="stat"><b data-count="257">257</b><span>test files</span></div>
+            <div class="stat"><b data-count="68">68</b><span>append-only migrations</span></div>
             <div class="stat"><b data-count="4">4</b><span>import contracts, all kept</span></div>
             <div class="stat"><b>0</b><span>frontend build steps</span></div>
           </div>
-          <p class="stats-note">// counted 2026-10-21 on main. Clone it and run the same commands: if a number is wrong, that's an issue we want.</p>
+          <p class="stats-note">// counted 2026-10-26 on main. Clone it and run the same commands: if a number is wrong, that's an issue we want.</p>
         </div>
       </div>
     </div>
@@ -393,9 +393,9 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
   function prompt(cmd){return '<span class="p">❯</span> '+esc(cmd)}
   var SCRIPT=[
     {c:'git clone https://github.com/LightningEg/Lightning.git && cd Lightning',o:['<span class="d">Cloning into \'Lightning\'... done.</span>']},
-    {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['57136']},
-    {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['1753']},
-    {c:'ls lightning/database/migrations | wc -l',o:['67']},
+    {c:"find lightning -name '*.py' | xargs cat | wc -l",o:['64581']},
+    {c:'grep -rhE "^\\s*(async )?def test_" tests | wc -l',o:['2066']},
+    {c:'ls lightning/database/migrations | wc -l',o:['68']},
     {c:'cat .notes',o:['<span class="d">found something strange. type</span> <span class="ok">gattaca</span> <span class="d">for more.</span>']},
     {c:'lint-imports',o:['<span class="d">Layers: each layer may only import the layers below it</span> <span class="ok">KEPT</span>','<span class="d">… 3 more contracts</span> <span class="ok">KEPT</span>','','Contracts: <span class="ok">4 kept</span>, 0 broken.']},
     {c:'python -m lightning --demo',o:['<span class="d">Mohab\'s sample household, rebuilt on every start</span>','serving on <span class="a2">http://127.0.0.1:8766</span>']}

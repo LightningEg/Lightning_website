@@ -2981,8 +2981,8 @@
       "id": "UX-2026.10.23.13",
       "name": "Release Log · Lightning 1.4.4",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.13.html"
     },
     {
       "id": "UX-2026.10.23.14",
@@ -2995,22 +2995,22 @@
       "id": "UX-2026.10.23.15",
       "name": "Home · Lightning 1.4.4",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.15.html"
     },
     {
       "id": "UX-2026.10.23.16",
       "name": "Features · Lightning 1.4.4",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.16.html"
     },
     {
       "id": "UX-2026.10.23.17",
       "name": "Sample Profiles · Lightning 1.4.4",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.17.html"
     },
     {
       "id": "UX-2026.10.23.18",
@@ -3051,25 +3051,86 @@
       "id": "UX-2026.10.26.02",
       "name": "Downloads · Builds table on a phone",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.02.html"
     },
     {
       "id": "UX-2026.10.26.03",
       "name": "App Feedback · Labelled attachments",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.03.html"
     },
     {
       "id": "UX-2026.10.26.04",
       "name": "Version Archive · Site audit fixes",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.04.html"
+    },
+    {
+      "id": "UX-2026.10.26.05",
+      "name": "Downloads · Lightning 1.5.0",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.06",
+      "name": "Release Log · Lightning 1.5.0",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.07",
+      "name": "Home · Lightning 1.5.0",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.08",
+      "name": "Features · Lightning 1.5.0",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.09",
+      "name": "Sample Profiles · Lightning 1.5.0",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.10",
+      "name": "App Feedback · Lightning 1.5.0",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.11",
+      "name": "Version Archive · Lightning 1.5.0",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
   ],
   "app_releases": [
+    {
+      "version": "v1.5.0",
+      "date": "2026-10-26",
+      "commit": "c73db53e4125001d52a968436869727adc1c5306",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v1.5.0",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-v1.5.0-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-Test-1.5.0-879-c73db53e.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/BUILD.json",
+      "windows_sha256": "f5a11ad881cae62c89acbdd721d2cb189673e1ef2428d5db8073b1a48e9c4985",
+      "android_sha256": "52fd36339255cae6d9f6fc4f0d9dc5fc637031a167e08b6632a85a5030f5e7d3"
+    },
     {
       "version": "v1.4.4",
       "date": "2026-10-23",
