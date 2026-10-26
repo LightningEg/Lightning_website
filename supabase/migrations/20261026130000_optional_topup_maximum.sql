@@ -10,10 +10,14 @@ returns jsonb language plpgsql stable security definer set search_path = '' as $
 declare cfg public.coin_pricing; bonus integer; base bigint; extra bigint;
 begin
   select * into cfg from public.coin_pricing where id = 1;
-  if p_amount_piastres is null or p_amount_piastres % 100 <> 0
-     or p_amount_piastres::bigint < cfg.minimum_egp::bigint * 100
-     or (cfg.maximum_egp is not null and p_amount_piastres::bigint > cfg.maximum_egp::bigint * 100) then
-    raise exception 'enter a whole EGP amount within the displayed range';
+  if p_amount_piastres is null or p_amount_piastres % 100 <> 0 then
+    raise exception 'enter a whole EGP amount';
+  end if;
+  if p_amount_piastres::bigint < cfg.minimum_egp::bigint * 100 then
+    raise exception 'enter a whole EGP amount above the displayed minimum';
+  end if;
+  if cfg.maximum_egp is not null and p_amount_piastres::bigint > cfg.maximum_egp::bigint * 100 then
+    raise exception 'enter a whole EGP amount below the displayed maximum';
   end if;
   select coalesce(max(bonus_percent), 0) into bonus
     from public.coin_bonus_tiers where minimum_egp::bigint * 100 <= p_amount_piastres;

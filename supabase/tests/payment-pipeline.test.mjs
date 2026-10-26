@@ -73,7 +73,7 @@ async function proof(u,r){const path=await reserve(u)(r.id);await as('authentica
 const settle=r=>asAdmin(()=>q(`select * from public.admin_settle_topup_from_transfers($1,$2,$3,'Verified receipt and grouped bank transfers')`,[r.id,r.receipt_object_key,r.receipt_revision]));
 let asset;
 await test('amount pricing uses the agreed rate and bonuses without bundles',async()=>{
- for(const [amount,coins]of[[1000,50],[2000,100],[5000,250],[9900,495],[10000,525],[50000,2750],[100000,5750],[1000000,57500]])assert.equal((await quote(amount)).coins,coins);
+ for(const [amount,coins]of[[1000,50],[2000,100],[5000,250],[9900,495],[10000,525],[50000,2750],[100000,5750],[1000000,57500],[3000000,172500]])assert.equal((await quote(amount)).coins,coins);
  await assert.rejects(quote(900),/displayed minimum/);await assert.rejects(quote(1050),/whole EGP/);
 });
 await test('the receiving QR stays private until this member accepts a pending checkout',async()=>{
