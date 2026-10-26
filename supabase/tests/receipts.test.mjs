@@ -186,4 +186,29 @@ await test('one owner account: a second can never be added, and the owner remove
  assert.deepEqual((await q(`select user_id from public.admin_roles`)).rows.map(x=>x.user_id),[ADMIN]);
  assert.equal((await as('authenticated',EXTRA,()=>q(`select public.is_admin() a`))).rows[0].a,false,'the other account no longer sees the console');
 });
+await test('the simple InstaPay checkout: copy our details, pay, send date, amount and where you paid from; the owner confirms without a receipt',async()=>{
+ const M=await newUser(),email=(await q(`select email from auth.users where id=$1`,[M])).rows[0].email;
+ const d=(await as('authenticated',M,()=>q(`select public.topup_payment_details() d`))).rows[0].d;
+ assert.equal(d.enabled,true);assert.equal(d.note_email,email,'their own email for the transfer note');assert.ok(d.instapay_address);assert.ok(d.pricing_version);
+ const quote=(await as('authenticated',M,()=>q(`select public.quote_topup_amount(10000) d`))).rows[0].d;
+ const k=key(),send=(payer,on,amount=10000,coins=quote.coins,who=M)=>as('authenticated',who,async()=>(await q(`select * from public.submit_instapay_topup($1,$2,true,$3,$4,$5,$6)`,[amount,k,coins,d.pricing_version,payer,on])).rows[0]);
+ const today=(await q(`select (now() at time zone 'Africa/Cairo')::date::text d`)).rows[0].d;
+ await assert.rejects(send('hello',today),/InstaPay address or wallet phone/);
+ await assert.rejects(send('sara@instapay','2020-01-01'),/last 30 days/);
+ const r=await send('Sara.M@InstaPay',today);
+ assert.equal(r.payer_instapay_address,'sara.m@instapay');assert.equal(r.price_piastres,10000);assert.equal(r.receipt_object_key,null);assert.ok(r.details_submitted_at);
+ assert.equal((await send('Sara.M@InstaPay',today)).id,r.id,'sending again opens no second ticket');
+ const dash=(await as('authenticated',ADMIN,()=>q(`select public.admin_dashboard() d`))).rows[0].d;
+ assert.ok(Number(dash.needs.receipts)>=1,'Today counts it as ready to confirm');
+ const fresh=(await q(`select * from public.topup_requests where id=$1`,[r.id])).rows[0];
+ const confirm=(amount,ref=null)=>as('authenticated',ADMIN,async()=>(await q(`select public.admin_confirm_topup($1,$2,null,null,$3,null,null,$4) d`,[r.id,amount,fresh.receipt_revision,ref])).rows[0].d);
+ assert.equal((await confirm(6000,'IPN-600001')).status,'amount_differs');
+ assert.equal((await wallet(M))?.balance??0,0);
+ const ok=await confirm(4000,'IPN-400001');
+ assert.equal(ok.status,'approved','two parts with their own references add up');
+ assert.equal((await wallet(M)).balance,quote.coins);
+ // a checkout with no details sent yet cannot be confirmed
+ const bare=(await as('authenticated',M,()=>q(`select * from public.create_amount_checkout(10000,$1,true,$2,$3)`,[key(),quote.coins,d.pricing_version]))).rows[0];
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_confirm_topup($1,10000,null,null,$2,null,null,'IPN-700001')`,[bare.id,bare.receipt_revision])),/not sent their payment details/);
+});
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;
