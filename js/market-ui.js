@@ -15,12 +15,13 @@
   var WEAR_OFF = 'lightning-site-skin-off';
   var COIN = 'assets/brand/cotton-coin.svg';
   var PARTS = ['Colours', 'Header and top bar', 'Navigation', 'Hero number', 'Cards and lists', 'Charts and progress', 'Buttons and inputs', 'Sheets and dialogs', 'Settings and menus', 'Texture and motion'];
-  // cosmetics/slots.json slot behind each of the ten parts
-  var SLOT = ['palette', 'header', 'navigation', 'hero', 'cards', 'charts', 'controls', 'overlays', 'menus', 'decoration'];
+  // cosmetics/slots.json slot behind each of the ten parts (schema 2: part 10 is the ground's texture and motion)
+  var SLOT = ['palette', 'header', 'navigation', 'hero', 'cards', 'charts', 'controls', 'overlays', 'menus', 'ground'];
+  // The themes that also dress the PC app and the phone: one purchase with their website version (themes.md, 8L).
   var APP = [
-    { id: 'nile-nocturne', line: 'Egyptian night river. Deep water, one glowing current.' },
-    { id: 'royal-obsidian-gold', line: 'Basalt and gold. Quiet luxury for tracking what you own.' },
-    { id: 'nile-papyrus-guilloche', line: 'Papyrus fibres, a guilloché rosette and one slow gold thread along the header.' }
+    { id: 'papyrus', line: 'Lapis lacquer and gold foil whose light travels the edge, over papyrus fibres.' },
+    { id: 'cotton', line: 'Warm paper and linen, embossed terracotta, ink tabs.' },
+    { id: 'nile', line: 'Nile night and gold, on every screen you use.' }
   ];
   var VIEWS = [['themes', 'Themes'], ['sets', 'Sets'], ['banners', 'Banners'], ['frames', 'Frames'], ['names', 'Names'], ['badges', 'Badges'], ['owned', 'Owned']];
 
@@ -76,7 +77,8 @@
   }
   function appEntry(m) {
     var p = m.parts.palette;
-    return { kind: 'theme', app: m, id: m.id, name: m.name, item: null, c: [p.background, p.text, p.muted, p.accent], palette: PV.clean(Object.assign({}, PV.DEFAULT, p)) };
+    var item = ms ? ms.items.filter(function (i) { return i.id === m.id && i.type === 'theme'; })[0] || null : null;
+    return { kind: 'theme', app: m, id: m.id, name: m.name, item: item, c: [p.background, p.text, p.muted, p.accent], palette: PV.clean(Object.assign({}, PV.DEFAULT, p)) };
   }
 
   /* ---------- the page around the cells ---------- */
@@ -148,9 +150,9 @@
     feat.id = 'mkt-feat'; feat.hidden = true;
     var themes = sections().themes;
     themes.appendChild(feat);
-    // the tiers, side by side, then the textured tier as its own row of large cards, then the palettes
+    // the tiers, side by side, then the textured and animated tiers as their own row of large cards, then the palettes
     var tiers = el('ul', 'mkt-tiers'); tiers.id = 'mkt-tiers';
-    var texH = el('h3', 'mkt-sub', ui('Textured')); texH.id = 'h-textured';
+    var texH = el('h3', 'mkt-sub', ui('Textured and animated')); texH.id = 'h-textured';
     var tex = el('ul', 'mkt-grid textured'); tex.id = 'list-textured'; tex.setAttribute('aria-labelledby', 'h-textured');
     var palH = el('h3', 'mkt-sub', ui('Palettes')); palH.id = 'h-palettes';
     var grid = $('list-themes');
@@ -253,18 +255,18 @@
     var feat = $('mkt-feat');
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
-    add(feat, [el('h3', 'mkt-sub', ui('Coming to the app')), el('p', 'mkt-feat-why', MAIN ? 'Three themes for the PC app and the phone, in testing. Try them here; the price comes when the app can wear them.'
-      : 'Three app themes in testing, in cosmetics/*.json, checked against cosmetics/slots.json. Try them here; a price comes when the app can wear them.')]);
+    add(feat, [el('h3', 'mkt-sub', ui('On your PC and phone too')), el('p', 'mkt-feat-why', MAIN ? 'Buy one of these once and it dresses this site, the PC app and the phone. The app unlocks it with a code from your account.'
+      : 'Bought once, worn on both sites, the PC and the phone (cosmetics/*.json, checked against cosmetics/slots.json). The app unlocks it with a one-time code.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
       var e = appEntry(m);
       var card = PV.paint(el('article', 'mkt-feat-card'), e.palette);
       card.setAttribute('data-app', m.id);
-      var words = add(el('div', 'mkt-feat-words'), [el('span', 'mkt-feat-tag', ui('App theme · in testing')), el('h4', 'mkt-feat-name', m.name), el('p', 'mkt-feat-line', m.line)]);
+      var words = add(el('div', 'mkt-feat-words'), [el('span', 'mkt-feat-tag', ui(e.item ? TIER_WORD[tierOf(e.item)] + ' · site and app' : 'App theme · in testing')), el('h4', 'mkt-feat-name', m.name), el('p', 'mkt-feat-line', m.line)]);
       var acts = add(el('div', 'mkt-feat-acts'), [
         btn('mkt-feat-try', 'Try it', function () { tryOn(e); }, 'Try ' + m.name + ' on this page'),
         btn('mkt-feat-more', 'Details', function (ev) { openDetail(e, ev.currentTarget, 'pc'); }, m.name + ' details'),
-        el('span', 'mkt-feat-price', ui('Price not set yet'))]);
+        e.item ? add(el('span', 'mkt-feat-price'), [priced(e.item.price)]) : el('span', 'mkt-feat-price', ui('Price not set yet'))]);
       words.appendChild(acts);
       var shots = add(el('div', 'mkt-feat-shots'), [PV.pc(e.palette), PV.phone(e.palette)]);
       shots.setAttribute('aria-hidden', 'true');
@@ -470,7 +472,8 @@
       parts.appendChild(el('h3', 'mkt-parts-h', ui('What this theme changes')));
       var dl = el('dl', 'mkt-parts-list');
       PARTS.forEach(function (name, i) {
-        var changes = e.app ? !!e.app.parts[SLOT[i]] && (SLOT[i] !== 'decoration' || e.app.parts.decoration.pattern !== 'none' || e.app.parts.decoration.motion !== 'none') : i === 9 ? !!e.tex : i < 9 && i !== 3;
+        var g = e.app && e.app.parts.ground;
+        var changes = e.app ? !!e.app.parts[SLOT[i]] && (SLOT[i] !== 'ground' || g.texture !== 'none' || g.artwork !== 'none' || g.ambient !== 'none') : i === 9 ? !!e.tex : i < 9 && i !== 3;
         add(dl, [add(el('div', changes ? 'on' : null), [el('dt', null, name), el('dd', null, changes ? 'changes' : 'stays')])]);
       });
       parts.appendChild(dl);
@@ -487,7 +490,7 @@
       else { var b = btn('btn ghost', '', function () { closeDetail(true); M().buy(it, trigger); }); add(b, [el('span', null, ui('Buy · ')), priced(it.price)]); acts.appendChild(b); }
     } else if (it && it.price > 0) {
       var a = link(FG && FG.signInHref ? FG.signInHref() : 'account.html', 'Sign in to buy'); a.className = 'btn ghost'; acts.appendChild(a);
-    } else if (e.app) acts.appendChild(el('span', 'mkt-feat-price', ui('Price not set yet')));
+    } else if (e.app && !e.item) acts.appendChild(el('span', 'mkt-feat-price', ui('Price not set yet')));
     acts.appendChild(btn('btn ghost', 'Close', function () { closeDetail(); }));
     $('mkt-detail').hidden = false;
     doc.documentElement.style.overflow = 'hidden';
@@ -520,7 +523,7 @@
     };
     [['palette', 'Palette', 'New colours on both sites, with a light and a dark side.'],
      ['texture', 'Textured', 'The palette plus a woven texture behind every page.'],
-     ['motion', 'Animated', 'Texture plus one quiet signature motion. Coming later.']].forEach(function (x) {
+     ['motion', 'Animated', 'The texture plus one slow signature motion.']].forEach(function (x) {
       var price = low(x[0]);
       var li = add(el('li', 'mkt-tierc mkt-tier-' + x[0]), [el('span', 'mkt-tier mkt-tier-' + x[0], ui(x[1])), el('p', null, x[2])]);
       li.appendChild(price ? add(el('p', 'mkt-tier-price'), [el('span', null, ui('From') + ' '), priced(price)]) : el('p', 'mkt-tier-price', ui('Coming soon')));
@@ -657,14 +660,15 @@
     rendered: function (state) {
       ms = state;
       build();
-      // textured cells move to their own row; the tier row says what each tier is and costs
+      // textured and animated cells move to their own row; the tier row says what each tier is and costs
       var tex = $('list-textured');
       while (tex.firstChild) tex.removeChild(tex.firstChild);
       Array.prototype.forEach.call($('list-themes').querySelectorAll('.mkt-cell'), function (li) {
         var it = state.items.filter(function (x) { return x.id === li.getAttribute('data-item'); })[0];
-        if (it && tierOf(it) === 'texture') tex.appendChild(li);
+        if (it && tierOf(it) !== 'palette') tex.appendChild(li);
       });
       drawTiers(state);
+      if (apps.length) drawFeatured();
       loadExtras(state);
       arrange();
       drawLook();

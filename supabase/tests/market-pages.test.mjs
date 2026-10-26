@@ -366,7 +366,8 @@ await test('picker: paid themes show a lock and their price; free themes show ne
   assert.ok(moss.querySelector('.tm-price svg'));
   assert.match(card(p, 'garnet').querySelector('.tm-price').textContent, /300 coins/);
   assert.match(card(p, 'frost').querySelector('.tm-price').textContent, /300 coins/);
-  assert.match(card(p, 'papyrus').querySelector('.tm-price').textContent, /600 coins/, 'the textured tier');
+  assert.match(card(p, 'papyrus').querySelector('.tm-price').textContent, /1,?000 coins/, 'the animated tier');
+  assert.match(card(p, 'cotton').querySelector('.tm-price').textContent, /600 coins/, 'the textured tier');
   assert.equal(card(p, 'mono').querySelector('.tm-price'), null);
   assert.equal(p.w.LG.THEMES.length, 17);
 });
