@@ -19,18 +19,18 @@
  function copyRow(label,value,key){const dt=el('dt',label),dd=el('dd',value||'Not set yet');dd.dir='auto';if(value){const b=el('button','Copy');b.type='button';b.className='btn ghost';b.setAttribute('aria-label','Copy '+label.toLowerCase());b.onclick=async()=>{try{await navigator.clipboard.writeText(String(value));msg(label+' copied.');}catch{msg('Copy this: '+value);}};dd.append(b);}if(key){dt.className='wal-key';dd.className='wal-key';}$('topup-details').append(dt,dd);}
  function showPay(){if(!pay)return;existing=null;clearFormError();$('topup-details').replaceChildren();
   copyRow('InstaPay address',pay.instapay_address);copyRow('Receiver name',pay.recipient_name);copyRow('Transfer note: your email',pay.note_email,true);
-  $('topup-rate').textContent='1 EGP = '+pay.coins_per_egp+' coins. Send '+pay.minimum_egp+'–'+Number(pay.maximum_egp).toLocaleString('en-US')+' EGP. '+(pay.tiers||[]).map(t=>t.bonus_percent+'% bonus from '+t.minimum_egp+' EGP').join('; ')+((pay.tiers||[]).length?'.':'');
+  $('topup-rate').textContent='1 EGP = '+pay.coins_per_egp+' coins. Send from '+pay.minimum_egp+(pay.maximum_egp==null?'':' to '+Number(pay.maximum_egp).toLocaleString('en-US'))+' EGP. '+(pay.tiers||[]).map(t=>t.bonus_percent+'% bonus from '+t.minimum_egp+' EGP').join('; ')+((pay.tiers||[]).length?'.':'');
   $('topup-pay').hidden=false;form.hidden=true;}
 
  /* ---------- step 2: confirm the payment ---------- */
  function showConfirm(request=null){clearFormError();existing=request;key=request?request.request_key:crypto.randomUUID();quote=null;form.reset();
   form.elements.date.value=today();form.elements.date.max=today();
-  const a=$('topup-amount');a.readOnly=!!request;if(pay){a.min=pay.minimum_egp;a.max=pay.maximum_egp;}
+  const a=$('topup-amount');a.readOnly=!!request;if(pay){a.min=pay.minimum_egp;if(pay.maximum_egp==null)a.removeAttribute('max');else a.max=pay.maximum_egp;}
   $('topup-for').textContent=request?'For the top-up you opened on '+String(request.created_at||'').slice(0,10)+'.':'';
   if(request){a.value=String((request.original_amount_piastres||request.price_piastres)/100);$('topup-quote').textContent='You receive '+count(request.coins)+' coins.';}
   else $('topup-quote').textContent='Enter the amount to see your coins.';
   $('topup-send').disabled=!request;$('topup-pay').hidden=true;form.hidden=false;form.elements.date.focus();}
- async function price(){const run=++quoteRun,uid=user;quote=null;$('topup-send').disabled=true;const amount=Number($('topup-amount').value);if(!Number.isSafeInteger(amount)||amount<1){$('topup-quote').textContent='Enter a whole EGP amount.';return;}
+ async function price(){const run=++quoteRun,uid=user;quote=null;$('topup-send').disabled=true;const amount=Number($('topup-amount').value);if(!Number.isSafeInteger(amount)||amount<1){$('topup-quote').textContent='Enter a whole EGP amount.';return;}if(amount*100>2147483647){$('topup-quote').textContent='This amount is too large to process online. Contact support.';return;}
   try{const r=await rpc('quote_topup_amount',{p_amount_piastres:amount*100});if(run!==quoteRun||uid!==user||Number($('topup-amount').value)*100!==r.amount_piastres)return;quote=r;$('topup-quote').textContent='You receive '+count(r.coins)+' coins'+(r.bonus_coins?' ('+count(r.base_coins)+' + '+count(r.bonus_coins)+' bonus)':'')+'.';$('topup-send').disabled=!r.enabled;}
   catch(e){if(run===quoteRun)$('topup-quote').textContent=error(e);}}
  $('topup-amount').oninput=()=>{clearFormError();if(existing)return;quoteRun++;key=crypto.randomUUID();quote=null;$('topup-send').disabled=true;clearTimeout(amountTimer);amountTimer=setTimeout(price,250);};
