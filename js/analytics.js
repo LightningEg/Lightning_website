@@ -272,8 +272,9 @@
     if (choice === 'all') startLink();
     else { send(); dropLink(); }
     send();
-    if (bar) bar.hidden = true;
+    if (bar) { bar.hidden = true; bar.dataset.answered = ''; }
     status();
+    window.dispatchEvent(new Event('lightning:consent')); // the membership invite waits for this (js/site-membership.js)
   };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-consent]');

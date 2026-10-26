@@ -38,6 +38,9 @@
     document.body.append(dialog);
     // Native dialog provides focus containment, Escape and a modal background. Never interrupt another dialog.
     if(document.querySelector('dialog[open], [aria-modal="true"]:not([hidden])'))return;
+    // The cookie choice comes first: a modal over the consent bar hid its words and made its buttons unreachable.
+    const consent=document.querySelector('.lc-bar');
+    if(consent&&!('answered' in consent.dataset)){window.addEventListener('lightning:consent',()=>setTimeout(()=>{if(dialog.isConnected&&!dialog.open&&!document.querySelector('dialog[open]'))dialog.showModal();},800),{once:true});return;}
     dialog.showModal();x.focus();
   }
   FG.ready.then(({session})=>{
