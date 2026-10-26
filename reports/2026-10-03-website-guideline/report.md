@@ -2,10 +2,10 @@
 
 ## Current reading · 2026-10-24
 
-This report records the 2026-10-03 site snapshot. Its “Next steps” section is historical, not a live work list. The site has since moved to `index.html`, `how-it-works.html` and `current-status.html`; `version-b.html` and `version-c.html` now redirect to `index.html`. Read [Current Status](../current-status.html) for current download facts. Track any remaining product decisions in the active plan.
+This report records the 2026-10-03 site snapshot. Its “Next steps” section is historical, not a live work list. The site has since moved to `index.html`, `how-it-works.html` and `current-status.html`; `version-b.html` and `version-c.html` now redirect to `index.html`. Read [Current Status](../../current-status.html) for current download facts. Track any remaining product decisions in the active plan.
 
 
-Scope: the three landing pages and the two shared pages, checked against [guideline 3.6](../brand-guidelines.html) Part B (B01 to B11) and the Part A rules the site borrows (colour, numbers, buttons, icons). Each page was rendered at 320, 390, 640, 760, 900, 1000, 1100 and 1280px, in light and dark.
+Scope: the three landing pages and the two shared pages, checked against [guideline 3.6](../../guideline/website.html) Part B (B01 to B11) and the Part A rules the site borrows (colour, numbers, buttons, icons). Each page was rendered at 320, 390, 640, 760, 900, 1000, 1100 and 1280px, in light and dark.
 
 > **Update, later the same day: owner decisions (guideline 3.7).** After seeing Version D, the owner chose centred hero and section headers, a short label above each section, and the hero's punch line in the gradient. Guideline 3.7 now says so, which overrules items 1 to 3 below for headers, labels and the hero (gradient words in *section* headings are still out). The site's logo is now the two-leaf mark from A02 everywhere; the old ribbon mark stays only in archived pages.
 
