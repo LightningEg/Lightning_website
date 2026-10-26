@@ -1,4 +1,4 @@
-/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Themes, top bar, rail, reveal, and the field with its lightning. */
+/* For Geeks: shared by forgeeks.html, forgeeks-guide.html and forgeeks-roadmap.html. Themes, top bar, rail, reveal, and the field with its weather (lightning, or the theme's own). */
 (function(){
   'use strict';
   // Keep links to the former home-page contribution section working: the steps now live on the contribute page.
@@ -200,16 +200,20 @@
 
   window.LG={THEMES:THEMES,keep:keep,use:use,own:function(id,yes){var t=find(id);if(t&&t.paid){own[id]=!!yes;mark(t)}},current:function(){return saved},open:open,onTheme:onTheme,copy:copy,toast:toast,reduce:reduce};
 
-  /* ===================== the field: a terrain of light, current in the grid, and lightning =====================
+  /* ===================== the field: a terrain of light, current in the grid, and its weather =====================
      The terrain stays behind the page, faint between the hero and the closing; a faint current runs through
-     the pixel grid now and then. Lightning strikes the terrain every few seconds, or where you click the sky. */
+     the pixel grid now and then. Every few seconds, or where you click the sky, the weather comes: lightning on
+     Mono; every other on-sale theme draws its own scene instead (below, and guideline D08). */
   var cv=$('#field'),ctx=cv.getContext('2d');
   if(!ctx)return;
   var W=0,H=0,DPR=1,N=0,small=false,U,Z,SEED,px,py,pa,ps,BI,ORD,BK=7,CNT=new Int32Array(8);
-  var STARS=[],PULSES=[],BOLTS=[],GLOWS=[],GRID=24;
+  var STARS=[],PULSES=[],BOLTS=[],GLOWS=[],RINGS=[],TRAILS=[],SPARKS=[],CURTAINS=[],GRID=24;
   var PART='242,242,242',GLOWC='255,255,255',CORE='255,255,255',LIGHT=false;
   function readColors(){var cs=getComputedStyle(root);PART=cs.getPropertyValue('--particle').trim()||PART;GLOWC=cs.getPropertyValue('--glow').trim()||GLOWC;LIGHT=!!(find(root.dataset.theme)||{}).light;CORE=LIGHT?GLOWC:'255,255,255'}
-  onTheme(function(){readColors();if(reduce)frame(performance.now())});
+  /* trying a theme on shows its scene and plays its event once, over the field behind the picker */
+  onTheme(function(){readColors();if(W)buildScene();if(reduce){frame(performance.now());return}
+    if(performance.now()-t0<1500||!W)return;BOLTS.length=RINGS.length=TRAILS.length=SPARKS.length=CURTAINS.length=0;
+    var a=anchor();weather(W*(.3+rnd()*.4),a.hz+(a.fa-a.hz)*.4,false);nextStrike=(performance.now()-t0)/1000+6});
   var hero=$('#top'),closing=$('#closing'),heroH1=$('#top h1');
   function rnd(){return Math.random()}
 
@@ -315,6 +319,145 @@
     ctx.globalCompositeOperation='source-over';
   }
 
+  /* ---- each theme's own scene (owner, 2026-10-26: "instead of the lightning it can be something else"; "we don't have
+     to keep the particles, it can be a completely different animation") ----
+     Mono keeps the particle terrain and its lightning. Every other on-sale theme draws its own scene on the same canvas,
+     in its own --particle and --glow, by the same rules (guideline D08): full under the hero and the closing, faint
+     between, one event every 6-12 seconds or where you click, a still frame under reduced motion, fewer pieces on a
+     phone, nothing blurred. A theme not named here (the archived ones) keeps the terrain. */
+  var SCENE_OF={paper:'ink',cotton:'ink',nile:'river',papyrus:'river',garnet:'embers',frost:'snow',dendera:'stars',meadow:'meadow'};
+  function scene(){return SCENE_OF[root.dataset.theme]||'terrain'}
+  var SC=null,SCN='';
+  function rgba(c,a){return 'rgba('+c+','+(a<0?0:a>1?1:a).toFixed(3)+')'}
+  function band(a,y){return y<a.fa?1:Math.max(0,1-(y-a.fa)/(a.fb-a.fa))} // fades out toward the reading area
+  function buildScene(){
+    SCN=scene();var n,i,j;SC={};
+    if(SCN==='ink'){SC.lines=small?14:22;SC.step=small?16:12}
+    else if(SCN==='river'){SC.rows=[];n=small?16:26;for(j=0;j<n;j++){var d=[],m=8+j*(small?1.4:2.2)|0;for(i=0;i<m;i++)d.push([rnd(),rnd()*6.283,.5+rnd()]);SC.rows.push(d)}SC.mx=.68}
+    else if(SCN==='embers'){SC.e=[];for(i=0,n=small?70:170;i<n;i++)SC.e.push(ember(true))}
+    else if(SCN==='snow'){SC.f=[];for(i=0,n=small?70:170;i<n;i++)SC.f.push([rnd(),rnd(),i%3,rnd()*6.283,.6+rnd()*.8])}
+    else if(SCN==='stars'){SC.gap=small?44:56;SC.tw=[];for(i=0;i<400;i++)SC.tw.push([rnd()*6.283,4+rnd()*5]);
+      var st=new Path2D(),r1=small?3.2:3.8,r0=r1*.42;for(i=0;i<10;i++){var ang=-Math.PI/2+i*Math.PI/5,rr=i%2?r0:r1;i?st.lineTo(Math.cos(ang)*rr,Math.sin(ang)*rr):st.moveTo(Math.cos(ang)*rr,Math.sin(ang)*rr)}st.closePath();SC.star=st;SC.sweep=[]}
+    else if(SCN==='meadow'){SC.g=[];for(i=0,n=small?110:260;i<n;i++)SC.g.push([rnd(),.45+rnd()*.55,rnd()*6.283,i%2]);SC.ff=[];for(i=0,n=small?22:54;i<n;i++)SC.ff.push([rnd(),rnd(),rnd()*6.283,.5+rnd()*.8,rnd()*6.283]);SC.gust=-1}
+  }
+  function ember(fresh){return {x:rnd(),y:fresh?rnd():1,v:.05+rnd()*.1,s:1.6+rnd()*2.2,ph:rnd()*6.283,w:.4+rnd()*.8}}
+
+  /* ink (Paper, Cotton): contour lines of a slow hand-drawn landscape; a drop of ink lands and its rings push the lines */
+  function drawInk(a,t){
+    var L=SC.lines,st=SC.step;ctx.lineWidth=1;
+    for(var i=0;i<L;i++){
+      var q=i/(L-1),y0=a.hz+(a.fb-a.hz)*Math.pow(q,1.25),amp=8+q*22,al=(.16+.5*(1-q))*band(a,y0)*TA;
+      if(al<.01)continue;ctx.strokeStyle=rgba(PART,al);ctx.beginPath();
+      for(var x=-st;x<=W+st;x+=st){
+        var y=y0+Math.sin(x*.005+i*.7+t*.13)*amp*.6+Math.sin(x*.013-t*.09+i*1.9)*amp*.25-Math.exp(-Math.pow((x-W*(.55+.2*Math.sin(t*.03)))/(W*.16),2))*amp*1.2;
+        for(var r=0;r<RINGS.length;r++){var R=RINGS[r];if(R.age<=0)continue;var dx=x-R.x,dy=(y-R.y)*2.6,d=Math.sqrt(dx*dx+dy*dy)-R.age*(small?150:240);if(d>-50&&d<50)y-=9*R.k*(1-R.age/2.4)*Math.exp(-d*d/(2*16*16))}
+        x<=-st?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+  }
+  /* river (Nile, Papyrus): stars over the water, the current drifting in dashes, and a gold road of light under the moon */
+  function drawRiver(a,t,dt){
+    var mx=W*SC.mx,my=Math.max(a.top+70,a.hz*.55),rows=SC.rows;
+    ctx.fillStyle='rgb('+PART+')';
+    for(var s=0;s<STARS.length;s++){var S=STARS[s],sy=S[1]*a.hz;ctx.globalAlpha=(reduce?.45:.25+.35*Math.sin(t*S[3]+S[2]))*TA;ctx.fillRect(S[0]*W,sy,1.3,1.3)}
+    ctx.globalAlpha=1;ctx.fillStyle=rgba(GLOWC,.85*TA);ctx.beginPath();ctx.arc(mx,my,small?9:13,0,6.283);ctx.fill();
+    ctx.fillStyle=rgba(GLOWC,.12*TA);ctx.beginPath();ctx.arc(mx,my,small?18:26,0,6.283);ctx.fill();
+    for(var j=0;j<rows.length;j++){
+      var q=j/(rows.length-1),y=a.hz+4+(a.fb-a.hz)*Math.pow(q,1.6),f=band(a,y)*TA,len=4+q*30,road=W*(.03+q*.11),speed=8+q*40;if(f<.01)continue;
+      for(var k=0;k<rows[j].length;k++){var D=rows[j][k],x=((D[0]*W+t*speed*D[2])%(W+60))-30,on=Math.abs(x-mx)<road,
+        sh=reduce?.6:.5+.5*Math.sin(t*1.6*D[2]+D[1]);
+        ctx.fillStyle=on?rgba(GLOWC,(.35+.6*sh)*f):rgba(PART,(.08+.3*sh)*(1-q*.3)*f);ctx.fillRect(x,y,len*(on?1.3:1),q>.5?2:1.2)}
+    }
+  }
+  /* embers (Garnet): sparks rise from a low glow and drift out; now and then a log settles and throws a burst */
+  function drawEmbers(a,t,dt){
+    var g=ctx.createLinearGradient(0,a.fb,0,a.hz);g.addColorStop(0,rgba(GLOWC,0));g.addColorStop(.35,rgba(GLOWC,.13*TA));g.addColorStop(1,rgba(GLOWC,0));ctx.fillStyle=g;ctx.fillRect(0,a.hz,W,a.fb-a.hz);
+    var top=a.top+30,span=a.fb-top;
+    for(var i=0;i<SC.e.length;i++){var E=SC.e[i];
+      if(!reduce){E.y-=E.v*dt*E.w;if(E.y<0)SC.e[i]=E=ember(false)}
+      var x=(E.x+Math.sin(t*E.w+E.ph)*.012)*W,y=top+E.y*span,life=E.y,al=Math.min(1,1.2*Math.pow(life,.7)*(.6+.4*Math.sin(t*6*E.w+E.ph)))*TA;
+      ctx.fillStyle=rgba(life>.85?CORE:GLOWC,al);ctx.fillRect(x,y,E.s,E.s)}
+  }
+  /* snow (Frost): three depths of flakes falling slowly, swaying; an aurora opens over the horizon now and then */
+  function drawSnow(a,t,dt){
+    var top=a.top+20,span=a.fb-top;
+    for(var i=0;i<SC.f.length;i++){var F=SC.f[i],layer=F[2],sp=[.018,.03,.05][layer],sz=[1.2,1.8,2.6][layer];
+      if(!reduce){F[1]+=sp*dt*F[4];if(F[1]>1){F[1]=0;F[0]=rnd()}}
+      var x=(F[0]+Math.sin(t*.5*F[4]+F[3])*.01*(layer+1))*W,y=top+F[1]*span;
+      ctx.fillStyle=rgba(PART,(.18+layer*.16)*band(a,y)*TA);ctx.fillRect(x,y,sz,sz)}
+  }
+  /* stars (Dendera): the temple ceiling's rows of five-pointed stars, each breathing on its own; a pigment light walks a row */
+  function drawStars(a,t,dt){
+    var gap=SC.gap,top=a.top+gap*.9,rows=Math.max(1,Math.floor((a.fb-top)/gap)),cols=Math.ceil(W/gap)+1,n=0;
+    for(var r=0;r<=rows;r++){var y=top+r*gap,f=band(a,y)*TA;if(f<.01)continue;
+      for(var c=0;c<cols;c++){var x=c*gap+(r%2?gap/2:0)-gap/4,T=SC.tw[n++%SC.tw.length],tw=reduce?.7:.55+.45*Math.sin(t*6.283/T[1]+T[0]),lit=0;
+        for(var w=0;w<SC.sweep.length;w++){var P=SC.sweep[w];if(P.row===r){var dx=x-P.x;lit=Math.max(lit,P.k*Math.exp(-dx*dx/(2*70*70)))}}
+        ctx.save();ctx.translate(x,y);if(lit>.05)ctx.scale(1+lit*.5,1+lit*.5);ctx.fillStyle=lit>.05?rgba(GLOWC,(.35+.65*lit)*f):rgba(PART,(.12+.3*tw)*f);ctx.fill(SC.star);ctx.restore()}}
+    for(var k=SC.sweep.length-1;k>=0;k--){var S=SC.sweep[k];S.x+=dt*W/2.6;if(S.x>W+120)SC.sweep.splice(k,1)}
+  }
+  /* meadow (Meadow): tall grass bending in the wind, fireflies blinking over it; far off, Lightning's own lightning */
+  function drawMeadow(a,t,dt){
+    var base=a.fb-(a.fb-a.fa)*.35,G=SC.g;ctx.lineWidth=1;
+    if(SC.gust>=0){SC.gust+=dt;if(SC.gust>3)SC.gust=-1}
+    for(var i=0;i<G.length;i++){var B=G[i],x=B[0]*W,h=(small?34:58)*B[1]*(B[3]?.7:1),gx=SC.gust<0?0:Math.exp(-Math.pow(x-SC.gust*W/2.2,2)/(2*90*90)),
+      lean=(Math.sin(t*.7+x*.004+B[2])*.22+.12+gx*.9)*h,y=base-(B[3]?10:0);
+      ctx.strokeStyle=rgba(PART,(B[3]?.22:.42)*TA);ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+lean*.3,y-h*.6,x+lean,y-h);ctx.stroke()}
+    if(!LIGHT)ctx.globalCompositeOperation='lighter';
+    var top=a.hz,span=base-a.hz-10;
+    for(var j=0;j<SC.ff.length;j++){var F=SC.ff[j],x2=(F[0]+Math.sin(t*.13*F[3]+F[2])*.04)*W,y2=top+(F[1]+Math.sin(t*.21*F[3]+F[4])*.08)*span,
+      blink=reduce?.6:Math.pow(Math.max(0,Math.sin(t*F[3]*1.3+F[4])),3),al=(.25+.75*blink)*band(a,y2)*TA;
+      ctx.fillStyle=rgba(GLOWC,al*.22);ctx.fillRect(x2-4,y2-4,10.5,10.5);ctx.fillStyle=rgba(GLOWC,al);ctx.fillRect(x2,y2,2.6,2.6)}
+    ctx.globalCompositeOperation='source-over';
+  }
+  var DRAW={ink:drawInk,river:drawRiver,embers:drawEmbers,snow:drawSnow,stars:drawStars,meadow:drawMeadow};
+
+  /* the event: a strike on Mono and Meadow (and any theme without a scene), and each scene's own on the others */
+  function weather(x,y,clicked){
+    var f=scene(),k=clicked?1:.45+.55*TA;
+    if(f==='terrain'||f==='meadow'){strike(x,y,clicked);if(f==='meadow'&&SC)SC.gust=0;return}
+    if(f==='ink'){RINGS.push({x:x,y:y,age:0,k:k},{x:x,y:y,age:-.35,k:k*.6})}
+    else if(f==='river'){var dir=rnd()<.5?-1:1;TRAILS.push({x0:x-dir*W*(small?.45:.3),y0:-10,x1:x,y1:y,age:0,dur:small?.75:.95,k:k,landed:false})}
+    else if(f==='embers'){for(var i=0,n=small?18:40;i<n;i++)SPARKS.push({x:x+(rnd()-.5)*60,y:y,vx:(rnd()-.5)*70,vy:-(45+rnd()*120),age:-rnd()*.4,life:1.8+rnd()*1.8,s:1.6+rnd()*2.2,ph:rnd()*6.283,k:k});GLOWS.push({x:x,y:y,life:k*.7})}
+    else if(f==='snow')CURTAINS.push({x:x,age:0,dur:5,k:k,ph:rnd()*6.283});
+    else if(f==='stars'&&SC){var gap=SC.gap,top=anchor().top+gap*.9;SC.sweep.push({row:Math.max(0,Math.round((y-top)/gap)),x:-120,k:k})}
+    pulse(x,y,true);
+  }
+  /* the pieces an event leaves behind: ink rings, the shooting star, ember bursts and the aurora */
+  function drawWeather(dt,a){
+    for(var r=RINGS.length-1;r>=0;r--){var R=RINGS[r];R.age+=dt;if(R.age>2.4){RINGS.splice(r,1);continue}
+      if(R.age>0){var life=1-R.age/2.4,rad=R.age*(small?150:240);ctx.strokeStyle=rgba(GLOWC,.5*R.k*life*life);ctx.lineWidth=1.2;
+        ctx.beginPath();ctx.ellipse(R.x,R.y,rad,rad/2.6,0,0,6.283);ctx.stroke()}}
+    if(!TRAILS.length&&!SPARKS.length&&!CURTAINS.length)return;
+    if(!LIGHT)ctx.globalCompositeOperation='lighter';
+    for(var t=TRAILS.length-1;t>=0;t--){
+      var T=TRAILS[t];T.age+=dt;var p=Math.min(1,T.age/T.dur),e=1-Math.pow(1-p,2.2),fade=T.age>T.dur?Math.max(0,1-(T.age-T.dur)/.45):1;
+      if(fade<=0){TRAILS.splice(t,1);continue}
+      if(p>=1&&!T.landed){T.landed=true;RINGS.push({x:T.x1,y:T.y1,age:0,k:T.k*.7})}
+      var hx=T.x0+(T.x1-T.x0)*e,hy=T.y0+(T.y1-T.y0)*e,q=Math.max(0,e-.28),tx=T.x0+(T.x1-T.x0)*q,ty=T.y0+(T.y1-T.y0)*q;
+      var g=ctx.createLinearGradient(tx,ty,hx,hy);g.addColorStop(0,rgba(GLOWC,0));g.addColorStop(1,rgba(GLOWC,.85*T.k*fade));
+      ctx.strokeStyle=g;ctx.lineCap='round';ctx.lineWidth=small?1.6:2.2;ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(hx,hy);ctx.stroke();
+      if(p<1){ctx.fillStyle=rgba(CORE,.95*T.k);ctx.fillRect(hx-1.5,hy-1.5,3,3)}
+    }
+    for(var i=SPARKS.length-1;i>=0;i--){
+      var S=SPARKS[i];S.age+=dt;if(S.age<0)continue;if(S.age>S.life){SPARKS.splice(i,1);continue}
+      S.vy*=1-dt*.35;S.x+=(S.vx+Math.sin(S.age*3+S.ph)*14)*dt;S.y+=S.vy*dt;
+      ctx.fillStyle=rgba(S.age<.3?CORE:GLOWC,1.25*S.k*Math.pow(1-S.age/S.life,1.1)*(.7+.3*Math.sin(S.age*18+S.ph)));ctx.fillRect(S.x,S.y,S.s,S.s);
+    }
+    for(var c=CURTAINS.length-1;c>=0;c--){
+      var C=CURTAINS[c];C.age+=dt;if(C.age>C.dur){CURTAINS.splice(c,1);continue}
+      var env=Math.sin(Math.PI*C.age/C.dur),span=W*(small?.95:.65),n=small?60:140,top=Math.max(0,a.hz-H*.17),gr=ctx.createLinearGradient(0,a.hz+6,0,top);
+      gr.addColorStop(0,rgba(GLOWC,.5));gr.addColorStop(.35,rgba(GLOWC,.22));gr.addColorStop(1,rgba(GLOWC,0));ctx.fillStyle=gr;
+      var sw=span/n*2.2;
+      for(var j=0;j<n;j++){var u=j/(n-1),edge=Math.pow(Math.max(0,1-Math.abs(u-.5)*2),.9),
+        sx=C.x-span/2+u*span+Math.sin(u*4+C.age*.6+C.ph)*18,base=a.hz+Math.sin(u*5+C.age*.8+C.ph)*10,
+        h=(a.hz-top)*(.3+.7*(.5+.5*Math.sin(u*4.5+C.age*.7+C.ph))*(.65+.35*Math.sin(u*19+C.age*1.6)));
+        ctx.globalAlpha=Math.min(1,env*edge*C.k*(LIGHT?.32:.5)*TA);ctx.fillRect(sx,base-h,sw,h)}
+      ctx.globalAlpha=1;
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
   /* ---- the terrain ---- */
   function drawTerrain(a,t){
     var ease=1-Math.pow(1-intro,3),f=Math.max(W,H*1.2)*.62,camY=1.55,spread=W/f*1.25;
@@ -360,24 +503,26 @@
     if(!reduce){
       intro=Math.min(1,intro+dt*.7);
       if(t>nextPulse){if(PULSES.length<5)pulse(rnd()*W,rnd()*H,false);nextPulse=t+.9+rnd()*1.1}
-      if(t>nextStrike){strike(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
+      if(t>nextStrike){weather(W*(.08+rnd()*.84),a.hz+(a.fa-a.hz)*(.15+rnd()*.5));nextStrike=t+6+rnd()*6}
       drawPulses(dt);
     }
-    drawTerrain(a,reduce?4:t);
-    if(!reduce)drawBolts(dt);
+    if(SCN!==scene())buildScene();
+    if(DRAW[SCN])DRAW[SCN](a,reduce?4:t,reduce?0:dt);else drawTerrain(a,reduce?4:t);
+    if(!reduce){drawBolts(dt);drawWeather(dt,a)}
   }
 
-  /* click any empty space for a strike */
+  /* click any empty space for the weather */
   if(!reduce)[$('#main')].forEach(function(sec){
     sec.addEventListener('click',function(e){
       if(e.target.closest('a,button,input,label,h1,h2,h3,p,li,pre,code,.meta,.term,.card,.stats,.steps,.clone,.tags,.track,.lane')||String(getSelection()))return;
-      var a=anchor();strike(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa),true);nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
+      var a=anchor();weather(e.clientX,Math.min(Math.max(e.clientY,a.hz+(a.fa-a.hz)*.3),a.fa),true);nextStrike=Math.max(nextStrike,(performance.now()-t0)/1000+4);
     });
   });
 
+  window.LG.scene=scene;
   var raf=0;
   function loop(now){frame(now);raf=requestAnimationFrame(loop)}
-  function start(){readColors();build();if(reduce){frame(performance.now())}else{cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+  function start(){readColors();build();buildScene();if(reduce){frame(performance.now())}else{cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
   /* rebuild only when the width changes: on phones the address bar showing or hiding changes the height while you scroll,
      and rebuilding then threw new dots on screen mid-scroll */
   var rt,BW=0;addEventListener('resize',function(){if(innerWidth===BW)return;clearTimeout(rt);rt=setTimeout(start,150)});
