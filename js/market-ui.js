@@ -19,6 +19,7 @@
   var SLOT = ['palette', 'header', 'navigation', 'hero', 'cards', 'charts', 'controls', 'overlays', 'menus', 'ground'];
   // The themes that also dress the PC app and the phone: one purchase with their website version (themes.md, 8L).
   var APP = [
+    { id: 'dendera', line: 'Temple pigments on aged papyrus by day, the star ceiling by night, a pigment thread along the header.' },
     { id: 'papyrus', line: 'Lapis lacquer and gold foil whose light travels the edge, over papyrus fibres.' },
     { id: 'cotton', line: 'Warm paper and linen, embossed terracotta, ink tabs.' },
     { id: 'nile', line: 'Nile night and gold, on every screen you use.' }

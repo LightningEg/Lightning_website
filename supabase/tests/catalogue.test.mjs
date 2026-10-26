@@ -52,12 +52,13 @@ const owner = (sql, params) => as('authenticated', ADMIN, () => q(sql, params));
 const member = (sql, params) => as('authenticated', MEMBER, () => q(sql, params));
 const price = async id => (await q(`select price, tier, active from public.catalog_items where id = $1`, [id])).rows[0];
 
-await test('One theme, one purchase on every surface: papyrus is animated, app themes wait disabled', async () => {
+await test('One theme, one purchase on every surface: papyrus and dendera are animated, app themes wait disabled', async () => {
   assert.deepEqual(await price('papyrus'), { price: 1000, tier: 'motion', active: true });
+  assert.deepEqual(await price('dendera'), { price: 1000, tier: 'motion', active: true }, 'the animated tier keeps one price');
   assert.equal((await price('cotton')).price, 600);
   assert.equal((await price('nile')).price, 300);
   const app = (await q(`select item_id, asset_version, enabled from public.bundled_item_versions order by item_id`)).rows;
-  assert.deepEqual(app.map(r => [r.item_id, r.asset_version, r.enabled]), [['cotton', 1, false], ['nile', 1, false], ['papyrus', 1, false]]);
+  assert.deepEqual(app.map(r => [r.item_id, r.asset_version, r.enabled]), [['cotton', 1, false], ['dendera', 1, false], ['nile', 1, false], ['papyrus', 1, false]]);
 });
 
 await test('Only an MFA owner reads or changes the catalogue', async () => {

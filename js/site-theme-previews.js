@@ -19,5 +19,6 @@ window.LG={THEMES:[
     {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:300},
     /* textured tier (guideline/themes.md section 7): a palette plus a woven texture behind the page, 600 coins */
     {id:'papyrus',name:'Papyrus',note:'Nile night and gold over papyrus fibres, with a travelling gold thread',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],tex:'papyrus',paid:true,price:1000},
-    {id:'cotton',name:'Cotton',note:'warm paper light over a cotton weave',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,tex:'cotton',paid:true,price:600}
+    {id:'cotton',name:'Cotton',note:'warm paper light over a cotton weave',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,tex:'cotton',paid:true,price:600},
+    {id:'dendera',name:'Dendera',note:'temple pigments on aged papyrus: lapis, gold, turquoise and red ochre, with a slow pigment thread',c:['#f1e6cc','#1e1a14','#54483a','#1f3f8c'],light:true,tex:'dendera',paid:true,price:1000}
   ]};

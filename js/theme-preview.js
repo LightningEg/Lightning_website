@@ -46,7 +46,7 @@
     KEYS.forEach(function (k) { out[k] = p && HEX.test(p[k] || '') ? p[k] : DEFAULT[k]; });
     return out;
   }
-  var TEX = /^(papyrus|cotton)$/; // css/textures.css
+  var TEX = /^(papyrus|cotton|dendera)$/; // css/textures.css
   function paint(node, palette) {
     var p = clean(palette);
     if (palette && TEX.test(palette.tex || '')) node.setAttribute('data-tex', palette.tex); else node.removeAttribute('data-tex');

@@ -7,7 +7,8 @@
 :root[data-texture] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
 
 /* papyrus: long horizontal fibres crossed by a looser vertical layer, the way the sheets are laid */
-:root[data-texture="papyrus"] body::before,.pv[data-tex="papyrus"]{background-image:
+:root[data-texture="papyrus"] body::before,.pv[data-tex="papyrus"],
+:root[data-texture="dendera"] body::before,.pv[data-tex="dendera"]{background-image:
   repeating-linear-gradient(0deg,color-mix(in srgb,var(--tex-ink) 6%,transparent) 0 1px,transparent 1px 7px),
   repeating-linear-gradient(0deg,color-mix(in srgb,var(--tex-ink) 4%,transparent) 0 2px,transparent 2px 11px),
   repeating-linear-gradient(0deg,transparent 0 13px,color-mix(in srgb,var(--tex-ink) 5%,transparent) 13px 14px,transparent 14px 17px),
@@ -31,3 +32,12 @@
   background-size:300% 1px;background-repeat:repeat-x;background-origin:border-box;background-position:0 100%;animation:tex-thread 12s linear infinite}
 @keyframes tex-thread{from{background-position:0 100%}to{background-position:-150% 100%}}
 @media (prefers-reduced-motion:reduce){:root[data-texture="papyrus"] .d-bar{animation:none}}
+
+/* dendera is the animated tier too: its seam is painted in the temple's four pigments (lapis, kenit gold, mefkat
+   turquoise, desher red ochre), the way the app paints it (lightning/ui/static/theme-materials.css, pigment-thread),
+   and one soft light travels it every 14 s. Reduced motion leaves the still pigment seam. Fibres as papyrus above. */
+:root[data-texture="dendera"] .d-bar{border-bottom-color:transparent;
+  background-image:linear-gradient(90deg,transparent 0 45%,rgba(255,250,235,.85) 50%,transparent 55% 100%),linear-gradient(90deg,#3d5fb8,#b8892a 36%,#1f9a92 66%,#c2552f);
+  background-size:300% 1px,100% 1px;background-repeat:repeat-x,no-repeat;background-origin:border-box;background-position:0 100%,0 100%;animation:tex-pigment 14s linear infinite}
+@keyframes tex-pigment{from{background-position:0 100%,0 100%}to{background-position:-150% 100%,0 100%}}
+@media (prefers-reduced-motion:reduce){:root[data-texture="dendera"] .d-bar{animation:none;background-position:0 100%,0 100%}}
