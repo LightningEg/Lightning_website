@@ -62,7 +62,7 @@ def build():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>{title}</title><meta name="description" content="Your Lightning profile, collection and marketplace.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap">{head}
 <script src="js/theme.js"></script></head>
-<body data-account-page="account.html" data-main-store="true">{nav}{main}<footer></footer>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
+<body data-account-page="account.html" data-main-store="true">{nav}{main}<div class="wrap"><footer></footer></div>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
         (ROOT/(name+'.html')).write_text(page)
     js=(ROOT/'js/forgeeks.js').read_text()
     registry=re.search(r'var THEMES=(\[.*?\]);',js,re.S).group(1)
@@ -96,7 +96,7 @@ def connect_public_pages():
         text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
-        text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-1\2', text)
+        text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-2\2', text)
         text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js|js/forgeeks-showcase[.]js|js/forgeeks-profile[.]js|js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
