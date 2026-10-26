@@ -109,9 +109,9 @@ await test('seed: five palettes are sold, the rest archived, and js/forgeeks.js 
   assert.deepEqual(archivedJs, archivedDb);
 });
 
-await test('tiers: every theme has one, palettes cost 300 and textured 600; coin_rate() tells anyone the rate', async () => {
+await test('tiers: every theme has one, palettes cost 300, textured 600 and animated 1,000; coin_rate() tells anyone the rate', async () => {
   const t = (await q(`select id, tier, price from public.catalog_items where type = 'theme' and active and not is_default`)).rows;
-  assert.ok(t.every(r => (r.tier === 'palette' && r.price === 300) || (r.tier === 'texture' && r.price === 600)), JSON.stringify(t));
+  assert.ok(t.every(r => (r.tier === 'palette' && r.price === 300) || (r.tier === 'texture' && r.price === 600) || (r.tier === 'motion' && r.price === 1000)), JSON.stringify(t));
   assert.equal((await q(`select count(*)::int c from public.catalog_items where type not in ('theme','banner','name') and tier is not null`)).rows[0].c, 0);
   assert.equal((await q(`select count(*)::int c from public.catalog_items where type in ('banner','name') and tier is not null and tier <> 'motion'`)).rows[0].c, 0, 'banners and names are animated or plain');
   const rate = (await as('anon', null, () => q(`select public.coin_rate() r`))).rows[0].r;

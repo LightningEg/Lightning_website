@@ -169,18 +169,22 @@ await test('main: Details shows the theme on both sites (the main site light and
   assert.equal(p.$('mkt-detail').hidden, true);
 });
 
-await test('main: the app themes in testing are featured, tried and shown without a price', async () => {
+await test('main: the themes that dress the app too are featured with their price, tried and bought like any theme', async () => {
   const p = await boot({ withFetch: true });
   await tick(80);
-  assert.deepEqual(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')), ['nile-nocturne', 'royal-obsidian-gold', 'nile-papyrus-guilloche']);
+  assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'papyrus cotton nile');
   assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 3 && p.qa('.mkt-feat-card .pv-phone').length === 3);
-  await p.click(p.byLabel('Try Nile Nocturne on this page'));
-  assert.equal(p.root.dataset.skin, 'nile-nocturne');
+  const papyrus = p.q('.mkt-feat-card[data-app="papyrus"]');
+  assert.match(papyrus.querySelector('.mkt-feat-price').textContent, /600/, 'its catalogue price');
+  assert.match(papyrus.querySelector('.mkt-feat-tag').textContent, /site and app/);
+  await p.click(p.byLabel('Try Papyrus on this page'));
+  assert.equal(p.root.dataset.skin, 'papyrus');
   await p.click(p.q('.mkt-trybar-cancel'));
-  await p.click(p.byLabel('Royal Obsidian & Gold details'));
-  assert.deepEqual(p.qa('.mkt-view').map(b => b.textContent), ['Computer', 'Phone']);
-  assert.match(p.q('.mkt-detail-acts').textContent, /Price not set yet/);
-  assert.ok(!p.qa('.mkt-detail-acts button').some(b => /Buy/.test(b.textContent)));
+  await p.click(p.byLabel('Papyrus details'));
+  const views = p.qa('.mkt-view').map(b => b.textContent);
+  assert.ok(views.includes('Computer') && views.includes('Phone'), views.join(' '));
+  assert.ok(p.qa('.mkt-detail-acts button').some(b => /Buy/.test(b.textContent)), 'bought like any theme');
+  assert.doesNotMatch(p.q('.mkt-detail-acts').textContent, /Price not set yet/);
 });
 
 await test('For Geeks: the same structure in its own look; Try it switches the page theme and puts it back', async () => {
