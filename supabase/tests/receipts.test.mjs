@@ -153,4 +153,37 @@ await test('a ticket takes money recorded without one: it lists the likely trans
  assert.deepEqual(after.on_ticket.map(x=>x.reference),['IPN-5551','IPN-5552']);
  assert.deepEqual(after.candidates,[],'a credited ticket offers nothing more');
 });
+await test('a ticket records when, who and the reference; the same reference can never pay a second ticket',async()=>{
+ const open=async()=>{const M=await newUser();const c=(await as('authenticated',M,()=>q(`select * from public.create_checkout($1,$2,true)`,[P,key()]))).rows[0];
+  const k=(await as('authenticated',M,()=>q(`select public.reserve_topup_receipt($1) as path`,[c.id]))).rows[0].path;
+  await as('authenticated',M,()=>q(`insert into storage.objects(bucket_id,name)values('topup-receipts',$1)`,[k]));
+  const r=(await as('authenticated',M,()=>q(`select * from public.attach_topup_receipt($1,'01001234567',null,$2)`,[c.id,k]))).rows[0];return {M,c,k,r};};
+ const confirm=(t,amount,ref,at=null,sender=null)=>as('authenticated',ADMIN,async()=>(await q(`select public.admin_confirm_topup($1,$2,$3,$4,$5,$6,$7,$8) d`,[t.c.id,amount,null,t.k,t.r.receipt_revision,at,sender,ref])).rows[0].d);
+ const a=await open(),b=await open();
+ assert.equal((await confirm(a,8000,null)).status,'amount_differs','first without a reference');
+ const ok=await confirm(a,10000,'ipn 7788 1122','2026-10-25T09:30:00Z','sara@instapay');
+ assert.equal(ok.status,'approved');assert.equal((await wallet(a.M)).balance,500);
+ const rows=(await q(`select reference,amount_piastres,voided,sender_address,received_at from public.bank_transfers where request_id=$1 order by reference`,[a.c.id])).rows;
+ assert.deepEqual(rows.map(x=>[x.reference,x.voided]),[['IPN77881122',false],['TKT-'+a.c.id.replace(/-/g,'').slice(0,20).toUpperCase(),true]],'the reference replaces the unreferenced entry');
+ assert.equal(rows[0].sender_address,'sara@instapay');assert.equal(new Date(rows[0].received_at).toISOString(),'2026-10-25T09:30:00.000Z');
+ await assert.rejects(confirm(b,10000,'IPN77881122'),/already on another ticket/);
+ assert.equal((await wallet(b.M))?.balance??0,0,'nothing credited twice');
+ await assert.rejects(confirm(b,10000,'IPN-9',null),/6 to 100/);
+ await assert.rejects(confirm(b,10000,'IPN-990011',new Date(Date.now()+864e5).toISOString()),/future/);
+});
+await test('one owner account: a second can never be added, and the owner removes any extra one',async()=>{
+ const EXTRA=await newUser();
+ await assert.rejects(q(`insert into public.admin_roles(user_id,role) values ($1,'admin')`,[EXTRA]),/one owner account/);
+ // an older database may already list two: simulate it, then keep only the verified owner
+ await q(`alter table public.admin_roles disable trigger one_owner_account`);await q(`insert into public.admin_roles(user_id,role) values ($1,'admin')`,[EXTRA]);await q(`alter table public.admin_roles enable trigger one_owner_account`);
+ const seen=(await as('authenticated',ADMIN,()=>q(`select public.admin_owner_accounts() d`))).rows[0].d;
+ assert.equal(Number(seen.count),2);assert.deepEqual(seen.others.map(o=>o.email),[(await q(`select email from auth.users where id=$1`,[EXTRA])).rows[0].email]);
+ await assert.rejects(as('authenticated',OTHER,()=>q(`select public.admin_keep_only_me()`)),/MFA|admin/i,'members cannot');
+ await q(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
+ await assert.rejects(as('authenticated',EXTRA,()=>q(`select public.admin_keep_only_me()`)),/MFA/,'needs a verified session');
+ await q(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+ assert.equal((await as('authenticated',ADMIN,()=>q(`select public.admin_keep_only_me() n`))).rows[0].n,1);
+ assert.deepEqual((await q(`select user_id from public.admin_roles`)).rows.map(x=>x.user_id),[ADMIN]);
+ assert.equal((await as('authenticated',EXTRA,()=>q(`select public.is_admin() a`))).rows[0].a,false,'the other account no longer sees the console');
+});
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;

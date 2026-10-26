@@ -32,6 +32,8 @@ insert into public.admin_roles (user_id, role)
 select id, 'admin' from auth.users where email = 'YOUR-EMAIL-HERE';
 ```
 
+Lightning has **one** owner account: once one is listed, adding a second is refused. If an older database lists more than one, sign in with the account you keep, verify MFA on `admin.html`, and use Settings › Owner account › *Make this the only owner account* (`admin_keep_only_me`); only that account then sees *Owner console* in the menu.
+
 Do not commit your address. Administrators publish rewards (`publish_reward`), correct the ledger (`admin_correct_entry`) and moderate profiles (`admin_suspend_profile`).
 
 ## Sign-in settings
