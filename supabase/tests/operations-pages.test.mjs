@@ -53,6 +53,17 @@ assert.deepEqual({...sends[0].args,p_request_key:undefined},{p_amount_piastres:1
 assert.equal(p.$('topup-confirm').hidden,true);assert.match(p.$('topup-status').textContent,/add 525 coins once your 100 EGP shows/);assert.equal(p.$('topup-new').hidden,false);
 await p.click(p.$('topup-new'));assert.equal(p.$('topup-pay').hidden,false);
 await p.click(p.$('topup-sent'));await p.click(p.$('topup-back'));assert.equal(p.$('topup-pay').hidden,false,'a way back to the details');p.close();
+// A payment already sent above the former 10,000 EGP cap can be reported as one transfer.
+p=await boot({rpc:(name,args)=>{
+ if(name==='topup_payment_details')return {data:{enabled:true,instapay_address:'project@instapay',recipient_name:'Lightning Recipient',note_email:'member@example.test',coins_per_egp:5,minimum_egp:10,maximum_egp:null,pricing_version:2,tiers:[]},error:null};
+ if(name==='quote_topup_amount')return {data:{amount_piastres:args.p_amount_piastres,coins:172500,base_coins:150000,bonus_coins:22500,pricing_version:2,enabled:true},error:null};
+ return null;
+}});
+assert.match(p.$('topup-rate').textContent,/Send from 10 EGP/);assert.doesNotMatch(p.$('topup-rate').textContent,/10,000|100,000/);
+await p.click(p.$('topup-sent'));assert.equal(p.$('topup-amount').hasAttribute('max'),false);
+p.$('topup-amount').value='30000';p.$('topup-amount').dispatchEvent(new p.w.Event('input'));await new Promise(r=>setTimeout(r,300));
+assert.equal(p.$('topup-send').disabled,false);p.$('topup-confirm').elements.payer.value='payer@instapay';p.$('topup-confirm').elements.terms.checked=true;
+await p.submit('topup-confirm');assert.equal(p.calls.find(c=>c.name==='submit_instapay_topup').args.p_amount_piastres,3000000);p.close();
 // a request opened earlier without details: "I've paid" confirms that one, at its amount
 p=await boot();p.state.rows=[{...proof,request_key:'66666666-6666-4666-8666-666666666666',original_amount_piastres:10000,created_at:'2026-10-25T09:00:00Z'}];await p.click(p.$('topup-refresh'));
 assert.match(p.$('topup-history').textContent,/Waiting for your details/);await p.click([...p.$('topup-history').querySelectorAll('button')].find(b=>b.textContent==='I’ve paid'));
