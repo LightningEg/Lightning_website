@@ -22,6 +22,7 @@ jobs:
           node apps-script/tests/website-receiver.test.js
           node apps-script/tests/receiver.test.js
           node analytics/tests/rules.test.js
+          python tools/docs_check.py
           python tools/site_check.py
           python apps-script/tests/test_deploy_receiver.py
           python tools/deploy_receiver.py --output /tmp/LightningAppsScript.gs
