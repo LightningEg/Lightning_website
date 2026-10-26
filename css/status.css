@@ -64,7 +64,17 @@
 @media (max-width:820px){.status-setup{grid-template-columns:1fr}.status-checklist{grid-template-columns:1fr}}
 @media (max-width:640px){
   .status-path{grid-template-columns:1fr}
-  .status-table th,.status-table td{padding:16px}
+  /* on a phone each build is its own card: release and status on top, the platform, then both buttons in reach (C over A) */
+  .status-table-wrap{overflow:visible;border:0;border-radius:0;background:none;box-shadow:none}
+  .status-table{min-width:0}
+  .status-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .status-table tbody{display:grid;gap:12px}
+  .status-table tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;align-items:start;padding:18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);box-shadow:var(--shadow)}
+  .status-table th,.status-table td,.status-table tbody tr:last-child>*{display:block;width:auto;padding:0;border:0}
+  .status-table td:nth-child(2),.status-table td:nth-child(4),.status-table td:nth-child(5){grid-column:1/-1}
+  .status-table tbody th{width:auto}
+  .status-table td:nth-child(3){grid-column:2;grid-row:1}
+  .status-table td .btn{width:100%}
   .status-table-hint{display:block;margin:10px 4px 0;color:var(--muted);font-size:13px;line-height:1.4}
   .status-profile-link{grid-template-columns:1fr}
   .status-profile-link em{white-space:normal}

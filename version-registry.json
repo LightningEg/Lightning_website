@@ -2862,8 +2862,8 @@
       "id": "UX-2026.10.22.04",
       "name": "Net Worth, Budget and Expense Tracker · August expenses",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.04.html"
     },
     {
       "id": "UX-2026.10.22.05",
@@ -2974,8 +2974,8 @@
       "id": "UX-2026.10.23.12",
       "name": "Downloads · Lightning 1.4.4",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.12.html"
     },
     {
       "id": "UX-2026.10.23.13",
@@ -3016,8 +3016,8 @@
       "id": "UX-2026.10.23.18",
       "name": "App Feedback · Lightning 1.4.4",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.18.html"
     },
     {
       "id": "UX-2026.10.23.19",
@@ -3036,6 +3036,34 @@
     {
       "id": "UX-2026.10.25.02",
       "name": "Version Archive · Privacy for accounts",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.25.02.html"
+    },
+    {
+      "id": "UX-2026.10.26.01",
+      "name": "Net Worth, Budget and Expense Tracker · Hero fits the screen",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.02",
+      "name": "Downloads · Builds table on a phone",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.03",
+      "name": "App Feedback · Labelled attachments",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.26.04",
+      "name": "Version Archive · Site audit fixes",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
