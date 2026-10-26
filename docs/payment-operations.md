@@ -13,12 +13,16 @@
 
 Open `/admin.html`, sign in with the owner account and verify an authenticator code. The server requires an active AAL2 session for financial and moderation operations. Routine operations use this console; no SQL or Google Sheet editing is needed.
 
+The console (rebuilt 2026-10-26) has one menu and seven views: **Overview** (what needs you, the month, thirty days of revenue, what sells, and *Ready to sell*: receiving details, checkout open, quotes on, fixed cost, a first real payment, app themes released), **Top-ups**, **Catalogue** (tier prices, app releases, every item with its sales, owners and status; retire or offer again; price a banner, frame, badge or name), **Members** (manual credits), **Stories**, **Money journal** and **Settings** (checkout, coin price with a live example, fixed cost, owner account, receipt retention). The header shows whether checkout is open and the ledger balanced.
+
 - **Checkout setup:** upload the real QR privately, verify the receiving address and exact displayed name, and save the processing message. Real receiving information is not a public asset or repository file. Turn checkout off to pause new payments; existing requests still resolve.
 - **Pricing:** change the rate, allowed range or bonuses here. Existing quotes retain their value. The default is 5 coins per EGP, minimum 10 EGP and maximum 10,000 EGP, with no bundles.
 - **Top-ups on one screen** (owner, 2026-10-26: "I want to do it on one screen"): Top-ups lists every open ticket as one row: the member, amount and coins, and what they said (amount, date, where they paid from). Find the money in your own InstaPay or bank app, type what arrived and its reference in the row, and press *Arrived · credit N coins*. A line compares it with the quote as you type (and counts money already on the ticket); a different amount turns the button into *Record what arrived* and credits nothing. *More* on the row holds when it arrived, the sender, a note, Reject, a revised offer and a return. `admin_confirm_topup` records the transfer and credits only when the money on the ticket equals the quote; a reference can pay one ticket only. Older tickets with a receipt show *Show receipt*, and it must be shown before they credit.
 - **One owner account** (owner, 2026-10-26): only one account is in `admin_roles`, and a second can never be added. If an older database lists more, Settings › Owner account names them; *Make this the only owner account* (MFA, from the account you keep) removes the rest.
 - **Money already recorded** (owner, 2026-10-25: reconcile on the same page): an open ticket also lists the money on it and any unmatched transfer that looks like it (same sender, email in the note, their reference, or the same amount within two days). *Use for this ticket* moves that transfer onto the ticket (`admin_attach_transfer`) and credits at once when the ticket's money equals the quote and the receipt was shown; *Not for this ticket* takes one off. Nothing is recorded twice.
-- **Money without a ticket** (Settings, folded): the older bank journal, for money that arrived with no request. Rarely needed.
+- **Money journal:** every recorded transfer, unmatched first, and a folded form for money that arrived with no request. Rarely needed.
+- **Catalogue** (2026-10-26): a tier keeps one price, so a theme is priced by its tier (`admin_set_tier_price`), never alone; a set follows its parts at 80%; banners, frames, badges and names are priced one at a time (`admin_set_item_price`). *Retire* takes an item off sale and owners keep it (`admin_set_item_active`). Every change is audited.
+- **App releases** (Catalogue › App themes): an app theme is one purchase with its website version. Its unlock stays off until the Windows and Android release that carries it has shipped; then *Turn on unlock* (`admin_set_app_release`) lets owners get a one-time code. *Pause new unlocks* stops new codes; unlocked copies keep working.
 - **Ledger discrepancies:** must remain zero. The immutable Supabase ledger is the balance source; spreadsheets can be exports only. Do not manually edit wallet balances or ledger entries.
 - **Manual credits:** use a clear reason for promotional/support credits. Coins are spendable; recognition points affect the leaderboard. This control is not bank reconciliation and must not substitute for approving a real payment.
 
@@ -50,11 +54,19 @@ Content changes invalidate verification. An outdated moderation screen cannot ap
 
 Owner revision (2026-10-25): about 3,000 EGP of fixed cost a month, 5 coins per EGP, and buyers who pay once rather than monthly. Coins are fixed prices; the market also shows each price in EGP (`coin_rate()`).
 
+**Ready to sell (2026-10-26, owner: "figure out the pricing").** One theme is one purchase on every surface: both sites, the PC and the phone (guideline/themes.md). The app's themes therefore take the website's ids and tiers: Nile (palette), Cotton (textured) and Papyrus (animated: the app's travelling gold-foil edge, the site's gold thread). Tier prices stay where they were, for three reasons:
+
+- **Each tier is one round top-up.** 60 EGP buys 300 coins: a palette. 120 EGP buys 630 coins with the 5% bonus: a textured theme and change. 200 EGP buys 1,050 coins: an animated theme and change. The buyer never has to top up twice, and never sees a price that strands most of a top-up.
+- **The ladder doubles, then rises by two thirds**, so the step from colour to material reads as earned, and the animated tier is the premium choice, not a different product.
+- **The app makes each theme worth more, not cost more.** Holding prices while adding the PC and phone versions is the launch offer; it needs no discount, and a tier keeps one price.
+
+Break-even at 3,000 EGP a month is about 15 animated themes, 25 textured or 50 palettes, less review time. Revisit after 60 days of real sales: if more than 40% of theme buyers choose animated, raise the next animated drop rather than discount anything; if palettes outsell everything, add a textured drop before touching price.
+
 | Tier | What it is | Coins | EGP |
 | --- | --- | --- | --- |
-| Palette | New colours on both sites, light and dark sides | 300 | 60 |
-| Textured | The palette plus a woven texture behind every page | 600 | 120 |
-| Animated (later) | Texture plus one quiet signature motion, still under reduced motion | 1,000 | 200 |
+| Palette | New colours on both sites, the PC and the phone | 300 | 60 |
+| Textured | The palette plus a material: a woven ground, grain, edge light | 600 | 120 |
+| Animated | The material plus one slow signature motion, still under reduced motion | 1,000 | 200 |
 | Banner | Strip on your profile, leaderboard row and account | 100–200 | 20–40 |
 | Frame · badge | Ring round your picture · mark beside your name | 60–100 | 12–20 |
 | Name style | Your display name in a colour (150), a gradient (300), or with one slow shimmer (500) | 150–500 | 30–100 |
@@ -83,9 +95,9 @@ Count coins only when they are spent: unspent coins are an obligation to deliver
 
 ## Deployment and acceptance
 
-Apply source migrations 2300, 2400, 2500 and 2600 after the existing core/audit/member-guard migrations. Provision receiving details and private QR through trusted runtime administration, never public source. Deploy versioned frontend assets. Retire legacy unquoted purchases and old receipt-review calls with migration 2100 only after the new frontend is live. Local tests apply migrations in filename order; the deferred retirement is compatible with the newer wrappers.
+Apply every migration in `supabase/migrations/` in filename order (the newest is `20261026110000_catalogue_and_app_release.sql`). Provision receiving details and private QR through trusted runtime administration, never public source. Deploy versioned frontend assets. Retire legacy unquoted purchases and old receipt-review calls with migration 2100 only after the new frontend is live. Local tests apply migrations in filename order; the deferred retirement is compatible with the newer wrappers.
 
-Run the SQL integration suite, browser-script tests, site checks and phone/desktop browser acceptance. Confirm zero wallet discrepancies and review Supabase security advisors. Then perform one genuine owner-supervised bank transfer, receipt upload, independent bank confirmation, credit, marketplace purchase and cross-device inventory check. Automated tests simulate transfers locally; they are not proof of live bank receipt or native app delivery. No real money is moved by these tests.
+Run the SQL integration suite, browser-script tests, site checks and phone/desktop browser acceptance. Confirm zero wallet discrepancies and review Supabase security advisors. Then perform one genuine owner-supervised InstaPay transfer, details confirmation, independent bank confirmation, credit, marketplace purchase and cross-device inventory check (the Overview's *Ready to sell* ticks it once a payer exists). Automated tests simulate transfers locally; they are not proof of live bank receipt or native app delivery. No real money is moved by these tests.
 
 Security-advisor review: private QR/reference tables deliberately have RLS enabled with no client policies (deny by default). Public profile projection views retain consent/adult/member filters and safe display-field allowlists; their definer-view notices remain intentional. Definer RPCs explicitly enforce ownership or active owner/MFA access and fixed search paths. The project also reports that leaked-password protection is disabled; this Auth setting is a remaining provider hardening item, not evidence of successful payment acceptance. See [Supabase password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) and [definer-view review](https://supabase.com/docs/guides/database/database-linter?lint=0010_security_definer_view).
 

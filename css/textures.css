@@ -1,6 +1,6 @@
 /* Theme textures, part 10 of guideline/themes.md: the textured tier's woven ground. One file for every surface:
    the main site and For Geeks draw it behind all content (:root[data-texture], set by js/theme.js and js/forgeeks.js),
-   and the previews draw it on their own ground (.pv[data-tex], js/theme-preview.js). Gradients only: no images, no motion.
+   and the previews draw it on their own ground (.pv[data-tex], js/theme-preview.js). Gradients only: no images.
    Lines are the text colour at 3 to 7 percent, so they sit on the ground and never under a letter's contrast. */
 :root{--tex-ink:var(--ink)}
 .pv{--tex-ink:var(--pv-text)}
@@ -22,3 +22,12 @@
   repeating-linear-gradient(45deg,color-mix(in srgb,var(--tex-ink) 5%,transparent) 0 1px,transparent 1px 6px),
   repeating-linear-gradient(-45deg,color-mix(in srgb,var(--tex-ink) 3%,transparent) 0 1px,transparent 1px 6px);
   background-size:34px 34px,34px 34px,auto,auto}
+
+/* papyrus is the animated tier (themes.md section 7): its one motion is a slow gold thread travelling the header's
+   seam every 12 s, in the seam's own 1px, behind content; reduced motion leaves the plain seam. The app draws the
+   same idea round its hero card (lightning/ui/static/theme-materials.css, edge-glint). */
+:root[data-texture="papyrus"] .d-bar{border-bottom-color:transparent;
+  background-image:linear-gradient(90deg,var(--line) 0 40%,color-mix(in srgb,#e6b450 45%,transparent) 46%,#e6b450 50%,color-mix(in srgb,#e6b450 45%,transparent) 54%,var(--line) 60% 100%);
+  background-size:300% 1px;background-repeat:repeat-x;background-origin:border-box;background-position:0 100%;animation:tex-thread 12s linear infinite}
+@keyframes tex-thread{from{background-position:0 100%}to{background-position:-150% 100%}}
+@media (prefers-reduced-motion:reduce){:root[data-texture="papyrus"] .d-bar{animation:none}}

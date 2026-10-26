@@ -1,4 +1,5 @@
-/* Owner dashboard (admin.html): one view at a time (Today, Top-ups, Bank, Stories, Settings), and the Today view
+/* Owner console (admin.html): one view at a time (Overview, Top-ups, Catalogue, Members, Stories, Money journal,
+   Settings), the segmented filters, and the Overview
    drawn from admin_dashboard() (supabase/migrations/20261025330000_owner_dashboard.sql): what needs the owner, the
    month against the fixed cost, paying members, the coins in circulation, thirty days of revenue and what sells.
    Every decision and credit still goes through js/store-admin.js and the server; this file only reads and shows.
@@ -9,8 +10,9 @@
   var $ = function (id) { return doc.getElementById(id); };
   var host = $('ops-dash');
   if (!host || !FG) return;
-  var VIEWS = ['today', 'requests', 'social', 'settings'];
-  var last = null, loading = false, again = false;
+  var VIEWS = ['today', 'requests', 'catalogue', 'members', 'social', 'bank', 'settings'];
+  var ALIAS = { setup: 'settings', pricing: 'settings', retention: 'settings', credits: 'members' };
+  var last = null, loading = false, again = false, store = {}, ready = null;
 
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function add(p, kids) { kids.forEach(function (k) { if (k) p.appendChild(k); }); return p; }
@@ -25,19 +27,53 @@
   /* ---------- one view at a time ---------- */
   function show() {
     var want = (location.hash || '').slice(1);
-    if (want === 'bank') { var b = $('bank'); if (b && b.querySelector('details')) b.querySelector('details').open = true; }
-    if (want === 'setup' || want === 'pricing' || want === 'credits' || want === 'retention' || want === 'bank') want = 'settings';
+    want = ALIAS[want] || want;
     if (VIEWS.indexOf(want) < 0) want = 'today';
     VIEWS.forEach(function (v) { var s = $(v); if (s) s.hidden = v !== want; });
     Array.prototype.forEach.call(doc.querySelectorAll('.ops-nav a'), function (a) {
       if (a.getAttribute('data-view') === want) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
+    window.dispatchEvent(new CustomEvent('lightning:owner-view', { detail: { view: want } }));
   }
-  // the checkout, pricing and retention panels belong to Settings
-  var move = $('settings-move');
-  if (move) Array.prototype.forEach.call(doc.querySelectorAll('.ops-settings'), function (p) { move.appendChild(p); });
   window.addEventListener('hashchange', show);
   show();
+  // Switching views never jumps the page to the section: it keeps the console header in sight instead.
+  var shell = doc.querySelector('.oc-head');
+  function settle() { if (shell && window.scrollY > shell.offsetTop) window.scrollTo(0, shell.offsetTop); }
+  doc.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var v = a.getAttribute('href').slice(1), to = ALIAS[v] || v;
+    if (VIEWS.indexOf(to) < 0 && v !== 'bank') return;
+    e.preventDefault();
+    if (location.hash !== '#' + v) history.pushState(null, '', '#' + v);
+    show(); settle();
+  });
+  if (location.hash) {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', function () { setTimeout(function () { window.scrollTo(0, 0); }, 0); });
+  }
+
+  // Segmented filters drive the plain select beside them, which js/store-admin.js listens to.
+  Array.prototype.forEach.call(doc.querySelectorAll('.oc-seg'), function (group) {
+    var select = $(group.getAttribute('data-for'));
+    if (!select) return;
+    group.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('button[data-value]');
+      if (!b || b.disabled) return;
+      Array.prototype.forEach.call(group.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      select.value = b.getAttribute('data-value');
+      select.dispatchEvent(new Event('change'));
+    });
+  });
+
+  // Verification: the gate shows until the session is verified, then folds away.
+  window.addEventListener('lightning:owner-access', function (e) {
+    var gate = $('ops-mfa'), access = $('store-access'), on = !!(e.detail && e.detail.verified);
+    if (gate) gate.hidden = on;
+    if (access) access.hidden = on; // "Owner account recognized" has done its job
+    if (on) load();
+  });
 
   /* ---------- Today ---------- */
   function need(count, title, sub, view, tone) {
@@ -84,6 +120,40 @@
     return svg;
   }
 
+  // Ready to sell: each thing the store needs before money changes hands, with where to fix it.
+  function readiness(d) {
+    var r = ready || {}, cfg = r.settings || {}, coin = r.pricing || {}, apps = r.apps || { on: 0, all: 0 };
+    var steps = [
+      [!!(cfg.instapay_address && cfg.recipient_name && cfg.qr_asset_id), 'Receiving details and QR', 'Your InstaPay address, the exact name it shows, and the private QR', 'settings'],
+      [!!(store.payments_enabled || cfg.enabled), 'Checkout open', 'Members can start a top-up', 'settings'],
+      [!!coin.enabled, 'Top-up quotes allowed', (coin.coins_per_egp || 5) + ' coins a pound, bonuses from ' + ((r.tiers || [])[0] ? r.tiers[0].minimum_egp + ' EGP' : 'none'), 'settings'],
+      [Number(d.fixed_cost_egp) > 0, 'Fixed cost set', 'The break-even line below', 'settings'],
+      [Number(d.payers_all) > 0, 'A real payment credited', 'Pay yourself once from another account, credit it, buy, check on a second device', 'requests'],
+      [apps.all > 0 && apps.on === apps.all, 'App themes released', apps.on + ' of ' + apps.all + ' on. Turn each on once the app version that carries it has shipped', 'catalogue']];
+    var done = steps.filter(function (s) { return s[0]; }).length;
+    var list = el('ol', 'oc-ready');
+    steps.forEach(function (s) {
+      var a = el('a', 'oc-ready-step' + (s[0] ? ' done' : ''));
+      a.href = '#' + s[3];
+      add(a, [el('span', 'oc-tick', s[0] ? '✓' : ''), add(el('span'), [el('b', null, s[1]), el('small', null, s[2])])]);
+      list.appendChild(add(el('li'), [a]));
+    });
+    var head = add(el('div', 'ops-card-h'), [el('h3', null, 'Ready to sell'), el('span', 'ops-chip ' + (done === steps.length ? 'good' : ''), done + ' of ' + steps.length)]);
+    return add(el('section', 'ops-block ops-card oc-ready-card'), [head, list]);
+  }
+  function context() {
+    // what the store is set to, for the readiness list; each read is allowed to fail on its own
+    var safe = function (fn, none) { return new Promise(function (ok) { ok(fn()); }).then(function (r) { return r && !r.error ? r.data : none; }, function () { return none; }); };
+    var from = function (t) { return safe(function () { return FG.sb.from(t).select('*').eq('id', 1).single(); }, null); };
+    var tiers = safe(function () { return FG.sb.from('coin_bonus_tiers').select('*').order('minimum_egp'); }, []);
+    var cat = safe(function () { return FG.sb.rpc('admin_catalog'); }, null);
+    return Promise.all([from('payment_settings'), from('coin_pricing'), tiers, cat]).then(function (x) {
+      var apps = { on: 0, all: 0 };
+      ((x[3] && x[3].items) || []).forEach(function (i) { (i.app || []).forEach(function (v) { apps.all++; if (v.enabled) apps.on++; }); });
+      ready = { settings: x[0], pricing: x[1], tiers: x[2] || [], apps: apps };
+    });
+  }
+
   function render(d) {
     host.textContent = '';
     var n = d.needs || {};
@@ -94,7 +164,7 @@
       need(n.awaiting_receipt, 'Waiting for a receipt', n.awaiting_receipt ? 'The member has not uploaded yet' : 'None', 'requests', ''),
       need(n.stories, 'Stories to review', n.stories ? 'Check the code and the link' : 'Queue clear', 'social', 'warn'),
       need(n.mismatches, 'Ledger mismatches', n.mismatches ? 'A wallet differs from its ledger' : 'Wallets agree with the ledger', 'today', 'bad')]);
-    var loose = Number(n.unmatched) ? add(el('p', 'ops-fine'), [el('span', null, num(n.unmatched) + ' older transfer' + (Number(n.unmatched) === 1 ? '' : 's') + ' with no ticket. '), (function () { var a = el('a', null, 'Open Money without a ticket'); a.href = '#bank'; return a; })()]) : null;
+    var loose = Number(n.unmatched) ? add(el('p', 'ops-fine'), [el('span', null, num(n.unmatched) + ' older transfer' + (Number(n.unmatched) === 1 ? '' : 's') + ' with no ticket. '), (function () { var a = el('a', null, 'Open the money journal'); a.href = '#bank'; return a; })()]) : null;
     host.appendChild(add(el('section', 'ops-block'), [el('h3', null, 'Needs you'), needs, loose]));
 
     // the month
@@ -135,6 +205,7 @@
       sells.appendChild(ul);
     }
     host.appendChild(add(el('div', 'ops-pair'), [trend, sells]));
+    host.appendChild(readiness(d));
 
     // badges on the tabs, and the fixed cost in Settings
     Array.prototype.forEach.call(doc.querySelectorAll('[data-badge]'), function (b) { var v = Number(n[b.getAttribute('data-badge')]) || 0; b.textContent = v ? String(v) : ''; b.hidden = !v; });
@@ -145,16 +216,16 @@
   function load() {
     if (loading) { again = true; return; }
     loading = true;
-    Promise.resolve(FG.sb.rpc('admin_dashboard')).then(function (r) {
+    Promise.all([Promise.resolve(FG.sb.rpc('admin_dashboard')), context()]).then(function (x) {
+      var r = x[0];
       if (r.error) throw r.error;
       last = r.data; render(last);
-      var mfa = $('ops-mfa'); if (mfa) mfa.open = false; // verified: the panel folds to one line
     }).catch(function (e) {
       host.textContent = '';
       host.appendChild(el('p', 'ops-empty', 'The dashboard did not load. ' + (FG.say ? FG.say(e) : '')));
     }).then(function () { loading = false; if (again) { again = false; load(); } });
   }
-  window.addEventListener('lightning:owner-changed', load);
+  window.addEventListener('lightning:owner-changed', function (e) { if (e.detail) store = e.detail; load(); });
 
   var form = $('ops-fixed-cost');
   if (form) form.onsubmit = function (e) {

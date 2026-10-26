@@ -1,27 +1,113 @@
-"""Generate the main-site owner console using the shared account/MFA controls."""
+"""Generate the main-site owner console (admin.html) using the shared account/MFA controls.
+
+    python tools/store_admin.py   # then python tools/footer.py to write the footer
+
+The console is one page with a menu and one view at a time (js/owner-dashboard.js): Overview, Top-ups, Catalogue,
+Members, Stories, Money journal and Settings. Element ids are the contract with js/store-admin.js,
+js/admin-operations.js, js/owner-catalog.js and the tests in supabase/tests/*pages*.test.mjs; keep them.
+"""
 from pathlib import Path
 import re
-ROOT=Path(__file__).resolve().parents[1]
-VERSION="20261026-onescreen-1"  # css/store-admin.css, js/store-admin.js, js/owner-dashboard.js
+
+ROOT = Path(__file__).resolve().parents[1]
+VERSION = "20261026-console-2"  # css/store-admin.css and every js/ file below
+
+ICON = {  # Lucide (A15), stroked by css/store-admin.css
+    'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
+    'requests': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/>',
+    'catalogue': '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+    'members': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+    'social': '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    'bank': '<path d="M3 21h18"/><path d="M5 21V10"/><path d="M19 21V10"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="m2 10 10-6 10 6"/>',
+    'settings': '<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/>',
+}
+MENU = [('today', 'Overview', ''), ('requests', 'Top-ups', 'receipts'), ('catalogue', 'Catalogue', ''),
+        ('members', 'Members', ''), ('social', 'Stories', 'stories'), ('bank', 'Money journal', 'unmatched'),
+        ('settings', 'Settings', '')]
+
+
+def icon(name):
+    return f'<svg viewBox="0 0 24 24" aria-hidden="true">{ICON[name]}</svg>'
+
+
+def view(key, title, lead, body):
+    head = f'<header class="oc-view-head"><h2 id="{key}-h">{title}</h2><p class="oc-lead">{lead}</p></header>'
+    return f'<section class="ops-view" id="{key}" aria-labelledby="{key}-h" hidden>{head}{body}</section>'
+
+
+def seg(label, target, options):
+    buttons = ''.join(f'<button type="button" data-value="{v}" aria-pressed="{"true" if i == 0 else "false"}">{t}</button>' for i, (v, t) in enumerate(options))
+    select = ''.join(f'<option value="{v}">{t}</option>' for v, t in options)
+    return (f'<div class="oc-seg" role="group" aria-label="{label}" data-for="{target}">{buttons}</div>'
+            f'<select id="{target}" class="oc-hidden-select" aria-label="{label}" tabindex="-1">{select}</select>')
+
+
 def build():
- home=(ROOT/'index.html').read_text();legacy=(ROOT/'forgeeks-admin.html').read_text()
- nav=re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>',home,re.S).group().replace(' aria-current="page"','')
- mfa=re.search(r'<section class="panel"><h2>Verify administrator access.*?</section>',legacy,re.S).group()
- credit=re.search(r'<form class="panel" id="admin-credit-form">.*?</form>',legacy,re.S).group()
- price=re.search(r'<form class="panel" id="admin-price-form">.*?</form>',legacy,re.S).group()
- price=re.sub(r'<p>Mono stays free\..*?</p>','<p>Mono stays free. Palettes are 300 coins and textured themes 600 (guideline/themes.md section 7). Change one item here without editing SQL; a tier keeps one price.</p>',price,count=1,flags=re.S).replace('value="100"','value="300"')
- panels='''
-<section class="panel ops-settings" id="setup"><h2>Checkout setup</h2><p>Support: <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a>. The QR is private and appears only in a signed-in customer’s accepted checkout.</p>
-<form id="store-settings"><div class="fields two"><label>Receiving InstaPay address<input name="address" maxlength="200" required></label><label>Exact recipient name shown by InstaPay<input name="recipient" maxlength="200" required></label></div><label>Private QR image<input type="file" name="qr" accept="image/png,image/jpeg,image/webp"></label><p id="store-qr-status">Upload only when changing the QR.</p><label>Processing instructions<textarea name="processing" minlength="20" maxlength="400" required></textarea></label><label class="chk"><input name="enabled" type="checkbox"><span>Open checkout after checking the receiving details and QR</span></label><button class="btn" type="submit">Save checkout settings</button></form><p id="store-settings-status" role="status"></p></section>
-<section class="panel ops-settings" id="pricing"><h2>Amount-based coin pricing</h2><p>Customers enter an EGP amount. The quote freezes the rate and bonus before payment; later pricing changes affect new requests.</p><form id="store-pricing"><div class="fields three"><label>Coins per 1 EGP<input name="rate" type="number" min="1" max="1000" required></label><label>Minimum EGP<input name="minimum" type="number" min="1" required></label><label>Maximum EGP<input name="maximum" type="number" min="1" max="100000" required></label></div><label>Bonus thresholds (EGP:percent, one per line)<textarea name="tiers" rows="3" placeholder="100:5&#10;500:10&#10;1000:15"></textarea></label><label class="chk"><input name="enabled" type="checkbox"><span>Allow new amount quotes</span></label><button class="btn" type="submit">Save pricing</button></form><p id="store-pricing-status" role="status"></p></section>
-<section class="panel ops-settings" id="bank"><details><summary><h2>Money without a ticket</h2></summary><p>Rare: money arrived with no top-up to match, or you need the older journal. Tickets record their own transfers.</p><form id="store-bank-record"><div class="fields two"><label>Receiving bank reference<input name="reference" minlength="6" maxlength="100" required></label><label>Actual EGP received<input name="amount" type="number" step="0.01" min="0.01" required></label><label>Received at (your local time)<input name="received" type="datetime-local" required></label><label>Checkout request ID (leave empty if unmatched)<input name="request" autocomplete="off"></label><label>Sender InstaPay address (if known)<input name="sender" maxlength="200"></label><label>Lightning email in the transfer note (if present)<input name="email" type="email" maxlength="254"></label></div><label>Reconciliation note<textarea name="note" minlength="5" maxlength="500" required></textarea></label><label class="chk"><input name="confirmed" type="checkbox" required><span>I independently confirmed these funds reached the receiving account.</span></label><button class="btn" type="submit">Record bank transfer</button></form><p id="store-bank-status" role="status"></p><h3>Bank journal</h3><div class="row"><select id="store-bank-filter" aria-label="Bank journal filter"><option value="unmatched">Unmatched</option><option value="all">All transfers</option></select><button class="btn ghost" type="button" id="store-bank-refresh">Refresh journal</button></div><div id="store-bank-list"></div><button class="btn ghost" id="store-bank-more" type="button">Load more</button></details></section>
-<section class="ops-view" id="requests"><h2>Top-ups</h2><p class="ops-lead">Every open top-up on one screen. Find the money in your InstaPay or bank app, type what arrived, confirm.</p><div class="row"><select id="store-request-filter" aria-label="Request status"><option value="pending">Open</option><option value="approved">Credited</option><option value="rejected">Rejected</option><option value="cancelled">Cancelled</option></select><input id="store-request-search" type="email" placeholder="Member email" aria-label="Member email"><button class="btn ghost" type="button" id="store-request-refresh">Refresh</button></div><p id="store-request-status" role="status"></p><div id="store-request-list"></div><button class="btn ghost" id="store-request-more" type="button">Load more</button></section>
-<section class="ops-view" id="social"><h2>Stories</h2><p class="ops-lead">Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.</p><div class="row"><select id="store-social-filter" aria-label="Post status"><option value="pending">Pending</option><option value="published">Published</option><option value="rejected">Rejected</option></select><button class="btn ghost" type="button" id="store-social-refresh">Refresh posts</button></div><div id="store-social-list"></div><button class="btn ghost" id="store-social-more" type="button">Load more</button></section>
-<section class="panel ops-settings" id="retention"><h2>Receipt retention</h2><p>Delete eligible image files older than 90 days. Pending payment evidence is protected; financial ledger records remain.</p><button class="btn ghost" id="store-retention" type="button">Remove expired receipt files</button><p id="store-retention-status" role="status"></p></section>
-'''
- page=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner dashboard · Lightning</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1"><link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head><body data-account-page="account.html" data-main-store="true" data-owner-console="amount">{nav}<main class="wrap acct ops"><section class="acct-top"><div class="ops-head"><div><h1>Owner dashboard.</h1><p class="lede">What needs you, how the month is going, and every tool to run the store.</p></div><button class="btn ghost" id="store-unlock" type="button">Refresh</button></div><p id="store-access" role="status">Checking account access…</p><a class="btn" id="store-signin" href="account.html?next=admin.html" hidden>Sign in</a><div id="store-owner" hidden><details class="ops-mfa" id="ops-mfa" open><summary>Administrator verification</summary>{mfa}</details><p id="store-overview-status" role="status"></p><p class="ops-alert" id="owner-extra" hidden></p><div id="store-overview" class="ops-overview" hidden></div>
-<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools"><a href="#today" data-view="today">Today</a><a href="#requests" data-view="requests">Top-ups <span class="ops-badge" data-badge="receipts"></span></a><a href="#social" data-view="social">Stories <span class="ops-badge" data-badge="stories"></span></a><a href="#settings" data-view="settings">Settings</a></nav>
-<div class="ops-main"><section class="ops-view" id="today" aria-labelledby="today-h"><h2 id="today-h">Today</h2><div id="ops-dash"><p class="ops-empty">Verify your session to load the dashboard.</p></div></section>
-<fieldset id="store-tools" disabled>{panels}<section class="ops-view" id="settings" aria-labelledby="settings-h"><h2 id="settings-h" class="ops-view-h">Settings</h2><form class="panel" id="ops-fixed-cost"><h2>Monthly fixed cost</h2><p>The break-even line on Today. Hosting, tools and your own time, in EGP a month.</p><label>Fixed cost in EGP<input name="egp" type="number" min="0" max="10000000" step="1" required></label><button class="btn" type="submit">Save fixed cost</button><p id="ops-fixed-status" role="status"></p></form><section class="panel" id="owner-accounts"><h2>Owner account</h2><p>Only one account opens this console and sees its link in the menu.</p><p id="owner-accounts-status" role="status"></p><button class="btn ghost" id="owner-keep-me" type="button" hidden>Make this the only owner account</button></section><div id="settings-move"></div><section id="credits">{credit}{price}</section><p><a href="forgeeks-admin.html?advanced=1">Advanced contributor and moderation tools</a></p></section></fieldset></div></div></div></section></main><footer></footer><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-reaudit-1"></script><script src="js/admin-operations.js?v=20261025-mfa-1"></script><script src="js/story-moderation.js?v=20261025-reaudit-1"></script><script src="js/store-admin.js?v={VERSION}"></script><script src="js/owner-dashboard.js?v={VERSION}"></script><script src="js/nav-menu.js"></script></body></html>'''
- (ROOT/'admin.html').write_text(page)
-if __name__=='__main__':build()
+    home = (ROOT / 'index.html').read_text()
+    legacy = (ROOT / 'forgeeks-admin.html').read_text()
+    nav = re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>', home, re.S).group().replace(' aria-current="page"', '')
+    mfa = re.search(r'<section class="panel"><h2>Verify administrator access.*?</section>', legacy, re.S).group()
+    mfa = mfa.replace('<section class="panel">', '<section class="panel oc-gate-card">', 1)
+    credit = re.search(r'<form class="panel" id="admin-credit-form">.*?</form>', legacy, re.S).group()
+    credit = credit.replace('<h2>', '<h3>').replace('</h2>', '</h3>')
+
+    menu = ''.join(f'<a href="#{k}" data-view="{k}">{icon(k)}<span class="oc-nav-l">{label}</span>'
+                   + (f'<span class="ops-badge" data-badge="{b}" hidden></span>' if b else '') + '</a>' for k, label, b in MENU)
+
+    today = view('today', 'Overview', 'What needs you, how the month is going, and whether the store is ready to sell.',
+                 '<div id="ops-dash"><p class="ops-empty">Verify your session to load the dashboard.</p></div>')
+
+    requests = view('requests', 'Top-ups', 'Find the money in your InstaPay or bank app, type what arrived, confirm. The server credits only when it matches the quote.',
+        '<div class="oc-toolbar">' + seg('Request status', 'store-request-filter', [('pending', 'Open'), ('approved', 'Credited'), ('rejected', 'Rejected'), ('cancelled', 'Cancelled')])
+        + '<input id="store-request-search" class="oc-search" type="email" placeholder="Search by member email" aria-label="Member email">'
+        '<button class="btn ghost" type="button" id="store-request-refresh">Refresh</button></div>'
+        '<p id="store-request-status" class="oc-status" role="status"></p><div id="store-request-list"></div>'
+        '<button class="btn ghost oc-more" id="store-request-more" type="button" hidden>Load more</button>')
+
+    catalogue = view('catalogue', 'Catalogue', 'Every look on sale. A theme takes its tier’s price everywhere it is worn: both sites, the PC and the phone. Sets follow their parts at 80%.',
+        '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>')
+
+    members = view('members', 'Members', 'Credit coins or recognition points by hand: a goodwill gift, a refund in coins, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
+        f'<div class="oc-grid one">{credit}</div>')
+
+    social = view('social', 'Stories', 'Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
+        '<div class="oc-toolbar">' + seg('Post status', 'store-social-filter', [('pending', 'Pending'), ('published', 'Published'), ('rejected', 'Rejected')])
+        + '<button class="btn ghost" type="button" id="store-social-refresh">Refresh</button></div>'
+        '<div id="store-social-list" class="oc-cards"></div><button class="btn ghost oc-more" id="store-social-more" type="button" hidden>Load more</button>')
+
+    bank = view('bank', 'Money journal', 'Every transfer recorded, with or without a ticket. Rarely needed: money that arrived with no top-up to match, or an entry to correct.',
+        '<div class="oc-toolbar">' + seg('Bank journal filter', 'store-bank-filter', [('unmatched', 'Unmatched'), ('all', 'All transfers')])
+        + '<button class="btn ghost" type="button" id="store-bank-refresh">Refresh</button></div>'
+        '<div id="store-bank-list" class="oc-cards"></div><button class="btn ghost oc-more" id="store-bank-more" type="button" hidden>Load more</button>'
+        '<details class="panel oc-fold" id="store-bank-panel"><summary><h3>Record money that arrived with no ticket</h3></summary>'
+        '<form id="store-bank-record"><div class="fields two"><label>Receiving bank reference<input name="reference" minlength="6" maxlength="100" required></label><label>Actual EGP received<input name="amount" type="number" step="0.01" min="0.01" required></label><label>Received at (your local time)<input name="received" type="datetime-local" required></label><label>Checkout request ID (leave empty if unmatched)<input name="request" autocomplete="off"></label><label>Sender InstaPay address (if known)<input name="sender" maxlength="200"></label><label>Lightning email in the transfer note (if present)<input name="email" type="email" maxlength="254"></label></div><label>Reconciliation note<textarea name="note" minlength="5" maxlength="500" required></textarea></label><label class="chk"><input name="confirmed" type="checkbox" required><span>I independently confirmed these funds reached the receiving account.</span></label><button class="btn" type="submit">Record bank transfer</button></form><p id="store-bank-status" class="oc-status" role="status"></p></details>')
+
+    settings = view('settings', 'Settings', 'How members pay, what a coin costs, and who runs the store.',
+        '<div class="oc-grid">'
+        '<section class="panel" id="setup"><h3>Checkout</h3><p>The QR is private and appears only in a signed-in member’s accepted checkout. Support: <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a>.</p>'
+        '<form id="store-settings"><div class="fields two"><label>Receiving InstaPay address<input name="address" maxlength="200" required></label><label>Exact recipient name shown by InstaPay<input name="recipient" maxlength="200" required></label></div><label>Private QR image<input type="file" name="qr" accept="image/png,image/jpeg,image/webp"></label><p id="store-qr-status" class="oc-hint">Upload only when changing the QR.</p><label>Processing instructions<textarea name="processing" minlength="20" maxlength="400" required></textarea></label><label class="chk"><input name="enabled" type="checkbox"><span>Open checkout after checking the receiving details and QR</span></label><button class="btn" type="submit">Save checkout</button></form><p id="store-settings-status" class="oc-status" role="status"></p></section>'
+        '<section class="panel" id="pricing"><h3>Coin price</h3><p>Members type an EGP amount; the quote freezes the rate and bonus before they pay, so a change here only affects new top-ups.</p><form id="store-pricing"><div class="fields three"><label>Coins per 1 EGP<input name="rate" type="number" min="1" max="1000" required></label><label>Minimum EGP<input name="minimum" type="number" min="1" required></label><label>Maximum EGP<input name="maximum" type="number" min="1" max="100000" required></label></div><label>Bonus steps (EGP:percent, one per line)<textarea name="tiers" rows="3" placeholder="100:5&#10;500:10&#10;1000:15"></textarea></label><p class="oc-hint" id="store-pricing-example" aria-live="polite"></p><label class="chk"><input name="enabled" type="checkbox"><span>Allow new top-up quotes</span></label><button class="btn" type="submit">Save coin price</button></form><p id="store-pricing-status" class="oc-status" role="status"></p></section>'
+        '<form class="panel" id="ops-fixed-cost"><h3>Monthly fixed cost</h3><p>The break-even line on the Overview: hosting, tools and your own time, in EGP a month.</p><label>Fixed cost in EGP<input name="egp" type="number" min="0" max="10000000" step="1" required></label><button class="btn" type="submit">Save fixed cost</button><p id="ops-fixed-status" class="oc-status" role="status"></p></form>'
+        '<section class="panel" id="owner-accounts"><h3>Owner account</h3><p>Only one account opens this console and sees its link in the menu.</p><p id="owner-accounts-status" class="oc-status" role="status"></p><button class="btn ghost" id="owner-keep-me" type="button" hidden>Make this the only owner account</button></section>'
+        '<section class="panel" id="retention"><h3>Receipt retention</h3><p>Delete eligible receipt images older than 90 days. Pending payment evidence is protected; ledger records stay.</p><button class="btn ghost" id="store-retention" type="button">Remove expired receipt files</button><p id="store-retention-status" class="oc-status" role="status"></p></section>'
+        '<section class="panel"><h3>Contributor tools</h3><p>Reward pull requests, review reports and manage the For Geeks community.</p><a class="btn ghost" href="forgeeks-admin.html?advanced=1">Open contributor tools</a></section>'
+        '</div>')
+
+    scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
+                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'store-admin'))
+    page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
+            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
+            f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'
+            f'<body class="oc-body" data-account-page="account.html" data-main-store="true" data-owner-console="amount">{nav}<main class="oc ops">\n'
+            '<header class="oc-head"><div class="oc-title"><h1>Owner console</h1><div id="store-overview" class="oc-chips" aria-label="Store status"></div><p id="store-overview-status" class="oc-status oc-quiet" role="status"></p></div><button class="btn ghost" id="store-unlock" type="button">Refresh</button></header>\n'
+            '<div class="oc-gate"><p id="store-access" class="oc-status" role="status">Checking account access…</p><a class="btn" id="store-signin" href="account.html?next=admin.html" hidden>Sign in with the owner account</a></div>\n'
+            f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
+            f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
+            f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
+            '<footer></footer><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>'
+            f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script></body></html>')
+    (ROOT / 'admin.html').write_text(page)
+
+
+if __name__ == '__main__':
+    build()

@@ -47,7 +47,7 @@ await test('Today: what needs the owner first, each linking to its tab, with a b
   assert.deepEqual(needs.map(a => a.querySelector('b').textContent), ['Tickets to confirm', 'Waiting for a receipt', 'Stories to review', 'Ledger mismatches']);
   assert.deepEqual(needs.map(a => a.querySelector('strong').textContent), ['2', '1', '3', '0']);
   assert.ok(needs[0].classList.contains('on') && !needs[3].classList.contains('on'));
-  assert.equal(p.w.document.querySelector('a[href="#bank"]'), null, 'no older transfers, no link to them');
+  assert.equal(p.$('ops-dash').querySelector('a[href="#bank"]'), null, 'no older transfers, no link to them');
   assert.match(needs[0].textContent, /oldest 5 h ago/);
   assert.equal(p.w.document.querySelector('[data-badge="receipts"]').textContent, '2');
   assert.equal(p.w.document.querySelector('[data-badge="stories"]').textContent, '3');
@@ -79,11 +79,12 @@ await test('Today: thirty days of revenue as bars, and what sells with its tier 
   assert.match(covered.qa('.ops-kpi')[1].textContent, /Covered, 500 EGP above/);
 });
 
-await test('tabs: one view at a time, Today by default, old section links land in Settings', async () => {
+await test('views: one at a time, Overview by default, old section links land where they now live', async () => {
   const p = await boot();
   assert.equal(p.$('today').hidden, false);
   assert.equal(p.$('requests').hidden, true);
   assert.equal(p.w.document.querySelector('.ops-nav a[aria-current=page]').getAttribute('data-view'), 'today');
+  assert.deepEqual(p.qa('.ops-nav a').map(a => a.getAttribute('data-view')), ['today', 'requests', 'catalogue', 'members', 'social', 'bank', 'settings']);
   const s = await boot({ hash: '#pricing' });
   assert.equal(s.$('settings').hidden, false);
   assert.ok(s.$('settings').contains(s.$('pricing')), 'checkout, pricing and retention live in Settings');
@@ -94,8 +95,33 @@ await test('tabs: one view at a time, Today by default, old section links land i
   assert.equal(s.$('settings').hidden, true);
   s.w.location.hash = '#bank';
   s.w.dispatchEvent(new s.w.HashChangeEvent('hashchange'));
-  assert.equal(s.$('settings').hidden, false, 'the older bank journal lives folded in Settings');
-  assert.equal(s.$('bank').querySelector('details').open, true);
+  assert.equal(s.$('bank').hidden, false, 'the money journal is its own view');
+  assert.ok(s.$('bank').contains(s.$('store-bank-record')) && s.$('bank').contains(s.$('store-bank-list')));
+  s.w.location.hash = '#credits';
+  s.w.dispatchEvent(new s.w.HashChangeEvent('hashchange'));
+  assert.equal(s.$('members').hidden, false, 'manual credits live under Members');
+  assert.ok(s.$('members').contains(s.$('admin-credit-form')));
+});
+
+await test('segmented filters drive the select the store script listens to', async () => {
+  const p = await boot();
+  p.$('store-tools').disabled = false; // verified
+  const seg = p.w.document.querySelector('.oc-seg[data-for="store-request-filter"]');
+  let changed = 0;
+  p.$('store-request-filter').addEventListener('change', () => changed++);
+  seg.querySelector('[data-value="approved"]').click();
+  assert.equal(p.$('store-request-filter').value, 'approved');
+  assert.equal(changed, 1);
+  assert.deepEqual([...seg.querySelectorAll('button')].map(b => b.getAttribute('aria-pressed')), ['false', 'true', 'false', 'false']);
+});
+
+await test('Ready to sell: each step the store needs, ticked from its settings, and where to fix it', async () => {
+  const p = await boot({ data: sample({ payers_all: 0 }) });
+  const steps = p.qa('.oc-ready-step');
+  assert.deepEqual(steps.map(a => a.querySelector('b').textContent), ['Receiving details and QR', 'Checkout open', 'Top-up quotes allowed', 'Fixed cost set', 'A real payment credited', 'App themes released']);
+  assert.ok(steps[3].classList.contains('done'), 'the fixed cost is set');
+  assert.ok(!steps[4].classList.contains('done'), 'nobody has paid yet');
+  assert.equal(steps[5].getAttribute('href'), '#catalogue');
 });
 
 await test('Settings: the fixed cost is shown, saved through the server and Today reloads', async () => {
