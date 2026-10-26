@@ -44,7 +44,7 @@ await test('Today: what needs the owner first, each linking to its tab, with a b
   const p = await boot();
   const needs = p.qa('.ops-need');
   assert.deepEqual(needs.map(a => a.getAttribute('href')), ['#requests', '#requests', '#social', '#today']);
-  assert.deepEqual(needs.map(a => a.querySelector('b').textContent), ['Tickets to confirm', 'Waiting for a receipt', 'Stories to review', 'Ledger mismatches']);
+  assert.deepEqual(needs.map(a => a.querySelector('b').textContent), ['Tickets to confirm', 'Not paid yet', 'Stories to review', 'Ledger mismatches']);
   assert.deepEqual(needs.map(a => a.querySelector('strong').textContent), ['2', '1', '3', '0']);
   assert.ok(needs[0].classList.contains('on') && !needs[3].classList.contains('on'));
   assert.equal(p.$('ops-dash').querySelector('a[href="#bank"]'), null, 'no older transfers, no link to them');

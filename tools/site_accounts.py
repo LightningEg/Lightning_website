@@ -62,7 +62,7 @@ def build():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>{title}</title><meta name="description" content="Your Lightning profile, collection and marketplace.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap">{head}
 <script src="js/theme.js"></script></head>
-<body data-account-page="account.html" data-main-store="true">{nav}{main}<footer></footer>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
+<body data-account-page="account.html" data-main-store="true">{nav}{main}<div class="wrap"><footer></footer></div>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
         (ROOT/(name+'.html')).write_text(page)
     js=(ROOT/'js/forgeeks.js').read_text()
     registry=re.search(r'var THEMES=(\[.*?\]);',js,re.S).group(1)

@@ -212,6 +212,11 @@
 .ops-st-pending{background:var(--t-azure);color:var(--azure)}
 .ops-st-approved{background:var(--t-green);color:var(--green-text)}
 .ops-st-rejected{background:var(--t-rose);color:var(--rose-strong)}
+.ops-st-idle{background:var(--field);color:var(--muted)}
+.ops-rec-idle .ops-rec-head b{color:var(--muted)}
+.oc .ops-link{display:inline-flex;align-items:center;min-height:36px;margin-top:8px;padding:0;border:0;background:none;color:var(--muted);font:700 14px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.oc .ops-link:hover{color:var(--ink)}
+.ops-rec-do[hidden],.ops-compare[hidden],.ops-link[hidden]{display:none}
 .ops-receipt{display:grid;justify-items:start;margin-top:10px}
 .oc .ops-receipt img{max-height:460px;width:auto}
 .ops-money{margin-top:12px;padding:12px 16px;border-radius:14px;background:var(--field)}
