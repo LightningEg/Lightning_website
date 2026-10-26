@@ -1,0 +1,81 @@
+/* Downloads (current-status.html): only what css/landing.css and css/home.css lack. Loads after both.
+   The feedback form (app-feedback.html) still uses css/current-status.css. */
+/* why Lightning exists: one readable column, the first paragraph larger */
+.status-story__copy{display:grid;gap:18px;max-width:720px;margin-inline:auto}
+.status-story__copy p{color:var(--ink2)}
+.status-story__copy p:first-child{color:var(--ink);font:800 22px/1.4 var(--display);letter-spacing:-.02em}
+
+/* the beta path: four numbered cards */
+.status-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.status-path__item{display:flex;flex-direction:column;gap:10px}
+.status-path__item>span{color:var(--green-text);font:800 13px/1 var(--body);font-variant-numeric:tabular-nums}
+.status-path__item h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.status-path__item p{color:var(--ink2);font-size:16px;line-height:1.5}
+.status-path__item b{color:var(--ink)}
+
+/* downloads */
+.status-apk-warning{display:grid;gap:6px;margin:0 0 20px;padding:18px 22px;border:1px solid var(--line);border-radius:16px;background:var(--t-azure);color:var(--ink2);font-size:15px;line-height:1.5}
+.status-apk-warning strong{color:var(--ink);font-weight:800}
+.status-apk-warning p{font-size:15px}
+.status-inline-link,.status-table a:not(.btn),.status-support a,.status-note a{color:var(--ink);font-weight:700}
+.status-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);box-shadow:var(--shadow)}
+.status-table{width:100%;min-width:760px;border-collapse:collapse;text-align:start}
+.status-table th,.status-table td{text-align:start;padding:20px 22px;border-bottom:1px solid var(--line);vertical-align:middle}
+.status-table thead th{background:var(--field);color:var(--muted);font:800 13px/1.2 var(--body)}
+.status-table tbody tr:last-child>*{border-bottom:0}
+.status-table tbody th{width:18%;color:var(--ink);font:800 18px/1.2 var(--display);letter-spacing:-.02em}
+.status-table tbody th small{display:block;margin-top:6px;color:var(--muted);font:700 13px/1.2 var(--body);letter-spacing:0}
+.status-table td{color:var(--ink2);font-size:15px;line-height:1.5}
+.status-table td small{font-size:13px}
+.status-badge{display:inline-flex;padding:6px 10px;border-radius:99px;background:var(--t-green);color:var(--green-text);font:800 13px/1 var(--body);white-space:nowrap}
+.status-table-hint{display:none}
+
+/* sample data: the steps, then the files */
+.status-setup{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.status-setup ol{display:grid;gap:12px;counter-reset:setup}
+.status-setup li{display:grid;grid-template-columns:26px 1fr;gap:12px;color:var(--ink2);font-size:16px;line-height:1.5;counter-increment:setup}
+.status-setup li::before{content:counter(setup);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 12px/1 var(--body)}
+.status-setup li b{color:var(--ink)}
+.status-setup code{padding:1px 6px;border-radius:6px;background:var(--field);color:var(--ink);font-size:.9em}
+.status-samples{display:grid;gap:12px}
+.status-sample,.status-profile-link{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:var(--paper);box-shadow:var(--shadow);color:inherit;text-decoration:none;transition:border-color .2s,transform .2s}
+.status-profile-link{grid-template-columns:minmax(0,1fr) auto}
+.status-sample:hover,.status-profile-link:hover{border-color:var(--line-ctl);transform:translateY(-2px)}
+.status-sample:focus-visible,.status-profile-link:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.status-sample__icon{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--nile);color:var(--on-nile);font:800 20px/1 var(--display)}
+.status-sample b,.status-profile-link b{display:block;color:var(--ink);font:800 16px/1.3 var(--body)}
+.status-sample small,.status-profile-link small{display:block;margin-top:3px;color:var(--ink2);font-size:14px;line-height:1.45}
+.status-sample em,.status-profile-link em{color:var(--green-text);font:800 14px/1.3 var(--body);font-style:normal;white-space:nowrap}
+.status-support{padding:18px 20px;border:1px dashed var(--line-ctl);border-radius:16px;color:var(--ink2)}
+.status-support b{color:var(--ink);font:800 16px/1.3 var(--body)}
+.status-support p{margin-top:4px;font-size:15px;line-height:1.5}
+.status-support a{display:inline-block;margin-top:8px;font-size:15px}
+
+/* what to evaluate */
+.status-checklist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.status-checklist .card{display:flex;flex-direction:column;gap:12px}
+.status-checklist .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--nile);color:var(--on-nile);font:800 18px/1 var(--display)}
+.status-checklist h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.status-checklist p{color:var(--ink2);font-size:16px;line-height:1.5}
+
+
+@media (prefers-reduced-motion:reduce){.status-sample,.status-profile-link,.status-sample:hover,.status-profile-link:hover{transition:none;transform:none}}
+@media (max-width:1000px){.status-path{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){.status-setup{grid-template-columns:1fr}.status-checklist{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .status-path{grid-template-columns:1fr}
+  /* on a phone each build is its own card: release and status on top, the platform, then both buttons in reach (C over A) */
+  .status-table-wrap{overflow:visible;border:0;border-radius:0;background:none;box-shadow:none}
+  .status-table{min-width:0}
+  .status-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .status-table tbody{display:grid;gap:12px}
+  .status-table tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;align-items:start;padding:18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--paper);box-shadow:var(--shadow)}
+  .status-table th,.status-table td,.status-table tbody tr:last-child>*{display:block;width:auto;padding:0;border:0}
+  .status-table td:nth-child(2),.status-table td:nth-child(4),.status-table td:nth-child(5){grid-column:1/-1}
+  .status-table tbody th{width:auto}
+  .status-table td:nth-child(3){grid-column:2;grid-row:1}
+  .status-table td .btn{width:100%}
+  .status-table-hint{display:block;margin:10px 4px 0;color:var(--muted);font-size:13px;line-height:1.4}
+  .status-profile-link{grid-template-columns:1fr}
+  .status-profile-link em{white-space:normal}
+}
