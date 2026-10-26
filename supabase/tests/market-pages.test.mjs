@@ -369,7 +369,7 @@ await test('picker: paid themes show a lock and their price; free themes show ne
   assert.match(card(p, 'papyrus').querySelector('.tm-price').textContent, /1,?000 coins/, 'the animated tier');
   assert.match(card(p, 'cotton').querySelector('.tm-price').textContent, /600 coins/, 'the textured tier');
   assert.equal(card(p, 'mono').querySelector('.tm-price'), null);
-  assert.equal(p.w.LG.THEMES.length, 17);
+  assert.equal(p.w.LG.THEMES.length, 18);
 });
 
 await test('picker: signed out, keeping a paid theme keeps nothing, restores the saved theme and points to the market', async () => {
@@ -390,12 +390,12 @@ await test('picker: signed out, keeping a paid theme keeps nothing, restores the
   p.w.LG.open();
   const grid = p.w.document.getElementById('theme-list');
   await p.key(grid, 'End');
-  assert.equal(p.w.document.documentElement.dataset.theme, 'cotton', 'preview is allowed for everyone');
-  assert.equal(p.w.document.documentElement.dataset.texture, 'cotton', 'a textured theme previews with its texture');
+  assert.equal(p.w.document.documentElement.dataset.theme, 'dendera', 'preview is allowed for everyone');
+  assert.equal(p.w.document.documentElement.dataset.texture, 'dendera', 'a textured theme previews with its texture');
   await p.key(grid, 'Enter');
   assert.equal(p.w.document.documentElement.dataset.theme, undefined, 'but keeping is not');
   assert.equal(p.w.LG.current(), 'mono');
-  assert.match(toast.textContent, /cotton is a paid theme, 600 coins\./);
+  assert.match(toast.textContent, /dendera is a paid theme, 1,?000 coins\./);
 });
 
 await test('picker: a free theme keeps with no account, no network call and no toast link', async () => {
@@ -412,11 +412,11 @@ await test('picker: a free theme keeps with no account, no network call and no t
 await test('picker: archived themes are hidden unless owned; arrow keys walk only the shown ones', async () => {
   const p = await pickerPage({ signedIn: false });
   const shown = [...p.w.document.querySelectorAll('.tm-card')].filter(c => !c.hidden).map(c => c.dataset.id);
-  assert.deepEqual(shown, ['mono', 'paper', 'meadow', 'nile', 'garnet', 'frost', 'papyrus', 'cotton']);
+  assert.deepEqual(shown, ['mono', 'paper', 'meadow', 'nile', 'garnet', 'frost', 'papyrus', 'cotton', 'dendera']);
   p.w.LG.open();
   const grid = p.w.document.getElementById('theme-list');
   grid.dispatchEvent(new p.w.KeyboardEvent('keydown', { key: 'End', bubbles: true }));
-  assert.equal(grid.getAttribute('aria-activedescendant'), 'th-cotton');
+  assert.equal(grid.getAttribute('aria-activedescendant'), 'th-dendera');
   const q = await pickerPage({ owned: ['moss'] });
   await tick(60);
   assert.equal(card(q, 'moss').hidden, false, 'an archived theme you own stays in your picker');
@@ -504,7 +504,7 @@ await test('picker: the theme list, the head boot script and the stylesheet know
     assert.deepEqual(boot_, ids, f);
   }
   // light themes are marked, so the logo and the field switch
-  assert.deepEqual(plain(p.w.LG.THEMES.filter(t => t.light).map(t => t.id)), ['paper', 'frost', 'cotton']);
+  assert.deepEqual(plain(p.w.LG.THEMES.filter(t => t.light).map(t => t.id)), ['paper', 'frost', 'cotton', 'dendera']);
   assert.ok(css.includes('[data-theme="frost"] .geeks-mark-light'));
 });
 

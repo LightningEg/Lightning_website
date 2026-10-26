@@ -20,6 +20,7 @@
 :root[data-theme="frost"]{color-scheme:light dark;--bg:#eef2f7;--panel:#f8fafc;--well:#e4eaf2;--ink:#0f1722;--dim:#3b475a;--faint:#c3cddb;--line:rgba(15,23,34,.13);--line-strong:rgba(15,23,34,.32);--accent:#3340c4;--accent2:#0b7a75;--btn:#3340c4;--btn-ink:#f4f7ff;--particle:30,40,70;--glow:51,64,196}
 /* textured tier: Papyrus wears Nile's tokens, Cotton wears Paper's; the texture itself is css/textures.css */
 :root[data-theme="papyrus"]{--bg:#070b16;--panel:#0c1222;--well:#090e1b;--ink:#e9edf7;--dim:#b7c0d8;--faint:#28324d;--line:rgba(230,180,80,.15);--line-strong:rgba(230,180,80,.36);--accent:#e6b450;--accent2:#4fb3c9;--btn:#e6b450;--btn-ink:#120d02;--particle:214,224,245;--glow:230,180,80}
+:root[data-theme="dendera"]{color-scheme:light dark;--bg:#f1e6cc;--panel:#faf3e2;--well:#ecdfc3;--ink:#1e1a14;--dim:#54483a;--faint:#cdbd97;--line:rgba(30,26,20,.13);--line-strong:rgba(30,26,20,.32);--accent:#1f3f8c;--accent2:#0f6e6a;--btn:#1f3f8c;--btn-ink:#fffbf1;--particle:30,26,20;--glow:31,63,140}
 :root[data-theme="cotton"]{color-scheme:light dark;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
 
 *,*::before,*::after{box-sizing:border-box}
@@ -38,7 +39,7 @@ b,strong{font-weight:500}
 #field{position:fixed;left:0;top:0;width:100%;height:100vh;height:100lvh;z-index:0;pointer-events:none}
 .grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(var(--particle),.09) 1px,transparent 1.2px);background-size:24px 24px;mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%)}
 .scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.06) 0 1px,transparent 1px 3px);opacity:.5}
-:root[data-theme="paper"] .scan,:root[data-theme="frost"] .scan,:root[data-theme="cotton"] .scan{opacity:.15}
+:root[data-theme="paper"] .scan,:root[data-theme="frost"] .scan,:root[data-theme="cotton"] .scan,:root[data-theme="dendera"] .scan{opacity:.15}
 main,header,footer{position:relative;z-index:2}
 
 .wrap{width:min(1180px,100% - 32px);margin-inline:auto}
@@ -54,8 +55,8 @@ main,header,footer{position:relative;z-index:2}
 .brand img{width:15px;height:21px;display:block}
 /* Match the mark to the palette, including its saved state and live preview. */
 :root .geeks-mark-light{display:none}
-:root[data-theme="paper"] .geeks-mark-dark,:root[data-theme="frost"] .geeks-mark-dark,:root[data-theme="cotton"] .geeks-mark-dark{display:none}
-:root[data-theme="paper"] .geeks-mark-light,:root[data-theme="frost"] .geeks-mark-light,:root[data-theme="cotton"] .geeks-mark-light{display:inline}
+:root[data-theme="paper"] .geeks-mark-dark,:root[data-theme="frost"] .geeks-mark-dark,:root[data-theme="cotton"] .geeks-mark-dark,:root[data-theme="dendera"] .geeks-mark-dark{display:none}
+:root[data-theme="paper"] .geeks-mark-light,:root[data-theme="frost"] .geeks-mark-light,:root[data-theme="cotton"] .geeks-mark-light,:root[data-theme="dendera"] .geeks-mark-light{display:inline}
 .crumb{color:var(--dim);font:400 13px var(--mono);white-space:nowrap}
 .crumb b{color:var(--ink);font-weight:500}
 .caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--accent);animation:blink 1.06s steps(1) infinite}

@@ -21,7 +21,7 @@
   const mix = (a, b, share) => '#' + rgb(a).map((v, i) => Math.round(v * share + rgb(b)[i] * (1 - share)).toString(16).padStart(2, '0')).join('');
   const lum = h => rgb(h).map(v => (v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
   const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
-  const TEXTURES = ['papyrus', 'cotton']; // css/textures.css
+  const TEXTURES = ['papyrus', 'cotton', 'dendera']; // css/textures.css
   function validSkin(v) {
     if (!(v && typeof v === 'object' && /^[a-z0-9-]{1,40}$/.test(v.id || '') && Array.isArray(v.c) && v.c.length === 4 && v.c.every(c => HEX.test(c)))) return null;
     return v.tex == null || TEXTURES.includes(v.tex) ? v : null;

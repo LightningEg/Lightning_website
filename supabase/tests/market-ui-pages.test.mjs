@@ -172,8 +172,8 @@ await test('main: Details shows the theme on both sites (the main site light and
 await test('main: the themes that dress the app too are featured with their price, tried and bought like any theme', async () => {
   const p = await boot({ withFetch: true });
   await tick(80);
-  assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'papyrus cotton nile');
-  assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 3 && p.qa('.mkt-feat-card .pv-phone').length === 3);
+  assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'dendera papyrus cotton nile');
+  assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 4 && p.qa('.mkt-feat-card .pv-phone').length === 4);
   const papyrus = p.q('.mkt-feat-card[data-app="papyrus"]');
   assert.match(papyrus.querySelector('.mkt-feat-price').textContent, /600/, 'its catalogue price');
   assert.match(papyrus.querySelector('.mkt-feat-tag').textContent, /site and app/);
