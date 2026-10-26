@@ -204,7 +204,7 @@
 .ops-rec-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .ops-rec-head b{color:var(--ink);font:700 15.5px var(--body);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .ops-rec>small{display:block;margin-top:2px;color:var(--muted);font:500 13.5px/1.5 var(--body);overflow-wrap:anywhere}
-.ops-rec-do{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:12px}
+.ops-rec-do{display:grid;grid-template-columns:minmax(0,140px) minmax(0,210px) minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:8px}
 .oc .ops-rec-do label{margin:0}
 .oc .ops-rec-do .btn{margin:0}
 .ops-compare{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;margin:8px 0 0;color:var(--ink);font:600 14px/1.5 var(--body);font-variant-numeric:tabular-nums}
@@ -222,13 +222,36 @@
 .ops-money{margin-top:12px;padding:12px 16px;border-radius:14px;background:var(--field)}
 .ops-money[hidden]{display:none}
 .ops-money h4{margin:0 0 6px;color:var(--ink);font:700 14.5px var(--body)}
-.ops-money h4+ul+h4{margin-top:14px}
+.ops-money ul+h4{margin-top:14px}
+/* the tally: received against the quote, with a bar */
+.ops-tally{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;margin-bottom:6px}
+.ops-tally h4{margin:0;font-variant-numeric:tabular-nums}
+.ops-bar{flex:1 0 100%;height:6px;border-radius:999px;background:var(--line);overflow:hidden}
+.ops-bar i{display:block;height:100%;border-radius:inherit;background:var(--green-text)}
+.ops-bar.over i{background:var(--rose-strong)}
+.ops-tally .ops-chip:not(.good):not(.bad){background:var(--panel)}
 .ops-money ul{list-style:none;margin:0;padding:0}
 .ops-money li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
 .ops-money li:last-child{border-bottom:0}
 .ops-money li>span{color:var(--ink);font:700 15px var(--body);font-variant-numeric:tabular-nums}
 .ops-money small{display:block;margin-top:2px;color:var(--muted);font:500 13px var(--body);overflow-wrap:anywhere}
 .ops-money li .btn{flex:none}
+.ops-money small+small{margin-top:0}
+/* recording a payment, and closing the ticket */
+.ops-step{margin-top:16px}
+.ops-step>h4{margin:0;color:var(--ink);font:700 14.5px var(--body)}
+.ops-choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.oc .ops-choice{min-height:38px;padding:0 16px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:700 14px var(--body);cursor:pointer}
+.oc .ops-choice:hover{border-color:var(--ink)}
+.oc .ops-choice[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--panel)}
+.oc .ops-choice:focus-visible{outline:2px solid var(--azure);outline-offset:2px}
+.ops-choice[hidden],.ops-pane[hidden]{display:none}
+.ops-pane{display:grid;gap:10px;margin-top:10px;padding:14px 16px;border-radius:14px;border:1px solid var(--line)}
+.ops-pane p{margin:0;color:var(--muted);font:500 13.5px/1.5 var(--body)}
+.oc .ops-pane label{margin:0}
+.oc .ops-pane .btn{justify-self:start}
+.oc .ops-pane .ops-narrow{max-width:220px}
+.oc .ops-mail{display:inline-flex;align-items:center;min-height:36px;margin-top:6px;color:var(--ink);font:700 14px var(--body);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
 .ops-ticket-status{margin:10px 0 0;color:var(--ink);font:600 14px/1.5 var(--body)}
 .ops-ticket-status:empty{display:none}
 .oc .ops-rec details{margin:10px 0 0}
@@ -250,6 +273,8 @@
 /* ---------- smaller screens ---------- */
 @media(max-width:1180px){.ops-needs,.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-tiers{grid-template-columns:minmax(0,1fr)}.oc-tier-what{min-height:0}}
 @media(max-width:960px){
+  .ops-rec-do{grid-template-columns:minmax(0,140px) minmax(0,1fr) minmax(0,1fr)}
+  .oc .ops-rec-do .btn{grid-column:1/-1;justify-self:start}
   .ops-shell{grid-template-columns:minmax(0,1fr);gap:16px}
   .ops-nav{position:sticky;top:70px;z-index:5;flex-direction:row;overflow-x:auto;padding:6px;gap:4px;scrollbar-width:none}
   .ops-nav a{flex:none;min-height:40px;padding:0 12px;font-size:14px}
@@ -275,7 +300,7 @@
   .oc .panel{padding:18px}
   .ops-rec{padding:14px 16px}
   .ops-rec-do{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .oc .ops-rec-do .btn{grid-column:1/-1;width:100%}
+  .oc .ops-rec-do .btn,.oc .ops-pane .btn{grid-column:1/-1;width:100%}
   .ops-money li{flex-direction:column;align-items:stretch}
   .ops-money li .btn{width:100%}
   .oc-rel-list li{grid-template-columns:minmax(0,1fr) auto}

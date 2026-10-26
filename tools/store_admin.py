@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261026-console-3"  # css/store-admin.css and every js/ file below
+VERSION = "20261026-console-4"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -57,7 +57,7 @@ def build():
     today = view('today', 'Overview', 'What needs you, how the month is going, and whether the store is ready to sell.',
                  '<div id="ops-dash"><p class="ops-empty">Verify your session to load the dashboard.</p></div>')
 
-    requests = view('requests', 'Top-ups', 'Oldest first. Find each one in your InstaPay or bank app, then confirm what arrived. The server credits only when it matches the quote.',
+    requests = view('requests', 'Top-ups', 'Oldest first. Find each one in your InstaPay or bank app and record what arrived. It credits once the payments add up to the quote, or when you close it for what arrived.',
         '<div class="oc-toolbar">' + seg('Request status', 'store-request-filter', [('pending', 'Open'), ('approved', 'Credited'), ('rejected', 'Rejected'), ('cancelled', 'Cancelled')])
         + '<input id="store-request-search" class="oc-search" type="search" autocomplete="off" placeholder="Email, sender or amount" aria-label="Search by email, sender or amount">'
         '<button class="btn ghost" type="button" id="store-request-refresh">Refresh</button></div>'

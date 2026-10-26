@@ -211,4 +211,38 @@ await test('the simple InstaPay checkout: copy our details, pay, send date, amou
  const bare=(await as('authenticated',M,()=>q(`select * from public.create_amount_checkout(10000,$1,true,$2,$3)`,[key(),quote.coins,d.pricing_version]))).rows[0];
  await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_confirm_topup($1,10000,null,null,$2,null,null,'IPN-700001')`,[bare.id,bare.receipt_revision])),/not sent their payment details/);
 });
+await test('a ticket holds payments: each Record adds one, a retry records nothing new, and the owner can close it for what arrived',async()=>{
+ const M=await newUser();
+ const d=(await as('authenticated',M,()=>q(`select public.topup_payment_details() d`))).rows[0].d;
+ const quote=(await as('authenticated',M,()=>q(`select public.quote_topup_amount(10000) d`))).rows[0].d;
+ const today=(await q(`select (now() at time zone 'Africa/Cairo')::date::text d`)).rows[0].d;
+ const r=(await as('authenticated',M,()=>q(`select * from public.submit_instapay_topup(10000,$1,true,$2,$3,'sara@instapay',$4)`,[key(),quote.coins,d.pricing_version,today]))).rows[0];
+ const record=(amount,entry,ref=null,who=ADMIN)=>as('authenticated',who,async()=>(await q(`select public.admin_record_ticket_payment($1,$2,null,null,$3,$4,null,$5) d`,[r.id,amount,ref,entry,r.receipt_revision])).rows[0].d);
+ const close=(coins,msg,who=ADMIN)=>as('authenticated',who,async()=>(await q(`select public.admin_close_ticket_for_received($1,$2,$3,null,$4) d`,[r.id,coins,msg,r.receipt_revision])).rows[0].d);
+ const k1=key(),k2=key();
+ await assert.rejects(record(4000,k1,null,M),/admin|permission|MFA/i,'members cannot record');
+ assert.equal(Number((await record(4000,k1)).received_piastres),4000);
+ assert.equal(Number((await record(4000,k1)).received_piastres),4000,'the same payment sent twice is recorded once');
+ await assert.rejects(record(5000,k1),/already on this ticket/);
+ const two=await record(3000,k2);
+ assert.equal(two.status,'amount_differs');assert.equal(Number(two.received_piastres),7000,'a second payment adds, never overwrites');
+ assert.equal((await wallet(M))?.balance??0,0);
+ const money=(await as('authenticated',ADMIN,()=>q(`select public.admin_ticket_money($1) d`,[r.id]))).rows[0].d;
+ assert.deepEqual(money.on_ticket.map(x=>x.amount_piastres).sort(),[3000,4000]);assert.ok(money.on_ticket.every(x=>x.recorded_at&&x.reference.startsWith('TKT-')));
+ await assert.rejects(close(350,'Thanks',M),/admin|permission|MFA/i,'members cannot close');
+ await assert.rejects(close(350,'Hi'),/short message/);
+ await assert.rejects(close(0,'This is all that arrived'),/between 1/);
+ const done=await close(350,'We received 70 EGP and credited 350 coins for it.');
+ assert.equal(done.status,'approved');assert.equal((await wallet(M)).balance,350);
+ const after=(await q(`select status,coins,price_piastres,review_note from public.topup_requests where id=$1`,[r.id])).rows[0];
+ assert.deepEqual([after.status,after.coins,after.price_piastres,after.review_note],['approved',350,7000,'We received 70 EGP and credited 350 coins for it.'],'the member reads the message in their history');
+ assert.equal((await q(`select count(*)::int c from public.topup_adjustments where request_id=$1 and status='accepted' and original_piastres=10000`,[r.id])).rows[0].c,1,'the first quote is kept');
+ assert.equal((await close(350,'Again, by mistake')).status,'approved');assert.equal((await wallet(M)).balance,350,'never credits twice');
+ assert.equal((await record(3000,key())).status,'approved','a closed ticket takes no more money');
+ assert.equal((await q(`select count(*)::int c from public.bank_transfers where request_id=$1`,[r.id])).rows[0].c,2);
+ // the full amount in one payment credits the quote, as before
+ const full=(await as('authenticated',M,()=>q(`select * from public.submit_instapay_topup(10000,$1,true,$2,$3,'sara@instapay',$4)`,[key(),quote.coins,d.pricing_version,today]))).rows[0];
+ const paid=await as('authenticated',ADMIN,async()=>(await q(`select public.admin_record_ticket_payment($1,10000,null,null,'IPN-880001',$2,null,$3) d`,[full.id,key(),full.receipt_revision])).rows[0].d);
+ assert.equal(paid.status,'approved');assert.equal(paid.reference,'IPN-880001');assert.equal((await wallet(M)).balance,350+quote.coins);
+});
 console.log(`\n${passed} passed, ${failed} failed`);await db.close();process.exitCode=failed?1:0;
