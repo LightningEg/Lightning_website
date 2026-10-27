@@ -7,7 +7,7 @@
 | 2 Home | `index.html`, `ar/index.html` | one-sentence hero, PC + phone side by side, real community pulse, five repeated sections cut |
 | 3 Features | `features.html`, `ar/features.html` | six-question explorer with real screens; groups fold; PC height ~8,200 → ~4,100 px |
 | 4 Community | `community.html` | three ways in, top five builders with GitHub and last merged PR, latest stories |
-| 5 Marketplace | `marketplace.html`, `topup.html`, shop scripts | three-step "how buying works" (InstaPay → try on → buy once); explainer lines under each heading cut; currency reads **Cotton Plants** everywhere a member reads it |
+| 5 Marketplace | `marketplace.html`, `topup.html`, shop scripts | three-step "how buying works" (InstaPay → try on → buy once); explainer lines under each heading cut; currency reads **Cotton** everywhere a member reads it |
 | 6 For Geeks + audit | For Geeks footer, this file | For Geeks footer links the Community builders; checks below |
 
 Checks: `tools/site_check.py` 0 errors (14 old warnings), `header.py`, `footer.py`, `shots.py`, `geeks_shell.py` in step; no script errors on Home, Features, Community, Marketplace, Wallet, For Geeks at 1280 px and 390 px, English and Arabic.
@@ -44,3 +44,6 @@ Proposed signature moments still missing:
 6. **Refund window** in the buy dialog (unequipped items, 7 days) is in the plan but not on screen.
 7. **Weekly quest**: one rotating small task on Community (e.g. "translate one screen") so returning visitors find something new.
 8. **Accessibility pass on real devices**: screen reader and real Android/Windows browsers were not checked.
+
+## Where scores come from (owner, 2026-10-27)
+Every score point is a ledger entry with a kind and a source, so the source is already tracked. `supabase/migrations/20261027230000_score_sources.sql` adds `score_sources(period, limit)`: per ranked member, **code** (merged pull requests and issues), **feedback** (accepted app feedback), **writing** (community stories) and other. The Community page shows them as small tags under each builder once the migration is applied. Today stories pay Cotton only, so writing stays 0 until the owner decides stories also earn score.

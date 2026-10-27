@@ -1,4 +1,4 @@
-/* For Geeks market (forgeeks-market.html): themes and banners, for looks only, bought with earned Cotton Plants.
+/* For Geeks market (forgeeks-market.html): themes and banners, for looks only, bought with earned Cotton.
    Talks to Supabase through window.FG (js/forgeeks-auth.js) and the functions in
    supabase/migrations/20261025120000_forgeeks_market.sql. The server decides every price and every purchase;
    this page only shows what market_catalog() returns and sends item ids. Text from the catalog is only ever
@@ -22,7 +22,7 @@
     if (text != null) e.textContent = text;
     return e;
   }
-  function coins(n) { return n + (n === 1 ? ' Cotton Plant' : ' Cotton Plants'); }
+  function coins(n) { return n + (n === 1 ? ' Cotton' : ' Cotton'); }
   // What a cell costs this member: a set is 80% of the parts they do not own yet (set_price, from the server).
   function priceOf(it) { return it.type === 'set' ? Number(it.set_price) || 0 : it.price; }
   // Gifts: anything on sale that is not a set, an earned badge or a free default.

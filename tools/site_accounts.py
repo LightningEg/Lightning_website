@@ -30,7 +30,7 @@ def build():
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Themes and looks for your profile, this site and the app. Try anything on before you buy.</p>
-      <ol class="mk-steps" aria-label="How buying works"><li><b>1</b><span><a href="topup.html">Top up with InstaPay</a>, or earn Cotton Plants with <a href="community.html">your work</a>.</span></li><li><b>2</b><span>Try it on. Nothing is charged.</span></li><li><b>3</b><span>Buy it once. It dresses the site and <a href="#app-guide">the app</a>.</span></li></ol>
+      <ol class="mk-steps" aria-label="How buying works"><li><b>1</b><span><a href="topup.html">Top up with InstaPay</a>, or earn Cotton with <a href="community.html">your work</a>.</span></li><li><b>2</b><span>Try it on. Nothing is charged.</span></li><li><b>3</b><span>Buy it once. It dresses the site and <a href="#app-guide">the app</a>.</span></li></ol>
       <nav class="mk-jump" aria-label="Categories"><a href="#h-themes">Themes</a><a href="#h-sets">Sets</a><a href="#h-banners">Banners</a><a href="#h-frames">Frames</a><a href="#h-names">Names</a><a href="#h-badges">Badges</a></nav>',main,count=1,flags=re.S)
             main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')

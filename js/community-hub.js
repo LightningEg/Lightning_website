@@ -43,6 +43,19 @@
     if (!rows.length) { empty.hidden = false; return; }
     rows.forEach(function (r, i) { list.appendChild(row(r, i)); });
     list.hidden = false;
+    // Where each score comes from (score_sources RPC); skipped quietly if it is not there yet.
+    FG.sb.rpc('score_sources', { p_period: 'month', p_limit: 25 }).then(function (s) {
+      if (s.error || !s.data) return;
+      var by = {}; s.data.forEach(function (x) { by[x.display_name] = x; });
+      [].forEach.call(list.children, function (li) {
+        var x = by[li.querySelector('.hb-name').textContent]; if (!x) return;
+        var bar = el('p', 'hb-src');
+        [['code', 'code'], ['feedback', 'feedback'], ['writing', 'writing']].forEach(function (k) {
+          var n = Number(x[k[0]]) || 0; if (n > 0) bar.appendChild(el('span', 'hb-src-' + k[0], k[1] + ' ' + nf.format(n)));
+        });
+        if (bar.childNodes.length) li.querySelector('.hb-who').appendChild(bar);
+      });
+    });
   }).catch(function () {
     status.textContent = 'The leaderboard did not load. ';
     var a = el('a', '', 'Open it'); a.href = 'leaderboard.html'; status.appendChild(a);
