@@ -20,11 +20,11 @@ ROOT = Path(__file__).resolve().parent.parent
 LINKS = [
     ("home", "index.html", "Home", "الرئيسية", True),
     ("features", "features.html", "Features", "المميزات", True),
-    ("community", "stories.html", "Community", "المجتمع", False),
+    ("community", "community.html", "Community", "المجتمع", False),
     ("market", "marketplace.html", "Marketplace", "المتجر", False),
     ("geeks", "forgeeks.html", "For Geeks", None, False),
 ]
-COMMUNITY = {"stories.html", "leaderboard.html", "collection.html", "topup.html", "profile.html", "account.html"}
+COMMUNITY = {"community.html", "stories.html", "leaderboard.html", "collection.html", "topup.html", "profile.html", "account.html"}
 MARKET = {"marketplace.html"}
 
 CTA = {

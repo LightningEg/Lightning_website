@@ -1,0 +1,41 @@
+/* Community hub (community.html, 2026-10-27): three ways in, this month's builders, latest stories. */
+.hub .wrap{max-width:1120px}
+.hub-top{padding:72px 0 8px;text-align:center}
+.hub-top h1{font:800 clamp(40px,6vw,72px)/1 var(--display);letter-spacing:-.035em;color:var(--ink)}
+.hub-top h1 span{color:var(--green)}
+.hub-top .lede{margin:16px auto 0;max-width:40ch;color:var(--ink2);font-size:18px}
+.hub-q{padding:48px 0 24px}
+.q-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.q-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--paper);overflow:hidden;
+  animation:q-in .6s cubic-bezier(.2,.8,.2,1) both;transition:border-color .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.q-card:nth-child(2){animation-delay:.08s}.q-card:nth-child(3){animation-delay:.16s}
+.q-card:hover{border-color:var(--green);transform:translateY(-3px)}
+.q-n{position:absolute;inset-inline-end:20px;top:10px;font:800 64px/1 var(--display);color:var(--line)}
+.q-ico{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--nile);color:var(--on-nile)}
+.q-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.q-card h3{margin-top:6px;font:800 23px/1.15 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.q-card p{margin:0;color:var(--ink2);line-height:1.5}
+.q-card .q-proof{margin-top:auto;padding-top:8px;color:var(--ink);font-weight:700;font-size:15px}
+.q-btn{align-self:flex-start;margin-top:8px}
+@keyframes q-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hub-board,.hub-stories{padding:48px 0 16px}
+.hub-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+.hub-head h2{font:800 30px/1.1 var(--display);letter-spacing:-.025em;color:var(--ink)}
+.hub-all{color:var(--ink);font-weight:700}
+.hb-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.hb-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:16px;min-height:68px;padding:10px 20px;border:1px solid var(--line);border-radius:18px;background:var(--paper);
+  animation:q-in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
+.hb-row:first-child{border-color:var(--green)}
+.hb-rk{font:800 22px/1 var(--display);color:var(--ink2);font-variant-numeric:tabular-nums;text-align:center}
+.hb-row:first-child .hb-rk{color:var(--green)}
+.hb-name{font-weight:800;color:var(--ink);text-decoration:none}
+.hb-name:hover{text-decoration:underline}
+.hb-meta{margin:4px 0 0;color:var(--ink2);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-gh{font-family:"JetBrains Mono",ui-monospace,monospace;color:var(--ink)}
+.hb-pr{color:var(--ink2)}
+.hb-sc{font:800 20px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.hb-empty,.hb-status{color:var(--ink2)}
+.hub-stories .story-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.q-grid,.hub-stories .story-grid{grid-template-columns:minmax(0,1fr)}.hub-top{padding-top:48px}.q-card{padding:22px}.hb-row{grid-template-columns:32px minmax(0,1fr) auto;padding:10px 14px;gap:12px}.hub-head h2{font-size:24px}}
+@media (prefers-reduced-motion:reduce){.q-card,.hb-row{animation:none;transition:none}.q-card:hover{transform:none}}
+.hub-all{white-space:nowrap}
