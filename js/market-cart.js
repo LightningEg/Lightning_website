@@ -322,6 +322,7 @@
     cart.balance = Number(order && order.balance) || cart.balance;
     paint();
     $('cart-title').textContent = T('order placed');
+    if($('cart-title').animate && !root.matchMedia('(prefers-reduced-motion: reduce)').matches) $('cart-title').animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:240,easing:'ease-out'});
     var ul = $('cart-lines');
     while (ul.firstChild) ul.removeChild(ul.firstChild);
     ((order && order.lines) || []).forEach(function (l) {

@@ -407,6 +407,7 @@
         }
         var paid = r.data && typeof r.data.price_paid === 'number' ? r.data.price_paid : it.price;
         dlg.done = true;
+        if ($('buy-title').animate && !root.matchMedia('(prefers-reduced-motion: reduce)').matches) $('buy-title').animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}], {duration:240,easing:'ease-out'});
         it.owned = true;
         state.balance = Math.max(0, state.balance - paid);
         if (LG && LG.own && it.type === 'theme') LG.own(it.id, true);

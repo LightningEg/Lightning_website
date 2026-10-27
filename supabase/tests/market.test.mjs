@@ -142,7 +142,7 @@ await test('one coin short is refused and charges nothing', async () => {
     await award(u, p.price - 1, 'short-' + p.id);
     await assert.rejects(buy(u, p.id, 'key-short-' + p.id), /insufficient coins/);
     assert.deepEqual(await wallet(u), { balance: p.price - 1, contribution_score: p.price - 1 });
-    assert.equal((await q(`select count(*)::int c from public.inventory where user_id = $1`, [u])).rows[0].c, 0);
+    assert.equal((await q(`select count(*)::int c from public.inventory i join public.catalog_items c on c.id=i.item_id where user_id = $1 and c.award is null`, [u])).rows[0].c, 0);
   }
 });
 
@@ -271,7 +271,7 @@ await test('market_catalog: anon sees every active item, nothing owned or equipp
   const rows = all.filter(r => !r.available_from);
   const core = rows.filter(r => !r.award && r.type !== 'set' && r.type !== 'name' && (r.type === 'theme' || !r.tier));
   assert.equal(core.length, 9 + 6 + 4 + 4, 'Mono, five palettes, one textured, two animated, six banners, four frames, four badges');
-  assert.equal(rows.filter(r => r.award).length, 4, 'three supporter badges and Founding supporter, shown so members know how to earn them');
+  assert.equal(rows.filter(r => r.award).length, 5, 'four supporter badges and Founding supporter, shown so members know how to earn them');
   assert.equal(rows.filter(r => r.type === 'name').length, 4);
   assert.equal(rows.filter(r => r.type === 'set').length, 3);
   assert.equal(rows.filter(r => r.type === 'banner' && r.tier === 'motion').length, 2);

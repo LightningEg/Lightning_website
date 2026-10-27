@@ -29,16 +29,16 @@ def build():
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Themes and looks for your profile, this site and the app. Try anything on before you buy.</p>
+            main=re.sub(r'<p class="lede">.*?</p>','''<p class="lede">Themes and looks for your profile, this site and the app. Try anything on before you buy.</p>
       <ol class="mk-steps" aria-label="How buying works"><li><b>1</b><span><a href="topup.html">Top up with InstaPay</a>, or earn Cotton with <a href="community.html">your work</a>.</span></li><li><b>2</b><span>Try it on. Nothing is charged.</span></li><li><b>3</b><span>Buy it once. It dresses the site and <a href="#app-guide">the app</a>.</span></li></ol>
-      <nav class="mk-jump" aria-label="Categories"><a href="#h-themes">Themes</a><a href="#h-sets">Sets</a><a href="#h-banners">Banners</a><a href="#h-frames">Frames</a><a href="#h-names">Names</a><a href="#h-badges">Badges</a></nav>',main,count=1,flags=re.S)
+      <nav class="mk-jump" aria-label="Categories"><a href="#h-themes">Themes</a><a href="#h-sets">Sets</a><a href="#h-banners">Banners</a><a href="#h-frames">Frames</a><a href="#h-names">Names</a><a href="#h-badges">Badges</a></nav>''',main,count=1,flags=re.S)
             main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Try any theme on this page, or open details to see it on the website, the computer and the phone.','Try any theme on this page, or open Details to see it on the website, the computer and the phone.')
         elif name=='account':
             main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
-            main=main.replace('</main>','<section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
+            main=main.replace('</main>','<section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>Copy your account email into the transfer note, then confirm the date, amount and InstaPay address you paid from. Cotton is added after the owner confirms the money arrived.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
         signin='<a class="btn ghost" id="mkt-signin" href="account.html" hidden>sign in to buy</a>'
         if name=='marketplace':
@@ -134,26 +134,27 @@ def add_community_nav(path,active):
 
 STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <h1>Stories.</h1>
-<p class="lede">Real ways people run their money with Lightning, told on LinkedIn and Reddit. Read what they shared, or share your own and earn coins for the marketplace.</p>
-<ol class="com-steps" aria-label="How it works"><li><b>Save a draft</b><span>Add a title and short summary to get your verification code.</span></li><li><b>Write your post</b><span>Share a general money-management habit on LinkedIn or Reddit. Include your code and a link back to Lightning.</span></li><li><b>Submit the link</b><span>Paste the post link, accept the community rules and send your listing for review.</span></li><li><b>Earn coins</b><span>A moderator verifies the post and may award coins for your marketplace wallet.</span></li></ol>
+<p class="lede">Real ways people run their money with Lightning, told on LinkedIn and Reddit. Read what they shared, or share your own and earn Cotton for the marketplace.</p>
+<ol class="com-steps" aria-label="How it works"><li><b>Write your post</b><span>Tell, on LinkedIn or Reddit, how you use Lightning. Put your code and a link to Lightning in it.</span></li><li><b>Paste the link</b><span>Add the link to your post and one line about how you use Lightning. Agree to share it under your display name.</span></li><li><b>We review it</b><span>We open your post, check your code and the link back, and read it.</span></li><li><b>Earn Cotton and points</b><span>An approved story earns Cotton for the marketplace and points for the leaderboard.</span></li></ol>
 <p id="story-status" role="status"></p>
 <div class="stories-layout"><div class="stories-content"><h2 class="com-h">Latest posts</h2>
 <div id="story-feed" class="story-grid"></div>
 <section class="acct" id="story-member" hidden><h2 class="com-h">Share your post</h2>
-<p class="com-lead">Drafts are private. Listing needs your consent and a public, adult-confirmed <a href="account.html">profile</a>. Editing a listed post takes it down until it is reviewed again.</p>
-<form id="story-form" class="panel"><input name="id" type="hidden"><div class="fields">
-<label>Title<input name="title" maxlength="140" required></label>
-<label>Short summary (20 to 400 characters)<textarea name="body" rows="4" maxlength="400" required></textarea></label>
-<label>LinkedIn post link<input name="linkedin" type="url" placeholder="https://www.linkedin.com/posts/..."></label>
-<label>Reddit post link<input name="reddit" type="url" placeholder="https://www.reddit.com/r/.../comments/..."></label></div>
-<p class="com-lead">Save a draft before adding your post link. Before submitting, add at least one link. Your draft gets a verification code: paste it into your post together with a link to Lightning.</p>
-<div class="row"><button class="btn" type="submit">Save draft</button><button class="btn ghost" id="story-copy" type="button">Copy verification code and link</button><button class="btn ghost" id="story-new" type="button">New draft</button></div></form>
+<form id="story-form" class="panel"><input name="id" type="hidden"><h3>Share your post</h3><div class="fields">
+<label>Post title<input name="title" minlength="5" maxlength="140" required></label>
+<label>Name on the post<input name="author" minlength="2" maxlength="80" required autocomplete="name"></label>
+<label>Link to your post (LinkedIn or Reddit)<input name="url" type="url" required placeholder="https://www.linkedin.com/posts/... or https://www.reddit.com/r/.../comments/..."></label>
+<label>Short excerpt (20 to 400 characters)<textarea name="line" rows="3" minlength="20" maxlength="400" required></textarea></label>
+<label class="chk"><input name="consent" type="checkbox" required><span>I agree to share my post under my public display name, and to the community rules.</span></label></div>
+<p class="com-lead">A public <a href="account.html">profile</a> is needed. Editing a listed post takes it down until it is reviewed again.</p>
+<div class="row"><button class="btn" type="submit">Share for review</button><button class="btn ghost" id="story-new" type="button" hidden>Cancel the edit</button></div></form>
 <ul class="com-rules"><li>Coins reward the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
-<li>Up to 3 rewarded posts in any 30 days. Add your verification code and a link to Lightning so we can review your submission.</li>
+<li>Up to 3 rewarded posts in any 30 days.</li>
 <li>Never include account numbers, balances you want private or anything identifying. Posts are personal experiences, not financial advice.</li></ul>
-<div id="story-mine"></div></section>
+<h3 class="com-h" id="story-mine-h" hidden>Your posts</h3><div id="story-mine"></div></section>
 <p class="com-lead"><a href="account.html">Sign in or manage your account</a></p>
-<section class="acct" id="story-review" hidden><h2 class="com-h">Moderation queue</h2><p class="com-lead">Open the external post yourself and look for the verification code. Rank points raise the leaderboard; coins are spendable and never raise rank. Each is paid once per post.</p><div id="story-queue"></div></section>
+<section class="acct" id="story-review" hidden><h2 class="com-h">Moderation queue</h2><p class="com-lead">Read the title, excerpt, author name and linked post, then approve, ask for a change or decline. Approve pays the reward set in the owner console once per post: Cotton are spendable, points raise the leaderboard.</p>
+<div id="story-queue"></div></section>
 </div><aside class="community-rules" aria-labelledby="community-rules-title"><h2 id="community-rules-title">Community rules</h2><p>Only general money-management experiences and educational tips are accepted.</p><p>Solicitation, advertising or offering financial services, and personalized financial or investment advice are prohibited. Violations will result in removal of the content and a ban from the community.</p><h3>External platforms</h3><p>Posts may link to third-party platforms. Lightning does not control those platforms and is not responsible for communications, transactions, services or other interactions conducted outside this website, subject to applicable law. Official checkout purchases remain governed by our payment terms.</p><p><a href="mailto:hello@lightningeg.com">Report a concern</a></p></aside></div></div></section></main>'''
 
 def build_stories():

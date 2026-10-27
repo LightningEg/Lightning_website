@@ -76,14 +76,14 @@ await test('one form: a LinkedIn or Reddit link, one line and consent make a pen
   const code = (await kit(U)).code;
   const r = await share(U, li() + '?utm=x#frag');
   assert.equal(r.status, 'pending');
-  assert.equal(r.verify_code, code, 'the code shown before is the code on the story');
+  assert.equal(r.submitted_author_name,'Sharer');
   assert.equal(r.body, LINE);
   assert.match(r.title, /Sharer/);
   assert.ok(r.consent_at && r.rules_version === 'community-v1');
   assert.ok(!r.linkedin_url.includes('?') && !r.linkedin_url.includes('#'), 'tracking is cut');
   const rd = await share(U, 'https://old.reddit.com/r/Egypt/comments/abc123/my_habit/?utm=1');
   assert.equal(rd.reddit_url, 'https://www.reddit.com/r/Egypt/comments/abc123/my_habit');
-  assert.equal(rd.verify_code, code);
+  assert.equal(rd.submitted_author_name,'Sharer');
   assert.deepEqual(plain(await wallet(U)), { balance: 0, contribution_score: 0 }, 'sharing alone pays nothing');
 });
 
@@ -155,7 +155,7 @@ await test('asking for a change sends the story back with the note; the member e
   const again = await share(U, li(), LINE + ' Now with my code.', true, s.id);
   assert.equal(again.id, s.id);
   assert.equal(again.status, 'pending');
-  assert.equal(again.verify_code, (await kit(U)).code);
+  assert.equal(again.submitted_author_name,'Editor');
   await as('authenticated', ADMIN, () => assert.rejects(q(`select * from public.admin_request_story_change($1, 'Change something else')`, [(again.id === s.id ? '00000000-0000-4000-8000-0000000000ff' : s.id)]), /not found/));
   const V = await newUser('Intruder');
   await assert.rejects(share(V, li(), LINE, true, s.id), /cannot be edited/);
@@ -190,6 +190,14 @@ await test('the public strip: only published stories of public, non-suspended me
   assert.equal((await feed({ author: 'showable' })).length, 1, 'by author, case-insensitive: the profile strip');
 });
 
+await test('story ticket accepts title, excerpt and author name without code or backlink proof',async()=>{
+ const U=await newUser('TicketOwner');
+ const r=await as('authenticated',U,async()=>(await q(`select * from public.share_story($1,$2,true,null,'My salary routine','External Author')`,[li(),LINE])).rows[0]);
+ assert.equal(r.title,'My salary routine');assert.equal(r.body,LINE);assert.equal(r.submitted_author_name,'External Author');
+ const done=await approve(r.id);assert.equal(done.status,'published');assert.equal(done.ownership_verified_at,null);assert.equal(done.backlink_verified_at,null);
+ const out=await feed({id:r.id});assert.equal(out[0].title,'My salary routine');assert.equal(out[0].summary,LINE);
+ await assert.rejects(as('authenticated',U,()=>q(`select * from public.share_story($1,$2,true,null,'bad','A')`,[li(),LINE])),/title|author/);
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();
 process.exitCode = failed ? 1 : 0;

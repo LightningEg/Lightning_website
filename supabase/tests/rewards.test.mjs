@@ -525,7 +525,7 @@ await test('feedback award: accepted with coins posts one feedback_award; repeat
   assert.equal(await count(`select 1 from public.audit_log where action = 'feedback.review' and target_id = '${id}'`), 1);
   // A different decision after paying is refused.
   await as('authenticated', ADMIN, async () => {
-    await assert.rejects(q(`select public.admin_review_feedback($1, 'accepted', 100, null)`, [id]), /already awarded/);
+    await assert.rejects(q(`select public.admin_review_feedback($1, 'accepted', 100, 'Detailed idea bonus')`, [id]), /already awarded/);
     await assert.rejects(q(`select public.admin_review_feedback($1, 'rejected', 0, null)`, [id]), /already awarded/);
   });
   // The member sees the decision and the note, and still not the reviewer.
@@ -547,11 +547,12 @@ await test('feedback review: reject and duplicate pay nothing; a rejection can l
   const acc = await as('authenticated', ADMIN, () => one(`select public.admin_review_feedback($1, 'accepted', 10, null) r`, [c]));
   assert.equal(acc.r.amount, 10);
   assert.equal((await wallet(C)).balance, before.balance + 10);
-  // Accepted with zero coins is a thank-you with no award.
+  // Legacy callers sending zero still receive the minimum accepted-feedback award.
   const z = (await one(`select id from public.feedback_submissions where user_id = $1 and body = 'C is fine'`, [C])).id;
   const zr = await as('authenticated', ADMIN, () => one(`select public.admin_review_feedback($1, 'accepted', 0, 'Thanks.') r`, [z]));
-  assert.equal(zr.r.ledger_entry_id, null);
-  assert.equal((await wallet(C)).balance, before.balance + 10);
+  assert.ok(zr.r.ledger_entry_id);
+  assert.equal(zr.r.amount, 10);
+  assert.equal((await wallet(C)).balance, before.balance + 20);
 });
 
 await test('feedback review validates its input', async () => {
@@ -694,5 +695,24 @@ await test('the website repository pays like the app repository: offer, merge, o
   assert.equal((await merge({ repo: 'SomeoneElse/Other', pr: 1, gh: 7007, login: 'webdev', issues: [1] })).status, 'ineligible_repository');
 });
 
+await test('accepted feedback defaults to 10 score and 10 Cotton, only once',async()=>{
+ const id=(await as('authenticated',D,()=>one(`select public.submit_feedback('Default award rule',null) r`))).r.id;
+ const before=await wallet(D);
+ const r=await as('authenticated',ADMIN,()=>one(`select public.admin_review_feedback($1,'accepted') r`,[id]));
+ assert.equal(r.r.amount,10);
+ assert.equal((await wallet(D)).balance,before.balance+10);
+ assert.equal((await wallet(D)).contribution_score,before.contribution_score+10);
+ await as('authenticated',ADMIN,()=>one(`select public.admin_review_feedback($1,'accepted') r`,[id]));
+ assert.equal((await wallet(D)).balance,before.balance+10);
+});
+await test('discretionary feedback bonus requires owner MFA and a reason',async()=>{
+ const id=(await as('authenticated',D,()=>one(`select public.submit_feedback('Detailed bonus rule',null) r`))).r.id;
+ await assert.rejects(as('authenticated',D,()=>q(`select public.admin_review_feedback($1,'accepted',20,'Bonus')`,[id])),/MFA|administrator/);
+ await db.exec(`select set_config('request.jwt.claims','{"aal":"aal1"}',false)`);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_feedback($1,'accepted',20,'Bonus')`,[id])),/MFA/);
+ await db.exec(`select set_config('request.jwt.claims','{"aal":"aal2"}',false)`);
+ await assert.rejects(as('authenticated',ADMIN,()=>q(`select public.admin_review_feedback($1,'accepted',20,null)`,[id])),/note required/);
+ assert.equal((await as('authenticated',ADMIN,()=>one(`select public.admin_review_feedback($1,'accepted',20,'Detailed idea bonus') r`,[id]))).r.amount,20);
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

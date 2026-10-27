@@ -36,7 +36,7 @@ const today=(()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return d.get
 let p=await boot();assert.equal(p.$('topup-pay').hidden,false);assert.equal(p.$('topup-confirm').hidden,true);
 assert.deepEqual([...p.$('topup-details').querySelectorAll('dt')].map(x=>x.textContent),['InstaPay address','Receiver name','Transfer note: your email']);
 assert.match(p.$('topup-details').textContent,/project@instapay.*Lightning Recipient.*member@example.test/);assert.equal(p.$('topup-details').querySelectorAll('button').length,3);
-assert.equal(p.w.document.querySelector('input[type=file]'),null,'no receipt upload');assert.match(p.$('topup-rate').textContent,/1 EGP = 5 coins.*5% bonus from 100 EGP/);
+assert.equal(p.w.document.querySelector('input[type=file]'),null,'no receipt upload');assert.match(p.$('topup-rate').textContent,/1 EGP = 5 Cotton.*5% bonus from 100 EGP/);
 // step 2: date, amount, where they paid from
 await p.click(p.$('topup-sent'));assert.equal(p.$('topup-pay').hidden,true);assert.equal(p.$('topup-confirm').hidden,false);assert.equal(p.$('topup-confirm').elements.date.value,today);
 assert.equal(p.$('topup-send').disabled,true,'nothing to send before the coins show');await p.price();assert.match(p.$('topup-quote').textContent,/You receive 525 Cotton \(500 \+ 25 bonus\)/);

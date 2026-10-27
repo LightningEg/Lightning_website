@@ -109,6 +109,7 @@
     'badge-supporter-bronze': ['Bronze supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
     'badge-supporter-silver': ['Silver supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
     'badge-supporter-gold': ['Gold supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
+    'badge-supporter-true': ['True supporter', 'M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6zm1 5-5 7h4l-1 5 6-8h-4z'],
     'badge-founding': ['Founding supporter', 'M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8zM8 20h8'],
     // seasonal
     'badge-cotton-boll': ['Cotton boll', 'M12 21v-6m0 0c-3 0-5-2-5-4.5S9 6 12 8c3-2 5 0 5 2.5S15 15 12 15zM9 6.5a3 3 0 0 1 6 0'],

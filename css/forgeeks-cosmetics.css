@@ -154,3 +154,5 @@
   radial-gradient(ellipse 70% 36% at 85% 104%,#3f9450 0 96%,transparent 100%),
   linear-gradient(180deg,transparent 0 62%,#4aa3c8 62% 74%,transparent 74%),
   linear-gradient(180deg,#d9f1ff,#bfe6f4)}
+
+.fg-badge[data-item="badge-supporter-true"]{color:var(--accent,var(--nile));box-shadow:inset 0 0 0 1px currentColor}

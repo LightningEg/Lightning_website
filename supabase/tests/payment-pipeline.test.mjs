@@ -175,11 +175,11 @@ await test('stray payments can be returned without a checkout and cannot later f
  await as('authenticated',u,()=>q(`select public.prepare_account_deletion('delete my account')`));
  assert.equal((await q(`select return_reference from public.bank_transfers where reference='STRAY-INCOMING'`)).rows[0].return_reference,'STRAY-OUTGOING');
 });
-await test('social awards require verified ownership, backlink, current consent and a stable post revision',async()=>{
+await test('social awards need rules review, current consent and stable revision, not code or backlink verification',async()=>{
  const u=await newUser();await as('authenticated',u,()=>q(`update public.member_profiles set adult_confirmed=true,visibility='public'where user_id=$1`,[u]));
  const make=async(i)=>{const r=(await as('authenticated',u,()=>q(`select * from public.save_story(null,'Money habit',$1,$2,null)`,['A general budgeting habit I follow every payday.','https://www.linkedin.com/posts/pipeline-'+i+'-'+key()]))).rows[0];return(await as('authenticated',u,()=>q(`select * from public.submit_story($1,true)`,[r.id]))).rows[0];};
  const approve=(r,own=true,back=true)=>asAdmin(()=>q(`select public.admin_moderate_story($1,true,0,50,'Verified the general money-management post',$2,$3,$4,true)`,[r.id,own,back,r.submission_revision]));
- const first=await make(1);await assert.rejects(approve(first,false,true),/verify the post/);await assert.rejects(approve(first,true,false),/verify the post/);assert.equal((await wallet(u)).balance,0);
+ const first=await make(1);await assert.rejects(asAdmin(()=>q(`select public.admin_moderate_story($1,true,0,50,'Rules were not reviewed',false,false,$2,false)`,[first.id,first.submission_revision])),/review the linked post/);assert.equal((await wallet(u)).balance,0); await approve(first,false,false);
  await approve(first);await approve(first);assert.deepEqual(await wallet(u),{balance:50,contribution_score:0});
  await as('authenticated',u,()=>q(`select public.withdraw_story($1)`,[first.id]));
  const resubmitted=(await as('authenticated',u,()=>q(`select * from public.submit_story($1,true)`,[first.id]))).rows[0];
