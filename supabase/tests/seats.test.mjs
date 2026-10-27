@@ -139,6 +139,19 @@ await test('a profile id must be a real one, and a code needs its theme version'
   assert.equal((await redeem(a.code, PA)).profile_id, PA);
 });
 
+await test('the code names its theme: the app sends what it carries, nothing is spent when it cannot wear it', async () => {
+  const byList = (code, items, profile = PA) => as('service_role', null, async () =>
+    (await q(`select public.redeem_activation_code($1,$2::jsonb,$3) d`, [code, JSON.stringify(items), profile])).rows[0].d);
+  const a = await issue(M);
+  await assert.rejects(byList(a.code, [{ item_id: 'cotton', asset_version: 1 }]), /unsupported/, 'an app without Nile');
+  await assert.rejects(byList(a.code, [{ item_id: 'nile', asset_version: 2 }]), /unsupported/, 'an app with another version');
+  await assert.rejects(byList(a.code, []), /unsupported/);
+  const d = await byList(a.code, [{ item_id: 'cotton', asset_version: 1 }, { item_id: 'nile', asset_version: 1 }]);
+  assert.equal(d.items[0].item_id, 'nile'); assert.equal(d.profile_id, PA);
+  await assert.rejects(byList(a.code, [{ item_id: 'nile', asset_version: 1 }]), /invalid or expired/, 'burned once used');
+  await assert.rejects(byList('zz', [{ item_id: 'nile', asset_version: 1 }]), /invalid or expired/);
+});
+
 await test('support can see a member\'s claims and free one, with a reason in the audit log', async () => {
   const asAdmin = fn => as('authenticated', ADMIN, fn);
   await assert.rejects(rpc(M, `select public.admin_profile_claims('u101@example.test')`), /administrator/);
