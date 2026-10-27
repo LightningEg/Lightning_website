@@ -3,14 +3,14 @@
     python tools/store_admin.py   # then python tools/footer.py to write the footer
 
 The console is one page with a menu and one view at a time (js/owner-dashboard.js): Overview, Top-ups, Catalogue,
-Sales, Members, Stories, Money journal and Settings. Element ids are the contract with js/store-admin.js,
+Sales, Members, Community, Money journal and Settings. Element ids are the contract with js/store-admin.js,
 js/admin-operations.js, js/owner-catalog.js and the tests in supabase/tests/*pages*.test.mjs; keep them.
 """
 from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261027-sales-1"  # css/store-admin.css and every js/ file below
+VERSION = "20261027-console-1"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -24,7 +24,7 @@ ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'settings': '<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/>',
 }
 MENU = [('today', 'Overview', ''), ('requests', 'Top-ups', 'receipts'), ('sales', 'Sales', ''), ('activity', 'Activity', ''), ('catalogue', 'Catalogue', ''),
-        ('members', 'Members', ''), ('social', 'Stories', 'stories'), ('bank', 'Money journal', 'unmatched'),
+        ('members', 'Members', ''), ('social', 'Community', 'stories'), ('bank', 'Money journal', 'unmatched'),
         ('settings', 'Settings', '')]
 
 
@@ -59,11 +59,12 @@ def build():
               '<label>Reason<input name="reason" minlength="5" maxlength="300" required></label></div>'
               '<button class="btn" type="submit">Remove picture</button><p id="admin-avatar-status" class="oc-status" role="status"></p></form>')
 
-    claims = ('<form class="panel" id="admin-claims-form"><h3>Unlocked app profiles</h3>'
-              '<p>Each purchase of an app theme unlocks it for one Lightning profile. Look a member up to see which profiles hold a theme, and free a seat for someone who lost a device or profile.</p>'
-              '<div class="fields"><label>Account email<input name="email" type="email" required></label>'
+    # Free a profile lives in Catalogue > App themes (js/owner-catalog.js moves this form into that panel): one home for seats.
+    claims = ('<form class="oc-lookup" id="admin-claims-form" hidden><h4>Free a profile</h4>'
+              '<p class="ops-fine">Each purchase of an app theme unlocks it for one Lightning profile. Look a member up by email to see which profiles hold a theme, and free a seat for someone who lost a device or profile.</p>'
+              '<div class="fields two"><label>Account email<input name="email" type="email" required></label>'
               '<label>Reason to free a seat<input name="reason" minlength="5" maxlength="300"></label></div>'
-              '<button class="btn" type="submit">Show profiles</button><div id="admin-claims-list"></div><p id="admin-claims-status" class="oc-status" role="status"></p></form>')
+              '<button class="btn ghost" type="submit">Show profiles</button><div id="admin-claims-list"></div><p id="admin-claims-status" class="oc-status" role="status"></p></form>')
 
     menu = ''.join(f'<a href="#{k}" data-view="{k}">{icon(k)}<span class="oc-nav-l">{label}</span>'
                    + (f'<span class="ops-badge" data-badge="{b}" hidden></span>' if b else '') + '</a>' for k, label, b in MENU)
@@ -85,15 +86,21 @@ def build():
         '<div id="ops-activity"><p class="ops-empty">Verify your session to load activity.</p></div>')
 
     catalogue = view('catalogue', 'Catalogue', 'Every look on sale. A theme takes its tier’s price everywhere it is worn: both sites, the PC and the phone. Sets follow their parts at 80%.',
-        '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>')
+        '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>' + claims)
 
     members = view('members', 'Members', 'Credit coins or recognition points by hand: a goodwill gift, a refund in coins, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
-        f'<div class="oc-grid one">{credit}{avatar}{claims}</div>')
+        f'<div class="oc-grid">{credit}{avatar}</div>')
 
-    social = view('social', 'Stories', 'Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
+    social = view('social', 'Community', 'Stories to review, merges held for people who have not linked GitHub yet, and what each reward pays. Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
         '<div class="oc-toolbar">' + seg('Post status', 'store-social-filter', [('pending', 'Pending'), ('published', 'Published'), ('rejected', 'Rejected')])
         + '<button class="btn ghost" type="button" id="store-social-refresh">Refresh</button></div>'
-        '<div id="store-social-list" class="oc-cards"></div><button class="btn ghost oc-more" id="store-social-more" type="button" hidden>Load more</button>')
+        '<div id="store-social-list" class="oc-cards"></div><button class="btn ghost oc-more" id="store-social-more" type="button" hidden>Load more</button>'
+        '<div class="oc-grid">'
+        '<section class="panel" id="ops-held"><h3>Held for linking</h3><p class="ops-fine">Merged pull requests and coins waiting for a GitHub account that is not linked to a Lightning account yet. Nothing is lost: when the author links GitHub in their account, what waits here is paid to them once.</p><div id="ops-held-list"><p class="ops-empty">Verify your session to load what is held.</p></div></section>'
+        '<form class="panel" id="ops-rewards"><h3>Story rewards</h3><p class="ops-fine">What one press of Approve pays for a story, and the extra coins when the blog or a guide links to a published story. Coins are spendable; points raise the leaderboard.</p>'
+        '<div class="fields three"><label>Coins for an approved story<input name="coins" type="number" min="0" max="500" required></label><label>Points for an approved story<input name="points" type="number" min="0" max="500" required></label>'
+        '<label>Blog bonus in coins<input name="blog_coins" type="number" min="0" max="500" required></label></div>'
+        '<button class="btn" type="submit">Save rewards</button><p id="ops-rewards-status" class="oc-status" role="status"></p></form></div>')
 
     bank = view('bank', 'Money journal', 'Every transfer recorded, with or without a ticket. Rarely needed: money that arrived with no top-up to match, or an entry to correct.',
         '<div class="oc-toolbar">' + seg('Bank journal filter', 'store-bank-filter', [('unmatched', 'Unmatched'), ('all', 'All transfers')])
@@ -114,7 +121,7 @@ def build():
         '</div>')
 
     scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
-                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'owner-claims', 'store-admin'))
+                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'owner-claims', 'owner-community', 'store-admin'))
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
             f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'
@@ -124,8 +131,8 @@ def build():
             f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
             f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
             f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{activity}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
-            '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>'
-            f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script></body></html>')
+            '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261027-stories-1"></script>'
+            f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-looks-1" defer></script></body></html>')
     (ROOT / 'admin.html').write_text(page)
 
 

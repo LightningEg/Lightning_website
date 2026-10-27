@@ -107,7 +107,7 @@ await test('refused: other sites, plain http, scripts, a short line, no consent,
 await test('the owner approves with one press at the default ladder: 100 coins and 50 points, once', async () => {
   const U = await newUser('Paid');
   const s = await share(U, li());
-  assert.deepEqual(plain(await as('authenticated', ADMIN, async () => (await q(`select public.admin_story_ladder() l`)).rows[0].l)), { coins: 100, points: 50 });
+  assert.deepEqual(plain(await as('authenticated', ADMIN, async () => (await q(`select public.admin_story_ladder() l`)).rows[0].l)), { coins: 100, points: 50, blog_coins: 100 }); // 8S: the ladder gained a blog bonus
   const done = await approve(s.id);
   assert.deepEqual([done.status, done.awarded_coins, done.awarded_points], ['published', 100, 50]);
   assert.deepEqual(plain(await wallet(U)), { balance: 100, contribution_score: 50 });

@@ -127,7 +127,7 @@
   if(row.receipt_object_key){shot.append(show);li.append(shot);}
   li.append(money,other,doRow,compare,status,more);draw();return li;
  }
- async function social(append=false){if(!append)socialOffset=0;const run=generation,view=++socialRun;const rows=await rpc('admin_social_queue',{p_status:$('store-social-filter').value,p_offset:socialOffset});if(run!==generation||view!==socialRun)return;if(!append)$('store-social-list').replaceChildren();if(!append&&!rows.length)$('store-social-list').append(el('p','No posts in this view.'));for(const s of rows)$('store-social-list').append(window.FGStoryModeration.card(s,async()=>{await Promise.all([social(),overview()]);}));socialOffset+=rows.length;$('store-social-more').hidden=rows.length<50;}
+ async function social(append=false){if(!append)socialOffset=0;const run=generation,view=++socialRun;const rows=await rpc('admin_social_queue',{p_status:$('store-social-filter').value,p_offset:socialOffset});if(run!==generation||view!==socialRun)return;if(!append)$('store-social-list').replaceChildren();if(!append&&!rows.length)$('store-social-list').append(el('p','No posts in this view.'));const ladder=await rpc('admin_story_ladder').catch(()=>null);for(const s of rows)$('store-social-list').append(window.FGStoryModeration.card(s,async()=>{await Promise.all([social(),overview()]);},ladder));socialOffset+=rows.length;$('store-social-more').hidden=rows.length<50;}
  function verification(verified){window.dispatchEvent(new CustomEvent('lightning:owner-access',{detail:{verified}}));}
  // One owner account (owner, 2026-10-26): the console and its menu link follow admin_roles; any other account still
  // listed there is named here and removed with one click, from the account the owner keeps.

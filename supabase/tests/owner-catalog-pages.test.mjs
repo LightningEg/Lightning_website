@@ -27,11 +27,11 @@ const sample = () => ({ coins_per_egp: 5, tiers: { palette: 300, texture: 600, m
   item({ id: 'banner-dusk', type: 'banner', name: 'Dusk', price: 150, owners: 11 }),
   item({ id: 'badge-founding', type: 'badge', name: 'Founding supporter', award: 'founding' })] });
 
-async function boot({ data = sample(), confirm = true, verified = true } = {}) {
+async function boot({ data = sample(), confirm = true, verified = true, unlocks = null } = {}) {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/admin.html#catalogue', virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
   w.confirm = () => confirm;
-  w.FG = { say: e => e.message, sb: { rpc: async (name, args) => { calls.push({ name, args: args && JSON.parse(JSON.stringify(args)) }); return { data: name === 'admin_catalog' ? JSON.parse(JSON.stringify(data)) : 3, error: null }; } } };
+  w.FG = { say: e => e.message, sb: { rpc: async (name, args) => { calls.push({ name, args: args && JSON.parse(JSON.stringify(args)) }); if (name === 'admin_app_unlocks') return unlocks ? { data: JSON.parse(JSON.stringify(unlocks)), error: null } : { data: null, error: { message: 'MFA administrator required' } }; return { data: name === 'admin_catalog' ? JSON.parse(JSON.stringify(data)) : 3, error: null }; } } };
   w.eval(read('js/owner-catalog.js'));
   if (verified) w.document.getElementById('store-tools').disabled = false; // js/store-admin.js does this once verified
   w.dispatchEvent(new w.CustomEvent('lightning:owner-access', { detail: { verified } }));
@@ -106,6 +106,35 @@ await test('app themes: turned on only after a confirmation, and paused the same
   assert.deepEqual(p.calls.find(x => x.name === 'admin_set_app_release').args, { p_item_id: 'nile', p_version: 1, p_enabled: true });
   p.button(p.qa('.oc-rel-list li')[1], 'Pause new unlocks').click(); await tick();
   assert.deepEqual(p.calls.filter(x => x.name === 'admin_set_app_release')[1].args, { p_item_id: 'cotton', p_version: 1, p_enabled: false });
+});
+
+// 8S: seats and app unlocks live in App themes.
+const UNLOCKS = [{ item_id: 'nile', name: 'Nile', codes_issued: 9, codes_redeemed: 6, profiles_claimed: 4, extra_seats_sold: 2, extra_coins: 150, members_with_seats: 3 },
+  { item_id: 'cotton', name: 'Cotton', codes_issued: 1, codes_redeemed: 1, profiles_claimed: 1, extra_seats_sold: 0, extra_coins: 0, members_with_seats: 1 }];
+await test('app themes: each theme shows profiles claimed, extra profiles sold (coins) and codes issued, beside its button', async () => {
+  const p = await boot({ unlocks: UNLOCKS });
+  const rel = p.qa('.oc-rel-list li');
+  assert.equal(rel[0].querySelector('.oc-unlock-stats').textContent, '4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued');
+  assert.equal(rel[1].querySelector('.oc-unlock-stats').textContent, '1 profile claimed · 0 extra profiles sold (0 coins) · 1 code issued');
+  assert.ok(p.calls.some(c => c.name === 'admin_app_unlocks'));
+  assert.ok(p.button(rel[0], 'Turn on unlock'), 'the button is still beside it');
+  const silent = await boot();
+  assert.equal(silent.qa('.oc-unlock-stats').length, 0, 'if the counts cannot load, the rows still show');
+  assert.equal(silent.qa('.oc-rel-list li').length, 2);
+});
+
+await test('Free a profile is in the App themes panel, not on Members: one home for seats', async () => {
+  const p = await boot({ unlocks: UNLOCKS });
+  const form = p.$('admin-claims-form');
+  assert.ok(form.closest('.oc-releases'), 'inside the App themes panel');
+  assert.equal(form.hidden, false);
+  assert.equal(form.closest('#members'), null);
+  assert.equal(p.$('members').querySelector('#admin-claims-form'), null, 'removed from Members');
+  assert.equal(form.querySelector('h4').textContent, 'Free a profile');
+  assert.deepEqual([...form.elements].map(e => e.name).filter(Boolean), ['email', 'reason']);
+  assert.ok(!form.classList.contains('panel'), 'no card inside a card');
+  await p.button(p.qa('.oc-rel-list li')[0], 'Turn on unlock').click(); await tick();
+  assert.ok(p.$('admin-claims-form').closest('.oc-releases'), 'still there after the panel redraws');
 });
 
 console.log(`${passed} passed, ${failed} failed`);
