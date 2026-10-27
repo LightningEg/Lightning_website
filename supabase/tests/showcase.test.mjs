@@ -92,6 +92,9 @@ await member(EVE, () => q(`update public.member_profiles set display_name = 'Eve
   show_work = true, show_on_leaderboard = true where user_id = $1`, [EVE]));
 await member(ZED, () => q(`update public.member_profiles set display_name = 'Zed', adult_confirmed = true, visibility = 'public', show_on_leaderboard = true where user_id = $1`, [ZED]));
 
+// New members start public and on the leaderboard; Cy and the people who only act in these tests stay private on purpose.
+await q(`update public.member_profiles set visibility = 'private', show_on_leaderboard = false where user_id = any($1::uuid[])`, [[CY, OPS, RAE, QUINN]]);
+
 // Ada: 150 this month + 100 three months ago. Eve: 150 this month. Ben: 50. Dee: 300 but not on the board. Zed: none.
 await award(ADA, 150, 'LightningEg/Lightning#101', { contribution: pr(1, 'Round money once', daysAgo(2)) });
 await award(ADA, 100, 'LightningEg/Lightning#102', { earned: daysAgo(90), contribution: pr(2, 'Older fix', daysAgo(90)) });

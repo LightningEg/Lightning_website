@@ -60,15 +60,15 @@ await test('memberUpdate: lists are split, trimmed and limited', () => {
   assert.match(rules.memberUpdate({ ...base, setup_tools: 'y'.repeat(41) }, null, NOW).error, /40 characters/);
 });
 
-await test('memberUpdate: public or leaderboard needs 18+, and under 18 stays private', () => {
-  assert.match(rules.memberUpdate({ ...base, visibility: 'public' }, null, NOW).error, /18 or older/);
-  assert.match(rules.memberUpdate({ ...base, show_on_leaderboard: true }, null, NOW).error, /18 or older/);
-  assert.equal(rules.memberUpdate({ ...base, visibility: 'public', adult_confirmed: true }, null, NOW).error, undefined);
-  assert.equal(rules.memberUpdate({ ...base, visibility: 'members' }, null, NOW).error, undefined);
-  assert.match(rules.memberUpdate({ ...base, visibility: 'public', adult_confirmed: true }, '2012-05-05', NOW).error, /under 18/);
-  assert.match(rules.memberUpdate({ ...base, adult_confirmed: true }, '2012-05-05', NOW).error, /under 18/);
-  assert.match(rules.memberUpdate({ ...base, visibility: 'members' }, '2012-05-05', NOW).error, /under 18/);
-  assert.equal(rules.memberUpdate(base, '2012-05-05', NOW).error, undefined);
+await test('memberUpdate: no age requirement; public and the leaderboard are allowed, and adult_confirmed is always sent true', () => {
+  for (const f of [{ visibility: 'public' }, { show_on_leaderboard: true }, { visibility: 'members' }, {}]) {
+    for (const birth of [null, '2012-05-05']) {
+      const r = rules.memberUpdate({ ...base, ...f, adult_confirmed: false }, birth, NOW);
+      assert.equal(r.error, undefined);
+      assert.equal(r.data.adult_confirmed, true);
+    }
+  }
+  assert.equal(rules.memberUpdate({ ...base, visibility: 'public', show_on_leaderboard: true }, '2012-05-05', NOW).data.visibility, 'public');
 });
 
 await test('privateUpdate: phone and birth date are optional but checked', () => {
@@ -96,7 +96,7 @@ await test('say maps database and auth errors to plain words', () => {
   assert.match(rules.say({ message: 'duplicate key value violates unique constraint "member_profiles_display_name_key"' }), /taken/);
   assert.match(rules.say({ message: 'Invalid login credentials' }), /Wrong email or password/);
   assert.match(rules.say({ message: 'Email not confirmed' }), /Confirm your email/);
-  assert.match(rules.say({ message: 'new row violates check constraint "public_needs_adult"' }), /18 or older/);
+  assert.doesNotMatch(rules.say({ message: 'new row violates check constraint "public_needs_adult"' }), /18/);
   assert.match(rules.say({ message: 'x', status: 429 }), /Too many/);
   assert.match(rules.say({ message: 'permission denied for table wallets', code: '42501' }), /not allowed/);
   assert.match(rules.say(new Error('Failed to fetch')), /Cannot reach/);
@@ -264,14 +264,11 @@ await test('page: signed in loads only the member own rows and fills the forms',
   assert.equal(p.$('links-list').children.length, 1);
 });
 
-await test('page: saving the public profile checks the 18+ rule, then sends one update with only the member own columns', async () => {
+await test('page: saving the public profile sends one update with only the member own columns, with no age step', async () => {
   const p = await boot(account());
   await p.fire('INITIAL_SESSION', session); await tick(30);
   p.set('visibility', 'public');
-  await p.submit('form-public');
-  assert.match(p.$('status-public').textContent, /18 or older/);
-  assert.equal(p.calls.filter(c => c.op === 'update').length, 0);
-  p.set('adult_confirmed', true); p.set('bio', 'I build things'); p.set('setup_editor', 'Neovim'); p.set('show_setup', true);
+  p.set('bio', 'I build things'); p.set('setup_editor', 'Neovim'); p.set('show_setup', true);
   await p.submit('form-public');
   const u = p.calls.find(c => c.op === 'update');
   assert.equal(u.table, 'member_profiles');
@@ -295,17 +292,19 @@ await test('page: a taken display name is reported in plain words', async () => 
   assert.match(p.$('status-public').className, /bad/);
 });
 
-await test('page: saving a birth date under 18 then blocks going public', async () => {
+await test('page: a birth date under 18 does not block going public', async () => {
   const p = await boot(account());
   await p.fire('INITIAL_SESSION', session); await tick(30);
   p.set('birth_date', '2014-03-03');
   await p.submit('form-private');
   const u = p.calls.find(c => c.table === 'profiles' && c.op === 'update');
   assert.equal(u.payload.birth_date, '2014-03-03');
-  p.set('visibility', 'public'); p.set('adult_confirmed', true);
+  p.set('visibility', 'public');
   await p.submit('form-public');
-  assert.match(p.$('status-public').textContent, /under 18/);
-  assert.equal(p.calls.filter(c => c.table === 'member_profiles' && c.op === 'update').length, 0);
+  const m = p.calls.find(c => c.table === 'member_profiles' && c.op === 'update');
+  assert.equal(m.payload.visibility, 'public');
+  assert.equal(m.payload.adult_confirmed, true);
+  assert.equal(p.$('status-public').textContent, 'saved');
 });
 
 await test('page: links reject http, show member text as text only, and can be removed', async () => {
