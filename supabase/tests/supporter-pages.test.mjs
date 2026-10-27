@@ -111,7 +111,7 @@ await test('names: their own tab, each previewed in its style; earned badges are
   assert.equal(silver.querySelector('[data-act="gift"]'), null);
   assert.match(silver.querySelector('.mkt-acts').textContent, /Earned by topping up/);
   assert.match(p.cell('badge-founding').querySelector('.mkt-acts').textContent, /First 100 to top up/);
-  assert.ok(p.btn('badge-supporter-bronze', 'Equip'), 'an earned badge you hold is worn like any other');
+  assert.ok(p.btn('badge-supporter-bronze', 'Wear'), 'an earned badge you hold is worn like any other (the main site now says Wear, 8M)');
   const box = p.$('mkt-supporter');
   assert.match(box.textContent, /1,350 coins topped up\. Silver supporter at 2,500 coins: 1,150 coins to go\./);
   assert.match(box.textContent, /73 of 100 places left/);

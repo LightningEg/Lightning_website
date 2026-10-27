@@ -19,7 +19,7 @@ body[data-main-store] .tm-pv b{display:block;width:25%;height:14px;border-radius
 .site-invite h2{font:800 clamp(25px,4vw,38px)/1.15 var(--display);color:var(--ink);margin:12px 44px 12px 0}
 .site-invite p{color:var(--muted);line-height:1.6}
 .site-invite-close{position:absolute;inset-inline-end:14px;top:14px;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:24px}
-.site-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-block:24px}
+.site-benefits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-block:24px}
 .site-benefits figure{margin:0;min-width:0}
 .site-benefits img{width:100%;height:auto;border-radius:16px;display:block}
 .site-benefits h3{font:700 17px var(--display);margin:12px 0 6px;color:var(--ink)}
@@ -60,3 +60,5 @@ body[data-main-store] .tm-pv b{display:block;width:25%;height:14px;border-radius
 .site-account-slot .chip.me:focus-visible,.site-account-slot .me-menu [role=menuitem]:focus-visible{outline:2px solid var(--azure);outline-offset:2px}
 
 body[data-main-store] .acct label:not(.chk){display:grid;gap:8px;margin-block:14px}body[data-main-store] .acct input:not([type=checkbox]),body[data-main-store] .acct select,body[data-main-store] .acct textarea{box-sizing:border-box;width:100%;padding:12px;color:var(--ink);font:500 15px var(--body);border:1px solid var(--line-ctl)}body[data-main-store] .acct .chk{display:flex;align-items:flex-start;gap:10px;margin-block:16px}body[data-main-store] .acct input[type=checkbox]{width:20px;height:20px;min-height:20px;flex:none;margin:0}#topup-details{display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2fr);gap:12px}#topup-details dd{margin:0;overflow-wrap:anywhere}#topup-details button{display:block;margin-top:6px}#topup-history p{overflow-wrap:anywhere}#topup-history .btn{margin:8px}#topup-adjustments article{padding-block:16px;border-block:1px solid var(--line)}
+
+.site-invite-quiet{color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:3px}

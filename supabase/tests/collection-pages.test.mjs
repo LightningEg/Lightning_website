@@ -72,7 +72,7 @@ await test('collection: an owned theme can be equipped and unlocked in the app w
   const p = await boot({ owned: ['moss'] });
   const labels = [...p.w.document.querySelectorAll('.mkt-cell[data-item="moss"] button')].map(b => b.textContent);
   assert.ok(labels.includes('equip'));
-  assert.ok(labels.includes('Get app unlock code'));
+  assert.ok(labels.includes('Get app code'));
   assert.ok(!labels.includes('add to cart') && !labels.includes('buy'));
   p.w.document.querySelector('[data-activation-code]').click();
   await tick(40);

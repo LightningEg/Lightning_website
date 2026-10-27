@@ -268,3 +268,72 @@ body[data-main-store] .mkt-cell:not(.compact):hover{transform:translateY(-2px);b
 .mkt-cart-line.off small{color:var(--ink)}
 .mkt-cart-lines:empty{border-top:0}
 @media (max-width:640px){.mkt-cart-line{grid-template-columns:minmax(0,1fr) auto}.mkt-cart-line .mkt-mini{grid-column:1/-1;grid-row:auto;justify-self:start}}
+
+/* ---- main site, 2026-10-27 (8M, 8O): one main action, a More menu, the app tag, a cart that is always in reach ---- */
+body[data-main-store] .mkt-chips{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start}
+body[data-main-store] .mkt-grid.textured .mkt-chips{grid-area:tier}
+body[data-main-store] .mkt-onapp{border-color:var(--mk-accent);color:var(--mk-ink)}
+body[data-main-store] .mkt-pv-try{cursor:pointer}
+body[data-main-store] .mkt-cell.mkt-hit{outline:3px solid var(--mk-accent);outline-offset:3px;scroll-margin-top:96px}
+body[data-main-store] .mkt-cell .mkt-primary{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;border:1px solid var(--mk-btn);border-radius:var(--mk-btn-r);
+  background:var(--mk-btn);color:var(--mk-btn-ink);font:var(--mk-b) 14px var(--mk-font);cursor:pointer}
+body[data-main-store] .mkt-cell .mkt-primary:disabled{opacity:.6;cursor:default}
+body[data-main-store] .mkt-cell .mkt-mini{min-height:40px;border-radius:var(--mk-btn-r);font:var(--mk-b) 14px var(--mk-font)}
+body[data-main-store] .mkt-more{position:relative}
+body[data-main-store] .mkt-more>summary{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:var(--mk-btn-r);color:var(--mk-dim);font:var(--mk-b) 14px var(--mk-font);cursor:pointer;list-style:none}
+body[data-main-store] .mkt-more>summary::-webkit-details-marker{display:none}
+body[data-main-store] .mkt-more>summary::after{content:"";width:6px;height:6px;margin-inline-start:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translateY(-2px)}
+body[data-main-store] .mkt-more[open]>summary{color:var(--mk-ink)}
+body[data-main-store] .mkt-more-list{position:absolute;inset-inline-start:0;bottom:calc(100% + 4px);z-index:5;display:grid;min-width:170px;padding:6px;border:1px solid var(--mk-line);border-radius:calc(var(--mk-card) / 2);background:var(--mk-bar);box-shadow:var(--shadow)}
+body[data-main-store] .mkt-more-item{display:flex;align-items:center;min-height:44px;padding:0 14px;border:0;border-radius:calc(var(--mk-card) / 3);background:transparent;color:var(--mk-ink);font:var(--mk-b) 14px var(--mk-font);text-align:start;cursor:pointer}
+body[data-main-store] .mkt-more-item:hover,body[data-main-store] .mkt-more-item:focus-visible{background:var(--mk-well)}
+body[data-main-store] .mkt-more>summary:focus-visible,body[data-main-store] .mkt-more-item:focus-visible,body[data-main-store] .mkt-cart-fab:focus-visible,body[data-main-store] .mkt-linkbtn:focus-visible{outline:3px solid var(--mk-accent);outline-offset:2px}
+
+body[data-main-store] .mkt-linkbtn{padding:0;border:0;background:none;color:var(--mk-ink);font:var(--mk-b) 14px var(--mk-font);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+body[data-main-store] .acct-msg .mkt-linkbtn{margin-inline-start:6px}
+
+/* the floating cart: bottom end corner, above the cookie bar and clear of the Try it bar */
+body[data-main-store] .mkt-cart-fab{position:fixed;z-index:55;inset-inline-end:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + var(--fab-lift,0px));
+  display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 20px;border:1px solid var(--mk-btn);border-radius:999px;background:var(--mk-btn);color:var(--mk-btn-ink);
+  font:var(--mk-b) 15px var(--mk-font);box-shadow:var(--shadow);cursor:pointer}
+body[data-main-store] .mkt-cart-fab[hidden]{display:none}
+body[data-main-store] .mkt-cart-fab b{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:var(--mk-btn-ink);color:var(--mk-btn);font-size:13px}
+body[data-main-store].mkt-trying .mkt-cart-fab{bottom:calc(max(16px,env(safe-area-inset-bottom)) + var(--fab-lift,0px) + 72px)}
+
+/* the cart window */
+body[data-main-store] .mkt-cart-name{display:flex;align-items:center;gap:10px}
+body[data-main-store] .mkt-cart-sw{flex:none;width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:var(--mk-well)}
+body[data-main-store] .mkt-cart-sw-banner,body[data-main-store] .mkt-cart-sw-frame,body[data-main-store] .mkt-cart-sw-badge,body[data-main-store] .mkt-cart-sw-name,body[data-main-store] .mkt-cart-sw-set{border-radius:4px}
+body[data-main-store] .mkt-cart-quiet{margin:14px 0 0;text-align:start}
+body[data-main-store] .mkt-cart-quiet[hidden]{display:none}
+body[data-main-store] .mkt-cart-quiet .mkt-linkbtn{color:var(--mk-dim);font-weight:500}
+
+/* the app steps, replacing the long Dendera block */
+body[data-main-store] .mkt-guide .mkt-guide-links{margin:12px 0 0}
+
+/* phone: the items lead */
+@media (max-width:640px){
+  body[data-main-store] .acct-top h1{font-size:28px;margin-bottom:12px}
+  body[data-main-store] .acct-top>.wrap>.lede{display:none}
+  body[data-main-store] #mkt-body:not([hidden]){display:flex;flex-direction:column}
+  body[data-main-store] #mkt-body>*{order:3}
+  body[data-main-store] #mkt-body>.mkt-top{order:0}
+  body[data-main-store] #mkt-body>.mkt-tabs{order:1;margin-bottom:20px}
+  body[data-main-store] #mkt-body>.mkt-gifts{order:2}
+  body[data-main-store] #mkt-body>.mkt-trust{order:9;margin:32px 0 0}
+  body[data-main-store] .mkt-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--mk-line);border-radius:var(--mk-card);background:var(--mk-panel)}
+  body[data-main-store] .mkt-top .mkt-look,body[data-main-store] .mkt-top .mkt-wallet{padding:0;border:0;background:none;border-radius:0;box-shadow:none;gap:8px}
+  body[data-main-store] .mkt-top .mkt-look{flex:1 1 100%;order:2}
+  body[data-main-store] .mkt-top .mkt-wallet{flex:1 1 100%;order:1;flex-direction:row;flex-wrap:wrap;align-items:center}
+  body[data-main-store] .mkt-top .mkt-look-h,body[data-main-store] .mkt-top .mkt-look-card,body[data-main-store] .mkt-wallet .mkt-bar .fine{display:none}
+  body[data-main-store].mkt-trying .mkt-top .mkt-look-card{display:block}
+  body[data-main-store] .mkt-top .mkt-wallet .mkt-bar{flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}
+  body[data-main-store] .mkt-top .mkt-earn{margin:0;gap:4px 14px}
+  body[data-main-store] .mkt-top .mkt-look-line{font-size:13px}
+  body[data-main-store] .mkt-cart-fab{min-height:44px;padding:0 16px}
+  body[data-main-store] .mkt-tiers{display:none}
+  body[data-main-store] .mkt-top .mkt-bar .btn{min-height:36px;padding:0 14px;font-size:14px}
+  body[data-main-store] .mkt-top .mkt-bar .chip{font-size:14px}
+  body[data-main-store] .mkt-top .mkt-bar .chip b{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){.mkt-cell.mkt-hit{outline-offset:3px}}

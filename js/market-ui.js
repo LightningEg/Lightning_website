@@ -32,7 +32,7 @@
   var lookOverride = {};    // Try it on a banner, frame or badge
   var me = null;
   var apps = [];            // validated app-theme manifests
-  var built = false;
+  var built = false, built2 = false;
   var detail = { trigger: null, entry: null, mode: 'website' };
   var fgTry = null;         // For Geeks: what to put back after Try it
 
@@ -122,7 +122,7 @@
     var trust = el('ul', 'mkt-trust');
     trust.setAttribute('aria-label', ui('What you get'));
     [['Pay once, keep it', 'No subscription. What you buy stays on your account.'],
-     ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app when themes ship there.' : 'Here and on the main site. The app when themes ship there.'],
+     ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app too, unlocked once per profile.' : 'Here and on the main site. The app when themes ship there.'],
      ['Looks only', 'Every feature of Lightning stays free. Nothing here changes a number or a rank.'],
      ['Paid in Egypt', 'InstaPay, checked by a person. Coins arrive once your transfer does.']].forEach(function (x) {
       trust.appendChild(add(el('li'), [el('b', null, ui(x[0])), el('span', null, x[1])]));
@@ -239,6 +239,7 @@
 
   /* ---------- the app themes in testing ---------- */
   function loadApps() {
+    if (MAIN) return; // the main site tags the cards that ship in the app instead of repeating them in a second block
     if (!root.CosmeticParts || !root.fetch) return;
     var get = function (p) { return root.fetch(p).then(function (r) { if (!r.ok) throw Error('missing'); return r.json(); }); };
     get('cosmetics/slots.json').then(function (contract) {
@@ -257,7 +258,7 @@
     while (feat.firstChild) feat.removeChild(feat.firstChild);
     if (!apps.length) return;
     add(feat, [el('h3', 'mkt-sub', ui('Try these on your PC and phone')), el('p', 'mkt-feat-why',
-      'One purchase dresses both websites. The PC and phone previews are included in app 1.5.0; paid app unlocking needs a later app release.')]);
+      'One purchase dresses both websites and the app on your PC and phone: unlock it in the app once per profile with a code from your account.')]);
     var row = el('div', 'mkt-feat-row');
     apps.forEach(function (m) {
       var e = appEntry(m);
@@ -269,7 +270,7 @@
         btn('mkt-feat-more', 'Details', function (ev) { openDetail(e, ev.currentTarget, 'pc'); }, m.name + ' details'),
         e.item ? add(el('span', 'mkt-feat-price'), [priced(e.item.price)]) : el('span', 'mkt-feat-price', ui('Price not set yet'))]);
       if (m.id === 'dendera') acts.appendChild(btn('mkt-feat-more', 'How to use', function () {
-        var guide = $('dendera-guide');
+        var guide = $('app-guide');
         if (guide) { guide.scrollIntoView({ block: 'start' }); guide.focus({ preventScroll: true }); }
       }, 'How to use Dendera'));
       words.appendChild(acts);
@@ -285,6 +286,10 @@
   var WORDS = { 'buy': 'Buy', 'equip': 'Equip', 'remove banner': 'Remove banner', '✓ equipped': '✓ Equipped', 'owned': 'Owned', 'free': 'Free',
     'buy set': 'Buy set', 'gift': 'Gift', 'plain name': 'Plain name', '✓ yours': '✓ Yours', 'earned': 'Earned', 'earned by topping up': 'Earned by topping up', 'first 100 to top up': 'First 100 to top up' };
   function cellHook(li, it) {
+    cellInner(li, it);
+    if (MAIN) tidy(li, it);
+  }
+  function cellInner(li, it) {
     var acts = li.querySelector('.mkt-acts');
     // Part B writes sentence case; the shared cells come in For Geeks' lower case
     if (MAIN) Array.prototype.forEach.call(li.querySelectorAll('.mkt-acts button,.mkt-state,.mkt-tag'), function (n) { if (WORDS[n.textContent]) n.textContent = WORDS[n.textContent]; });
@@ -299,15 +304,102 @@
     if (buy) buy.classList.add('mkt-buy');
     if (it.is_default && it.type === 'theme') return;
     var st = it.type === 'theme' ? siteTheme(it.id) : null;
-    if (it.type === 'theme') { var tr = el('span', 'mkt-tier mkt-tier-' + tierOf(it), ui(TIER_WORD[tierOf(it)])); li.insertBefore(tr, li.querySelector('.mkt-head')); }
+    if (it.type === 'theme') {
+      var tr = el('span', 'mkt-tier mkt-tier-' + tierOf(it), ui(TIER_WORD[tierOf(it)]));
+      var chips = el('span', 'mkt-chips');
+      chips.appendChild(tr);
+      if (MAIN && bundled[it.id]) chips.appendChild(el('span', 'mkt-tier mkt-onapp', 'On PC and phone'));
+      li.insertBefore(chips, li.querySelector('.mkt-head'));
+    }
     if (st && st.archived) li.insertBefore(el('p', 'mkt-archived', MAIN ? 'Archived: still yours, no longer sold.' : 'archived: still yours, no longer sold.'), acts);
     var e = entryFor(it);
     add(acts, [
       btn('mkt-mini mkt-try-btn', 'Try it', function () { tryOn(e); }, 'Try ' + it.name),
-      btn('mkt-mini ghost', 'Details', function (ev) { openDetail(e, ev.currentTarget); }, it.name + ' details')]);
+      btn('mkt-mini ghost mkt-details-btn', 'Details', function (ev) { openDetail(e, ev.currentTarget); }, it.name + ' details')]);
     var tag = li.querySelector('.mkt-tag');
     if (tag && !it.owned && it.price > 0 && !it.award) { while (tag.firstChild) tag.removeChild(tag.firstChild); tag.appendChild(priced(it.price)); }
     if (it.tier === 'motion' && it.type !== 'theme') li.insertBefore(el('span', 'mkt-tier mkt-tier-motion', ui('Animated')), li.querySelector('.mkt-head'));
+  }
+
+
+  /* One main action, Try it, and a More menu: the main site's cards (owner, 2026-10-27). The shared cells in
+     js/forgeeks-market.js stay as they are; this regroups their buttons, keeping every handler. */
+  function tidy(li, it) {
+    var acts = li.querySelector('.mkt-acts');
+    if (!acts) return;
+    var one = function (sel) { return acts.querySelector(sel); };
+    var cart = one('[data-cart]'), buy = one('[data-act="buy"]'), equip = one('[data-act="equip"]'), gift = one('[data-act="gift"]'),
+      remove = one('[data-act="remove"]'), tryBtn = one('.mkt-try-btn'), details = one('.mkt-details-btn');
+    var primary = equip || cart || buy;
+    var more = [];
+    if (primary === equip && equip) equip.textContent = 'Wear';
+    if (primary === cart && buy) { buy.textContent = it.type === 'set' ? 'Buy set now' : 'Buy now'; more.push(buy); }
+    [details, gift, remove].forEach(function (b) { if (b) more.push(b); });
+    if (primary) { primary.className = 'mkt-mini mkt-primary'; primary.removeAttribute('data-primary'); }
+    var kept = [one('.mkt-state'), primary, tryBtn].filter(Boolean);
+    while (acts.firstChild) acts.removeChild(acts.firstChild);
+    kept.forEach(function (n) { acts.appendChild(n); });
+    if (more.length) {
+      var d = el('details', 'mkt-more');
+      var sum = el('summary', null, 'More');
+      sum.setAttribute('aria-label', 'More about ' + it.name);
+      var list = el('div', 'mkt-more-list');
+      more.forEach(function (b) { b.className = 'mkt-more-item'; list.appendChild(b); b.addEventListener('click', function () { d.open = false; }); });
+      add(d, [sum, list]);
+      acts.appendChild(d);
+    }
+    // pressing the preview tries the look on, like the Try it button
+    var pv = li.firstElementChild;
+    if (tryBtn && pv && !li.classList.contains('compact')) {
+      pv.classList.add('mkt-pv-try');
+      pv.addEventListener('click', function () { tryBtn.click(); });
+    }
+  }
+  doc.addEventListener('click', function (ev) {
+    Array.prototype.forEach.call(doc.querySelectorAll('.mkt-more[open]'), function (d) { if (!d.contains(ev.target)) d.open = false; });
+  });
+  doc.addEventListener('keydown', function (ev) {
+    if (ev.key !== 'Escape') return;
+    var d = doc.querySelector('.mkt-more[open]');
+    if (d) { ev.preventDefault(); d.open = false; var s = d.querySelector('summary'); if (s) s.focus(); }
+  });
+
+  /* ---------- tags and links from the app ---------- */
+  var bundled = {};        // item ids whose theme ships in the app (bundled_item_versions, enabled)
+  function loadBundled() {
+    if (!MAIN || !FG || !FG.sb || !FG.sb.from) return;
+    try {
+      Promise.resolve(FG.sb.from('bundled_item_versions').select('item_id').eq('enabled', true)).then(function (r) {
+        if (!r || r.error || !Array.isArray(r.data)) return;
+        var next = {};
+        r.data.forEach(function (x) { if (x && typeof x.item_id === 'string') next[x.item_id] = true; });
+        bundled = next;
+        if (ms && ms.items.length) M().render();
+      }, function () {});
+    } catch (_) {}
+  }
+  // marketplace.html?item=<id> (the app's See prices link): open that item's tab, scroll to it, mark it.
+  var TAB_OF = { theme: 'themes', set: 'sets', banner: 'banners', frame: 'frames', badge: 'badges', name: 'names' };
+  var hitDone = false, hit = null;   // hit: the item being pointed at, and until when
+  function mark() {
+    if (!hit) return;
+    if (Date.now() > hit.until) { hit = null; return; }
+    var cell = doc.querySelector('.mkt-cell[data-item="' + hit.id + '"]');
+    if (cell && !cell.hidden) cell.classList.add('mkt-hit');
+  }
+  function highlight() {
+    if (!MAIN || !ms || !ms.items.length) return;
+    if (hitDone) { mark(); return; } // the cards are drawn again as the page loads: keep the mark on the new card
+    var id = null;
+    try { id = new root.URLSearchParams(root.location.search).get('item'); } catch (_) {}
+    hitDone = true;
+    var it = id ? ms.items.filter(function (i) { return i.id === id; })[0] : null; // only ids the catalogue lists
+    if (!it) return;
+    if (TAB_OF[it.type] && view !== TAB_OF[it.type]) show(TAB_OF[it.type], false);
+    hit = { id: it.id, until: Date.now() + 4000 };
+    mark();
+    var cell = doc.querySelector('.mkt-cell[data-item="' + it.id + '"]');
+    if (cell && !cell.hidden && cell.scrollIntoView) cell.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
 
   /* ---------- Try it ---------- */
@@ -675,9 +767,11 @@
       drawTiers(state);
       if (apps.length) drawFeatured();
       loadExtras(state);
+      if (!built2) { built2 = true; loadBundled(); }
       arrange();
       drawLook();
       syncSkin(false);
+      highlight();
       if (trying && trying.item) {
         var fresh = state.items.filter(function (i) { return i.id === trying.item.id; })[0];
         if (fresh) { trying.item = fresh; drawBar(); }
