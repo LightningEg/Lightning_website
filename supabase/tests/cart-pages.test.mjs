@@ -36,10 +36,12 @@ async function boot({ signedIn = true, balance = 500, cart = [], checkout, main 
   w.Element.prototype.scrollIntoView = function () {};
   w.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
   const srv = { balance, cart: [...cart], owned: new Set(), session: signedIn ? { user: { id: UID, email: 'ada@example.test' } } : null };
-  const find = id => CATALOG.find(i => i.id === id);
+  const EXTRA = [{ id: 'set-moss', type: 'set', name: 'Moss set', price: 100 }];
+  const find = id => CATALOG.find(i => i.id === id) || EXTRA.find(i => i.id === id);
   const view = () => ({
     lines: srv.cart.map(id => ({ item_id: id, name: find(id).name, type: find(id).type, price: srv.gone?.has(id) ? 0 : find(id).price, status: srv.gone?.has(id) ? 'unavailable' : 'ok' })),
-    total: srv.cart.reduce((s, id) => s + (srv.gone?.has(id) ? 0 : find(id).price), 0), balance: srv.balance });
+    total: srv.cart.reduce((s, id) => s + (srv.gone?.has(id) ? 0 : find(id).price), 0), balance: srv.balance,
+    suggestions: srv.cart.includes('moss') && !srv.cart.includes('set-moss') && !srv.noSuggest ? [{ set_id: 'set-moss', name: 'Moss set', parts_in_cart: 1, parts_total: 2, price: 100, saving: 50, extra: 0 }] : [] });
   const thenable = v => ({ then: (a, b) => Promise.resolve(v).then(a, b) });
   const rpc = (name, args) => {
     calls.push({ fn: name, args });
@@ -47,6 +49,7 @@ async function boot({ signedIn = true, balance = 500, cart = [], checkout, main 
     if (name === 'cart_view') return thenable({ data: view(), error: null });
     if (name === 'cart_add') { if (!srv.cart.includes(args.p_item_id)) srv.cart.push(args.p_item_id); return thenable({ data: view(), error: null }); }
     if (name === 'cart_remove') { srv.cart = srv.cart.filter(i => i !== args.p_item_id); return thenable({ data: view(), error: null }); }
+    if (name === 'cart_swap_for_set') { srv.cart = srv.cart.filter(i => i !== 'moss'); srv.cart.push(args.p_set_id); return thenable({ data: view(), error: null }); }
     if (name === 'cart_clear') { srv.cart = []; return thenable({ data: view(), error: null }); }
     if (name === 'checkout_cart') {
       if (checkout) { const r = checkout(args, srv, view); if (r) return thenable(r); }
@@ -241,6 +244,34 @@ await test('For Geeks keeps its lower-case cart words', async () => {
   await p.click(p.$('cart-open'));
   assert.equal(p.$('cart-title').textContent, 'your cart');
   assert.equal(p.$('cart-ok').textContent, 'buy everything');
+});
+
+await test('main: the cart window offers the cheaper set, and one press swaps the parts for it', async () => {
+  const p = await boot({ main: true, cart: ['moss', 'banner-halo'] });
+  await p.click(p.$('cart-fab'));
+  const btn = p.w.document.querySelector('.mkt-suggest-btn');
+  assert.equal(btn.textContent, 'Switch to the Moss set: save 50 coins');
+  assert.equal(p.w.document.querySelectorAll('.mkt-suggest-btn').length, 1);
+  await p.click(btn);
+  assert.equal(p.rpcs('cart_swap_for_set').length, 1);
+  assert.equal(p.rpcs('cart_swap_for_set')[0].args.p_set_id, 'set-moss');
+  assert.deepEqual(p.srv.cart.sort(), ['banner-halo', 'set-moss']);
+  assert.equal(p.w.document.querySelector('.mkt-suggest-btn'), null, 'nothing left to suggest');
+  assert.equal([...p.w.document.querySelectorAll('.mkt-cart-name')].map(n => n.textContent).sort().join(','), 'Halo,Moss set');
+});
+
+await test('main: no suggestion, no block; a refused swap says why and keeps the cart', async () => {
+  const none = await boot({ main: true, cart: ['banner-halo'] });
+  await none.click(none.$('cart-fab'));
+  assert.equal(none.w.document.querySelector('.mkt-suggest-btn'), null);
+  const p = await boot({ main: true, cart: ['moss'] });
+  await p.click(p.$('cart-fab'));
+  const rpc0 = p.w.FG.sb.rpc;
+  p.w.FG.sb.rpc = (n, a) => n === 'cart_swap_for_set' ? { then: (ok) => Promise.resolve({ data: null, error: { message: 'that set shares parts with a set already in your cart' } }).then(ok) } : rpc0(n, a);
+  await p.click(p.w.document.querySelector('.mkt-suggest-btn'));
+  assert.ok(p.$('cart-status').textContent.length > 0 && p.$('cart-status').className.includes('bad'), 'the refusal is shown');
+  assert.deepEqual(p.srv.cart, ['moss']);
+  assert.ok(p.w.document.querySelector('.mkt-suggest-btn'), 'the offer stays');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
