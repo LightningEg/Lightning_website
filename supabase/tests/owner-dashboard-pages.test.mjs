@@ -84,7 +84,7 @@ await test('views: one at a time, Overview by default, old section links land wh
   assert.equal(p.$('today').hidden, false);
   assert.equal(p.$('requests').hidden, true);
   assert.equal(p.w.document.querySelector('.ops-nav a[aria-current=page]').getAttribute('data-view'), 'today');
-  assert.deepEqual(p.qa('.ops-nav a').map(a => a.getAttribute('data-view')), ['today', 'requests', 'catalogue', 'members', 'social', 'bank', 'settings']);
+  assert.deepEqual(p.qa('.ops-nav a').map(a => a.getAttribute('data-view')), ['today', 'requests', 'sales', 'catalogue', 'members', 'social', 'bank', 'settings']);
   const s = await boot({ hash: '#pricing' });
   assert.equal(s.$('settings').hidden, false);
   assert.ok(s.$('settings').contains(s.$('pricing')), 'checkout, pricing and retention live in Settings');

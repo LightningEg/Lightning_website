@@ -92,6 +92,18 @@ Add `https://lightningeg.com/account.html` (and the localhost equivalent for dev
 
 Automated acceptance: all `supabase/tests/*.test.mjs`; optional real Chromium: install `playwright-core@1.58.2`, run `python -m http.server 8000 --bind 127.0.0.1`, then `node supabase/tests/main-site-browser.mjs`. Browser tests intercept authentication and never use the live Supabase project. The test currently uses `/usr/bin/chromium`.
 
+## Marketplace cart and sales tracking
+
+Apply `20261027090000_cart_and_sales_tracking.sql` after the migrations above. It adds a server-side cart so the cart follows a member between devices, an all-or-nothing checkout, and the numbers the owner needs to see what sells. Cosmetics only; every charge is still a ledger entry through the existing purchase functions.
+
+- **Cart:** `cart_view()`, `cart_add(item)`, `cart_remove(item)`, `cart_clear()` for the signed-in member. A cart holds up to 25 lines; only what is on sale, not owned, not free and not earned can be added. A set in the cart covers its parts (they ride inside it at no extra cost); a set that shares parts with another set already in the cart is refused. Tables are private: members use these functions, never the tables.
+- **Checkout:** `checkout_cart(expected_total, key)` prices the cart now, refuses the whole order if the total differs from the one shown, if any line stopped being available, or if the wallet is short, then buys each line through `purchase_set` / `purchase_item_at_price` in one transaction and empties the cart. The key (8 to 36 characters) makes a retry return the same order and never charge twice. Each line keeps its own purchase and ledger entry; `orders` and `order_lines` group them.
+- **Tracking:** `cart_events` records add, remove, clear and checkout, written only by those functions. Deleting an account removes its cart and orders and keeps the events without the person. `admin_sales(days)` (MFA administrator) returns sales by day, item, type and channel (cart, direct, gift), the order count and basket size, the funnel (added, started, checked out, taken out again), carts waiting now and carts stalled over a day, and the latest orders by short id. It names no member.
+- **Pages:** `js/market-cart.js` adds the chip, the add-to-cart buttons and the cart window to `marketplace.html` (For Geeks keeps buying one item at a time). The owner console has a **Sales** view (`js/owner-sales.js`). Regenerate with `python tools/site_accounts.py`, `python tools/store_admin.py`, then `python tools/footer.py`.
+- **Tests:** `cart.test.mjs` (database), `cart-pages.test.mjs` (cart window), `owner-sales-pages.test.mjs` (Sales view).
+
+Not built: shipping or fulfilment (everything is delivered to the account at once), discount codes, and cart reminders by email.
+
 ## Swappable parts, activation codes and proof policy
 
 Apply `20261025140000_activation_and_payment_proof.sql` next. No bundled app versions are enabled by this migration. `cosmetics/slots.json` inventories eleven appearance compartments; each theme JSON is its per-part guideline. The supplied PDFs are references, not executable assets or binding policy. The two new designs are sandbox previews on the main marketplace, unpriced and unavailable for paid app delivery until integration/acceptance. Textile products and currency naming remain optional design backlog. See [parts contract](../cosmetics/README.md) and [manual payment policy](../cosmetics/payment-policy.md).

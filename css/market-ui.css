@@ -254,3 +254,17 @@ body[data-main-store] .mkt-cell:not(.compact):hover{transform:translateY(-2px);b
 .mkt-gift-to input{min-height:44px;padding:0 14px;border:1px solid var(--mk-line);border-radius:var(--mk-pill);background:var(--mk-well);color:var(--mk-ink);font:500 15px var(--mk-font)}
 @media (max-width:640px){.mkt-vote-opt{grid-template-columns:minmax(0,1fr) auto}.mkt-vote-opt .mkt-mini{grid-column:1/-1;justify-self:start}}
 .mkt-tag:empty{display:none}
+
+/* the cart: a chip beside the wallet and a window that lists the lines (js/market-cart.js) */
+.mkt-cart-chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.mkt-cart-win{width:min(520px,100%)}
+.mkt-cart-lines{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.mkt-cart-line{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.mkt-cart-line .mkt-cart-name{grid-column:1;font-weight:700;color:var(--ink);overflow-wrap:anywhere}
+.mkt-cart-line small{grid-column:1;grid-row:2;color:var(--muted)}
+.mkt-cart-line b{grid-column:2;grid-row:1;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.mkt-cart-line .mkt-mini{grid-column:3;grid-row:1}
+.mkt-cart-line.off .mkt-cart-name,.mkt-cart-line.off b{color:var(--muted)}
+.mkt-cart-line.off small{color:var(--ink)}
+.mkt-cart-lines:empty{border-top:0}
+@media (max-width:640px){.mkt-cart-line{grid-template-columns:minmax(0,1fr) auto}.mkt-cart-line .mkt-mini{grid-column:1/-1;grid-row:auto;justify-self:start}}

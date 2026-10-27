@@ -160,13 +160,19 @@
     return b;
   }
 
+  // The main-site marketplace adds a cart (js/market-cart.js); For Geeks has none and buys one item at a time.
+  function addToCart(row, it, cls) {
+    var mc = root.MarketCart, b = mc && mc.button ? mc.button(it, cls) : null;
+    if (b) row.appendChild(b);
+  }
+
   function actions(it, compact) {
     var row = el('div', 'mkt-acts');
     if (!state.signedIn) return row; // signed out: browse only, the sign-in link is at the top
     var ghost = compact ? 'mkt-mini' : 'btn ghost';
     if (it.type === 'set') {
       if (it.owned || priceOf(it) <= 0) row.appendChild(el('span', 'mkt-state', '✓ yours'));
-      else row.appendChild(button(ghost, 'buy set', 'buy', it));
+      else { row.appendChild(button(ghost, 'buy set', 'buy', it)); addToCart(row, it, ghost); }
       return row;
     }
     if (it.equipped) {
@@ -179,6 +185,7 @@
       row.appendChild(el('span', 'mkt-state mkt-earn', it.award === 'founding' ? 'first 100 to top up' : 'earned by topping up'));
     } else {
       row.appendChild(button(ghost, 'buy', 'buy', it));
+      addToCart(row, it, compact ? 'mkt-mini' : 'btn ghost');
     }
     if (giftable(it)) row.appendChild(button('mkt-mini', 'gift', 'gift', it, 'give ' + it.name + ' to another member'));
     return row;
@@ -510,7 +517,7 @@
     });
   }
 
-  root.LightningMarket = { state: state, buy: function (it, b) { if (!state.busy) openBuy(it, b); }, act: onAct, render: render };
+  root.LightningMarket = { state: state, reload: load, buy: function (it, b) { if (!state.busy) openBuy(it, b); }, act: onAct, render: render };
 
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 })(window);

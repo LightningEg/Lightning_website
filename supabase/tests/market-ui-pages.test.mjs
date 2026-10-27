@@ -291,5 +291,24 @@ await test('skin: theme.js refuses anything but four hex colours and an id', asy
   assert.equal(w.document.getElementById('site-skin'), null);
 });
 
+await test('skin: dark mode is never recoloured by a light theme, and comes back when light mode does', async () => {
+  const dom = new JSDOM('<html><head></head><body></body></html>', { runScripts: 'outside-only', url: 'https://lightningeg.com/' });
+  const w = dom.window, d = w.document, cotton = { id: 'cotton', c: ['#f3ead8', '#2b2118', '#6b5a48', '#b5553a'], tex: 'cotton' };
+  w.eval(code('js/theme.js'));
+  const toggle = d.createElement('button');
+  toggle.setAttribute('data-theme-toggle', '');
+  d.body.appendChild(toggle);
+  w.LightningTheme.skin(cotton);
+  assert.equal(d.documentElement.dataset.skin, 'cotton', 'light mode wears it');
+  toggle.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  assert.equal(d.documentElement.dataset.theme, 'dark');
+  assert.equal(d.getElementById('site-skin'), null, 'dark mode keeps the plain dark site');
+  assert.equal(d.documentElement.dataset.skin, undefined);
+  assert.equal(d.documentElement.dataset.texture, undefined, 'and no texture');
+  assert.equal(w.LightningTheme.worn().id, 'cotton', 'the theme is still worn');
+  toggle.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  assert.equal(d.documentElement.dataset.skin, 'cotton', 'light mode paints it again');
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed) process.exit(1);

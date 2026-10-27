@@ -43,6 +43,7 @@ def build():
         elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
         elif name=='profile':scripts+=['js/forgeeks-showcase.js','js/forgeeks-profile.js','js/story-card.js','js/story-strip.js']
         else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
+        if name=='marketplace':scripts.insert(scripts.index('js/forgeeks-market.js')+1,'js/market-cart.js')
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
         if name in('marketplace','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
         if name=='marketplace':css+=['css/forgeeks-market.css','css/theme-preview.css','css/market-ui.css']
@@ -50,9 +51,9 @@ def build():
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
         # the market's own files change often: a version so browsers fetch the new copy
-        SHOP='?v=20261026-dendera-1'
+        SHOP='?v=20261027-cart-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
-        scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js') else j for j in scripts]
+        scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
         if name=='account':scripts+=['js/site-banner.js']
         scripts+=['js/site-words.js']
@@ -98,7 +99,7 @@ def connect_public_pages():
         # changed with the community tabs pass (owner, 2026-10-25)
         text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-2\2', text)
         text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js|js/forgeeks-showcase[.]js|js/forgeeks-profile[.]js|js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
-        text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
+        text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-cart-1\2', text)
         text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/admin-operations[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
