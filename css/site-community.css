@@ -200,3 +200,9 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
 #topup-details dd.wal-key{padding:4px 14px 12px;border:0;border-radius:0 0 14px 14px;background:var(--field)}
 .wal .wal-back{min-height:36px;height:36px;margin:0 0 12px}
 #topup-adjustments:empty{display:none}
+
+/* sharing a story (8R): the code to put in the post, and the owner's one-row review */
+.story-kit-text{margin:12px 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--field);color:var(--ink);font:600 14px/1.6 var(--body);white-space:pre-wrap;overflow-wrap:anywhere;user-select:all}
+.story-row textarea{width:100%;min-height:72px;margin:10px 0}
+.story-row .row{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+#story-mine article+article,#story-queue article+article{margin-top:14px}

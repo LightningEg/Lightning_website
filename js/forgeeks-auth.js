@@ -57,6 +57,12 @@
     if (/session ended/i.test(m)) return 'Your session ended. Sign in again and verify MFA if you are using owner controls.';
     if (/community access is restricted/i.test(m)) return 'Your community access is restricted. Contact hello@lightningeg.com to request a review.';
     if (/post changed/i.test(m)) return 'This post changed after you opened it. Reload it and verify the current links and code.';
+    if (/LinkedIn or Reddit post/i.test(m)) return 'Paste the link to your own LinkedIn or Reddit post.';
+    if (/20 to 400 characters/i.test(m)) return 'Say in 20 to 400 characters how you use Lightning.';
+    if (/tick the box to agree/i.test(m)) return 'Tick the box to agree to share your post under your display name.';
+    if (/cannot be edited now/i.test(m)) return 'That post cannot be edited now. Share a new one instead.';
+    if (/3 stories in 30 days/i.test(m)) return 'This member already earned story coins for 3 stories in 30 days. Approve it later.';
+    if (/say what to change|5 to 500 characters/i.test(m)) return 'Write a note of 5 to 500 characters first.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
     if (/public adult profile/i.test(m)) return 'Set your profile to public before publishing.';
     if (/sharing consent/i.test(m)) return 'Add a title, a summary of 20–400 characters, and confirm sharing consent.';

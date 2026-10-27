@@ -2477,8 +2477,8 @@
       "id": "UX-2026.10.21.01",
       "name": "Guides · Four topics, one picture each",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.01.html"
     },
     {
       "id": "UX-2026.10.21.02",
@@ -2617,8 +2617,8 @@
       "id": "UX-2026.10.21.22",
       "name": "Your Data and Devices · Topic page",
       "page": "your-data-and-devices.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.22.html"
     },
     {
       "id": "UX-2026.10.21.23",
@@ -2666,8 +2666,8 @@
       "id": "UX-2026.10.21.29",
       "name": "Budget Your Salary · Recaptured figures",
       "page": "budget-your-salary.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.29.html"
     },
     {
       "id": "UX-2026.10.21.30",
@@ -2680,8 +2680,8 @@
       "id": "UX-2026.10.21.31",
       "name": "Know What You Own · Recaptured figures",
       "page": "know-what-you-own.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.31.html"
     },
     {
       "id": "UX-2026.10.21.32",
@@ -2869,8 +2869,8 @@
       "id": "UX-2026.10.22.05",
       "name": "See Where Your Money Goes · August expenses",
       "page": "see-where-your-money-goes.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.05.html"
     },
     {
       "id": "UX-2026.10.22.06",
@@ -3127,6 +3127,48 @@
     {
       "id": "UX-2026.10.27.02",
       "name": "Version Archive · Looks strip",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.27.02.html"
+    },
+    {
+      "id": "UX-2026.10.27.03",
+      "name": "Guides · How people use Lightning",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.04",
+      "name": "Budget your salary · How people use Lightning",
+      "page": "budget-your-salary.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.05",
+      "name": "See where your money goes · How people use Lightning",
+      "page": "see-where-your-money-goes.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.06",
+      "name": "Know what you own · How people use Lightning",
+      "page": "know-what-you-own.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.07",
+      "name": "Your data and devices · How people use Lightning",
+      "page": "your-data-and-devices.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.08",
+      "name": "Version Archive · How people use Lightning",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
