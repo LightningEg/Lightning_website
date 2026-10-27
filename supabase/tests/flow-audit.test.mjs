@@ -129,7 +129,8 @@ await test('deletion is blocked by receipts until Storage removal; deletion barr
  assert.equal((await as('authenticated',u,()=>q(`delete from storage.objects where name=$1 returning name`,[path]))).rows.length,1);
  await as('authenticated',u,()=>q(`select public.delete_my_account('delete my account')`));
  const kept=(await q(`select user_id,transfer_note_email,payer_instapay_address,customer_payment_reference,receipt_object_key from public.topup_requests where id=$1`,[r.id])).rows[0];assert.ok(Object.values(kept).every(v=>v===null));
- await q(`update public.member_profiles set visibility='members',adult_confirmed=true where user_id=$1`,[another]);
+ await q(`update public.member_profiles set visibility='private',show_on_leaderboard=false`); // new members start public; this check is about members-only
+ await q(`update public.member_profiles set visibility='members' where user_id=$1`,[another]);
  assert.equal((await as('authenticated',u,()=>q(`select * from public.profile_directory`))).rows.length,0,'deleted JWT is not a current member');
  assert.equal((await as('authenticated',u,()=>q(`select * from storage.objects`))).rows.length,0);
 });

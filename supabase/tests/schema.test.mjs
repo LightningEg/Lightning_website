@@ -64,12 +64,14 @@ const award = (user, amount, source, extra = {}) =>
     `select * from public.award_coins($1, 'contribution_award', $2, 'pr', $3, 'Merged PR', coalesce($4::timestamptz, now()), 'primary', $5::jsonb)`,
     [user, amount, source, extra.earned ?? null, extra.contribution ? JSON.stringify(extra.contribution) : null]));
 
-await test('signup creates private profile, wallet and an alias that is not an email', async () => {
+await test('signup creates a public profile on the leaderboard, wallet and an alias that is not an email', async () => {
   const r = await q(`select m.display_name, m.visibility, w.balance, w.contribution_score from public.member_profiles m
                      join public.wallets w using (user_id) where user_id = $1`, [A]);
   assert.equal(r.rows.length, 1);
   assert.match(r.rows[0].display_name, /^geek-[0-9a-f]{8}$/);
-  assert.equal(r.rows[0].visibility, 'private');
+  assert.equal(r.rows[0].visibility, 'public');
+  const d = (await q(`select show_on_leaderboard, adult_confirmed from public.member_profiles where user_id = $1`, [A])).rows[0];
+  assert.deepEqual([d.show_on_leaderboard, d.adult_confirmed], [true, true]);
   assert.equal(r.rows[0].balance, 0);
   assert.equal((await q(`select count(*)::int c from public.profiles`)).rows[0].c, 3);
 });
@@ -108,14 +110,18 @@ await test('profile fields reject emails as alias, duplicate aliases, bad urls a
   });
 });
 
-await test('public visibility and leaderboard need the 18+ confirmation', async () => {
+await test('public and leaderboard are the default and need no age confirmation; adult_confirmed cannot be set false', async () => {
   await as('authenticated', A, async () => {
-    await assert.rejects(q(`update public.member_profiles set visibility = 'public' where user_id = $1`, [A]), /public_needs_adult/);
-    await assert.rejects(q(`update public.member_profiles set show_on_leaderboard = true where user_id = $1`, [A]), /leaderboard_needs_adult/);
+    await q(`update public.member_profiles set visibility = 'private', show_on_leaderboard = false where user_id = $1`, [A]);
+    await q(`update public.member_profiles set visibility = 'public' where user_id = $1`, [A]);
+    await q(`update public.member_profiles set show_on_leaderboard = true where user_id = $1`, [A]);
+    await q(`update public.member_profiles set adult_confirmed = false where user_id = $1`, [A]);
+    assert.equal((await q(`select adult_confirmed from public.member_profiles where user_id = $1`, [A])).rows[0].adult_confirmed, true);
   });
 });
 
 await test('showcase: private stays hidden; opted-in sections only; members level needs sign-in', async () => {
+  await q(`update public.member_profiles set visibility = 'private', show_on_leaderboard = false`); // new members start public; this test is about private
   await as('anon', null, async () => assert.equal((await q(`select * from public.profile_directory`)).rows.length, 0));
   await as('authenticated', A, () => q(
     `update public.member_profiles set adult_confirmed = true, visibility = 'public', setup_editor = 'Neovim', setup_os = 'Arch', dotfiles_url = 'https://example.test/dots', show_setup = false where user_id = $1`, [A]));
@@ -290,25 +296,26 @@ await test('catalog: free defaults are always listed, retired items stay visible
   await as('authenticated', A, async () => q(`select * from public.equip_item('banner-aurora')`));
 });
 
-await test('minors: a birth date under 18 keeps the profile private, in the database as well as the page', async () => {
+await test('no age requirement: a birth date under 18 keeps the profile public and on the leaderboard', async () => {
   const D = '00000000-0000-4000-8000-00000000000d';
   await q(`insert into auth.users (id, email) values ($1, 'd@example.test')`, [D]);
   await as('authenticated', D, async () => {
+    const r0 = (await q(`select visibility, show_on_leaderboard from public.member_profiles where user_id = $1`, [D])).rows[0];
+    assert.deepEqual([r0.visibility, r0.show_on_leaderboard], ['public', true]);
     await q(`update public.profiles set birth_date = current_date - interval '15 years' where user_id = $1`, [D]);
-    await assert.rejects(q(`update public.member_profiles set visibility = 'public', adult_confirmed = true where user_id = $1`, [D]), /under 18/);
-    await assert.rejects(q(`update public.member_profiles set adult_confirmed = true where user_id = $1`, [D]), /under 18/);
-    await assert.rejects(q(`update public.member_profiles set show_on_leaderboard = true where user_id = $1`, [D]), /under 18|leaderboard_needs_adult/);
-    await assert.rejects(q(`update public.member_profiles set visibility = 'members' where user_id = $1`, [D]), /under 18/);
-    await q(`update public.member_profiles set bio = 'hi' where user_id = $1`, [D]); // private edits are fine
+    await q(`update public.member_profiles set visibility = 'members' where user_id = $1`, [D]);
+    await q(`update public.member_profiles set visibility = 'public', show_on_leaderboard = true, adult_confirmed = false where user_id = $1`, [D]);
+    const r = (await q(`select visibility, show_on_leaderboard, adult_confirmed from public.member_profiles where user_id = $1`, [D])).rows[0];
+    assert.deepEqual([r.visibility, r.show_on_leaderboard, r.adult_confirmed], ['public', true, true]);
   });
-  // An adult who is already public, then enters a birth date under 18, is made private at once.
+  // Entering a birth date under 18 no longer hides anyone; opting out still works.
   const E = '00000000-0000-4000-8000-00000000000e';
   await q(`insert into auth.users (id, email) values ($1, 'e@example.test')`, [E]);
   await as('authenticated', E, async () => {
-    await q(`update public.member_profiles set adult_confirmed = true, visibility = 'public', show_on_leaderboard = true where user_id = $1`, [E]);
     await q(`update public.profiles set birth_date = current_date - interval '17 years' where user_id = $1`, [E]);
-    const r = (await q(`select visibility, show_on_leaderboard, adult_confirmed from public.member_profiles where user_id = $1`, [E])).rows[0];
-    assert.deepEqual([r.visibility, r.show_on_leaderboard, r.adult_confirmed], ['private', false, false]);
+    assert.equal((await q(`select visibility from public.member_profiles where user_id = $1`, [E])).rows[0].visibility, 'public');
+    await q(`update public.member_profiles set show_on_leaderboard = false where user_id = $1`, [E]);
+    assert.equal((await q(`select show_on_leaderboard from public.member_profiles where user_id = $1`, [E])).rows[0].show_on_leaderboard, false);
   });
   // An adult birth date changes nothing.
   const F = '00000000-0000-4000-8000-00000000000f';

@@ -39,7 +39,7 @@
     return HTTPS.test(v) ? { value: v } : { error: label + ' must start with https://' };
   }
 
-  /* The public profile and setup form. `dob` is the saved birth date, used for the 18+ rule. */
+  /* The public profile and setup form. `dob` is the saved birth date (it limits nothing). */
   function memberUpdate(f, dob, now) {
     var name = text(f.display_name);
     if (name.length < 2 || name.length > 40) return { error: 'Display name: 2 to 40 characters' };
@@ -63,12 +63,7 @@
       if (parts[i][1].error) return { error: parts[i][1].error };
       out[parts[i][0]] = parts[i][1].value;
     }
-    var age = ageOn(dob, now);
-    var wantsPublic = out.visibility === 'public' || out.show_on_leaderboard;
-    if (wantsPublic && !out.adult_confirmed) return { error: 'Confirm you are 18 or older to be public or on the leaderboard' };
-    if (age !== null && age < 18 && (out.adult_confirmed || out.visibility !== 'private' || out.show_on_leaderboard)) {
-      return { error: 'A profile for someone under 18 stays private' };
-    }
+    out.adult_confirmed = true; // no age requirement (owner, 2026-10-27); the column stays for older readers
     return { data: out };
   }
 
@@ -336,7 +331,7 @@
     ev.preventDefault();
     var form = ev.target, btn = form.querySelector('button[type=submit]');
     var sid = form.id === 'form-setup' ? 'status-setup' : 'status-public';
-    var all = formData($('form-public'), ['display_name', 'bio', 'visibility', 'adult_confirmed', 'show_on_leaderboard']);
+    var all = formData($('form-public'), ['display_name', 'bio', 'visibility', 'show_on_leaderboard']);
     var setup = formData($('form-setup'), ['setup_editor', 'setup_os', 'setup_languages', 'setup_tools', 'setup_notes', 'dotfiles_url', 'portfolio_url', 'show_work', 'show_setup']);
     var r = memberUpdate(Object.assign({}, setup, all), birthDate);
     if (r.error) { flash(sid, r.error, true); return; }

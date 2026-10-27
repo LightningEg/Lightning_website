@@ -162,8 +162,11 @@ await test('gifts: bought for another member by display name, delivered to them,
   const sent = await rpc(A, `select public.my_gifts() g`);
   assert.deepEqual(sent.g.sent.map(x => [x.item_id, x.to, x.coins]), [['banner-dusk', 'Receiver', 150]]);
   await assert.rejects(as('authenticated', B, () => q(`select * from public.gifts`)), /permission/);
-  const minor = await newUser('young'); await q(`update public.member_profiles set adult_confirmed=false where user_id=$1`, [minor]);
-  await assert.rejects(rpc(A, `select public.gift_item('frame-halo','young',80,$1)`, [key()]), /no member/);
+  // No age requirement: a member under 18 can receive a gift; a suspended one cannot.
+  const young = await newUser('young'); await q(`update public.profiles set birth_date = current_date - interval '15 years' where user_id=$1`, [young]);
+  assert.equal((await rpc(A, `select public.gift_item('frame-halo','young',80,$1) g`, [key()])).g.to, 'young');
+  const banned = await newUser('banned'); await q(`update public.member_profiles set suspended=true where user_id=$1`, [banned]);
+  await assert.rejects(rpc(A, `select public.gift_item('frame-halo','banned',80,$1)`, [key()]), /no member/);
 });
 
 await test('the next theme: supporters vote once each and can change it; others see the count', async () => {

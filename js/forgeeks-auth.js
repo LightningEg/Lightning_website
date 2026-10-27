@@ -58,13 +58,11 @@
     if (/community access is restricted/i.test(m)) return 'Your community access is restricted. Contact hello@lightningeg.com to request a review.';
     if (/post changed/i.test(m)) return 'This post changed after you opened it. Reload it and verify the current links and code.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
-    if (/public adult profile/i.test(m)) return 'Set your profile to public and confirm you are 18 or older before publishing.';
+    if (/public adult profile/i.test(m)) return 'Set your profile to public before publishing.';
     if (/sharing consent/i.test(m)) return 'Add a title, a summary of 20–400 characters, and confirm sharing consent.';
     if (/source already accepted/i.test(m)) return 'That social post has already been accepted for another story.';
     if (/account not found/i.test(m)) return 'No account matches that email.';
     if (/member_profiles_display_name_key/.test(m)) return 'That display name is taken. Try another.';
-    if (/public_needs_adult|leaderboard_needs_adult/.test(m)) return 'Confirm you are 18 or older to be public or on the leaderboard.';
-    if (/under 18|minor/i.test(m)) return 'A profile for someone under 18 stays private.';
     if (/at most 12/.test(m)) return 'You can keep up to 12 links.';
     if (/insufficient coins/i.test(m)) return 'Not enough coins for that yet.';
     if (/already owned/i.test(m)) return 'You already own that.';
