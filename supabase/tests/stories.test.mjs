@@ -94,8 +94,9 @@ await test('drafts private and writing/submitting alone awards nothing',async()=
  assert.equal((await as('anon',null,()=>q(`select * from public.stories_feed()`))).rows.length,0);
  assert.equal((await as('authenticated',OTHER,()=>q(`select * from public.community_stories`))).rows.length,0);
  await assert.rejects(as('authenticated',OTHER,()=>q(`select public.save_story($1,'Stolen','x',null)`,[story.id])),/not found/);
+ await as('authenticated',OWNER,()=>q(`update public.member_profiles set visibility='private',show_on_leaderboard=false where user_id=$1`,[OWNER]));
  await assert.rejects(as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[story.id])),/public adult/);
- await as('authenticated',OWNER,()=>q(`update public.member_profiles set adult_confirmed=true,visibility='public' where user_id=$1`,[OWNER]));
+ await as('authenticated',OWNER,()=>q(`update public.member_profiles set visibility='public' where user_id=$1`,[OWNER]));
  await assert.rejects(as('authenticated',OWNER,()=>q(`select public.submit_story($1,false)`,[story.id])),/consent/);
  await as('authenticated',OWNER,()=>q(`select public.submit_story($1,true)`,[story.id]));
  assert.deepEqual(await wallet(OWNER),{balance:0,contribution_score:200});
