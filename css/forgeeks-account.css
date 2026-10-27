@@ -52,3 +52,15 @@
 .links-list a{overflow-wrap:anywhere;color:var(--ink)}
 .links-empty{margin:0 0 14px;color:var(--dim);font-size:14.5px}
 .fine{margin:18px 0 0;color:var(--dim);font-size:13.5px}
+
+/* the profile picture field (js/forgeeks-account.js): a round preview, the file picker as a button, remove */
+.avatar-edit .avatar-l{display:block;margin:0 0 8px;font:inherit;color:var(--ink)}
+.avatar-row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.avatar-pv{flex:none;width:84px;height:84px;display:grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--field,var(--well,#e6ebf0));border:1px solid var(--line,var(--line-strong,#cfd6dd));color:var(--ink);font:800 32px/1 var(--display,inherit)}
+.avatar-pv img{width:100%;height:100%;object-fit:cover}
+.avatar-side{flex:1 1 260px;min-width:0}
+.avatar-btns{display:flex;flex-wrap:wrap;gap:8px}
+.avatar-btns .btn{cursor:pointer}
+.avatar-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
+.avatar-file:focus-visible+.btn,.avatar-btns:focus-within #avatar-pick{outline:3px solid var(--azure,currentColor);outline-offset:2px}
+.avatar-help{margin:8px 0 0;color:var(--muted,var(--dim));font-size:14px;line-height:1.5}

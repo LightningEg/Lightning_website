@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def build():
     home=(ROOT/'index.html').read_text()
     nav=re.search(r'<div class="d-bar">.*?</div>\s*</div>\s*</div>',home,re.S).group().replace(' aria-current="page"','')
-    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace'),('leaderboard','forgeeks-leaderboard','Lightning leaderboard'),('profile','forgeeks-profile','Lightning member')]:
+    for name,src,title in [('account','forgeeks-account','Your Lightning account'),('marketplace','forgeeks-market','Lightning marketplace'),('collection','forgeeks-market','Your Lightning collection'),('leaderboard','forgeeks-leaderboard','Lightning leaderboard'),('profile','forgeeks-profile','Lightning member')]:
         text=(ROOT/(src+'.html')).read_text()
         main=re.search(r'<main\b.*?</main>',text,re.S).group()
         if name=='leaderboard':
@@ -25,7 +25,7 @@ def build():
             main=main.replace('<div class="wrap">','<div class="wrap"><div class="fg-banner site-banner" data-banner-strip aria-hidden="true" hidden></div>',1)
         # Market purchase dialog lives after the For Geeks footer.
         dialog=''
-        if name=='marketplace':
+        if name in('marketplace','collection'):
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
@@ -38,6 +38,15 @@ def build():
         if name=='marketplace':
             main=main.replace('</main>','<section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
+        signin='<a class="btn ghost" id="mkt-signin" href="account.html" hidden>sign in to buy</a>'
+        if name=='marketplace':
+            main=main.replace(signin,signin+'<a class="btn ghost" id="mkt-collection" href="collection.html" hidden>your collection</a>')
+        if name=='collection':
+            main=re.sub(r'<section class="s mkt-guide".*?</section>','',main,flags=re.S)
+            main=re.sub(r'<h1 id="h1">.*?</h1>','<h1 id="h1">Your collection.</h1>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Everything you own, in one place. Equip a look on this website, or choose <b>Get app unlock code</b> on a theme to unlock it in the Lightning app on your PC or phone: a one-time code, free on every device you own. Looks you do not own yet are in <a href="marketplace.html">the marketplace</a>.</p>',main,count=1,flags=re.S)
+            main=main.replace(signin,'<a class="btn ghost" id="mkt-signin" href="account.html" hidden>sign in to see your collection</a><a class="btn ghost" href="marketplace.html">browse the marketplace</a>')
+            main=re.sub(r'<p class="fine">.*?</p>','<p class="fine" id="col-empty" hidden>You do not own a paid look yet. Free themes are always yours; paid ones appear here the moment you buy them.</p>',main,count=1,flags=re.S)
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
         elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
@@ -45,8 +54,8 @@ def build():
         else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
         if name=='marketplace':scripts.insert(scripts.index('js/forgeeks-market.js')+1,'js/market-cart.js')
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
-        if name in('marketplace','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
-        if name=='marketplace':css+=['css/forgeeks-market.css','css/theme-preview.css','css/market-ui.css']
+        if name in('marketplace','collection','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
+        if name in('marketplace','collection'):css+=['css/forgeeks-market.css','css/theme-preview.css','css/market-ui.css']
         if name=='leaderboard':css+=['css/forgeeks-leaderboard.css']
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
@@ -63,7 +72,7 @@ def build():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>{title}</title><meta name="description" content="Your Lightning profile, collection and marketplace.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap">{head}
 <script src="js/theme.js"></script></head>
-<body data-account-page="account.html" data-main-store="true">{nav}{main}<div class="wrap"><footer></footer></div>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
+<body data-account-page="account.html" data-main-store="true"{' data-collection="true"' if name=='collection' else ''}>{nav}{main}<div class="wrap"><footer></footer></div>{dialog}{tail}<script src="js/nav-menu.js"></script></body></html>'''
         (ROOT/(name+'.html')).write_text(page)
     js=(ROOT/'js/forgeeks.js').read_text()
     registry=re.search(r'var THEMES=(\[.*?\]);',js,re.S).group(1)
@@ -94,18 +103,20 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-collection-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
         text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-2\2', text)
         text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js|js/forgeeks-showcase[.]js|js/forgeeks-profile[.]js|js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-cart-1\2', text)
+        # the profile picture field (owner, 2026-10-27)
+        text=re.sub(r'(js/forgeeks-account[.]js|css/forgeeks-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-avatar-1\2', text)
         text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         text=re.sub(r'(js/admin-operations[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
-NAV_ITEMS=[('stories','Stories','stories.html'),('leaderboard','Leaderboard','leaderboard.html'),('marketplace','Marketplace','marketplace.html'),('wallet','Wallet','topup.html'),('account','Account','account.html')]
+NAV_ITEMS=[('stories','Stories','stories.html'),('leaderboard','Leaderboard','leaderboard.html'),('marketplace','Marketplace','marketplace.html'),('collection','Collection','collection.html'),('wallet','Wallet','topup.html'),('account','Account','account.html')]
 def community_nav(active):
     links=''.join(f'<a href="{h}"'+(' aria-current="page"' if k==active else '')+f'>{t}</a>' for k,t,h in NAV_ITEMS)
     return f'<div class="com-bar"><div class="wrap"><nav class="com-nav" aria-label="Community">{links}</nav></div></div>'
@@ -173,5 +184,5 @@ if __name__=='__main__':
     build_stories()
     build_guides()
     connect_public_pages()
-    for f,k in [('stories','stories'),('leaderboard','leaderboard'),('marketplace','marketplace'),('topup','wallet'),('account','account'),('profile','leaderboard')]:
+    for f,k in [('stories','stories'),('leaderboard','leaderboard'),('marketplace','marketplace'),('collection','collection'),('topup','wallet'),('account','account'),('profile','leaderboard')]:
         add_community_nav(ROOT/(f+'.html'),k)

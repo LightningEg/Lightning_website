@@ -15,6 +15,7 @@ VERSION = "20261027-sales-1"  # css/store-admin.css and every js/ file below
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
     'sales': '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    'activity': '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
     'requests': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/>',
     'catalogue': '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
     'members': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
@@ -22,7 +23,7 @@ ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'bank': '<path d="M3 21h18"/><path d="M5 21V10"/><path d="M19 21V10"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="m2 10 10-6 10 6"/>',
     'settings': '<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/>',
 }
-MENU = [('today', 'Overview', ''), ('requests', 'Top-ups', 'receipts'), ('sales', 'Sales', ''), ('catalogue', 'Catalogue', ''),
+MENU = [('today', 'Overview', ''), ('requests', 'Top-ups', 'receipts'), ('sales', 'Sales', ''), ('activity', 'Activity', ''), ('catalogue', 'Catalogue', ''),
         ('members', 'Members', ''), ('social', 'Stories', 'stories'), ('bank', 'Money journal', 'unmatched'),
         ('settings', 'Settings', '')]
 
@@ -52,6 +53,12 @@ def build():
     credit = re.search(r'<form class="panel" id="admin-credit-form">.*?</form>', legacy, re.S).group()
     credit = credit.replace('<h2>', '<h3>').replace('</h2>', '</h3>')
 
+    avatar = ('<form class="panel" id="admin-avatar-form"><h3>Remove a profile picture</h3>'
+              '<p>For a picture that breaks the community rules. It disappears from every page at once, your reason is kept in the audit log, and the member can upload another.</p>'
+              '<div class="fields"><label>Account email<input name="email" type="email" required></label>'
+              '<label>Reason<input name="reason" minlength="5" maxlength="300" required></label></div>'
+              '<button class="btn" type="submit">Remove picture</button><p id="admin-avatar-status" class="oc-status" role="status"></p></form>')
+
     menu = ''.join(f'<a href="#{k}" data-view="{k}">{icon(k)}<span class="oc-nav-l">{label}</span>'
                    + (f'<span class="ops-badge" data-badge="{b}" hidden></span>' if b else '') + '</a>' for k, label, b in MENU)
 
@@ -68,11 +75,14 @@ def build():
     sales = view('sales', 'Sales', 'What sold, how it was bought, and the carts that were filled but never checked out. Coins, not EGP: the Overview counts revenue from top-ups.',
         '<div id="ops-sales"><p class="ops-empty">Verify your session to load sales.</p></div>')
 
+    activity = view('activity', 'Activity', 'The audit trail: every coin that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',
+        '<div id="ops-activity"><p class="ops-empty">Verify your session to load activity.</p></div>')
+
     catalogue = view('catalogue', 'Catalogue', 'Every look on sale. A theme takes its tier’s price everywhere it is worn: both sites, the PC and the phone. Sets follow their parts at 80%.',
         '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>')
 
     members = view('members', 'Members', 'Credit coins or recognition points by hand: a goodwill gift, a refund in coins, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
-        f'<div class="oc-grid one">{credit}</div>')
+        f'<div class="oc-grid one">{credit}{avatar}</div>')
 
     social = view('social', 'Stories', 'Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
         '<div class="oc-toolbar">' + seg('Post status', 'store-social-filter', [('pending', 'Pending'), ('published', 'Published'), ('rejected', 'Rejected')])
@@ -98,7 +108,7 @@ def build():
         '</div>')
 
     scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
-                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'store-admin'))
+                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'store-admin'))
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
             f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'
@@ -107,7 +117,7 @@ def build():
             '<div class="oc-gate"><p id="store-access" class="oc-status" role="status">Checking account access…</p><a class="btn" id="store-signin" href="account.html?next=admin.html" hidden>Sign in with the owner account</a></div>\n'
             f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
             f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
-            f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
+            f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{activity}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
             '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261025-supporter-1"></script>'
             f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js" defer></script></body></html>')
     (ROOT / 'admin.html').write_text(page)

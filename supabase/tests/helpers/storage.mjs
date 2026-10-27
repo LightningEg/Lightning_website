@@ -5,6 +5,6 @@ create table storage.buckets(id text primary key,name text,public boolean defaul
 create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text,name text,created_at timestamptz default now(),unique(bucket_id,name));
 alter table storage.objects enable row level security;
 grant usage on schema storage to authenticated,service_role;
-grant select,insert,delete on storage.objects to authenticated;
+grant select,insert,update,delete on storage.objects to authenticated;
 grant all on storage.objects,storage.buckets to service_role;
 `);}

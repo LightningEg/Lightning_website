@@ -74,10 +74,11 @@ const pr = (n, title, mergedAt) => ({ repository: 'LightningEg/Lightning', issue
 const daysAgo = n => new Date(Date.now() - n * 864e5).toISOString();
 
 // Private details that must never come back: email, real name, phone, birth date, wallet.
+const ADA_KEY = (await q(`insert into private.avatar_keys (user_id) values ($1) returning key`, [ADA])).rows[0].key; // what the first upload does
 await member(ADA, async () => {
   await q(`update public.profiles set full_name = 'Ada Lovelace', phone = '+201000000001', birth_date = '1990-05-05' where user_id = $1`, [ADA]);
   await q(`update public.member_profiles set display_name = 'Ada', adult_confirmed = true, visibility = 'public', bio = 'I build budgets.',
-    avatar_url = 'https://example.test/ada.png', show_work = true, show_setup = true, show_on_leaderboard = true,
+    avatar_url = 'https://x.supabase.co/storage/v1/object/public/avatars/${ADA_KEY}/avatar?v=1', show_work = true, show_setup = true, show_on_leaderboard = true,
     setup_editor = 'Neovim', setup_os = 'Arch Linux', setup_languages = array['Python','SQL'], setup_tools = array['git','tmux'],
     setup_notes = 'Dotfiles are boring.', dotfiles_url = 'https://example.test/dots', portfolio_url = 'https://example.test/ada' where user_id = $1`, [ADA]);
   await q(`insert into public.profile_links (user_id, label, url) values ($1, 'My CLI', 'https://example.test/cli')`, [ADA]);

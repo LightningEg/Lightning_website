@@ -77,7 +77,7 @@ await q(`insert into auth.users (id, email) values
   ($1, 'admin@example.test'), ($2, 'b@example.test'), ($3, 'c@example.test'), ($4, 'd@example.test'), ($5, 'e@example.test')`,
   [ADMIN, B, C, D, E]);
 await q(`insert into public.admin_roles (user_id, role) values ($1, 'admin')`, [ADMIN]);
-await q(`insert into public.repositories (full_name, eligible) values ('LightningEg/Lightning_website', false)`);
+await q(`insert into public.repositories (full_name, eligible) values ('LightningEg/Lightning_market', false)`);
 
 // ------------------------------------------------------------ GitHub identity
 
@@ -202,7 +202,7 @@ await test('record_claim locks the version and amount; it is idempotent; another
 });
 
 await test('record_claim ignores ineligible repositories, issues without an offer and closed offers', async () => {
-  assert.equal((await claim(10, 2003, 'x', 'LightningEg/Lightning_website')).status, 'ineligible_repository');
+  assert.equal((await claim(10, 2003, 'x', 'LightningEg/Lightning_market')).status, 'ineligible_repository');
   assert.equal((await claim(10, 2003, 'x', 'Someone/Else')).status, 'ineligible_repository');
   assert.equal((await claim(999, 2003, 'x')).status, 'no_offer');
   await assert.rejects(claim(10, null, 'x'), /github id required/);
@@ -384,7 +384,7 @@ await test('a zero-coin task pays nothing, writes no ledger row and closes the o
 
 await test('other repositories, unknown issues and bad input pay nothing', async () => {
   const before = await count(`select 1 from public.ledger_entries`);
-  const r = await merge({ repo: 'LightningEg/Lightning_website', pr: 160, gh: 1001, issues: [10] });
+  const r = await merge({ repo: 'LightningEg/Lightning_market', pr: 160, gh: 1001, issues: [10] });
   assert.equal(r.status, 'ineligible_repository');
   assert.equal((await merge({ repo: 'Someone/Else', pr: 161, gh: 1001, issues: [10] })).status, 'ineligible_repository');
   assert.equal((await merge({ pr: 162, gh: 1001, issues: [4040] })).results[0].status, 'no_offer');
@@ -676,6 +676,22 @@ await test('deleting an account removes its GitHub link and feedback, keeps anon
   // The freed GitHub id can be linked by someone else.
   await identity(E, 1001, 'bee');
   assert.deepEqual(await activeLink(E), { github_id: 1001, github_login: 'bee' });
+});
+
+await test('the website repository pays like the app repository: offer, merge, one award per issue', async () => {
+  const WEB = 'LightningEg/Lightning_website';
+  assert.deepEqual((await q(`select full_name from public.repositories where eligible order by full_name`)).rows.map(r => r.full_name), [REPO, WEB], 'the website is eligible, a third repository is not');
+  const F = '00000000-0000-4000-8000-0000000000f2';
+  await q(`insert into auth.users (id, email) values ($1, 'f@example.test')`, [F]);
+  await identity(F, 7007, 'webdev');
+  await as('authenticated', ADMIN, () => one(`select * from public.publish_reward($1, $2, $3, $4, $5)`, [WEB, 41, 120, 'Done when the page is fixed.', 'Fix the footer link']));
+  const paid = await merge({ repo: WEB, pr: 77, gh: 7007, login: 'webdev', issues: [41] });
+  assert.ok(paid, 'the merge is answered');
+  assert.equal((await wallet(F)).balance, 120, 'the author is paid the offer');
+  await merge({ repo: WEB, pr: 78, gh: 7007, login: 'webdev', issues: [41] });
+  assert.equal((await wallet(F)).balance, 120, 'a second pull request for the same issue pays nothing more');
+  // a repository that is not listed is still refused
+  assert.equal((await merge({ repo: 'SomeoneElse/Other', pr: 1, gh: 7007, login: 'webdev', issues: [1] })).status, 'ineligible_repository');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

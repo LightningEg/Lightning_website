@@ -240,6 +240,8 @@
     { label: 'leaderboard', href: MAIN_ACCOUNT ? 'leaderboard.html' : 'forgeeks-leaderboard.html' },
     { label: 'profile settings', href: ACCOUNT }
   ];
+  // The looks you own, one tap from the account menu (the main site only; For Geeks equips from its market).
+  if (MAIN_ACCOUNT) MENU.splice(3, 0, { label: 'my collection', href: 'collection.html' });
   FG.menu = MENU;
 
   function render(m) {

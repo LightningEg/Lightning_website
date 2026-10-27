@@ -227,16 +227,26 @@
     var si = $('mkt-signin');
     si.hidden = state.signedIn;
     if (!state.signedIn) si.href = FG.signInHref();
-    var themes = state.items.filter(function (i) { return i.type === 'theme'; });
+    // The collection page (collection.html) is this market drawn with only what the member owns.
+    var mine = !!doc.body.dataset.collection;
+    var items = mine ? state.items.filter(function (i) { return i.owned && i.type !== 'set'; }) : state.items;
+    var col = $('mkt-collection');
+    if (col) col.hidden = !state.signedIn;
+    var themes = items.filter(function (i) { return i.type === 'theme'; });
     fill('list-themes', themes.filter(function (i) { return !i.is_default; }));
     fill('list-free', themes.filter(function (i) { return i.is_default; }));
-    fill('list-banners', state.items.filter(function (i) { return i.type === 'banner'; }));
-    if ($('list-frames')) fill('list-frames', state.items.filter(function (i) { return i.type === 'frame'; }));
-    if ($('list-badges')) fill('list-badges', state.items.filter(function (i) { return i.type === 'badge'; }));
-    if ($('list-names')) fill('list-names', state.items.filter(function (i) { return i.type === 'name'; }));
-    if ($('list-sets')) fill('list-sets', state.items.filter(function (i) { return i.type === 'set'; }));
+    fill('list-banners', items.filter(function (i) { return i.type === 'banner'; }));
+    if ($('list-frames')) fill('list-frames', items.filter(function (i) { return i.type === 'frame'; }));
+    if ($('list-badges')) fill('list-badges', items.filter(function (i) { return i.type === 'badge'; }));
+    if ($('list-names')) fill('list-names', items.filter(function (i) { return i.type === 'name'; }));
+    if ($('list-sets')) fill('list-sets', mine ? [] : items.filter(function (i) { return i.type === 'set'; }));
     ['frames', 'badges', 'names', 'sets'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
     $('h-free').hidden = $('list-free').children.length === 0;
+    if (mine) {
+      var paid = items.some(function (i) { return !i.is_default; });
+      ['themes', 'banners'].forEach(function (k) { var l = $('list-' + k), sec = l && l.closest('section'); if (sec) sec.hidden = k === 'themes' ? false : l.children.length === 0; });
+      var empty = $('col-empty'); if (empty) empty.hidden = !state.signedIn || paid;
+    }
     var done = ui('rendered');
     if (done) done(state);
   }

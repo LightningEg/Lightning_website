@@ -24,7 +24,7 @@ export function deleteAccountHandler({createClient,url,anonKey,allowedOrigins=['
     const r=await db.rpc('prepare_account_deletion',{p_confirm:body.p_confirm});
     if(r.error){const message=String(r.error.message||'');return reply(409,{error:/pending payments/.test(message)?'Resolve pending payments with support before deleting your account.':/administrator/.test(message)?'The administrator account cannot be deleted here.':'Could not prepare account deletion. Retry or contact support.'});}
     if(!Array.isArray(r.data))throw Error('Invalid cleanup response');
-    if(r.data.length===0){const out=await db.rpc('delete_my_account',{p_confirm:body.p_confirm});if(out.error)throw Error('Delete failed');return reply(200,{deleted:true});}
+    if(r.data.length===0){const mine=await db.rpc('my_avatar_path');if(mine.error)throw Error('Profile picture lookup failed');if(typeof mine.data==='string'){if(!/^[0-9a-f]{32}\/avatar$/.test(mine.data))throw Error('Invalid picture path');const pic=await db.storage.from('avatars').remove([mine.data]);if(pic.error)throw Error('Profile picture removal failed');}const out=await db.rpc('delete_my_account',{p_confirm:body.p_confirm});if(out.error)throw Error('Delete failed');return reply(200,{deleted:true});}
     const paths=r.data.map(r=>r.object_key);
     if(paths.some(path=>typeof path!=='string'||!path.startsWith(uid+'/')||path.split('/').length!==3||path.includes('..')))throw Error('Invalid receipt path');
     const out=await db.storage.from('topup-receipts').remove(paths);if(out.error)throw Error('Storage removal failed');
