@@ -427,3 +427,5 @@ button,input{font:inherit}
 .d-foot-links{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 32px;font-size:13px;font-weight:500}
 .d-foot-links nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 .d-foot-links a{text-decoration:none}.d-foot-links a:hover{color:var(--ink)}
+/* Top bar on small phones: the mark alone, so Download, theme, account and Menu fit beside it (Header, 2026-10-27) */
+@media (max-width:430px){.d-bar .d-lockup{font-size:0;gap:0}}
