@@ -135,6 +135,36 @@ await test('leaderboard: signed out, it asks for this month and shows ranked row
   assert.equal(p.$('tab-month').getAttribute('aria-selected'), 'true');
 });
 
+await test('leaderboard: a coder advertises their GitHub, last merge, merges this month and portfolio, with checked links and text only', async () => {
+  const boards = { month: [
+    { rank: 1, display_name: 'Ada', contribution_count: 3, score: 1450, github_login: 'ada-codes', last_merge_title: 'Round money once <b>bold</b>',
+      last_merge_url: 'https://github.com/LightningEg/Lightning/pull/12', merges_month: 3, portfolio_url: 'https://ada.example.test/' },
+    { rank: 2, display_name: 'One', contribution_count: 1, score: 20, github_login: 'one', last_merge_title: 'Single', last_merge_url: 'https://github.com/x/y/pull/1', merges_month: 1, portfolio_url: null },
+    { rank: 3, display_name: 'Evil', contribution_count: 1, score: 10, github_login: 'bad login"><img>', last_merge_title: 'Click me', last_merge_url: 'javascript:alert(1)', merges_month: 0, portfolio_url: 'http://insecure.test' },
+    { rank: 4, display_name: 'Plain', contribution_count: 1, score: 5, github_login: null, last_merge_title: null, last_merge_url: null, merges_month: 0, portfolio_url: null }
+  ], all: [] };
+  const p = await boot('leaderboard', { rpc: lbRpc({ boards }) });
+  const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
+  const ada = rows[0].querySelector('.lb-coder');
+  const links = [...ada.querySelectorAll('a')];
+  assert.deepEqual(links.map(a => a.getAttribute('href')), ['https://github.com/ada-codes', 'https://github.com/LightningEg/Lightning/pull/12', 'https://ada.example.test/']);
+  assert.ok(links.every(a => a.getAttribute('rel') === 'noopener nofollow ugc'));
+  assert.equal(links[0].textContent, '@ada-codes');
+  assert.equal(links[1].textContent, 'Round money once <b>bold</b>', 'member text is text, never markup');
+  assert.equal(ada.querySelector('b'), null);
+  assert.match(ada.textContent, /3 merges this month/);
+  assert.match(rows[1].querySelector('.lb-coder').textContent, /1 merge this month/);
+  assert.doesNotMatch(rows[1].querySelector('.lb-coder').textContent, /merges/);
+  const evil = rows[2].querySelector('.lb-coder');
+  assert.equal(evil, null, 'a login that is not a GitHub login, a non-https link and no merges this month: nothing is shown');
+  assert.equal(rows[2].querySelector('img'), null);
+  assert.equal(rows[3].querySelector('.lb-coder'), null, 'a member with nothing to advertise gets no empty line');
+  // the main site's own leaderboard page carries the same table the script fills
+  const main = read('leaderboard.html');
+  for (const id of ['lb-list', 'lb-body', 'lb-panel', 'tab-month']) assert.ok(main.includes('id="' + id + '"'), id);
+  assert.ok(main.includes('js/forgeeks-leaderboard.js'));
+});
+
 await test('leaderboard: ?sample fills the table with made-up people, says so, and never asks the server for the board', async () => {
   const p = await boot('leaderboard', { rpc: lbRpc(), search: '?sample' });
   assert.equal(p.rpcs('leaderboard').length, 0);
