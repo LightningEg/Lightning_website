@@ -12,12 +12,12 @@ async function page({signedIn=false,ar=false,dismissed=false,blocked=false,chip=
  w.FG={available:true,ready:Promise.resolve({session:signedIn?{user:{id:'test'}}:null}),onAuth:()=>{}};
  w.eval(script);await new Promise(r=>w.setTimeout(r,0));return w;
 }
-let w=await page();assert.ok(w.document.querySelector('dialog').open);assert.equal(w.document.querySelectorAll('figure img').length,3);
+let w=await page();assert.ok(w.document.querySelector('dialog').open);assert.equal(w.document.querySelectorAll('figure img').length,4);assert.match(w.document.querySelector('.site-benefits').textContent,/theme you keep/);assert.equal(w.document.querySelector('.site-invite-quiet').textContent,'See the looks');assert.equal(w.document.querySelector('.site-invite-quiet').getAttribute('href'),'marketplace.html');
 w.document.querySelector('[data-later]').click();assert.equal(w.document.querySelector('dialog').open,false);assert.ok(w.localStorage.getItem('lightning-account-invite-dismissed-v1'));w.close();
 w=await page({signedIn:true});assert.equal(w.document.querySelector('dialog'),null);assert.equal(w.document.querySelector('a').textContent,'My account');w.close();
 w=await page({dismissed:true});assert.equal(w.document.querySelector('dialog'),null);w.close();
 w=await page({blocked:true});assert.ok(w.document.querySelector('dialog').open);w.document.querySelector('[data-later]').click();w.close();
-w=await page({ar:true});assert.equal(w.document.querySelector('dialog a').getAttribute('href'),'../account.html?signup=1');assert.match(w.document.querySelector('h2').textContent,/Lightning/);w.close();
+w=await page({ar:true});assert.equal(w.document.querySelector('dialog a').getAttribute('href'),'../account.html?signup=1');assert.equal(w.document.querySelectorAll('figure img').length,4);assert.match(w.document.querySelector('.site-invite-quiet').textContent,/[\u0600-\u06FF]/);assert.equal(w.document.querySelector('.site-invite-quiet').getAttribute('href'),'../marketplace.html');assert.match(w.document.querySelector('h2').textContent,/Lightning/);w.close();
 // The top-bar chip is an icon: signing in must never swap it for the words "My account" (the flash on every page).
 w=await page({signedIn:true,chip:true,dismissed:true});assert.ok(w.document.querySelector('#me svg'),'the icon stays');assert.equal(w.document.querySelector('#me').textContent,'');assert.equal(w.document.querySelector('#me').getAttribute('aria-label'),'My account');w.close();
 w=await page({chip:true,dismissed:true});assert.ok(w.document.querySelector('#me svg'));assert.equal(w.document.querySelector('#me').getAttribute('aria-label'),'Account');w.close();

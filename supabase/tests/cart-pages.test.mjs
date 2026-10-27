@@ -29,7 +29,7 @@ const CATALOG = [
   { id: 'banner-dusk', type: 'banner', name: 'Dusk', description: 'Indigo sky.', price: 70, is_default: false, asset_version: 1 }
 ];
 
-async function boot({ signedIn = true, balance = 500, cart = [], checkout } = {}) {
+async function boot({ signedIn = true, balance = 500, cart = [], checkout, main = false } = {}) {
   const vc = new VirtualConsole();
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/marketplace.html', virtualConsole: vc, pretendToBeVisual: true });
   const w = dom.window, calls = [];
@@ -63,6 +63,7 @@ async function boot({ signedIn = true, balance = 500, cart = [], checkout } = {}
   const client = { rpc, from: builder, auth: { onAuthStateChange(f) { setTimeout(() => f('INITIAL_SESSION', srv.session), 0); return { data: { subscription: { unsubscribe() {} } } }; }, signOut: async () => ({ error: null }) } };
   w.supabase = { createClient: () => client };
   w.FORGEEKS = { supabaseUrl: 'https://x.supabase.co', anonKey: 'anon' };
+  if (main) { w.document.body.dataset.mainStore = 'true'; w.LG = { THEMES: [{ id: 'moss', name: 'Moss', c: ['#101a10', '#e6f0d8', '#8fa080', '#9acd32'] }] }; }
   w.eval(authCode); w.eval(marketCode); w.eval(cartCode);
   await tick(80);
   const $ = id => w.document.getElementById(id);
@@ -181,6 +182,65 @@ await test('cart: server text is only ever inserted as text', async () => {
   await p.click(p.$('cart-open'));
   assert.equal(p.w.document.querySelectorAll('#cart img').length, 0);
   CATALOG[1].name = 'Moss';
+});
+
+await test('main: a floating Cart button shows the count whenever the cart has lines, and opens the cart window', async () => {
+  const p = await boot({ main: true });
+  const fab = p.$('cart-fab');
+  assert.ok(fab && fab.hidden, 'hidden while the cart is empty');
+  await p.click(p.cartBtn('moss'));
+  assert.equal(fab.hidden, false);
+  assert.equal(fab.querySelector('b').textContent, '1');
+  assert.equal(fab.getAttribute('aria-label'), 'Cart, 1 item');
+  assert.equal(fab.firstChild.textContent, 'Cart', 'sentence case on the main site');
+  assert.equal(fab.parentNode, p.w.document.body);
+  await p.click(fab);
+  assert.equal(p.$('cart').hidden, false);
+  assert.equal(p.$('cart-title').textContent, 'Your cart');
+  assert.deepEqual([p.$('cart-l1').textContent, p.$('cart-l2').textContent, p.$('cart-l3').textContent], ['Total', 'Balance now', 'Balance after']);
+  assert.equal(p.$('cart-ok').textContent, 'Buy everything');
+  await p.click(p.$('cart-close'));
+  const signedOut = await boot({ main: true, signedIn: false });
+  assert.equal(signedOut.$('cart-fab').hidden, true);
+});
+
+await test('main: adding says "<name> is in your cart" with a View cart action that opens the window', async () => {
+  const p = await boot({ main: true });
+  await p.click(p.cartBtn('moss'));
+  const msg = p.$('mkt-msg');
+  assert.match(msg.textContent, /^Moss is in your cart/);
+  const view = msg.querySelector('button');
+  assert.equal(view.textContent, 'View cart');
+  await p.click(view);
+  assert.equal(p.$('cart').hidden, false);
+  await p.click(p.$('cart-close'));
+  await p.click(p.cartBtn('moss'));
+  assert.equal(p.$('mkt-msg').textContent, 'Moss is out of your cart', 'no View cart on a removal');
+});
+
+await test('main: each cart line carries a swatch and its kind; Empty cart is a quiet link apart from the main button', async () => {
+  const p = await boot({ main: true, cart: ['moss', 'banner-halo'] });
+  await p.click(p.$('cart-fab'));
+  const lines = [...p.w.document.querySelectorAll('.mkt-cart-line')];
+  assert.equal(lines.length, 2);
+  assert.match(lines[0].querySelector('.mkt-cart-sw').style.background, /linear-gradient/, 'a theme shows its own colours');
+  assert.equal(lines[0].querySelector('small').textContent, 'Theme');
+  assert.equal(lines[1].querySelector('small').textContent, 'Banner');
+  const clear = p.$('cart-clear');
+  assert.equal(clear.textContent, 'Empty cart');
+  assert.ok(clear.classList.contains('mkt-linkbtn') && !clear.closest('.row'), 'not beside the main button');
+  assert.ok(p.$('cart-ok').closest('.row'));
+  await p.click(clear);
+  assert.equal(p.srv.cart.length, 0);
+  assert.equal(p.$('cart-fab').hidden, true);
+  assert.equal(clear.parentNode.hidden, true);
+});
+
+await test('For Geeks keeps its lower-case cart words', async () => {
+  const p = await boot({ cart: ['moss'] });
+  await p.click(p.$('cart-open'));
+  assert.equal(p.$('cart-title').textContent, 'your cart');
+  assert.equal(p.$('cart-ok').textContent, 'buy everything');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

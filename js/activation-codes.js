@@ -1,5 +1,6 @@
-// Owned, shipped app themes. A one-time code claims the theme's seat for ONE Lightning profile and is then burned; that
-// profile can be unlocked on all of its devices with further free codes. Another profile needs another seat, which the
+// Owned, shipped app themes. A one-time code claims the theme's seat for ONE Lightning profile and is then burned; the
+// app shares the unlock through the profile itself, so the profile's other devices unlock by themselves with no further
+// code. Another profile needs another seat, which the
 // owner of the theme can add for a quarter of its price (supabase/migrations/20261027130000_profile_seats.sql).
 (function(){
  const FG=window.FG;if(!FG)return;
@@ -26,8 +27,8 @@
    const copy=make('button','Copy code');copy.type='button';copy.className='btn';copy.onclick=async()=>{try{await navigator.clipboard.writeText(input.value);status.textContent='Copied.';}catch{input.focus();input.select();status.textContent='Press Ctrl+C or long-press to copy.';}};
    const close=make('button','Close');close.type='button';close.className='btn';close.onclick=shut;
    const d=open('Unlock in Lightning',
-    make('p','In Lightning, open Settings, then Appearance, on a computer or phone that has your profile, and enter this code while connected to the internet. It works once and expires in ten minutes.'),
-    make('p','The first profile to use a code takes this theme’s seat. Your other devices running that same profile can use another code for free. A different profile needs its own seat.'),
+    make('p','In Lightning, open Settings, then Appearance, then Unlock a theme you bought, and paste this code while connected to the internet. It works once and expires in ten minutes.'),
+    make('p','One code unlocks the theme for one profile. Do this once: that profile’s other devices unlock by themselves, with no code. A different profile needs its own unlock, at a quarter of the price.'),
     input,copy,close,status);
    d.addEventListener('close',()=>{input.value='';});
   }catch{button.textContent='Try getting a code again';}finally{button.disabled=false;}
@@ -64,7 +65,7 @@
   if(!FG.session())return;
   for(const cell of document.querySelectorAll('.mkt-cell[data-state="owned"],.mkt-cell[data-state="equipped"]')){
    const bundle=enabled.find(e=>e.item_id===cell.dataset.item);if(!bundle||cell.querySelector('[data-activation-code]'))continue;
-   const button=make('button','Get app unlock code');button.type='button';button.className='btn';button.dataset.activationCode='';button.onclick=()=>show(bundle.item_id,bundle.asset_version,button);cell.append(button);
+   const button=make('button','Get app code');button.type='button';button.className='btn';button.dataset.activationCode='';button.onclick=()=>show(bundle.item_id,bundle.asset_version,button);cell.append(button);
    const info=seats[bundle.item_id];
    if(info){
     cell.append(seatNote(info));

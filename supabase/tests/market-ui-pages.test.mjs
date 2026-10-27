@@ -41,6 +41,7 @@ function fake(opts, calls) {
     const b = { select: () => b, eq: () => b, maybeSingle: () => b, then(res, rej) {
       let v = { data: null, error: null };
       if (table === 'wallets') v = { data: { balance: srv.balance, contribution_score: 3 }, error: null };
+      if (table === 'bundled_item_versions') v = { data: (opts.bundled ?? []).map(item_id => ({ item_id })), error: null };
       if (table === 'member_profiles') v = { data: { user_id: UID, display_name: 'Mohab', avatar_url: null }, error: null };
       return Promise.resolve(v).then(res, rej);
     } };
@@ -58,9 +59,9 @@ function fake(opts, calls) {
   return { auth: { onAuthStateChange(f) { setTimeout(() => f('INITIAL_SESSION', srv.session), 0); return { data: { subscription: { unsubscribe() {} } } }; } }, from, rpc };
 }
 
-async function boot({ main = true, withFetch = false, stored = {}, ...opts } = {}) {
+async function boot({ main = true, withFetch = false, stored = {}, search = '', ...opts } = {}) {
   const file = main ? 'marketplace.html' : 'forgeeks-market.html';
-  const dom = new JSDOM(strip(read(file)), { runScripts: 'outside-only', url: 'https://lightningeg.com/' + file, virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
+  const dom = new JSDOM(strip(read(file)), { runScripts: 'outside-only', url: 'https://lightningeg.com/' + file + search, virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
   Object.entries(stored).forEach(([k, v]) => w.localStorage.setItem(k, v));
   w.Element.prototype.scrollIntoView = function () {};
@@ -170,28 +171,73 @@ await test('main: Details shows the theme on both sites (the main site light and
   assert.equal(p.$('mkt-detail').hidden, true);
 });
 
-await test('main: the themes that dress the app too are featured with their price, tried and bought like any theme', async () => {
-  const p = await boot({ withFetch: true });
+// Changed on purpose (8M, 2026-10-27): the main site no longer repeats the app themes in a second block. Each card that
+// ships in the app carries an "On PC and phone" tag, and the long Dendera block became three steps that match the app.
+await test('main: no second block of app themes; shipped themes carry an On PC and phone tag; the app steps match the app', async () => {
+  const p = await boot({ withFetch: true, bundled: ['dendera', 'papyrus'] });
   await tick(80);
-  assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'dendera papyrus cotton nile');
-  assert.ok(p.qa('.mkt-feat-card .pv-pc').length === 4 && p.qa('.mkt-feat-card .pv-phone').length === 4);
-  const dendera = p.q('.mkt-feat-card[data-app="dendera"]');
-  assert.match(dendera.querySelector('.mkt-feat-price').textContent, /1000/);
-  assert.match(dendera.querySelector('.mkt-feat-price').textContent, /200 EGP/);
-  await p.click(p.byLabel('How to use Dendera'));
-  assert.equal(p.w.document.activeElement.id, 'dendera-guide');
-  assert.match(p.$('dendera-guide').closest('section').textContent, /Paid app unlocking is not available in 1\.5\.0 yet/);
-  const papyrus = p.q('.mkt-feat-card[data-app="papyrus"]');
-  assert.match(papyrus.querySelector('.mkt-feat-price').textContent, /600/, 'its catalogue price');
-  assert.match(papyrus.querySelector('.mkt-feat-tag').textContent, /site and app/);
-  await p.click(p.byLabel('Try Papyrus on this page'));
-  assert.equal(p.root.dataset.skin, 'papyrus');
-  await p.click(p.q('.mkt-trybar-cancel'));
+  assert.equal(p.qa('.mkt-feat-card').length, 0, 'Try these on your PC and phone is gone');
+  assert.equal(p.q('#mkt-feat').hidden, true);
+  const tagged = p.qa('.mkt-cell').filter(c => c.querySelector('.mkt-onapp')).map(c => c.getAttribute('data-item')).sort();
+  assert.deepEqual(tagged, ['dendera', 'papyrus']);
+  assert.equal(p.q('.mkt-cell[data-item="dendera"] .mkt-onapp').textContent, 'On PC and phone');
+  assert.equal(p.q('.mkt-cell[data-item="paper"] .mkt-onapp'), null, 'a theme the app does not carry has no tag');
+  const guide = p.$('app-guide').closest('section');
+  assert.equal(guide.querySelectorAll('ol li').length, 3);
+  assert.match(guide.textContent, /Get app code/);
+  assert.match(guide.textContent, /Settings › Appearance/);
+  assert.match(guide.textContent, /other devices unlock by themselves/);
+  assert.doesNotMatch(guide.textContent, /not available in 1\.5\.0/);
+  assert.ok(guide.querySelector('a[href="current-status.html#app-themes"]'), 'a Downloads link');
   await p.click(p.byLabel('Papyrus details'));
   const views = p.qa('.mkt-view').map(b => b.textContent);
   assert.ok(views.includes('Computer') && views.includes('Phone'), views.join(' '));
   assert.ok(p.qa('.mkt-detail-acts button').some(b => /Buy/.test(b.textContent)), 'bought like any theme');
-  assert.doesNotMatch(p.q('.mkt-detail-acts').textContent, /Price not set yet/);
+});
+
+await test('For Geeks: the app themes block stays, with its price, and How to use points at the app steps', async () => {
+  const p = await boot({ main: false, withFetch: true });
+  await tick(80);
+  assert.equal(p.qa('.mkt-feat-card').map(c => c.getAttribute('data-app')).join(' '), 'dendera papyrus cotton nile');
+  assert.match(p.q('.mkt-feat-card[data-app="dendera"] .mkt-feat-price').textContent, /1000/);
+  assert.doesNotMatch(p.q('#mkt-feat').textContent, /needs a later app release/);
+  await p.click(p.byLabel('How to use Dendera'));
+  assert.equal(p.w.document.activeElement.id, 'app-guide');
+  await p.click(p.byLabel('Try Papyrus on this page'));
+  assert.equal(p.root.dataset.tryApp, '1');
+  await p.click(p.q('.mkt-trybar-cancel'));
+});
+
+await test('main cards: one main action, Try it, and a More menu; Gift and Details live under More', async () => {
+  const p = await boot({ owned: ['meadow'], equipped: {}, balance: 500 });
+  const paper = p.q('.mkt-cell[data-item="paper"] .mkt-acts');
+  assert.ok(paper.querySelector(':scope > .mkt-primary'), 'one main action');
+  assert.equal(paper.querySelectorAll(':scope > button').length, 2, 'the main action and Try it');
+  assert.ok(paper.querySelector(':scope > .mkt-try-btn'));
+  const more = paper.querySelector('details.mkt-more');
+  assert.equal(more.querySelector('summary').textContent, 'More');
+  assert.deepEqual([...more.querySelectorAll('button')].map(b => b.textContent).sort(), ['Details', 'Gift']);
+  // owned: Wear; Free Mono: Free and Wear only, never Buy
+  assert.equal(p.q('.mkt-cell[data-item="meadow"] .mkt-primary').textContent, 'Wear');
+  const mono = p.q('.mkt-cell[data-item="mono"]');
+  assert.equal(mono.querySelector('.mkt-tag').textContent, 'Free');
+  assert.deepEqual([...mono.querySelectorAll('.mkt-acts button')].map(b => b.textContent), ['Wear']);
+  // the preview is pressable like Try it, and Details still opens from the menu
+  await p.click(p.q('.mkt-cell[data-item="paper"] .mkt-pv-try'));
+  assert.equal(p.root.dataset.skin, 'paper');
+  await p.click(p.q('.mkt-trybar-cancel'));
+  await p.click(p.byLabel('Paper details'));
+  assert.equal(p.$('mkt-detail').hidden, false);
+});
+
+await test('main: ?item= opens that item, scrolls to it and marks it; unknown ids do nothing', async () => {
+  let scrolled = null;
+  const p = await boot({ search: '?item=banner-dusk&from=app' });
+  assert.equal(p.q('#list-banners').closest('.mkt-sec').hidden, false, 'its tab opens');
+  assert.ok(p.q('.mkt-cell[data-item="banner-dusk"]').classList.contains('mkt-hit'));
+  const q = await boot({ search: '?item=%3Cscript%3E' });
+  assert.equal(q.qa('.mkt-hit').length, 0);
+  assert.equal((await boot({ search: '?item=nope' })).qa('.mkt-hit').length, 0);
 });
 
 await test('For Geeks: the same structure in its own look; Try it switches the page theme and puts it back', async () => {

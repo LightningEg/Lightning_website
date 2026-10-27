@@ -29,7 +29,7 @@ def build():
             start=text.index('<div class="mkt-dlg" id="buy"')
             dialog=text[start:text.index('<script src=',start)]
             main=main.replace('Cosmetics you <span class="hi">earned.</span>','Make it your own.')
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Try anything on first: themes on this page, banners, frames and badges on your look. Buy with coins from <a href="topup.html">your wallet</a> or <a href="stories.html">a story you share</a>. A theme you own can dress this website and For Geeks; app themes are in testing.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">One account, one collection. Try anything on first: themes on this page, banners, frames and badges on your look. Buy with coins from <a href="topup.html">your wallet</a> or <a href="stories.html">a story you share</a>. A theme you own dresses this website, For Geeks and the app.</p>',main,count=1,flags=re.S)
             main=main.replace('>themes</h2>','>Themes</h2>').replace('>banners</h2>','>Banners</h2>').replace('>free palette</h3>','>Free palette</h3>').replace('>frames</h2>','>Frames</h2>').replace('>badges</h2>','>Badges</h2>')
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Try any theme on this page, or open details to see it on the website, the computer and the phone.','Try any theme on this page, or open Details to see it on the website, the computer and the phone.')
@@ -44,7 +44,7 @@ def build():
         if name=='collection':
             main=re.sub(r'<section class="s mkt-guide".*?</section>','',main,flags=re.S)
             main=re.sub(r'<h1 id="h1">.*?</h1>','<h1 id="h1">Your collection.</h1>',main,count=1,flags=re.S)
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Everything you own, in one place. Equip a look on this website, or choose <b>Get app unlock code</b> on a theme to unlock it in the Lightning app on your PC or phone: a one-time code, free on every device you own. Looks you do not own yet are in <a href="marketplace.html">the marketplace</a>.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Everything you own, in one place. Equip a look on this website, or press <b>Get app code</b> on a theme to unlock it in the Lightning app: one code per profile, and the profile’s other devices unlock by themselves. Looks you do not own yet are in <a href="marketplace.html">the marketplace</a>.</p>',main,count=1,flags=re.S)
             main=main.replace(signin,'<a class="btn ghost" id="mkt-signin" href="account.html" hidden>sign in to see your collection</a><a class="btn ghost" href="marketplace.html">browse the marketplace</a>')
             main=re.sub(r'<p class="fine">.*?</p>','<p class="fine" id="col-empty" hidden>You do not own a paid look yet. Free themes are always yours; paid ones appear here the moment you buy them.</p>',main,count=1,flags=re.S)
         scripts=['js/vendor/supabase-2.118.0.js','js/forgeeks-config.js','js/forgeeks-auth.js']
@@ -52,7 +52,7 @@ def build():
         elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
         elif name=='profile':scripts+=['js/forgeeks-showcase.js','js/forgeeks-profile.js','js/story-card.js','js/story-strip.js']
         else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
-        if name=='marketplace':scripts.insert(scripts.index('js/forgeeks-market.js')+1,'js/market-cart.js')
+        if name in('marketplace','collection'):scripts.insert(scripts.index('js/forgeeks-market.js')+1,'js/market-cart.js')
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
         if name in('marketplace','collection','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
         if name in('marketplace','collection'):css+=['css/forgeeks-market.css','css/theme-preview.css','css/market-ui.css']
@@ -60,7 +60,7 @@ def build():
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
         # the market's own files change often: a version so browsers fetch the new copy
-        SHOP='?v=20261027-cart-1'
+        SHOP='?v=20261027-layout-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
         scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js','js/activation-codes.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
@@ -111,7 +111,8 @@ def connect_public_pages():
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-cart-1\2', text)
         # the profile picture field (owner, 2026-10-27)
         text=re.sub(r'(js/forgeeks-account[.]js|css/forgeeks-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-avatar-1\2', text)
-        text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
+        text=re.sub(r'(css/(?:site-account)[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-looks-1\2', text)
+        text=re.sub(r'(js/site-membership[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-looks-1\2', text)
         text=re.sub(r'(js/admin-operations[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-mfa-1\2', text)
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)

@@ -3086,8 +3086,8 @@
       "id": "UX-2026.10.26.07",
       "name": "Home · Lightning 1.5.0",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.07.html"
     },
     {
       "id": "UX-2026.10.26.08",
@@ -3113,6 +3113,20 @@
     {
       "id": "UX-2026.10.26.11",
       "name": "Version Archive · Lightning 1.5.0",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.11.html"
+    },
+    {
+      "id": "UX-2026.10.27.01",
+      "name": "Lightning · Looks strip",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.27.02",
+      "name": "Version Archive · Looks strip",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

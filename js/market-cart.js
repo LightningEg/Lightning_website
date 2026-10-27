@@ -9,7 +9,11 @@
   var FG = root.FG;
   var cart = { lines: [], total: 0, balance: 0, signedIn: false, busy: false };
   var dlg = { key: null, trigger: null, busy: false, done: false };
-  var chip, count, win;
+  var chip, count, win, fab, fabCount;
+  var MAIN = !!doc.body.dataset.mainStore;
+  // Part B writes sentence case; For Geeks keeps its lower-case commands.
+  function T(t) { return MAIN ? t.charAt(0).toUpperCase() + t.slice(1) : t; }
+  var KIND = { theme: 'Theme', banner: 'Banner', frame: 'Frame', badge: 'Badge', name: 'Name colour', set: 'Set' };
 
   function el(tag, cls, text) {
     var e = doc.createElement(tag);
@@ -46,6 +50,12 @@
       chip.hidden = !cart.signedIn;
       count.textContent = String(cart.lines.length);
     }
+    if (fab) {
+      var n = cart.lines.length;
+      fab.hidden = !(cart.signedIn && n > 0);
+      fabCount.textContent = String(n);
+      fab.setAttribute('aria-label', 'Cart, ' + n + (n === 1 ? ' item' : ' items'));
+    }
     if (!$('cart').hidden && !dlg.done) drawLines();
   }
 
@@ -62,7 +72,7 @@
   function button(it, cls) {
     if (!cart.signedIn) return null;
     var inIt = has(it.id);
-    var b = el('button', cls, inIt ? 'in cart ✓' : 'add to cart');
+    var b = el('button', cls, inIt ? T('in cart ✓') : T('add to cart'));
     b.type = 'button';
     b.setAttribute('data-cart', it.id);
     b.setAttribute('aria-pressed', inIt ? 'true' : 'false');
@@ -85,19 +95,28 @@
           note(say(r.error), 'bad');
         } else {
           take(r.data);
-          note(adding ? it.name + ' is in your cart.' : it.name + ' is out of your cart.', 'ok');
+          if (adding) note(it.name + ' is in your cart', 'ok', true);
+          else note(it.name + ' is out of your cart', 'ok');
         }
         if (m) m.render();
         var again = doc.querySelector('.mkt-cell[data-item="' + it.id + '"] [data-cart]');
         if (again) again.focus();
       });
   }
-  function note(msg, kind) {
+  // The status line above the cards. After an add it carries a View cart action.
+  function note(msg, kind, withView) {
     var m = $('mkt-msg');
     if (!m) return;
     m.textContent = msg || '';
     m.hidden = !msg;
     m.className = 'acct-msg' + (kind ? ' ' + kind : '');
+    if (msg && withView) {
+      var v = el('button', 'mkt-linkbtn', T('view cart'));
+      v.type = 'button';
+      v.addEventListener('click', function () { open(v); });
+      m.appendChild(doc.createTextNode(' '));
+      m.appendChild(v);
+    }
   }
 
   /* ---------- the cart window ---------- */
@@ -112,12 +131,12 @@
     win.setAttribute('aria-modal', 'true');
     win.setAttribute('aria-labelledby', 'cart-title');
     win.tabIndex = -1;
-    win.appendChild(el('h2', null, 'your cart')).id = 'cart-title';
+    win.appendChild(el('h2', null, T('your cart'))).id = 'cart-title';
     win.appendChild(el('ul', 'mkt-cart-lines')).id = 'cart-lines';
     var sum = el('dl', 'mkt-sum');
     [['cart-l1', 'total', 'cart-total'], ['cart-l2', 'balance now', 'cart-now'], ['cart-l3', 'balance after', 'cart-after']].forEach(function (x) {
       var row = el('div');
-      var dt = el('dt', null, x[1]); dt.id = x[0];
+      var dt = el('dt', null, T(x[1])); dt.id = x[0];
       var dd = el('dd'); dd.id = x[2];
       row.appendChild(dt); row.appendChild(dd); sum.appendChild(row);
     });
@@ -125,13 +144,19 @@
     var st = el('p', 'acct-status'); st.id = 'cart-status'; st.setAttribute('role', 'status');
     win.appendChild(st);
     var row = el('div', 'row');
-    [['cart-ok', 'btn', 'buy everything'], ['cart-topup', 'btn ghost', 'top up coins'], ['cart-clear', 'btn ghost', 'empty cart'], ['cart-close', 'btn ghost', 'close']].forEach(function (x) {
-      var b = x[0] === 'cart-topup' ? el('a', x[1], x[2]) : el('button', x[1], x[2]);
+    [['cart-ok', 'btn', 'buy everything'], ['cart-topup', 'btn ghost', 'top up coins'], ['cart-close', 'btn ghost', 'close']].forEach(function (x) {
+      var b = x[0] === 'cart-topup' ? el('a', x[1], T(x[2])) : el('button', x[1], T(x[2]));
       if (b.tagName === 'A') b.href = 'topup.html'; else b.type = 'button';
       b.id = x[0];
       row.appendChild(b);
     });
     win.appendChild(row);
+    // Emptying the cart is rare and destructive: a quiet link away from the main button.
+    var quiet = el('p', 'mkt-cart-quiet');
+    var clr = el('button', 'mkt-linkbtn', T('empty cart'));
+    clr.type = 'button'; clr.id = 'cart-clear';
+    quiet.appendChild(clr);
+    win.appendChild(quiet);
     d.appendChild(back); d.appendChild(win);
     doc.body.appendChild(d);
     back.addEventListener('click', close);
@@ -147,17 +172,31 @@
       : l.status === 'owned' ? 'you already have this'
       : l.status === 'unavailable' ? 'no longer on sale' : '';
   }
+  // A small swatch of the theme's own colours (the website's registry), or a plain dot for other kinds.
+  function swatch(l) {
+    var s = el('i', 'mkt-cart-sw mkt-cart-sw-' + (l.type || 'item'));
+    s.setAttribute('aria-hidden', 'true');
+    var list = (root.LG && root.LG.THEMES) || [], t = null;
+    for (var i = 0; i < list.length; i++) if (list[i].id === l.item_id) t = list[i];
+    if (t && t.c && /^#[0-9a-f]{3,8}$/i.test(t.c[0]) && /^#[0-9a-f]{3,8}$/i.test(t.c[3])) {
+      s.style.background = 'linear-gradient(135deg,' + t.c[0] + ' 50%,' + t.c[3] + ' 50%)';
+    }
+    return s;
+  }
   function drawLines() {
     var ul = $('cart-lines');
     while (ul.firstChild) ul.removeChild(ul.firstChild);
     cart.lines.forEach(function (l) {
       var li = el('li', 'mkt-cart-line' + (l.status === 'ok' ? '' : ' off'));
-      var name = el('span', 'mkt-cart-name', l.name);
+      var name = el('span', 'mkt-cart-name');
+      name.appendChild(swatch(l));
+      name.appendChild(el('span', null, l.name));
       li.appendChild(name);
+      var kind = KIND[l.type] || '';
       var n = lineNote(l);
-      if (n) li.appendChild(el('small', null, n));
+      if (kind || n) li.appendChild(el('small', null, kind && n ? kind + ' · ' + n : kind || n));
       li.appendChild(el('b', null, l.status === 'ok' ? coins(l.price) : l.status === 'covered' ? 'included' : '—'));
-      var rm = el('button', 'mkt-mini', 'remove');
+      var rm = el('button', 'mkt-mini', T('remove'));
       rm.type = 'button';
       rm.setAttribute('aria-label', 'remove ' + l.name + ' from your cart');
       rm.addEventListener('click', function () { removeLine(l, rm); });
@@ -169,7 +208,7 @@
     $('cart-now').textContent = coins(cart.balance);
     $('cart-after').textContent = after >= 0 ? coins(after) : '−' + coins(-after);
     $('cart-ok').disabled = dlg.busy || empty || bad > 0 || after < 0;
-    $('cart-clear').hidden = cart.lines.length === 0;
+    $('cart-clear').hidden = cart.lines.length === 0; $('cart-clear').parentNode.hidden = cart.lines.length === 0;
     $('cart-topup').hidden = after >= 0;
     if (!cart.lines.length) status('Your cart is empty. Add looks from the marketplace.');
     else if (bad) status('Remove the items marked above, then check out.', true);
@@ -203,9 +242,10 @@
   function open(trigger) {
     if (!cart.signedIn) return;
     dlg.key = newKey(); dlg.trigger = trigger || null; dlg.busy = false; dlg.done = false;
-    $('cart-title').textContent = 'your cart';
-    $('cart-l1').textContent = 'total'; $('cart-l2').textContent = 'balance now'; $('cart-l3').textContent = 'balance after';
+    $('cart-title').textContent = T('your cart');
+    $('cart-l1').textContent = T('total'); $('cart-l2').textContent = T('balance now'); $('cart-l3').textContent = T('balance after');
     $('cart-ok').hidden = false;
+    $('cart-clear').parentNode.hidden = false;
     $('cart').hidden = false;
     doc.documentElement.style.overflow = 'hidden';
     load().then(function () { drawLines(); (payable().length && !$('cart-ok').disabled ? $('cart-ok') : $('cart-close')).focus(); });
@@ -247,7 +287,7 @@
     cart.lines = []; cart.total = 0;
     cart.balance = Number(order && order.balance) || cart.balance;
     paint();
-    $('cart-title').textContent = 'order placed';
+    $('cart-title').textContent = T('order placed');
     var ul = $('cart-lines');
     while (ul.firstChild) ul.removeChild(ul.firstChild);
     ((order && order.lines) || []).forEach(function (l) {
@@ -256,11 +296,11 @@
       li.appendChild(el('b', null, coins(Number(l.price_paid) || 0)));
       ul.appendChild(li);
     });
-    $('cart-l1').textContent = 'paid'; $('cart-total').textContent = coins(Number(order && order.total) || 0);
-    $('cart-l2').textContent = 'balance'; $('cart-now').textContent = coins(cart.balance);
+    $('cart-l1').textContent = T('paid'); $('cart-total').textContent = coins(Number(order && order.total) || 0);
+    $('cart-l2').textContent = T('balance'); $('cart-now').textContent = coins(cart.balance);
     $('cart-l3').textContent = ''; $('cart-after').textContent = '';
-    $('cart-ok').hidden = true; $('cart-clear').hidden = true; $('cart-topup').hidden = true;
-    $('cart-close').textContent = 'close';
+    $('cart-ok').hidden = true; $('cart-clear').hidden = true; $('cart-clear').parentNode.hidden = true; $('cart-topup').hidden = true;
+    $('cart-close').textContent = T('close');
     status('Bought. Everything is in your collection: equip it from the cards.');
     $('cart-close').focus();
     var m = market();
@@ -278,6 +318,31 @@
     else if (!ev.shiftKey && (at === last || !win.contains(at))) { ev.preventDefault(); first.focus(); }
   }
 
+  /* ---------- the floating cart button: always in reach while the cart holds something ---------- */
+  function buildFab() {
+    fab = el('button', 'mkt-cart-fab');
+    fab.type = 'button';
+    fab.id = 'cart-fab';
+    fab.hidden = true;
+    fab.setAttribute('aria-haspopup', 'dialog');
+    fab.appendChild(el('span', null, T('cart')));
+    fabCount = el('b', null, '0');
+    fab.appendChild(fabCount);
+    fab.addEventListener('click', function () { open(fab); });
+    doc.body.appendChild(fab);
+    // keep clear of the cookie bar while it is on screen
+    var lift = function () {
+      var bar = doc.querySelector('.lc-bar'), h = 0;
+      if (bar && !('answered' in bar.dataset) && bar.offsetParent !== null) h = bar.offsetHeight;
+      fab.style.setProperty('--fab-lift', h ? (h + 12) + 'px' : '0px');
+    };
+    lift();
+    root.addEventListener('resize', lift);
+    root.addEventListener('lightning:consent', lift);
+    if (root.MutationObserver) new root.MutationObserver(lift).observe(doc.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'data-answered'] });
+    paint();
+  }
+
   /* ---------- start ---------- */
   function start() {
     var wallet = $('wallet');
@@ -288,11 +353,12 @@
     chip.id = 'cart-open';
     chip.hidden = true;
     chip.setAttribute('aria-haspopup', 'dialog');
-    chip.appendChild(doc.createTextNode('cart '));
+    chip.appendChild(doc.createTextNode(T('cart') + ' '));
     count = el('b', null, '0');
     chip.appendChild(count);
     chip.addEventListener('click', function () { open(chip); });
     wallet.parentNode.insertBefore(chip, wallet.nextSibling);
+    buildFab();
     FG.ready.then(function () {
       if (!FG.sb) return;
       load().then(refresh);

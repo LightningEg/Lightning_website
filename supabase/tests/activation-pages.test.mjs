@@ -13,7 +13,7 @@ const tick=()=>new Promise(r=>w.setTimeout(r,0));await tick();await tick();
 assert.equal(w.document.querySelectorAll('[data-activation-code]').length,1,'no code for unowned cell');
 w.document.querySelector('[data-activation-code]').click();
 pending({data:{code:'12345678-12345678-12345678-12345678'},error:null});await tick();
-assert.ok(w.document.querySelector('dialog').open);assert.match(w.document.querySelector('dialog').textContent,/other devices running that same profile can use another code for free/);assert.match(w.document.querySelector('dialog').textContent,/different profile needs its own seat/);
+assert.ok(w.document.querySelector('dialog').open);assert.match(w.document.querySelector('dialog').textContent,/that profile’s other devices unlock by themselves, with no code/);assert.match(w.document.querySelector('dialog').textContent,/different profile needs its own unlock, at a quarter of the price/);
 const input=w.document.querySelector('dialog input');assert.equal(input.value,'12345678-12345678-12345678-12345678');
 session=null;notify();await tick();assert.equal(w.document.querySelector('dialog'),null);assert.equal(input.value,'');
 assert.equal(w.document.querySelectorAll('[data-activation-code]').length,0);
