@@ -27,6 +27,11 @@ test('the size is additions plus deletions from the file list, without lockfiles
   assert.ok(body.includes('p_lines:$lines'));
 });
 
+test('a failed points call never stops the coins', () => {
+  const call = text.slice(text.indexOf('rpc record_merge'), text.indexOf('rpc award_merge'));
+  assert.ok(call.includes('|| echo "::warning::record_merge failed'), 'record_merge runs first under set -e: a failure must not skip award_merge');
+});
+
 test('bots and the owner never reach record_merge; the safety rules stay', () => {
   const owner = body.slice(body.indexOf('if [[ "$AUTHOR_TYPE"'), body.indexOf('          else\n'));
   assert.ok(!owner.includes('record_merge') && !owner.includes('award_merge') && owner.includes('close_rewarded_issues'));
