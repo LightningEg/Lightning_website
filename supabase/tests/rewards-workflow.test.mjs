@@ -40,5 +40,19 @@ test('bots and the owner never reach record_merge; the safety rules stay', () =>
   assert.ok(text.includes('pull_request_target') && body.includes('jq -nc'));
 });
 
+test('a coins label publishes an offer only for people who can write; the claim job ignores label events', () => {
+  assert.ok(text.includes('types: [assigned, unassigned, labeled, unlabeled]'));
+  const offer = text.slice(text.indexOf('\n  offer:'), text.indexOf('\n  merged:'));
+  const run = offer.slice(offer.indexOf('      - run: |'));
+  assert.ok(!run.includes('${{'), 'label, login and title reach the script through env');
+  assert.ok(run.includes('^coins:[0-9]{1,5}$'));
+  const check = run.indexOf('collaborators/$SENDER/permission');
+  assert.ok(check > 0 && check < run.indexOf('rpc publish_offer_from_label') && check < run.indexOf('rpc close_offer_from_label'));
+  assert.ok(run.includes('admin|maintain|write) ;;'));
+  assert.ok(offer.includes("github.event.sender.type != 'Bot'"));
+  const claim = text.slice(text.indexOf('\n  claim:'), text.indexOf('\n  offer:'));
+  assert.ok(claim.includes("github.event.action == 'assigned'") && claim.includes("github.event.action == 'unassigned'"));
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exitCode = failed ? 1 : 0;

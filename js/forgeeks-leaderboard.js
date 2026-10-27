@@ -29,6 +29,35 @@
     if (text) { $('lb-list').hidden = true; $('lb-empty').hidden = true; }
   }
 
+  // What a coder advertises (8Q): their GitHub login, the title of their last merged pull request, merges this month and
+  // their portfolio. Every link is checked here: https only, a GitHub login of the allowed shape, text only.
+  function httpsUrl(u) {
+    if (typeof u !== 'string' || u.length > 500) return null;
+    try { var p = new root.URL(u); return p.protocol === 'https:' && !p.username && !p.password ? p.href : null; } catch (_) { return null; }
+  }
+  function ext(href, cls, text) {
+    var a = S.el('a', cls, text);
+    a.href = href;
+    a.rel = 'noopener nofollow ugc';
+    return a;
+  }
+  function coderLine(r) {
+    if (sample) return null;
+    var parts = [];
+    var login = typeof r.github_login === 'string' && /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/.test(r.github_login) ? r.github_login : null;
+    if (login) parts.push(ext('https://github.com/' + login, 'lb-gh', '@' + login));
+    var pr = httpsUrl(r.last_merge_url);
+    if (pr && typeof r.last_merge_title === 'string' && r.last_merge_title.trim()) parts.push(ext(pr, 'lb-pr', r.last_merge_title.trim()));
+    var n = Number(r.merges_month);
+    if (n > 0) parts.push(S.el('span', 'lb-n', S.num(n) + (n === 1 ? ' merge' : ' merges') + ' this month'));
+    var site = httpsUrl(r.portfolio_url);
+    if (site) parts.push(ext(site, 'lb-site', 'portfolio'));
+    if (!parts.length) return null;
+    var p = S.el('p', 'lb-coder');
+    parts.forEach(function (x, i) { if (i) p.appendChild(doc.createTextNode(' · ')); p.appendChild(x); });
+    return p;
+  }
+
   // One table row per member: rank, display name, contributions and score, over the member's banner (owner, 2026-10-25).
   // Only a well-formed catalog id reaches the banner's attribute.
   function row(r) {
@@ -48,6 +77,8 @@
     if (!sample) a.href = S.profileHref(r.display_name);
     if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     td.appendChild(a);
+    var coder = coderLine(r);
+    if (coder) td.appendChild(coder);
     tr.appendChild(td);
     tr.appendChild(S.el('td', 'ct', S.num(Number(r.contribution_count) || 0)));
     tr.appendChild(S.el('td', 'sc', S.num(r.score)));

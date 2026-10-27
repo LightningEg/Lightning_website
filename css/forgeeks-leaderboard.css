@@ -90,3 +90,8 @@ a.nm:hover{text-decoration:underline;text-underline-offset:4px}
 .lb-next{padding:48px 0 120px}
 .lb-next .cta{flex-wrap:wrap}
 @media (max-width:640px){.lb-top{padding-top:104px}.lb-next{padding-bottom:88px}}
+
+/* what a coder advertises: login, last merge, merges this month, portfolio (8Q) */
+.lb-coder{margin:4px 0 0;color:var(--dim);font:400 12.5px/1.5 var(--mono);overflow-wrap:anywhere}
+.lb-coder a{color:var(--ink);text-underline-offset:3px}
+.lb-coder .lb-pr{max-width:42ch;display:inline-block;vertical-align:bottom;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
