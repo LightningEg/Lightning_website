@@ -1,4 +1,4 @@
-// Bearer-ticket exchange for native apps, no app account login required. Configure verify_jwt=false
+// Bearer-ticket exchange for native apps, no app account login required. One code claims one profile's seat. Configure verify_jwt=false
 // for this endpoint ONLY; the UUID-strength one-time ticket is the authority. Add edge rate limits.
 import {createClient} from 'npm:@supabase/supabase-js@2.118.0';
 import {signInventory} from '../restore-purchases/license.mjs';
@@ -20,12 +20,15 @@ Deno.serve(async(req:Request)=>{
   const raw=new Uint8Array(bytes);let at=0;for(const c of chunks){raw.set(c,at);at+=c.length;}
   const body=JSON.parse(new TextDecoder().decode(raw));
   if(typeof body.code!=='string'||body.code.length>64||typeof body.item_id!=='string'||body.item_id.length>60||!Number.isInteger(body.asset_version))return reply(400,{error:'Invalid code'});
+  // The app names its profile: a code claims one profile's seat, and further devices of that profile reuse it.
+  if(typeof body.profile_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(body.profile_id))return reply(400,{error:'Update Lightning: the app did not say which profile this is.'});
   // Validate signing configuration before spending a ticket. Ownership survives failed delivery;
   // the customer can always issue a fresh code from the same purchase.
   const jwk=JSON.parse(secret);await crypto.subtle.importKey('jwk',jwk,'Ed25519',false,['sign']);
   if(!/^[a-zA-Z0-9._-]{1,80}$/.test(keyId))return reply(503,{error:'Activation is not configured'});
   const db=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
-  const {data,error}=await db.rpc('redeem_activation_code',{p_code:body.code,p_item_id:body.item_id,p_asset_version:body.asset_version});
+  const {data,error}=await db.rpc('redeem_activation_code',{p_code:body.code,p_item_id:body.item_id,p_asset_version:body.asset_version,p_profile_id:body.profile_id});
+  if(error&&/every profile seat/.test(String(error.message)))return reply(409,{code:'no_seat',error:'Every profile seat for this theme is used. Add another profile on your account page: it costs a quarter of the price.'});
   if(error)return reply(400,{error:'Code unavailable, expired or unsupported. Get a fresh code from your account.'});
   return reply(200,await signInventory(data,jwk,keyId));
  }catch{return reply(400,{error:'Could not activate. Get a fresh code from your account if needed.'});}

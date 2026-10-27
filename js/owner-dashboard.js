@@ -10,7 +10,7 @@
   var $ = function (id) { return doc.getElementById(id); };
   var host = $('ops-dash');
   if (!host || !FG) return;
-  var VIEWS = ['today', 'requests', 'catalogue', 'members', 'social', 'bank', 'settings'];
+  var VIEWS = ['today', 'requests', 'sales', 'activity', 'catalogue', 'members', 'social', 'bank', 'settings'];
   var ALIAS = { setup: 'settings', pricing: 'settings', retention: 'settings', credits: 'members' };
   var last = null, loading = false, again = false, store = {}, ready = null;
 

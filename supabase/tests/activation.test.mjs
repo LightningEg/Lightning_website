@@ -76,7 +76,8 @@ const review = async (r,decision='approved',amount=10000,ref='BANK-000001',who=A
 };
 const P=await pkg();
 const issue=(u,item='garnet',version=1)=>as('authenticated',u,async()=>(await q(`select public.issue_activation_code($1,$2) d`,[item,version])).rows[0].d);
-const redeem=(code,item='garnet',version=1,role='service_role')=>as(role,null,async()=>(await q(`select public.redeem_activation_code($1,$2,$3) d`,[code,item,version])).rows[0].d);
+const PROFILE='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',OTHER_PROFILE='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+const redeem=(code,item='garnet',version=1,role='service_role',profile=PROFILE)=>as(role,null,async()=>(await q(`select public.redeem_activation_code($1,$2,$3,$4) d`,[code,item,version,profile])).rows[0].d);
 await award(OWNER,1000,'claim-test');await buy(OWNER,'garnet','claim-buy-0001');
 await test('unshipped theme cannot issue codes; buying does not create a device limit',async()=>{
  await assert.rejects(issue(OWNER),/not available/);
@@ -87,17 +88,19 @@ await test('strong one-time code, private hashed storage, no browser redemption'
  const a=await issue(OWNER);assert.match(a.code,/^[A-F0-9]{8}(-[A-F0-9]{8}){3}$/);
  await as('authenticated',OWNER,async()=>{
   await assert.rejects(q(`select * from private.activation_tickets`),/permission denied/);
-  await assert.rejects(q(`select public.redeem_activation_code($1,'garnet',1)`,[a.code]),/permission denied/);
+  await assert.rejects(q(`select public.redeem_activation_code($1,'garnet',1,$2)`,[a.code,PROFILE]),/permission denied/);
  });
  const row=(await q(`select * from private.activation_tickets`)).rows[0];
  assert.equal(row.code_hash.length,64);assert.ok(!JSON.stringify(row).includes(a.code));
- const inv=await redeem(a.code.toLowerCase());assert.equal(inv.account_id,OWNER);assert.deepEqual(inv.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
+ const inv=await redeem(a.code.toLowerCase());assert.equal(inv.account_id,OWNER);assert.equal(inv.profile_id,PROFILE,'the licence names the profile');assert.deepEqual(inv.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
  await assert.rejects(redeem(a.code),/invalid or expired/);
 });
-await test('another device gets a fresh code without repurchase or wallet debit',async()=>{
+await test('another device of the same profile gets a fresh code without repurchase or wallet debit; another profile does not',async()=>{
  const before=await wallet(OWNER);const a=await issue(OWNER),b=await issue(OWNER);
  assert.notEqual(a.code,b.code);assert.deepEqual(await redeem(a.code),await redeem(b.code));
  assert.deepEqual(await wallet(OWNER),before);
+ const c=await issue(OWNER);await assert.rejects(redeem(c.code,'garnet',1,'service_role',OTHER_PROFILE),/profile seat/);
+ assert.deepEqual(await redeem(c.code),await redeem((await issue(OWNER)).code),'a refused claim burned nothing: the code still works for the profile that holds the seat');
 });
 await test('old app does not spend a code; expiry and disabled bundles fail closed',async()=>{
  const a=await issue(OWNER);await assert.rejects(redeem(a.code,'garnet',2),/unsupported/);

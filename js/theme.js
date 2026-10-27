@@ -1,7 +1,7 @@
 // Lightning theme: light by default, whatever the browser or system setting; dark only when the visitor picks it, then remembered.
 // A member may also wear a marketplace theme across the website (a "skin", chosen on marketplace.html, remembered on
 // this device). Themes are shared with For Geeks, but each site draws its own version: here a theme has a light side
-// and a dark side (variant below), so the light/dark switch keeps working. The skin repaints surfaces, text and buttons
+// and a dark side (variant below); a light theme leaves dark mode alone, so the switch shows the plain dark site. The skin repaints surfaces, text and buttons
 // only; good and bad keep their colours.
 // Load in <head> without defer so the right theme is set before the first paint.
 (() => {
@@ -37,6 +37,9 @@
     const readable = start => { let x = start; for (let t = 0.1; contrast(x, ground) < 4.5 && t < 1; t += 0.1) x = mix(text, start, t); return x; };
     return [ground, text, readable(own ? quiet : mix(text, ground, 0.62)), readable(acc)];
   }
+  // Dark mode belongs to the visitor: a light theme (Cotton, Papyrus) never recolours it, so the switch shows the plain
+  // dark site. A dark theme shows in both modes; light mode is where every worn theme appears.
+  const paintsOn = (c, mode) => mode === 'light' || lum(c[0]) <= 0.4;
   // The skin, part by part (guideline/themes.md): each part names the Part B tokens it may repaint, and nothing else
   // changes. Text, surfaces and lines come from the theme's ground and text; buttons, links and focus from its accent.
   function skinParts(c) {
@@ -68,7 +71,8 @@
   function setSkin(next, remember) {
     skin = validSkin(next);
     let tag = document.getElementById('site-skin');
-    if (skin) {
+    // A theme paints only its own side: the other mode stays the plain site, so the switch never recolours it.
+    if (skin && paintsOn(skin.c, saved || 'light')) {
       if (!tag) { tag = document.createElement('style'); tag.id = 'site-skin'; document.head.appendChild(tag); }
       const mode = saved || 'light';
       tag.textContent = skinCss(variant(skin.c, mode));
@@ -121,5 +125,5 @@
     try { localStorage.setItem(KEY, saved); } catch (_) {}
     if (skin) setSkin(skin, false); else apply(saved);
   });
-  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin, variant, parts: skinParts};
+  window.LightningTheme = {apply, get: () => root.dataset.theme, skin: setSkin, worn: () => skin, stored: storedSkin, variant, parts: skinParts, paintsOn};
 })();

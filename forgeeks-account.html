@@ -117,7 +117,21 @@
               <div class="f"><label for="visibility">who can see it</label>
                 <select id="visibility" name="visibility"><option value="private">only me</option><option value="members">signed-in members</option><option value="public">anyone</option></select></div>
               <div class="f wide"><label for="bio">bio <span class="opt">optional</span></label><textarea id="bio" name="bio" maxlength="500" rows="3"></textarea></div>
-              <div class="f wide"><label for="avatar_url">avatar link <span class="opt">optional, https</span></label><input id="avatar_url" name="avatar_url" type="url" placeholder="https://" autocomplete="off"></div>
+              <div class="f wide avatar-edit" id="avatar-edit">
+                <span class="avatar-l" id="avatar-l">profile picture <span class="opt">optional</span></span>
+                <div class="avatar-row">
+                  <span class="avatar-pv" id="avatar-preview" aria-hidden="true"></span>
+                  <div class="avatar-side">
+                    <div class="avatar-btns">
+                      <label class="btn ghost" for="avatar-file" id="avatar-pick">choose a picture</label>
+                      <input id="avatar-file" class="avatar-file" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="avatar-help">
+                      <button class="btn ghost" id="avatar-remove" type="button" hidden>remove picture</button>
+                    </div>
+                    <p class="avatar-help" id="avatar-help">PNG, JPEG or WebP. It is cropped to a square and shrunk to 256 px in your browser, so only a small copy is uploaded. It shows on your profile, the leaderboard and your stories only where you made those public.</p>
+                    <p class="acct-status" id="avatar-status" role="status" aria-live="polite"></p>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="checks">
               <label class="chk"><input type="checkbox" name="adult_confirmed"><span>I am 18 or older<small>Needed to be public or on the leaderboard.</small></span></label>

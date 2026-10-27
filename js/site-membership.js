@@ -43,9 +43,13 @@
     if(consent&&!('answered' in consent.dataset)){window.addEventListener('lightning:consent',()=>setTimeout(()=>{if(dialog.isConnected&&!dialog.open&&!document.querySelector('dialog[open]'))dialog.showModal();},800),{once:true});return;}
     dialog.showModal();x.focus();
   }
+  // The top-bar chip is an icon (then the member's picture): never replace it with words, or every page shows
+  // "My account" in body type until the profile loads. A chip keeps its icon and only gets the right accessible name.
+  const name=session=>session?(ar?'حسابي':'My account'):(ar?'حساب':'Account');
+  const label=session=>accountLinks.forEach(a=>{if(a.querySelector('svg,.me-av')||a.classList.contains('me'))a.setAttribute('aria-label',name(session));else a.textContent=name(session);});
   FG.ready.then(({session})=>{
-    accountLinks.forEach(a=>a.textContent=session?(ar?'حسابي':'My account'):(ar?'حساب':'Account'));
+    label(session);
     if(!session && FG.available)invite();
   }).catch(()=>{});
-  FG.onAuth(session=>{accountLinks.forEach(a=>a.textContent=session?(ar?'حسابي':'My account'):(ar?'حساب':'Account'));if(session)close();});
+  FG.onAuth(session=>{label(session);if(session)close();});
 })();

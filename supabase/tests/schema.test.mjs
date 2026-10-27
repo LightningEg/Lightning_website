@@ -232,11 +232,11 @@ await test('leaderboard: opt-in only, ties share a rank, spending never lowers r
 await test('admin tools: rewards are versioned, ineligible repos refused, non-admins refused', async () => {
   await as('authenticated', A, async () => assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning', 7, 75, 'Do it')`), /administrator/));
   await q(`insert into public.admin_roles (user_id, role) values ($1, 'admin')`, [A]);
-  await q(`insert into public.repositories (full_name, eligible) values ('LightningEg/Lightning_website', false)`);
+  await q(`insert into public.repositories (full_name, eligible) values ('LightningEg/Lightning_market', false)`);
   await as('authenticated', A, async () => {
     assert.equal((await q(`select * from public.publish_reward('LightningEg/Lightning', 7, 75, 'Do it', 'Round money')`)).rows[0].version, 1);
     assert.equal((await q(`select * from public.publish_reward('LightningEg/Lightning', 7, 100, 'Do it better')`)).rows[0].version, 2);
-    await assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning_website', 1, 50, 'x')`), /not eligible/);
+    await assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning_market', 1, 50, 'x')`), /not eligible/);
     await assert.rejects(q(`select * from public.publish_reward('LightningEg/Lightning', 8, -5, 'x')`), /amount/);
   });
   const v = (await q(`select version, amount from public.reward_offer_versions order by version`)).rows;

@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 const script=readFileSync(new URL('../../js/site-membership.js',import.meta.url),'utf8');
-async function page({signedIn=false,ar=false,dismissed=false,blocked=false}={}) {
- const dom=new JSDOM(`<html lang="${ar?'ar-EG':'en'}"><body><a data-site-account>Account</a></body></html>`,{url:'https://lightningeg.com/'+(ar?'ar/':'')+'index.html',runScripts:'outside-only'});
+async function page({signedIn=false,ar=false,dismissed=false,blocked=false,chip=false}={}) {
+ const dom=new JSDOM(`<html lang="${ar?'ar-EG':'en'}"><body>${chip?'<a class="chip me" id="me" data-site-account><svg aria-hidden="true"><circle r="4"/></svg></a>':'<a data-site-account>Account</a>'}</body></html>`,{url:'https://lightningeg.com/'+(ar?'ar/':'')+'index.html',runScripts:'outside-only'});
  const w=dom.window;
  w.HTMLDialogElement.prototype.showModal=function(){this.open=true;};
  w.HTMLDialogElement.prototype.close=function(){this.open=false;};
@@ -18,4 +18,8 @@ w=await page({signedIn:true});assert.equal(w.document.querySelector('dialog'),nu
 w=await page({dismissed:true});assert.equal(w.document.querySelector('dialog'),null);w.close();
 w=await page({blocked:true});assert.ok(w.document.querySelector('dialog').open);w.document.querySelector('[data-later]').click();w.close();
 w=await page({ar:true});assert.equal(w.document.querySelector('dialog a').getAttribute('href'),'../account.html?signup=1');assert.match(w.document.querySelector('h2').textContent,/Lightning/);w.close();
+// The top-bar chip is an icon: signing in must never swap it for the words "My account" (the flash on every page).
+w=await page({signedIn:true,chip:true,dismissed:true});assert.ok(w.document.querySelector('#me svg'),'the icon stays');assert.equal(w.document.querySelector('#me').textContent,'');assert.equal(w.document.querySelector('#me').getAttribute('aria-label'),'My account');w.close();
+w=await page({chip:true,dismissed:true});assert.ok(w.document.querySelector('#me svg'));assert.equal(w.document.querySelector('#me').getAttribute('aria-label'),'Account');w.close();
+w=await page({signedIn:true,chip:true,dismissed:true,ar:true});assert.ok(w.document.querySelector('#me svg'));assert.equal(w.document.querySelector('#me').getAttribute('aria-label'),'حسابي');w.close();
 console.log('Membership invitation: images, account links, dismissal, signed-in suppression, blocked storage and Arabic passed');

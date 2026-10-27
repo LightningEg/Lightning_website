@@ -156,7 +156,12 @@ async function boot(handle = () => ({ data: null, error: null }), url = 'https:/
     updateUser: async a => { calls.push({ fn: 'updateUser', a }); return { error: null }; },
     signOut: async o => { calls.push({ fn: 'signOut', o }); return { error: null }; }
   };
-  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, from: builder, functions: { invoke: (name, options) => { calls.push({fn:'invoke',name,args:options.body}); return Promise.resolve(handle({op:'invoke',name,args:options.body,filters:{}})); } }, rpc: (name, args) => { calls.push({ fn: 'rpc', name, args }); return Promise.resolve(handle({ op: 'rpc', name, args, filters: {} })); } }; } };
+  // Storage: records each upload and removal; the picture's own bytes come from the stubs set by `picture()` below.
+  const storage = { from: bucket => ({
+    upload: async (path, blob, opts) => { calls.push({ fn: 'upload', bucket, path, type: blob.type, size: blob.size, opts }); return storage.result ?? { data: { path }, error: null }; },
+    getPublicUrl: path => ({ data: { publicUrl: `https://x.supabase.co/storage/v1/object/public/${bucket}/${path}` } }),
+    remove: async paths => { calls.push({ fn: 'remove', bucket, paths }); return { error: null }; } }) };
+  w.supabase = { createClient: (u, k, o) => { calls.push({ fn: 'createClient', u, k, o }); return { auth, storage, from: builder, functions: { invoke: (name, options) => { calls.push({fn:'invoke',name,args:options.body}); return Promise.resolve(handle({op:'invoke',name,args:options.body,filters:{}})); } }, rpc: (name, args) => { calls.push({ fn: 'rpc', name, args }); if (name === 'ensure_avatar_path' || name === 'my_avatar_path') return Promise.resolve(storage.pathResult ?? { data: 'a1b2c3d4e5f60718293a4b5c6d7e8f90/avatar', error: null }); return Promise.resolve(handle({ op: 'rpc', name, args, filters: {} })); } }; } };
   w.FORGEEKS = { supabaseUrl: 'https://x.supabase.co', anonKey: 'anon' };
   w.eval(authCode);
   w.URL.createObjectURL = () => 'blob:test'; w.URL.revokeObjectURL = () => {};
@@ -169,7 +174,7 @@ async function boot(handle = () => ({ data: null, error: null }), url = 'https:/
   const set = (id, v) => { const e = $(id) ?? w.document.querySelector(`[name="${id}"]`); if (e.type === 'checkbox') e.checked = v; else e.value = v; };
   const views = () => ['loading', 'out', 'recover', 'in'].filter(v => !$('view-' + v).hidden);
   await tick(30); // the page starts once the document has finished loading
-  return { w, $, calls, fire, submit, click, set, views, navs };
+  return { w, $, calls, fire, submit, click, set, views, navs, storage };
 }
 const session = { user: { id: UID, email: 'ada@example.test' } };
 const account = (extra = {}) => q => {
@@ -504,5 +509,80 @@ await test('owner account menu keeps the resolved profile and links to the main 
  assert.ok(p.$('me-menu').querySelector('a[href="admin.html"]'));
  await p.fire('SIGNED_OUT',null);assert.equal(p.$('me').tagName,'A');
 });
+
+/* ---- profile picture ---- */
+// jsdom has no canvas: a 1000 x 600 picture, and a canvas whose toBlob returns `size` bytes of `type`.
+function picture(p, { width = 1000, height = 600, size = 20000, type = 'image/webp', fileType = 'image/png', fileSize = 3000 } = {}) {
+  const w = p.w, draws = [];
+  w.createImageBitmap = async () => ({ width, height });
+  w.HTMLCanvasElement.prototype.getContext = () => ({ drawImage: (...a) => draws.push(a), fillRect() {}, set globalCompositeOperation(v) {}, set fillStyle(v) {} });
+  w.HTMLCanvasElement.prototype.toBlob = function (cb, t, q) { cb(new w.Blob([new Uint8Array(typeof size === 'function' ? size(q) : size)], { type })); };
+  const file = new w.File([new Uint8Array(fileSize)], 'me.png', { type: fileType });
+  return { file, draws, choose: async () => { Object.defineProperty(p.$('avatar-file'), 'files', { value: [file], configurable: true }); p.$('avatar-file').dispatchEvent(new w.Event('change', { bubbles: true })); await tick(60); } };
+}
+const signedIn = async (extra) => { const p = await boot(account(extra)); await p.fire('INITIAL_SESSION', session); return p; };
+
+await test('picture: choosing one crops a centred square to 256 px, uploads to the member\'s own file and saves the link', async () => {
+  const p = await signedIn(); const pic = picture(p);
+  await pic.choose();
+  assert.deepEqual(pic.draws[0].slice(1), [200, 0, 600, 600, 0, 0, 256, 256], 'the middle square of a wide picture, drawn at 256 px');
+  const up = p.calls.find(c => c.fn === 'upload');
+  assert.ok(up, 'uploaded: ' + p.$('avatar-status').textContent);
+  assert.deepEqual([up.bucket, up.path, up.type, up.opts.upsert, up.opts.contentType], ['avatars', 'a1b2c3d4e5f60718293a4b5c6d7e8f90/avatar', 'image/webp', true, 'image/webp']);
+  assert.ok(!up.path.includes(UID), 'the account id is never in the file path');
+  const save = p.calls.find(c => c.table === 'member_profiles' && c.op === 'update');
+  assert.match(save.payload.avatar_url, /^https:\/\/x\.supabase\.co\/storage\/v1\/object\/public\/avatars\/a1b2c3d4e5f60718293a4b5c6d7e8f90\/avatar\?v=\d+$/);
+  assert.deepEqual(Object.keys(save.payload), ['avatar_url'], 'nothing else is changed');
+  assert.equal(p.$('avatar-status').textContent, 'Picture saved.');
+  assert.ok(p.$('avatar-preview').querySelector('img'));
+  assert.equal(p.$('avatar-remove').hidden, false);
+});
+
+await test('picture: it keeps lowering the quality until it fits the 256 KB limit, then gives up with a plain message', async () => {
+  let p = await signedIn(); let pic = picture(p, { size: q => (q > 0.6 ? 400000 : 90000) });
+  await pic.choose();
+  assert.ok(p.calls.find(c => c.fn === 'upload').size <= 262144, 'a smaller version was uploaded');
+  p = await signedIn(); pic = picture(p, { size: 400000 });
+  await pic.choose();
+  assert.equal(p.calls.some(c => c.fn === 'upload'), false);
+  assert.match(p.$('avatar-status').textContent, /too detailed/);
+});
+
+await test('picture: wrong types, huge files and unreadable images are refused before anything is sent', async () => {
+  let p = await signedIn(); let pic = picture(p, { fileType: 'image/gif' });
+  await pic.choose(); assert.match(p.$('avatar-status').textContent, /PNG, JPEG or WebP/); assert.equal(p.calls.some(c => c.fn === 'upload'), false);
+  p = await signedIn(); pic = picture(p, { fileSize: 13 * 1024 * 1024 });
+  await pic.choose(); assert.match(p.$('avatar-status').textContent, /over 12 MB/); assert.equal(p.calls.some(c => c.fn === 'upload'), false);
+  p = await signedIn(); pic = picture(p); p.w.createImageBitmap = async () => { throw new Error('nope'); };
+  await pic.choose(); assert.match(p.$('avatar-status').textContent, /not a picture this browser can read/);
+});
+
+await test('picture: a refused upload says so and does not save a link', async () => {
+  const p = await signedIn(); const pic = picture(p);
+  p.storage.result = { data: null, error: { message: 'new row violates row-level security policy' } };
+  await pic.choose();
+  assert.equal(p.calls.some(c => c.table === 'member_profiles' && c.op === 'update'), false);
+  assert.equal(p.$('avatar-status').className.includes('bad'), true);
+});
+
+await test('picture: remove clears the link first, then deletes the file', async () => {
+  const p = await signedIn({ member_profiles: { user_id: UID, display_name: 'Ada', avatar_url: 'https://x.supabase.co/storage/v1/object/public/avatars/a1b2c3d4e5f60718293a4b5c6d7e8f90/avatar?v=1', visibility: 'private' } });
+  assert.equal(p.$('avatar-remove').hidden, false);
+  await p.click('avatar-remove'); await tick(30);
+  const order = p.calls.filter(c => (c.table === 'member_profiles' && c.op === 'update') || c.fn === 'remove');
+  assert.deepEqual(order.map(c => c.fn ?? 'update'), ['update', 'remove']);
+  assert.equal(order[0].payload.avatar_url, null);
+  assert.deepEqual([...order[1].paths], ['a1b2c3d4e5f60718293a4b5c6d7e8f90/avatar']);
+  assert.equal(p.$('avatar-remove').hidden, true);
+  assert.equal(p.$('avatar-preview').textContent, 'A', 'back to the initial');
+});
+
+await test('picture: saving the profile form never touches the picture', async () => {
+  const p = await signedIn({ member_profiles: { user_id: UID, display_name: 'Ada', avatar_url: 'https://x.supabase.co/storage/v1/object/public/avatars/a1b2c3d4e5f60718293a4b5c6d7e8f90/avatar?v=1', visibility: 'private', adult_confirmed: false, show_on_leaderboard: false } });
+  await p.submit('form-public'); await tick(30);
+  const save = p.calls.find(c => c.table === 'member_profiles' && c.op === 'update');
+  assert.ok(save && !('avatar_url' in save.payload), 'the form has no picture field to overwrite it with');
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

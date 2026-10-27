@@ -160,13 +160,19 @@
     return b;
   }
 
+  // The main-site marketplace adds a cart (js/market-cart.js); For Geeks has none and buys one item at a time.
+  function addToCart(row, it, cls) {
+    var mc = root.MarketCart, b = mc && mc.button ? mc.button(it, cls) : null;
+    if (b) row.appendChild(b);
+  }
+
   function actions(it, compact) {
     var row = el('div', 'mkt-acts');
     if (!state.signedIn) return row; // signed out: browse only, the sign-in link is at the top
     var ghost = compact ? 'mkt-mini' : 'btn ghost';
     if (it.type === 'set') {
       if (it.owned || priceOf(it) <= 0) row.appendChild(el('span', 'mkt-state', '✓ yours'));
-      else row.appendChild(button(ghost, 'buy set', 'buy', it));
+      else { row.appendChild(button(ghost, 'buy set', 'buy', it)); addToCart(row, it, ghost); }
       return row;
     }
     if (it.equipped) {
@@ -179,6 +185,7 @@
       row.appendChild(el('span', 'mkt-state mkt-earn', it.award === 'founding' ? 'first 100 to top up' : 'earned by topping up'));
     } else {
       row.appendChild(button(ghost, 'buy', 'buy', it));
+      addToCart(row, it, compact ? 'mkt-mini' : 'btn ghost');
     }
     if (giftable(it)) row.appendChild(button('mkt-mini', 'gift', 'gift', it, 'give ' + it.name + ' to another member'));
     return row;
@@ -220,16 +227,26 @@
     var si = $('mkt-signin');
     si.hidden = state.signedIn;
     if (!state.signedIn) si.href = FG.signInHref();
-    var themes = state.items.filter(function (i) { return i.type === 'theme'; });
+    // The collection page (collection.html) is this market drawn with only what the member owns.
+    var mine = !!doc.body.dataset.collection;
+    var items = mine ? state.items.filter(function (i) { return i.owned && i.type !== 'set'; }) : state.items;
+    var col = $('mkt-collection');
+    if (col) col.hidden = !state.signedIn;
+    var themes = items.filter(function (i) { return i.type === 'theme'; });
     fill('list-themes', themes.filter(function (i) { return !i.is_default; }));
     fill('list-free', themes.filter(function (i) { return i.is_default; }));
-    fill('list-banners', state.items.filter(function (i) { return i.type === 'banner'; }));
-    if ($('list-frames')) fill('list-frames', state.items.filter(function (i) { return i.type === 'frame'; }));
-    if ($('list-badges')) fill('list-badges', state.items.filter(function (i) { return i.type === 'badge'; }));
-    if ($('list-names')) fill('list-names', state.items.filter(function (i) { return i.type === 'name'; }));
-    if ($('list-sets')) fill('list-sets', state.items.filter(function (i) { return i.type === 'set'; }));
+    fill('list-banners', items.filter(function (i) { return i.type === 'banner'; }));
+    if ($('list-frames')) fill('list-frames', items.filter(function (i) { return i.type === 'frame'; }));
+    if ($('list-badges')) fill('list-badges', items.filter(function (i) { return i.type === 'badge'; }));
+    if ($('list-names')) fill('list-names', items.filter(function (i) { return i.type === 'name'; }));
+    if ($('list-sets')) fill('list-sets', mine ? [] : items.filter(function (i) { return i.type === 'set'; }));
     ['frames', 'badges', 'names', 'sets'].forEach(function (k) { var sec = $('sec-' + k); if (sec) sec.hidden = $('list-' + k).children.length === 0; });
     $('h-free').hidden = $('list-free').children.length === 0;
+    if (mine) {
+      var paid = items.some(function (i) { return !i.is_default; });
+      ['themes', 'banners'].forEach(function (k) { var l = $('list-' + k), sec = l && l.closest('section'); if (sec) sec.hidden = k === 'themes' ? false : l.children.length === 0; });
+      var empty = $('col-empty'); if (empty) empty.hidden = !state.signedIn || paid;
+    }
     var done = ui('rendered');
     if (done) done(state);
   }
@@ -510,7 +527,7 @@
     });
   }
 
-  root.LightningMarket = { state: state, buy: function (it, b) { if (!state.busy) openBuy(it, b); }, act: onAct, render: render };
+  root.LightningMarket = { state: state, reload: load, buy: function (it, b) { if (!state.busy) openBuy(it, b); }, act: onAct, render: render };
 
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 })(window);
