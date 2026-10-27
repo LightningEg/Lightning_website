@@ -60,7 +60,7 @@ def build():
         if name=='profile':css+=['css/forgeeks-profile.css']
         css+=['css/site-account.css','css/site-community.css','css/footer.css']
         # the market's own files change often: a version so browsers fetch the new copy
-        SHOP='?v=20261027-layout-1'
+        SHOP='?v=20261027-bundles-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
         scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js','js/activation-codes.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)

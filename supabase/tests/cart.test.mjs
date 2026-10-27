@@ -172,6 +172,105 @@ await test('deleting an account removes its cart and orders but keeps anonymous 
   assert.equal(Number((await q(`select count(*) c from public.cart_events where user_id=$1`, [M])).rows[0].c), 0, 'but no longer name anyone');
 });
 
+// ---------------------------------------------------------------- 8N: the cart offers the cheaper set
+const sugg = u => view(u).then(v => v.suggestions);
+const swap = (u, id) => rpc(u, `select public.cart_swap_for_set($1) v`, [id]).then(r => r.v);
+const NILE = ['nile', 'banner-nile-flow', 'frame-nile', 'name-nile'];
+await test('suggestions: a set appears once the cart and the inventory cover half of its parts, with the saving and the extra cost', async () => {
+  const U = await newUser('suggest');
+  assert.deepEqual(await sugg(U), []);
+  await add(U, 'nile');
+  assert.deepEqual(await sugg(U), [], 'one of four parts is under half');
+  await add(U, 'banner-nile-flow');
+  const [s] = await sugg(U);
+  assert.equal(s.set_id, 'set-nile');
+  assert.equal(s.name, 'Nile set');
+  assert.deepEqual([s.parts_in_cart, s.parts_total], [2, 4]);
+  const prices = await Promise.all(NILE.map(price));
+  const listed = prices.reduce((a, b) => a + b, 0);
+  assert.equal(s.price, (await q(`select private.set_price('set-nile', $1) p`, [U])).rows[0].p, 'the price checkout uses');
+  assert.equal(s.saving, listed - s.price, 'the saving is what the parts cost one by one minus the set price');
+  assert.ok(s.saving > 0);
+  assert.equal(s.extra, s.price - prices[0] - prices[1], 'what the set adds to today\'s cart total');
+  // the same price the cart then charges for the set
+  const after = await add(U, 'set-nile');
+  assert.equal(after.lines.find(l => l.item_id === 'set-nile').price, s.price);
+  assert.deepEqual(after.suggestions, [], 'in the cart already: nothing to suggest');
+});
+
+await test('suggestions: owned parts count toward the half, a set you own or cannot buy is never offered', async () => {
+  const U = await newUser('owned-half');
+  await topUp(U, 5000);
+  await rpc(U, `select * from public.purchase_item_at_price('frame-nile',$1,$2)`, [await price('frame-nile'), key()]);
+  await add(U, 'name-nile');
+  const [s] = await sugg(U);
+  assert.equal(s.set_id, 'set-nile', 'one owned plus one in the cart is half');
+  const unowned = await Promise.all(['nile', 'banner-nile-flow', 'name-nile'].map(price));
+  assert.equal(s.saving, unowned.reduce((a, b) => a + b, 0) - s.price, 'owned parts are not counted in the saving');
+  await q(`update public.catalog_items set active=false where id='banner-nile-flow'`);
+  assert.deepEqual(await sugg(U), [], 'a part that is not on sale: the swap would fail, so it is not offered');
+  await q(`update public.catalog_items set active=true where id='banner-nile-flow'`);
+  assert.equal((await sugg(U)).length, 1);
+});
+await test('suggestions: a set you own is never offered', async () => {
+  const W = await newUser('owns-set');
+  await q(`insert into public.inventory (user_id, item_id) values ($1,'set-nile'), ($1,'nile'), ($1,'banner-nile-flow')`, [W]);
+  await add(W, 'name-nile');
+  assert.deepEqual(await sugg(W), []);
+});
+
+await test('cart_swap_for_set: the parts leave, the set comes in, in one step, and the saving is real', async () => {
+  const U = await newUser('swapper');
+  await add(U, 'nile'); await add(U, 'banner-nile-flow'); await add(U, 'banner-dusk');
+  const before = await view(U);
+  const [s] = before.suggestions;
+  const v = await swap(U, 'set-nile');
+  assert.deepEqual(v.lines.map(l => l.item_id).sort(), ['banner-dusk', 'set-nile']);
+  assert.equal(v.lines.find(l => l.item_id === 'set-nile').price, s.price);
+  assert.equal(v.total, s.price + await price('banner-dusk'));
+  assert.deepEqual(v.suggestions, []);
+  const log = (await q(`select item_id, event from public.cart_events where user_id=$1 order by id`, [U])).rows.map(r => r.item_id + ':' + r.event);
+  assert.ok(log.includes('nile:remove') && log.includes('banner-nile-flow:remove') && log.includes('set-nile:add'));
+  // buying it charges exactly what the cart said
+  await topUp(U, 5000);
+  const bought = await checkout(U, v.total);
+  assert.equal(bought.total, v.total);
+  assert.ok(await owns(U, 'set-nile') && await owns(U, 'frame-nile'));
+});
+
+await test('cart_swap_for_set: a refusal changes nothing (all or nothing)', async () => {
+  const U = await newUser('refused');
+  // a set that shares a part with a set already in the cart: cart_add refuses it, and the parts must stay in the cart
+  await q(`insert into public.catalog_items (id, type, name, description, price) values ('set-clash','set','Clash set','Shares the gold ring with Dusk.',500)`);
+  await q(`insert into public.set_parts (set_id, item_id) values ('set-clash','frame-gold'), ('set-clash','banner-halo')`);
+  await add(U, 'set-dusk'); await add(U, 'frame-gold');
+  const before = (await view(U)).lines.map(l => l.item_id).sort();
+  await assert.rejects(swap(U, 'set-clash'), /shares parts/);
+  assert.deepEqual((await view(U)).lines.map(l => l.item_id).sort(), before, 'frame-gold is still in the cart');
+  // every part owned: nothing to switch to
+  const O = await newUser('owns-all');
+  await q(`insert into public.inventory (user_id, item_id) select $1, item_id from public.set_parts where set_id = 'set-cotton'`, [O]);
+  await assert.rejects(swap(O, 'set-cotton'), /already own every part/);
+  // a part that is not on sale, and things that are not sets
+  const P = await newUser('offsale');
+  await add(P, 'nile'); await add(P, 'banner-nile-flow');
+  await q(`update public.catalog_items set active=false where id='frame-nile'`);
+  await assert.rejects(swap(P, 'set-nile'), /not on sale/);
+  assert.deepEqual((await view(P)).lines.map(l => l.item_id).sort(), ['banner-nile-flow', 'nile']);
+  await q(`update public.catalog_items set active=true where id='frame-nile'`);
+  await assert.rejects(swap(P, 'nile'), /not available/);
+  await assert.rejects(swap(P, 'nope'), /not available/);
+});
+
+await test('cart_swap_for_set: signed-in members only, and one member cannot touch another\'s cart', async () => {
+  const A = await newUser('member-a'), B = await newUser('member-b');
+  await add(A, 'nile'); await add(A, 'banner-nile-flow');
+  await as('anon', null, () => assert.rejects(q(`select public.cart_swap_for_set('set-nile')`), /permission denied/));
+  await swap(B, 'set-nile'); // B's own cart only
+  assert.deepEqual((await view(A)).lines.map(l => l.item_id).sort(), ['banner-nile-flow', 'nile']);
+  assert.deepEqual((await view(B)).lines.map(l => l.item_id), ['set-nile']);
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();
 process.exitCode = failed ? 1 : 0;
