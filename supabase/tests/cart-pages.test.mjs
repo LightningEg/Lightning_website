@@ -116,31 +116,31 @@ await test('cart: the window lists lines, the total and the balance after; buy e
   await p.click(p.$('cart-open'));
   assert.equal(p.$('cart').hidden, false);
   assert.equal(p.w.document.querySelectorAll('#cart-lines .mkt-cart-line').length, 2);
-  assert.equal(p.$('cart-total').textContent, '190 coins');
-  assert.equal(p.$('cart-now').textContent, '500 coins');
-  assert.equal(p.$('cart-after').textContent, '310 coins');
+  assert.equal(p.$('cart-total').textContent, '190 Cotton');
+  assert.equal(p.$('cart-now').textContent, '500 Cotton');
+  assert.equal(p.$('cart-after').textContent, '310 Cotton');
   await p.click(p.$('cart-ok'));
   const sent = p.rpcs('checkout_cart');
   assert.equal(sent.length, 1);
   assert.equal(sent[0].args.p_expected_total, 190);
   assert.ok(sent[0].args.p_idempotency_key.length >= 8 && sent[0].args.p_idempotency_key.length <= 36);
   assert.equal(p.$('cart-title').textContent, 'order placed');
-  assert.equal(p.$('cart-total').textContent, '190 coins');
-  assert.equal(p.$('cart-now').textContent, '310 coins');
+  assert.equal(p.$('cart-total').textContent, '190 Cotton');
+  assert.equal(p.$('cart-now').textContent, '310 Cotton');
   assert.equal(p.$('cart-open').textContent.trim(), 'cart 0');
   assert.ok(p.rpcs('market_catalog').length >= 2, 'the market is read again so the cards show Owned');
   await p.click(p.$('cart-ok')); // hidden after success
   assert.equal(p.rpcs('checkout_cart').length, 1);
 });
 
-await test('cart: not enough coins says how many more, offers a top-up, and keeps the cart', async () => {
+await test('cart: not enough Cotton says how many more, offers a top-up, and keeps the cart', async () => {
   const p = await boot({ cart: ['moss'], balance: 100 });
   await p.click(p.$('cart-open'));
-  assert.equal(p.$('cart-after').textContent, '−50 coins');
+  assert.equal(p.$('cart-after').textContent, '−50 Cotton');
   assert.equal(p.$('cart-ok').disabled, true);
   assert.equal(p.$('cart-topup').hidden, false);
   assert.equal(p.$('cart-topup').getAttribute('href'), 'topup.html');
-  assert.match(p.$('cart-status').textContent, /50 coins more/);
+  assert.match(p.$('cart-status').textContent, /50 Cotton more/);
   assert.equal(p.rpcs('checkout_cart').length, 0, 'nothing is sent that cannot work');
 });
 
@@ -149,7 +149,7 @@ await test('cart: a price that changed reloads the cart and asks again; the same
   await p.click(p.$('cart-open'));
   await p.click(p.$('cart-ok'));
   assert.match(p.$('cart-status').textContent, /price changed/i);
-  assert.equal(p.$('cart-total').textContent, '120 coins', 'the new total is shown');
+  assert.equal(p.$('cart-total').textContent, '120 Cotton', 'the new total is shown');
   assert.equal(p.$('cart-title').textContent, 'your cart');
   await p.click(p.$('cart-ok'));
   assert.equal(p.rpcs('checkout_cart')[1].args.p_expected_total, 120);
@@ -165,7 +165,7 @@ await test('cart: an item that is no longer on sale blocks buying until it is re
   assert.match(p.$('cart-status').textContent, /Remove the items marked/);
   await p.click(p.w.document.querySelector('#cart-lines .mkt-cart-line .mkt-mini'));
   assert.equal(p.$('cart-ok').disabled, false);
-  assert.equal(p.$('cart-total').textContent, '40 coins');
+  assert.equal(p.$('cart-total').textContent, '40 Cotton');
 });
 
 await test('cart: empty cart clears everything; Escape closes the window and returns focus', async () => {
@@ -250,7 +250,7 @@ await test('main: the cart window offers the cheaper set, and one press swaps th
   const p = await boot({ main: true, cart: ['moss', 'banner-halo'] });
   await p.click(p.$('cart-fab'));
   const btn = p.w.document.querySelector('.mkt-suggest-btn');
-  assert.equal(btn.textContent, 'Switch to the Moss set: save 50 coins');
+  assert.equal(btn.textContent, 'Switch to the Moss set: save 50 Cotton');
   assert.equal(p.w.document.querySelectorAll('.mkt-suggest-btn').length, 1);
   await p.click(btn);
   assert.equal(p.rpcs('cart_swap_for_set').length, 1);

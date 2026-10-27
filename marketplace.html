@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="css/site-account.css?v=20261027-header-1">
 <link rel="stylesheet" href="css/site-community.css?v=20261027-stories-1">
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
-<script src="js/theme.js"></script></head>
+<script src="js/theme.js"></script><link rel="stylesheet" href="css/market-steps.css?v=20261027-plants-1">
+</head>
 <body data-account-page="account.html" data-main-store="true"><div class="d-bar">
   <div class="wrap">
     <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
@@ -34,7 +35,8 @@
   <section class="s acct-top" aria-labelledby="h1">
     <div class="wrap">
       <h1 id="h1">Make it your own.</h1>
-      <p class="lede">One account, one collection. Try anything on first: themes on this page, banners, frames and badges on your look. Buy with coins from <a href="topup.html">your wallet</a> or <a href="stories.html">a story you share</a>. A theme you own dresses this website, For Geeks and the app.</p>
+      <p class="lede">Themes and looks for your profile, this site and the app. Try anything on before you buy.</p>
+      <ol class="mk-steps" aria-label="How buying works"><li><b>1</b><span><a href="topup.html">Top up with InstaPay</a>, or earn Cotton with <a href="community.html">your work</a>.</span></li><li><b>2</b><span>Try it on. Nothing is charged.</span></li><li><b>3</b><span>Buy it once. It dresses the site and <a href="#app-guide">the app</a>.</span></li></ol>
 
       <div class="acct mkt">
         <p id="mkt-msg" class="acct-msg" role="status" aria-live="polite" hidden></p>
@@ -42,47 +44,41 @@
 
         <div id="mkt-body" hidden>
           <div class="mkt-bar">
-            <span class="chip" id="wallet" hidden>coins <b id="coins">0</b></span>
+            <span class="chip" id="wallet" hidden>Cotton <b id="coins">0</b></span>
             <a class="btn ghost" id="mkt-signin" href="account.html" hidden>sign in to buy</a><a class="btn ghost" id="mkt-collection" href="collection.html" hidden>your collection</a>
             <p class="fine">Mono is free. Other palettes require ownership. Contrast, reduced motion and keyboard access come with every theme.</p>
           </div>
 
           <section class="mkt-sec" aria-labelledby="h-themes">
             <h2 id="h-themes">Themes</h2>
-            <p class="why">Colours, and a woven texture in the textured tier. Layout, sizes and words never change. Try any theme on this page, or open Details to see it on the website, the computer and the phone.</p>
-            <ul class="mkt-grid themes" id="list-themes"></ul>
+                        <ul class="mkt-grid themes" id="list-themes"></ul>
             <h3 class="mkt-sub" id="h-free">Free palette</h3>
             <ul class="mkt-free" id="list-free" aria-labelledby="h-free"></ul>
           </section>
 
           <section class="mkt-sec" id="sec-sets" aria-labelledby="h-sets" hidden>
-            <h2 id="h-sets">sets</h2>
-            <p class="why">A theme, a banner, a frame and a fourth piece that belong together, for 80% of the parts you do not own yet.</p>
-            <ul class="mkt-grid sets" id="list-sets"></ul>
+            <h2 id="h-sets">Sets</h2>
+                        <ul class="mkt-grid sets" id="list-sets"></ul>
           </section>
 
           <section class="mkt-sec" aria-labelledby="h-banners">
             <h2 id="h-banners">Banners</h2>
-            <p class="why">A strip across the top of your profile and your account page. No text, no links.</p>
-            <ul class="mkt-grid banners" id="list-banners"></ul>
+                        <ul class="mkt-grid banners" id="list-banners"></ul>
           </section>
 
           <section class="mkt-sec" id="sec-frames" aria-labelledby="h-frames" hidden>
             <h2 id="h-frames">Frames</h2>
-            <p class="why">A ring around your picture on your profile, the leaderboard and your stories.</p>
-            <ul class="mkt-grid frames" id="list-frames"></ul>
+                        <ul class="mkt-grid frames" id="list-frames"></ul>
           </section>
 
           <section class="mkt-sec" id="sec-names" aria-labelledby="h-names" hidden>
-            <h2 id="h-names">names</h2>
-            <p class="why">Your display name in a colour of its own on your profile, the leaderboard and members. Still readable in light and dark.</p>
-            <ul class="mkt-grid names" id="list-names"></ul>
+            <h2 id="h-names">Names</h2>
+                        <ul class="mkt-grid names" id="list-names"></ul>
           </section>
 
           <section class="mkt-sec" id="sec-badges" aria-labelledby="h-badges" hidden>
             <h2 id="h-badges">Badges</h2>
-            <p class="why">A small mark beside your name. Looks only: it never changes your rank. Supporter badges are earned by topping up, never sold.</p>
-            <div class="mkt-supporter" id="mkt-supporter" hidden></div>
+                        <div class="mkt-supporter" id="mkt-supporter" hidden></div>
             <ul class="mkt-grid badges" id="list-badges"></ul>
           </section>
         </div>
@@ -98,7 +94,7 @@
     <li>In the app, open <b>Settings › Appearance</b>, paste the code and press <b>Unlock</b>. Do this once: your profile’s other devices unlock by themselves.</li>
   </ol>
   <p class="mkt-guide-note">Another profile needs its own unlock, at a quarter of the price. Unlocking needs the app update that adds <b>Unlock a theme you bought</b>.</p>
-  <p class="mkt-guide-links"><a href="current-status.html#app-themes">Downloads and app steps</a> · <a href="topup.html">Add coins to your wallet</a></p>
+  <p class="mkt-guide-links"><a href="current-status.html#app-themes">Downloads and app steps</a> · <a href="topup.html">Add Cotton to your wallet</a></p>
 </div></section>
 <section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>At checkout, copy your Lightning account email into the transfer note, then upload your receipt, payment reference and sending InstaPay address on the website. Coins are added only after we review the receipt and separately confirm that the transfer reached our account.</p></details></section></main><div class="wrap"><footer class="sf"><section class="sf-contact" aria-labelledby="sf-contact-title"><div><h2 id="sf-contact-title">Contact Us</h2><p>Questions, ideas or something not working? Write to us.</p></div><ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><small>General questions</small><span><a href="mailto:hello@lightningeg.com"><bdi>hello@lightningeg.com</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><small>Feedback on the app</small><span><a href="mailto:feedback@lightningeg.com"><bdi>feedback@lightningeg.com</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><small>Community</small><span><a href="https://www.reddit.com/r/LightningEg/" target="_blank" rel="noopener"><bdi>r/LightningEg on Reddit</bdi></a></span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><small>Chat with other testers</small><span><a href="https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET" target="_blank" rel="noopener">WhatsApp</a> · <a href="https://discord.gg/fukkUs263W" target="_blank" rel="noopener">Discord</a></span></li></ul></section><div class="sf-main"><div class="sf-brand"><a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a><p>Made in Egypt. Your money stays on your devices.</p></div><nav class="sf-col" aria-label="Explore"><h3>Explore</h3><ul><li><a href="features.html">Features</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="current-status.html">Downloads</a></li><li><a href="guides.html">Guides</a></li><li><a href="contribute.html">Contribute</a></li></ul></nav><nav class="sf-col" aria-label="More"><h3>More</h3><ul><li><a href="release-log.html">Release Log</a></li><li><a href="survey.html">Survey</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="forgeeks.html">For Geeks</a></li><li><a href="account.html">Account</a></li><li><a href="stories.html">Stories</a></li><li><a href="leaderboard.html">Leaderboard</a></li><li><a href="marketplace.html">Marketplace</a></li></ul></nav></div></footer></div><div class="mkt-dlg" id="buy" hidden>
   <div class="mkt-back" data-close></div>
@@ -130,9 +126,9 @@
 <script src="js/forgeeks-showcase.js?v=20261025-supporter-1"></script>
 <script src="js/theme-preview.js?v=20261027-cart-1"></script>
 <script src="js/cosmetic-parts.js"></script>
-<script src="js/market-ui.js?v=20261027-layout-1"></script>
-<script src="js/forgeeks-market.js?v=20261027-cart-1"></script>
-<script src="js/market-cart.js?v=20261027-layout-1"></script>
+<script src="js/market-ui.js?v=20261027-plants-1"></script>
+<script src="js/forgeeks-market.js?v=20261027-plants-1"></script>
+<script src="js/market-cart.js?v=20261027-plants-1"></script>
 <script src="js/activation-codes.js?v=20261027-layout-1"></script>
-<script src="js/site-words.js"></script><script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-looks-1" defer></script>
+<script src="js/site-words.js"></script><script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-plants-1" defer></script>
 </body></html>

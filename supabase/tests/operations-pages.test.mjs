@@ -39,7 +39,7 @@ assert.match(p.$('topup-details').textContent,/project@instapay.*Lightning Recip
 assert.equal(p.w.document.querySelector('input[type=file]'),null,'no receipt upload');assert.match(p.$('topup-rate').textContent,/1 EGP = 5 coins.*5% bonus from 100 EGP/);
 // step 2: date, amount, where they paid from
 await p.click(p.$('topup-sent'));assert.equal(p.$('topup-pay').hidden,true);assert.equal(p.$('topup-confirm').hidden,false);assert.equal(p.$('topup-confirm').elements.date.value,today);
-assert.equal(p.$('topup-send').disabled,true,'nothing to send before the coins show');await p.price();assert.match(p.$('topup-quote').textContent,/You receive 525 coins \(500 \+ 25 bonus\)/);
+assert.equal(p.$('topup-send').disabled,true,'nothing to send before the coins show');await p.price();assert.match(p.$('topup-quote').textContent,/You receive 525 Cotton \(500 \+ 25 bonus\)/);
 const f=p.$('topup-confirm');f.elements.payer.value='1';f.elements.terms.checked=true;await p.submit('topup-confirm');
 assert.equal(p.calls.some(c=>c.name==='submit_instapay_topup'),false);
 assert.match(p.$('topup-status').textContent,/InstaPay address or wallet phone/);
@@ -50,7 +50,7 @@ assert.equal(p.$('topup-form-error'),null,'correcting the field clears the error
 p.$('topup-confirm').dispatchEvent(new p.w.Event('submit',{cancelable:true}));await p.submit('topup-confirm');
 const sends=p.calls.filter(c=>c.name==='submit_instapay_topup');assert.equal(sends.length,1,'a double click sends once');
 assert.deepEqual({...sends[0].args,p_request_key:undefined},{p_amount_piastres:10000,p_request_key:undefined,p_accept_terms:true,p_expected_coins:525,p_pricing_version:1,p_payer:'+20 100 123 4567',p_sent_on:today});
-assert.equal(p.$('topup-confirm').hidden,true);assert.match(p.$('topup-status').textContent,/add 525 coins once your 100 EGP shows/);assert.equal(p.$('topup-new').hidden,false);
+assert.equal(p.$('topup-confirm').hidden,true);assert.match(p.$('topup-status').textContent,/add 525 Cotton once your 100 EGP shows/);assert.equal(p.$('topup-new').hidden,false);
 await p.click(p.$('topup-new'));assert.equal(p.$('topup-pay').hidden,false);
 await p.click(p.$('topup-sent'));await p.click(p.$('topup-back'));assert.equal(p.$('topup-pay').hidden,false,'a way back to the details');p.close();
 // A payment already sent above the former 10,000 EGP cap can be reported as one transfer.
@@ -73,9 +73,9 @@ assert.equal(p.calls.find(c=>c.name==='submit_instapay_topup').args.p_request_ke
 // sent details show as being checked, with no actions
 p=await boot();p.state.rows=[{...proof,details_submitted_at:'2026-10-26T10:00:00Z',member_sent_on:'2026-10-26'}];await p.click(p.$('topup-refresh'));assert.match(p.$('topup-history').textContent,/Being checked.*paid 2026-10-26/);assert.equal(p.$('topup-history').querySelectorAll('button').length,0);p.close();
 // closed: no details to copy, history stays
-p=await boot({closed:true});assert.equal(p.$('topup-pay').hidden,true);assert.match(p.$('topup-status').textContent,/closed/);assert.match(p.$('topup-history').textContent,/coins/);p.close();
+p=await boot({closed:true});assert.equal(p.$('topup-pay').hidden,true);assert.match(p.$('topup-status').textContent,/closed/);assert.match(p.$('topup-history').textContent,/Cotton/);p.close();
 // signing out while sending shows nothing of the old account
 let finish;const pending=new Promise(r=>finish=r);p=await boot({rpc:name=>name==='submit_instapay_topup'?pending:null});await p.click(p.$('topup-sent'));await p.price();p.$('topup-confirm').elements.payer.value='me@instapay';p.$('topup-confirm').elements.terms.checked=true;
 p.$('topup-confirm').dispatchEvent(new p.w.Event('submit',{cancelable:true}));await tick();await p.signOut();finish({data:{...proof,coins:525},error:null});await tick();
-assert.doesNotMatch(p.$('topup-status').textContent,/525 coins/);assert.equal(p.$('topup-history').textContent,'');assert.equal(p.$('topup-details').textContent,'');p.close();
+assert.doesNotMatch(p.$('topup-status').textContent,/525 Cotton/);assert.equal(p.$('topup-history').textContent,'');assert.equal(p.$('topup-details').textContent,'');p.close();
 console.log('Checkout UI: copy details, confirm date, amount and sender, one send per click, paused history and sign-out privacy passed');

@@ -50,7 +50,7 @@ FOOTER_COLUMNS = [
     ("Rules", [("forgeeks-guide.html#product", "What Lightning is"), ("forgeeks-guide.html#rules", "Ground rules"),
                ("forgeeks-guide.html#team", "Who does what"), (f"{GH}/blob/main/LICENSE", "Licence"),
                (f"{GH}/security/advisories/new", "Report a flaw privately")]),
-    ("Community", [("https://discord.gg/fukkUs263W", "Discord"), ("https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET", "WhatsApp"),
+    ("Community", [("community.html", "Builders and leaderboard"), ("https://discord.gg/fukkUs263W", "Discord"), ("https://chat.whatsapp.com/DNIR1vwjegeFU9dCIOp4ET", "WhatsApp"),
                    ("https://www.reddit.com/r/LightningEg/", "r/LightningEg"), ("mailto:geeks@lightningeg.com", "geeks@lightningeg.com"),
                    ("index.html", "Lightning, the app")]),
 ]

@@ -34,8 +34,8 @@ const catalog = () => [
   { id: 'name-gold', type: 'name', name: 'Gold name', description: 'Warm gold.', price: 150, is_default: false },
   { id: 'set-nile', type: 'set', name: 'Nile set', description: 'Four parts.', price: 880, is_default: false, parts: ['banner-nile-flow', 'frame-nile', 'name-nile', 'nile'], set_price: 704 },
   { id: 'badge-founding', type: 'badge', name: 'Founding supporter', description: 'First 100.', price: 0, is_default: false, award: 'founding' },
-  { id: 'badge-supporter-bronze', type: 'badge', name: 'Bronze supporter', description: '500 coins.', price: 0, is_default: false, award: 'supporter', award_coins: 500 },
-  { id: 'badge-supporter-silver', type: 'badge', name: 'Silver supporter', description: '2,500 coins.', price: 0, is_default: false, award: 'supporter', award_coins: 2500 }
+  { id: 'badge-supporter-bronze', type: 'badge', name: 'Bronze supporter', description: '500 Cotton.', price: 0, is_default: false, award: 'supporter', award_coins: 500 },
+  { id: 'badge-supporter-silver', type: 'badge', name: 'Silver supporter', description: '2,500 Cotton.', price: 0, is_default: false, award: 'supporter', award_coins: 2500 }
 ];
 const STATUS = { topped_up_coins: 1350, tiers: [{ id: 'badge-supporter-bronze', name: 'Bronze supporter', coins: 500, owned: true }, { id: 'badge-supporter-silver', name: 'Silver supporter', coins: 2500, owned: false }], founding_left: 73, founding_owned: false };
 const POLL = (vote = null, can = true) => ({ options: [{ id: 'lotus', name: 'Lotus', description: 'Pink lotus.', votes: 3 }, { id: 'khan', name: 'Khan el-Khalili', description: 'Brass.', votes: 1 }], my_vote: vote, can_vote: can });
@@ -90,11 +90,11 @@ await test('sets: 80% of what you do not own, the full price struck through, bou
   const c = p.cell('set-nile');
   assert.ok(p.$('list-sets').contains(c));
   assert.match(c.querySelector('.mkt-tag').textContent, /704/);
-  assert.match(c.textContent, /Instead of 880 coins/);
+  assert.match(c.textContent, /Instead of 880 Cotton/);
   assert.ok(c.querySelector('.mkt-pv-set .fg-banner[data-item="banner-nile-flow"]'), 'the set shows its banner');
   assert.equal(p.btn('set-nile', 'Gift'), undefined, 'sets are not gifts');
   await p.click(p.btn('set-nile', 'Buy set'));
-  assert.match(p.$('buy-price').textContent, /704 coins/);
+  assert.match(p.$('buy-price').textContent, /704 Cotton/);
   await p.click(p.$('buy-ok'));
   await tick(60);
   const call = p.calls.find(c => c.fn === 'purchase_set');
@@ -113,7 +113,7 @@ await test('names: their own tab, each previewed in its style; earned badges are
   assert.match(p.cell('badge-founding').querySelector('.mkt-acts').textContent, /First 100 to top up/);
   assert.ok(p.btn('badge-supporter-bronze', 'Wear'), 'an earned badge you hold is worn like any other (the main site now says Wear, 8M)');
   const box = p.$('mkt-supporter');
-  assert.match(box.textContent, /1,350 coins topped up\. Silver supporter at 2,500 coins: 1,150 coins to go\./);
+  assert.match(box.textContent, /1,350 Cotton topped up\. Silver supporter at 2,500 Cotton: 1,150 Cotton to go\./);
   assert.match(box.textContent, /73 of 100 places left/);
   assert.equal(box.querySelector('[role=meter]').getAttribute('aria-valuenow'), '1350');
   assert.equal(box.querySelector('.mkt-sup-legend b').textContent, 'Bronze 500', 'the badges you hold are bold');

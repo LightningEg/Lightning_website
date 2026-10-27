@@ -59,13 +59,13 @@
     var s = el('span', 'mkt-price'); add(s, [coin(), el('span', null, String(n))]);
     var e = egp(n);
     if (e) s.appendChild(el('small', 'mkt-egp', e + ' EGP'));
-    s.setAttribute('aria-label', n + (n === 1 ? ' coin' : ' coins') + (e ? ', about ' + e + ' EGP' : ''));
+    s.setAttribute('aria-label', n + (n === 1 ? ' Cotton' : ' Cotton') + (e ? ', about ' + e + ' EGP' : ''));
     return s;
   }
   // a theme's tier (guideline/themes.md section 7): from the catalog, else from the seed
   function tierOf(it) { if (it.tier) return it.tier; var t = siteTheme(it.id); return t && t.tex ? 'texture' : 'palette'; }
   var TIER_WORD = { palette: 'Palette', texture: 'Textured', motion: 'Animated' };
-  function coinsWord(n) { return Number(n).toLocaleString('en-US') + (n === 1 ? ' coin' : ' coins'); }
+  function coinsWord(n) { return Number(n).toLocaleString('en-US') + (n === 1 ? ' Cotton' : ' Cotton'); }
   function siteTheme(id) { var l = (LG && LG.THEMES) || []; for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
   function items(type) { return ms ? ms.items.filter(function (i) { return i.type === type; }) : []; }
   function equippedOf(type) { var l = items(type); for (var i = 0; i < l.length; i++) if (l[i].equipped) return l[i]; return null; }
@@ -114,8 +114,8 @@
     var chip = $('wallet');
     if (chip) chip.insertBefore(coin(), chip.firstChild);
     var earn = el('p', 'mkt-earn');
-    if (MAIN) add(earn, [link('topup.html', 'Top up your wallet'), link('stories.html', 'Share a story for coins')]);
-    else add(earn, [link('forgeeks-tasks.html', 'Earn coins with open tasks')]);
+    if (MAIN) add(earn, [link('topup.html', 'Top up your wallet'), link('stories.html', 'Share a story to earn Cotton')]);
+    else add(earn, [link('forgeeks-tasks.html', 'Earn Cotton with open tasks')]);
     wallet.appendChild(earn);
 
     // what a buyer gets, said once, beside the wallet
@@ -124,7 +124,7 @@
     [['Pay once, keep it', 'No subscription. What you buy stays on your account.'],
      ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app too, unlocked once per profile.' : 'Here and on the main site. The app too, unlocked once per profile.'],
      ['Looks only', 'Every feature of Lightning stays free. Nothing here changes a number or a rank.'],
-     ['Paid in Egypt', 'InstaPay, checked by a person. Coins arrive once your transfer does.']].forEach(function (x) {
+     ['Paid in Egypt', 'InstaPay, checked by a person. Cotton arrive once your transfer does.']].forEach(function (x) {
       trust.appendChild(add(el('li'), [el('b', null, ui(x[0])), el('span', null, x[1])]));
     });
     top.parentNode.insertBefore(trust, top.nextSibling);
@@ -650,13 +650,13 @@
     var missing = it.price - balance;
     s.hidden = missing <= 0;
     if (missing <= 0) return;
-    $('buy-title').textContent = 'not enough coins for ' + it.name.toLowerCase();
+    $('buy-title').textContent = 'not enough Cotton for ' + it.name.toLowerCase();
     $('buy-status').textContent = '';
     $('buy-ok').hidden = true;
     $('buy-cancel').textContent = 'close';
     $('buy-cancel').focus();
     add(s, [el('p', 'mkt-short-need', 'You need ' + coinsWord(missing) + ' more' + (egp(missing) ? ', about ' + Math.max(1, egp(missing)) + ' EGP.' : '.')),
-      el('p', 'mkt-short-how', MAIN ? 'Coins come from wallet top-ups and from stories you share. Your score stays as it is.' : 'Coins come from merged tasks and accepted feedback. Your score stays as it is.')]);
+      el('p', 'mkt-short-how', MAIN ? 'Cotton come from wallet top-ups and from stories you share. Your score stays as it is.' : 'Cotton come from merged tasks and accepted feedback. Your score stays as it is.')]);
     var ways = el('div', 'mkt-short-ways');
     if (MAIN) add(ways, [link('topup.html', 'Top up your wallet'), link('stories.html', 'Share a story')]);
     else add(ways, [link('forgeeks-tasks.html', 'See open tasks')]);
@@ -690,7 +690,7 @@
     else line.textContent = 'Gold supporter. Thank you for keeping Lightning free.';
     var top = s.tiers.length ? s.tiers[s.tiers.length - 1].coins : 1;
     var meter = el('div', 'mkt-sup-meter');
-    meter.setAttribute('role', 'meter'); meter.setAttribute('aria-label', 'Coins topped up toward Gold supporter');
+    meter.setAttribute('role', 'meter'); meter.setAttribute('aria-label', 'Cotton topped up toward Gold supporter');
     meter.setAttribute('aria-valuemin', '0'); meter.setAttribute('aria-valuemax', String(top)); meter.setAttribute('aria-valuenow', String(Math.min(got, top)));
     var fill = el('i'); fill.style.width = Math.min(100, Math.round(got / top * 100)) + '%'; meter.appendChild(fill);
     var legend = el('p', 'mkt-sup-legend');

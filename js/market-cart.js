@@ -22,7 +22,7 @@
     return e;
   }
   function $(id) { return doc.getElementById(id); }
-  function coins(n) { return n + (n === 1 ? ' coin' : ' coins'); }
+  function coins(n) { return n + (n === 1 ? ' Cotton' : ' Cotton'); }
   function say(err) { return FG && FG.say ? FG.say(err) : 'Something went wrong. Try again.'; }
   function newKey() {
     var c = root.crypto;
@@ -146,7 +146,7 @@
     var st = el('p', 'acct-status'); st.id = 'cart-status'; st.setAttribute('role', 'status');
     win.appendChild(st);
     var row = el('div', 'row');
-    [['cart-ok', 'btn', 'buy everything'], ['cart-topup', 'btn ghost', 'top up coins'], ['cart-close', 'btn ghost', 'close']].forEach(function (x) {
+    [['cart-ok', 'btn', 'buy everything'], ['cart-topup', 'btn ghost', 'top up Cotton'], ['cart-close', 'btn ghost', 'close']].forEach(function (x) {
       var b = x[0] === 'cart-topup' ? el('a', x[1], T(x[2])) : el('button', x[1], T(x[2]));
       if (b.tagName === 'A') b.href = 'topup.html'; else b.type = 'button';
       b.id = x[0];

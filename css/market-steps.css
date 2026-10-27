@@ -1,0 +1,6 @@
+/* Marketplace: how buying works in three steps, then a jump to each category (Milestone 5, 2026-10-27) */
+.mk-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:28px 0 0;padding:0;list-style:none}
+.mk-steps li{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:var(--paper);color:var(--ink2);line-height:1.45}
+.mk-steps b{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 15px/1 var(--display)}
+.mk-steps a{color:var(--ink);font-weight:700}
+@media (max-width:760px){.mk-steps{grid-template-columns:minmax(0,1fr)}}
