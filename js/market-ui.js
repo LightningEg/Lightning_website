@@ -122,7 +122,7 @@
     var trust = el('ul', 'mkt-trust');
     trust.setAttribute('aria-label', ui('What you get'));
     [['Pay once, keep it', 'No subscription. What you buy stays on your account.'],
-     ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app too, unlocked once per profile.' : 'Here and on the main site. The app when themes ship there.'],
+     ['Both sites', MAIN ? 'Here and on For Geeks, light and dark. The app too, unlocked once per profile.' : 'Here and on the main site. The app too, unlocked once per profile.'],
      ['Looks only', 'Every feature of Lightning stays free. Nothing here changes a number or a rank.'],
      ['Paid in Egypt', 'InstaPay, checked by a person. Coins arrive once your transfer does.']].forEach(function (x) {
       trust.appendChild(add(el('li'), [el('b', null, ui(x[0])), el('span', null, x[1])]));
