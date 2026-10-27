@@ -59,6 +59,12 @@ def build():
               '<label>Reason<input name="reason" minlength="5" maxlength="300" required></label></div>'
               '<button class="btn" type="submit">Remove picture</button><p id="admin-avatar-status" class="oc-status" role="status"></p></form>')
 
+    claims = ('<form class="panel" id="admin-claims-form"><h3>Unlocked app profiles</h3>'
+              '<p>Each purchase of an app theme unlocks it for one Lightning profile. Look a member up to see which profiles hold a theme, and free a seat for someone who lost a device or profile.</p>'
+              '<div class="fields"><label>Account email<input name="email" type="email" required></label>'
+              '<label>Reason to free a seat<input name="reason" minlength="5" maxlength="300"></label></div>'
+              '<button class="btn" type="submit">Show profiles</button><div id="admin-claims-list"></div><p id="admin-claims-status" class="oc-status" role="status"></p></form>')
+
     menu = ''.join(f'<a href="#{k}" data-view="{k}">{icon(k)}<span class="oc-nav-l">{label}</span>'
                    + (f'<span class="ops-badge" data-badge="{b}" hidden></span>' if b else '') + '</a>' for k, label, b in MENU)
 
@@ -82,7 +88,7 @@ def build():
         '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>')
 
     members = view('members', 'Members', 'Credit coins or recognition points by hand: a goodwill gift, a refund in coins, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
-        f'<div class="oc-grid one">{credit}{avatar}</div>')
+        f'<div class="oc-grid one">{credit}{avatar}{claims}</div>')
 
     social = view('social', 'Stories', 'Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
         '<div class="oc-toolbar">' + seg('Post status', 'store-social-filter', [('pending', 'Pending'), ('published', 'Published'), ('rejected', 'Rejected')])
@@ -108,7 +114,7 @@ def build():
         '</div>')
 
     scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
-                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'store-admin'))
+                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'owner-claims', 'store-admin'))
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
             f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'

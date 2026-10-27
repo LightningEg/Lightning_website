@@ -207,7 +207,9 @@ begin
            case when exists (select 1 from public.order_lines l where l.purchase_id = p.id) then 'cart' else 'direct' end as channel
       from public.purchases p where p.created_at >= t0
     union all
-    select g.created_at, g.from_user, g.item_id, g.price_paid, 'gift' from public.gifts g where g.created_at >= t0),
+    select g.created_at, g.from_user, g.item_id, g.price_paid, 'gift' from public.gifts g where g.created_at >= t0
+    union all
+    select sp.created_at, sp.user_id, sp.item_id, sp.price_paid, 'seat' from public.seat_purchases sp where sp.created_at >= t0),
   ev as (select * from public.cart_events where created_at >= t0),
   open_carts as (
     select ci.user_id, count(*) as lines, max(ci.added_at) as last_add, min(ci.added_at) as first_add,

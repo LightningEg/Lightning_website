@@ -27,7 +27,7 @@ begin
            l.kind as event, l.user_id, l.wallet_delta as coins, l.contribution_delta as score,
            left(l.reason, 200) as detail, l.source_type || ':' || l.source_id as ref,
            case when l.created_by is null then 'system' when l.created_by = l.user_id then 'member' else 'owner' end as actor_kind,
-           coalesce(pc.name, gc.name) as item,
+           coalesce(pc.name, gc.name, spc.name) as item,
            left(ol.order_id::text, 8) as order_id,
            case when g.id is not null then (select m.display_name from public.member_profiles m where m.user_id = g.to_user) end as gift_to
       from public.ledger_entries l
@@ -35,7 +35,9 @@ begin
       left join public.catalog_items pc on pc.id = p.item_id
       left join public.order_lines ol on ol.purchase_id = p.id
       left join public.gifts g on g.ledger_entry_id = l.id
-      left join public.catalog_items gc on gc.id = g.item_id),
+      left join public.catalog_items gc on gc.id = g.item_id
+      left join public.seat_purchases sp on sp.ledger_entry_id = l.id
+      left join public.catalog_items spc on spc.id = sp.item_id),
   adm as (
     select a.created_at as at, 'a' || a.id::text as ref_id, 'admin' as category, a.action as event, a.actor as user_id,
            null::integer as coins, null::integer as score,

@@ -62,7 +62,7 @@ def build():
         # the market's own files change often: a version so browsers fetch the new copy
         SHOP='?v=20261027-cart-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
-        scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js') else j for j in scripts]
+        scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js','js/activation-codes.js') else j for j in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
         if name=='account':scripts+=['js/site-banner.js']
         scripts+=['js/site-words.js']

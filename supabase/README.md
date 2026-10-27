@@ -92,6 +92,17 @@ Add `https://lightningeg.com/account.html` (and the localhost equivalent for dev
 
 Automated acceptance: all `supabase/tests/*.test.mjs`; optional real Chromium: install `playwright-core@1.58.2`, run `python -m http.server 8000 --bind 127.0.0.1`, then `node supabase/tests/main-site-browser.mjs`. Browser tests intercept authentication and never use the live Supabase project. The test currently uses `/usr/bin/chromium`.
 
+## One purchase, one profile: seats and codes (2026-10-27)
+
+Owner rule: buying an app theme unlocks it for **one Lightning profile**. `20261027130000_profile_seats.sql` builds it.
+
+- **The seat.** A purchase comes with one seat. The website code (`issue_activation_code`, unchanged: ten minutes, single use, hashed) claims it. The app sends its own profile id, which is the same on every device that profile lives on; `redeem_activation_code(code, item, version, profile_id)` then either finds that profile already holding a seat (another device of it: free) or takes a free seat for it, and **burns the code**. With no free seat the claim is refused and the code is **not** burned. The signed licence names the profile (`profile_id`), so the app wears the theme only for that profile.
+- **Another profile.** The owner of the theme can add a seat for **25% of its price** (75% off, rounded up, at least one coin) with `purchase_theme_seat(item, expected_price, key)`: once per key, a changed price refuses, ten profiles at most, the theme must be in an app release. It is a ledger purchase, so it shows in Sales, Activity, the wallet history and the data export.
+- **The pages.** Each owned app theme on the marketplace and your collection shows "1 of 1 profile unlocked", **Get app unlock code** and **Add another profile · N coins** (a confirmation first). `my_theme_seats()` feeds it.
+- **Support.** The owner console's Members view lists a member's claimed profiles (`admin_profile_claims`) and frees a seat for someone who lost a device or profile (`admin_release_profile_claim`, reason required, kept in the audit log).
+- **The edge function.** `redeem-purchase` now requires `profile_id` and answers **409 `no_seat`** when every seat is used, so the app can say what to do. Redeploy it together with the migration; an app that does not send a profile id is told to update. The signed payload keeps `schema_version` 1 and adds `profile_id`.
+- **Offline and portability.** A licence is signed and checked offline against the profile id; it is still a copyable file, and a copy only works on a profile with that id. This limits sharing between people, it is not strong DRM.
+
 ## Marketplace cart and sales tracking
 
 Apply `20261027090000_cart_and_sales_tracking.sql` after the migrations above. It adds a server-side cart so the cart follows a member between devices, an all-or-nothing checkout, and the numbers the owner needs to see what sells. Cosmetics only; every charge is still a ledger entry through the existing purchase functions.
