@@ -129,3 +129,23 @@
   .t-lock::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--nile);opacity:0;animation:t-pulse 2.6s ease-out infinite}
 }
 @keyframes t-pulse{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(1.7);opacity:0}}
+
+/* Hero: the PC and the phone side by side, the same Overview (Home, 2026-10-27) */
+.h-duo{position:relative;max-width:1040px;margin:44px auto 0;padding-inline-end:120px}
+.h-duo figure{margin:0}
+.h-duo-pc .d-frame{box-shadow:var(--shadow-screen)}
+.h-duo-pc img,.h-duo-phone img{display:block;width:100%;height:auto}
+.h-duo-phone{position:absolute;inset-inline-end:0;bottom:-28px;width:210px;animation:h-duo-in .7s cubic-bezier(.2,.7,.2,1) .15s both}
+@keyframes h-duo-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.h-duo-phone{animation:none}}
+@media (max-width:640px){.h-duo{margin-top:32px;padding-inline-end:64px}.h-duo-phone{width:112px;bottom:-18px}.h-duo-phone .t-phone-shot{border-radius:16px}}
+
+/* Community pulse: one quiet line of real activity (js/community-pulse.js); hidden until there is some */
+.pulse{display:flex;align-items:center;justify-content:center;gap:10px;max-width:640px;margin:64px auto 0;padding:10px 18px;border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--ink2);font:600 14px/1.4 var(--body)}
+.pulse[hidden]{display:none}
+.pulse-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--t-green,var(--nile));box-shadow:0 0 0 4px color-mix(in oklab,var(--t-green,var(--nile)) 22%,transparent)}
+.pulse-line{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .35s ease}
+.pulse-line.is-out{opacity:0}
+.pulse-line a{color:var(--ink);text-decoration:none}
+.pulse-line a:hover{text-decoration:underline}
+@media (max-width:640px){.pulse{margin-top:48px;font-size:13px;border-radius:14px}}
