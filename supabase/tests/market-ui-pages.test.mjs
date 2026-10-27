@@ -125,7 +125,7 @@ await test('main: too few coins says exactly how many are missing, links ways to
   await p.click(p.q('button[data-act="buy"][data-item="moss"]'));
   assert.equal(p.$('buy').hidden, false);
   assert.equal(p.$('buy-short').hidden, false);
-  assert.match(p.$('buy-short').textContent, /You need 90 coins more/);
+  assert.match(p.$('buy-short').textContent, /You need 90 Cotton more/);
   assert.ok(p.$('buy-short').querySelector('a[href="topup.html"]'));
   assert.equal(p.$('buy-ok').hidden, true);
   assert.equal(p.calls.filter(c => c.fn === 'purchase_item_at_price').length, 0);
@@ -315,7 +315,7 @@ await test('tiers: textured themes get their own row, every theme says its tier,
   assert.match(p.q('#mkt-tiers .mkt-tier-motion').textContent, /1000\s*200 EGP/);
   assert.equal(p.qa('.mkt-trust li').length, 4);
   await p.click(p.q('button[data-act="buy"][data-item="papyrus"]'));
-  assert.match(p.$('buy-short').textContent, /You need 500 coins more, about 100 EGP/);
+  assert.match(p.$('buy-short').textContent, /You need 500 Cotton more, about 100 EGP/);
 });
 
 await test('textures: a textured theme tried on the main site wears its texture, and Cancel takes it off', async () => {

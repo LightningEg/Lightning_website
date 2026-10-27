@@ -129,7 +129,7 @@ await test('market: signed out shows the whole catalog, no buy or equip buttons,
   assert.equal(si.hidden, false);
   assert.equal(si.textContent, 'sign in to buy');
   assert.equal(si.getAttribute('href'), 'forgeeks-account.html?next=forgeeks-market.html');
-  assert.equal(p.cell('moss').querySelector('.mkt-tag').textContent, '150 coins');
+  assert.equal(p.cell('moss').querySelector('.mkt-tag').textContent, '150 Cotton');
   assert.equal(p.cell('mono').querySelector('.mkt-tag').textContent, 'free');
   assert.ok(!p.calls.some(c => c.table === 'wallets'), 'no wallet read when signed out');
   assert.equal(p.rpcs('purchase_item_at_price').length, 0);
@@ -162,9 +162,9 @@ await test('market: the buy dialog shows price, balance now and balance after, a
   const dlg = p.$('buy');
   assert.equal(dlg.hidden, false);
   assert.equal(p.$('buy-title').textContent, 'buy moss');
-  assert.equal(p.$('buy-price').textContent, '150 coins');
-  assert.equal(p.$('buy-now').textContent, '210 coins');
-  assert.equal(p.$('buy-after').textContent, '60 coins');
+  assert.equal(p.$('buy-price').textContent, '150 Cotton');
+  assert.equal(p.$('buy-now').textContent, '210 Cotton');
+  assert.equal(p.$('buy-after').textContent, '60 Cotton');
   assert.equal(p.rpcs('purchase_item_at_price').length, 0, 'opening the dialog buys nothing');
   assert.equal(p.w.document.activeElement, p.$('buy-ok'));
   await p.key(p.$('buy'), 'Escape');
@@ -203,7 +203,7 @@ await test('market: confirm sends purchase_item once, with the item id and a key
   assert.equal(p.$('buy-title').textContent, 'moss is yours');
   assert.equal(p.$('buy-equip').hidden, false);
   assert.equal(p.$('buy-ok').hidden, true);
-  assert.equal(p.$('buy-now').textContent, '60 coins');
+  assert.equal(p.$('buy-now').textContent, '60 Cotton');
   assert.equal(p.w.document.activeElement, p.$('buy-equip'));
   await p.click(p.$('buy-equip'));
   assert.equal(p.$('buy').hidden, true);
@@ -247,8 +247,8 @@ await test('market: a retry in the same dialog reuses the same key; a new dialog
 await test('market: not enough coins is said in plain words, charges nothing and keeps the dialog open', async () => {
   const p = await boot({ balance: 100 });
   await p.click(p.btn('buy', 'moss'));
-  assert.equal(p.$('buy-after').textContent, '−50 coins');
-  assert.match(p.$('buy-status').textContent, /100 coins/);
+  assert.equal(p.$('buy-after').textContent, '−50 Cotton');
+  assert.match(p.$('buy-status').textContent, /100 Cotton/);
   await p.click(p.$('buy-ok'));
   assert.equal(p.rpcs('purchase_item_at_price').length, 1, 'the server is asked and decides');
   assert.equal(p.$('buy-status').textContent, 'Not enough coins for that yet.');
