@@ -285,3 +285,22 @@
   .oc-seg{display:flex;width:100%;box-sizing:border-box}
   .oc-seg button{flex:1 1 auto}
 }
+
+/* 8S: seats in App themes, the folded Ready to sell line, the Community view */
+.oc-unlock-stats{display:block;margin-top:2px;color:var(--muted);font:600 13px/1.4 var(--body)}
+.oc-lookup{margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.oc-lookup h4{margin:0 0 6px;font:800 16px var(--display);color:var(--ink)}
+.oc-lookup .fields{margin:10px 0}
+.oc-lookup[hidden]{display:none}
+.oc-ready-fold{margin:0;padding:0}
+.oc-ready-fold>summary{display:flex;align-items:center;min-height:44px;color:var(--muted);font:700 14px var(--body);cursor:pointer;list-style:none}
+.oc-ready-fold>summary::-webkit-details-marker{display:none}
+.oc-ready-fold[open]>summary{color:var(--ink)}
+.oc-ready-fold>summary:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.oc-held{list-style:none;margin:0;padding:0}
+.oc-held li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.oc-held li:last-child{border-bottom:0}
+.oc-held small{color:var(--muted);flex-basis:100%}
+.story-row input[type=url]{width:100%;min-height:44px;margin:10px 0;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--field);color:var(--ink);font:500 15px var(--body)}
+@media (max-width:640px){.oc-lookup .fields.two{grid-template-columns:minmax(0,1fr)}}
+.story-row .row{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:10px;margin:12px 0 8px;padding-top:0;border-top:0}

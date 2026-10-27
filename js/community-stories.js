@@ -32,7 +32,6 @@
   const admin=await rpc('is_admin',{});if(admin){
    const [ladder,q]=await Promise.all([rpc('admin_story_ladder',{}).catch(()=>null),FG.sb.from('community_stories').select('*').eq('status','pending').order('submitted_at')]);
    if(q.error)throw q.error;if(run!==generation)return;
-   if(ladder){$('story-ladder').elements.coins.value=ladder.coins;$('story-ladder').elements.points.value=ladder.points;}
    $('story-review').hidden=false;$('story-queue').replaceChildren(...q.data.map(s=>window.FGStoryModeration.card(s,load,ladder)));}
   msg('');
  }catch(e){msg('Stories are not available yet, or this action needs setup. '+FG.say(e));}}
@@ -42,6 +41,5 @@
   if(FG.session()?.user.id!==uid)return;reset();await load();msg('Shared. We will look at your post and tell you here.');}catch(e){msg(FG.say(e));}finally{b.disabled=false;}};
  $('story-new').onclick=reset;
  $('story-copy').onclick=async()=>{if(!kit){msg('Your code is not loaded yet.');return;}try{await navigator.clipboard.writeText(kit.text);msg('Copied. Put it in your post, then paste your post’s link below.');}catch{msg('Select the code and link above and copy them.');}};
- $('story-ladder').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;try{await rpc('admin_set_story_ladder',{p_coins:Number(f.elements.coins.value),p_points:Number(f.elements.points.value)});await load();msg('Reward saved. It applies to the next approval.');}catch(err){msg(FG.say(err));}};
  FG.ready.then(()=>{if(FG.sb)load();else msg('Sign-in is not configured.');});FG.onAuth(()=>{reset();load();});
 })();

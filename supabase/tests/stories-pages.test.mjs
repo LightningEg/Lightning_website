@@ -134,7 +134,7 @@ await test('the owner\'s row: Open post, Approve at the ladder, Ask for a change
   ];
   const p = await boot({ admin: true, pending, ladder: { coins: 120, points: 60 } });
   assert.equal(p.$('story-review').hidden, false);
-  assert.equal(p.$('story-ladder').elements.coins.value, '120');
+  assert.equal(p.$('story-ladder'), null, 'the ladder editor moved to the owner console (8S)');
   const rows = [...p.$('story-queue').querySelectorAll('.story-row')];
   assert.equal(rows.length, 2);
   const open = rows[0].querySelector('a');
@@ -165,12 +165,11 @@ await test('the owner\'s row: Open post, Approve at the ladder, Ask for a change
   assert.equal(d.p_note, 'Add your code to the post.');
 });
 
-await test('the owner sets the reward ladder; a member sees no review queue', async () => {
+// Changed on purpose (8S): the reward ladder is edited in the owner console's Community view, not on this page.
+await test('the stories page has no ladder editor; a member sees no review queue', async () => {
   const p = await boot({ admin: true });
-  const f = p.$('story-ladder');
-  f.elements.coins.value = '200'; f.elements.points.value = '75';
-  await p.submit(f);
-  assert.deepEqual(plain(p.rpcs('admin_set_story_ladder')[0].args), { p_coins: 200, p_points: 75 });
+  assert.equal(p.$('story-ladder'), null);
+  assert.equal(p.rpcs('admin_set_story_ladder').length, 0);
   const m = await boot({ admin: false });
   assert.equal(m.$('story-review').hidden, true);
   assert.equal(m.rpcs('admin_story_ladder').length, 0);

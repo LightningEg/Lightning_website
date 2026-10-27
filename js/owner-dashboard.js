@@ -1,4 +1,4 @@
-/* Owner console (admin.html): one view at a time (Overview, Top-ups, Catalogue, Members, Stories, Money journal,
+/* Owner console (admin.html): one view at a time (Overview, Top-ups, Catalogue, Members, Community, Money journal,
    Settings), the segmented filters, and the Overview
    drawn from admin_dashboard() (supabase/migrations/20261025330000_owner_dashboard.sql): what needs the owner, the
    month against the fixed cost, paying members, the coins in circulation, thirty days of revenue and what sells.
@@ -12,7 +12,7 @@
   if (!host || !FG) return;
   var VIEWS = ['today', 'requests', 'sales', 'activity', 'catalogue', 'members', 'social', 'bank', 'settings'];
   var ALIAS = { setup: 'settings', pricing: 'settings', retention: 'settings', credits: 'members' };
-  var last = null, loading = false, again = false, store = {}, ready = null;
+  var last = null, loading = false, again = false, store = {}, ready = null, seatSales = [];
 
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function add(p, kids) { kids.forEach(function (k) { if (k) p.appendChild(k); }); return p; }
@@ -139,6 +139,12 @@
       list.appendChild(add(el('li'), [a]));
     });
     var head = add(el('div', 'ops-card-h'), [el('h3', null, 'Ready to sell'), el('span', 'ops-chip ' + (done === steps.length ? 'good' : ''), done + ' of ' + steps.length)]);
+    if (done === steps.length) {
+      // all six ticked: one quiet line, the list a click away, so the month's figures lead and nothing sits alone in a row
+      var fold = el('details', 'oc-ready-fold');
+      add(fold, [el('summary', null, '✓ Ready to sell · all ' + steps.length + ' steps done'), list]);
+      return fold;
+    }
     return add(el('section', 'ops-block ops-card oc-ready-card'), [head, list]);
   }
   function context() {
@@ -190,13 +196,14 @@
     var trend = add(el('section', 'ops-block ops-card'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Revenue, last 30 days'), el('span', 'ops-fine', egp(total) + ' EGP · ' + num(d.topups_month) + ' top-ups this month')]), chart(days), axis]);
     var rate = Number(d.coins_per_egp) || 5;
     var sells = add(el('section', 'ops-block ops-card'), [add(el('div', 'ops-card-h'), [el('h3', null, 'What sells this month'), el('span', 'ops-fine', 'by purchases')])]);
-    var items = Array.isArray(d.top_items) ? d.top_items : [];
+    // extra profiles sold this month sit in the same list as themes (admin_month_seat_sales)
+    var items = (Array.isArray(d.top_items) ? d.top_items : []).concat(seatSales).sort(function (a, b) { return Number(b.sold) - Number(a.sold) || Number(b.coins) - Number(a.coins); }).slice(0, 6);
     if (!items.length) sells.appendChild(el('p', 'ops-empty', 'No purchases yet this month.'));
     else {
       var ul = el('ul', 'ops-sells');
       var top = Math.max.apply(null, items.map(function (i) { return Number(i.sold); }));
       items.forEach(function (i) {
-        var kind = i.type === 'theme' ? (i.tier === 'texture' ? 'Textured' : i.tier === 'motion' ? 'Animated' : 'Palette') : i.type[0].toUpperCase() + i.type.slice(1);
+        var kind = i.type === 'seat' ? 'Another profile' : i.type === 'theme' ? (i.tier === 'texture' ? 'Textured' : i.tier === 'motion' ? 'Animated' : 'Palette') : i.type[0].toUpperCase() + i.type.slice(1);
         var bar = add(el('span', 'ops-sell-bar'), [el('i')]);
         bar.firstChild.style.width = Math.round(Number(i.sold) / top * 100) + '%';
         ul.appendChild(add(el('li'), [add(el('span', 'ops-sell-name'), [el('b', null, i.name), el('small', null, kind)]), bar,
@@ -216,9 +223,11 @@
   function load() {
     if (loading) { again = true; return; }
     loading = true;
-    Promise.all([Promise.resolve(FG.sb.rpc('admin_dashboard')), context()]).then(function (x) {
+    var seats = Promise.resolve().then(function () { return FG.sb.rpc('admin_month_seat_sales'); }).then(function (r) { return r && !r.error && Array.isArray(r.data) ? r.data : []; }, function () { return []; });
+    Promise.all([Promise.resolve(FG.sb.rpc('admin_dashboard')), context(), seats]).then(function (x) {
       var r = x[0];
       if (r.error) throw r.error;
+      seatSales = x[2];
       last = r.data; render(last);
     }).catch(function (e) {
       host.textContent = '';

@@ -13,6 +13,8 @@
                ['motion', 'Animated', 'The material plus one slow signature motion, still under reduced motion']];
   var KINDS = [['all', 'All'], ['theme', 'Themes'], ['set', 'Sets'], ['banner', 'Banners'], ['frame', 'Frames'], ['badge', 'Badges'], ['name', 'Names']];
   var data = null, kind = 'all', loading = false, verified = false;
+  var unlocks = {};                                   // admin_app_unlocks(): per theme with its unlock on, keyed by item id
+  var claimsForm = $('admin-claims-form');            // Free a profile (js/owner-claims.js): kept here, in App themes, one home for seats
 
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function add(p, kids) { kids.forEach(function (k) { if (k) p.appendChild(k); }); return p; }
@@ -76,6 +78,12 @@
   }
 
   /* ---------- app releases ---------- */
+  // "4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued", from admin_app_unlocks()
+  function unlockLine(u) {
+    var claimed = Number(u.profiles_claimed), extra = Number(u.extra_seats_sold), codes = Number(u.codes_issued);
+    return num(claimed) + (claimed === 1 ? ' profile' : ' profiles') + ' claimed · ' + num(extra) + (extra === 1 ? ' extra profile' : ' extra profiles') + ' sold (' + num(u.extra_coins) + ' coins) · ' +
+      num(codes) + (codes === 1 ? ' code' : ' codes') + ' issued';
+  }
   function releases(status) {
     var themes = data.items.filter(function (i) { return i.type === 'theme' && (i.app || []).length; });
     var box = el('div', 'oc-releases');
@@ -93,10 +101,12 @@
               if (!window.confirm('Turn on the app unlock for ' + i.name + ' version ' + v.version + '? Do this only after the app version that carries it has shipped to members on Windows and Android.')) return;
               return rpc('admin_set_app_release', { p_item_id: i.id, p_version: v.version, p_enabled: true }).then(function () { status.textContent = i.name + ': owners can now unlock it in the app.'; return load(); });
             }, status);
-        ul.appendChild(add(el('li'), [add(el('span', 'oc-rel-name'), [el('b', null, i.name), el('small', null, tierName(i.tier) + ' · version ' + v.version + ' · ' + num(i.owners) + ' owner' + (Number(i.owners) === 1 ? '' : 's'))]), chip, act]));
+        var u = unlocks[i.id], stats = u ? el('small', 'oc-unlock-stats', unlockLine(u)) : null;
+        ul.appendChild(add(el('li'), [add(el('span', 'oc-rel-name'), [el('b', null, i.name), el('small', null, tierName(i.tier) + ' · version ' + v.version + ' · ' + num(i.owners) + ' owner' + (Number(i.owners) === 1 ? '' : 's')), stats]), chip, act]));
       });
     });
     box.appendChild(ul);
+    if (claimsForm) { claimsForm.hidden = false; box.appendChild(claimsForm); }
     return box;
   }
 
@@ -162,7 +172,8 @@
   function load() {
     if (loading) return Promise.resolve();
     loading = true;
-    return rpc('admin_catalog').then(function (d) { data = d || { items: [] }; data.items = data.items || []; render(); })
+    var seats = rpc('admin_app_unlocks').then(function (rows) { var m = {}; if (Array.isArray(rows)) rows.forEach(function (u) { if (u && typeof u.item_id === 'string') m[u.item_id] = u; }); return m; }, function () { return {}; });
+    return Promise.all([rpc('admin_catalog'), seats]).then(function (x) { var d = x[0]; unlocks = x[1]; data = d || { items: [] }; data.items = data.items || []; render(); })
       .catch(function (e) { host.textContent = ''; host.appendChild(el('p', 'ops-empty', 'The catalogue did not load. ' + say(e))); })
       .then(function () { loading = false; });
   }

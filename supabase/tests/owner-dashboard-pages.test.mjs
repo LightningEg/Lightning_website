@@ -29,10 +29,10 @@ const sample = (over = {}) => ({
   ...over
 });
 
-async function boot({ data = sample(), hash = '', fail = false } = {}) {
+async function boot({ data = sample(), hash = '', fail = false, extra = {}, from = null } = {}) {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/admin.html' + hash, virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
-  w.FG = { say: () => 'Try again.', sb: { rpc: async (name, args) => { calls.push({ name, args }); if (fail) return { data: null, error: { message: 'MFA required' } }; return { data: name === 'admin_dashboard' ? JSON.parse(JSON.stringify(data)) : null, error: null }; } } };
+  w.FG = { say: () => 'Try again.', sb: { rpc: async (name, args) => { calls.push({ name, args }); if (fail) return { data: null, error: { message: 'MFA required' } }; if (name in extra) return { data: JSON.parse(JSON.stringify(extra[name])), error: null }; return { data: name === 'admin_dashboard' ? JSON.parse(JSON.stringify(data)) : null, error: null }; }, ...(from ? { from } : {}) } };
   w.eval(read('js/owner-dashboard.js'));
   w.dispatchEvent(new w.CustomEvent('lightning:owner-changed'));
   await tick(30);
@@ -122,6 +122,41 @@ await test('Ready to sell: each step the store needs, ticked from its settings, 
   assert.ok(steps[3].classList.contains('done'), 'the fixed cost is set');
   assert.ok(!steps[4].classList.contains('done'), 'nobody has paid yet');
   assert.equal(steps[5].getAttribute('href'), '#catalogue');
+});
+
+// 8S: extra profiles sold this month are a row in What sells, beside the themes.
+await test('What sells this month also counts extra profiles, in the same list and order', async () => {
+  const p = await boot({ extra: { admin_month_seat_sales: [{ id: 'seat:nile', name: 'Extra profile · Nile', type: 'seat', tier: null, sold: 3, coins: 225 }] } });
+  const rows = p.qa('.ops-sells li');
+  assert.deepEqual(rows.map(r => r.querySelector('.ops-sell-name b').textContent), ['Papyrus', 'Extra profile · Nile', 'Dusk'], 'by units sold, then coins');
+  assert.match(rows[1].textContent, /Another profile/);
+  assert.match(rows[1].textContent, /3 sold/);
+  assert.match(rows[1].textContent, /225 coins · 45 EGP/);
+  assert.ok(p.calls.some(c => c.name === 'admin_month_seat_sales'));
+  const none = await boot({ extra: { admin_month_seat_sales: [] } });
+  assert.equal(none.qa('.ops-sells li').length, 2, 'no extra profile sold: the list is as before');
+  const broken = await boot({ extra: { admin_month_seat_sales: { not: 'a list' } } });
+  assert.equal(broken.qa('.ops-sells li').length, 2, 'an unexpected answer is ignored');
+});
+
+// 8S: Ready to sell folds to one quiet line once all six steps are ticked.
+const everything = (table) => {
+  const rows = { payment_settings: { instapay_address: 'shop@instapay', recipient_name: 'Lightning', qr_asset_id: 'qr1', enabled: true }, coin_pricing: { enabled: true, coins_per_egp: 5 }, coin_bonus_tiers: [{ minimum_egp: 100 }] };
+  const b = { select: () => b, eq: () => b, order: () => b, single: () => b, then(res, rej) { return Promise.resolve({ data: rows[table], error: null }).then(res, rej); } };
+  return b;
+};
+await test('Ready to sell: all six ticked folds to one quiet line, with the list a click away; any missing step keeps the card open', async () => {
+  const p = await boot({ from: everything, extra: { admin_catalog: { items: [{ id: 'nile', app: [{ version: 1, enabled: true }] }] } } });
+  const fold = p.qa('.oc-ready-fold');
+  assert.equal(fold.length, 1);
+  assert.equal(p.qa('.oc-ready-card').length, 0, 'no card');
+  assert.match(fold[0].querySelector('summary').textContent, /Ready to sell · all 6 steps done/);
+  assert.equal(fold[0].open, false);
+  assert.equal(p.qa('.oc-ready-step.done').length, 6, 'the list is still there, folded');
+  const open = await boot({ from: everything, data: sample({ payers_all: 0 }), extra: { admin_catalog: { items: [{ id: 'nile', app: [{ version: 1, enabled: true }] }] } } });
+  assert.equal(open.qa('.oc-ready-fold').length, 0);
+  assert.equal(open.qa('.oc-ready-card').length, 1, 'one step is missing: the card shows the list');
+  assert.equal(open.qa('.oc-ready-step.done').length, 5);
 });
 
 await test('Settings: the fixed cost is shown, saved through the server and Today reloads', async () => {
