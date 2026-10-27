@@ -119,7 +119,7 @@ def connect_public_pages():
         text=re.sub(r'(?m)^[ \t]+$', '', text)
         p.write_text(text)
 
-NAV_ITEMS=[('stories','Stories','stories.html'),('leaderboard','Leaderboard','leaderboard.html'),('marketplace','Marketplace','marketplace.html'),('collection','Collection','collection.html'),('wallet','Wallet','topup.html'),('account','Account','account.html')]
+NAV_ITEMS=[('community','Overview','community.html'),('stories','Stories','stories.html'),('leaderboard','Leaderboard','leaderboard.html'),('marketplace','Marketplace','marketplace.html'),('collection','Collection','collection.html'),('wallet','Wallet','topup.html'),('account','Account','account.html')]
 def community_nav(active):
     links=''.join(f'<a href="{h}"'+(' aria-current="page"' if k==active else '')+f'>{t}</a>' for k,t,h in NAV_ITEMS)
     return f'<div class="com-bar"><div class="wrap"><nav class="com-nav" aria-label="Community">{links}</nav></div></div>'

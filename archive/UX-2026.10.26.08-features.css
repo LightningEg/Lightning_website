@@ -1,0 +1,26 @@
+/* Features page (features.html): only what css/landing.css and css/home.css lack. Loads after both. */
+/* one card a group, one bullet a feature: the feature in bold, then what it does in one line (guideline B06, Feature list) */
+.f-card{padding:28px 32px}
+.f-list{list-style:disc;margin:0;padding-block:0 0;padding-inline:20px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 40px;color:var(--ink2);line-height:1.5}
+.f-list li{padding-inline-start:2px}
+.f-list b{color:var(--ink);font-weight:800}
+.f-list li::marker{color:var(--green)}
+@media (max-width:820px){.f-card{padding:20px}.f-list{grid-template-columns:minmax(0,1fr)}}
+
+/* Where it shines (UX-2026.10.05.25): five cards, each with one of Mohab's numbers */
+.f-best-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.f-best{display:flex;flex-direction:column;gap:12px;padding:28px}
+.f-best.wide{grid-column:1/-1}
+.f-ico{display:grid;place-items:center;width:44px;height:44px;border-radius:16px;background:var(--nile);color:var(--on-nile)}
+.f-best h3{font:800 24px/1.15 var(--display);letter-spacing:-.025em;color:var(--ink)}
+.f-best p{color:var(--ink2);font-size:16px;line-height:1.55}
+.f-best .f-proof{margin-top:auto;padding:12px 16px;border-radius:16px;background:var(--t-green);color:var(--ink2);font-size:15px;font-variant-numeric:tabular-nums}
+.f-best .f-proof b{color:var(--ink);font-weight:800}
+/* jump to a group: wraps, never scrolls sideways */
+.f-jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:860px;margin:0 auto}
+.f-jump a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:700 14px/1 var(--body);text-decoration:none}
+.f-jump a:hover{background:var(--white);border-color:var(--green)}
+.f-jump a:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.f-all{padding-bottom:0}
+@media (max-width:820px){.f-best-grid{grid-template-columns:minmax(0,1fr)}.f-best{padding:20px}.f-best h3{font-size:21px}}
+@media (max-width:640px){.f-jump a{padding:0 14px;font-size:13px}}

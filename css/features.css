@@ -24,3 +24,38 @@
 .f-all{padding-bottom:0}
 @media (max-width:820px){.f-best-grid{grid-template-columns:minmax(0,1fr)}.f-best{padding:20px}.f-best h3{font-size:21px}}
 @media (max-width:640px){.f-jump a{padding:0 14px;font-size:13px}}
+
+/* Explorer (Features, 2026-10-27): six questions, one real screen each. Without JS every panel shows stacked. */
+.fx-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:900px;margin:0 auto 28px}
+.fx-tab{min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:700 15px/1 var(--body);cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.fx-tab:hover{border-color:var(--green)}
+.fx-tab[aria-selected="true"]{background:var(--nile);border-color:var(--nile);color:var(--on-nile)}
+.fx-tab:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.fx-stage{display:grid}
+.fx-panel{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:40px;align-items:center;margin-bottom:40px}
+.fx-js .fx-stage>.fx-panel{grid-area:1/1;margin:0;transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .35s cubic-bezier(.2,.8,.2,1)}
+.fx-js .fx-panel[data-fx-hidden]{opacity:0;transform:translateY(8px);visibility:hidden;pointer-events:none}
+.fx-shot{margin:0;box-shadow:var(--shadow-screen)}
+.fx-shot img{display:block;width:100%;height:auto}
+.fx-copy h3{font:800 28px/1.15 var(--display);letter-spacing:-.025em;color:var(--ink)}
+.fx-line{margin-top:12px;color:var(--ink2);font-size:17px;line-height:1.55}
+.fx-pts{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.fx-pts li{position:relative;padding-inline-start:26px;color:var(--ink);font-weight:600}
+.fx-pts li::before{content:"";position:absolute;inset-inline-start:0;top:.45em;width:12px;height:12px;border-radius:4px;background:var(--green)}
+.fx-more{display:inline-block;margin-top:22px;color:var(--ink);font-weight:700}
+.fx-groups{display:grid;gap:10px;max-width:980px;margin:0 auto}
+.fx-group{border:1px solid var(--line);border-radius:20px;background:var(--paper);scroll-margin-top:96px}
+.fx-group summary{display:flex;align-items:center;gap:14px;min-height:60px;padding:0 22px;cursor:pointer;list-style:none}
+.fx-group summary::-webkit-details-marker{display:none}
+.fx-group summary::after{content:"+";margin-inline-start:8px;font:700 22px/1 var(--body);color:var(--ink2);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.fx-group[open] summary::after{transform:rotate(45deg)}
+.fx-group summary:focus-visible{outline:3px solid var(--green);outline-offset:-3px;border-radius:20px}
+.fx-g-label{flex:none;min-width:150px;color:var(--ink2);font:700 13px/1.2 var(--body);text-transform:uppercase;letter-spacing:.06em}
+.fx-g-title{flex:1;font:800 18px/1.25 var(--display);color:var(--ink)}
+.fx-g-n{flex:none;min-width:32px;padding:4px 10px;border-radius:99px;background:var(--t-green);color:var(--ink);font:700 13px/1 var(--body);text-align:center;font-variant-numeric:tabular-nums}
+.fx-group .f-card{margin:0 12px 12px;box-shadow:none}
+@media (max-width:820px){.fx-panel{grid-template-columns:minmax(0,1fr);gap:20px}.fx-copy h3{font-size:23px}.fx-g-label{display:none}
+  .fx-tabs{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;margin-inline:-20px;padding-inline:20px;scroll-snap-type:x proximity}.fx-tab{flex:none;scroll-snap-align:start}}
+@media (prefers-reduced-motion:reduce){.fx-js .fx-stage>.fx-panel,.fx-group summary::after,.fx-tab{transition:none}}
+.fx-panel>*{min-width:0}
+.fx-stage .fx-shot.d-frame{width:auto;max-width:100%;margin:0;transform:none}
