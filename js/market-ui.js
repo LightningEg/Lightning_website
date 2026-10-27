@@ -284,7 +284,7 @@
 
   /* ---------- cells: Try it and Details ---------- */
   var WORDS = { 'buy': 'Buy', 'equip': 'Equip', 'remove banner': 'Remove banner', '✓ equipped': '✓ Equipped', 'owned': 'Owned', 'free': 'Free',
-    'buy set': 'Buy set', 'gift': 'Gift', 'plain name': 'Plain name', '✓ yours': '✓ Yours', 'earned': 'Earned', 'earned by topping up': 'Earned by topping up', 'first 100 to top up': 'First 100 to top up' };
+    'buy set': 'Buy set', 'gift': 'Gift', 'plain name': 'Plain name', '✓ yours': '✓ Yours', 'earned': 'Earned', 'earned by topping up': 'Earned through support', 'first 100 to top up': 'First 100 to top up' };
   function cellHook(li, it) {
     cellInner(li, it);
     if (MAIN) tidy(li, it);
@@ -415,7 +415,7 @@
     hit = { id: it.id, until: Date.now() + 4000 };
     mark();
     var cell = doc.querySelector('.mkt-cell[data-item="' + it.id + '"]');
-    if (cell && !cell.hidden && cell.scrollIntoView) cell.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (cell && !cell.hidden && cell.scrollIntoView) cell.scrollIntoView({ block: 'center', behavior: root.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
   /* ---------- Try it ---------- */
@@ -463,7 +463,12 @@
   function tryOn(e) {
     if (trying) undo();
     trying = e;
-    if (e.kind === 'theme') paintSite(e);
+    if (e.kind === 'theme') {
+      paintSite(e);
+      var target=doc.querySelector('.mkt-look .pv-profile');
+      if(target && target.animate && !root.matchMedia('(prefers-reduced-motion: reduce)').matches)
+        target.animate([{opacity:.45,transform:'translateY(3px)'},{opacity:1,transform:'none'}],{duration:280,easing:'ease-out'});
+    }
     else { lookOverride = {}; lookOverride[e.kind] = e.id; }
     drawLook();
     var text = tbar.querySelector('.mkt-trybar-text');
@@ -472,7 +477,7 @@
     drawBar();
     tbar.hidden = false;
     doc.body.classList.add('mkt-trying');
-    if (e.kind !== 'theme') { var look = doc.querySelector('.mkt-look'); if (look && look.scrollIntoView) look.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+    if (e.kind !== 'theme') { var look = doc.querySelector('.mkt-look'); if (look && look.scrollIntoView) look.scrollIntoView({ block: 'nearest', behavior: root.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
     var first = tbar.querySelector('.mkt-trybar-acts button,.mkt-trybar-acts a');
     if (first) first.focus();
   }
@@ -679,31 +684,28 @@
   }
   // Badges tab: how far this member is from the next supporter badge, and how many Founding places are left.
   function drawSupporter(s, state) {
-    var box = $('mkt-supporter');
-    if (!box) return;
-    while (box.firstChild) box.removeChild(box.firstChild);
+    var box = $('mkt-supporter'); if (!box) return;
+    box.replaceChildren();
     if (!s || !Array.isArray(s.tiers)) { box.hidden = true; return; }
-    var got = Number(s.topped_up_coins) || 0, next = s.tiers.filter(function (t) { return !t.owned; })[0];
-    var line = el('p', 'mkt-sup-line');
-    if (!state.signedIn) line.textContent = MAIN ? 'Top up once and a supporter badge is yours. It grows with you: Bronze, Silver, then Gold.' : 'top up once and a supporter badge is yours: bronze, silver, then gold.';
-    else if (next) add(line, [el('b', null, coinsWord(got) + ' topped up. '), el('span', null, next.name + ' at ' + coinsWord(next.coins) + ': ' + coinsWord(next.coins - got) + ' to go.')]);
-    else line.textContent = 'Gold supporter. Thank you for keeping Lightning free.';
-    var top = s.tiers.length ? s.tiers[s.tiers.length - 1].coins : 1;
-    var meter = el('div', 'mkt-sup-meter');
-    meter.setAttribute('role', 'meter'); meter.setAttribute('aria-label', 'Cotton topped up toward Gold supporter');
-    meter.setAttribute('aria-valuemin', '0'); meter.setAttribute('aria-valuemax', String(top)); meter.setAttribute('aria-valuenow', String(Math.min(got, top)));
-    var fill = el('i'); fill.style.width = Math.min(100, Math.round(got / top * 100)) + '%'; meter.appendChild(fill);
-    var legend = el('p', 'mkt-sup-legend');
-    s.tiers.forEach(function (t) {
-      var tick = el('span', 'mkt-sup-tick' + (t.owned ? ' on' : '')); tick.style.left = Math.round(t.coins / top * 100) + '%'; meter.appendChild(tick);
-      legend.appendChild(el(t.owned ? 'b' : 'span', null, ui(t.name.split(' ')[0]) + ' ' + Number(t.coins).toLocaleString('en-US')));
-    });
-    var found = el('p', 'mkt-sup-found', s.founding_owned ? 'You are a Founding supporter: one of the first 100.'
-      : Number(s.founding_left) > 0 ? 'Founding supporter: ' + s.founding_left + ' of 100 places left, for the first members to top up.' : 'All 100 Founding supporter places are taken.');
-    var go = state.signedIn && next ? link('topup.html', 'Top up') : null;
-    if (!MAIN) { found.textContent = found.textContent.toLowerCase(); if (go) go.href = 'topup.html'; }
-    add(box, [line, meter, legend, found, go]);
-    box.hidden = false;
+    var got = Number(s.support_equivalent_egp) || 0;
+    var owned = s.tiers.filter(function(t) { return t.owned; });
+    var next = s.tiers.filter(function(t) { return !t.owned; })[0];
+    var level = owned.length ? owned[owned.length - 1].name : 'Support Lightning';
+    box.appendChild(el('p', 'mkt-sup-line', state.signedIn ? level : 'Bronze · Silver · Gold · True supporter'));
+    if (state.signedIn && s.support_equivalent_egp != null) {
+      var top = next ? Number(next.egp) : 1000;
+      var meter = el('div','mkt-sup-meter'); meter.setAttribute('role','meter');
+      meter.setAttribute('aria-label','Combined support toward ' + (next ? next.name : 'True supporter'));
+      meter.setAttribute('aria-valuemin','0'); meter.setAttribute('aria-valuemax',String(top));
+      meter.setAttribute('aria-valuenow',String(Math.min(got,top)));
+      var fill=el('i'); fill.style.width=Math.min(100,got/top*100)+'%'; meter.appendChild(fill); box.appendChild(meter);
+      box.appendChild(el('p','mkt-sup-progress', next ? Math.min(100,Math.floor(got/top*100))+'% toward '+next.name : 'Thank you for keeping Lightning free.'));
+    }
+    var legend=el('p','mkt-sup-legend'); s.tiers.forEach(function(t){ legend.appendChild(el(t.owned?'b':'span',null,ui(t.name))); }); box.appendChild(legend); if(!MAIN) legend.textContent=legend.textContent.toLowerCase();
+    box.appendChild(el('p','mkt-sup-found','Earned through money and contributions together.'));
+    if(s.founding_owned) box.appendChild(el('p','mkt-sup-found','You are a Founding supporter: one of the first 100.'));
+    if(state.signedIn && next) { box.appendChild(link('topup.html','Top up')); box.appendChild(link('community.html','Contribute')); }
+    box.hidden=false;
   }
   // Themes tab, last: supporters choose the next theme. Everyone sees the count.
   function drawVote() {
@@ -730,7 +732,7 @@
       ul.appendChild(li);
     });
     var why = el('p', 'mkt-vote-why', poll.can_vote ? (MAIN ? 'Supporters choose. You can change your vote until the theme ships.' : 'supporters choose. you can change your vote until the theme ships.')
-      : (MAIN ? 'Supporters choose: top up once to earn a supporter badge and a vote.' : 'supporters choose: top up once to earn a supporter badge and a vote.'));
+      : (MAIN ? 'Supporters choose: earn a supporter badge through money and contributions to vote.' : 'supporters choose: earn a supporter badge through money and contributions to vote.'));
     add(box, [h, why, ul]);
     box.hidden = view !== 'themes';
   }

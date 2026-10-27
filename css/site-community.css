@@ -206,3 +206,7 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
 .story-row textarea{width:100%;min-height:72px;margin:10px 0}
 .story-row .row{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
 #story-mine article+article,#story-queue article+article{margin-top:14px}
+
+/* Story tickets: excerpt remains readable, with a cut-edge divider rather than extra instructions. */
+.story-card{position:relative;border-radius:8px}
+.story-card .story-foot{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}

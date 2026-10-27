@@ -1,0 +1,10 @@
+/* Shared structure and semantic tokens; Arabic uses the brand Cairo family. */
+html[lang^="ar"] body{--body:"Cairo",sans-serif;--display:"Cairo",sans-serif;font-family:var(--body)}
+html[lang^="ar"] .hub-top h1{font-size:52px;letter-spacing:0;line-height:1.3}
+html[lang^="ar"] .q-card h3,html[lang^="ar"] .hub-head h2{letter-spacing:0}
+html[lang^="ar"] .hb-gh,html[lang^="ar"] .hb-sc{direction:ltr;unicode-bidi:isolate}
+html[lang^="ar"] .mkt-feat-shots{padding:0 0 6% 12%}
+html[lang^="ar"] .mkt-feat-shots .pv-phone{right:auto;left:0}
+html[lang^="ar"] .pv{direction:ltr}
+html[lang^="ar"] .hub-head{flex-wrap:wrap}
+@media(max-width:640px){html[lang^="ar"] .hub-top h1{font-size:36px}html[lang^="ar"] .mkt-trybar{max-width:calc(100% - 24px)}}

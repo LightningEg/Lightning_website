@@ -7,7 +7,7 @@
   var list = document.getElementById('hb-list'), empty = document.getElementById('hb-empty'), status = document.getElementById('hb-status');
   if (!list) return;
   var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  var https = function (u) { try { var p = new URL(u); return p.protocol === 'https:' && !p.username ? p.href : null; } catch (_) { return null; } };
+  var https = function (u) { try { var p = new URL(u); return p.protocol === 'https:' && !p.username && !p.password ? p.href : null; } catch (_) { return null; } };
   var link = function (href, cls, text) { var a = el('a', cls, text); a.href = href; a.rel = 'noopener nofollow ugc'; a.target = '_blank'; return a; };
   var nf = new Intl.NumberFormat('en');
   function row(r, i) {
@@ -43,6 +43,7 @@
     if (!rows.length) { empty.hidden = false; return; }
     rows.forEach(function (r, i) { list.appendChild(row(r, i)); });
     list.hidden = false;
+    FG.sb.rpc('supporter_levels').then(function(s){ if(s.error || !Array.isArray(s.data)) return; s.data.forEach(function(x){ Array.from(list.children).forEach(function(li){ if(li.querySelector('.hb-name').textContent===x.display_name) li.querySelector('.hb-who').appendChild(el('span','hb-supporter',x.supporter_level)); }); }); });
     // Where each score comes from (score_sources RPC); skipped quietly if it is not there yet.
     FG.sb.rpc('score_sources', { p_period: 'month', p_limit: 25 }).then(function (s) {
       if (s.error || !s.data) return;

@@ -35,6 +35,7 @@
       .forEach(function (id) { $(id).hidden = true; });
     $('pf-name').textContent = '';
     doc.title = 'Profile' + SUFFIX;
+    var support=doc.querySelector('.pf-supporter'); if(support)support.remove();
   }
 
   function status(text) { var s = $('pf-status'); s.textContent = text || ''; s.hidden = !text; s.classList.remove('pf-own'); }
@@ -154,6 +155,7 @@
     current = p;
     doc.title = p.display_name + SUFFIX;
     $('pf-name').textContent = p.display_name;
+    var visibleName=p.display_name; FG.sb.rpc('supporter_levels').then(function(res){ if(res.error || !Array.isArray(res.data) || !current || current.display_name!==visibleName)return; var level=res.data.find(function(x){return x.display_name===visibleName;}); if(!level)return; var label=doc.createElement('p');label.className='pf-supporter';label.textContent=level.supporter_level;$('pf-name').after(label); });
     $('pf-name').removeAttribute('data-name-style');
     if (S.nameStyle) S.nameStyle($('pf-name'), p.name_item_id);
     var oldBadge = $('pf-name').parentNode.querySelector('.fg-badge');

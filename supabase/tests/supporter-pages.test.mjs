@@ -37,7 +37,7 @@ const catalog = () => [
   { id: 'badge-supporter-bronze', type: 'badge', name: 'Bronze supporter', description: '500 Cotton.', price: 0, is_default: false, award: 'supporter', award_coins: 500 },
   { id: 'badge-supporter-silver', type: 'badge', name: 'Silver supporter', description: '2,500 Cotton.', price: 0, is_default: false, award: 'supporter', award_coins: 2500 }
 ];
-const STATUS = { topped_up_coins: 1350, tiers: [{ id: 'badge-supporter-bronze', name: 'Bronze supporter', coins: 500, owned: true }, { id: 'badge-supporter-silver', name: 'Silver supporter', coins: 2500, owned: false }], founding_left: 73, founding_owned: false };
+const STATUS = { support_equivalent_egp: 135, tiers: [{ id: 'badge-supporter-bronze', name: 'Bronze supporter', coins: 500, egp: 100, owned: true }, { id: 'badge-supporter-silver', name: 'Silver supporter', coins: 1250, egp: 250, owned: false }], founding_left: 73, founding_owned: false };
 const POLL = (vote = null, can = true) => ({ options: [{ id: 'lotus', name: 'Lotus', description: 'Pink lotus.', votes: 3 }, { id: 'khan', name: 'Khan el-Khalili', description: 'Brass.', votes: 1 }], my_vote: vote, can_vote: can });
 
 function fake(opts, calls) {
@@ -109,14 +109,14 @@ await test('names: their own tab, each previewed in its style; earned badges are
   const silver = p.cell('badge-supporter-silver');
   assert.equal(silver.querySelector('[data-act="buy"]'), null);
   assert.equal(silver.querySelector('[data-act="gift"]'), null);
-  assert.match(silver.querySelector('.mkt-acts').textContent, /Earned by topping up/);
+  assert.match(silver.querySelector('.mkt-acts').textContent, /Earned through support/);
   assert.match(p.cell('badge-founding').querySelector('.mkt-acts').textContent, /First 100 to top up/);
   assert.ok(p.btn('badge-supporter-bronze', 'Wear'), 'an earned badge you hold is worn like any other (the main site now says Wear, 8M)');
   const box = p.$('mkt-supporter');
-  assert.match(box.textContent, /1,350 Cotton topped up\. Silver supporter at 2,500 Cotton: 1,150 Cotton to go\./);
-  assert.match(box.textContent, /73 of 100 places left/);
-  assert.equal(box.querySelector('[role=meter]').getAttribute('aria-valuenow'), '1350');
-  assert.equal(box.querySelector('.mkt-sup-legend b').textContent, 'Bronze 500', 'the badges you hold are bold');
+  assert.match(box.textContent,/54% toward Silver supporter/);
+  assert.doesNotMatch(box.textContent,/EGP|topped up/);
+  assert.equal(box.querySelector('[role=meter]').getAttribute('aria-valuenow'), '135');
+  assert.equal(box.querySelector('.mkt-sup-legend b').textContent, 'Bronze supporter', 'the badges you hold are bold');
   assert.match(p.cell('banner-nile-flow').textContent, /Animated/);
 });
 
@@ -157,7 +157,7 @@ await test('the theme vote: supporters vote and see their choice; others see the
   assert.match(p.$('mkt-vote').textContent, /3 votes/);
   const q = await boot({ supporter: false });
   assert.equal(q.$('mkt-vote').querySelectorAll('button').length, 0);
-  assert.match(q.$('mkt-vote').textContent, /top up once to earn a supporter badge and a vote/);
+  assert.match(q.$('mkt-vote').textContent, /earn a supporter badge through money and contributions to vote/);
 });
 
 await test('Owned: gifts from other members come first; For Geeks keeps its lower-case words', async () => {
@@ -168,7 +168,7 @@ await test('Owned: gifts from other members come first; For Geeks keeps its lowe
   const g = await boot({ main: false });
   assert.equal(g.btn('banner-dusk', 'gift').textContent, 'gift');
   assert.match(g.$('mkt-supporter').textContent, /bronze/);
-  assert.match(g.$('mkt-supporter').querySelector('.mkt-sup-legend').textContent, /bronze 500.*silver 2,500/, 'the legend is lower case on For Geeks');
+  assert.match(g.$('mkt-supporter').querySelector('.mkt-sup-legend').textContent, /bronze supporter.*silver supporter/, 'the legend is lower case on For Geeks');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

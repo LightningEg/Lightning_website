@@ -19,7 +19,7 @@
  function copyRow(label,value,key){const dt=el('dt',label),dd=el('dd',value||'Not set yet');dd.dir='auto';if(value){const b=el('button','Copy');b.type='button';b.className='btn ghost';b.setAttribute('aria-label','Copy '+label.toLowerCase());b.onclick=async()=>{try{await navigator.clipboard.writeText(String(value));msg(label+' copied.');}catch{msg('Copy this: '+value);}};dd.append(b);}if(key){dt.className='wal-key';dd.className='wal-key';}$('topup-details').append(dt,dd);}
  function showPay(){if(!pay)return;existing=null;clearFormError();$('topup-details').replaceChildren();
   copyRow('InstaPay address',pay.instapay_address);copyRow('Receiver name',pay.recipient_name);copyRow('Transfer note: your email',pay.note_email,true);
-  $('topup-rate').textContent='1 EGP = '+pay.coins_per_egp+' coins. Send from '+pay.minimum_egp+(pay.maximum_egp==null?'':' to '+Number(pay.maximum_egp).toLocaleString('en-US'))+' EGP. '+(pay.tiers||[]).map(t=>t.bonus_percent+'% bonus from '+t.minimum_egp+' EGP').join('; ')+((pay.tiers||[]).length?'.':'');
+  $('topup-rate').textContent='1 EGP = '+pay.coins_per_egp+' Cotton. Send from '+pay.minimum_egp+(pay.maximum_egp==null?'':' to '+Number(pay.maximum_egp).toLocaleString('en-US'))+' EGP. '+(pay.tiers||[]).map(t=>t.bonus_percent+'% bonus from '+t.minimum_egp+' EGP').join('; ')+((pay.tiers||[]).length?'.':'');
   $('topup-pay').hidden=false;form.hidden=true;}
 
  /* ---------- step 2: confirm the payment ---------- */
@@ -27,7 +27,7 @@
   form.elements.date.value=today();form.elements.date.max=today();
   const a=$('topup-amount');a.readOnly=!!request;if(pay){a.min=pay.minimum_egp;if(pay.maximum_egp==null)a.removeAttribute('max');else a.max=pay.maximum_egp;}
   $('topup-for').textContent=request?'For the top-up you opened on '+String(request.created_at||'').slice(0,10)+'.':'';
-  if(request){a.value=String((request.original_amount_piastres||request.price_piastres)/100);$('topup-quote').textContent='You receive '+count(request.coins)+' coins.';}
+  if(request){a.value=String((request.original_amount_piastres||request.price_piastres)/100);$('topup-quote').textContent='You receive '+count(request.coins)+' Cotton.';}
   else $('topup-quote').textContent='Enter the amount to see your Cotton.';
   $('topup-send').disabled=!request;$('topup-pay').hidden=true;form.hidden=false;form.elements.date.focus();}
  async function price(){const run=++quoteRun,uid=user;quote=null;$('topup-send').disabled=true;const amount=Number($('topup-amount').value);if(!Number.isSafeInteger(amount)||amount<1){$('topup-quote').textContent='Enter a whole EGP amount.';return;}if(amount*100>2147483647){$('topup-quote').textContent='This amount is too large to process online. Contact support.';return;}
@@ -44,7 +44,7 @@
   const b=$('topup-send');sendBusy=true;b.disabled=true;
   try{const r=await rpc('submit_instapay_topup',{p_amount_piastres:existing?(existing.original_amount_piastres||existing.price_piastres):quote.amount_piastres,p_request_key:requestKey,p_accept_terms:true,p_expected_coins:existing?existing.coins:quote.coins,p_pricing_version:existing?(existing.pricing_version||0):quote.pricing_version,p_payer:payer,p_sent_on:f.elements.date.value});
    if(run!==version)return;form.reset();form.hidden=true;existing=null;key=crypto.randomUUID();$('topup-new').hidden=false;
-   msg('Thank you. We’ll add '+count(r.coins)+' Cotton once your '+egp(r.price_piastres)+' shows in our account, usually within one working day.');$('topup-status').scrollIntoView?.({block:'center'});await refresh();}
+   msg('Payment details received. We’ll add '+count(r.coins)+' Cotton once your '+egp(r.price_piastres)+' shows in our account, usually within one working day.');$('topup-status').scrollIntoView?.({block:'center'});await refresh();}
   catch(e){if(run===version){formMsg(error(e));if(/quote changed/i.test(error(e)))await price();}}
   finally{sendBusy=false;b.disabled=!existing&&!quote;}};
  $('topup-new').onclick=()=>{msg('');$('topup-new').hidden=true;showPay();};

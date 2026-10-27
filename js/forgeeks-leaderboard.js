@@ -17,6 +17,7 @@
   var period = 'month';
   var sample = /[?&]sample(=|&|$)/.test(root.location.search);
   var boardCache = {};
+  var previousRanks = {}, levels = {};
   var boardToken = 0, dirToken = 0, shown = 0;
 
   /* ---------- the board ---------- */
@@ -77,6 +78,7 @@
     if (!sample) a.href = S.profileHref(r.display_name);
     if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     td.appendChild(a);
+    if(levels[r.display_name]) td.appendChild(S.el('span','lb-supporter',levels[r.display_name]));
     var coder = coderLine(r);
     if (coder) td.appendChild(coder);
     tr.appendChild(td);
@@ -118,7 +120,7 @@
       $('lb-empty').hidden = false;
       return;
     }
-    good.forEach(function (r) { body.appendChild(row(r)); });
+    good.forEach(function (r) { var tr=row(r); body.appendChild(tr); var old=previousRanks[period+':'+r.display_name]; if(!sample && old!=null && old!==Number(r.rank) && tr.animate && !root.matchMedia('(prefers-reduced-motion: reduce)').matches) tr.animate([{opacity:.5,transform:'translateY('+Math.max(-16,Math.min(16,(Number(r.rank)-old)*8))+'px)'},{opacity:1,transform:'none'}],{duration:300,easing:'ease-out'}); previousRanks[period+':'+r.display_name]=Number(r.rank); });
     $('lb-empty').hidden = true;
     list.hidden = false;
   }
@@ -240,6 +242,7 @@
     $('mem-retry').addEventListener('click', function () { loadMembers(true); });
     $('mem-more').addEventListener('click', function () { loadMembers(false); });
     $('lb-sample').hidden = !sample;
+    FG.sb.rpc('supporter_levels').then(function(res){ if(res.error || !Array.isArray(res.data))return; res.data.forEach(function(x){levels[x.display_name]=x.supporter_level;}); if(boardCache[period])showBoard(boardCache[period]); });
     pick('month');
     loadMembers(true);
     // Signing in or out changes which profiles are visible (members-only ones), so ask again.

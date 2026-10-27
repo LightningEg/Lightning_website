@@ -47,7 +47,14 @@ let n = 100;
 const newUser = async (name) => { const id = uid(++n); await q(`insert into auth.users (id, email) values ($1, $2)`, [id, `u${n}@example.test`]);
   await q(`update public.member_profiles set display_name=$2, adult_confirmed=true where user_id=$1`, [id, name || 'member-' + n]); return id; };
 let topups = 0;
-const topUp = (user, coins) => q(`select private.post_ledger($1,'paid_topup',0,$2,'instapay',$3,'primary','Top-up','topup:'||$3,now(),null,null)`, [user, coins, 'T' + (++topups)]);
+const topUp = async (user, coins) => {
+  const ref='TEST-'+(++topups), amount=coins*20;
+  const pack=(await q(`insert into public.coin_packages(name,coins,price_piastres) values('Test', $1,$2) returning id`,[coins,amount])).rows[0].id;
+  const request=(await q(`insert into public.topup_requests(user_id,package_id,request_key,coins,price_piastres) values($1,$2,gen_random_uuid(),$3,$4) returning id`,[user,pack,coins,amount])).rows[0].id;
+  const entry=(await q(`select (private.post_ledger($1,'paid_topup',0,$2,'instapay',$3,'primary','Top-up','topup:'||$3,now(),null,null)).id id`,[user,coins,request])).rows[0].id;
+  await q(`insert into public.bank_transfers(reference,amount_piastres,received_at,request_id,recorded_by,note) values($1,$2,now(),$3,$4,'Test transfer')`,[ref,amount,request,user]);
+  await q(`update public.topup_requests set status='approved',received_piastres=price_piastres,payment_reference=$2,ledger_entry_id=$3,reviewed_by=$4,reviewed_at=now() where id=$1`,[request,ref,entry,user]);
+};
 const gift = (user, coins) => as('service_role', null, () => q(`select * from public.award_coins($1,'admin_gift',$2,'test',$3,'Coins for the test')`, [user, coins, 'G' + (++topups)]));
 const owns = async (user, item) => (await q(`select 1 from public.inventory where user_id=$1 and item_id=$2`, [user, item])).rows.length === 1;
 const balance = async user => (await q(`select balance from public.wallets where user_id=$1`, [user])).rows[0].balance;
@@ -61,14 +68,14 @@ await test('supporter badges are earned by coins topped up, kept, and never sold
   await topUp(M, 250);
   assert.equal(await owns(M, 'badge-supporter-bronze'), true, '550 coins: bronze');
   assert.equal(await owns(M, 'badge-supporter-silver'), false);
-  await topUp(M, 2000);
-  assert.equal(await owns(M, 'badge-supporter-silver'), true, '2,550 coins: silver');
+  await topUp(M, 700);
+  assert.equal(await owns(M, 'badge-supporter-silver'), true, '1,250 Cotton: silver');
   await gift(M, 50000);
   assert.equal(await owns(M, 'badge-supporter-gold'), false, 'coins given by the owner are not top-ups');
   await assert.rejects(rpc(M, `select * from public.purchase_item_at_price('badge-supporter-gold',0,$1)`, [key()]), /earned, not sold|not available|price/);
   const s = await rpc(M, `select public.supporter_status() s`);
-  assert.equal(Number(s.s.topped_up_coins), 2550);
-  assert.deepEqual(s.s.tiers.map(t => [t.id, t.owned]), [['badge-supporter-bronze', true], ['badge-supporter-silver', true], ['badge-supporter-gold', false]]);
+  assert.equal(Number(s.s.support_equivalent_egp), 250);
+  assert.deepEqual(s.s.tiers.map(t => [t.id, t.owned]), [['badge-supporter-bronze', true], ['badge-supporter-silver', true], ['badge-supporter-gold', false], ['badge-supporter-true',false]]);
   const e = await rpc(M, `select * from public.equip_item('badge-supporter-silver')`);
   assert.equal(e.slot, 'badge');
 });
@@ -192,6 +199,44 @@ await test('the export includes gifts and the vote', async () => {
   assert.ok(Array.isArray(x.gifts.received));
 });
 
+await test('combined support: 500 EGP plus 2,500 score earns True supporter at 1,000 EGP equivalent', async () => {
+  const M=await newUser(); await topUp(M,2500);
+  assert.equal(await owns(M,'badge-supporter-true'),false);
+  await as('service_role',null,()=>q(`select public.award_coins($1,'contribution_award',2499,'pr','combined-below','Merged work')`,[M]));
+  assert.equal(await owns(M,'badge-supporter-true'),false);
+  await as('service_role',null,()=>q(`select public.award_coins($1,'feedback_award',1,'feedback','combined-boundary','Accepted work')`,[M]));
+  assert.equal(await owns(M,'badge-supporter-true'),true);
+  assert.equal(Number((await rpc(M,`select public.supporter_status() s`)).s.support_equivalent_egp),1000);
+});
+await test('contributions alone reach every tier without buying Cotton; gifts cannot qualify',async()=>{
+  const M=await newUser(); await gift(M,50000);
+  assert.equal(await owns(M,'badge-supporter-bronze'),false);
+  for(const [score,id] of [[500,'bronze'],[1250,'silver'],[2500,'gold'],[5000,'true']]) {
+    const before=Number((await q(`select contribution_score from public.wallets where user_id=$1`,[M])).rows[0].contribution_score);
+    await as('service_role',null,()=>q(`select public.award_coins($1,'contribution_award',$2,'pr',$3,'Tier boundary')`,[M,score-before,'tier-'+id]));
+    assert.equal(await owns(M,'badge-supporter-'+id),true);
+  }
+});
+await test('public supporter output contains earned level only, not money or private progress',async()=>{
+ const M=await newUser('public-supporter'); await q(`update public.member_profiles set visibility='public' where user_id=$1`,[M]); await topUp(M,5000);
+ const rows=(await as('anon',null,()=>q(`select * from public.supporter_levels() where display_name='public-supporter'`))).rows;
+ assert.deepEqual(Object.keys(rows[0]).sort(),['display_name','supporter_badge','supporter_level']);
+ assert.equal(rows[0].supporter_level,'True supporter');
+ const status=(await as('anon',null,()=>q(`select public.supporter_status() s`))).rows[0].s;
+ assert.equal(status.support_equivalent_egp,null);
+});
+await test('bonus Cotton does not inflate confirmed EGP support and corrected contributions reduce progress',async()=>{
+ const M=await newUser(); await topUp(M,500);
+ const entry=(await q(`select id from public.ledger_entries where user_id=$1 and kind='paid_topup'`,[M])).rows[0].id;
+ // Additional bonus-only wallet credit is not confirmed financial support.
+ await as('service_role',null,()=>q(`select public.award_coins($1,'admin_gift',5000,'test','bonus-test','Promotional Cotton')`,[M]));
+ assert.equal(Number((await rpc(M,`select public.supporter_status() s`)).s.support_equivalent_egp),100);
+ const award=(await as('service_role',null,()=>q(`select (public.award_coins($1,'contribution_award',500,'pr','reversed-support','Work')).id id`,[M]))).rows[0].id;
+ assert.equal(Number((await rpc(M,`select public.supporter_status() s`)).s.support_equivalent_egp),200);
+ await q(`select private.post_ledger($1,'correction',-500,-500,'correction',$2::text,'primary','Reversed work','support-correction',now(),$2::bigint,null)`,[M,award]);
+ assert.equal(Number((await rpc(M,`select public.supporter_status() s`)).s.support_equivalent_egp),100);
+ assert.equal(Number((await q(`select contribution_score from public.wallets where user_id=$1`,[M])).rows[0].contribution_score),0);
+});
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();
 process.exitCode = failed ? 1 : 0;

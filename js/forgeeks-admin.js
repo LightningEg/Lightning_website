@@ -32,9 +32,10 @@
     if (['accepted', 'rejected', 'duplicate'].indexOf(status) < 0) return { error: 'Choose accept, duplicate or reject.' };
     var amount = 0;
     if (status === 'accepted') {
-      amount = wholeNumber(coins === '' || coins == null ? 0 : coins);
+      amount = wholeNumber(coins === '' || coins == null ? 10 : coins);
       if (!(amount >= 0 && amount <= 10000)) return { error: 'Coins: a whole number from 0 to 10000.' };
     }
+    if (status === 'accepted') { amount = Math.max(10, amount); if (amount > 10 && !note) return { error: 'Add a note for the discretionary bonus.' }; }
     if (note.length > 500) return { error: 'Note: at most 500 characters.' };
     return { data: { p_id: id, p_status: status, p_amount: amount, p_note: note || null } };
   }
@@ -247,7 +248,7 @@
     var fields = el('div', 'review-fields');
     var c = el('div', 'f');
     var cl = el('label', null, 'coins'); cl.htmlFor = 'fbc-' + f.id;
-    var ci = el('input'); ci.id = 'fbc-' + f.id; ci.type = 'number'; ci.min = '0'; ci.max = '10000'; ci.step = '1'; ci.value = '0'; ci.setAttribute('inputmode', 'numeric');
+    var ci = el('input'); ci.id = 'fbc-' + f.id; ci.type = 'number'; ci.min = '0'; ci.max = '10000'; ci.step = '1'; ci.value = '10'; ci.setAttribute('inputmode', 'numeric');
     c.appendChild(cl); c.appendChild(ci);
     var n = el('div', 'f');
     var nl = el('label', null, 'note to the member'); nl.htmlFor = 'fbn-' + f.id;

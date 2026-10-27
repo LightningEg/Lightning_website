@@ -68,43 +68,23 @@ await test('signed out: the stories are shown, the share form is not', async () 
   assert.equal(p.rpcs('story_kit').length, 0);
 });
 
-await test('one form: link, one line and consent; no draft step, no title field; the code and link are shown before pasting', async () => {
-  const p = await boot();
-  assert.equal(p.$('story-member').hidden, false);
-  assert.equal(p.$('story-kit-text').textContent, KIT.text, 'the code and the link to put in the post');
-  assert.equal(p.rpcs('story_kit').length, 1);
-  const f = p.$('story-form');
-  assert.deepEqual([...f.elements].map(e => e.name).filter(Boolean), ['id', 'url', 'line', 'consent']);
-  assert.equal(f.querySelector('[type=submit]').textContent, 'Share for review');
-  assert.ok(![...p.w.document.querySelectorAll('button')].some(b => /draft/i.test(b.textContent)), 'no draft step');
-  assert.ok(p.$('story-kit').compareDocumentPosition(f) & p.w.Node.DOCUMENT_POSITION_FOLLOWING, 'the code comes first');
-  f.elements.url.value = 'https://www.linkedin.com/posts/mona-2';
-  f.elements.line.value = 'I keep a budget in envelopes and check it each Friday.';
-  f.elements.consent.checked = true;
-  await p.submit(f);
-  const call = p.rpcs('share_story')[0];
-  assert.deepEqual(plain(call.args), { p_url: 'https://www.linkedin.com/posts/mona-2', p_line: 'I keep a budget in envelopes and check it each Friday.', p_consent: true, p_id: null });
-  assert.match(p.$('story-status').textContent, /Shared/);
-  assert.equal(f.elements.url.value, '', 'the form is cleared');
+await test('one story form sends link, title, excerpt and author without asking for post additions',async()=>{
+ const p=await boot();const f=p.$('story-form');
+ assert.equal(p.rpcs('story_kit').length,0);
+ assert.deepEqual([...f.elements].map(e=>e.name).filter(Boolean),['id','title','author','url','line','consent']);
+ f.elements.title.value='My Friday budget';f.elements.author.value='Mona';f.elements.url.value='https://www.linkedin.com/posts/mona-2';f.elements.line.value='I keep a budget in envelopes and check it each Friday.';f.elements.consent.checked=true;
+ await p.submit(f);
+ assert.deepEqual(plain(p.rpcs('share_story')[0].args),{p_url:'https://www.linkedin.com/posts/mona-2',p_line:'I keep a budget in envelopes and check it each Friday.',p_consent:true,p_id:null,p_title:'My Friday budget',p_author:'Mona'});
+ assert.equal(f.elements.url.value,'');
 });
-
-await test('the code can be copied, and a refusal is said in plain words', async () => {
-  const p = await boot({ failShare: 'paste the link to your own LinkedIn or Reddit post' });
-  let copied = null;
-  Object.defineProperty(p.w.navigator, 'clipboard', { value: { writeText: async t => { copied = t; } }, configurable: true });
-  await p.click(p.$('story-copy'));
-  assert.equal(copied, KIT.text);
-  const f = p.$('story-form');
-  f.elements.url.value = 'https://evil.example/x';
-  f.elements.line.value = 'I keep a budget in envelopes and check it each Friday.';
-  f.elements.consent.checked = true;
-  await p.submit(f);
-  assert.equal(p.$('story-status').textContent, 'Paste the link to your own LinkedIn or Reddit post.');
+await test('invalid story source returns the server refusal without claiming verification',async()=>{
+ const p=await boot({failShare:'paste the link to your own LinkedIn or Reddit post'});const f=p.$('story-form');
+ f.elements.title.value='My Friday budget';f.elements.author.value='Mona';f.elements.url.value='https://evil.example/x';f.elements.line.value='I keep a budget in envelopes and check it each Friday.';f.elements.consent.checked=true;await p.submit(f);
+ assert.equal(p.$('story-status').textContent,'Paste the link to your own LinkedIn or Reddit post.');
 });
-
 await test('my posts: status, the reviewer\'s note, edit and share again with the same story, withdraw', async () => {
   const mine = [
-    { id: 'm1', status: 'draft', review_note: 'Please put your code in the post.', body: 'Envelopes.', linkedin_url: 'https://www.linkedin.com/posts/m1', reddit_url: null, awarded_coins: 0, awarded_points: 0 },
+    { id: 'm1', status: 'draft', title:'My envelopes',submitted_author_name:'Mona',review_note: 'Please clarify your excerpt.', body: 'Envelopes.', linkedin_url: 'https://www.linkedin.com/posts/m1', reddit_url: null, awarded_coins: 0, awarded_points: 0 },
     { id: 'm2', status: 'pending', review_note: null, body: 'Waiting.', linkedin_url: null, reddit_url: 'https://www.reddit.com/r/Egypt/comments/abc/x', awarded_coins: 0, awarded_points: 0 },
     { id: 'm3', status: 'published', review_note: null, body: 'Live.', linkedin_url: 'https://www.linkedin.com/posts/m3', reddit_url: null, awarded_coins: 100, awarded_points: 50 },
     { id: 'm4', status: 'draft', review_note: null, body: 'Internal old draft.', linkedin_url: null, reddit_url: null, awarded_coins: 0, awarded_points: 0 }
@@ -113,7 +93,7 @@ await test('my posts: status, the reviewer\'s note, edit and share again with th
   const cards = [...p.$('story-mine').querySelectorAll('article')];
   assert.equal(cards.length, 3, 'an internal draft with no note is not listed');
   assert.deepEqual(cards.map(c => c.querySelector('h3').textContent), ['Needs a change', 'Waiting for review', 'Published']);
-  assert.match(cards[0].textContent, /Note from the reviewer: Please put your code in the post\./);
+  assert.match(cards[0].textContent, /Note from the reviewer: Please clarify your excerpt\./);
   assert.match(cards[2].textContent, /Earned 100 coins and 50 points/);
   await p.click(p.button(cards[0], 'Edit and share again'));
   const f = p.$('story-form');
@@ -142,7 +122,7 @@ await test('the owner\'s row: Open post, Approve at the ladder, Ask for a change
   assert.equal(open.getAttribute('href'), 'https://www.linkedin.com/posts/sam-1');
   assert.equal(open.getAttribute('rel'), 'noopener noreferrer');
   assert.equal(rows[1].querySelector('a'), null, 'a link that is not a LinkedIn or Reddit post is not made');
-  assert.match(rows[0].textContent, /Verification code: deadbeef/);
+  assert.match(rows[0].textContent, /Name on the post: Sam/);
   const approve = p.button(rows[0], 'Approve');
   assert.equal(approve.textContent, 'Approve · 120 coins + 60 points');
   await p.click(approve);

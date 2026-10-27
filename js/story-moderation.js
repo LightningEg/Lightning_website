@@ -7,9 +7,9 @@
  const POST=/^https:\/\/www\.(linkedin|reddit)\.com\//;
  function card(s,onReview,ladder){
   const a=el('article');a.className='panel story-row';
-  a.append(el('h3',s.title),el('p',(s.author||'Member')+' · '+s.body),el('p','Verification code: '+s.verify_code));
+  a.append(el('h3',s.title),el('p',(s.author||'Member')+' · '+s.body),el('p','Name on the post: '+(s.submitted_author_name||s.author||'Member')));
   for(const [name,url]of[['LinkedIn',s.linkedin_url],['Reddit',s.reddit_url]])if(typeof url==='string'&&POST.test(url)){const link=el('a','Open the '+name+' post');link.href=url;link.target='_blank';link.rel='noopener noreferrer';a.append(link);}
-  const confirm=el('input');confirm.type='checkbox';const confirmLabel=el('label');confirmLabel.className='chk';confirmLabel.append(confirm,el('span','I opened the post: my member’s code is in it, it links to lightningeg.com, and it is general money content.'));a.append(confirmLabel);
+  const confirm=el('input');confirm.type='checkbox';const confirmLabel=el('label');confirmLabel.className='chk';confirmLabel.append(confirm,el('span','I opened the post: the title and excerpt match, and it follows the community rules.'));a.append(confirmLabel);
   const note=el('textarea');note.maxLength=500;note.placeholder='Note to the member (needed to ask for a change or decline)';note.setAttribute('aria-label','Note');a.append(note);
   const status=el('p');status.setAttribute('role','status');
   const coins=ladder?Number(ladder.coins):100,points=ladder?Number(ladder.points):50;
