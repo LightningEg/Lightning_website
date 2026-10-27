@@ -22,6 +22,7 @@ const tick = (ms = 5) => new Promise(r => setTimeout(r, ms));
 const UID = '22222222-2222-4222-8222-222222222222';
 const code = f => read(f);
 
+let withSet = false;
 const catalog = () => [
   { id: 'mono', type: 'theme', name: 'Mono', description: 'White on black', price: 0, is_default: true },
   { id: 'paper', type: 'theme', name: 'Paper', description: 'Light, for daylight reading', price: 100, is_default: false },
@@ -31,7 +32,8 @@ const catalog = () => [
   { id: 'banner-dusk', type: 'banner', name: 'Dusk', description: 'Indigo sky.', price: 70, is_default: false },
   { id: 'frame-gold', type: 'frame', name: 'Gold ring', description: 'Warm gold.', price: 50, is_default: false },
   { id: 'dendera', type: 'theme', name: 'Dendera', description: 'Temple pigments by day, stars by night.', price: 1000, is_default: false, tier: 'motion' },
-  { id: 'papyrus', type: 'theme', name: 'Papyrus', description: 'Nile night and gold over papyrus fibres.', price: 600, is_default: false, tier: 'texture' }
+  { id: 'papyrus', type: 'theme', name: 'Papyrus', description: 'Nile night and gold over papyrus fibres.', price: 600, is_default: false, tier: 'texture' },
+  ...(withSet ? [{ id: 'set-moss', type: 'set', name: 'Moss set', description: 'A set.', price: 200, set_price: 200, is_default: false }] : [])
 ];
 
 function fake(opts, calls) {
@@ -59,7 +61,8 @@ function fake(opts, calls) {
   return { auth: { onAuthStateChange(f) { setTimeout(() => f('INITIAL_SESSION', srv.session), 0); return { data: { subscription: { unsubscribe() {} } } }; } }, from, rpc };
 }
 
-async function boot({ main = true, withFetch = false, stored = {}, search = '', ...opts } = {}) {
+async function boot({ main = true, withFetch = false, stored = {}, search = '', withSets = false, ...opts } = {}) {
+  withSet = withSets;
   const file = main ? 'marketplace.html' : 'forgeeks-market.html';
   const dom = new JSDOM(strip(read(file)), { runScripts: 'outside-only', url: 'https://lightningeg.com/' + file + search, virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
@@ -238,6 +241,20 @@ await test('main: ?item= opens that item, scrolls to it and marks it; unknown id
   const q = await boot({ search: '?item=%3Cscript%3E' });
   assert.equal(q.qa('.mkt-hit').length, 0);
   assert.equal((await boot({ search: '?item=nope' })).qa('.mkt-hit').length, 0);
+});
+
+await test('main: a member who owns no theme starts on Sets, first in the tabs; one who owns a theme keeps the usual order', async () => {
+  const none = await boot({ owned: [], withSets: true });
+  assert.deepEqual(none.qa('.mkt-tab').map(b => b.textContent).slice(0, 2), ['Sets', 'Themes']);
+  assert.equal(none.q('#sec-sets').hidden, false, 'the Sets tab is the one showing');
+  assert.equal(none.q('#list-themes').closest('.mkt-sec').hidden, true);
+  const owner = await boot({ owned: ['meadow'], withSets: true });
+  assert.deepEqual(owner.qa('.mkt-tab').map(b => b.textContent).slice(0, 2), ['Themes', 'Sets']);
+  assert.equal(owner.q('#list-themes').closest('.mkt-sec').hidden, false);
+  const deep = await boot({ owned: [], withSets: true, search: '?item=paper' });
+  assert.equal(deep.q('#list-themes').closest('.mkt-sec').hidden, false, 'a link to an item wins over the default tab');
+  const out = await boot({ signedIn: false, withSets: true });
+  assert.equal(out.qa('.mkt-tab')[0].textContent, 'Themes', 'signed out: unchanged');
 });
 
 await test('For Geeks: the same structure in its own look; Try it switches the page theme and puts it back', async () => {

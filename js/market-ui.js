@@ -380,6 +380,22 @@
   }
   // marketplace.html?item=<id> (the app's See prices link): open that item's tab, scroll to it, mark it.
   var TAB_OF = { theme: 'themes', set: 'sets', banner: 'banners', frame: 'frames', badge: 'badges', name: 'names' };
+  // A member who owns no paid theme starts on Sets (a whole look for 20% less): its tab goes first, once.
+  var tabsOrdered = false;
+  function orderTabs(state) {
+    if (tabsOrdered || !MAIN || !state.signedIn || doc.body.dataset.collection) return;
+    var sets = state.items.some(function (i) { return i.type === 'set'; });
+    if (!sets) return;
+    tabsOrdered = true;
+    var owns = state.items.some(function (i) { return i.type === 'theme' && !i.is_default && i.owned; });
+    var hashed = VIEWS.some(function (v) { return v[0] === (root.location.hash || '').slice(1); });
+    if (owns) return;
+    var tabs = doc.querySelector('.mkt-tabs'), first = tabs && tabs.querySelector('.mkt-tab'), setsTab = tabs && tabs.querySelector('[data-view="sets"]');
+    if (setsTab && first && setsTab !== first) tabs.insertBefore(setsTab, first);
+    var asked = false;
+    try { asked = !!new root.URLSearchParams(root.location.search).get('item'); } catch (_) {}
+    if (!hashed && !asked) view = 'sets';
+  }
   var hitDone = false, hit = null;   // hit: the item being pointed at, and until when
   function mark() {
     if (!hit) return;
@@ -767,6 +783,7 @@
       drawTiers(state);
       if (apps.length) drawFeatured();
       loadExtras(state);
+      orderTabs(state);
       if (!built2) { built2 = true; loadBundled(); }
       arrange();
       drawLook();
