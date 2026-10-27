@@ -16,7 +16,7 @@
     dialog=make('dialog');dialog.className='site-invite';dialog.setAttribute('aria-labelledby','site-invite-title');dialog.setAttribute('aria-describedby','site-invite-description');
     const x=make('button','×');x.type='button';x.className='site-invite-close';x.setAttribute('aria-label',ar?'اقفل الدعوة':'Close invitation');x.addEventListener('click',close);dialog.append(x);
     const title=make('h2',ar?'خلي ليك مكان في Lightning.':'Make Lightning a little more yours.');title.id='site-invite-title';dialog.append(title);
-    const description=make('p',ar?'حساب مجاني لملفك الشخصي ومجموعتك وسجل الكوينز. التطبيق نفسه بيشتغل من غير حساب.':'A free account for your profile, collection and coin history. The finance app still works without an account.');description.id='site-invite-description';dialog.append(description);
+    const description=make('p',ar?'حساب مجاني لملفك الشخصي ومجموعتك وسجل الكوينز. التطبيق نفسه بيشتغل من غير حساب.':'A free account for your profile, collection and Cotton Plant history. The finance app still works without an account.');description.id='site-invite-description';dialog.append(description);
     const benefits=make('div');benefits.className='site-benefits';
     const rows=ar?[
       ['profile','ملف على مزاجك','اختار مين يشوف ملفك، وشارك شغلك لو حبيت.'],
@@ -26,7 +26,7 @@
     ]:[
       ['profile','Your own profile','Choose who can see it, and share your work if you want.'],
       ['looks','A look you like','Explore website themes and banners in the marketplace.'],
-      ['community','Credit for contributing','Accepted tasks and useful feedback can earn you coins.'],
+      ['community','Credit for contributing','Accepted tasks and useful feedback can earn you Cotton Plants.'],
       ['looks','A look you keep','Dress the site and the app in a theme you keep.']
     ];
     for(const [image,heading,copy] of rows){const f=make('figure');const img=make('img');img.src=prefix+'assets/account/'+image+'.svg';img.alt='';img.width=480;img.height=240;f.append(img,make('h3',heading),make('p',copy));benefits.append(f);}
