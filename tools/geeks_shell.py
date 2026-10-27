@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "20261027-coders-1"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
+VERSION = "20261027-coders-2"  # css/forgeeks.css, js/forgeeks.js, js/forgeeks-auth.js, js/forgeeks-config.js; bump it when any changes
 SUPABASE_JS = "js/vendor/supabase-2.118.0.js"  # pinned; a new version is a new file name
 
 # Themes the head script may apply before first paint (js/forgeeks.js lists their names and colours).

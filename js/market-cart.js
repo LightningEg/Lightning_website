@@ -7,7 +7,7 @@
   'use strict';
   var doc = root.document;
   var FG = root.FG;
-  var cart = { lines: [], total: 0, balance: 0, signedIn: false, busy: false };
+  var cart = { lines: [], total: 0, balance: 0, suggestions: [], signedIn: false, busy: false };
   var dlg = { key: null, trigger: null, busy: false, done: false };
   var chip, count, win, fab, fabCount;
   var MAIN = !!doc.body.dataset.mainStore;
@@ -41,6 +41,7 @@
     cart.lines = (view && view.lines) || [];
     cart.total = Number(view && view.total) || 0;
     cart.balance = Number(view && view.balance) || 0;
+    cart.suggestions = (view && Array.isArray(view.suggestions)) ? view.suggestions : [];
     paint();
   }
 
@@ -63,7 +64,7 @@
   function load() {
     var s = FG && FG.session && FG.session();
     cart.signedIn = !!s;
-    if (!s) { cart.lines = []; cart.total = 0; paint(); return Promise.resolve(); }
+    if (!s) { cart.lines = []; cart.total = 0; cart.suggestions = []; paint(); return Promise.resolve(); }
     return Promise.resolve(FG.sb.rpc('cart_view')).then(function (r) {
       if (!r.error) take(r.data);
     }, function () {});
@@ -133,6 +134,7 @@
     win.tabIndex = -1;
     win.appendChild(el('h2', null, T('your cart'))).id = 'cart-title';
     win.appendChild(el('ul', 'mkt-cart-lines')).id = 'cart-lines';
+    win.appendChild(el('div', 'mkt-cart-suggest')).id = 'cart-suggest';
     var sum = el('dl', 'mkt-sum');
     [['cart-l1', 'total', 'cart-total'], ['cart-l2', 'balance now', 'cart-now'], ['cart-l3', 'balance after', 'cart-after']].forEach(function (x) {
       var row = el('div');
@@ -203,6 +205,7 @@
       li.appendChild(rm);
       ul.appendChild(li);
     });
+    drawSuggestions();
     var after = cart.balance - cart.total, bad = problems().length, empty = payable().length === 0;
     $('cart-total').textContent = coins(cart.total);
     $('cart-now').textContent = coins(cart.balance);
@@ -214,6 +217,37 @@
     else if (bad) status('Remove the items marked above, then check out.', true);
     else if (after < 0) status('You need ' + coins(-after) + ' more. Top up, then come back: your cart is kept.', true);
     else status('');
+  }
+  // The server's set suggestions (8N): one button swaps the parts in the cart for the cheaper set.
+  function drawSuggestions() {
+    var box = $('cart-suggest');
+    while (box.firstChild) box.removeChild(box.firstChild);
+    if (dlg.done) return;
+    cart.suggestions.forEach(function (g) {
+      var saving = Number(g.saving) || 0, extra = Number(g.extra) || 0;
+      if (saving <= 0) return;
+      var b = el('button', 'mkt-suggest-btn', 'Switch to the ' + g.name + ': save ' + coins(saving));
+      b.type = 'button';
+      b.setAttribute('data-set', g.set_id);
+      b.addEventListener('click', function () { swapFor(g, b); });
+      var row = el('p', 'mkt-suggest');
+      row.appendChild(b);
+      if (extra > 0) row.appendChild(el('small', null, 'It adds the other parts of the set for ' + coins(extra) + ' more.'));
+      box.appendChild(row);
+    });
+  }
+  function swapFor(g, btn) {
+    if (cart.busy || dlg.busy) return;
+    cart.busy = true; btn.disabled = true;
+    Promise.resolve(FG.sb.rpc('cart_swap_for_set', { p_set_id: g.set_id })).then(function (r) { return r; }, function (e) { return { error: e }; })
+      .then(function (r) {
+        cart.busy = false;
+        if (r.error) { status(say(r.error), true); btn.disabled = false; return; }
+        take(r.data);
+        if (market()) market().render();
+        var f = win.querySelector('.mkt-cart-line .mkt-mini') || $('cart-close');
+        f.focus();
+      });
   }
   function removeLine(l, btn) {
     if (cart.busy || dlg.busy) return;
