@@ -103,11 +103,12 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-collection-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-stories-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
         text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-2\2', text)
         text=re.sub(r'(css/site-community[.]css|css/forgeeks-leaderboard[.]css|css/forgeeks-cosmetics[.]css|js/forgeeks-leaderboard[.]js|js/forgeeks-showcase[.]js|js/forgeeks-profile[.]js|js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-supporter-1\2', text)
+        text=re.sub(r'(js/(?:story-moderation|community-stories)[.]js|css/site-community[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-stories-1\2', text)
         text=re.sub(r'(js/forgeeks-market[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-cart-1\2', text)
         # the profile picture field (owner, 2026-10-27)
         text=re.sub(r'(js/forgeeks-account[.]js|css/forgeeks-account[.]css)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-avatar-1\2', text)
