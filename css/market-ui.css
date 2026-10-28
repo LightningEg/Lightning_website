@@ -181,7 +181,7 @@ body:not([data-main-store]) .mkt-wallet .mkt-bar .chip b{font-size:16px;font-wei
 
 /* the textured tier: one large card each, its texture on the whole drawing */
 .mkt-grid.textured{grid-template-columns:minmax(0,1fr);gap:20px;margin-bottom:36px}
-.mkt-grid.textured .mkt-cell{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-areas:"pv tier" "pv head" "pv note" "pv acts";grid-template-rows:auto auto 1fr auto;column-gap:28px;row-gap:10px;padding:24px}
+.mkt-grid.textured .mkt-cell{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-areas:"pv tier" "pv head" "pv note" "pv archived" "pv acts";grid-template-rows:auto auto auto auto auto;column-gap:28px;row-gap:10px;padding:24px}
 .mkt-grid.textured .mkt-big-pv{grid-area:pv}
 .mkt-grid.textured .mkt-tier{grid-area:tier;justify-self:start}
 .mkt-grid.textured .mkt-head{grid-area:head;flex-direction:column;align-items:flex-start;gap:6px}
@@ -189,13 +189,13 @@ body:not([data-main-store]) .mkt-wallet .mkt-bar .chip b{font-size:16px;font-wei
 .mkt-grid.textured .mkt-tag{font-size:16px;color:var(--mk-ink)}
 .mkt-grid.textured .mkt-note{grid-area:note;font-size:15px}
 .mkt-grid.textured .mkt-acts{grid-area:acts}
-.mkt-grid.textured .mkt-archived{grid-area:note}
+.mkt-grid.textured .mkt-archived{grid-area:archived}
 .mkt-big-pv{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:end;min-width:0}
 .mkt-big-pv .pv-pair{padding-bottom:0}
 @media (max-width:900px){
   .mkt-trust{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mkt-trust li{box-shadow:1px 0 0 var(--mk-line),0 1px 0 var(--mk-line)}
-  .mkt-grid.textured .mkt-cell{grid-template-columns:minmax(0,1fr);grid-template-areas:"pv" "tier" "head" "note" "acts"}
+  .mkt-grid.textured .mkt-cell{grid-template-columns:minmax(0,1fr);grid-template-areas:"pv" "tier" "head" "note" "archived" "acts"}
 }
 @media (max-width:640px){
   .mkt-tiers{grid-template-columns:minmax(0,1fr);gap:8px}

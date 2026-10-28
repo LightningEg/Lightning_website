@@ -14,6 +14,9 @@
   const VISIT = 'lightning-visit';
   const VISITOR = 'lightning-visitor';
   const VISITOR_DAYS = 90;
+  const STORE = new Set(['marketplace', 'ar/marketplace', 'collection', 'ar/collection', 'topup', 'ar/topup']);
+  // Public values, the same as js/forgeeks-config.js (the publishable key can only call site_track here).
+  const DB = {url: 'https://etecxblerynmkgppdfac.supabase.co', key: 'sb_publishable_Z0JRNnV2TYci1N6RObVjOg_ksRSJUzI'};
   const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec';
 
   const me = document.currentScript;
@@ -130,6 +133,12 @@
     const snapshot = JSON.stringify({...payload, ev: undefined});
     if (snapshot === lastSent && !(payload.ev && payload.ev.length)) return;
     lastSent = snapshot;
+    // On the store pages, the same record without the linked-visit ids also goes to Lightning's own database, so the
+    // owner console can follow a look from browsing to an order (supabase/migrations/20261028140000_site_analytics.sql).
+    const own = {...payload};
+    delete own.sid; delete own.vid; delete own.vn; delete own.ev;
+    if (STORE.has(page)) fetch(`${DB.url}/rest/v1/rpc/site_track`, {method: 'POST', keepalive: true,
+      headers: {apikey: DB.key, 'Content-Type': 'application/json'}, body: JSON.stringify({p: own})}).catch(() => {});
     const body = new URLSearchParams({form_type: 'event', payload: JSON.stringify(payload)});
     if (!(navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, body))) {
       fetch(ENDPOINT, {method: 'POST', mode: 'no-cors', keepalive: true, body}).catch(() => {});
@@ -142,6 +151,8 @@
   const track = name => { gc(`${name}@${release}`); note(name); };
   const once = new Set();
   const trackOnce = name => { if (!once.has(name)) { once.add(name); track(name); } };
+  // For other scripts (the marketplace, the wallet): `count` also sends the name to GoatCounter. Names only, never text.
+  window.LightningTrack = (name, count) => { name = slug(name).slice(0, 80); if (name) (count ? track : note)(name); };
 
   // ---- signals that need no click: scroll, time spent, speed ----
   let lastActivity = Date.now();

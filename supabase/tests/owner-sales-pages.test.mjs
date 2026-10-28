@@ -1,4 +1,5 @@
-// The owner console's Sales view (admin.html #sales, js/owner-sales.js) in jsdom with a fake admin_sales().
+// The owner console's Sales view (admin.html #sales, js/owner-sales.js) in jsdom with a fake admin_sales() and
+// admin_store_funnel() (the funnel's database side: store-funnel.test.mjs).
 // What the database computes and who may ask is tested in cart.test.mjs.
 //
 //   JSDOM_PATH=/path/to/jsdom/lib/api.js node supabase/tests/owner-sales-pages.test.mjs
@@ -29,10 +30,20 @@ const sample = () => ({
   recent_orders: [{ id: 'a1b2c3d4', at: '2026-10-26T10:30:00Z', lines: 2, total: 380, items: ['Nile', 'Halo'] }]
 });
 
-async function boot({ data = sample(), verified = true, fail = false } = {}) {
+const funnelSample = () => ({
+  days: 30, since: '2026-09-29',
+  steps: { store_views: 200, looked_closer: 80, tried_on: 60, started_buy: 20, short_of_coins: 9, members_added_to_cart: 8, orders: 4, buyers: 5 },
+  topups: { wallet_views: 30, requests: 10, details_sent: 7, credited: 6, credited_egp: 900, rejected: 1, cancelled: 2, waiting: 1, median_hours_to_credit: 3.5 },
+  items: [{ id: 'nile', name: 'Nile', type: 'theme', price: 300, tried: 40, opened: 25, added: 9, sold: 5 },
+    { id: 'y', name: '<img src=y onerror=alert(2)>', type: 'banner', price: 80, tried: 3, opened: 1, added: 0, sold: 0 }]
+});
+
+async function boot({ data = sample(), verified = true, fail = false, funnel = funnelSample() } = {}) {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/admin.html#sales', virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
-  w.FG = { say: e => e.message, sb: { rpc: async (name, args) => { calls.push({ name, args: args && JSON.parse(JSON.stringify(args)) }); return fail ? { data: null, error: { message: 'MFA administrator required' } } : { data: JSON.parse(JSON.stringify(data)), error: null }; } } };
+  w.FG = { say: e => e.message, sb: { rpc: async (name, args) => { calls.push({ name, args: args && JSON.parse(JSON.stringify(args)) }); if (fail) return { data: null, error: { message: 'MFA administrator required' } };
+    if (name === 'admin_store_funnel') return funnel ? { data: JSON.parse(JSON.stringify(funnel)), error: null } : { data: null, error: { message: 'function not found' } };
+    return { data: JSON.parse(JSON.stringify(data)), error: null }; } } };
   w.eval(read('js/owner-sales.js'));
   if (verified) w.document.getElementById('store-tools').disabled = false; // js/store-admin.js does this once verified
   w.dispatchEvent(new w.CustomEvent('lightning:owner-access', { detail: { verified } }));
@@ -55,7 +66,7 @@ await test('nothing loads before the owner session is verified', async () => {
 
 await test('it asks for thirty days first, and the figures answer what sold, how, and where carts stall', async () => {
   const p = await boot();
-  assert.deepEqual(p.calls.map(c => [c.name, c.args]), [['admin_sales', { p_days: 30 }]]);
+  assert.deepEqual(p.calls.map(c => [c.name, c.args]), [['admin_store_funnel', { p_days: 30 }], ['admin_sales', { p_days: 30 }]]);
   const t = p.$('ops-sales').textContent;
   assert.match(t, /Sold\s*12\s*items/);
   assert.match(t, /2,400\s*coins/);
@@ -74,7 +85,7 @@ await test('the period buttons ask again for seven or ninety days', async () => 
   const p = await boot();
   const b = [...p.$('ops-sales').querySelectorAll('.oc-seg button')].find(x => x.textContent === '7 days');
   b.click(); await tick();
-  assert.deepEqual(p.calls.map(c => c.args && c.args.p_days), [30, 7]);
+  assert.deepEqual(p.calls.filter(c => c.name === 'admin_sales').map(c => c.args && c.args.p_days), [30, 7]);
   assert.equal([...p.$('ops-sales').querySelectorAll('.oc-seg button')].find(x => x.getAttribute('aria-pressed') === 'true').textContent, '7 days');
 });
 
@@ -84,6 +95,27 @@ await test('a refusal is said plainly, and item names are only ever text', async
   const p = await boot();
   assert.equal(p.qa('#ops-sales img').length, 0);
   assert.match(p.$('ops-sales').textContent, /<img src=x/);
+});
+
+await test('the store funnel follows a look from browsing to buying, and top-ups from wallet to credit', async () => {
+  const p = await boot();
+  const t = p.$('ops-sales').textContent;
+  assert.match(t, /From browsing to buying/);
+  assert.match(t, /Visited the store\s*200/);
+  assert.match(t, /Opened Details or tried a look\s*80\s*40% of the step before/);
+  assert.match(t, /9 times a buy stopped because the wallet was short/);
+  assert.match(t, /Credited\s*6\s*86% of the step before/);
+  assert.match(t, /900 EGP credited/);
+  assert.match(t, /half are credited within 3.5 hours/);
+  assert.match(t, /Nile · Theme\s*40\s*25\s*9\s*5\s*13%/);
+  assert.equal(p.qa('#ops-sales img').length, 0, 'a look name is only ever text');
+});
+
+await test('when the funnel cannot load, sales still show', async () => {
+  const p = await boot({ funnel: null });
+  const t = p.$('ops-sales').textContent;
+  assert.match(t, /Sold\s*12\s*items/);
+  assert.doesNotMatch(t, /From browsing to buying/);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

@@ -460,7 +460,12 @@
     fgTry = null;
   }
 
+  // Counted by js/analytics.js when the page has it (main site): the look's id, never who looked.
+  function stat(name, count) { if (root.LightningTrack) root.LightningTrack(name, count); }
+  function lookId(e) { return (e.item && e.item.id) || e.id || 'look'; }
+
   function tryOn(e) {
+    stat('store-try-' + lookId(e));
     if (trying) undo();
     trying = e;
     if (e.kind === 'theme') {
@@ -566,6 +571,7 @@
   }
 
   function openDetail(e, trigger, mode) {
+    stat('store-details-' + lookId(e));
     detail.entry = e; detail.trigger = trigger;
     var it = e.item, win = doc.querySelector('.mkt-detail-win');
     doc.querySelector('.mkt-detail-tag').textContent = ui(e.app ? 'App theme · in testing' : e.kind === 'theme' ? 'Theme · both sites, computer and phone' : e.kind[0].toUpperCase() + e.kind.slice(1));
@@ -653,8 +659,10 @@
     var s = short();
     while (s.firstChild) s.removeChild(s.firstChild);
     var missing = it.price - balance;
+    stat('store-buy');
     s.hidden = missing <= 0;
     if (missing <= 0) return;
+    stat('store-short', true);
     $('buy-title').textContent = 'not enough Cotton for ' + it.name.toLowerCase();
     $('buy-status').textContent = '';
     $('buy-ok').hidden = true;
