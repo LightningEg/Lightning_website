@@ -274,7 +274,7 @@ await test('market_catalog: anon sees every active item, nothing owned or equipp
   assert.equal(rows.filter(r => r.award).length, 5, 'four supporter badges and Founding supporter, shown so members know how to earn them');
   assert.equal(rows.filter(r => r.type === 'name').length, 4);
   assert.equal(rows.filter(r => r.type === 'set').length, 3);
-  assert.equal(rows.filter(r => r.type === 'banner' && r.tier === 'motion').length, 2);
+  assert.equal(rows.filter(r => r.type === 'banner' && r.tier === 'motion').length, 4); // Nile at night, Drifting stars, Felucca, Sand wind
   assert.ok(all.every(r => r.owned === false && r.equipped === false));
   assert.deepEqual(Object.keys(rows[0]).sort(), ['asset_version', 'available_from', 'available_until', 'award', 'award_coins', 'description', 'equipped', 'id', 'is_default', 'name', 'owned', 'parts', 'price', 'set_price', 'tier', 'type']);
   const order = ['set', 'theme', 'banner', 'frame', 'name', 'badge'], types = all.map(r => order.indexOf(r.type));
