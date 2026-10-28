@@ -39,7 +39,7 @@ WORDS = {
             ("community", "Community", REDDIT, "r/LightningEg on Reddit", True),
             ("chat", "Chat with other testers", [(WHATSAPP, "WhatsApp"), (DISCORD, "Discord")], None, True),
         ],
-        "about": "Made in Egypt. Your money stays on your devices.",
+        "about": "Made in Egypt.",
         "explore": "Explore",
         "more": "More",
         "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("contribute", "Contribute")],
@@ -55,7 +55,7 @@ WORDS = {
             ("community", "المجتمع", REDDIT, "r/LightningEg على Reddit", True),
             ("chat", "دردشة مع المجرّبين التانيين", [(WHATSAPP, "واتساب"), (DISCORD, "Discord")], None, True),
         ],
-        "about": "اتعمل في مصر. وفلوسك بتفضل على أجهزتك.",
+        "about": "اتعمل في مصر.",
         "explore": "استكشف",
         "more": "كمان",
         "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات"), ("contribute", "ساهم معانا")],  # the Arabic Contribute page, not the English one

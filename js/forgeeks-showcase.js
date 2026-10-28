@@ -101,7 +101,11 @@
 
   // Frames and badges: purely visual catalog items. Only a well-formed catalog id reaches an attribute.
   var BADGES = {
-    'badge-bolt': ['Bolt', 'M13 2 4 14h6l-1 8 9-12h-6z'],
+    // Lightning's own two-leaf mark (assets/brand/lightning-mark.svg, scaled to 24): never a generic bolt (owner, 2026-10-28)
+    'badge-bolt': ['Lightning mark', [['leaf-a', 'M12 2.78C12 2.28 11.57 2 11.15 2.25L8.45 3.63C6.26 4.73 4.91 6.75 4.91 9.52L4.91 15.97C4.91 17.74 6.33 18.45 7.82 17.6L12 15.55Z'],
+      ['leaf-a lit', 'M4.91 11.89L12 8.45L12 15.55L7.82 17.6C6.33 18.45 4.91 17.74 4.91 15.97Z'],
+      ['leaf-b', 'M12 21.22C12 21.72 12.43 22 12.85 21.75L15.55 20.37C17.74 19.27 19.09 17.25 19.09 14.48L19.09 8.03C19.09 6.26 17.67 5.55 16.18 6.4L12 8.45Z'],
+      ['leaf-b lit', 'M19.09 12.11L12 15.55L12 8.45L16.18 6.4C17.67 5.55 19.09 6.26 19.09 8.03Z']]],
     'badge-coin': ['Coin', 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4v10m-3-7c0-1.4 1.3-2 3-2s3 .6 3 2-1.3 1.8-3 2-3 .6-3 2 1.3 2 3 2 3-.6 3-2'],
     'badge-pen': ['Writer', 'M4 20l1-4L16 5l3 3L8 19zM14 7l3 3'],
     'badge-star': ['Star', 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z'],
@@ -109,7 +113,9 @@
     'badge-supporter-bronze': ['Bronze supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
     'badge-supporter-silver': ['Silver supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
     'badge-supporter-gold': ['Gold supporter', 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6zm0 13-3.2-3.1a2 2 0 0 1 3.2-2.4 2 2 0 0 1 3.2 2.4z'],
-    'badge-supporter-true': ['True supporter', 'M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6zm1 5-5 7h4l-1 5 6-8h-4z'],
+    'badge-supporter-true': ['True supporter', [['', 'M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6z'],
+      ['leaf-a', 'M12 6.96C12 6.7 11.78 6.55 11.55 6.68L10.14 7.41C8.98 7.98 8.28 9.04 8.28 10.50L8.28 13.89C8.28 14.82 9.02 15.19 9.8 14.74L12 13.66Z'],
+      ['leaf-b', 'M12 16.64C12 16.9 12.22 17.05 12.45 16.92L13.86 16.19C15.02 15.62 15.72 14.56 15.72 13.10L15.72 9.71C15.72 8.78 14.98 8.41 14.2 8.86L12 9.94Z']]],
     'badge-founding': ['Founding supporter', 'M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8zM8 20h8'],
     // seasonal
     'badge-cotton-boll': ['Cotton boll', 'M12 21v-6m0 0c-3 0-5-2-5-4.5S9 6 12 8c3-2 5 0 5 2.5S15 15 12 15zM9 6.5a3 3 0 0 1 6 0'],
@@ -125,9 +131,14 @@
     var svg = doc.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '14'); svg.setAttribute('height', '14');
     svg.setAttribute('aria-hidden', 'true');
-    var path = doc.createElementNS(NS, 'path');
-    path.setAttribute('d', def[1]);
-    svg.appendChild(path); b.appendChild(svg);
+    // One stroked path, or parts: [class, d] each, where a leaf-* part is filled in the mark's colours.
+    (typeof def[1] === 'string' ? [['', def[1]]] : def[1]).forEach(function (part) {
+      var path = doc.createElementNS(NS, 'path');
+      if (part[0]) path.setAttribute('class', part[0]);
+      path.setAttribute('d', part[1]);
+      svg.appendChild(path);
+    });
+    b.appendChild(svg);
     var t = el('span', 'sr', def[0] + ' badge');
     b.appendChild(t);
     return b;
