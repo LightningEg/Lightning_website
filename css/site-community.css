@@ -64,7 +64,14 @@ body[data-main-store] .lb-list td.ct{color:var(--muted)}
 body[data-main-store] .lb-list td.sc{font-weight:800}
 body[data-main-store] .nm{font-weight:700}
 body[data-main-store] .lb-list tbody tr:not(.has-banner):hover td{background:var(--track)}
-body[data-main-store] .lb-veil{background:linear-gradient(90deg,color-mix(in srgb,var(--panel) 86%,transparent) 0%,color-mix(in srgb,var(--panel) 70%,transparent) 22%,color-mix(in srgb,var(--panel) 35%,transparent) 50%,color-mix(in srgb,var(--panel) 70%,transparent) 76%,color-mix(in srgb,var(--panel) 86%,transparent) 100%)}
+/* The veil keeps every figure at 4.5:1 or better on any banner: near-solid panel under the rank and name (the first
+   360px, where a name is cut at 240px) and under the two figure columns (the last 340px), and the banner whole in the
+   empty middle (owner, 2026-10-28: the old 35% middle sat right under Contributions). Narrow rows: solid all along. */
+body[data-main-store] .lb-veil{--lb-v:color-mix(in srgb,var(--white) 93%,transparent);background:linear-gradient(90deg,var(--lb-v) 0 360px,transparent 440px calc(100% - 420px),var(--lb-v) calc(100% - 340px) 100%)}
+[dir=rtl] body[data-main-store] .lb-veil,body[data-main-store][dir=rtl] .lb-veil,html[dir=rtl] body[data-main-store] .lb-veil{background:linear-gradient(270deg,var(--lb-v) 0 360px,transparent 440px calc(100% - 420px),var(--lb-v) calc(100% - 340px) 100%)}
+@media(max-width:1000px){body[data-main-store] .lb-veil,html[dir=rtl] body[data-main-store] .lb-veil{background:var(--lb-v)}}
+body[data-main-store] .lb-row.has-banner td.ct,body[data-main-store] .lb-row.has-banner td.rk{color:var(--ink)}
+body[data-main-store] .lb-row .nm{display:inline-block;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
 body[data-main-store] .lb-sample{font:500 14px/1.5 var(--body);color:var(--muted)}
 body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
 body[data-main-store] .av{background:var(--field);border:1px solid var(--line-ctl);font:700 14px var(--body)}
