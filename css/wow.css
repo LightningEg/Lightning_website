@@ -11,3 +11,5 @@
 @media (min-width:1001px){.t-stage .d-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* The seventh place (the dollar brokerage) takes the whole last row, in every layout */
 .t-stage .d-tiles .t-wide{grid-column:1/-1}
+/* Two columns on a phone: the ninth place takes the last row whole, so no tile sits alone (A16) */
+@media (min-width:381px) and (max-width:640px){.t-stage .d-tiles>div.kpi:last-of-type:nth-of-type(odd){grid-column:1/-1}}

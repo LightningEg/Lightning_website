@@ -80,7 +80,7 @@ await test('one story form sends link, title, excerpt and author without asking 
 await test('invalid story source returns the server refusal without claiming verification',async()=>{
  const p=await boot({failShare:'paste the link to your own LinkedIn or Reddit post'});const f=p.$('story-form');
  f.elements.title.value='My Friday budget';f.elements.author.value='Mona';f.elements.url.value='https://evil.example/x';f.elements.line.value='I keep a budget in envelopes and check it each Friday.';f.elements.consent.checked=true;await p.submit(f);
- assert.equal(p.$('story-status').textContent,'Paste the link to your own LinkedIn or Reddit post.');
+ assert.equal(p.$('story-status').textContent,'That link is not a LinkedIn or Reddit post. Use the post’s Share button and copy the link, or copy it from the address bar.');
 });
 await test('my posts: status, the reviewer\'s note, edit and share again with the same story, withdraw', async () => {
   const mine = [

@@ -57,8 +57,13 @@
     if (/session ended/i.test(m)) return 'Your session ended. Sign in again and verify MFA if you are using owner controls.';
     if (/community access is restricted/i.test(m)) return 'Your community access is restricted. Contact hello@lightningeg.com to request a review.';
     if (/post changed/i.test(m)) return 'This post changed after you opened it. Reload it and verify the current links and code.';
-    if (/LinkedIn or Reddit post/i.test(m)) return 'Paste the link to your own LinkedIn or Reddit post.';
-    if (/20 to 400 characters/i.test(m)) return 'Say in 20 to 400 characters how you use Lightning.';
+    if (/LinkedIn or Reddit post/i.test(m)) return 'That link is not a LinkedIn or Reddit post. Use the post’s Share button and copy the link, or copy it from the address bar.';
+    if (/20 to 400 characters/i.test(m)) return 'Copy 20 to 400 characters from your post as the excerpt.';
+    if (/title must be 5 to 140/i.test(m)) return 'Give the post a title of 5 to 140 characters.';
+    if (/author name must be 2 to 80/i.test(m)) return 'Write the name shown on the post, 2 to 80 characters.';
+    if (/submission limit reached/i.test(m)) return 'You have shared 5 posts today. Share the next one tomorrow.';
+    if (/too many draft stories/i.test(m)) return 'You have 20 posts waiting. Withdraw one you no longer need, then share again.';
+    if (/story too long or missing|title or summary too long/i.test(m)) return 'Keep the title under 140 characters and the excerpt under 400.';
     if (/tick the box to agree/i.test(m)) return 'Tick the box to agree to share your post under your display name.';
     if (/cannot be edited now/i.test(m)) return 'That post cannot be edited now. Share a new one instead.';
     if (/3 stories in 30 days/i.test(m)) return 'This member already earned story coins for 3 stories in 30 days. Approve it later.';
@@ -80,7 +85,16 @@
     if (c === '42501' || /permission denied|row-level security|administrator only/i.test(m)) return 'That is not allowed for your account.';
     if (c === '23514') return 'One of the values is not allowed. Check the form.';
     if (c === '23505') return 'That already exists.';
+    // A rule the database refused (raise exception, code P0001) is already written as an instruction:
+    // show it as a sentence rather than hide it behind "Something went wrong". Internals stay hidden.
+    if (c === 'P0001' && plain(m)) return plain(m);
     return 'Something went wrong. Try again.';
+  }
+
+  function plain(m) {
+    m = m.trim();
+    if (!m || m.length > 200 || /%|migration|contract|guard|idempotency|violates|syntax|relation|column|function|[_{}<>\\]/i.test(m)) return '';
+    return m.charAt(0).toUpperCase() + m.slice(1) + (/[.!?]$/.test(m) ? '' : '.');
   }
 
   var pure = { safeNext: safeNext, signInHref: signInHref, initial: initial, say: say };
@@ -297,6 +311,45 @@
       }, 0);
     });
   }
+
+  /* The answer next to the button. Pages keep one status line, often at the top of a long page, so on a phone
+     a refusal or a "Shared." appeared out of sight and the button seemed to do nothing. When a status line
+     changes within 15 seconds of a press and is off screen, a copy appears under the pressed button's row.
+     The status line stays the one screen readers hear; the copy is aria-hidden. */
+  var pressed = null, pressedAt = 0, near = null;
+  function press(b) {
+    if (!b || !b.closest || !b.closest('form,.panel,section')) return;
+    pressed = b; pressedAt = Date.now();
+  }
+  function offScreen(el) {
+    var r = el.getBoundingClientRect();
+    return !r.height || r.bottom < 0 || r.top > (root.innerHeight || doc.documentElement.clientHeight);
+  }
+  function echo(status) {
+    var text = status.textContent.trim();
+    if (near && near.dataset.for === status.id && !text) { near.remove(); near = null; return; }
+    if (!text || !pressed || !pressed.isConnected || Date.now() - pressedAt > 15000) return;
+    if (pressed.closest('[role=status],[role=alert]') || !offScreen(status) || offScreen(pressed)) return;
+    if (!near) { near = doc.createElement('p'); near.setAttribute('aria-hidden', 'true'); }
+    near.className = (status.className ? status.className + ' ' : '') + 'fg-near-status';
+    near.dataset.for = status.id || '';
+    near.textContent = text;
+    var row = pressed.closest('.row,.actions,.btn-row') || pressed;
+    if (row.nextSibling !== near) row.after(near);
+  }
+  function watchStatus() {
+    doc.addEventListener('click', function (e) { press(e.target.closest && e.target.closest('button,[type=submit],a.btn')); }, true);
+    doc.addEventListener('submit', function (e) { press(e.submitter || e.target.querySelector('[type=submit]')); }, true);
+    if (!root.MutationObserver) return;
+    new root.MutationObserver(function (list) {
+      list.forEach(function (m) {
+        var t = m.target.nodeType === 1 ? m.target : m.target.parentElement;
+        var s = t && t.closest && t.closest('[role=status],[role=alert]');
+        if (s && !s.classList.contains('fg-near-status')) echo(s);
+      });
+    }).observe(doc.body, { subtree: true, childList: true, characterData: true });
+  }
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', watchStatus); else watchStatus();
 
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(typeof window !== 'undefined' ? window : globalThis);

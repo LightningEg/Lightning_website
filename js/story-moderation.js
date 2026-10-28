@@ -4,7 +4,7 @@
 (function(){
  'use strict';
  const FG=window.FG,el=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;return e;};
- const POST=/^https:\/\/www\.(linkedin|reddit)\.com\//;
+ const POST=/^https:\/\/(www\.(linkedin|reddit)\.com|lnkd\.in|redd\.it)\//;
  function card(s,onReview,ladder){
   const a=el('article');a.className='panel story-row';
   a.append(el('h3',s.title),el('p',(s.author||'Member')+' · '+s.body),el('p','Name on the post: '+(s.submitted_author_name||s.author||'Member')));

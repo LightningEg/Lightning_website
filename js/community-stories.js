@@ -6,7 +6,7 @@
  const msg=s=>{$('story-status').textContent=s;};
  const action=(title,fn)=>{const b=el('button',title);b.type='button';b.className='btn ghost';b.onclick=async()=>{b.disabled=true;try{await fn();}catch(e){msg(FG.say(e));}finally{b.disabled=false;}};return b;};
  const rpc=async(n,p)=>{const r=await FG.sb.rpc(n,p);if(r.error)throw r.error;return r.data;};
- const SAFE=/^https:\/\/www\.(linkedin\.com\/(posts\/|feed\/update\/)|reddit\.com\/r\/[A-Za-z0-9_]+\/comments\/)/;
+ const SAFE=/^https:\/\/(www\.linkedin\.com\/(posts\/|feed\/update\/|pulse\/)|lnkd\.in\/|www\.reddit\.com\/r\/[A-Za-z0-9_]+\/(comments|s)\/|redd\.it\/)/;
  const STATE={pending:'Waiting for review',published:'Published',rejected:'Declined',withdrawn:'Withdrawn',draft:'Needs a change'};
  function mine(s){
   const a=el('article');a.className='panel';a.append(el('h3',STATE[s.status]||s.status),el('p',s.body));

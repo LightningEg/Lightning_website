@@ -56,19 +56,22 @@
 
   // Paced so the eye can follow: each tile takes 420px of scroll to fly in, the figure trails the scroll
   // by about a second, and tiles side by side go one after another, left to right, 160px of scroll apart.
-  const DISTANCE = 420, APART = 160;
+  // On a phone (one or two columns) the rows sit closer than 420px, so tiles from several rows flew at once,
+  // crossed to the middle and piled over each other: there each tile rises straight up its own column, faster.
   const row = el => tiles.filter(t => t.el.offsetTop === el.offsetTop);
-  const lead = el => APART * row(el).filter(t => t.el.offsetLeft > el.offsetLeft).length; // left goes first
+  const narrow = () => row(tiles[0].el).length < 3;
+  const DISTANCE = () => (narrow() ? 200 : 420), APART = () => (narrow() ? 80 : 160);
+  const lead = el => APART() * row(el).filter(t => t.el.offsetLeft > el.offsetLeft).length; // left goes first
   tiles.forEach(t => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: t.el, scrub: 1.2, invalidateOnRefresh: true,
-        start: () => `top ${land() + lead(t.el) + DISTANCE}px`, end: () => `top ${land() + lead(t.el)}px`,
+        start: () => `top ${land() + lead(t.el) + DISTANCE()}px`, end: () => `top ${land() + lead(t.el)}px`,
       },
       onUpdate() { t.p = this.progress(); paint(); },
     });
     tl.to(t.el, {
-      x: () => counter.offsetLeft + counter.offsetWidth / 2 - (t.el.offsetLeft + t.el.offsetWidth / 2),
+      x: () => (narrow() ? 0 : counter.offsetLeft + counter.offsetWidth / 2 - (t.el.offsetLeft + t.el.offsetWidth / 2)),
       y: () => -(lead(t.el) + 50), scale: .3, ease: 'power1.in', transformOrigin: '50% 0',
     }, 0).to(t.el, {opacity: 0, ease: 'power3.in'}, 0);
   });
