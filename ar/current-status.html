@@ -71,10 +71,11 @@
     <p class="label">التنزيل</p>
     <h1 style="--fit:7.6">نزّل لايتنينج. <span>ببلاش.</span></h1>
     <p class="d-hero-line">الإصدار 1.5.0 لويندوز وأندرويد. نزّل النسختين عشان موبايلك وكمبيوترك يشتغلوا على سجل واحد. ومفيش نسخة للآيفون لسه.</p>
-    <div class="d-actions">
-      <a class="btn btn-primary" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-v1.5.0-Windows-x64.zip">نزّل لويندوز</a>
-      <a class="btn btn-primary" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-Test-1.5.0-879-c73db53e.apk">نزّل لأندرويد</a>
+    <div class="d-actions" data-platform-first>
+      <a class="btn btn-primary" data-platform="windows" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-v1.5.0-Windows-x64.zip">نزّل لويندوز</a>
+      <a class="btn btn-primary" data-platform="android" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-Test-1.5.0-879-c73db53e.apk">نزّل لأندرويد</a>
     </div>
+    <script>/* An Android phone sees its own download first (8W). */(()=>{if(!/android/i.test(navigator.userAgent))return;document.querySelectorAll("[data-platform-first]").forEach(b=>{const a=b.querySelector('[data-platform="android"]');if(a)b.prepend(a);});})();</script>
     <p class="c-free status-note" role="note"><b>الإصدار 1.5.0 جاهز للتنزيل:</b> تقدر تجرّبه بكشوفك الحقيقية. وفي <a href="release-log.html">سجل التحديثات</a> هتلاقي اللي لسه بنصلّحه.</p>
   </header>
 
@@ -86,6 +87,21 @@
       <article class="card card-support"><span class="tile" aria-hidden="true">٢</span><h3>على الموبايل</h3><p>ملف APK مباشر من غير فك ضغط، ومن برّه جوجل بلاي، عشان كده ممكن أندرويد يحذّرك أو يطلب إذن التثبيت من المتصفح. نزّله من هنا بس، ومتثبّتش ملف APK من مصدر متعرفوش.</p><p>لو بترقّي من الإصدار 1.3.0 أو أقدم، احتفظ بنسخة احتياطية مستقلة قبل ما تمسح التطبيق القديم وتثبّت النسخة دي؛ مش هتتثبّت كتحديث فوق النسخة القديمة.</p></article>
       <article class="card card-support"><span class="tile" aria-hidden="true">٣</span><h3>اربط الجهازين</h3><p>افتح التطبيقين على نفس شبكة الواي فاي. الموبايل بيحتفظ بالسجل، والكمبيوتر بيستعيره منه، مشفّر ومن غير سيرفر.</p></article>
     </div>
+  </section>
+
+  <!-- The builds, with checksums and the archive -->
+  <section class="d-section status-downloads" id="downloads" aria-labelledby="downloads-title">
+    <div class="d-head"><p class="label">النسخة الحالية</p><h2 id="downloads-title">نسخة واحدة. للجهازين.</h2><p>ويندوز وأندرويد من نفس الكود، واتجرّبوا مع بعض. والنسخ الأقدم في <a class="status-inline-link" href="../versions.html">أرشيف النسخ</a>.</p></div>
+    <div class="status-table-wrap" role="region" aria-label="النسخ المتاحة للتنزيل" tabindex="0">
+      <table class="status-table">
+        <thead><tr><th>النسخة</th><th>الجهاز</th><th>الحالة</th><th>التنزيل</th><th>سجل التحديثات</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><b>لايتنينج 1.5.0</b><small>أحدث نسخة</small></th><td>ويندوز x64 · ملف ZIP<br><small><a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/SHA256SUMS">بصمات SHA-256</a> · <a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/BUILD.json">سجل البناء</a></small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-v1.5.0-Windows-x64.zip" target="_blank" rel="noreferrer">نزّل لويندوز</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v1.5.0">اللي اتغيّر</a></td></tr>
+          <tr><th scope="row"><b>لايتنينج 1.5.0</b><small>نفس الإصدار</small></th><td>أندرويد arm64 · ملف APK<br><small>اسمه على موبايلك Lightning Test · نسخة اختبار</small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-Test-1.5.0-879-c73db53e.apk" target="_blank" rel="noreferrer">نزّل لأندرويد</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v1.5.0">اللي اتغيّر</a></td></tr>
+          </tbody>
+      </table>
+    </div>
+    <p class="status-table-hint">نفس البصمات وسجل البناء للملفين <span aria-hidden="true">←</span></p>
   </section>
 
   <!-- Mohab's sample year: learn on fictional numbers first -->
@@ -100,30 +116,16 @@
     </div>
   </section>
 
-  <!-- The builds, with checksums and the archive -->
-  <section class="d-section status-downloads" id="downloads" aria-labelledby="downloads-title">
-    <div class="d-head"><p class="label">النسخة الحالية</p><h2 id="downloads-title">نسخة واحدة. للجهازين.</h2><p>ويندوز وأندرويد من نفس الكود، واتجرّبوا مع بعض. لو هتجرّب بأرقامك الحقيقية، احتفظ بنسخة احتياطية مستقلة. والنسخ الأقدم في <a class="status-inline-link" href="../versions.html">أرشيف النسخ</a>.</p></div>
-    <div class="status-table-wrap" role="region" aria-label="النسخ المتاحة للتنزيل" tabindex="0">
-      <table class="status-table">
-        <thead><tr><th>النسخة</th><th>الجهاز</th><th>الحالة</th><th>التنزيل</th><th>سجل التحديثات</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><b>لايتنينج 1.5.0</b><small>أحدث نسخة</small></th><td>ويندوز x64 · ملف ZIP<br><small><a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/SHA256SUMS">بصمات SHA-256</a> · <a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/BUILD.json">سجل البناء</a></small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-v1.5.0-Windows-x64.zip" target="_blank" rel="noreferrer">نزّل لويندوز</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v1.5.0">اللي اتغيّر</a></td></tr>
-          <tr><th scope="row"><b>لايتنينج 1.5.0</b><small>نفس الإصدار</small></th><td>أندرويد arm64 · ملف APK<br><small>اسمه على موبايلك Lightning Test · نسخة اختبار</small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.0/Lightning-Test-1.5.0-879-c73db53e.apk" target="_blank" rel="noreferrer">نزّل لأندرويد</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v1.5.0">اللي اتغيّر</a></td></tr>
-          </tbody>
-      </table>
-    </div>
-    <p class="status-table-hint">نفس البصمات وسجل البناء للملفين <span aria-hidden="true">←</span></p>
-  </section>
-
   <!-- Feedback: what to tell us, and where -->
-  <section class="d-section" id="app-themes" aria-labelledby="app-themes-title">
-    <div class="d-head"><p class="label">شكل التطبيق</p><h2 id="app-themes-title">جرّب دندرة.</h2><p>من الإعدادات ← المظهر، اختار «دندرة» أو «دندرة، بالليل». التغيير بيظهر فورًا. اختار شكل لايتنينج الافتراضي عشان ترجع له.</p></div>
-    <div class="status-steps"><p>السمات المجانية والمفتوحة بتتحفظ مع الملف. عشان تحتفظ بسمة مدفوعة: اشتريها من <a href="marketplace.html">المتجر</a>، ودوس «Get app code» على كارتها، والصق الكود في الإعدادات ← المظهر ← «افتح سمة اشتريتها». بتعملها مرة واحدة لكل ملف شخصي، وباقي أجهزة الملف بتفتح لوحدها. أي ملف شخصي تاني محتاج فتح لوحده بربع السعر. الفتح محتاج إصدار التطبيق اللي فيه الخطوة دي؛ 1.5.0 للتجربة بس.</p><p>شراء دندرة على الموقع بيشمل شكلها النهاري والليلي، وتقدر تلبسها على الموقع وFor Geeks بنفس الحساب. السعر الحالي والخطوات في <a href="../marketplace.html#app-guide">المتجر، قسم استخدمها في التطبيق</a>.</p></div>
-  </section>
-
   <section class="d-section" id="feedback" aria-labelledby="feedback-title">
     <div class="d-head"><p class="label">رأيك في التطبيق</p><h2 id="feedback-title">قابلتك مشكلة؟ قولّنا.</h2><p>ابعت كل مشكلة أو فكرة لوحدها. والأهم: الاستيراد كان واضح؟ والأرقام مفهومة؟ وعرفت تعمل إيه بعدها؟</p></div>
     <div class="d-actions"><a class="btn btn-primary" href="app-feedback.html">ابعت ملاحظاتك</a></div>
+  </section>
+
+  <!-- App themes: how to try and unlock one -->
+  <section class="d-section" id="app-themes" aria-labelledby="app-themes-title">
+    <div class="d-head"><p class="label">شكل التطبيق</p><h2 id="app-themes-title">جرّب دندرة.</h2><p>من الإعدادات ← المظهر، اختار «دندرة» أو «دندرة، بالليل». التغيير بيظهر فورًا. اختار شكل لايتنينج الافتراضي عشان ترجع له.</p></div>
+    <div class="status-steps"><p>السمات المجانية والمفتوحة بتتحفظ مع الملف. عشان تحتفظ بسمة مدفوعة: اشتريها من <a href="marketplace.html">المتجر</a>، ودوس «Get app code» على كارتها، والصق الكود في الإعدادات ← المظهر ← «افتح سمة اشتريتها». بتعملها مرة واحدة لكل ملف شخصي، وباقي أجهزة الملف بتفتح لوحدها. أي ملف شخصي تاني محتاج فتح لوحده بربع السعر. الفتح محتاج إصدار التطبيق اللي فيه الخطوة دي؛ 1.5.0 للتجربة بس.</p><p>شراء دندرة على الموقع بيشمل شكلها النهاري والليلي، وتقدر تلبسها على الموقع وFor Geeks بنفس الحساب. السعر الحالي والخطوات في <a href="../marketplace.html#app-guide">المتجر، قسم استخدمها في التطبيق</a>.</p></div>
   </section>
 
   <!-- The founder's story, short -->
