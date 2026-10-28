@@ -78,7 +78,11 @@
 /* Badges: a small mark beside the name. The words for screen readers sit in .sr. */
 .fg-badge{display:inline-grid;place-items:center;width:20px;height:20px;margin-inline-start:8px;border-radius:50%;vertical-align:middle;background:var(--well);border:1px solid var(--line);color:var(--ink)}
 .fg-badge svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.fg-badge[data-item="badge-bolt"]{color:#C28A00}
+.fg-badge[data-item="badge-bolt"]{color:var(--ink)}
+/* the two-leaf mark keeps the logo's own colours (B03: Vivid is for the logo), with its lit facet a step lighter */
+.fg-badge svg .leaf-a,.fg-badge svg .leaf-b{stroke:none}
+.fg-badge svg .leaf-a{fill:#0B6DD6}.fg-badge svg .leaf-a.lit{fill:#36B4F2}
+.fg-badge svg .leaf-b{fill:#14A874}.fg-badge svg .leaf-b.lit{fill:#2FD69A}
 .fg-badge[data-item="badge-coin"]{color:#9A6B12}
 .fg-badge[data-item="badge-pen"]{color:#0B7A57}
 .fg-badge[data-item="badge-star"]{color:#B8860B}
