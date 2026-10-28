@@ -15,7 +15,7 @@ window.LG={THEMES:[
     /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
        catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
     {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150,archived:true},
-    {id:'garnet',name:'Garnet',note:'wine red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:300},
+    {id:'garnet',name:'Garnet',note:'red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:300},
     {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:300},
     /* textured tier (guideline/themes.md section 7): a palette plus a woven texture behind the page, 600 coins */
     {id:'papyrus',name:'Papyrus',note:'Nile night and gold over papyrus fibres, with a travelling gold thread',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],tex:'papyrus',paid:true,price:1000},

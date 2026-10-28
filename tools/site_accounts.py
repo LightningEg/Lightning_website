@@ -53,7 +53,7 @@ def build():
         if name=='account':scripts+=['js/forgeeks-account.js','js/forgeeks-account-rewards.js','js/forgeeks-account-data.js']
         elif name=='leaderboard':scripts+=['js/forgeeks-showcase.js','js/forgeeks-leaderboard.js']
         elif name=='profile':scripts+=['js/forgeeks-showcase.js','js/forgeeks-profile.js','js/story-card.js','js/story-strip.js']
-        else:scripts+=['js/site-theme-previews.js','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
+        else:scripts+=['js/site-theme-previews.js?v=20261029-garnet-copy-1','js/forgeeks-showcase.js','js/theme-preview.js','js/cosmetic-parts.js','js/market-ui.js','js/forgeeks-market.js','js/activation-codes.js']
         if name in('marketplace','collection'):scripts.insert(scripts.index('js/forgeeks-market.js')+1,'js/market-cart.js')
         css=['css/landing.css','css/theme.css','css/forgeeks-account.css','css/forgeeks-rewards.css']
         if name in('marketplace','collection','leaderboard','account','profile'):css+=['css/forgeeks-cosmetics.css']
