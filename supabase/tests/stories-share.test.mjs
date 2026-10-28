@@ -198,6 +198,19 @@ await test('story ticket accepts title, excerpt and author name without code or 
  const out=await feed({id:r.id});assert.equal(out[0].title,'My salary routine');assert.equal(out[0].summary,LINE);
  await assert.rejects(as('authenticated',U,()=>q(`select * from public.share_story($1,$2,true,null,'bad','A')`,[li(),LINE])),/title|author/);
 });
+await test('phone share links: lnkd.in, Reddit /s/ and redd.it, with or without https://, are accepted; look-alikes are not', async () => {
+  const ok = [['https://lnkd.in/p/ehhzgsKw', 'linkedin_url', 'https://lnkd.in/p/ehhzgsKw'],
+    ['lnkd.in/p/abcDEF12', 'linkedin_url', 'https://lnkd.in/p/abcDEF12'],
+    ['https://www.linkedin.com/pulse/my-budget-x', 'linkedin_url', 'https://www.linkedin.com/pulse/my-budget-x'],
+    ['https://www.reddit.com/r/Egypt/s/AbC123xyz', 'reddit_url', 'https://www.reddit.com/r/Egypt/s/AbC123xyz'],
+    ['reddit.com/r/Egypt/s/Zz9', 'reddit_url', 'https://www.reddit.com/r/Egypt/s/Zz9'],
+    ['https://redd.it/1abcde', 'reddit_url', 'https://redd.it/1abcde']];
+  for (const [i, [url, col, want]] of ok.entries()) assert.equal((await share(await newUser('Phone' + i), url))[col], want, url);
+  const U = await newUser('Phone');
+  for (const bad of ['https://lnkd.in.evil.example/p/x', 'https://redd.it.evil.example/x', 'https://redd.it/a/b', 'https://www.reddit.com/r/Egypt/s/', 'lnkd.in'])
+    await assert.rejects(share(U, bad), /LinkedIn or Reddit/, bad);
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();
 process.exitCode = failed ? 1 : 0;

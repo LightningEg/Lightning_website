@@ -43,7 +43,7 @@
     if (!rows.length) { empty.hidden = false; return; }
     rows.forEach(function (r, i) { list.appendChild(row(r, i)); });
     list.hidden = false;
-    FG.sb.rpc('supporter_levels').then(function(s){ if(s.error || !Array.isArray(s.data)) return; s.data.forEach(function(x){ Array.from(list.children).forEach(function(li){ if(li.querySelector('.hb-name').textContent===x.display_name) li.querySelector('.hb-who').appendChild(el('span','hb-supporter',x.supporter_level)); }); }); });
+    FG.sb.rpc('supporter_levels').then(function(s){ if(s.error || !Array.isArray(s.data)) return; s.data.forEach(function(x){ Array.from(list.children).forEach(function(li){ if(li.querySelector('.hb-name').textContent!==x.display_name) return; var b=window.FGShow&&window.FGShow.badge(x.supporter_badge); if(b) li.querySelector('.hb-name').after(b); }); }); });
     // Where each score comes from (score_sources RPC); skipped quietly if it is not there yet.
     FG.sb.rpc('score_sources', { p_period: 'month', p_limit: 25 }).then(function (s) {
       if (s.error || !s.data) return;

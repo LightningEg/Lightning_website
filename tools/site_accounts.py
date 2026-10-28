@@ -143,7 +143,7 @@ STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <form id="story-form" class="panel"><input name="id" type="hidden"><h3>Share your post</h3><div class="fields">
 <label>Post title<input name="title" minlength="5" maxlength="140" required></label>
 <label>Name on the post<input name="author" minlength="2" maxlength="80" required autocomplete="name"></label>
-<label>Link to your post (LinkedIn or Reddit)<input name="url" type="url" required placeholder="https://www.linkedin.com/posts/... or https://www.reddit.com/r/.../comments/..."></label>
+<label>Link to your post (LinkedIn or Reddit)<input name="url" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Paste the link from the post’s Share button"></label>
 <label>Short excerpt (20 to 400 characters)<textarea name="line" rows="3" minlength="20" maxlength="400" required></textarea></label>
 <label class="chk"><input name="consent" type="checkbox" required><span>I agree to share my post under my public display name, and to the community rules.</span></label></div>
 <p class="com-lead">A public <a href="account.html">profile</a> is needed. Editing a listed post takes it down until it is reviewed again.</p>

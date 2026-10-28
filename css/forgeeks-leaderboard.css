@@ -34,7 +34,10 @@ a.nm:hover{text-decoration:underline;text-underline-offset:4px}
 .lb-row.has-banner{position:relative;isolation:isolate}
 .lb-row .lb-bg,.lb-veil{position:absolute;inset:0;z-index:-1;height:auto;margin:0;border:0;border-radius:0;pointer-events:none}
 /* a veil of the panel colour keeps every figure readable over any banner (banners draw their own ::after) */
-.lb-veil{background:linear-gradient(90deg,color-mix(in srgb,var(--bg) 84%,transparent) 0%,color-mix(in srgb,var(--bg) 66%,transparent) 22%,color-mix(in srgb,var(--bg) 25%,transparent) 50%,color-mix(in srgb,var(--bg) 66%,transparent) 76%,color-mix(in srgb,var(--bg) 84%,transparent) 100%)}
+/* The banner shows whole in a 6px tab on the leading edge and as a soft tint behind the text: at half strength it
+   fought the names on light themes and busy banners (owner, 2026-10-28). */
+.lb-veil{background:linear-gradient(90deg,transparent 0 6px,color-mix(in srgb,var(--bg) 80%,transparent) 6px 100%)}
+[dir=rtl] .lb-veil{background:linear-gradient(270deg,transparent 0 6px,color-mix(in srgb,var(--bg) 80%,transparent) 6px 100%)}
 .lb-sample{margin:0 0 12px;font:400 12.5px var(--mono);color:var(--dim)}
 @media (max-width:640px){
   .lb-list th,.lb-list td{padding:10px 12px}

@@ -4,8 +4,8 @@
   var doc = root.document;
   var AR = /^ar/i.test(doc.documentElement.lang || '');
   var SOURCES = [
-    ['linkedin_url', /^https:\/\/www\.linkedin\.com\/(posts\/|feed\/update\/)/, AR ? 'اقرأ على لينكدإن' : 'Read on LinkedIn'],
-    ['reddit_url', /^https:\/\/www\.reddit\.com\/r\/[A-Za-z0-9_]+\/comments\//, AR ? 'اقرأ على ريديت' : 'Read on Reddit']
+    ['linkedin_url', /^https:\/\/(www\.linkedin\.com\/(posts\/|feed\/update\/|pulse\/)|lnkd\.in\/)/, AR ? 'اقرأ على لينكدإن' : 'Read on LinkedIn'],
+    ['reddit_url', /^https:\/\/(www\.reddit\.com\/r\/[A-Za-z0-9_]+\/(comments|s)\/|redd\.it\/)/, AR ? 'اقرأ على ريديت' : 'Read on Reddit']
   ];
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function excerpt(text, n) { var t = String(text || '').replace(/\s+/g, ' ').trim(); return t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t; }

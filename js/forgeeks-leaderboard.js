@@ -78,7 +78,9 @@
     if (!sample) a.href = S.profileHref(r.display_name);
     if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     td.appendChild(a);
-    if(levels[r.display_name]) td.appendChild(S.el('span','lb-supporter',levels[r.display_name]));
+    // The supporter level is a badge beside the name (its name is the tooltip and the screen-reader text), never words.
+    var sup = levels[r.display_name] && S.badge(levels[r.display_name]);
+    if (sup) td.appendChild(sup);
     var coder = coderLine(r);
     if (coder) td.appendChild(coder);
     tr.appendChild(td);
@@ -242,7 +244,7 @@
     $('mem-retry').addEventListener('click', function () { loadMembers(true); });
     $('mem-more').addEventListener('click', function () { loadMembers(false); });
     $('lb-sample').hidden = !sample;
-    FG.sb.rpc('supporter_levels').then(function(res){ if(res.error || !Array.isArray(res.data))return; res.data.forEach(function(x){levels[x.display_name]=x.supporter_level;}); if(boardCache[period])showBoard(boardCache[period]); });
+    FG.sb.rpc('supporter_levels').then(function(res){ if(res.error || !Array.isArray(res.data))return; res.data.forEach(function(x){levels[x.display_name]=x.supporter_badge;}); if(boardCache[period])showBoard(boardCache[period]); });
     pick('month');
     loadMembers(true);
     // Signing in or out changes which profiles are visible (members-only ones), so ask again.

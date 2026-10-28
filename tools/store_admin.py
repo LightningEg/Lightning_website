@@ -131,7 +131,7 @@ def build():
             f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
             f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
             f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{activity}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
-            '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261027-stories-1"></script>'
+            '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261028-errors-1"></script>'
             f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-looks-1" defer></script></body></html>')
     (ROOT / 'admin.html').write_text(page)
 
