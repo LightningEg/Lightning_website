@@ -185,6 +185,20 @@ def build_guides():
         text=text.replace('<script src="js/site-membership.js','<script src="js/forgeeks-showcase.js" defer></script><script src="js/story-card.js" defer></script><script src="js/story-strip.js" defer></script><script src="js/site-membership.js',1)
     path.write_text(text)
 
+ANALYTICS='js/analytics.js?v=20261028-store-1'
+def add_analytics():
+    """Every main-site page counts visits (README › Analytics and consent), the community and store pages included.
+    Not the owner console, For Geeks, the test page, archived versions or redirects."""
+    for p in [*ROOT.glob('*.html'), *ROOT.glob('ar/*.html')]:
+        if p.name.startswith(('forgeeks','for-geeks','admin','test','version-')): continue
+        text=p.read_text()
+        if 'http-equiv="refresh"' in text: continue
+        up='../' if p.parent.name=='ar' else ''
+        new=re.sub(r'(js/analytics[.]js)(?:[?]v=[^"]*)?"', lambda m: ANALYTICS[len('js/analytics.js'):].join([m[1], '"']), text)
+        if 'js/analytics.js' not in new:
+            new=new.replace('</head>',f'<script src="{up}{ANALYTICS}" defer></script>\n</head>',1)
+        if new!=text:p.write_text(new)
+
 if __name__=='__main__':
     build()
     build_stories()
@@ -192,3 +206,4 @@ if __name__=='__main__':
     connect_public_pages()
     for f,k in [('stories','stories'),('leaderboard','leaderboard'),('marketplace','marketplace'),('collection','collection'),('topup','wallet'),('account','account'),('profile','leaderboard')]:
         add_community_nav(ROOT/(f+'.html'),k)
+    add_analytics()
