@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261027-console-1"  # css/store-admin.css and every js/ file below
+VERSION = "20261028-funnel-1"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',

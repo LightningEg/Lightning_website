@@ -1,5 +1,6 @@
 /* Owner console, Sales view (admin.html #sales): what sold, how it was bought, and where carts stall.
-   Reads admin_sales() (supabase/migrations/20261027090000_cart_and_sales_tracking.sql, MFA administrators only) and
+   Reads admin_sales() (supabase/migrations/20261027090000_cart_and_sales_tracking.sql) and admin_store_funnel()
+   (20261028140000_site_analytics.sql: store page views, then carts, orders and top-ups), MFA administrators only, and
    changes nothing. Money here is coins; the Overview shows revenue in EGP from top-ups. Item and member text is only
    ever set with textContent, and the view names no member: orders show a short id and the items bought. */
 (function () {
@@ -58,7 +59,40 @@
     return add(el('div', 'oc-table-wrap'), [t]);
   }
 
-  function render(s) {
+  // One row of a funnel: the step, how many, and what share of the step before it reached it.
+  function steps(rows) {
+    var list = el('ol', 'ops-steps');
+    rows.forEach(function (r, i) {
+      var prev = i ? rows[i - 1][1] : null;
+      add(list, [add(el('li'), [el('span', 'ops-step-l', r[0]), el('strong', null, num(r[1])),
+        el('small', 'ops-sub', i ? pct(r[1], prev) + ' of the step before' : (r[2] || ''))])]);
+    });
+    return list;
+  }
+
+  function renderFunnel(fn) {
+    if (!fn) return;
+    var st = fn.steps || {}, tp = fn.topups || {};
+    host.appendChild(add(el('section', 'ops-block ops-card'), [
+      add(el('div', 'ops-card-h'), [el('h3', null, 'From browsing to buying'), el('span', 'ops-fine', 'store page views, then members')]),
+      steps([['Visited the store', st.store_views, 'page views of Marketplace and Collection'],
+        ['Opened Details or tried a look', st.looked_closer], ['Pressed Buy', st.started_buy],
+        ['Added to a cart (members)', st.members_added_to_cart], ['Bought (members)', st.buyers]]),
+      el('p', 'ops-fine', num(st.short_of_coins) + ' times a buy stopped because the wallet was short. ' + num(st.orders) + ' cart orders.')]));
+    host.appendChild(add(el('section', 'ops-block ops-card'), [
+      add(el('div', 'ops-card-h'), [el('h3', null, 'Top-ups'), el('span', 'ops-fine', num(tp.credited_egp) + ' EGP credited')]),
+      steps([['Opened the wallet', tp.wallet_views, 'page views'], ['Asked for a top-up', tp.requests],
+        ['Sent payment details', tp.details_sent], ['Credited', tp.credited]]),
+      el('p', 'ops-fine', num(tp.waiting) + ' waiting · ' + num(tp.rejected) + ' rejected · ' + num(tp.cancelled) + ' cancelled' +
+        (tp.median_hours_to_credit != null ? ' · half are credited within ' + tp.median_hours_to_credit + ' hours' : ''))]));
+    var items = Array.isArray(fn.items) ? fn.items : [];
+    host.appendChild(add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Tried, opened, carted, sold')]),
+      table(['Look', 'Tried', 'Details', 'Added to carts', 'Sold', 'Tried → sold'],
+        items.map(function (i) { return [i.name + ' · ' + kindOf(i.type), num(i.tried), num(i.opened), num(i.added), num(i.sold), pct(i.sold, i.tried)]; }),
+        'Nobody has tried or opened a look in this period yet.')]));
+  }
+
+  function render(s, fn) {
     host.textContent = '';
     var sales = s.sales || {}, orders = s.orders || {}, f = s.funnel || {}, ch = sales.by_channel || {};
     var seg = el('div', 'oc-seg'); seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Period');
@@ -90,6 +124,8 @@
         kpi('Waiting in carts now', num(f.open_carts), 'carts', num(f.open_listed_coins) + ' coins at list price'),
         kpi('Stalled over a day', num(stalled), 'carts', stalled ? num(f.stale_listed_coins) + ' coins not yet spent' : 'nothing is stuck')])]));
 
+    renderFunnel(fn);
+
     var items = Array.isArray(s.by_item) ? s.by_item : [];
     host.appendChild(add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Every item that moved')]),
       table(['Item', 'Sold', 'Coins', 'Added to carts', 'Added → sold', 'In carts now'],
@@ -107,9 +143,12 @@
     if (!verified) return Promise.resolve();
     if (loading) { again = true; return Promise.resolve(); }
     loading = true;
-    return Promise.resolve(FG.sb.rpc('admin_sales', { p_days: days })).then(function (r) {
+    // The funnel is extra: if it fails (an older database), sales still show.
+    var funnel = Promise.resolve(FG.sb.rpc('admin_store_funnel', { p_days: days })).then(function (r) { return r.error ? null : r.data; }, function () { return null; });
+    return Promise.all([Promise.resolve(FG.sb.rpc('admin_sales', { p_days: days })), funnel]).then(function (both) {
+      var r = both[0];
       if (r.error) throw r.error;
-      render(r.data || {});
+      render(r.data || {}, both[1]);
     }).catch(function (e) {
       host.textContent = '';
       host.appendChild(el('p', 'ops-empty', 'Sales did not load. ' + say(e)));
