@@ -93,7 +93,7 @@
   var SAMPLE_NAMES = ['Mariam Adel', 'Youssef Hamdy', 'Nour El-Din', 'Salma Fathy', 'Omar Khaled', 'Habiba Samir', 'Karim Mostafa',
     'Farida Nabil', 'Ziad Ashraf', 'Laila Hassan', 'Ahmed Tarek', 'Malak Sherif', 'Hassan Wael', 'Rana Magdy', 'Mostafa Said',
     'Jana Ibrahim', 'Adham Reda', 'Yasmin Gamal', 'Seif Amr', 'Hana Lotfy', 'Marwan Ehab', 'Dina Kamal', 'Tamer Fouad', 'Aya Mahmoud'];
-  var SAMPLE_BANNERS = ['banner-dusk', 'banner-blueprint', null, 'banner-borealis', 'banner-circuit', null, 'banner-dunes', 'banner-halo', null];
+  var SAMPLE_BANNERS = ['banner-dusk', 'banner-blueprint', null, 'banner-felucca', 'banner-circuit', null, 'banner-dunes', 'banner-sandwind', null];
   var SAMPLE_NAMES_STYLE = ['name-shimmer', null, 'name-gold', null, 'name-nile', null, null, 'name-sunset', null, null];
   function sampleBoard(p) {
     var n = p === 'month' ? 14 : SAMPLE_NAMES.length, rows = [], score = p === 'month' ? 420 : 3150;

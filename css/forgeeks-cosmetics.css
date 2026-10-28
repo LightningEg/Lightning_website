@@ -4,12 +4,13 @@
 .fg-banner{display:block;height:120px;border-radius:8px 8px 0 0;background:var(--well);border:1px solid var(--line);border-bottom:0;overflow:hidden;position:relative}
 .fg-banner:not([data-item]),.fg-banner[data-item=""]{background:linear-gradient(120deg,var(--well),var(--panel))}
 @media (max-width:640px){.fg-banner{height:88px}}
-@media (prefers-reduced-motion:reduce){.fg-banner,.fg-banner *{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.fg-banner,.fg-banner *,.fg-banner::before,.fg-banner::after{animation:none!important;transition:none!important}}
 
 /* ---- items (added by the market) ---- */
 /* Banners are drawn with gradients only: no images, no text. Each has its own ground, so it reads the same
-   on a dark theme and on a light one (the hairline border comes from the base rule). Sizes are in px so the
-   pattern is the same at every width. Only borealis moves, slowly; the rule above stops it under reduced motion. */
+   on a dark theme and on a light one (the hairline border comes from the base rule). The redrawn scenes (2026-10-28)
+   size themselves to the banner's height (cqh), so a 50px leaderboard row and a 140px profile strip show the same
+   picture. Only the motion tier moves, slowly; the rule above stops it, pseudo-elements included, under reduced motion. */
 
 /* halo: follows the colours of the theme it is seen in */
 .fg-banner[data-item="banner-halo"]{background:
@@ -17,36 +18,79 @@
   radial-gradient(55% 130% at 92% 115%,color-mix(in srgb,var(--accent2) 40%,transparent),transparent 72%),
   linear-gradient(120deg,var(--well),var(--panel))}
 
-/* blueprint: a fine grid, a heavier one every 40px, on deep blue */
-.fg-banner[data-item="banner-blueprint"]{background:
-  linear-gradient(rgba(150,205,255,.34) 1px,transparent 1px) 0 0/40px 40px,
-  linear-gradient(90deg,rgba(150,205,255,.34) 1px,transparent 1px) 0 0/40px 40px,
-  linear-gradient(rgba(150,205,255,.13) 1px,transparent 1px) 0 0/8px 8px,
-  linear-gradient(90deg,rgba(150,205,255,.13) 1px,transparent 1px) 0 0/8px 8px,
-  radial-gradient(120% 160% at 85% 0%,#215aa8 0%,#143774 45%,#0b2250 100%)}
+/* Banners, redrawn (owner, 2026-10-28: better contrast, crisper scenes). Each scene is drawn on ::before in units of
+   the banner's own height (cqh), so it composes the same in a 50px leaderboard row and a 140px profile strip: the
+   horizon, the sun or the trace always sit in view instead of being cut off. Clear shapes on one dark or one light
+   ground, no muddy middle greys. */
+.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"]){container-type:size}
+.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"])::before{content:"";position:absolute;inset:0}
 
-/* dusk: indigo sky down to a low orange sun, a few horizon bands */
-.fg-banner[data-item="banner-dusk"]{background:
-  radial-gradient(circle at 74% 100%,#fff0c8 0 14px,rgba(255,196,120,.85) 15px 30px,rgba(255,150,90,.28) 31px 78px,transparent 79px),
-  repeating-linear-gradient(180deg,transparent 0 9px,rgba(40,16,70,.16) 9px 10px) 0 62%/100% 38% no-repeat,
-  linear-gradient(180deg,#171446 0%,#40226a 36%,#a9416f 66%,#ee8a4d 88%,#ffc47c 100%)}
+/* blueprint: crisp white-blue lines on deep cobalt, one bright trace with a node, like a drawing's main line */
+.fg-banner[data-item="banner-blueprint"]{background:#0d2f6b}
+.fg-banner[data-item="banner-blueprint"]::before{background:
+  radial-gradient(circle at 62% 50%,#e8f4ff 0 4cqh,rgba(120,200,255,.45) 4.5cqh 9cqh,transparent 9.5cqh),
+  linear-gradient(transparent calc(50% - .8cqh),rgba(200,232,255,.95) calc(50% - .8cqh) calc(50% + .8cqh),transparent calc(50% + .8cqh)) 0 0/62% 100% no-repeat,
+  linear-gradient(rgba(170,214,255,.42) 1px,transparent 1px) 0 0/25cqh 25cqh,
+  linear-gradient(90deg,rgba(170,214,255,.42) 1px,transparent 1px) 0 0/25cqh 25cqh,
+  linear-gradient(rgba(170,214,255,.16) 1px,transparent 1px) 0 0/5cqh 5cqh,
+  linear-gradient(90deg,rgba(170,214,255,.16) 1px,transparent 1px) 0 0/5cqh 5cqh,
+  radial-gradient(120% 140% at 80% 0%,#1d56b8,#0d2f6b 60%,#081f4a)}
 
-/* circuit: copper traces and pads on graphite, two tiles of different size so the pattern does not repeat in step */
-.fg-banner[data-item="banner-circuit"]{background:
-  radial-gradient(circle at 25px 15px,#e7a566 0 2.6px,transparent 3.2px) 0 0/72px 60px,
-  radial-gradient(circle at 10px 45px,rgba(231,165,102,.75) 0 2px,transparent 2.6px) 0 0/48px 60px,
-  linear-gradient(90deg,transparent 0 25px,rgba(231,165,102,.5) 25px 26px,transparent 26px) 0 0/72px 60px,
-  linear-gradient(0deg,transparent 0 14px,rgba(231,165,102,.38) 14px 15px,transparent 15px) 0 0/72px 60px,
-  linear-gradient(0deg,transparent 0 44px,rgba(231,165,102,.28) 44px 45px,transparent 45px) 0 0/48px 60px,
-  linear-gradient(135deg,#1c1815,#12100e)}
+/* dusk: a deep sky down to a low sun sitting on the horizon, and its light broken on the water below */
+.fg-banner[data-item="banner-dusk"]{background:#1a1446}
+.fg-banner[data-item="banner-dusk"]::before{background:
+  radial-gradient(circle at 58% 60%,#fff4d6 0 13cqh,#ffc370 13.5cqh 17cqh,rgba(255,140,80,.35) 17.5cqh 34cqh,transparent 35cqh),
+  radial-gradient(ellipse 9cqw 1.2cqh at 58% 68%,rgba(255,206,140,.9),transparent),
+  radial-gradient(ellipse 6cqw 1.1cqh at 58% 76%,rgba(255,196,120,.7),transparent),
+  radial-gradient(ellipse 4cqw 1cqh at 58% 85%,rgba(255,186,110,.5),transparent),
+  radial-gradient(ellipse 2.5cqw .9cqh at 58% 93%,rgba(255,176,100,.35),transparent),
+  linear-gradient(180deg,transparent 0 62%,#2a1748 62% 100%),
+  linear-gradient(180deg,#1a1446 0%,#46207a 30%,#b83f6e 52%,#f28a4a 62%)}
 
-/* dunes: three overlapping sand dunes, the nearest darkest, under a pale sun */
-.fg-banner[data-item="banner-dunes"]{background:
-  radial-gradient(ellipse 70% 58% at 8% 122%,#7d3a20 0 97%,transparent 100%),
-  radial-gradient(ellipse 62% 62% at 78% 130%,#b05a2c 0 97%,transparent 100%),
-  radial-gradient(ellipse 80% 56% at 42% 126%,#d98f4e 0 97%,transparent 100%),
-  radial-gradient(circle at 80% 30%,rgba(255,244,214,.95) 0 9px,rgba(255,244,214,.3) 10px 26px,transparent 27px),
-  linear-gradient(180deg,#f6dfb4 0%,#f0c68d 70%,#e8ac70 100%)}
+/* circuit: bright copper traces and pads on near-black, sized to the banner so the pads read at any height */
+.fg-banner[data-item="banner-circuit"]{background:#14110f}
+.fg-banner[data-item="banner-circuit"]::before{background:
+  radial-gradient(circle at 18cqh 30cqh,#ffb36b 0 4cqh,#14110f 4.2cqh 6cqh,transparent 6.2cqh) 0 0/60cqh 100cqh,
+  radial-gradient(circle at 48cqh 72cqh,#ffb36b 0 3cqh,transparent 3.2cqh) 0 0/60cqh 100cqh,
+  linear-gradient(90deg,transparent 0 17.2cqh,#d98a48 17.2cqh 18.8cqh,transparent 18.8cqh) 0 30cqh/60cqh 42cqh repeat-x,
+  linear-gradient(0deg,transparent 0 28cqh,#d98a48 28cqh 29.6cqh,transparent 29.6cqh) 18cqh 0/30cqh 100cqh repeat-x,
+  linear-gradient(0deg,transparent 0 71.2cqh,rgba(217,138,72,.7) 71.2cqh 72.6cqh,transparent 72.6cqh) 0 0/60cqh 100cqh,
+  radial-gradient(80% 140% at 50% 50%,#231d18,#14110f 70%)}
+
+/* dunes: three clear dune ridges, nearest darkest, under a pale sun; a light ground on purpose */
+.fg-banner[data-item="banner-dunes"]{background:#f3d6a2}
+.fg-banner[data-item="banner-dunes"]::before{background:
+  radial-gradient(ellipse 34cqw 60cqh at 10% 118%,#8a3d1e 0 98%,transparent 100%),
+  radial-gradient(ellipse 40cqw 64cqh at 82% 124%,#b9622e 0 98%,transparent 100%),
+  radial-gradient(ellipse 52cqw 70cqh at 46% 128%,#e19a55 0 98%,transparent 100%),
+  radial-gradient(circle at 58% 34%,#fffaf0 0 9cqh,rgba(255,244,214,.45) 9.5cqh 20cqh,transparent 21cqh),
+  linear-gradient(180deg,#f8e7c4 0%,#f3d6a2 60%,#eebf80 100%)}
+
+/* ---- new, animated (tier motion): one slow motion each; the base rule stops it under reduced motion ---- */
+/* felucca: a white sail crossing the Nile at sunset, once every 40 seconds */
+.fg-banner[data-item="banner-felucca"]{background:#2a1a4a}
+.fg-banner[data-item="banner-felucca"]::before{background:
+  linear-gradient(180deg,transparent 0 64%,rgba(255,206,140,.55) 64% 65.5%,transparent 65.5% 72%,rgba(255,206,140,.3) 72% 73%,transparent 73%) 0 0/100% 100% no-repeat,
+  radial-gradient(circle at 46% 58%,#ffe9b8 0 10cqh,rgba(255,170,90,.4) 10.5cqh 26cqh,transparent 27cqh),
+  linear-gradient(180deg,transparent 0 63%,#1b2550 63% 100%),
+  linear-gradient(180deg,#2a1a4a 0%,#7a2f6a 34%,#e0704c 58%,#ffb36b 63%)}
+.fg-banner[data-item="banner-felucca"]::after{content:"";position:absolute;bottom:34%;left:0;width:30cqh;height:52cqh;
+  background:
+    linear-gradient(to top right,#fffaf0 0 49%,transparent 50%) 30% 0/62% 86% no-repeat,
+    linear-gradient(#3a2a1e,#3a2a1e) 0 100%/100% 10% no-repeat;
+  animation:fg-sail 40s linear infinite}
+@keyframes fg-sail{from{transform:translateX(-30cqh)}to{transform:translateX(100cqw)}}
+
+/* sand wind: gusts of light running over the dunes, slowly */
+.fg-banner[data-item="banner-sandwind"]{background:#f0c88a}
+.fg-banner[data-item="banner-sandwind"]::before{background:
+  radial-gradient(ellipse 14cqw 1.6cqh at 30% 42%,rgba(255,252,240,.75),transparent) 0 0/60cqw 100%,
+  radial-gradient(ellipse 10cqw 1.4cqh at 70% 74%,rgba(255,240,210,.55),transparent) 0 0/60cqw 100%,
+  radial-gradient(ellipse 50cqw 66cqh at 70% 126%,#a8542a 0 98%,transparent 100%),
+  radial-gradient(ellipse 60cqw 72cqh at 22% 130%,#d48a4a 0 98%,transparent 100%),
+  linear-gradient(180deg,#fbe9c6,#f0c88a);
+  animation:fg-wind 18s linear infinite}
+@keyframes fg-wind{to{background-position:60cqw 0,60cqw 0,0 0,0 0,0 0}}
 
 /* borealis: soft bands of teal and violet over a night sky, drifting slowly */
 .fg-banner[data-item="banner-borealis"]{
