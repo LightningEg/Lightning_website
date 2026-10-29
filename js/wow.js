@@ -4,7 +4,7 @@
 // only once the page has loaded. <body data-wow-always> (the home page, owner's choice 2026-10-06, and
 // test.html) plays it even with reduce motion on; any other page skips it then and downloads nothing.
 // Without it, the card shows the total and the tiles stay still. The line shown once every tile has landed is the
-// counter's data-t-done (home: seven places since UX-2026.10.15.04); pages without it keep the six-places line.
+// counter's data-t-done (home: nine places since UX-2026.10.21; three named and six more in one tile since 2026-10-29); pages without it keep the six-places line.
 (() => {
   const here = document.currentScript.src; // vendor/ sits beside this file, also for ar/ pages
   const ar = document.documentElement.lang.startsWith('ar');
@@ -43,7 +43,9 @@
   const all = counter.dataset.tDone || (ar ? 'الست أماكن، محسوبين كأنهم واحد' : 'All six places, counted as one');
   let landed = -1;
   const paint = () => {
-    sumEl.textContent = format.format(Math.round(tiles.reduce((sum, t) => sum + t.value * t.p, 0)));
+    // Before the first tile moves the sum is 0, and a sticky "0 EGP" reads as a broken page: show a dash (2026-10-29)
+    const sum = Math.round(tiles.reduce((total, t) => total + t.value * t.p, 0));
+    sumEl.textContent = sum ? format.format(sum) : '—';
     const done = tiles.filter(t => t.p >= 1);
     if (done.length === landed) return;
     const last = done[done.length - 1];

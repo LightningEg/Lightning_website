@@ -1,0 +1,151 @@
+/* Landing page C · Trust (UX-2026.10.04.24, 2026-10-04): only what css/landing.css lacks. Loads after it. */
+/* B02: labels and the "or" are sentence case */
+.label,.l-game-k{text-transform:none;letter-spacing:.01em;word-spacing:0}
+.l-game-k{font-size:14px}
+.label{font-size:13px}
+/* the sign-off is ink: the hero punch line is the only gradient (B12) */
+.c-free{margin-top:14px;color:var(--muted);font:700 14px/1.4 var(--body)}
+
+/* the trace: pick a number, see its working and its screen */
+.c-trace{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;align-items:start}
+.c-seg{display:flex;gap:4px;width:fit-content;max-width:100%;margin:0 auto 24px;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--paper)}
+.c-seg button{min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--ink2);font:700 14px/1.15 var(--body);cursor:pointer}
+.c-seg button:hover{color:var(--ink);background:var(--white)}
+.c-seg button[aria-selected="true"]{background:var(--nile);color:var(--on-nile)}
+.c-seg button:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.c-panel[hidden]{display:none}
+.c-panel .card-lead{min-height:100%}
+.c-panel .lead-fig{margin-top:2px}
+.c-panel .c-pct{display:inline-block;margin-top:10px;padding:6px 12px;border-radius:999px;background:var(--t-green);color:var(--green-text);font:800 13px/1 var(--body)}
+.c-panel .c-pct.out{background:var(--t-rose);color:var(--ink)}
+.c-panel .row.sub span{padding-inline-start:14px}
+.c-panel figure{margin:0}
+.c-trace-shot{display:flex;flex-direction:column;gap:10px}
+.c-see{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .c-panel:not([hidden]) .rows .row{animation:c-in .32s ease both}
+  .c-panel:not([hidden]) .rows .row:nth-child(2){animation-delay:.05s}
+  .c-panel:not([hidden]) .rows .row:nth-child(3){animation-delay:.1s}
+  .c-panel:not([hidden]) .rows .row:nth-child(4){animation-delay:.15s}
+  .c-panel:not([hidden]) .rows .row:nth-child(5){animation-delay:.2s}
+  .c-panel:not([hidden]) .rows .row:nth-child(6){animation-delay:.25s}
+  @keyframes c-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+
+/* the next three months: the screen, then three tiles */
+.c-ahead figure{margin:0}
+
+/* method: three numbered steps, text only */
+.c-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.c-steps li{display:flex;flex-direction:column;gap:12px}
+.c-steps .step-head{display:flex;align-items:center;gap:12px}
+.c-steps .num{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 15px/1 var(--display)}
+.c-steps h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.c-steps .mins{margin-inline-start:auto;color:var(--muted);font:700 13px/1 var(--body);white-space:nowrap}
+.c-steps p{color:var(--ink2);font-size:16px;line-height:1.5}
+
+/* the promise: three cards */
+.c-promise{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.c-promise .card{display:flex;flex-direction:column;gap:12px}
+.c-promise .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--nile);color:var(--on-nile)}
+.c-promise h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.c-promise p{color:var(--ink2);font-size:16px;line-height:1.5}
+
+@media (max-width:1000px){
+  .c-trace{grid-template-columns:1fr}
+  .c-trace-shot{display:none}
+  .c-see{display:flex;width:100%;margin-top:18px}
+  .c-promise{grid-template-columns:1fr}
+}
+@media (max-width:820px){.c-steps{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .c-seg{width:100%}
+  .c-seg button{flex:1;min-height:48px;padding:6px 8px;font-size:13px}
+  .c-steps h3,.c-promise h3,.l-game-in h3{font-size:19px}
+}
+@media (max-width:640px){
+  .d-links a{display:inline-flex;align-items:center;min-height:44px}
+  .d-foot nav a,.d-foot-links a{display:inline-flex;align-items:center;min-height:44px}
+}
+
+/* test page (UX-2026.10.07.02): phone and PC, connected. Real screens only (B07): the PC in its browser frame,
+   the phone flat with rounded corners (no device mockup), and the link between them */
+.t-sync{display:grid;grid-template-columns:minmax(0,1fr) 132px 236px;align-items:center;gap:0}
+.t-sync figure{margin:0}
+.t-phone-shot{overflow:hidden;border:1px solid var(--line);border-radius:26px;background:var(--white);box-shadow:var(--shadow-screen)}
+.t-phone-shot img{display:block;width:100%;height:auto}
+.t-phone-shot .zoom{all:unset;display:block;cursor:zoom-in}
+.t-phone-shot .zoom:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+:root[data-theme="dark"] .t-phone-shot img{filter:brightness(.9)}
+.t-link{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 10px;text-align:center}
+.t-wire{position:relative;width:100%;height:2px;background:repeating-linear-gradient(90deg,var(--azure) 0 6px,transparent 6px 12px)}
+.t-wire i{position:absolute;top:-4px;inset-inline-start:0;width:10px;height:10px;border-radius:50%;background:var(--azure)}
+.t-wire i+i{background:var(--green)}
+.t-lock{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--nile);color:var(--on-nile);box-shadow:var(--shadow)}
+.t-link p{color:var(--ink2);font:700 12.5px/1.35 var(--body)}
+.t-same{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 24px;margin-top:22px;color:var(--ink2);font-size:15px;font-weight:600}
+.t-same b{color:var(--ink);font-weight:800}
+.t-same span{position:relative;padding-inline-start:16px;line-height:1.45}
+.t-same span::before{content:"";position:absolute;inset-inline-start:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--green)}
+@media (prefers-reduced-motion:no-preference){
+  .t-wire i{animation:t-to-phone 2.6s ease-in-out infinite}
+  .t-wire i+i{animation:t-to-pc 2.6s ease-in-out 1.3s infinite;opacity:0}
+}
+@keyframes t-to-phone{0%{transform:translateX(0);opacity:0}15%,85%{opacity:1}100%{transform:translateX(100px);opacity:0}}
+@keyframes t-to-pc{0%{transform:translateX(100px);opacity:0}15%,85%{opacity:1}100%{transform:translateX(0);opacity:0}}
+.t-phones{display:grid;grid-template-columns:repeat(3,minmax(0,250px));justify-content:center;gap:28px}
+.t-phones figure{margin:0}
+@media (max-width:900px){
+  .t-sync{grid-template-columns:1fr;justify-items:center;gap:6px}
+  .t-sync>figure:first-child{width:100%}
+  .t-sync>figure:last-child{width:min(240px,70%)}
+  .t-link{flex-direction:row;padding:14px 0}
+  .t-wire{width:2px;height:44px;background:repeating-linear-gradient(180deg,var(--azure) 0 6px,transparent 6px 12px)}
+  .t-wire i{display:none}
+}
+@media (max-width:640px){
+  .t-same{flex-direction:column;align-items:flex-start;width:fit-content;max-width:100%;margin-inline-start:auto;margin-inline-end:auto;gap:10px;text-align:start}
+  /* phone: the three screens become a swipe strip, the next one peeking in */
+  .t-phones{display:flex;justify-content:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px;overscroll-behavior-x:contain}
+  .t-phones::-webkit-scrollbar{display:none}
+  .t-phones figure{flex:0 0 min(66%,250px);scroll-snap-align:start}
+}
+
+/* Hero notes (UX-2026.10.07.04): the four things only Lightning does, under the hero line */
+.h-notes{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:640px;margin:18px auto 0;padding:0;list-style:none}
+.h-notes li{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:700 14px/1.2 var(--body)}
+.h-notes li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+@media (max-width:640px){
+  .h-notes{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:400px}
+  .h-notes li{min-height:48px;padding:8px 12px;border-radius:16px;font-size:13px;line-height:1.3;text-align:start}
+  .h-notes li::before{align-self:flex-start;margin-top:.4em}
+  .h-notes li{align-items:flex-start;padding-top:10px}
+}
+.t-sync~.c-steps{margin-top:40px}.c-steps+.t-phones{margin-top:56px}
+@media (max-width:640px){.t-sync~.c-steps{margin-top:28px}.c-steps+.t-phones{margin-top:32px}}
+
+@media (prefers-reduced-motion:no-preference){
+  .t-lock{position:relative}
+  .t-lock::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--nile);opacity:0;animation:t-pulse 2.6s ease-out infinite}
+}
+@keyframes t-pulse{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(1.7);opacity:0}}
+
+/* Hero: the PC and the phone side by side, the same Overview (Home, 2026-10-27) */
+.h-duo{position:relative;max-width:1040px;margin:44px auto 0;padding-inline-end:120px}
+.h-duo figure{margin:0}
+.h-duo-pc .d-frame{box-shadow:var(--shadow-screen)}
+.h-duo-pc img,.h-duo-phone img{display:block;width:100%;height:auto}
+.h-duo-phone{position:absolute;inset-inline-end:0;bottom:-28px;width:210px;animation:h-duo-in .7s cubic-bezier(.2,.7,.2,1) .15s both}
+@keyframes h-duo-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.h-duo-phone{animation:none}}
+@media (max-width:640px){.h-duo{margin-top:32px;padding-inline-end:64px}.h-duo-phone{width:112px;bottom:-18px}.h-duo-phone .t-phone-shot{border-radius:16px}}
+
+/* Community pulse: one quiet line of real activity (js/community-pulse.js); hidden until there is some */
+.pulse{display:flex;align-items:center;justify-content:center;gap:10px;max-width:640px;margin:64px auto 0;padding:10px 18px;border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--ink2);font:600 14px/1.4 var(--body)}
+.pulse[hidden]{display:none}
+.pulse-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--t-green,var(--nile));box-shadow:0 0 0 4px color-mix(in oklab,var(--t-green,var(--nile)) 22%,transparent)}
+.pulse-line{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .35s ease}
+.pulse-line.is-out{opacity:0}
+.pulse-line a{color:var(--ink);text-decoration:none}
+.pulse-line a:hover{text-decoration:underline}
+@media (max-width:640px){.pulse{margin-top:48px;font-size:13px;border-radius:14px}}
