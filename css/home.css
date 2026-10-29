@@ -149,3 +149,11 @@
 .pulse-line a{color:var(--ink);text-decoration:none}
 .pulse-line a:hover{text-decoration:underline}
 @media (max-width:640px){.pulse{margin-top:48px;font-size:13px;border-radius:14px}}
+/* One quiet line that sends the detail to its own page (Home, 2026-10-29): the pairing steps and the worked figures */
+.d-more{margin:20px 0 0;text-align:center;color:var(--ink2);font-size:15px;font-weight:600;line-height:1.45}
+.d-more a{color:var(--green-text);text-underline-offset:3px}
+.d-more a::after{content:" →"}
+:root[dir="rtl"] .d-more a::after,[dir="rtl"] .d-more a::after{content:" ←"}
+/* Net worth in one card, its working in one line (the five-row table moved off Home, 2026-10-29) */
+.c-net{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px}
+.c-net .chead{margin:0;padding:0;border:0}

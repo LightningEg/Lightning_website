@@ -28,14 +28,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/landing.css?v=20261027-1">
-<link rel="stylesheet" href="css/home.css?v=20261027-1">
+<link rel="stylesheet" href="css/home.css?v=20261029-1">
 <link rel="stylesheet" href="css/sync-demo.css?v=20261021-1">
 <script src="js/sync-demo.js?v=20261014-1" defer></script>
 <link rel="stylesheet" href="css/motion.css?v=20261006-4">
 <script src="js/motion.js?v=20261006-4" defer></script>
-<link rel="stylesheet" href="css/wow.css?v=20261028-errors-1">
+<link rel="stylesheet" href="css/wow.css?v=20261029-1">
 <link rel="stylesheet" href="css/runway.css?v=20261012-5">
-<script src="js/wow.js?v=20261028-errors-1" defer></script>
+<script src="js/wow.js?v=20261029-1" defer></script>
 <script src="js/runway.js?v=20261015-1" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
 <script src="js/theme.js?v=20261026-1"></script>
@@ -114,34 +114,27 @@
 
   <aside class="pulse" data-pulse hidden aria-label="Community activity"><span class="pulse-dot" aria-hidden="true"></span><p class="pulse-line" aria-live="off"></p></aside>
 
-  <!-- 1 · Your accounts, savings, shares, gold, dollars and a flat: nine places, counted as one -->
+  <!-- 1 · Your money in many places, counted as one: three named, six more in one tile, then net worth in one line -->
   <section class="d-section" id="picture">
     <div class="d-head">
       <p class="label">Accounts, shares, gold and dollars</p>
-      <h2>Your Money Is in Nine Places. Lightning Counts It as One.</h2>
-      <p>A bank, two wallets, dollars, a certificate, THNDR, gold and a share of a flat. Lightning adds it up in EGP, takes off what he owes, and leaves out what isn’t his.</p>
+      <h2>Your Money Is in Many Places. Lightning Counts It as One.</h2>
+      <p>A bank, THNDR, gold at home and six more. Lightning adds it up in EGP, takes off what he owes, and leaves out what isn’t his.</p>
     </div>
     <div class="t-stage" data-mo-skip>
       <div class="card card-lead t-count" aria-hidden="true" data-t-done="All nine places, counted as one"><div class="chead"><h3>In Nine Places</h3><p data-t-line>The nine places, in EGP</p></div><span class="lead-fig"><span data-t-sum>995,703</span><span class="unit">EGP</span></span></div>
       <div class="d-tiles">
         <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-landmark"/></svg></span><span class="lbl">CIB Payroll</span></div><span class="fig">157,582<span class="unit">EGP</span></span><span class="foot">Bank account</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="lbl">Cash wallet</span></div><span class="fig">10,564<span class="unit">EGP</span></span><span class="foot">Cash on hand</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="lbl">Vodafone Cash</span></div><span class="fig">2,455<span class="unit">EGP</span></span><span class="foot">Mobile wallet</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-dollar"/></svg></span><span class="lbl">Dollar savings</span></div><span class="fig">51,600<span class="unit">EGP</span></span><span class="foot">1,000 dollars</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span><span class="lbl">NBE certificate</span></div><span class="fig">100,000<span class="unit">EGP</span></span><span class="foot">Three-year deposit</span></div>
         <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg></span><span class="lbl">THNDR</span></div><span class="fig">48,996<span class="unit">EGP</span></span><span class="foot">Shares and a fund</span></div>
         <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-coins"/></svg></span><span class="lbl">Gold at home</span></div><span class="fig">110,295<span class="unit">EGP</span></span><span class="foot">Valued by weight</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-dollar"/></svg></span><span class="lbl">Dollar brokerage</span></div><span class="fig">114,211<span class="unit">EGP</span></span><span class="foot">Dollars and a US fund</span></div>
-        <div class="kpi"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg></span><span class="lbl">Family flat</span></div><span class="fig">400,000<span class="unit">EGP</span></span><span class="foot">His share of it</span></div>
+        <div class="kpi t-more"><div class="top"><span class="ico"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="lbl">Six more places</span></div><span class="fig">678,830<span class="unit">EGP</span></span><span class="foot">Cash, Vodafone Cash, dollars, a certificate, a US fund and a family flat</span></div>
         <p class="d-tiles-cap">Mohab, our sample household, on 2026-10-04</p>
       </div>
     </div>
     <div class="t-after">
-      <div class="card card-lead" aria-label="Mohab’s net worth, worked out">
-        <div class="chead"><h3>Net Worth</h3><p>What you own, less what you owe</p></div>
+      <div class="card card-lead c-net" aria-label="Mohab’s net worth">
+        <div class="chead"><h3>Net Worth</h3><p>995,703 in nine places, less 6,900 held for family and 78,500 he owes</p></div>
         <span class="lead-fig">910,304<span class="unit">EGP</span></span>
-        <ol class="rows"><li class="row"><span>The nine places<small>In EGP, as above</small></span><b>995,703</b></li><li class="row"><span>Held for family<small>In your bank, but not yours</small></span><b>−6,900</b></li><li class="row result"><span>What you own<small>Counted to the piastre, then rounded</small></span><b>988,804</b></li><li class="row"><span>What you owe<small>Two loans, an office gam’eya and October’s rent, now late</small></span><b>−78,500</b></li><li class="row result"><span>Net worth</span><b>910,304</b></li></ol>
-        <p class="d-cap">Each figure is rounded to whole EGP, so a row can differ by 1.</p>
       </div>
     </div>
   </section>
@@ -162,11 +155,7 @@
     <div class="sync-controls"><p class="sync-state" role="status" aria-live="polite">The PC has the ledger. Your phone can read it.</p><button class="btn btn-secondary sync-action" type="button" hidden>Hand back to phone</button></div>
     <p class="t-same"><span>Same ledger, same figures: <b>+311,804</b> this year on both</span><span>One edits, the other reads</span></p>
 
-    <ol class="c-steps" aria-label="How they stay in sync">
-      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">1</span><h3>Pair Once</h3><span class="mins">Once</span></div><p>Your phone shows a code; type it on your PC. Both screens then show the same six digits, such as 370 548, so you know it’s your phone.</p></li>
-      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">2</span><h3>Borrow It</h3><span class="mins">Any time</span></div><p>Open it on your PC with the same password as on your phone. It arrives with every edit you made on the go, and your phone reads while you work.</p></li>
-      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">3</span><h3>Hand It Back</h3><span class="mins">On close</span></div><p>Close Lightning near your phone and the ledger goes home. Away from it, your edits are sealed and wait for the next meeting.</p></li>
-    </ol>
+    <p class="d-more"><a href="sync-phone-and-pc-without-cloud.html">Pair once, then just open it: how pairing works</a></p>
     <div class="t-phones">
       <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/phone-overview.webp" data-caption="Overview on the phone: Mohab’s year to date."><img src="assets/app/mohab-year-2026-10-21/phone-overview.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone, Overview: net worth 910,304 EGP as of 2026-10-04, what needs you, and the latest transactions."></button></div><figcaption class="d-cap">On the phone: Overview</figcaption></figure>
       <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/phone-account.webp" data-caption="CIB Payroll on the phone: day by day."><img src="assets/app/mohab-year-2026-10-21/phone-account.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone, CIB Payroll: 157,582 EGP in the account, of which 150,682 is Mohab’s and 6,900 held for others, with October’s transactions grouped by day."></button></div><figcaption class="d-cap">An account, day by day</figcaption></figure>
@@ -205,45 +194,9 @@
         </ul>
       </div>
     </div>
+    <p class="d-more">Every number shows its working. <a href="features.html#trust">See three of Mohab’s, worked out</a></p>
   </section>
 
-  <!-- 4 · Numbers you can trust: pick a figure, see its working and its screen -->
-  <section class="d-section" id="trust">
-    <div class="d-head">
-      <p class="label">Numbers you can trust</p>
-      <h2>Every Number Shows Its Working.</h2>
-      <p>Three of Mohab’s numbers, each with its working and the screen it comes from.</p>
-    </div>
-    <div class="d-tabs c-seg" role="tablist" aria-label="Three of Mohab’s numbers"><button type="button" role="tab" id="c-tab-spend" aria-controls="c-panel-spend" aria-selected="true" tabindex="0">Safe to spend</button><button type="button" role="tab" id="c-tab-out" aria-controls="c-panel-out" aria-selected="false" tabindex="-1">Money out, 2026-08</button><button type="button" role="tab" id="c-tab-kept" aria-controls="c-panel-kept" aria-selected="false" tabindex="-1">Saved this year</button></div>
-      <div class="c-panel c-trace" role="tabpanel" id="c-panel-spend" aria-labelledby="c-tab-spend">
-        <div class="card card-lead">
-          <div class="chead"><h3>Safe to Spend</h3><p>Until the next salary, 2026-11-01</p></div>
-          <span class="lead-fig">112,288<span class="unit">EGP</span></span><span class="c-pct">74% of your free cash</span>
-          <ol class="rows"><li class="row"><span>Free cash<small>Your cash, less reserves and bills due</small></span><b>151,701</b></li><li class="row"><span>Due before payday<small>Bills and loan payments, before the next salary</small></span><b>−6,460</b></li><li class="row"><span>Gam’eya instalments<small>Before the next income</small></span><b>−2,000</b></li><li class="row"><span>Budget until payday<small>What this month’s plan still allows</small></span><b>−16,558</b></li><li class="row"><span>Saving for goals<small>This month’s share of your goals</small></span><b>−5,500</b></li><li class="row"><span>Emergency fund top-up<small>This month’s share of rebuilding it</small></span><b>−8,895</b></li><li class="row result"><span>Safe to spend</span><b>112,288</b></li></ol>
-          <p class="d-cap">Each figure is rounded to whole EGP, so a row can differ by 1.</p>
-          <button class="btn btn-secondary c-see" type="button" data-zoom="assets/app/mohab-year-2026-10-21/a-plan-working.webp" data-caption="Cash planning: safe to spend, worked out from free cash.">See it on the screen</button>
-        </div>
-        <figure class="c-trace-shot"><div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Cash planning</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/a-plan-working.webp" data-caption="Cash planning: safe to spend, worked out from free cash."><img src="assets/app/mohab-year-2026-10-21/a-plan-working.webp" width="1800" height="1125" loading="lazy" alt="Lightning Cash planning, how safe to spend is worked out: free cash 151,701 EGP, less 6,460 due before payday, 2,000 of gam’eya instalments before the next income, 16,558 of budget until payday, 5,500 for goals and an 8,895 emergency fund top-up, leaves 112,288 EGP safe to spend until 2026-11-01."></button></div><figcaption class="d-cap">The same figure on Mohab’s Cash planning screen</figcaption></figure>
-      </div>
-      <div class="c-panel c-trace" role="tabpanel" id="c-panel-out" aria-labelledby="c-tab-out" hidden>
-        <div class="card card-lead">
-          <div class="chead"><h3>Money Out</h3><p>2026-08, by category</p></div>
-          <span class="lead-fig">44,621<span class="unit">EGP</span></span><span class="c-pct out">33% went on entertainment</span>
-          <ol class="rows"><li class="row"><span>Entertainment<small>One payment of 14,200, on the 12th</small></span><b>14,539</b></li><li class="row"><span>Housing &amp; Rent</span><b>12,000</b></li><li class="row"><span>Other</span><b>8,078</b></li><li class="row"><span>Food &amp; Groceries</span><b>5,504</b></li><li class="row"><span>Loan payments</span><b>4,500</b></li><li class="row total"><span>Money out</span><b>44,621</b></li></ol>
-          <button class="btn btn-secondary c-see" type="button" data-zoom="assets/app/mohab-year-2026-10-22/a-expenses.webp" data-caption="Expense analysis: where August’s money went.">See it on the screen</button>
-        </div>
-        <figure class="c-trace-shot"><div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Expense analysis</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-22/a-expenses.webp" data-caption="Expense analysis: where August’s money went."><img src="assets/app/mohab-year-2026-10-22/a-expenses.webp" width="1800" height="1125" loading="lazy" alt="Lightning Expense analysis for 2026-08: 44,621 EGP out, 7,772 more than 2026-07, a treemap led by Entertainment at 14,539 EGP (33%), then Housing &amp; Rent 12,000, Other 8,078, Food &amp; Groceries 5,504 and Loan payments 4,500, and how each category moved."></button></div><figcaption class="d-cap">The same figure on Mohab’s Expense analysis screen</figcaption></figure>
-      </div>
-      <div class="c-panel c-trace" role="tabpanel" id="c-panel-kept" aria-labelledby="c-tab-kept" hidden>
-        <div class="card card-lead">
-          <div class="chead"><h3>Saved This Year</h3><p>2026-01-01 to 2026-10-04</p></div>
-          <span class="lead-fig">262,111<span class="unit">EGP</span></span><span class="c-pct">45.4% of money in</span>
-          <ol class="rows"><li class="row"><span>Money in</span><b>577,860</b></li><li class="row result"><span>Saved<small>What was left after spending</small></span><b>262,111</b></li><li class="row sub"><span>Invested<small>Moved into investments, 76.9% of it</small></span><b>201,450</b></li><li class="row sub"><span>Kept as cash</span><b>60,661</b></li></ol>
-          <button class="btn btn-secondary c-see" type="button" data-zoom="assets/app/mohab-year-2026-10-21/a-kpis.webp" data-caption="Overview: the savings rate and the investing rate, year to date.">See it on the screen</button>
-        </div>
-        <figure class="c-trace-shot"><div class="d-frame free"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Overview</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/a-kpis.webp" data-caption="Overview: the savings rate and the investing rate, year to date."><img src="assets/app/mohab-year-2026-10-21/a-kpis.webp" width="1589" height="363" loading="lazy" alt="Lightning Overview, year to date: a 45.4% savings rate, +262,111 kept of 577,860 money in, and a 76.9% investing rate, +201,450 money added, beside safe to spend 112,288 EGP and 35,018 EGP left in this month’s plan."></button><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/a-sankey.webp" data-caption="Overview: where the money in went, year to date."><img src="assets/app/mohab-year-2026-10-21/a-sankey.webp" width="1589" height="717" loading="lazy" alt="Lightning Overview, where money in went: 577,860 EGP money in (salary 470,000, bonus 90,000, interest 16,500, other 1,360) went to spending, 201,450 EGP invested (35%) and 60,661 EGP kept (10%)."></button></div><figcaption class="d-cap">The same figures on Mohab’s Overview</figcaption></figure>
-      </div>
-  </section>
 
 
 

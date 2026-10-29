@@ -13,3 +13,7 @@
 .t-stage .d-tiles .t-wide{grid-column:1/-1}
 /* Two columns on a phone: the ninth place takes the last row whole, so no tile sits alone (A16) */
 @media (min-width:381px) and (max-width:640px){.t-stage .d-tiles>div.kpi:last-of-type:nth-of-type(odd){grid-column:1/-1}}
+/* Since 2026-10-29 Home names three places and gathers the other six in one tile: three in a row above it
+   wherever there are three columns; on a two-column phone the four tiles make a 2 × 2 grid */
+@media (min-width:641px){.t-stage .d-tiles .t-more{grid-column:1/-1;min-height:0}}
+.t-stage .d-tiles .t-more{--tone:var(--ink2)}
