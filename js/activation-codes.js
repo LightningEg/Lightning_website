@@ -6,7 +6,9 @@
  const FG=window.FG;if(!FG)return;
  let enabled=[],seats={},run=0,dialog;
  const make=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;return e;};
- const coins=n=>n+(n===1?' coin':' coins');
+ // a price is the cotton icon and the number (the same mark as the market's prices), never the word
+ const price=n=>{const e=make('span');e.className='mkt-price';e.setAttribute('aria-label',n+' Cotton');const i=make('img');i.className='coin-i';i.src='assets/brand/cotton-coin.svg';i.alt='';i.width=16;i.height=16;e.append(i,make('span',String(n)));return e;};
+ const withPrice=(tag,before,n,after)=>{const e=make(tag);e.append(before,price(n));if(after)e.append(after);return e;};
  const key=()=>(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2));
  const shut=()=>{if(dialog){dialog.close();dialog.remove();dialog=null;}};
  function clear(keepDialog){if(!keepDialog)shut();document.querySelectorAll('[data-activation-extra]').forEach(b=>b.remove());}
@@ -37,7 +39,7 @@
  function addSeat(item,info,button){
   const attempt=key();
   const status=make('p');status.setAttribute('role','status');
-  const ok=make('button','Add a profile for '+coins(info.next_price));ok.type='button';ok.className='btn';
+  const ok=withPrice('button','Add a profile for ',info.next_price);ok.type='button';ok.className='btn';
   const cancel=make('button','Cancel');cancel.type='button';cancel.className='btn ghost';cancel.onclick=shut;
   ok.onclick=async()=>{
    ok.disabled=true;status.textContent='';
@@ -54,7 +56,7 @@
    }
   };
   open('Add another profile to '+info.name,
-   make('p','Each purchase of '+info.name+' unlocks it for one Lightning profile, on all of that profile’s devices. For another profile you pay 25% of the price: '+coins(info.next_price)+', 75% off. The coins are spent now.'),
+   withPrice('p','Each purchase of '+info.name+' unlocks it for one Lightning profile, on all of that profile’s devices. For another profile you pay 25% of the price: ',info.next_price,', 75% off. It is spent now.'),
    ok,cancel,status);
  }
  function seatNote(info){
@@ -71,7 +73,7 @@
    const info=seats[bundle.item_id];
    if(info){
     extra.append(seatNote(info));
-    if(info.can_buy){const add=make('button','Add another profile · '+coins(info.next_price));add.type='button';add.className='btn ghost';add.dataset.seatAdd='';add.onclick=()=>addSeat(bundle.item_id,info,add);extra.append(add);}
+    if(info.can_buy){const add=withPrice('button','Add another profile · ',info.next_price);add.type='button';add.className='btn ghost';add.dataset.seatAdd='';add.onclick=()=>addSeat(bundle.item_id,info,add);extra.append(add);}
    }
    cell.append(extra);
   }
