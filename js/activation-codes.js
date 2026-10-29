@@ -9,7 +9,7 @@
  const coins=n=>n+(n===1?' coin':' coins');
  const key=()=>(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2));
  const shut=()=>{if(dialog){dialog.close();dialog.remove();dialog=null;}};
- function clear(keepDialog){if(!keepDialog)shut();document.querySelectorAll('[data-activation-code],[data-seat-note],[data-seat-add]').forEach(b=>b.remove());}
+ function clear(keepDialog){if(!keepDialog)shut();document.querySelectorAll('[data-activation-extra]').forEach(b=>b.remove());}
  function open(title,...nodes){
   shut();dialog=make('dialog');dialog.className='site-invite';dialog.setAttribute('aria-label',title);
   dialog.append(make('h2',title),...nodes);document.body.append(dialog);dialog.showModal();return dialog;
@@ -65,12 +65,15 @@
   if(!FG.session())return;
   for(const cell of document.querySelectorAll('.mkt-cell[data-state="owned"],.mkt-cell[data-state="equipped"]')){
    const bundle=enabled.find(e=>e.item_id===cell.dataset.item);if(!bundle||cell.querySelector('[data-activation-code]'))continue;
-   const button=make('button','Get app code');button.type='button';button.className='btn';button.dataset.activationCode='';button.onclick=()=>show(bundle.item_id,bundle.asset_version,button);cell.append(button);
+   // one block under the card's own rows (a grid cell of its own on the textured cards), so none of it lands on the description
+   const extra=make('div');extra.className='mkt-extra';extra.dataset.activationExtra='';
+   const button=make('button','Get app code');button.type='button';button.className='btn';button.dataset.activationCode='';button.onclick=()=>show(bundle.item_id,bundle.asset_version,button);extra.append(button);
    const info=seats[bundle.item_id];
    if(info){
-    cell.append(seatNote(info));
-    if(info.can_buy){const add=make('button','Add another profile · '+coins(info.next_price));add.type='button';add.className='btn ghost';add.dataset.seatAdd='';add.onclick=()=>addSeat(bundle.item_id,info,add);cell.append(add);}
+    extra.append(seatNote(info));
+    if(info.can_buy){const add=make('button','Add another profile · '+coins(info.next_price));add.type='button';add.className='btn ghost';add.dataset.seatAdd='';add.onclick=()=>addSeat(bundle.item_id,info,add);extra.append(add);}
    }
+   cell.append(extra);
   }
  }
  async function load(keepDialog){const current=++run;clear(keepDialog===true);enabled=[];seats={};if(!FG.session())return;

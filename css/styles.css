@@ -1,7 +1,7 @@
 /* Lightning website · Meadow identity */
-html{color-scheme:light}
+html{color-scheme:only light}
 :root{
-  color-scheme:light;
+  color-scheme:only light;
   --bg1:#D6E8FC;--bg2:#E1F1F6;--bg3:#D6F3E5;
   --ink:#0B1F36;--ink2:#2F4A66;--muted:#5A7390;--faint:#AFC2D3;
   --card:rgba(255,255,255,.76);--card-line:rgba(255,255,255,.95);--line:rgba(11,31,54,.08);

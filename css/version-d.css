@@ -3,7 +3,7 @@
    Tokens are the guideline's own (A03, B03, B09). Building blocks are the guideline's six (B06):
    money tiles, result (lead) card, breakdown, steps, quote and the signup band. */
 :root{
-  color-scheme:light;
+  color-scheme:only light;
   --ink:#0D2233;--ink2:#304A5C;--muted:#566E7E;
   --nile:#0A2442;--nile-2:#143A63;--on-nile:#FFFFFF;
   --green:#14A874;--green-text:#097852;--azure:#0B6DD6;--rose:#E68CA8;--rose-strong:#C93D72;
