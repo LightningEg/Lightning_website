@@ -322,7 +322,7 @@
 
   function syncVisibilityNote() {
     var v = $('form-public').elements.visibility.value;
-    $('vis-note').textContent = v === 'public' ? 'Anyone can see the parts you switch on below. Your email, phone, birth date and coins stay private.'
+    $('vis-note').textContent = v === 'public' ? 'Anyone can see the parts you switch on below. Your email, phone, birth date and Cotton stay private.'
       : v === 'members' ? 'Only signed-in For Geeks members can see the parts you switch on below.'
       : 'Only you can see your profile. Nothing is shown to anyone else.';
   }

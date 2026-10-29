@@ -101,7 +101,7 @@ await test('say maps database and auth errors to plain words', () => {
   assert.match(rules.say({ message: 'permission denied for table wallets', code: '42501' }), /not allowed/);
   assert.match(rules.say(new Error('Failed to fetch')), /Cannot reach/);
   assert.doesNotMatch(rules.say({ message: 'secret internal detail xyz' }), /xyz/);
-  assert.match(rules.say({ message: 'insufficient coins' }), /Not enough coins/);
+  assert.match(rules.say({ message: 'insufficient coins' }), /Not enough Cotton/);
 });
 
 await test('safeNext allows explicit main-site and For Geeks routes, never an account page or another site', () => {

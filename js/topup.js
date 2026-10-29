@@ -5,7 +5,7 @@
  'use strict';
  const FG=window.FG,$=id=>document.getElementById(id),el=(tag,text)=>{const e=document.createElement(tag);if(text!=null)e.textContent=text;return e;};
  let user=null,version=0,quoteRun=0,quote=null,pay=null,existing=null,key=crypto.randomUUID(),timer=null,amountTimer=null,pollBusy=false,sendBusy=false,historyLimit=50,refreshRun=0,proposalSignature='';
- const msg=s=>{$('topup-status').textContent=s;},count=n=>Number(n).toLocaleString('en-US'),egp=n=>{const v=Number(n)/100;return(Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(2))+' EGP';};
+ const ref=r=>String(r.id||'').slice(0,8).toUpperCase(),msg=s=>{$('topup-status').textContent=s;},count=n=>Number(n).toLocaleString('en-US'),egp=n=>{const v=Number(n)/100;return(Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(2))+' EGP';};
  async function rpc(name,args={}){const r=await FG.sb.rpc(name,args);if(r.error)throw r.error;return r.data;}
  const error=e=>String(e?.message||'Could not complete this request. Please retry or contact support.');
  const today=()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());};
@@ -44,7 +44,7 @@
   const b=$('topup-send');sendBusy=true;b.disabled=true;
   try{const r=await rpc('submit_instapay_topup',{p_amount_piastres:existing?(existing.original_amount_piastres||existing.price_piastres):quote.amount_piastres,p_request_key:requestKey,p_accept_terms:true,p_expected_coins:existing?existing.coins:quote.coins,p_pricing_version:existing?(existing.pricing_version||0):quote.pricing_version,p_payer:payer,p_sent_on:f.elements.date.value});
    if(run!==version)return;form.reset();form.hidden=true;existing=null;key=crypto.randomUUID();$('topup-new').hidden=false;
-   msg('Payment details received. We’ll add '+count(r.coins)+' Cotton once your '+egp(r.price_piastres)+' shows in our account, usually within one working day.');$('topup-status').scrollIntoView?.({block:'center'});await refresh();}
+   msg('Received: reference '+ref(r)+'. Status: waiting for review. We’ll add '+count(r.coins)+' Cotton once your '+egp(r.price_piastres)+' shows in our account, usually within one working day. Keep this reference if you write to us.');$('topup-status').scrollIntoView?.({block:'center'});await refresh();}
   catch(e){if(run===version){formMsg(error(e));if(/quote changed/i.test(error(e)))await price();}}
   finally{sendBusy=false;b.disabled=!existing&&!quote;}};
  $('topup-new').onclick=()=>{msg('');$('topup-new').hidden=true;showPay();};
@@ -65,7 +65,7 @@
   $('topup-history-more').hidden=hist.data.length<historyLimit;$('topup-balance').textContent=count(wallet.data?.balance??0);$('topup-history').replaceChildren();if(!rows.length)$('topup-history').append(el('p','No top-ups yet.'));
   for(const r of rows){const p=el('p');p.className='wal-row';const sent=r.details_submitted_at||r.receipt_object_key;
    const st=el('span',{pending:sent?'Being checked':'Waiting for your details',approved:'Credited',rejected:'Rejected',cancelled:'Cancelled'}[r.status]||r.status);st.className='wal-st wal-'+String(r.status).replace(/[^a-z]/g,'');
-   p.append(el('b',count(r.coins)+' Cotton'),el('span',egp(r.price_piastres)),st);if(r.member_sent_on)p.append(el('span','paid '+r.member_sent_on));if(r.review_note&&r.status!=='pending')p.append(el('span',r.review_note));
+   p.append(el('b',count(r.coins)+' Cotton'),el('span',egp(r.price_piastres)),st);if(r.member_sent_on)p.append(el('span','paid '+r.member_sent_on));if(sent)p.append(el('span','ref '+ref(r)));if(r.review_note&&r.status!=='pending')p.append(el('span',r.review_note));
    if(r.status==='pending'&&!sent){const b=el('button','I’ve paid');b.type='button';b.className='btn ghost';b.onclick=()=>showConfirm(r);p.append(b);
     const c=el('button','Cancel');c.type='button';c.className='btn ghost';c.onclick=async()=>{if(!window.confirm('Cancel only if you have not sent money.'))return;c.disabled=true;try{await rpc('cancel_topup',{p_request_id:r.id});if(run!==version)return;await refresh();}catch(e){msg(error(e));}finally{c.disabled=false;}};p.append(c);}
    $('topup-history').append(p);}
