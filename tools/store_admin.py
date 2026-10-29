@@ -122,7 +122,7 @@ def build():
 
     scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
                       ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'owner-claims', 'owner-community', 'store-admin'))
-    page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
+    page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
             f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'
             f'<body class="oc-body" data-account-page="account.html" data-main-store="true" data-owner-console="amount">{nav}<main class="oc ops">\n'

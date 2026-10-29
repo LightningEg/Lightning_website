@@ -3079,8 +3079,8 @@
       "id": "UX-2026.10.26.06",
       "name": "Release Log · Lightning 1.5.0",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.06.html"
     },
     {
       "id": "UX-2026.10.26.07",
@@ -3100,15 +3100,15 @@
       "id": "UX-2026.10.26.09",
       "name": "Sample Profiles · Lightning 1.5.0",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.09.html"
     },
     {
       "id": "UX-2026.10.26.10",
       "name": "App Feedback · Lightning 1.5.0",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.26.10.html"
     },
     {
       "id": "UX-2026.10.26.11",
@@ -3205,8 +3205,8 @@
       "id": "UX-2026.10.28.01",
       "name": "Downloads · Your platform first",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.28.01.html"
     },
     {
       "id": "UX-2026.10.28.02",
@@ -3226,8 +3226,8 @@
       "id": "UX-2026.10.29.02",
       "name": "Features · Every number shows its working",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.02.html"
     },
     {
       "id": "UX-2026.10.29.03",
@@ -3238,13 +3238,62 @@
     },
     {
       "id": "UX-2026.10.29.04",
+      "name": "Home · Lightning 1.5.1",
+      "page": "index.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.04.html"
+    },
+    {
+      "id": "UX-2026.10.29.05",
+      "name": "Features · Lightning 1.5.1",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.06",
+      "name": "Downloads · Lightning 1.5.1",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.07",
+      "name": "Release Log · Lightning 1.5.1",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.08",
+      "name": "Sample Profiles · Lightning 1.5.1",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.09",
+      "name": "App Feedback · Lightning 1.5.1",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.10",
+      "name": "Version Archive · Lightning 1.5.1",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.10.html"
+    },
+    {
+      "id": "UX-2026.10.29.11",
       "name": "Lightning · Net worth animation starts later",
       "page": "index.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.10.29.05",
+      "id": "UX-2026.10.29.12",
       "name": "Version Archive · Net worth animation starts later",
       "page": "versions.html",
       "status": "current",
@@ -3252,6 +3301,18 @@
     }
   ],
   "app_releases": [
+    {
+      "version": "v1.5.1",
+      "date": "2026-10-29",
+      "commit": "8bba1524fd28ed2f76bfb10bd5385af56e3985f2",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v1.5.1",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.1/Lightning-v1.5.1-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.1/Lightning-Test-1.5.1-904-8bba1524.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.1/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v1.5.1/BUILD.json",
+      "windows_sha256": "a98769d5051695bbf48af2ac90eb34f1cea8634e98bb766fd78aed2cd417d6b6",
+      "android_sha256": "421b1b4e25117b229cbaa8dda23aee598ebdc597ca4c7aeba8c8df5dfc3c9446"
+    },
     {
       "version": "v1.5.0",
       "date": "2026-10-26",

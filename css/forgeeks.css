@@ -13,15 +13,15 @@
 :root[data-theme="solarized"]{--bg:#002b36;--panel:#073642;--well:#01313d;--ink:#eee8d5;--dim:#aab9b8;--faint:#1f4a55;--line:rgba(181,137,0,.15);--line-strong:rgba(181,137,0,.36);--accent:#d4a017;--accent2:#3cc4b6;--btn:#d4a017;--btn-ink:#002b36;--particle:238,232,213;--glow:181,137,0}
 :root[data-theme="synthwave"]{--bg:#12061f;--panel:#1b0b2e;--well:#160826;--ink:#f6e9ff;--dim:#c6a9df;--faint:#3d2357;--line:rgba(255,62,165,.15);--line-strong:rgba(255,62,165,.36);--accent:#ff3ea5;--accent2:#36f9f6;--btn:#ff3ea5;--btn-ink:#14051f;--particle:230,200,255;--glow:255,62,165}
 :root[data-theme="meadow"]{--bg:#08192A;--panel:#0F2233;--well:#0b1d2e;--ink:#EAF4F1;--dim:#B8CAD2;--faint:#243A4C;--line:rgba(63,203,147,.16);--line-strong:rgba(63,203,147,.38);--accent:#3FCB93;--accent2:#5AA9FF;--btn:#3FCB93;--btn-ink:#0A2442;--particle:200,232,222;--glow:63,203,147}
-:root[data-theme="paper"]{color-scheme:light dark;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
+:root[data-theme="paper"]{color-scheme:only light;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
 /* paid themes (the market, forgeeks-market.html): the same fourteen tokens, same contrast rules (tools/theme_contrast.py) */
 :root[data-theme="moss"]{--bg:#0b0e08;--panel:#12170d;--well:#0e120a;--ink:#eef3dc;--dim:#bcc7a0;--faint:#2f3a20;--line:rgba(185,217,74,.15);--line-strong:rgba(185,217,74,.36);--accent:#b9d94a;--accent2:#e0a84a;--btn:#b9d94a;--btn-ink:#10160a;--particle:222,236,170;--glow:185,217,74}
 :root[data-theme="garnet"]{--bg:#1a0608;--panel:#250a0f;--well:#1e070b;--ink:#fbeee4;--dim:#e0b9ab;--faint:#4f2428;--line:rgba(255,107,87,.16);--line-strong:rgba(255,107,87,.38);--accent:#ff6b57;--accent2:#f2c27a;--btn:#ff6b57;--btn-ink:#1c0505;--particle:255,205,190;--glow:255,107,87}
-:root[data-theme="frost"]{color-scheme:light dark;--bg:#eef2f7;--panel:#f8fafc;--well:#e4eaf2;--ink:#0f1722;--dim:#3b475a;--faint:#c3cddb;--line:rgba(15,23,34,.13);--line-strong:rgba(15,23,34,.32);--accent:#3340c4;--accent2:#0b7a75;--btn:#3340c4;--btn-ink:#f4f7ff;--particle:30,40,70;--glow:51,64,196}
+:root[data-theme="frost"]{color-scheme:only light;--bg:#eef2f7;--panel:#f8fafc;--well:#e4eaf2;--ink:#0f1722;--dim:#3b475a;--faint:#c3cddb;--line:rgba(15,23,34,.13);--line-strong:rgba(15,23,34,.32);--accent:#3340c4;--accent2:#0b7a75;--btn:#3340c4;--btn-ink:#f4f7ff;--particle:30,40,70;--glow:51,64,196}
 /* textured tier: Papyrus wears Nile's tokens, Cotton wears Paper's; the texture itself is css/textures.css */
 :root[data-theme="papyrus"]{--bg:#070b16;--panel:#0c1222;--well:#090e1b;--ink:#e9edf7;--dim:#b7c0d8;--faint:#28324d;--line:rgba(230,180,80,.15);--line-strong:rgba(230,180,80,.36);--accent:#e6b450;--accent2:#4fb3c9;--btn:#e6b450;--btn-ink:#120d02;--particle:214,224,245;--glow:230,180,80}
-:root[data-theme="dendera"]{color-scheme:light dark;--bg:#f1e6cc;--panel:#faf3e2;--well:#ecdfc3;--ink:#1e1a14;--dim:#54483a;--faint:#cdbd97;--line:rgba(30,26,20,.13);--line-strong:rgba(30,26,20,.32);--accent:#1f3f8c;--accent2:#0f6e6a;--btn:#1f3f8c;--btn-ink:#fffbf1;--particle:30,26,20;--glow:31,63,140}
-:root[data-theme="cotton"]{color-scheme:light dark;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
+:root[data-theme="dendera"]{color-scheme:only light;--bg:#f1e6cc;--panel:#faf3e2;--well:#ecdfc3;--ink:#1e1a14;--dim:#54483a;--faint:#cdbd97;--line:rgba(30,26,20,.13);--line-strong:rgba(30,26,20,.32);--accent:#1f3f8c;--accent2:#0f6e6a;--btn:#1f3f8c;--btn-ink:#fffbf1;--particle:30,26,20;--glow:31,63,140}
+:root[data-theme="cotton"]{color-scheme:only light;--bg:#f4f1ea;--panel:#fbf9f4;--well:#ece8de;--ink:#161616;--dim:#45413a;--faint:#cbc5b8;--line:rgba(22,22,22,.13);--line-strong:rgba(22,22,22,.32);--accent:#a8401c;--accent2:#2f6f62;--btn:#161616;--btn-ink:#f4f1ea;--particle:30,28,24;--glow:168,64,28}
 
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
@@ -87,6 +87,12 @@ main,header,footer{position:relative;z-index:2}
 .me-menu [role=menuitem]{display:flex;align-items:center;width:100%;min-height:38px;padding:0 12px;border:0;border-radius:4px;background:none;font:400 13px var(--mono);color:var(--dim);text-align:left;text-decoration:none;cursor:pointer}
 .me-menu [role=menuitem]:hover,.me-menu [role=menuitem]:focus-visible{color:var(--ink);background:rgba(var(--particle),.06)}
 .me-menu .me-out{margin-top:6px;border-top:1px solid var(--line);border-radius:0 0 4px 4px}
+.me-menu .me-group{justify-content:space-between;color:var(--ink)}
+.me-menu .me-group::after{content:'';width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+.me-menu .me-group[aria-expanded=true]::after{transform:rotate(-135deg)}
+.me-sub{margin:0 0 4px 12px;padding-left:4px;border-left:1px solid var(--line)}
+.me-sub[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.me-menu .me-group::after{transition:none}}
 @media (max-width:760px){.me-name{display:none}.chip.me.in{padding:0 4px}}
 @media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.links a.opt,.src{display:none}}
 @media (max-width:1040px){.crumb{display:none}}
