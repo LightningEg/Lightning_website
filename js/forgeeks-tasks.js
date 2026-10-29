@@ -1,4 +1,4 @@
-/* For Geeks task board (forgeeks-tasks.html): open tasks that pay Lightning Coins, from public.task_board().
+/* For Geeks task board (forgeeks-tasks.html): open tasks that pay Cotton, from public.task_board().
    Signed-in members only. The database says whether a task is taken or yours, never by whom.
    Everything shown from the database goes through textContent. The rules are also tested in supabase/tests/rewards-pages.test.mjs. */
 (function (root) {
@@ -92,7 +92,7 @@
     var r = await FG.sb.from('github_links').select('github_login').eq('user_id', uid).is('unlinked_at', null).maybeSingle();
     if (r.error) return;
     if (r.data && GH_LOGIN.test(r.data.github_login || '')) line.appendChild(doc.createTextNode('Linked now: @' + r.data.github_login + '.'));
-    else line.appendChild(doc.createTextNode('Not linked yet: coins for a merged pull request wait for you until you link.'));
+    else line.appendChild(doc.createTextNode('Not linked yet: Cotton for a merged pull request waits for you until you link.'));
   }
 
   async function load(session) {

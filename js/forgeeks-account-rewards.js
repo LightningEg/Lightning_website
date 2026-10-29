@@ -107,7 +107,7 @@
     var h = '';
     if (message) h = message;
     else if (gh.identity && gh.others < 1) h = 'To unlink, add another way to sign in first: a password or Google.';
-    else if (!gh.link) h = 'You can still earn: coins for a merged pull request wait for you until you link.';
+    else if (!gh.link) h = 'You can still earn: Cotton for a merged pull request waits for you until you link.';
     hint.textContent = h;
     hint.hidden = !h;
     hint.className = 'fine' + (bad ? ' bad' : '');
@@ -174,7 +174,7 @@
     var rows = res[0].data || [];
     var urls = {};
     ((res[1] && res[1].data) || []).forEach(function (c) { if (HTTPS.test(c.url || '')) urls[c.ledger_entry_id] = c.url; });
-    $('act-empty').textContent = 'Nothing yet. Coins show up here when a pull request for a task is merged or your feedback is accepted.';
+    $('act-empty').textContent = 'Nothing yet. Cotton shows up here when a pull request for a task is merged or your feedback is accepted.';
     $('act-empty').hidden = rows.length > 0;
     rows.forEach(function (r) {
       var li = el('li', 'act-row');
@@ -211,7 +211,7 @@
       var tags = el('div', 'tags');
       tags.appendChild(el('span', 'when', cairoDate(f.created_at)));
       tags.appendChild(el('span', 'tag' + (f.status === 'accepted' ? ' on' : ''), STATUS_WORDS[f.status] || String(f.status)));
-      if (f.status === 'accepted' && f.amount > 0) tags.appendChild(el('span', 'tag on', signed(f.amount) + ' coins'));
+      if (f.status === 'accepted' && f.amount > 0) tags.appendChild(el('span', 'tag on', signed(f.amount) + ' Cotton'));
       li.appendChild(tags);
       li.appendChild(el('div', 'what pre', f.body));
       if (f.context) li.appendChild(el('div', 'meta-line', 'where: ' + f.context));

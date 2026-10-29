@@ -138,7 +138,7 @@ await test('market: signed out shows the whole catalog, no buy or equip buttons,
 await test('market: signed in shows the wallet and one action per item: buy, equip or equipped', async () => {
   const p = await boot({ balance: 210, owned: ['frost', 'banner-dusk'], equipped: { theme: 'frost', banner: 'banner-dusk' } });
   assert.equal(p.$('wallet').hidden, false);
-  assert.equal(p.$('wallet').textContent, 'coins 210');
+  assert.equal(p.$('wallet').textContent, 'Cotton 210');
   assert.equal(p.$('mkt-signin').hidden, true);
   assert.deepEqual(p.calls.filter(c => c.table === 'wallets').map(c => c.filters), [{ user_id: UID }]);
   assert.equal(p.cell('moss').dataset.state, 'for-sale');
@@ -251,7 +251,7 @@ await test('market: not enough coins is said in plain words, charges nothing and
   assert.match(p.$('buy-status').textContent, /100 Cotton/);
   await p.click(p.$('buy-ok'));
   assert.equal(p.rpcs('purchase_item_at_price').length, 1, 'the server is asked and decides');
-  assert.equal(p.$('buy-status').textContent, 'Not enough coins for that yet.');
+  assert.equal(p.$('buy-status').textContent, 'Not enough Cotton for that yet.');
   assert.match(p.$('buy-status').className, /bad/);
   assert.equal(p.$('buy').hidden, false);
   assert.equal(p.$('coins').textContent, '100');
@@ -362,12 +362,12 @@ await test('picker: paid themes show a lock and their price; free themes show ne
   const p = await pickerPage({ signedIn: false });
   const moss = card(p, 'moss');
   assert.ok(moss.classList.contains('lk'));
-  assert.match(moss.querySelector('.tm-price').textContent, /locked, 150 coins/);
+  assert.match(moss.querySelector('.tm-price').textContent, /locked, 150 Cotton/);
   assert.ok(moss.querySelector('.tm-price svg'));
-  assert.match(card(p, 'garnet').querySelector('.tm-price').textContent, /300 coins/);
-  assert.match(card(p, 'frost').querySelector('.tm-price').textContent, /300 coins/);
-  assert.match(card(p, 'papyrus').querySelector('.tm-price').textContent, /1,?000 coins/, 'the animated tier');
-  assert.match(card(p, 'cotton').querySelector('.tm-price').textContent, /600 coins/, 'the textured tier');
+  assert.match(card(p, 'garnet').querySelector('.tm-price').textContent, /300 Cotton/);
+  assert.match(card(p, 'frost').querySelector('.tm-price').textContent, /300 Cotton/);
+  assert.match(card(p, 'papyrus').querySelector('.tm-price').textContent, /1,?000 Cotton/, 'the animated tier');
+  assert.match(card(p, 'cotton').querySelector('.tm-price').textContent, /600 Cotton/, 'the textured tier');
   assert.equal(card(p, 'mono').querySelector('.tm-price'), null);
   assert.equal(p.w.LG.THEMES.length, 18);
 });
@@ -382,7 +382,7 @@ await test('picker: signed out, keeping a paid theme keeps nothing, restores the
   assert.equal(p.w.document.getElementById('themes').hidden, true);
   const toast = p.w.document.getElementById('toast');
   assert.ok(toast.classList.contains('on'));
-  assert.match(toast.textContent, /moss is a paid theme, 150 coins\./);
+  assert.match(toast.textContent, /moss is a paid theme, 150 Cotton\./);
   const a = toast.querySelector('a');
   assert.equal(a.getAttribute('href'), 'forgeeks-market.html');
   assert.equal(p.rpcs('equip_item').length, 0);
@@ -395,7 +395,7 @@ await test('picker: signed out, keeping a paid theme keeps nothing, restores the
   await p.key(grid, 'Enter');
   assert.equal(p.w.document.documentElement.dataset.theme, undefined, 'but keeping is not');
   assert.equal(p.w.LG.current(), 'mono');
-  assert.match(toast.textContent, /dendera is a paid theme, 1,?000 coins\./);
+  assert.match(toast.textContent, /dendera is a paid theme, 1,?000 Cotton\./);
 });
 
 await test('picker: a free theme keeps with no account, no network call and no toast link', async () => {

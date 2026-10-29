@@ -66,7 +66,7 @@
     if (/story too long or missing|title or summary too long/i.test(m)) return 'Keep the title under 140 characters and the excerpt under 400.';
     if (/tick the box to agree/i.test(m)) return 'Tick the box to agree to share your post under your display name.';
     if (/cannot be edited now/i.test(m)) return 'That post cannot be edited now. Share a new one instead.';
-    if (/3 stories in 30 days/i.test(m)) return 'This member already earned story coins for 3 stories in 30 days. Approve it later.';
+    if (/3 stories in 30 days/i.test(m)) return 'This member already earned story Cotton for 3 stories in 30 days. Approve it later.';
     if (/say what to change|5 to 500 characters/i.test(m)) return 'Write a note of 5 to 500 characters first.';
     if (/MFA/i.test(m)) return 'Verify your administrator session with an authenticator code first.';
     if (/public adult profile/i.test(m)) return 'Set your profile to public before publishing.';
@@ -75,7 +75,7 @@
     if (/account not found/i.test(m)) return 'No account matches that email.';
     if (/member_profiles_display_name_key/.test(m)) return 'That display name is taken. Try another.';
     if (/at most 12/.test(m)) return 'You can keep up to 12 links.';
-    if (/insufficient coins/i.test(m)) return 'Not enough coins for that yet.';
+    if (/insufficient coins/i.test(m)) return 'Not enough Cotton for that yet.';
     if (/already owned/i.test(m)) return 'You already own that.';
     if (/Invalid login credentials/i.test(m)) return 'Wrong email or password.';
     if (/Email not confirmed/i.test(m)) return 'Confirm your email first: open the link we sent you.';

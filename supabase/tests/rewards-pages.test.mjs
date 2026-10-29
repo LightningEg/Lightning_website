@@ -360,7 +360,7 @@ await test('account page: accepted feedback shows its coins and the reply', asyn
   await p.fire('INITIAL_SESSION', session);
   const t = p.text('fb-list');
   assert.match(t, /accepted/);
-  assert.match(t, /\+25 coins/);
+  assert.match(t, /\+25 Cotton/);
   assert.match(t, /reply: Shipped in 0\.6/);
   assert.match(t, /duplicate/);
 });
@@ -648,7 +648,7 @@ await test('admin: a ledger correction is looked up first, shown, and only then 
   await p.submit('form-correct');
   assert.equal(p.rpcs('admin_correct_entry').length, 0, 'looking up never posts');
   assert.equal(p.$('cx-post').hidden, false);
-  assert.match(p.text('cx-preview'), /Entry 12 · 2026-10-25 · contribution_award · Ada · \+60 coins/);
+  assert.match(p.text('cx-preview'), /Entry 12 · 2026-10-25 · contribution_award · Ada · \+60 Cotton/);
   assert.match(p.text('cx-preview'), /reverses it: -60 coins and -60 score/);
   const q = p.calls.find(c => c.table === 'ledger_entries');
   assert.ok(hasFilter(q, 'eq', 'id', 12));

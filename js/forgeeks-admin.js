@@ -146,7 +146,7 @@
     var f = $('form-reward').elements;
     f.issue.value = r.issue_number; f.amount.value = r.amount; f.title.value = r.title || ''; f.criteria.value = r.acceptance_criteria || '';
     f.amount.focus();
-    flash('status-reward', 'Change the coins or the criteria, then publish: it becomes version ' + (r.version + 1) + '.');
+    flash('status-reward', 'Change the Cotton or the criteria, then publish: it becomes version ' + (r.version + 1) + '.');
   }
 
   async function toggleHistory(r, li, btn) {
@@ -304,7 +304,7 @@
     pendingCorrection = v.data;
     var p = $('cx-preview');
     p.hidden = false;
-    p.textContent = 'Entry ' + e.id + ' · ' + cairoDate(e.earned_at) + ' · ' + e.kind + ' · ' + (who || 'member') + ' · ' + signed(e.wallet_delta) + ' coins · "' + e.reason +
+    p.textContent = 'Entry ' + e.id + ' · ' + cairoDate(e.earned_at) + ' · ' + e.kind + ' · ' + (who || 'member') + ' · ' + signed(e.wallet_delta) + ' Cotton · "' + e.reason +
       '". Posting reverses it: ' + signed(-e.wallet_delta) + ' coins' + (e.contribution_delta ? ' and ' + signed(-e.contribution_delta) + ' score' : '') + '.';
     $('cx-post').hidden = false;
     flash('status-correct', '');

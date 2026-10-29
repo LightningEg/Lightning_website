@@ -38,12 +38,12 @@
     {id:'phosphor',name:'Phosphor',note:'green CRT glow',c:['#040a06','#d8ffe4','#a8d6b6','#39ff88'],paid:true,price:100,archived:true},
     {id:'amber',name:'Amber',note:'old terminal, warm',c:['#0c0803','#ffe7c2','#dcb98a','#ffb000'],paid:true,price:100,archived:true},
     {id:'solarized',name:'Solarized',note:'the classic, gold and teal',c:['#002b36','#eee8d5','#aab9b8','#d4a017'],paid:true,price:100,archived:true},
-    /* paid themes: cosmetic only, bought with coins in the market (forgeeks-market.html). Prices here are what shows before the
+    /* paid themes: cosmetic only, bought with Cotton in the market (forgeeks-market.html). Prices here are what shows before the
        catalog loads; the server decides the real price (supabase/tests/market.test.mjs checks the two agree). */
     {id:'moss',name:'Moss',note:'dark olive and lime',c:['#0b0e08','#eef3dc','#bcc7a0','#b9d94a'],paid:true,price:150,archived:true},
     {id:'garnet',name:'Garnet',note:'red and cream',c:['#1a0608','#fbeee4','#e0b9ab','#ff6b57'],paid:true,price:300},
     {id:'frost',name:'Frost',note:'cool light, slate and indigo',c:['#eef2f7','#0f1722','#3b475a','#3340c4'],light:true,paid:true,price:300},
-    /* textured tier (guideline/themes.md section 7): a palette plus a woven texture behind the page, 600 coins */
+    /* textured tier (guideline/themes.md section 7): a palette plus a woven texture behind the page, 600 Cotton */
     {id:'papyrus',name:'Papyrus',note:'Nile night and gold over papyrus fibres, with a travelling gold thread',c:['#070b16','#e9edf7','#b7c0d8','#e6b450'],tex:'papyrus',paid:true,price:1000},
     {id:'cotton',name:'Cotton',note:'warm paper light over a cotton weave',c:['#f4f1ea','#161616','#45413a','#a8401c'],light:true,tex:'cotton',paid:true,price:600},
     {id:'dendera',name:'Dendera',note:'temple pigments on aged papyrus: lapis, gold, turquoise and red ochre, with a slow pigment thread',c:['#f1e6cc','#1e1a14','#54483a','#1f3f8c'],light:true,tex:'dendera',paid:true,price:1000}
@@ -73,7 +73,7 @@
   /* Preview is free for everyone (cosmetics are not DRM); keeping a paid theme you do not own is not: the saved theme stays and the toast points to the market. */
   function keep(id){
     var t=find(id);if(!t)return false;
-    if(locked(t)){apply(saved);toast(t.name.toLowerCase()+' is a paid theme, '+t.price+' coins.',{href:'forgeeks-market.html',text:'open the market'});return false}
+    if(locked(t)){apply(saved);toast(t.name.toLowerCase()+' is a paid theme, '+t.price+' Cotton.',{href:'forgeeks-market.html',text:'open the market'});return false}
     use(id);equipOnServer(id);return true;
   }
   /* Archived themes (owner, 2026-10-25) leave the picker unless you own one or wear it; the market no longer sells them. */
@@ -84,7 +84,7 @@
     o.hidden=!shown(t);
     var lk=locked(t),p=o.querySelector('.tm-price');
     o.classList.toggle('lk',lk);
-    if(lk)p.innerHTML=LOCK+'<span class="sr">locked, </span>'+(Math.round(+t.price)||0)+' coins';else p.textContent='owned';
+    if(lk)p.innerHTML=LOCK+'<span class="sr">locked, </span>'+(Math.round(+t.price)||0)+' Cotton';else p.textContent='owned';
   }
   THEMES.forEach(function(t,i){
     var o=doc.createElement('div');o.className='tm-card';o.setAttribute('role','option');o.id='th-'+t.id;o.dataset.id=t.id;
