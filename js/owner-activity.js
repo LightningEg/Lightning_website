@@ -1,4 +1,4 @@
-/* Owner console, Activity view (admin.html #activity): the audit timeline for coins, scores, sales and the owner's
+/* Owner console, Activity view (admin.html #activity): the audit timeline for Cotton, scores, sales and the owner's
    own actions. Reads admin_activity() (supabase/migrations/20261027100000_activity_audit.sql, MFA administrators
    only) and changes nothing: the records it shows are the append-only ledger, the purchases and the audit log.
    Filter, search by member, item or reference, page back through time, and save what is on screen as a CSV file.
@@ -9,7 +9,7 @@
   var $ = function (id) { return doc.getElementById(id); };
   var host = $('ops-activity');
   if (!host || !FG) return;
-  var CATS = [['all', 'Everything'], ['coins', 'Coins'], ['score', 'Scores'], ['sales', 'Sales'], ['admin', 'Owner actions']];
+  var CATS = [['all', 'Everything'], ['coins', 'Cotton'], ['score', 'Scores'], ['sales', 'Sales'], ['admin', 'Owner actions']];
   var PAGE = 50;
   var cat = 'all', search = '', rows = [], more = false, summary = null, verified = false, loading = false, run = 0;
   var list, status, moreBtn, kpis, table;
@@ -40,8 +40,8 @@
     if (!summary) return;
     var s = summary, d = 'last ' + s.days + ' days';
     add(kpis, [
-      kpi('Coins in', num(Number(s.paid_in) + Number(s.given)), 'coins', num(s.paid_in) + ' paid · ' + num(s.given) + ' given · ' + d),
-      kpi('Coins spent', num(s.spent), 'coins', num(s.refunded) + ' refunded · ' + num(s.corrections) + ' corrections'),
+      kpi('Cotton in', num(Number(s.paid_in) + Number(s.given)), 'Cotton', num(s.paid_in) + ' paid · ' + num(s.given) + ' given · ' + d),
+      kpi('Cotton spent', num(s.spent), 'Cotton', num(s.refunded) + ' refunded · ' + num(s.corrections) + ' corrections'),
       kpi('Score awarded', num(s.score_awarded), 'points', d),
       kpi('Owner actions', num(s.admin_actions), '', num(s.manual_credits) + ' manual credits')]);
   }
@@ -50,7 +50,7 @@
     table.textContent = '';
     if (!rows.length) { table.appendChild(el('p', 'ops-empty', loading ? 'Loading…' : 'Nothing matches in the last ' + (summary ? summary.days : 30) + ' days.')); moreBtn.hidden = true; return; }
     var t = el('table', 'oc-table'), head = el('tr');
-    ['When (UTC)', 'Who', 'What', 'Details', 'Coins', 'Score'].forEach(function (h) { head.appendChild(el('th', null, h)); });
+    ['When (UTC)', 'Who', 'What', 'Details', 'Cotton', 'Score'].forEach(function (h) { head.appendChild(el('th', null, h)); });
     t.appendChild(add(el('thead'), [head]));
     var body = el('tbody');
     rows.forEach(function (r) {

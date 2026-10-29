@@ -54,7 +54,7 @@ await test('it loads the newest fifty first and shows who, what, details, coins 
   assert.equal(p.qa('#ops-activity tbody tr').length, 3);
   assert.match(t, /paid topup/); assert.match(t, /Gold name · order a1b2c3d4/); assert.match(t, /\+300/); assert.match(t, /−150/);
   assert.match(t, /ben · automatic|ben/);
-  assert.match(t, /Coins in\s*1,350\s*coins/); assert.match(t, /Coins spent\s*480/); assert.match(t, /2 manual credits/);
+  assert.match(t, /Cotton in\s*1,350\s*Cotton/); assert.match(t, /Cotton spent\s*480/); assert.match(t, /2 manual credits/);
 });
 
 await test('a filter asks again for that kind, and search waits for a pause before asking', async () => {

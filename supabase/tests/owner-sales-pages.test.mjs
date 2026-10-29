@@ -69,10 +69,10 @@ await test('it asks for thirty days first, and the figures answer what sold, how
   assert.deepEqual(p.calls.map(c => [c.name, c.args]), [['admin_store_funnel', { p_days: 30 }], ['admin_sales', { p_days: 30 }]]);
   const t = p.$('ops-sales').textContent;
   assert.match(t, /Sold\s*12\s*items/);
-  assert.match(t, /2,400\s*coins/);
+  assert.match(t, /2,400\s*Cotton/);
   assert.match(t, /67%/, 'eight of twelve sales came from the cart');
   assert.match(t, /Stalled over a day\s*2\s*carts/);
-  assert.match(t, /600 coins not yet spent/);
+  assert.match(t, /600 Cotton not yet spent/);
   assert.match(t, /50% of members who started a cart/);
   assert.match(t, /Nile · Theme/);
   assert.match(t, /56%/, 'five sold of nine added');

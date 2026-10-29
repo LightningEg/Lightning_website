@@ -1,5 +1,5 @@
 /* Owner console, Community view (admin.html #social): merges held for GitHub accounts that are not linked yet
-   (admin_held_awards) and the story reward settings (admin_story_ladder / admin_set_story_ladder: coins, points and the blog
+   (admin_held_awards) and the story reward settings (admin_story_ladder / admin_set_story_ladder: Cotton, points and the blog
    bonus). The story review queue itself is js/store-admin.js with js/story-moderation.js. Every figure and name is set with
    textContent; the server (supabase/migrations/20261027210000_owner_console_seats_and_community.sql) checks everything. */
 (function () {
@@ -25,7 +25,7 @@
       var pr = safe(r.pr_url), title = (r.repository || '') + ' #' + r.pr_number;
       var what = pr ? el('a', null, title) : el('span', null, title);
       if (pr) { what.href = pr; what.target = '_blank'; what.rel = 'noopener noreferrer'; }
-      var pays = el('span', 'oc-chip', r.kind === 'points' ? num(r.amount) + ' points' : num(r.amount) + ' coins');
+      var pays = el('span', 'oc-chip', r.kind === 'points' ? num(r.amount) + ' points' : num(r.amount) + ' Cotton');
       li.append(who, what, pays, el('small', null, 'merged ' + String(r.merged_at).slice(0, 10)));
       ul.appendChild(li);
     });

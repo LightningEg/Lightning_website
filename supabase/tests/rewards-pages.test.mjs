@@ -121,11 +121,11 @@ await test('rules: task links, states and lock notes', () => {
   assert.equal(tasksRules.issueHref('LightningEg/Lightning', 12), 'https://github.com/LightningEg/Lightning/issues/12');
   for (const [r, n] of [['LightningEg/Lightning', 0], ['LightningEg/Lightning', 1.5], ['a b/c', 1], ['javascript:x/y', 1], ['a/b/c', 1], [null, 1]]) assert.equal(tasksRules.issueHref(r, n), null, `${r} ${n}`);
   assert.deepEqual([{ mine: true }, { claimed: true }, {}].map(tasksRules.stateOf), ['yours', 'taken', 'open']);
-  assert.equal(tasksRules.coinsText(1), '1 coin');
-  assert.equal(tasksRules.coinsText(75), '75 coins');
+  assert.equal(tasksRules.coinsText(1), '1 Cotton');
+  assert.equal(tasksRules.coinsText(75), '75 Cotton');
   assert.equal(tasksRules.lockNote({ mine: false, locked_amount: 5, amount: 9 }), '');
-  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 80 }), /locked at 80 coins\.$/);
-  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 120 }), /locked at 80 coins.*now offers 120 coins/);
+  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 80 }), /locked at 80 Cotton\.$/);
+  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 120 }), /locked at 80 Cotton.*now offers 120 Cotton/);
 });
 
 await test('rules: owner inputs are checked before anything is sent', () => {
@@ -405,11 +405,11 @@ await test('tasks: signed in lists open tasks with coins, state, criteria and a 
   assert.equal(items.length, 3);
   const first = items[0];
   assert.match(first.querySelector('h2').textContent, /^#12Round money$/);
-  assert.deepEqual([...first.querySelectorAll('.tag')].map(t => t.textContent), ['120 coins', 'yours']);
+  assert.deepEqual([...first.querySelectorAll('.tag')].map(t => t.textContent), ['120 Cotton', 'yours']);
   assert.match(first.textContent, /Whole EGP everywhere\.\nTests pass\./);
-  assert.match(first.textContent, /locked at 80 coins.*now offers 120 coins/);
-  assert.deepEqual([...items[1].querySelectorAll('.tag')].map(t => t.textContent), ['50 coins', 'taken']);
-  assert.deepEqual([...items[2].querySelectorAll('.tag')].map(t => t.textContent), ['10 coins', 'open']);
+  assert.match(first.textContent, /locked at 80 Cotton.*now offers 120 Cotton/);
+  assert.deepEqual([...items[1].querySelectorAll('.tag')].map(t => t.textContent), ['50 Cotton', 'taken']);
+  assert.deepEqual([...items[2].querySelectorAll('.tag')].map(t => t.textContent), ['10 Cotton', 'open']);
   assert.match(items[2].querySelector('h2').textContent, /Task$/, 'a task without a title still reads');
   const a = first.querySelector('a');
   assert.equal(a.href, 'https://github.com/LightningEg/Lightning/issues/12');
@@ -527,8 +527,8 @@ await test('admin: the owner gets every section loaded once', async () => {
   for (const f of ['is_admin', 'admin_task_overview', 'admin_pending_awards', 'admin_feedback_queue', 'profile_reports', 'audit_log']) assert.equal(fns.filter(x => x === f).length, f === 'is_admin' ? 2 : 1, f);
   assert.equal(p.$('tasks-list').children.length, 2);
   assert.match(p.$('tasks-list').children[0].textContent, /#12 Round money/);
-  assert.match(p.$('tasks-list').children[0].textContent, /claim: bee, active, locked at 80 coins/);
-  assert.match(p.$('tasks-list').children[1].textContent, /award: paid 50 coins/);
+  assert.match(p.$('tasks-list').children[0].textContent, /claim: bee, active, locked at 80 Cotton/);
+  assert.match(p.$('tasks-list').children[1].textContent, /award: paid 50 Cotton/);
 });
 
 await test('admin: publish sends the exact payload, with the repository fixed, and then reloads the overview', async () => {
@@ -539,12 +539,12 @@ await test('admin: publish sends the exact payload, with the repository fixed, a
   assert.equal(call.length, 1);
   assert.deepEqual(plain(call[0].args), { p_repo: 'LightningEg/Lightning', p_issue: 7, p_amount: 75, p_criteria: 'Whole EGP everywhere.', p_title: 'Round money' });
   assert.equal(p.rpcs('admin_task_overview').length, 2);
-  assert.match(p.text('status-reward'), /published #7 at 75 coins/);
+  assert.match(p.text('status-reward'), /published #7 at 75 Cotton/);
 });
 
 await test('admin: publish refuses bad numbers and empty criteria before asking the database', async () => {
   const p = await adminBoot();
-  for (const [issue, amount, crit, msg] of [['', '5', 'x', /Issue number/], ['7', '-5', 'x', /Coins/], ['7', '5.5', 'x', /Coins/], ['7', '5', '  ', /Acceptance criteria/]]) {
+  for (const [issue, amount, crit, msg] of [['', '5', 'x', /Issue number/], ['7', '-5', 'x', /Cotton/], ['7', '5.5', 'x', /Cotton/], ['7', '5', '  ', /Acceptance criteria/]]) {
     p.set('rw-issue', issue); p.set('rw-amount', amount); p.set('rw-criteria', crit);
     await p.submit('form-reward');
     assert.match(p.text('status-reward'), msg);
@@ -571,8 +571,8 @@ await test('admin: edit fills the form, history lists versions, close and reopen
   await p.click(btn('history'));
   const q = p.calls.find(c => c.table === 'reward_offer_versions');
   assert.ok(hasFilter(q, 'eq', 'offer_id', 5));
-  assert.match(row.querySelector('.adm-sub').textContent, /v2 · 120 coins/);
-  assert.match(row.querySelector('.adm-sub').textContent, /v1 · 80 coins/);
+  assert.match(row.querySelector('.adm-sub').textContent, /v2 · 120 Cotton/);
+  assert.match(row.querySelector('.adm-sub').textContent, /v1 · 80 Cotton/);
   await p.click(btn('history'));
   assert.equal(row.querySelector('.adm-sub'), null, 'history closes again');
   await p.click(btn('close'));
@@ -602,7 +602,7 @@ await test('admin: pending awards link only real https pull request pages', asyn
   assert.equal(a.href, 'https://github.com/LightningEg/Lightning/pull/300');
   assert.equal(a.rel, 'noopener noreferrer');
   assert.match(p.text('pending-list'), /@ghost · PR #300 for issue #41/);
-  assert.match(p.text('pending-list'), /12 coins/);
+  assert.match(p.text('pending-list'), /12 Cotton/);
 });
 
 const feedbackItem = { id: 3, display_name: 'geek-1a2b', body: 'Add a dark theme', context: 'home', status: 'pending', amount: 0, note: null, created_at: '2026-10-25T10:00:00Z', reviewed_at: null };
@@ -614,7 +614,7 @@ await test('admin: feedback is accepted with coins and a note, rejected without 
   assert.match(li.textContent, /Add a dark theme/);
   li.querySelector('#fbc-3').value = '-4';
   await p.click(btn('accept'));
-  assert.match(p.text('status-feedback'), /Coins/);
+  assert.match(p.text('status-feedback'), /Cotton/);
   assert.equal(p.rpcs('admin_review_feedback').length, 0);
   li.querySelector('#fbc-3').value = '25';
   li.querySelector('#fbn-3').value = ' Thanks, shipped. ';
@@ -649,7 +649,7 @@ await test('admin: a ledger correction is looked up first, shown, and only then 
   assert.equal(p.rpcs('admin_correct_entry').length, 0, 'looking up never posts');
   assert.equal(p.$('cx-post').hidden, false);
   assert.match(p.text('cx-preview'), /Entry 12 · 2026-10-25 · contribution_award · Ada · \+60 Cotton/);
-  assert.match(p.text('cx-preview'), /reverses it: -60 coins and -60 score/);
+  assert.match(p.text('cx-preview'), /reverses it: -60 Cotton and -60 score/);
   const q = p.calls.find(c => c.table === 'ledger_entries');
   assert.ok(hasFilter(q, 'eq', 'id', 12));
   // Changing the entry or the reason after the look-up takes the confirm button away.

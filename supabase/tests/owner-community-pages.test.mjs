@@ -65,7 +65,7 @@ await test('Held for linking: points and coins waiting for an unlinked GitHub ac
   assert.deepEqual(rows.map(r => r.querySelector('b').textContent), ['@newcomer', '@solver']);
   assert.match(rows[0].textContent, /LightningEg\/Lightning #801/);
   assert.match(rows[0].textContent, /50 points/);
-  assert.match(rows[1].textContent, /100 coins/);
+  assert.match(rows[1].textContent, /100 Cotton/);
   assert.match(rows[0].textContent, /merged 2026-10-20/);
   assert.equal(rows[0].querySelector('a').getAttribute('href'), 'https://github.com/LightningEg/Lightning/pull/801');
   assert.equal(rows[1].querySelector('a'), null, 'a link that is not github.com https is not made');
@@ -95,7 +95,7 @@ await test('a published story: Linked from the blog · pay N coins asks for the 
   const card = p.w.FGStoryModeration.card(story, async () => { done++; }, { coins: 100, points: 50, blog_coins: 80 });
   p.w.document.body.appendChild(card);
   const bonus = [...card.querySelectorAll('button')].find(b => b.textContent.startsWith('Linked from the blog'));
-  assert.equal(bonus.textContent, 'Linked from the blog · pay 80 coins');
+  assert.equal(bonus.textContent, 'Linked from the blog · pay 80 Cotton');
   assert.ok(![...card.querySelectorAll('button')].some(b => /^(Approve|Ask for a change|Decline)/.test(b.textContent)), 'a published story is not approved again');
   assert.ok(card.querySelector('input[type=url]'));
   card.querySelector('input[type=url]').value = 'https://lightningeg.com/blog-budget-20000-egp.html';
@@ -103,10 +103,10 @@ await test('a published story: Linked from the blog · pay N coins asks for the 
   assert.deepEqual(p.calls.find(c => c.name === 'admin_story_blog_bonus').args, { p_id: 'st1', p_blog_url: 'https://lightningeg.com/blog-budget-20000-egp.html' });
   assert.equal(done, 1, 'the row reloads');
   const paid = p.w.FGStoryModeration.card({ ...story, blog_url: 'https://lightningeg.com/guides.html', blog_coins_paid: 80 }, async () => {}, { blog_coins: 80 });
-  assert.match(paid.textContent, /Blog bonus paid: 80 coins/);
+  assert.match(paid.textContent, /Blog bonus paid: 80 Cotton/);
   assert.ok(![...paid.querySelectorAll('button')].some(b => b.textContent.startsWith('Linked from the blog')), 'never offered twice');
   const pending = p.w.FGStoryModeration.card({ ...story, status: 'pending' }, async () => {}, { coins: 120, points: 60, blog_coins: 80 });
-  assert.ok([...pending.querySelectorAll('button')].some(b => b.textContent === 'Approve · 120 coins + 60 points'), 'a pending story still shows Approve at the ladder');
+  assert.ok([...pending.querySelectorAll('button')].some(b => b.textContent === 'Approve · 120 Cotton + 60 points'), 'a pending story still shows Approve at the ladder');
   assert.ok(![...pending.querySelectorAll('button')].some(b => b.textContent.startsWith('Linked from the blog')));
 });
 

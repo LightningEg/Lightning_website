@@ -94,7 +94,7 @@ await test('my posts: status, the reviewer\'s note, edit and share again with th
   assert.equal(cards.length, 3, 'an internal draft with no note is not listed');
   assert.deepEqual(cards.map(c => c.querySelector('h3').textContent), ['Needs a change', 'Waiting for review', 'Published']);
   assert.match(cards[0].textContent, /Note from the reviewer: Please clarify your excerpt\./);
-  assert.match(cards[2].textContent, /Earned 100 coins and 50 points/);
+  assert.match(cards[2].textContent, /Earned 100 Cotton and 50 points/);
   await p.click(p.button(cards[0], 'Edit and share again'));
   const f = p.$('story-form');
   assert.equal(f.elements.id.value, 'm1');
@@ -124,7 +124,7 @@ await test('the owner\'s row: Open post, Approve at the ladder, Ask for a change
   assert.equal(rows[1].querySelector('a'), null, 'a link that is not a LinkedIn or Reddit post is not made');
   assert.match(rows[0].textContent, /Name on the post: Sam/);
   const approve = p.button(rows[0], 'Approve');
-  assert.equal(approve.textContent, 'Approve · 120 coins + 60 points');
+  assert.equal(approve.textContent, 'Approve · 120 Cotton + 60 points');
   await p.click(approve);
   assert.equal(p.rpcs('admin_approve_story').length, 0, 'not before the post is confirmed');
   assert.match(rows[0].querySelector('[role=status]').textContent, /confirm/);

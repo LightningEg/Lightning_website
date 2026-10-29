@@ -25,7 +25,7 @@
  function example(){const p=$('store-pricing'),out=$('store-pricing-example');if(!p||!out)return;const rate=Number(p.elements.rate.value)||0,steps=p.elements.tiers.value.split(/\n/).map(x=>x.match(/^\s*(\d+)\s*:\s*(\d+)\s*$/)).filter(Boolean).map(m=>[Number(m[1]),Number(m[2])]).sort((a,b)=>a[0]-b[0]);
   const coins=egp=>{let bonus=0;for(const [min,pc]of steps)if(egp>=min)bonus=pc;return Math.floor(egp*rate*(100+bonus)/100);};
   const amounts=[...new Set([Number(p.elements.minimum.value)||0,...steps.map(x=>x[0])])].filter(n=>n>0).slice(0,4);
-  out.textContent=rate?'A member gets '+amounts.map(a=>coins(a).toLocaleString('en-US')+' coins for '+a.toLocaleString('en-US')+' EGP').join(' · ')+'.':'';}
+  out.textContent=rate?'A member gets '+amounts.map(a=>coins(a).toLocaleString('en-US')+' Cotton for '+a.toLocaleString('en-US')+' EGP').join(' · ')+'.':'';}
  for(const n of['rate','minimum','tiers'])$('store-pricing').elements[n].addEventListener('input',example);
  async function bank(append=false){if(!append)bankOffset=0;const run=generation,view=++bankRun;let q=FG.sb.from('bank_transfers').select('*').order('received_at',{ascending:false});if($('store-bank-filter').value==='unmatched')q=q.is('request_id',null).eq('voided',false).is('returned_at',null);const r=await q.range(bankOffset,bankOffset+24);if(run!==generation||view!==bankRun)return;if(r.error)throw r.error;if(!append)$('store-bank-list').replaceChildren();
   if(!append&&!r.data.length)$('store-bank-list').append(el('p','No transfers in this view.'));
@@ -55,7 +55,7 @@
   requestOffset+=r.data.length;$('store-request-more').hidden=r.data.length<15;
  }
  let searchTimer=null;$('store-request-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>requests().catch(e=>say('store-overview-status',message(e))),300);});
- async function settled(row,text){await Promise.all([requests(),overview()]);say('store-request-status',text||'Credited '+count(row.coins)+' coins to '+(row.transfer_note_email||'the member')+'.');}
+ async function settled(row,text){await Promise.all([requests(),overview()]);say('store-request-status',text||'Credited '+count(row.coins)+' Cotton to '+(row.transfer_note_email||'the member')+'.');}
  const ownRef=row=>'TKT-'+String(row.id).replace(/-/g,'').slice(0,20).toUpperCase();
  const refOf=text=>String(text||'').replace(/\s/g,'').toUpperCase();
  function localNow(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes());}
@@ -71,7 +71,7 @@
      if(!t.credited)li.append(action('Not for this ticket',async()=>{await rpc('admin_correct_bank_transfer',{p_reference:t.reference,p_amount_piastres:t.amount_piastres,p_request_id:null,p_voided:false,p_note:'Taken off ticket '+String(row.id).slice(0,8)+' on the owner dashboard'});await load();},status));ul.append(li);});box.append(ul);}
    let completes=false;
    if(cand.length){box.append(el('h4','Already in your money journal: is it this payment?'));const ul=el('ul');cand.forEach(t=>{const li=line(t,(t.why||[]).join(', ')),fits=Number(t.amount_piastres)===owed;completes=completes||fits;
-     const use=action(fits?'Use it · credit '+count(row.coins)+' coins':'Use for this ticket',async()=>{if(row.receipt_object_key&&!receiptSeen())throw Error('Show the receipt first.');const res=await rpc('admin_attach_transfer',{p_request_id:row.id,p_reference:t.reference,p_note:null,p_receipt_key:row.receipt_object_key,p_receipt_revision:row.receipt_revision});if(run!==generation)return;
+     const use=action(fits?'Use it · credit '+count(row.coins)+' Cotton':'Use for this ticket',async()=>{if(row.receipt_object_key&&!receiptSeen())throw Error('Show the receipt first.');const res=await rpc('admin_attach_transfer',{p_request_id:row.id,p_reference:t.reference,p_note:null,p_receipt_key:row.receipt_object_key,p_receipt_revision:row.receipt_revision});if(run!==generation)return;
       if(res.status==='approved'){await settled(row);return;}
       await load();status.textContent=res.status==='waiting_receipt'?'The money matches. It credits once the member uploads the receipt.':'Now '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+'. Nothing was credited yet.';},status);if(fits)use.className='btn';li.append(use);ul.append(li);});box.append(ul);}
    box.hidden=!on.length&&!cand.length;onMoney(on,completes);};
@@ -82,7 +82,7 @@
   const li=el('li');li.className='ops-rec';li.dataset.status=row.status;
   const open=row.status==='pending',isReady=ready(row);
   const head=el('div');head.className='ops-rec-head';
-  const who=el('b',(row.transfer_note_email||'Deleted account')+' · '+egp(row.price_piastres)+' · '+count(row.coins)+' coins');who.dir='auto';head.append(who);
+  const who=el('b',(row.transfer_note_email||'Deleted account')+' · '+egp(row.price_piastres)+' · '+count(row.coins)+' Cotton');who.dir='auto';head.append(who);
   // in the Open list every row is open: the chip says what differs, how long it has waited or that it is not paid yet
   const st=el('span',!open?STATUS[row.status]||row.status:isReady?waited(row.details_submitted_at||row.receipt_uploaded_at||row.created_at)+' waiting':'Waiting for details');st.className='ops-st ops-st-'+(open&&!isReady?'idle':row.status);if(open&&isReady)st.title='Since the member confirmed paying';head.append(st);
   const said=el('small',!open?[row.payer_instapay_address&&'from '+row.payer_instapay_address,row.payment_reference,row.reviewed_at&&when(row.reviewed_at),row.review_note].filter(Boolean).join(' · '):row.details_submitted_at?'Look for '+egp(row.original_amount_piastres||row.price_piastres)+' from '+(row.payer_instapay_address||'?')+(row.member_sent_on?', sent '+row.member_sent_on:'')+(row.transfer_note_email?', note '+row.transfer_note_email:''):row.receipt_object_key?'Receipt uploaded'+(row.payer_instapay_address?', paid from '+row.payer_instapay_address:''):'Opened '+(row.created_at?when(row.created_at):'')+'; has not confirmed paying yet');said.dir='auto';
@@ -100,11 +100,11 @@
   const before=()=>{const mine=refOf(ref.input.value),own=ownRef(row);return others.filter(t=>!t.credited&&t.reference!==own&&t.reference!==mine).reduce((a,t)=>a+Number(t.amount_piastres),0);};
   const draw=()=>{compare.replaceChildren();let typed;try{typed=cents(amount.input.value);}catch{compare.append(el('span','Type the amount that arrived.'));if(ok)ok.textContent='Record what arrived';return;}
    const b=before(),total=b+typed,d=total-row.price_piastres;
-   if(ok)ok.textContent=d===0?'Arrived · credit '+count(row.coins)+' coins':'Record what arrived';
+   if(ok)ok.textContent=d===0?'Arrived · credit '+count(row.coins)+' Cotton':'Record what arrived';
    // a match needs no words (the button says it); a difference says what it means
    if(d===0&&!b)return;
    const chip=el('span',d===0?'Matches':egp(Math.abs(d))+(d<0?' short':' over'));chip.className='ops-chip '+(d===0?'good':'bad');
-   compare.append(chip,el('span',' '+(b?egp(b)+' already on it + '+egp(typed)+' = '+egp(total):egp(total))+' of '+egp(row.price_piastres)+(d===0?'':d<0?'. Credits nothing yet: wait for the rest, or offer fewer coins under More.':'. Credits nothing: send the extra back, or offer more coins under More.')));};
+   compare.append(chip,el('span',' '+(b?egp(b)+' already on it + '+egp(typed)+' = '+egp(total):egp(total))+' of '+egp(row.price_piastres)+(d===0?'':d<0?'. Credits nothing yet: wait for the rest, or offer fewer Cotton under More.':'. Credits nothing: send the extra back, or offer more Cotton under More.')));};
   amount.input.addEventListener('input',()=>{touched=true;draw();});ref.input.addEventListener('input',draw);
   const doRow=el('div');doRow.className='ops-rec-do';
   const other=el('button','A different transfer? Type what arrived');other.type='button';other.className='ops-link';other.hidden=true;other.onclick=()=>{doRow.hidden=false;compare.hidden=false;other.hidden=true;amount.input.focus();};
@@ -114,8 +114,8 @@
    // money already in the journal pays it: that is the one button, so the same transfer is not recorded twice
    if(completes&&doRow.hidden===false&&!touched){doRow.hidden=true;compare.hidden=true;other.hidden=false;}
    draw();});
-  const more=details('More'),offer=details('Offer a revised amount'),offerCoins=input('Coins for what arrived','number'),offerWhy=input('Message to the member');offerCoins.input.min='1';
-  ok=action('Arrived · credit '+count(row.coins)+' coins',async()=>{if(!viewed)throw Error('Show the receipt first.');if(!at.input.value)throw Error('Enter when the money arrived, under More.');
+  const more=details('More'),offer=details('Offer a revised amount'),offerCoins=input('Cotton for what arrived','number'),offerWhy=input('Message to the member');offerCoins.input.min='1';
+  ok=action('Arrived · credit '+count(row.coins)+' Cotton',async()=>{if(!viewed)throw Error('Show the receipt first.');if(!at.input.value)throw Error('Enter when the money arrived, under More.');
    const res=await rpc('admin_confirm_topup',{p_request_id:row.id,p_received_piastres:cents(amount.input.value),p_note:note.input.value,p_receipt_key:row.receipt_object_key||null,p_receipt_revision:row.receipt_revision,p_received_at:new Date(at.input.value).toISOString(),p_sender:from.input.value,p_reference:ref.input.value.trim()||null});if(run!==generation)return;
    if(res.status==='amount_differs'){status.textContent='Recorded. '+egp(res.received_piastres)+' of '+egp(res.quote_piastres)+' is on this ticket, so nothing was credited. Wait for the rest, or offer a revised amount.';more.open=true;offer.open=true;offerCoins.input.value=String(Math.max(1,Math.floor(row.coins*res.received_piastres/res.quote_piastres)));touched=false;money.reload();return;}
    await settled(row);},status);ok.className='btn';

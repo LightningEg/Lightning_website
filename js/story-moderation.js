@@ -18,7 +18,7 @@
    if(needNote&&note.value.trim().length<5){status.textContent='Write a note of at least 5 characters first.';return;}
    if(needConfirm&&!confirm.checked){status.textContent='Open the post and confirm it first.';return;}
    button.disabled=true;try{const r=await call();if(r.error)throw r.error;await onReview();}catch(e){status.textContent=FG.say(e);}finally{button.disabled=false;}};row.append(button);};
-  const approve=el('button','Approve · '+coins+' coins + '+points+' points');approve.className='btn';
+  const approve=el('button','Approve · '+coins+' Cotton + '+points+' points');approve.className='btn';
   run(approve,()=>FG.sb.rpc('admin_approve_story',{p_id:s.id,p_expected_revision:s.submission_revision,p_note:note.value||null}),false,true);
   const change=el('button','Ask for a change');change.className='btn ghost';
   run(change,()=>FG.sb.rpc('admin_request_story_change',{p_id:s.id,p_note:note.value}),true,false);
@@ -28,10 +28,10 @@
   if(s.status==='published'){
    row.replaceChildren();confirmLabel.hidden=true;
    const blogCoins=ladder&&ladder.blog_coins!=null?Number(ladder.blog_coins):100;
-   if(s.blog_url){a.append(el('p','Blog bonus paid: '+(s.blog_coins_paid||0)+' coins · '+s.blog_url));}
+   if(s.blog_url){a.append(el('p','Blog bonus paid: '+(s.blog_coins_paid||0)+' Cotton · '+s.blog_url));}
    else{
     const url=el('input');url.type='url';url.placeholder='https://lightningeg.com/blog-….html';url.setAttribute('aria-label','Link to the blog post or guide');
-    const bonus=el('button','Linked from the blog · pay '+blogCoins+' coins');bonus.className='btn';
+    const bonus=el('button','Linked from the blog · pay '+blogCoins+' Cotton');bonus.className='btn';
     run(bonus,()=>FG.sb.rpc('admin_story_blog_bonus',{p_id:s.id,p_blog_url:url.value}),false,false);
     a.append(url);
    }

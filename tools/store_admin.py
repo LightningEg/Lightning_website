@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261028-funnel-1"  # css/store-admin.css and every js/ file below
+VERSION = "20261029-cotton-1"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -79,16 +79,16 @@ def build():
         '<p id="store-request-status" class="oc-status" role="status"></p><div id="store-request-list"></div>'
         '<button class="btn ghost oc-more" id="store-request-more" type="button" hidden>Load more</button>')
 
-    sales = view('sales', 'Sales', 'What sold, how it was bought, and the carts that were filled but never checked out. Coins, not EGP: the Overview counts revenue from top-ups.',
+    sales = view('sales', 'Sales', 'What sold, how it was bought, and the carts that were filled but never checked out. Cotton, not EGP: the Overview counts revenue from top-ups.',
         '<div id="ops-sales"><p class="ops-empty">Verify your session to load sales.</p></div>')
 
-    activity = view('activity', 'Activity', 'The audit trail: every coin that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',
+    activity = view('activity', 'Activity', 'The audit trail: all the Cotton that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',
         '<div id="ops-activity"><p class="ops-empty">Verify your session to load activity.</p></div>')
 
     catalogue = view('catalogue', 'Catalogue', 'Every look on sale. A theme takes its tier’s price everywhere it is worn: both sites, the PC and the phone. Sets follow their parts at 80%.',
         '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>' + claims)
 
-    members = view('members', 'Members', 'Credit coins or recognition points by hand: a goodwill gift, a refund in coins, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
+    members = view('members', 'Members', 'Credit Cotton or recognition points by hand: a goodwill gift, a refund in Cotton, a contest prize. Paid top-ups are confirmed under Top-ups, never here.',
         f'<div class="oc-grid">{credit}{avatar}</div>')
 
     social = view('social', 'Community', 'Stories to review, merges held for people who have not linked GitHub yet, and what each reward pays. Open the post, check the member’s code and the link back to Lightning, then reward it once. Up to three rewarded posts per member in 30 days.',
@@ -96,10 +96,10 @@ def build():
         + '<button class="btn ghost" type="button" id="store-social-refresh">Refresh</button></div>'
         '<div id="store-social-list" class="oc-cards"></div><button class="btn ghost oc-more" id="store-social-more" type="button" hidden>Load more</button>'
         '<div class="oc-grid">'
-        '<section class="panel" id="ops-held"><h3>Held for linking</h3><p class="ops-fine">Merged pull requests and coins waiting for a GitHub account that is not linked to a Lightning account yet. Nothing is lost: when the author links GitHub in their account, what waits here is paid to them once.</p><div id="ops-held-list"><p class="ops-empty">Verify your session to load what is held.</p></div></section>'
-        '<form class="panel" id="ops-rewards"><h3>Story rewards</h3><p class="ops-fine">What one press of Approve pays for a story, and the extra coins when the blog or a guide links to a published story. Coins are spendable; points raise the leaderboard.</p>'
-        '<div class="fields three"><label>Coins for an approved story<input name="coins" type="number" min="0" max="500" required></label><label>Points for an approved story<input name="points" type="number" min="0" max="500" required></label>'
-        '<label>Blog bonus in coins<input name="blog_coins" type="number" min="0" max="500" required></label></div>'
+        '<section class="panel" id="ops-held"><h3>Held for linking</h3><p class="ops-fine">Merged pull requests and Cotton waiting for a GitHub account that is not linked to a Lightning account yet. Nothing is lost: when the author links GitHub in their account, what waits here is paid to them once.</p><div id="ops-held-list"><p class="ops-empty">Verify your session to load what is held.</p></div></section>'
+        '<form class="panel" id="ops-rewards"><h3>Story rewards</h3><p class="ops-fine">What one press of Approve pays for a story, and the extra Cotton when the blog or a guide links to a published story. Cotton is spendable; points raise the leaderboard.</p>'
+        '<div class="fields three"><label>Cotton for an approved story<input name="coins" type="number" min="0" max="500" required></label><label>Points for an approved story<input name="points" type="number" min="0" max="500" required></label>'
+        '<label>Blog bonus in Cotton<input name="blog_coins" type="number" min="0" max="500" required></label></div>'
         '<button class="btn" type="submit">Save rewards</button><p id="ops-rewards-status" class="oc-status" role="status"></p></form></div>')
 
     bank = view('bank', 'Money journal', 'Every transfer recorded, with or without a ticket. Rarely needed: money that arrived with no top-up to match, or an entry to correct.',
@@ -109,11 +109,11 @@ def build():
         '<details class="panel oc-fold" id="store-bank-panel"><summary><h3>Record money that arrived with no ticket</h3></summary>'
         '<form id="store-bank-record"><div class="fields two"><label>Receiving bank reference<input name="reference" minlength="6" maxlength="100" required></label><label>Actual EGP received<input name="amount" type="number" step="0.01" min="0.01" required></label><label>Received at (your local time)<input name="received" type="datetime-local" required></label><label>Checkout request ID (leave empty if unmatched)<input name="request" autocomplete="off"></label><label>Sender InstaPay address (if known)<input name="sender" maxlength="200"></label><label>Lightning email in the transfer note (if present)<input name="email" type="email" maxlength="254"></label></div><label>Reconciliation note<textarea name="note" minlength="5" maxlength="500" required></textarea></label><label class="chk"><input name="confirmed" type="checkbox" required><span>I independently confirmed these funds reached the receiving account.</span></label><button class="btn" type="submit">Record bank transfer</button></form><p id="store-bank-status" class="oc-status" role="status"></p></details>')
 
-    settings = view('settings', 'Settings', 'How members pay, what a coin costs, and who runs the store.',
+    settings = view('settings', 'Settings', 'How members pay, what one Cotton costs, and who runs the store.',
         '<div class="oc-grid">'
         '<section class="panel" id="setup"><h3>Checkout</h3><p>The QR is private and appears only in a signed-in member’s accepted checkout. Support: <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a>.</p>'
         '<form id="store-settings"><div class="fields two"><label>Receiving InstaPay address<input name="address" maxlength="200" required></label><label>Exact recipient name shown by InstaPay<input name="recipient" maxlength="200" required></label></div><label>Private QR image<input type="file" name="qr" accept="image/png,image/jpeg,image/webp"></label><p id="store-qr-status" class="oc-hint">Upload only when changing the QR.</p><label>Processing instructions<textarea name="processing" minlength="20" maxlength="400" required></textarea></label><label class="chk"><input name="enabled" type="checkbox"><span>Open checkout after checking the receiving details and QR</span></label><button class="btn" type="submit">Save checkout</button></form><p id="store-settings-status" class="oc-status" role="status"></p></section>'
-        '<section class="panel" id="pricing"><h3>Coin price</h3><p>Members type an EGP amount; the quote freezes the rate and bonus before they pay, so a change here only affects new top-ups.</p><form id="store-pricing"><div class="fields three"><label>Coins per 1 EGP<input name="rate" type="number" min="1" max="1000" required></label><label>Minimum EGP<input name="minimum" type="number" min="1" required></label><label>Maximum EGP<input name="maximum" type="number" min="1" max="100000" required></label></div><label>Bonus steps (EGP:percent, one per line)<textarea name="tiers" rows="3" placeholder="100:5&#10;500:10&#10;1000:15"></textarea></label><p class="oc-hint" id="store-pricing-example" aria-live="polite"></p><label class="chk"><input name="enabled" type="checkbox"><span>Allow new top-up quotes</span></label><button class="btn" type="submit">Save coin price</button></form><p id="store-pricing-status" class="oc-status" role="status"></p></section>'
+        '<section class="panel" id="pricing"><h3>Cotton price</h3><p>Members type an EGP amount; the quote freezes the rate and bonus before they pay, so a change here only affects new top-ups.</p><form id="store-pricing"><div class="fields three"><label>Cotton per 1 EGP<input name="rate" type="number" min="1" max="1000" required></label><label>Minimum EGP<input name="minimum" type="number" min="1" required></label><label>Maximum EGP<input name="maximum" type="number" min="1" max="100000" required></label></div><label>Bonus steps (EGP:percent, one per line)<textarea name="tiers" rows="3" placeholder="100:5&#10;500:10&#10;1000:15"></textarea></label><p class="oc-hint" id="store-pricing-example" aria-live="polite"></p><label class="chk"><input name="enabled" type="checkbox"><span>Allow new top-up quotes</span></label><button class="btn" type="submit">Save Cotton price</button></form><p id="store-pricing-status" class="oc-status" role="status"></p></section>'
         '<form class="panel" id="ops-fixed-cost"><h3>Monthly fixed cost</h3><p>The break-even line on the Overview: hosting, tools and your own time, in EGP a month.</p><label>Fixed cost in EGP<input name="egp" type="number" min="0" max="10000000" step="1" required></label><button class="btn" type="submit">Save fixed cost</button><p id="ops-fixed-status" class="oc-status" role="status"></p></form>'
         '<section class="panel" id="owner-accounts"><h3>Owner account</h3><p>Only one account opens this console and sees its link in the menu.</p><p id="owner-accounts-status" class="oc-status" role="status"></p><button class="btn ghost" id="owner-keep-me" type="button" hidden>Make this the only owner account</button></section>'
         '<section class="panel" id="retention"><h3>Receipt retention</h3><p>Delete eligible receipt images older than 90 days. Pending payment evidence is protected; ledger records stay.</p><button class="btn ghost" id="store-retention" type="button">Remove expired receipt files</button><p id="store-retention-status" class="oc-status" role="status"></p></section>'

@@ -20,18 +20,18 @@ p=await boot();assert.equal(p.$('store-tools').disabled,false);
 {const det={...row,id:'33333333-3333-4333-8333-333333333333',receipt_object_key:null,details_submitted_at:'2026-10-26T09:00:00Z',member_sent_on:'2026-10-26',original_amount_piastres:10000,payer_instapay_address:'sara@instapay',transfer_note_email:'sara@example.test'};
  const q=await boot(true,{requestOverride:()=>({data:[det,{...row}],error:null})});const card=q.rec(0);const field=l=>card.querySelector(`[aria-label="${l}"]`);
  assert.equal(q.$('store-request-list').querySelectorAll('.ops-rec').length,2,'every open ticket on one screen');
- assert.match(card.textContent,/sara@example.test · 100 EGP · 525 coins/);
+ assert.match(card.textContent,/sara@example.test · 100 EGP · 525 Cotton/);
  assert.equal(card.querySelector('img'),null,'no receipt to show');assert.equal(card.querySelector('.ops-compare').textContent,'','a match needs no extra line');assert.match(card.querySelector('.ops-st').textContent,/waiting/);assert.match(card.textContent,/Look for 100 EGP from sara@instapay, sent 2026-10-26, note sara@example.test/);
  field('Arrived (EGP)').value='80';field('Arrived (EGP)').dispatchEvent(new q.w.Event('input'));assert.match(card.querySelector('.ops-compare').textContent,/20 EGP short.*Credits nothing/);
  const btn=()=>[...card.querySelectorAll('button')].find(b=>/Arrived · credit|Record what arrived/.test(b.textContent));assert.equal(btn().textContent,'Record what arrived');
- field('Arrived (EGP)').value='100';field('Arrived (EGP)').dispatchEvent(new q.w.Event('input'));assert.equal(btn().textContent,'Arrived · credit 525 coins');
+ field('Arrived (EGP)').value='100';field('Arrived (EGP)').dispatchEvent(new q.w.Event('input'));assert.equal(btn().textContent,'Arrived · credit 525 Cotton');
  field('Reference (optional)').value=' IPN 1234 ';field('When it arrived').value='2026-10-26T11:30';await q.click(btn());
  const c=q.calls.find(x=>x.name==='admin_confirm_topup');assert.equal(c.args.p_request_id,det.id);assert.equal(c.args.p_receipt_key,null);assert.equal(c.args.p_received_piastres,10000);assert.equal(c.args.p_reference,'IPN 1234');assert.equal(c.args.p_sender,'sara@instapay');assert.equal(c.args.p_received_at,new Date('2026-10-26T11:30').toISOString());
- assert.match(q.$('store-request-status').textContent,/Credited 525 coins to sara@example.test/);q.close();}
+ assert.match(q.$('store-request-status').textContent,/Credited 525 Cotton to sara@example.test/);q.close();}
 // an older ticket with a receipt: the receipt must show before it credits
 let card=p.rec();const button=text=>[...card.querySelectorAll('button')].find(b=>b.textContent===text);assert.match(card.textContent,/Receipt uploaded, paid from 01001234567/);
-await p.click(button('Arrived · credit 525 coins'));assert.equal(p.calls.some(c=>c.name==='admin_confirm_topup'),false,'nothing before the receipt is shown');assert.match(card.textContent,/Show the receipt first/);
-await p.click(button('Show receipt'));card.querySelector('img').dispatchEvent(new p.w.Event('load'));card.querySelector('[aria-label="Note (optional)"]').value='Seen in InstaPay';await p.click(button('Arrived · credit 525 coins'));
+await p.click(button('Arrived · credit 525 Cotton'));assert.equal(p.calls.some(c=>c.name==='admin_confirm_topup'),false,'nothing before the receipt is shown');assert.match(card.textContent,/Show the receipt first/);
+await p.click(button('Show receipt'));card.querySelector('img').dispatchEvent(new p.w.Event('load'));card.querySelector('[aria-label="Note (optional)"]').value='Seen in InstaPay';await p.click(button('Arrived · credit 525 Cotton'));
 const settle=p.calls.find(c=>c.name==='admin_confirm_topup');assert.equal(settle.args.p_receipt_revision,7);assert.equal(settle.args.p_receipt_key,row.receipt_object_key);assert.equal(settle.args.p_received_piastres,10000);assert.equal(settle.args.p_note,'Seen in InstaPay');assert.equal(settle.args.p_sender,'01001234567');
 
 await p.out();assert.equal(p.$('store-owner').hidden,true);assert.equal(p.$('store-request-list').textContent,'');assert.equal(p.$('store-settings').elements.address.value,'');p.close();
@@ -45,7 +45,7 @@ p=await boot(true,{mfa:true,mfaError:{code:'mfa_verification_failed',message:'In
  p=await boot(true,{money,attach:{status:'approved'}});const card=p.rec();const box=card.querySelector('.ops-money');
  assert.equal(box.hidden,false);assert.match(box.textContent,/On this ticket: 40 EGP of 100 EGP/);assert.match(box.textContent,/Already in your money journal/);assert.match(box.textContent,/IPN-5552 · 01009998887 · same sender/);
  // the recorded 60 completes the quote: it is the one button, and typing a second record is folded away
- const use=[...box.querySelectorAll('button')].find(b=>b.textContent==='Use it · credit 525 coins');assert.ok(use);assert.equal(use.className,'btn');
+ const use=[...box.querySelectorAll('button')].find(b=>b.textContent==='Use it · credit 525 Cotton');assert.ok(use);assert.equal(use.className,'btn');
  assert.equal(card.querySelector('.ops-rec-do').hidden,true,'no second record of the same money');const other=card.querySelector('.ops-link');assert.equal(other.hidden,false);
  assert.equal(card.querySelector('[aria-label="Arrived (EGP)"]').value,'60','the field starts at what is still owed');
  await p.click(use);

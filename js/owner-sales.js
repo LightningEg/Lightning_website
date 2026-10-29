@@ -1,7 +1,7 @@
 /* Owner console, Sales view (admin.html #sales): what sold, how it was bought, and where carts stall.
    Reads admin_sales() (supabase/migrations/20261027090000_cart_and_sales_tracking.sql) and admin_store_funnel()
    (20261028140000_site_analytics.sql: store page views, then carts, orders and top-ups), MFA administrators only, and
-   changes nothing. Money here is coins; the Overview shows revenue in EGP from top-ups. Item and member text is only
+   changes nothing. Money here is Cotton; the Overview shows revenue in EGP from top-ups. Item and member text is only
    ever set with textContent, and the view names no member: orders show a short id and the items bought. */
 (function () {
   'use strict';
@@ -30,7 +30,7 @@
     rows.forEach(function (d) { max = Math.max(max, Number(d.coins)); });
     var svg = doc.createElementNS(ns, 'svg');
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h); svg.setAttribute('class', 'ops-chart'); svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'Coins spent per day over the last ' + rows.length + ' days' + (max ? ', best day ' + num(max) + ' coins' : ''));
+    svg.setAttribute('aria-label', 'Cotton spent per day over the last ' + rows.length + ' days' + (max ? ', best day ' + num(max) + ' Cotton' : ''));
     var bw = w / Math.max(rows.length, 1);
     rows.forEach(function (d, i) {
       var v = Number(d.coins), bh = max ? Math.max(v ? 4 : 2, (v / max) * (h - 18)) : 2;
@@ -38,7 +38,7 @@
       r.setAttribute('x', (i * bw + 1).toFixed(1)); r.setAttribute('width', Math.max(2, bw - 2).toFixed(1));
       r.setAttribute('y', (h - bh).toFixed(1)); r.setAttribute('height', bh.toFixed(1)); r.setAttribute('rx', '3');
       r.setAttribute('class', v ? 'bar' : 'bar zero');
-      var t = doc.createElementNS(ns, 'title'); t.textContent = d.day + ': ' + num(v) + ' coins, ' + num(d.units) + ' sold'; r.appendChild(t);
+      var t = doc.createElementNS(ns, 'title'); t.textContent = d.day + ': ' + num(v) + ' Cotton, ' + num(d.units) + ' sold'; r.appendChild(t);
       svg.appendChild(r);
     });
     return svg;
@@ -107,12 +107,12 @@
     var carted = Number((ch.cart || {}).units) || 0;
     host.appendChild(add(el('div', 'ops-kpis'), [
       kpi('Sold', num(sales.units), 'items', num(sales.buyers) + ' buyers · last ' + s.days + ' days'),
-      kpi('Coins spent', num(sales.coins), 'coins', 'gifts included'),
-      kpi('Orders', num(orders.count), '', 'average ' + num(orders.avg_coins) + ' coins, ' + Number(orders.avg_lines || 0) + ' items'),
+      kpi('Cotton spent', num(sales.coins), 'Cotton', 'gifts included'),
+      kpi('Orders', num(orders.count), '', 'average ' + num(orders.avg_coins) + ' Cotton, ' + Number(orders.avg_lines || 0) + ' items'),
       kpi('Bought from the cart', pct(carted, sales.units), '', num(carted) + ' of ' + num(sales.units) + ' sales')]));
 
     host.appendChild(add(el('section', 'ops-block ops-card'), [
-      add(el('div', 'ops-card-h'), [el('h3', null, 'Coins spent per day'), el('span', 'ops-fine', 'cart ' + num((ch.cart || {}).coins) + ' · direct ' + num((ch.direct || {}).coins) + ' · gifts ' + num((ch.gift || {}).coins))]),
+      add(el('div', 'ops-card-h'), [el('h3', null, 'Cotton spent per day'), el('span', 'ops-fine', 'cart ' + num((ch.cart || {}).coins) + ' · direct ' + num((ch.direct || {}).coins) + ' · gifts ' + num((ch.gift || {}).coins))]),
       chart(Array.isArray(s.daily) ? s.daily : [])]));
 
     var stalled = Number(f.stale_carts) || 0;
@@ -121,20 +121,20 @@
       add(el('div', 'ops-kpis'), [
         kpi('Added to a cart', num(f.adds), 'items', num(f.carts_started) + ' members · ' + num(f.removed) + ' taken out again'),
         kpi('Checked out', num(f.checkouts), 'orders', pct(f.checkouts, f.carts_started) + ' of members who started a cart'),
-        kpi('Waiting in carts now', num(f.open_carts), 'carts', num(f.open_listed_coins) + ' coins at list price'),
-        kpi('Stalled over a day', num(stalled), 'carts', stalled ? num(f.stale_listed_coins) + ' coins not yet spent' : 'nothing is stuck')])]));
+        kpi('Waiting in carts now', num(f.open_carts), 'carts', num(f.open_listed_coins) + ' Cotton at list price'),
+        kpi('Stalled over a day', num(stalled), 'carts', stalled ? num(f.stale_listed_coins) + ' Cotton not yet spent' : 'nothing is stuck')])]));
 
     renderFunnel(fn);
 
     var items = Array.isArray(s.by_item) ? s.by_item : [];
     host.appendChild(add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Every item that moved')]),
-      table(['Item', 'Sold', 'Coins', 'Added to carts', 'Added → sold', 'In carts now'],
+      table(['Item', 'Sold', 'Cotton', 'Added to carts', 'Added → sold', 'In carts now'],
         items.map(function (i) { return [i.name + ' · ' + kindOf(i.type), num(i.units), num(i.coins), num(i.adds), pct(i.units, i.adds), num(i.in_carts)]; }),
         'Nothing has sold or been added to a cart in this period.')]));
 
     var recent = Array.isArray(s.recent_orders) ? s.recent_orders : [];
     host.appendChild(add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Latest orders')]),
-      table(['Order', 'When (UTC)', 'Items', 'Coins'],
+      table(['Order', 'When (UTC)', 'Items', 'Cotton'],
         recent.map(function (o) { return [o.id, when(o.at), (o.items || []).join(', '), num(o.total)]; }),
         'No cart orders yet.')]));
   }

@@ -1,7 +1,7 @@
 /* Owner console (admin.html): one view at a time (Overview, Top-ups, Catalogue, Members, Community, Money journal,
    Settings), the segmented filters, and the Overview
    drawn from admin_dashboard() (supabase/migrations/20261025330000_owner_dashboard.sql): what needs the owner, the
-   month against the fixed cost, paying members, the coins in circulation, thirty days of revenue and what sells.
+   month against the fixed cost, paying members, the Cotton in circulation, thirty days of revenue and what sells.
    Every decision and credit still goes through js/store-admin.js and the server; this file only reads and shows.
    It refreshes when store-admin.js says something changed (lightning:owner-changed). */
 (function () {
@@ -126,7 +126,7 @@
     var steps = [
       [!!(cfg.instapay_address && cfg.recipient_name && cfg.qr_asset_id), 'Receiving details and QR', 'Your InstaPay address, the exact name it shows, and the private QR', 'settings'],
       [!!(store.payments_enabled || cfg.enabled), 'Checkout open', 'Members can start a top-up', 'settings'],
-      [!!coin.enabled, 'Top-up quotes allowed', (coin.coins_per_egp || 5) + ' coins a pound, bonuses from ' + ((r.tiers || [])[0] ? r.tiers[0].minimum_egp + ' EGP' : 'none'), 'settings'],
+      [!!coin.enabled, 'Top-up quotes allowed', (coin.coins_per_egp || 5) + ' Cotton a pound, bonuses from ' + ((r.tiers || [])[0] ? r.tiers[0].minimum_egp + ' EGP' : 'none'), 'settings'],
       [Number(d.fixed_cost_egp) > 0, 'Fixed cost set', 'The break-even line below', 'settings'],
       [Number(d.payers_all) > 0, 'A real payment credited', 'Pay yourself once from another account, credit it, buy, check on a second device', 'requests'],
       [apps.all > 0 && apps.on === apps.all, 'App themes released', apps.on + ' of ' + apps.all + ' on. Turn each on once the app version that carries it has shipped', 'catalogue']];
@@ -185,7 +185,7 @@
       kpi('Revenue this month', egp(rev), 'EGP', change(rev, d.revenue_prev, 'egp')),
       kpi('Fixed cost covered', pct + '%', null, beSub, meter),
       kpi('Paying members this month', num(d.payers_month), null, el('p', 'ops-sub', num(d.payers_all) + ' all time · ' + num(d.repeat_payers) + ' came back · ' + num(d.members_month) + ' new members')),
-      kpi('Coins unspent', num(d.coins_outstanding), 'coins', el('p', 'ops-sub', 'This month: ' + num(d.coins_sold_month) + ' sold · ' + num(d.coins_given_month) + ' given · ' + num(d.coins_spent_month) + ' spent'))]);
+      kpi('Cotton unspent', num(d.coins_outstanding), 'Cotton', el('p', 'ops-sub', 'This month: ' + num(d.coins_sold_month) + ' sold · ' + num(d.coins_given_month) + ' given · ' + num(d.coins_spent_month) + ' spent'))]);
     host.appendChild(add(el('section', 'ops-block'), [el('h3', null, 'This month'), kpis]));
 
     // thirty days, then what sells
@@ -207,7 +207,7 @@
         var bar = add(el('span', 'ops-sell-bar'), [el('i')]);
         bar.firstChild.style.width = Math.round(Number(i.sold) / top * 100) + '%';
         ul.appendChild(add(el('li'), [add(el('span', 'ops-sell-name'), [el('b', null, i.name), el('small', null, kind)]), bar,
-          el('span', 'ops-sell-n', num(i.sold) + ' sold'), el('span', 'ops-sell-c', num(i.coins) + ' coins · ' + num(Number(i.coins) / rate) + ' EGP')]));
+          el('span', 'ops-sell-n', num(i.sold) + ' sold'), el('span', 'ops-sell-c', num(i.coins) + ' Cotton · ' + num(Number(i.coins) / rate) + ' EGP')]));
       });
       sells.appendChild(ul);
     }

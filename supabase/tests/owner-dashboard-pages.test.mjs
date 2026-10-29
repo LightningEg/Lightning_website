@@ -65,7 +65,7 @@ await test('Today: the month in four figures, each compared, with break-even aga
   assert.match(k[1].textContent, /1,800 EGP to go, about 12 top-ups at your average 150 EGP/);
   assert.equal(k[1].querySelector('[role=meter]').getAttribute('aria-valuenow'), '40');
   assert.match(k[2].textContent, /14 all time · 3 came back · 22 new members/);
-  assert.match(k[3].textContent, /9,100\s*coins/);
+  assert.match(k[3].textContent, /9,100\s*Cotton/);
 });
 
 await test('Today: thirty days of revenue as bars, and what sells with its tier and EGP', async () => {
@@ -74,7 +74,7 @@ await test('Today: thirty days of revenue as bars, and what sells with its tier 
   assert.match(p.w.document.querySelector('.ops-chart').getAttribute('aria-label'), /900 EGP in total/);
   const rows = p.qa('.ops-sells li');
   assert.equal(rows.length, 2);
-  assert.match(rows[0].textContent, /Papyrus.*Textured.*4 sold.*2,400 coins · 480 EGP/);
+  assert.match(rows[0].textContent, /Papyrus.*Textured.*4 sold.*2,400 Cotton · 480 EGP/);
   const covered = await boot({ data: sample({ revenue_month: 350000 }) });
   assert.match(covered.qa('.ops-kpi')[1].textContent, /Covered, 500 EGP above/);
 });
@@ -128,10 +128,10 @@ await test('Ready to sell: each step the store needs, ticked from its settings, 
 await test('What sells this month also counts extra profiles, in the same list and order', async () => {
   const p = await boot({ extra: { admin_month_seat_sales: [{ id: 'seat:nile', name: 'Extra profile · Nile', type: 'seat', tier: null, sold: 3, coins: 225 }] } });
   const rows = p.qa('.ops-sells li');
-  assert.deepEqual(rows.map(r => r.querySelector('.ops-sell-name b').textContent), ['Papyrus', 'Extra profile · Nile', 'Dusk'], 'by units sold, then coins');
+  assert.deepEqual(rows.map(r => r.querySelector('.ops-sell-name b').textContent), ['Papyrus', 'Extra profile · Nile', 'Dusk'], 'by units sold, then Cotton');
   assert.match(rows[1].textContent, /Another profile/);
   assert.match(rows[1].textContent, /3 sold/);
-  assert.match(rows[1].textContent, /225 coins · 45 EGP/);
+  assert.match(rows[1].textContent, /225 Cotton · 45 EGP/);
   assert.ok(p.calls.some(c => c.name === 'admin_month_seat_sales'));
   const none = await boot({ extra: { admin_month_seat_sales: [] } });
   assert.equal(none.qa('.ops-sells li').length, 2, 'no extra profile sold: the list is as before');

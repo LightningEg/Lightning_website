@@ -20,7 +20,7 @@
     var issue = wholeNumber(f.issue), amount = wholeNumber(f.amount);
     var title = text(f.title), criteria = text(f.criteria);
     if (!(issue >= 1 && issue <= MAX_ISSUE)) return { error: 'Issue number: a whole number from 1.' };
-    if (!(amount >= 0 && amount <= 100000)) return { error: 'Coins: a whole number from 0 to 100000.' };
+    if (!(amount >= 0 && amount <= 100000)) return { error: 'Cotton: a whole number from 0 to 100000.' };
     if (title.length > 200) return { error: 'Title: at most 200 characters.' };
     if (criteria.length < 1 || criteria.length > 4000) return { error: 'Acceptance criteria: 1 to 4000 characters.' };
     return { data: { p_repo: REPO, p_issue: issue, p_amount: amount, p_criteria: criteria, p_title: title || null } };
@@ -33,7 +33,7 @@
     var amount = 0;
     if (status === 'accepted') {
       amount = wholeNumber(coins === '' || coins == null ? 10 : coins);
-      if (!(amount >= 0 && amount <= 10000)) return { error: 'Coins: a whole number from 0 to 10000.' };
+      if (!(amount >= 0 && amount <= 10000)) return { error: 'Cotton: a whole number from 0 to 10000.' };
     }
     if (status === 'accepted') { amount = Math.max(10, amount); if (amount > 10 && !note) return { error: 'Add a note for the discretionary bonus.' }; }
     if (note.length > 500) return { error: 'Note: at most 500 characters.' };
@@ -68,7 +68,7 @@
     return new Intl.DateTimeFormat('en-GB', { timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
   }
   function signed(n) { n = Math.trunc(Number(n) || 0); return (n > 0 ? '+' : n < 0 ? '-' : '') + Math.abs(n); }
-  function coinsText(n) { n = Math.trunc(Number(n) || 0); return n + (n === 1 ? ' coin' : ' coins'); }
+  function coinsText(n) { n = Math.trunc(Number(n) || 0); return n + ' Cotton'; }
   function shortId(v) { return typeof v === 'string' && v ? v.slice(0, 8) : '-'; }
 
   // The reports table belongs to another migration; before it is applied the request fails like this.
@@ -247,7 +247,7 @@
     if (f.context) li.appendChild(el('div', 'meta-line', 'where: ' + f.context));
     var fields = el('div', 'review-fields');
     var c = el('div', 'f');
-    var cl = el('label', null, 'coins'); cl.htmlFor = 'fbc-' + f.id;
+    var cl = el('label', null, 'Cotton'); cl.htmlFor = 'fbc-' + f.id;
     var ci = el('input'); ci.id = 'fbc-' + f.id; ci.type = 'number'; ci.min = '0'; ci.max = '10000'; ci.step = '1'; ci.value = '10'; ci.setAttribute('inputmode', 'numeric');
     c.appendChild(cl); c.appendChild(ci);
     var n = el('div', 'f');
@@ -305,7 +305,7 @@
     var p = $('cx-preview');
     p.hidden = false;
     p.textContent = 'Entry ' + e.id + ' · ' + cairoDate(e.earned_at) + ' · ' + e.kind + ' · ' + (who || 'member') + ' · ' + signed(e.wallet_delta) + ' Cotton · "' + e.reason +
-      '". Posting reverses it: ' + signed(-e.wallet_delta) + ' coins' + (e.contribution_delta ? ' and ' + signed(-e.contribution_delta) + ' score' : '') + '.';
+      '". Posting reverses it: ' + signed(-e.wallet_delta) + ' Cotton' + (e.contribution_delta ? ' and ' + signed(-e.contribution_delta) + ' score' : '') + '.';
     $('cx-post').hidden = false;
     flash('status-correct', '');
   }

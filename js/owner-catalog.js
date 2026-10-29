@@ -53,22 +53,22 @@
       var price = (data.tiers || {})[t[0]];
       var card = el('article', 'oc-tier');
       var input = el('input'); input.type = 'number'; input.min = '1'; input.max = '1000000'; input.value = price || '';
-      input.setAttribute('aria-label', t[1] + ' price in coins');
+      input.setAttribute('aria-label', t[1] + ' price in Cotton');
       var each = el('small', 'oc-hint', price ? egp(price) + ' each' : 'No theme in this tier yet');
       input.addEventListener('input', function () { each.textContent = Number(input.value) > 0 ? egp(input.value) + ' each' : ''; });
       var names = items.map(function (i) { return i.name; });
       add(card, [add(el('header'), [el('h4', null, t[1]), el('span', 'oc-chip', items.length + (items.length === 1 ? ' theme' : ' themes'))]),
         el('p', 'oc-tier-what', t[2]),
-        add(el('div', 'oc-price'), [el('strong', null, price ? num(price) : '—'), el('span', null, 'coins')]),
+        add(el('div', 'oc-price'), [el('strong', null, price ? num(price) : '—'), el('span', null, 'Cotton')]),
         el('p', 'oc-hint', names.length ? names.join(', ') : 'Nothing on sale'),
         add(el('div', 'oc-inline'), [add(el('label', 'oc-inline-l'), [el('span', null, 'New price'), input]),
           button('Save', 'btn', function () {
             var v = Number(input.value);
-            if (!(v > 0)) throw Error('Type a price in coins.');
+            if (!(v > 0)) throw Error('Type a price in Cotton.');
             if (v === Number(price)) { status.textContent = 'That is already the ' + t[1].toLowerCase() + ' price.'; return; }
-            if (!window.confirm('Set every ' + t[1].toLowerCase() + ' theme to ' + num(v) + ' coins (' + egp(v) + ')? ' + items.length + ' themes change; sets that include them follow. People who already bought keep what they paid.')) return;
+            if (!window.confirm('Set every ' + t[1].toLowerCase() + ' theme to ' + num(v) + ' Cotton (' + egp(v) + ')? ' + items.length + ' themes change; sets that include them follow. People who already bought keep what they paid.')) return;
             return rpc('admin_set_tier_price', { p_tier: t[0], p_price: v }).then(function (n) {
-              status.textContent = t[1] + ' is now ' + num(v) + ' coins on ' + n + ' theme' + (n === 1 ? '' : 's') + '.';
+              status.textContent = t[1] + ' is now ' + num(v) + ' Cotton on ' + n + ' theme' + (n === 1 ? '' : 's') + '.';
               return load();
             });
           }, status)]), each]);
@@ -78,10 +78,10 @@
   }
 
   /* ---------- app releases ---------- */
-  // "4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued", from admin_app_unlocks()
+  // "4 profiles claimed · 2 extra profiles sold (150 Cotton) · 9 codes issued", from admin_app_unlocks()
   function unlockLine(u) {
     var claimed = Number(u.profiles_claimed), extra = Number(u.extra_seats_sold), codes = Number(u.codes_issued);
-    return num(claimed) + (claimed === 1 ? ' profile' : ' profiles') + ' claimed · ' + num(extra) + (extra === 1 ? ' extra profile' : ' extra profiles') + ' sold (' + num(u.extra_coins) + ' coins) · ' +
+    return num(claimed) + (claimed === 1 ? ' profile' : ' profiles') + ' claimed · ' + num(extra) + (extra === 1 ? ' extra profile' : ' extra profiles') + ' sold (' + num(u.extra_coins) + ' Cotton) · ' +
       num(codes) + (codes === 1 ? ' code' : ' codes') + ' issued';
   }
   function releases(status) {
@@ -124,15 +124,15 @@
       if (!i.active && !i.is_default) tr.className = 'retired';
       var price = el('td', 'num');
       if (i.is_default || i.award) price.appendChild(el('span', 'oc-muted', 'Free'));
-      else add(price, [el('b', null, num(i.price) + ' coins'), el('small', null, egp(i.price))]);
+      else add(price, [el('b', null, num(i.price) + ' Cotton'), el('small', null, egp(i.price))]);
       var act = el('td', 'oc-act');
       if (!i.is_default && !i.award && i.type !== 'theme' && i.type !== 'set') {
         var edit = el('details', 'oc-edit');
-        var input = el('input'); input.type = 'number'; input.min = '1'; input.max = '1000000'; input.value = i.price; input.setAttribute('aria-label', 'Price of ' + i.name + ' in coins');
+        var input = el('input'); input.type = 'number'; input.min = '1'; input.max = '1000000'; input.value = i.price; input.setAttribute('aria-label', 'Price of ' + i.name + ' in Cotton');
         add(edit, [el('summary', 'btn ghost small', 'Price'), add(el('div', 'oc-inline'), [input, button('Save', 'btn small', function () {
           var v = Number(input.value);
-          if (!(v > 0)) throw Error('Type a price in coins.');
-          return rpc('admin_set_item_price', { p_item_id: i.id, p_price: v }).then(function () { status.textContent = i.name + ' now costs ' + num(v) + ' coins (' + egp(v) + ').'; return load(); });
+          if (!(v > 0)) throw Error('Type a price in Cotton.');
+          return rpc('admin_set_item_price', { p_item_id: i.id, p_price: v }).then(function () { status.textContent = i.name + ' now costs ' + num(v) + ' Cotton (' + egp(v) + ').'; return load(); });
         }, status)])]);
         act.appendChild(edit);
       }
@@ -142,7 +142,7 @@
       }, status));
       var name = add(el('td', 'oc-item'), [el('b', null, i.name), el('small', null, i.type === 'set' && i.parts ? i.parts.join(' · ') : i.id)]);
       add(tr, [name, el('td', null, kindOf(i)), price,
-        add(el('td', 'num'), [el('b', null, num(i.sold_month) + ' this month'), el('small', null, num(i.sold) + ' in all · ' + num(i.coins) + ' coins')]),
+        add(el('td', 'num'), [el('b', null, num(i.sold_month) + ' this month'), el('small', null, num(i.sold) + ' in all · ' + num(i.coins) + ' Cotton')]),
         el('td', 'num', num(i.owners)), add(el('td'), [el('span', 'oc-chip ' + st[1], st[0])]), act]);
       body.appendChild(tr);
     });
@@ -164,7 +164,7 @@
       filter.appendChild(b);
     });
     add(host, [status,
-      add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Tier prices'), el('span', 'ops-fine', '1 EGP = ' + rate() + ' coins')]), tiers(status)]),
+      add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Tier prices'), el('span', 'ops-fine', '1 EGP = ' + rate() + ' Cotton')]), tiers(status)]),
       add(el('section', 'ops-block ops-card'), [add(el('div', 'ops-card-h'), [el('h3', null, 'App themes'), el('span', 'ops-fine', 'Bought once, unlocked in the Windows and Android app with a one-time code')]), releases(status)]),
       add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, 'Every item'), filter]), table(status)])]);
   }

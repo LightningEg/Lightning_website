@@ -14,7 +14,7 @@
     return 'https://github.com/' + repo + '/issues/' + n;
   }
 
-  function coinsText(n) { n = Math.trunc(Number(n) || 0); return n + (n === 1 ? ' coin' : ' coins'); }
+  function coinsText(n) { n = Math.trunc(Number(n) || 0); return n + ' Cotton'; }
 
   function stateOf(row) { return row && row.mine ? 'yours' : row && row.claimed ? 'taken' : 'open'; }
 
@@ -84,7 +84,7 @@
   async function githubNote(uid) {
     var line = $('gh-note');
     line.textContent = '';
-    line.appendChild(doc.createTextNode('Coins are paid when the pull request is merged, to the GitHub account linked on '));
+    line.appendChild(doc.createTextNode('Cotton is paid when the pull request is merged, to the GitHub account linked on '));
     var a = el('a', null, 'your account page');
     a.href = 'forgeeks-account.html';
     line.appendChild(a);

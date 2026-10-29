@@ -51,11 +51,11 @@ await test('tier prices: three tiers with coins, EGP and the themes in each', as
   const p = await boot();
   const tiers = p.qa('.oc-tier');
   assert.deepEqual(tiers.map(t => t.querySelector('h4').textContent), ['Palette', 'Textured', 'Animated']);
-  assert.match(tiers[0].textContent, /300\s*coins/);
+  assert.match(tiers[0].textContent, /300\s*Cotton/);
   assert.match(tiers[0].textContent, /60 EGP each/);
   assert.match(tiers[0].textContent, /Nile/);
   assert.doesNotMatch(tiers[0].textContent, /Mono/, 'the free default is not priced');
-  assert.match(tiers[2].textContent, /1,000\s*coins/);
+  assert.match(tiers[2].textContent, /1,000\s*Cotton/);
 });
 
 await test('a tier price moves every theme in it, after a confirmation, then reloads', async () => {
@@ -114,8 +114,8 @@ const UNLOCKS = [{ item_id: 'nile', name: 'Nile', codes_issued: 9, codes_redeeme
 await test('app themes: each theme shows profiles claimed, extra profiles sold (coins) and codes issued, beside its button', async () => {
   const p = await boot({ unlocks: UNLOCKS });
   const rel = p.qa('.oc-rel-list li');
-  assert.equal(rel[0].querySelector('.oc-unlock-stats').textContent, '4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued');
-  assert.equal(rel[1].querySelector('.oc-unlock-stats').textContent, '1 profile claimed · 0 extra profiles sold (0 coins) · 1 code issued');
+  assert.equal(rel[0].querySelector('.oc-unlock-stats').textContent, '4 profiles claimed · 2 extra profiles sold (150 Cotton) · 9 codes issued');
+  assert.equal(rel[1].querySelector('.oc-unlock-stats').textContent, '1 profile claimed · 0 extra profiles sold (0 Cotton) · 1 code issued');
   assert.ok(p.calls.some(c => c.name === 'admin_app_unlocks'));
   assert.ok(p.button(rel[0], 'Turn on unlock'), 'the button is still beside it');
   const silent = await boot();

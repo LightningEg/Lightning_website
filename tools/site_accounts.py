@@ -36,7 +36,7 @@ def build():
             main=main.replace('A strip across the top of your profile when it is visible. No text, no links.','A strip across the top of your profile and your account page. No text, no links.')
             main=main.replace('Try any theme on this page, or open details to see it on the website, the computer and the phone.','Try any theme on this page, or open Details to see it on the website, the computer and the phone.')
         elif name=='account':
-            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, coin history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
+            main=re.sub(r'<p class="lede">.*?</p>','<p class="lede">Your profile, Cotton history and collection in one place. The same account works here and in For Geeks. Your financial data stays on your devices.</p>',main,count=1,flags=re.S)
         if name=='marketplace':
             main=main.replace('</main>','<section class="wrap mkt-terms" aria-label="Payments"><details><summary>Payments and refunds</summary><p>Top-ups and cosmetic purchases are final. No discretionary refunds are offered at this time. Required legal rights and manual review of duplicate transfers, incorrect payments or failed delivery remain available.</p><p>Copy your account email into the transfer note, then confirm the date, amount and InstaPay address you paid from. Cotton is added after the owner confirms the money arrived.</p></details></section></main>')
         main=main.replace('forgeeks-account.html','account.html')
@@ -105,7 +105,7 @@ def connect_public_pages():
             text=text.replace('</body>',tags+'\n</body>')
         if 'css/site-account.css' not in text:
             text=text.replace('</head>',f'<link rel="stylesheet" href="{up}css/site-account.css">\n</head>')
-        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261027-stories-1\2', text)
+        text=re.sub(r'(js/forgeeks-auth[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261029-cotton-1\2', text)
         text=re.sub(r'(js/(?:forgeeks-account|forgeeks-account-data|admin-operations|story-card|story-moderation|community-stories)[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261025-reaudit-1\2', text)
         # changed with the community tabs pass (owner, 2026-10-25)
         text=re.sub(r'(js/topup[.]js)(?:[?]v=[^\"]*)?(\")', r'\1?v=20261026-instapay-2\2', text)
@@ -148,7 +148,7 @@ STORIES_MAIN='''<main id="main"><section class="s acct-top"><div class="wrap">
 <label class="chk"><input name="consent" type="checkbox" required><span>I agree to share my post under my public display name, and to the community rules.</span></label></div>
 <p class="com-lead">A public <a href="account.html">profile</a> is needed. Editing a listed post takes it down until it is reviewed again.</p>
 <div class="row"><button class="btn" type="submit">Share for review</button><button class="btn ghost" id="story-new" type="button" hidden>Cancel the edit</button></div></form>
-<ul class="com-rules"><li>Coins reward the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
+<ul class="com-rules"><li>Cotton rewards the post, never likes, votes, comments or the link alone, and each post can be rewarded once.</li>
 <li>Up to 3 rewarded posts in any 30 days.</li>
 <li>Never include account numbers, balances you want private or anything identifying. Posts are personal experiences, not financial advice.</li></ul>
 <h3 class="com-h" id="story-mine-h" hidden>Your posts</h3><div id="story-mine"></div></section>
@@ -171,7 +171,7 @@ def build_stories():
 STRIP='''<section class="d-section story-strip" data-story-strip data-limit="3" hidden aria-labelledby="strip-title"><div class="wrap">
 <p class="d-label">From the community</p><h2 id="strip-title">How people manage their money with Lightning, in their own words.</h2><p class="com-lead">Posts on LinkedIn and Reddit by Lightning users. They open on those sites.</p>
 <div class="story-grid" data-story-list></div><p data-story-empty hidden>No stories yet. Yours could be the first.</p>
-<p class="story-more"><a class="btn btn-secondary" href="stories.html">See all posts</a> <a class="btn btn-primary" href="stories.html#story-member">Share yours and earn coins</a></p></div></section>
+<p class="story-more"><a class="btn btn-secondary" href="stories.html">See all posts</a> <a class="btn btn-primary" href="stories.html#story-member">Share yours and earn Cotton</a></p></div></section>
 '''
 
 def build_guides():

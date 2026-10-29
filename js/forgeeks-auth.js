@@ -110,7 +110,7 @@
   var FG = root.FG = {
     sb: null,
     ready: ready,
-    coinName: 'Lightning Coins',
+    coinName: 'Cotton',
     session: function () { return current; },
     onAuth: function (fn) {
       listeners.push(fn);
