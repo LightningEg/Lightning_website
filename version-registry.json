@@ -3219,8 +3219,8 @@
       "id": "UX-2026.10.29.01",
       "name": "Lightning · Three places and six more",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.01.html"
     },
     {
       "id": "UX-2026.10.29.02",
@@ -3232,6 +3232,20 @@
     {
       "id": "UX-2026.10.29.03",
       "name": "Version Archive · Three places and six more",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.03.html"
+    },
+    {
+      "id": "UX-2026.10.29.04",
+      "name": "Lightning · Net worth animation starts later",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.05",
+      "name": "Version Archive · Net worth animation starts later",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
