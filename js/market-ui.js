@@ -479,6 +479,11 @@
     var text = tbar.querySelector('.mkt-trybar-text');
     text.textContent = '';
     add(text, [el('span', null, 'Previewing '), el('b', null, e.name), el('span', null, e.kind === 'theme' ? ' on this page. Nothing is saved.' : ' on your look. Nothing is saved.')]);
+    var old = tbar.querySelector('.mkt-trybar-pv'); if (old) old.parentNode.removeChild(old);
+    if (e.kind === 'theme' && PV.budget) {
+      var pal = e.palette || (e.c && PV.fromWebsite({ c: e.c, tex: e.tex }));
+      if (pal) { var pv = PV.budget(pal); pv.classList.add('mkt-trybar-pv'); pv.setAttribute('aria-hidden', 'true'); tbar.insertBefore(pv, tbar.firstChild); }
+    }
     drawBar();
     tbar.hidden = false;
     doc.body.classList.add('mkt-trying');

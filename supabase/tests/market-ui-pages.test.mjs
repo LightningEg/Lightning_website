@@ -107,6 +107,7 @@ await test('main: Try it wears a theme on the page without saving, and Cancel ta
   assert.equal(p.w.localStorage.getItem('lightning-site-skin'), null, 'Try it saves nothing');
   assert.equal(p.q('.mkt-trybar').hidden, false);
   assert.match(p.q('.mkt-trybar-text').textContent, /Previewing Paper/);
+  assert.equal(p.qa(".mkt-trybar-pv .pv-cat").length, 4, "the try bar shows the budget screen in the theme");
   await p.click(p.q('.mkt-trybar-cancel'));
   assert.equal(p.root.dataset.skin, undefined);
   assert.equal(p.q('.mkt-trybar').hidden, true);

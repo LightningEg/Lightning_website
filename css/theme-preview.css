@@ -135,3 +135,12 @@
 .pv-pair{position:relative;padding-inline-end:15%;padding-bottom:4%}
 .pv-pair .pv-phone{position:absolute;inset-inline-end:0;bottom:0;width:26%;border-width:5px;border-radius:22px;box-shadow:0 18px 40px -18px rgba(0,0,0,.55)}
 @media (max-width:560px){.pv-pair{padding-inline-end:0;padding-bottom:0}.pv-pair .pv-phone{position:relative;width:62%;margin:16px auto 0}}
+.pv-budget{width:230px;padding:12px 14px;border-radius:12px;background:var(--pv-background);border:1px solid var(--pv-border);color:var(--pv-text);font-size:14px;container-type:normal}
+.pv-budget .pv-head{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 8px}
+.pv-budget .pv-h1{font-size:.95em}.pv-budget .pv-sub{font-size:.7em;color:var(--pv-muted)}
+.pv-budget .pv-kpi{margin:0 0 6px}
+.pv-budget .pv-cat{padding:2px 0 5px}
+.pv-budget .pv-cat .pv-row{border-bottom:0;padding:.25em 0 .15em}
+.pv-budget .pv-meter.over i{background:var(--pv-expense)}
+.mkt-trybar-pv{flex:none}
+@media(max-width:640px){.mkt-trybar-pv{display:none}}

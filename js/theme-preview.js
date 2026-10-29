@@ -116,6 +116,21 @@
     return w;
   }
 
+  /* The budget screen in a palette: what is left in the plan, then four categories with their meters. Fixed words from
+     Mohab's sample year, as in the other previews; shown beside "Previewing" so a buyer sees the screen they will use. */
+  function budget(palette) {
+    var w = paint(el('div', 'pv pv-budget'), palette);
+    var rows = [['Rent', '9,000', 100], ['Groceries', '4,120', 82], ['Transport', '1,860', 74], ['Eating out', '1,540', 103]];
+    add(w, [add(el('div', 'pv-head'), [el('b', 'pv-h1', 'Budget'), el('span', 'pv-sub', 'October')]),
+      kpi('Left in plan', '1,309', 'EGP', 'of 24,698 planned', null, 95)]);
+    rows.forEach(function (r) {
+      var line = add(el('div', 'pv-cat'), [row(r[0], r[1], r[2] > 100 ? 'out' : null)]);
+      var m = el('span', 'pv-meter' + (r[2] > 100 ? ' over' : '')), i = el('i'); i.style.width = Math.min(100, r[2]) + '%'; m.appendChild(i); line.appendChild(m);
+      w.appendChild(line);
+    });
+    return w;
+  }
+
   /* The phone's Overview (guideline C03, C06, C08): app bar, the Lead, two-by-two tiles, latest rows, five-slot tab bar. */
   function phone(palette) {
     var w = paint(el('div', 'pv pv-phone'), palette);
@@ -193,5 +208,5 @@
     return c;
   }
 
-  root.LightningPreview = { DEFAULT: DEFAULT, fromWebsite: fromWebsite, fromSite: fromSite, variant: variant, geek: geek, clean: clean, paint: paint, pc: pc, phone: phone, site: site, thumb: thumb, profile: profile, isLight: isLight, contrast: contrast, mix: mix };
+  root.LightningPreview = { DEFAULT: DEFAULT, fromWebsite: fromWebsite, fromSite: fromSite, variant: variant, geek: geek, clean: clean, paint: paint, pc: pc, budget: budget, phone: phone, site: site, thumb: thumb, profile: profile, isLight: isLight, contrast: contrast, mix: mix };
 })(window);
