@@ -53,10 +53,12 @@ for(const width of [390,1280]) {
  const before=await page.locator('.d-bar').boundingBox();
  await trigger.click();
  const dropdown=page.locator('#me-menu');
+ await dropdown.locator('.me-group',{hasText:'Market'}).click();
+ assert.equal(await dropdown.locator('.me-group').count(),3,'three folded groups');
  assert.equal(await dropdown.locator('a[href="marketplace.html"]').textContent(),'Marketplace');
  assert.equal(await dropdown.locator('a[href="stories.html"]').count(),1);
  assert.equal(await page.locator('.d-links a[href="marketplace.html"]').count(),0);
- const layout=await dropdown.evaluate(e=>({position:getComputedStyle(e).position,box:e.getBoundingClientRect().toJSON(),rows:[...e.querySelectorAll('[role=menuitem]')].map(a=>a.getBoundingClientRect().toJSON())}));
+ const layout=await dropdown.evaluate(e=>({position:getComputedStyle(e).position,box:e.getBoundingClientRect().toJSON(),rows:[...e.querySelectorAll('[role=menuitem]')].filter(a=>!a.closest('[hidden]')).map(a=>a.getBoundingClientRect().toJSON())}));
  assert.equal(layout.position,'absolute');
  assert.ok(layout.box.x>=0 && layout.box.right<=width);
  for(let i=0;i<layout.rows.length;i++){

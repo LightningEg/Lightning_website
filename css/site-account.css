@@ -57,6 +57,13 @@ body[data-main-store] .tm-pv b{display:block;width:25%;height:14px;border-radius
 .site-account-slot .me-head b{display:block;color:var(--ink);font:700 14px/1.5 var(--body)}
 .site-account-slot .me-head span{display:block;min-width:0;direction:ltr;unicode-bidi:plaintext}
 .site-account-slot .me-menu .me-out{border-top:1px solid var(--line);border-radius:0;margin-top:6px;padding-top:14px}
+.site-account-slot .me-menu .me-group{justify-content:space-between}
+.site-account-slot .me-menu .me-group::after{content:'';width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+.site-account-slot .me-menu .me-group[aria-expanded=true]::after{transform:rotate(-135deg)}
+.site-account-slot .me-sub{margin:0 0 4px 12px;padding-inline-start:4px;border-inline-start:2px solid var(--line)}
+.site-account-slot .me-sub[hidden]{display:none}
+.site-account-slot .me-sub [role=menuitem]{font-weight:500;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.site-account-slot .me-menu .me-group::after{transition:none}}
 .site-account-slot .chip.me:focus-visible,.site-account-slot .me-menu [role=menuitem]:focus-visible{outline:2px solid var(--azure);outline-offset:2px}
 
 body[data-main-store] .acct label:not(.chk){display:grid;gap:8px;margin-block:14px}body[data-main-store] .acct input:not([type=checkbox]),body[data-main-store] .acct select,body[data-main-store] .acct textarea{box-sizing:border-box;width:100%;padding:12px;color:var(--ink);font:500 15px var(--body);border:1px solid var(--line-ctl)}body[data-main-store] .acct .chk{display:flex;align-items:flex-start;gap:10px;margin-block:16px}body[data-main-store] .acct input[type=checkbox]{width:20px;height:20px;min-height:20px;flex:none;margin:0}#topup-details{display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2fr);gap:12px}#topup-details dd{margin:0;overflow-wrap:anywhere}#topup-details button{display:block;margin-top:6px}#topup-history p{overflow-wrap:anywhere}#topup-history .btn{margin:8px}#topup-adjustments article{padding-block:16px;border-block:1px solid var(--line)}

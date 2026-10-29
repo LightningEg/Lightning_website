@@ -149,7 +149,16 @@
     if (first) first.focus();
   }
 
-  function items() { return Array.prototype.slice.call(menu.querySelectorAll('[role=menuitem]')); }
+  function items() { return Array.prototype.slice.call(menu.querySelectorAll('[role=menuitem]')).filter(function (el) { return !el.closest('[hidden]'); }); }
+
+  // One group open at a time: the rows under it show, the others fold away.
+  function toggleGroup(g, open) {
+    Array.prototype.forEach.call(menu.querySelectorAll('.me-group'), function (b) {
+      var on = b === g && open;
+      b.setAttribute('aria-expanded', on ? 'true' : 'false');
+      doc.getElementById(b.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
 
   function signedOutChip() {
     var a = doc.createElement('a');
@@ -210,18 +219,40 @@
     var e = doc.createElement('span'); e.textContent = (current && current.user.email) || '';
     head.appendChild(b); head.appendChild(e);
     menu.appendChild(head);
-    (ownerRole ? MENU.concat([{label:'Owner console',href:'admin.html'}]) : MENU).forEach(function (it) {
+    var prefix = MAIN_ACCOUNT && root.location.pathname.indexOf('/ar/') >= 0 ? '../' : '';
+    function link(it) {
       var a = doc.createElement('a');
       a.setAttribute('role', 'menuitem');
-      a.href = (MAIN_ACCOUNT && root.location.pathname.indexOf('/ar/') >= 0 ? '../' : '') + (typeof it.href === 'function' ? it.href(m) : it.href);
-      a.textContent = it.label;
-      menu.appendChild(a);
+      a.href = prefix + (typeof it.href === 'function' ? it.href(m) : it.href);
+      a.textContent = word(it.label);
+      return a;
+    }
+    MENU.forEach(function (g, n) {
+      var gb = doc.createElement('button');
+      gb.type = 'button';
+      gb.className = 'me-group';
+      gb.setAttribute('role', 'menuitem');
+      gb.setAttribute('aria-haspopup', 'true');
+      gb.setAttribute('aria-expanded', 'false');
+      gb.setAttribute('aria-controls', 'me-sub-' + n);
+      gb.textContent = word(g.label);
+      var sub = doc.createElement('div');
+      sub.className = 'me-sub';
+      sub.id = 'me-sub-' + n;
+      sub.setAttribute('role', 'group');
+      sub.setAttribute('aria-label', word(g.label));
+      sub.hidden = true;
+      g.items.forEach(function (it) { sub.appendChild(link(it)); });
+      gb.addEventListener('click', function () { toggleGroup(gb, sub.hidden); });
+      menu.appendChild(gb);
+      menu.appendChild(sub);
     });
+    if (ownerRole) menu.appendChild(link({ label: 'owner console', href: 'admin.html' }));
     var out = doc.createElement('button');
     out.type = 'button';
     out.setAttribute('role', 'menuitem');
     out.className = 'me-out';
-    out.textContent = 'sign out';
+    out.textContent = word('sign out');
     out.addEventListener('click', function () {
       closeMenu(false);
       FG.sb.auth.signOut().then(function () {
@@ -241,6 +272,11 @@
       else if (ev.key === 'ArrowUp') { ev.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
       else if (ev.key === 'Home') { ev.preventDefault(); list[0].focus(); }
       else if (ev.key === 'End') { ev.preventDefault(); list[list.length - 1].focus(); }
+      else if (ev.key === 'ArrowRight' && doc.activeElement.classList.contains('me-group')) { ev.preventDefault(); toggleGroup(doc.activeElement, true); }
+      else if (ev.key === 'ArrowLeft') {
+        var host = doc.activeElement.closest('.me-sub'), gb = host ? doc.querySelector('[aria-controls="' + host.id + '"]') : doc.activeElement;
+        if (gb && gb.classList.contains('me-group')) { ev.preventDefault(); toggleGroup(gb, false); gb.focus(); }
+      }
       else if (ev.key === 'Tab') { closeMenu(false); }
     });
     wrap.appendChild(btn);
@@ -248,18 +284,26 @@
     return wrap;
   }
 
-  // Menu entries. Pages that are not live yet are added here when they ship.
+  // Menu entries: three folded groups instead of a long list. Labels are written lower case here; the main
+  // site shows them in sentence case (word), For Geeks keeps its lower case.
+  function word(t) { return MAIN_ACCOUNT ? t.charAt(0).toUpperCase() + t.slice(1) : t; }
   var MENU = [
-    { label: 'my profile', href: function (m) { return m && m.display_name ? (MAIN_ACCOUNT ? 'profile.html' : 'forgeeks-profile.html') + '?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
-    { label: 'tasks', href: 'forgeeks-tasks.html' },
-    { label: MAIN_ACCOUNT ? 'Marketplace' : 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
-    { label: 'community stories', href: 'stories.html' },
-    { label: 'top up wallet', href: 'topup.html' },
-    { label: 'leaderboard', href: MAIN_ACCOUNT ? 'leaderboard.html' : 'forgeeks-leaderboard.html' },
-    { label: 'profile settings', href: ACCOUNT }
+    { label: 'profile', items: [
+      { label: 'my profile', href: function (m) { return m && m.display_name ? (MAIN_ACCOUNT ? 'profile.html' : 'forgeeks-profile.html') + '?u=' + encodeURIComponent(m.display_name) : ACCOUNT; } },
+      { label: 'settings', href: ACCOUNT }
+    ] },
+    { label: 'market', items: [
+      { label: MAIN_ACCOUNT ? 'marketplace' : 'market', href: MAIN_ACCOUNT ? 'marketplace.html' : 'forgeeks-market.html' },
+      // The looks you own, one tap from the account menu (the main site only; For Geeks equips from its market).
+      MAIN_ACCOUNT ? { label: 'my collection', href: 'collection.html' } : null,
+      { label: 'top up wallet', href: 'topup.html' }
+    ].filter(Boolean) },
+    { label: 'community', items: [
+      { label: 'tasks', href: 'forgeeks-tasks.html' },
+      { label: 'stories', href: 'stories.html' },
+      { label: 'leaderboard', href: MAIN_ACCOUNT ? 'leaderboard.html' : 'forgeeks-leaderboard.html' }
+    ] }
   ];
-  // The looks you own, one tap from the account menu (the main site only; For Geeks equips from its market).
-  if (MAIN_ACCOUNT) MENU.splice(3, 0, { label: 'my collection', href: 'collection.html' });
   FG.menu = MENU;
 
   function render(m) {
