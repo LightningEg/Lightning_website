@@ -87,6 +87,12 @@ main,header,footer{position:relative;z-index:2}
 .me-menu [role=menuitem]{display:flex;align-items:center;width:100%;min-height:38px;padding:0 12px;border:0;border-radius:4px;background:none;font:400 13px var(--mono);color:var(--dim);text-align:left;text-decoration:none;cursor:pointer}
 .me-menu [role=menuitem]:hover,.me-menu [role=menuitem]:focus-visible{color:var(--ink);background:rgba(var(--particle),.06)}
 .me-menu .me-out{margin-top:6px;border-top:1px solid var(--line);border-radius:0 0 4px 4px}
+.me-menu .me-group{justify-content:space-between;color:var(--ink)}
+.me-menu .me-group::after{content:'';width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+.me-menu .me-group[aria-expanded=true]::after{transform:rotate(-135deg)}
+.me-sub{margin:0 0 4px 12px;padding-left:4px;border-left:1px solid var(--line)}
+.me-sub[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.me-menu .me-group::after{transition:none}}
 @media (max-width:760px){.me-name{display:none}.chip.me.in{padding:0 4px}}
 @media (max-width:640px){.links{margin-left:auto}.links a{padding:6px 7px}.links a.opt,.src{display:none}}
 @media (max-width:1040px){.crumb{display:none}}
