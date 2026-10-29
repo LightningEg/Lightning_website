@@ -63,12 +63,15 @@
   const row = el => tiles.filter(t => t.el.offsetTop === el.offsetTop);
   const narrow = () => row(tiles[0].el).length < 3;
   const DISTANCE = () => (narrow() ? 200 : 420), APART = () => (narrow() ? 80 : 160);
+  // The whole run starts a little late (2026-10-29): at the top of the page the tiles used to be already
+  // shrinking behind the counter, so they now hold their place for LATE more pixels of scroll.
+  const LATE = () => (narrow() ? 90 : 180);
   const lead = el => APART() * row(el).filter(t => t.el.offsetLeft > el.offsetLeft).length; // left goes first
   tiles.forEach(t => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: t.el, scrub: 1.2, invalidateOnRefresh: true,
-        start: () => `top ${land() + lead(t.el) + DISTANCE()}px`, end: () => `top ${land() + lead(t.el)}px`,
+        start: () => `top ${land() + lead(t.el) + DISTANCE() - LATE()}px`, end: () => `top ${land() + lead(t.el) - LATE()}px`,
       },
       onUpdate() { t.p = this.progress(); paint(); },
     });

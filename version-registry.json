@@ -3240,8 +3240,8 @@
       "id": "UX-2026.10.29.04",
       "name": "Home · Lightning 1.5.1",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.04.html"
     },
     {
       "id": "UX-2026.10.29.05",
@@ -3281,6 +3281,20 @@
     {
       "id": "UX-2026.10.29.10",
       "name": "Version Archive · Lightning 1.5.1",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.10.html"
+    },
+    {
+      "id": "UX-2026.10.29.11",
+      "name": "Lightning · Net worth animation starts later",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.29.12",
+      "name": "Version Archive · Net worth animation starts later",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
