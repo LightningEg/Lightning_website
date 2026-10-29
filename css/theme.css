@@ -1,6 +1,9 @@
 /* Lightning theme switch · shared by every page that supports dark mode.
    Markup and behaviour: js/theme.js. Spec: brand-guidelines.html#dark */
 @import url("textures.css");
+/* The light theme is drawn light on purpose: "only light" keeps a browser's forced dark mode (Brave, Chrome's auto dark) from inverting it.
+   Dark mode stays the visitor's own choice, made with the switch. */
+:root[data-theme="light"]{color-scheme:only light}
 .theme-toggle{--tt-track:#fff;--tt-line:rgba(13,34,51,.12);--tt-thumb:#0A2442;--tt-icon:#fff;--tt-faint:#8FA6B2;
   display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 :root[data-theme="dark"] .theme-toggle{--tt-track:rgba(234,244,241,.06);--tt-line:rgba(234,244,241,.16);--tt-thumb:#E3F6EC;--tt-icon:#0A2442;--tt-faint:#566E7E}

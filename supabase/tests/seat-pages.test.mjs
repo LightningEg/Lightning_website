@@ -39,16 +39,17 @@ async function boot({ seats = { seats: 1, used: 1, next_price: 25, can_buy: true
 await test('an owned app theme says how many profiles are unlocked and offers another at a quarter of the price', async () => {
   const p = await boot();
   assert.equal(p.cell.querySelector('[data-seat-note]').textContent, '1 of 1 profile unlocked');
-  assert.equal(p.cell.querySelector('[data-seat-add]').textContent, 'Add another profile · 25 coins');
+  assert.equal(p.cell.querySelector('[data-seat-add]').textContent, 'Add another profile · 25');
+  assert.ok(p.cell.querySelector('[data-seat-add] img.coin-i[src$="cotton-coin.svg"]'), 'the cotton icon, not the word coins');
   assert.ok(p.cell.querySelector('[data-activation-code]'));
 });
 
 await test('buying it asks first, then spends once at the price shown and updates the card', async () => {
   const p = await boot();
   p.cell.querySelector('[data-seat-add]').click(); await tick();
-  assert.match(p.dialog().textContent, /25% of the price: 25 coins, 75% off/);
+  assert.match(p.dialog().textContent, /25% of the price: 25, 75% off/);
   assert.equal(p.calls.some(c => c.name === 'purchase_theme_seat'), false, 'nothing is spent by opening it');
-  p.button('Add a profile for 25 coins').click(); await tick(40);
+  p.button('Add a profile for 25').click(); await tick(40);
   const sent = p.calls.filter(c => c.name === 'purchase_theme_seat');
   assert.equal(sent.length, 1); assert.equal(sent[0].args.p_expected_price, 25);
   assert.ok(sent[0].args.p_idempotency_key.length >= 8);
@@ -60,9 +61,9 @@ await test('a refusal is said plainly and a retry in the same dialog uses the sa
   let first = true;
   const p = await boot({ buy: () => { if (first) { first = false; return { data: null, error: { message: 'insufficient coins' } }; } return null; } });
   p.cell.querySelector('[data-seat-add]').click(); await tick();
-  p.button('Add a profile for 25 coins').click(); await tick(40);
+  p.button('Add a profile for 25').click(); await tick(40);
   assert.match(p.dialog().textContent, /insufficient coins/);
-  p.button('Add a profile for 25 coins').click(); await tick(40);
+  p.button('Add a profile for 25').click(); await tick(40);
   const keys = p.calls.filter(c => c.name === 'purchase_theme_seat').map(c => c.args.p_idempotency_key);
   assert.equal(keys.length, 2); assert.equal(keys[0], keys[1], 'one key per dialog, so a retry can never charge twice');
   assert.match(p.dialog().textContent, /unlocked on 2 profiles/);
@@ -71,7 +72,7 @@ await test('a refusal is said plainly and a retry in the same dialog uses the sa
 await test('a changed price asks to start again; at ten profiles there is no add button', async () => {
   const p = await boot({ buy: () => ({ data: null, error: { message: 'price changed; reload before buying' } }) });
   p.cell.querySelector('[data-seat-add]').click(); await tick();
-  p.button('Add a profile for 25 coins').click(); await tick(40);
+  p.button('Add a profile for 25').click(); await tick(40);
   assert.match(p.dialog().textContent, /The price changed/);
   const full = await boot({ seats: { seats: 10, used: 4, next_price: 25, can_buy: false } });
   assert.equal(full.cell.querySelector('[data-seat-add]'), null);
