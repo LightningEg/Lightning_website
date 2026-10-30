@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost|papyrus|cotton|dendera)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
   <link rel="stylesheet" href="css/forgeeks.css?v=20261029-roadmap-2">
-  <link rel="stylesheet" href="css/forgeeks-account.css?v=20261024-1">
+  <link rel="stylesheet" href="css/forgeeks-account.css?v=20261030-github-oauth-1">
   <link rel="stylesheet" href="css/forgeeks-rewards.css?v=20261025-1">
 </head>
 <body class="no-js">
@@ -74,7 +74,8 @@
             <h2 id="auth-title">sign in</h2>
             <p class="why">Email is the only thing we need. Everything else is optional and yours to change or remove.</p>
             <div class="oauth">
-              <button class="btn" id="auth-google" type="button"><span class="k">$</span> continue with Google</button>
+              <button class="btn" id="auth-google" type="button"><span class="k" aria-hidden="true">$</span> continue with Google</button>
+              <button class="btn" id="auth-github" type="button"><span class="k" aria-hidden="true">$</span> continue with GitHub</button>
             </div>
             <div class="or" aria-hidden="true">or use email</div>
             <form id="auth-form" novalidate>
@@ -282,7 +283,7 @@
 <script src="js/vendor/supabase-2.118.0.js"></script>
 <script src="js/forgeeks-config.js?v=20261029-roadmap-2"></script>
 <script src="js/forgeeks-auth.js?v=20261029-roadmap-2"></script>
-<script src="js/forgeeks-account.js?v=20261029-roadmap-2"></script>
+<script src="js/forgeeks-account.js?v=20261030-github-oauth-1"></script>
 <script src="js/forgeeks-account-rewards.js?v=20261025-1"></script>
 <script src="js/forgeeks-account-data.js?v=20261029-roadmap-2"></script>
 </body>
