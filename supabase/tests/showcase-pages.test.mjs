@@ -165,13 +165,13 @@ await test('leaderboard: a coder advertises their GitHub, last merge, merges thi
   assert.ok(main.includes('js/forgeeks-leaderboard.js'));
 });
 
-await test('leaderboard: ?sample fills the table with made-up people, says so, and never asks the server for the board', async () => {
+await test('leaderboard: ?sample fills the table with made-up people at feedback-sized scores, unlabelled for the owner\'s look test, and never asks the server for the board', async () => {
   const p = await boot('leaderboard', { rpc: lbRpc(), search: '?sample' });
   assert.equal(p.rpcs('leaderboard').length, 0);
-  assert.equal(p.$('lb-sample').hidden, false);
-  assert.match(p.$('lb-sample').textContent, /Nobody here is real/);
+  assert.equal(p.$('lb-sample').hidden, true, 'owner, 2026-10-30: the look test reads as a real board');
   const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
-  assert.equal(rows.length, 14);
+  assert.equal(rows.length, 12);
+  assert.ok(rows.every(r => Number(r.querySelector('.sc').textContent.replace(/,/g, '')) <= 100), 'feedback-sized scores');
   assert.equal(rows[0].querySelector('.lb-bg').getAttribute('data-item'), 'banner-dusk', 'each row carries its banner behind it');
   assert.ok(rows[0].classList.contains('has-banner') && rows[0].querySelector('.lb-veil'));
   assert.equal(rows[2].querySelector('.lb-bg'), null);
@@ -180,7 +180,7 @@ await test('leaderboard: ?sample fills the table with made-up people, says so, a
   assert.deepEqual(scores, [...scores].sort((a, b) => b - a));
   rows.forEach((r, i) => { if (i && scores[i] === scores[i - 1]) assert.equal(r.querySelector('.rk').textContent, rows[i - 1].querySelector('.rk').textContent); });
   await p.click('tab-all');
-  assert.equal(p.doc.querySelectorAll('#lb-list .lb-row').length, 24);
+  assert.equal(p.doc.querySelectorAll('#lb-list .lb-row').length, 20);
   assert.equal(p.rpcs('leaderboard').length, 0);
 });
 
