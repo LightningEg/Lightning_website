@@ -102,14 +102,13 @@ await test('a member who links GitHub is still paid what was held for them', asy
   assert.ok(await score(D) > 0);
 });
 
-await test('rewards an administrator already received are reversed, once, and the migration can run again', async () => {
+await test('what an administrator was already paid stays; the migration can run again', async () => {
   await as('service_role', null, () => q(`select public.award_coins($1, 'contribution_award', 30, 'issue', 'LightningEg/Lightning#77', 'Merged')`, [ADMIN]));
-  assert.equal(await score(ADMIN), 30);
   const migration = readFileSync(new URL('../migrations/20261030120000_no_rewards_for_admins.sql', import.meta.url), 'utf8');
   await db.exec(migration);
-  assert.equal(await score(ADMIN), 0);
   await db.exec(migration);
-  assert.equal(await count(`select 1 from public.ledger_entries where user_id = $1 and kind = 'correction'`, [ADMIN]), 1, 'one correction per award');
+  assert.equal(await score(ADMIN), 30, 'owner, 2026-10-30: keep my credits');
+  assert.equal(await count(`select 1 from public.ledger_entries where kind = 'correction'`), 0);
   assert.ok(await score(D) > 0, 'members keep theirs');
 });
 

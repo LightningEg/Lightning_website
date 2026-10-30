@@ -6,9 +6,7 @@ begin;
 -- pending award for that GitHub id. record_merge and award_merge refuse an administrator only once the id is
 -- linked; when the owner signed in with GitHub, settle_pending paid the whole backlog. Now:
 --   * settle_pending closes an administrator's pending rows without paying them (audited as reward.void_admin);
---   * every recognition or contribution award an administrator already received is reversed with a linked
---     correction entry (as admin_correct_entry does), so the leaderboard drops them and the wallet gives back
---     what it was paid; an entry whose reversal the ledger refuses is left and reported in audit_log;
+--   * what an administrator was already paid stays (owner, 2026-10-30: keep my credits);
 --   * the workflow also skips any author with admin or maintain permission on the repository.
 
 create or replace function private.settle_pending(p_user uuid, p_github_id bigint) returns integer
@@ -72,32 +70,6 @@ begin
     update public.pending_awards set settled_at = now(), user_id = r.user_id where id = r.id;
     insert into public.audit_log (actor, action, target_type, target_id, detail)
     values (null, 'reward.void_admin', 'pending_award', r.id::text, jsonb_build_object('source', r.source_id, 'amount', r.amt));
-  end loop;
-end $$;
-
--- Reverse what was already paid to an administrator for merged work.
-do $$
-declare o public.ledger_entries; e public.ledger_entries;
-begin
-  for o in
-    select l.* from public.ledger_entries l
-     where l.kind in ('recognition', 'contribution_award') and l.user_id is not null
-       and exists (select 1 from public.admin_roles a where a.user_id = l.user_id)
-       and not exists (select 1 from public.ledger_entries c where c.idempotency_key = 'correction:' || l.id::text)
-     order by l.id
-  loop
-    begin
-      e := private.post_ledger(o.user_id, 'correction', -o.contribution_delta, -o.wallet_delta, 'correction', o.id::text,
-                               'primary', 'Administrators earn no rewards for merged work', 'correction:' || o.id::text,
-                               now(), o.id, null);
-      update public.contributions set hidden = true where ledger_entry_id = o.id;
-      insert into public.audit_log (actor, action, target_type, target_id, detail)
-      values (null, 'ledger.correct', 'ledger_entry', o.id::text,
-              jsonb_build_object('reason', 'administrator reward', 'correction_id', e.id));
-    exception when others then
-      insert into public.audit_log (actor, action, target_type, target_id, detail)
-      values (null, 'ledger.correct_refused', 'ledger_entry', o.id::text, jsonb_build_object('error', sqlerrm));
-    end;
   end loop;
 end $$;
 
