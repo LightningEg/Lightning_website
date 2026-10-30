@@ -388,9 +388,9 @@
     }
   }
 
-  async function google() {
+  async function oauth(provider) {
     note('');
-    var out = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: PAGE } });
+    var out = await sb.auth.signInWithOAuth({ provider: provider, options: { redirectTo: PAGE } });
     if (out.error) note(say(out.error), 'bad');
   }
 
@@ -446,7 +446,8 @@
     readUrlError();
     $('auth-form').addEventListener('submit', submitAuth);
     $('auth-switch').addEventListener('click', function () { setMode(mode === 'up' ? 'in' : 'up'); });
-    $('auth-google').addEventListener('click', google);
+    $('auth-google').addEventListener('click', function () { oauth('google'); });
+    $('auth-github').addEventListener('click', function () { oauth('github'); });
     $('auth-forgot').addEventListener('click', forgot);
     $('recover-form').addEventListener('submit', newPassword);
     $('form-public').addEventListener('submit', savePublic);
