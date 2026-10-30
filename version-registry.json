@@ -3338,8 +3338,8 @@
       "id": "UX-2026.10.30.06",
       "name": "Lightning · Version 1.5.4",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.06.html"
     },
     {
       "id": "UX-2026.10.30.07",
@@ -3358,6 +3358,20 @@
     {
       "id": "UX-2026.10.30.09",
       "name": "Version Archive · Lightning 1.5.4",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.09.html"
+    },
+    {
+      "id": "UX-2026.10.30.10",
+      "name": "Lightning · Now with animated themes",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.30.11",
+      "name": "Version Archive · Now with animated themes",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

@@ -35,6 +35,8 @@
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/wow.css?v=20261029-1">
 <link rel="stylesheet" href="css/runway.css?v=20261012-5">
+<link rel="stylesheet" href="css/themes-demo.css?v=20261030-1">
+<script src="js/themes-demo.js?v=20261030-1" defer></script>
 <script src="js/wow.js?v=20261029-2" defer></script>
 <script src="js/runway.js?v=20261015-1" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
@@ -54,7 +56,7 @@
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261027-header-1">
 </head>
-<body data-account-page="account.html" data-wow-always data-ux-version="UX-2026.10.30.06" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<body data-account-page="account.html" data-wow-always data-ux-version="UX-2026.10.30.10" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
   <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z"/></symbol>
@@ -231,6 +233,23 @@
     </div>
   </section>
 
+
+  <!-- 5 · Now with animated themes: Dendera, Dendera Night and Papyrus on Mohab's own screens -->
+  <section class="d-section themes-demo" id="themes">
+    <div class="d-head">
+      <p class="label">Optional cosmetic themes</p>
+      <h2>Now With Animated Themes.</h2>
+      <p>A slow thread of colour runs along the top, and Papyrus lights a gold edge around its lead card. Mohab’s year, new clothes.</p>
+    </div>
+    <div class="th-stage" data-th data-th-on="dendera">
+      <div class="th-tabs" role="tablist" aria-label="Animated themes" hidden><button class="th-tab" type="button" role="tab" id="th-tab-dendera" aria-controls="th-panel" aria-selected="true" data-th-tab="dendera" data-bar="Spending, August 2026" tabindex="0">Dendera</button><button class="th-tab" type="button" role="tab" id="th-tab-dendera-night" aria-controls="th-panel" aria-selected="false" data-th-tab="dendera-night" data-bar="Budget, 2026-10" tabindex="-1">Dendera Night</button><button class="th-tab" type="button" role="tab" id="th-tab-papyrus" aria-controls="th-panel" aria-selected="false" data-th-tab="papyrus" data-bar="Overview, year to date" tabindex="-1">Papyrus</button></div>
+      <figure class="th-shot">
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · <b data-th-bar>Spending, August 2026</b></span></div><div class="th-thread" aria-hidden="true"></div><div class="th-frames" id="th-panel" role="tabpanel"><button class="zoom th-frame is-on" type="button" data-th-frame="dendera" data-zoom="assets/app/themes-2026-10-30/dendera-spending.webp" data-caption="Dendera: temple pigments on aged papyrus, a lotus frieze and the zodiac ring behind the page. Spending for August 2026 as Mohab sees it."><img src="assets/app/themes-2026-10-30/dendera-spending.webp" width="2000" height="1250" loading="lazy" alt="Spending for August 2026 in the Dendera theme: money out 44,621 EGP, the largest payment 14,200 EGP, and the month split by category."></button><button class="zoom th-frame" type="button" data-th-frame="dendera-night" data-zoom="assets/app/themes-2026-10-30/dendera-night-budget.webp" data-caption="Dendera Night: the same theme for the evening. One purchase gives you both. Mohab’s Budget, 35,018 EGP left in the plan."><img src="assets/app/themes-2026-10-30/dendera-night-budget.webp" width="2000" height="1250" loading="lazy" alt="Budget for 2026-10 in the Dendera Night theme: 35,018 EGP left in the plan, with the line showing whether everyday spending is on pace."></button><button class="zoom th-frame" type="button" data-th-frame="papyrus" data-zoom="assets/app/themes-2026-10-30/papyrus-overview.webp" data-caption="Papyrus: lapis lacquer with a gold edge that travels around the lead card. Mohab’s net worth, 910,304 EGP."><img src="assets/app/themes-2026-10-30/papyrus-overview.webp" width="2000" height="1250" loading="lazy" alt="Overview year to date in the Papyrus theme: net worth 910,304 EGP, up 311,804 this year, with what needs attention below."></button></div></div>
+        <figcaption class="d-cap th-cap" aria-live="polite"><span data-th-cap="dendera">Dendera: temple pigments on aged papyrus, a lotus frieze and the zodiac ring behind the page. Spending for August 2026 as Mohab sees it.</span><span data-th-cap="dendera-night" hidden>Dendera Night: the same theme for the evening. One purchase gives you both. Mohab’s Budget, 35,018 EGP left in the plan.</span><span data-th-cap="papyrus" hidden>Papyrus: lapis lacquer with a gold edge that travels around the lead card. Mohab’s net worth, 910,304 EGP.</span></figcaption>
+      </figure>
+    </div>
+    <p class="d-more">Appearance only. Every money feature stays free. <a href="marketplace.html">See the themes in the Marketplace</a></p>
+  </section>
 
 
   <!-- Signup band (guideline 3.20, B06): the same on every page -->

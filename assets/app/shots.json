@@ -20,6 +20,18 @@
     "b-expenses": {
       "en": "mohab-year-2026-10-22",
       "ar": "ar-2026-10-22"
+    },
+    "dendera-spending": {
+      "en": "themes-2026-10-30",
+      "ar": "themes-2026-10-30"
+    },
+    "dendera-night-budget": {
+      "en": "themes-2026-10-30",
+      "ar": "themes-2026-10-30"
+    },
+    "papyrus-overview": {
+      "en": "themes-2026-10-30",
+      "ar": "themes-2026-10-30"
     }
   },
   "pages": {
