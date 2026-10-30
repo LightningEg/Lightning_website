@@ -38,7 +38,9 @@
 .linkish{background:none;border:0;padding:6px 0;color:var(--dim);font:400 12.5px var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:4px;min-height:34px}
 .linkish:hover{color:var(--ink)}
 
-.oauth{display:flex;flex-direction:column;gap:14px}
+.oauth{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.oauth .btn{width:100%;min-width:0;min-height:44px;text-align:center}
+@media(max-width:560px){.oauth{grid-template-columns:1fr}}
 .or{display:flex;align-items:center;gap:14px;margin:22px 0;color:var(--dim);font:400 12.5px var(--mono)}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 

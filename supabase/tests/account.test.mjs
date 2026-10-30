@@ -117,6 +117,17 @@ await test('safeNext allows explicit main-site and For Geeks routes, never an ac
   assert.equal(auth.initial(''), '?');
 });
 
+await test('GitHub login button sits alongside Google on both account pages', () => {
+  for (const page of ['forgeeks-account.html', 'account.html']) {
+    const markup = readFileSync(new URL('../../' + page, import.meta.url), 'utf8');
+    const google = markup.indexOf('id="auth-google"');
+    const github = markup.indexOf('id="auth-github"');
+    assert.ok(google > 0 && github > google, page + ': GitHub follows Google');
+    assert.ok(markup.slice(google, github).includes('continue with Google'));
+    assert.ok(markup.slice(github, github + 160).includes('continue with GitHub'));
+  }
+});
+
 // ------------------------------------------------------------ the page, with a fake Supabase client
 const html = readFileSync(new URL('../../forgeeks-account.html', import.meta.url), 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
 const code = readFileSync(new URL('../../js/forgeeks-account.js', import.meta.url), 'utf8');
@@ -240,6 +251,11 @@ await test('page: sign up without a session tells you to check your inbox; Googl
   const g = p.calls.find(c => c.fn === 'signInWithOAuth').a;
   assert.equal(g.provider, 'google');
   assert.equal(g.options.redirectTo, 'https://lightningeg.com/forgeeks-account.html');
+  await p.click('auth-github');
+  const providers = p.calls.filter(c => c.fn === 'signInWithOAuth').map(c => c.a);
+  assert.equal(providers.length, 2);
+  assert.equal(providers[1].provider, 'github');
+  assert.equal(providers[1].options.redirectTo, 'https://lightningeg.com/forgeeks-account.html');
   await p.click('auth-switch');
   p.set('auth-email', 'ada@example.test');
   await p.click('auth-forgot');
