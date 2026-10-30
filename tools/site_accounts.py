@@ -65,6 +65,10 @@ def build():
         SHOP='?v=20261027-bundles-1'
         css=[c+SHOP if c in ('css/theme-preview.css','css/market-ui.css') else c for c in css]
         scripts=[j+SHOP if j in ('js/theme-preview.js','js/market-ui.js','js/forgeeks-market.js','js/market-cart.js','js/activation-codes.js') else j for j in scripts]
+        # Keep the generated account page on the same OAuth JS/CSS release as For Geeks.
+        if name=='account':
+            css=[p+'?v=20261030-github-oauth-1' if p=='css/forgeeks-account.css' else p for p in css]
+            scripts=[p+'?v=20261030-github-oauth-1' if p=='js/forgeeks-account.js' else p for p in scripts]
         head='\n'.join(f'<link rel="stylesheet" href="{p}">' for p in css)
         if name=='account':scripts+=['js/site-banner.js']
         scripts+=['js/site-words.js']
