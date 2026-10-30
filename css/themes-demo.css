@@ -1,0 +1,35 @@
+/* Home: Now With Animated Themes. Three of the app's themes worn on Mohab's own screens.
+   Only opacity and transform move. Without the script the first theme shows; reduced motion keeps the picker but stops the thread and the turn. */
+.themes-demo .th-stage{--th-thread:#1f3f8c;--th-glow:rgba(31,63,140,.22);max-width:1040px;margin:0 auto}
+.themes-demo .th-stage[data-th-on="dendera-night"]{--th-thread:#e6b450;--th-glow:rgba(230,180,80,.22)}
+.themes-demo .th-stage[data-th-on="papyrus"]{--th-thread:#e6b450;--th-glow:rgba(230,180,80,.26)}
+.themes-demo .th-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px}
+.themes-demo .th-tabs[hidden]{display:none}
+.themes-demo .th-tab{min-height:44px;padding:0 20px;border:1px solid var(--line-ctl);border-radius:999px;background:var(--white);color:var(--ink);font:800 15px/1 var(--body);cursor:pointer;transition:border-color .2s ease,background-color .2s ease,color .2s ease}
+.themes-demo .th-tab:hover{border-color:var(--green)}
+.themes-demo .th-tab[aria-selected="true"]{border-color:var(--nile);background:var(--nile);color:var(--on-nile)}
+.themes-demo .th-tab:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.themes-demo .th-shot{margin:0}
+.themes-demo .d-frame{position:relative;transition:box-shadow .6s ease}
+.themes-demo .th-stage .d-frame{box-shadow:0 0 0 1px var(--th-glow),0 0 46px -8px var(--th-glow),var(--shadow-screen)}
+.themes-demo .d-frame-bar b{font-weight:inherit}
+/* the thread: one short bright segment travelling along the seam under the bar, as the themes do in the app */
+.themes-demo .th-thread{position:absolute;z-index:2;top:32px;left:0;right:0;height:2px;overflow:hidden;pointer-events:none}
+.themes-demo .th-thread::after{content:"";position:absolute;inset:0;width:30%;background:linear-gradient(90deg,transparent,var(--th-thread),transparent);animation:th-thread 6s ease-in-out infinite}
+@keyframes th-thread{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+.themes-demo .th-frames{display:grid}
+.themes-demo .th-frame{all:unset;grid-area:1/1;display:block;cursor:zoom-in;opacity:0;visibility:hidden;transition:opacity .7s ease,visibility 0s .7s}
+.themes-demo .th-frame.is-on{opacity:1;visibility:visible;transition:opacity .7s ease}
+.themes-demo .th-frame:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+.themes-demo .th-frame img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top left}
+:root[data-theme="dark"] .themes-demo .th-tab{background:var(--panel)}
+:root[data-theme="dark"] .themes-demo .th-tab[aria-selected="true"]{background:#E3F6EC;border-color:#E3F6EC;color:#0A2442}
+.themes-demo .th-cap{max-width:42em;margin-inline:auto}
+@media (prefers-reduced-motion:reduce){
+  .themes-demo .th-thread::after{animation:none;width:100%;opacity:.5}
+  .themes-demo .th-frame,.themes-demo .th-frame.is-on{transition:none}
+}
+@media (max-width:640px){
+  .themes-demo .th-tabs{gap:6px;margin-bottom:14px}
+  .themes-demo .th-tab{padding:0 14px;font-size:14px}
+}

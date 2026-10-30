@@ -20,7 +20,7 @@ by sending one you grant the owner the right to use and relicense it as part of 
 ## Structure
 
 ```
-index.html          the home page, the only live landing page (guideline Part B): a one-sentence hero with the PC and phone Overview side by side, one quiet community pulse line (js/community-pulse.js: merged pull requests from GitHub and shared stories, never money; hidden when there is none), then many places as one (CIB, THNDR, gold at home and a Six more places tile, then net worth in one line), phone and PC, cash ahead, the promise, FAQ and signup. Dollars, the tedious part, the calculator, Help Build and Make It Your Own were cut on 2026-10-27 (Features, Contribute and Marketplace carry them). On 2026-10-29 (`UX-2026.10.29.01`) the five-row net worth table left, the pairing steps moved to the sync page (sync-phone-and-pc-without-cloud.html) and Every Number Shows Its Working moved to Features (#trust); Home keeps one line linking each
+index.html          the home page, the only live landing page (guideline Part B): a one-sentence hero with the PC and phone Overview side by side, one quiet community pulse line (js/community-pulse.js: merged pull requests from GitHub and shared stories, never money; hidden when there is none), then many places as one (CIB, THNDR, gold at home and a Six more places tile, then net worth in one line), phone and PC, cash ahead, the promise, FAQ and signup. Dollars, the tedious part, the calculator, Help Build and Make It Your Own were cut on 2026-10-27 (Features, Contribute and Marketplace carry them). On 2026-10-29 (`UX-2026.10.29.01`) the five-row net worth table left, the pairing steps moved to the sync page (sync-phone-and-pc-without-cloud.html) and Every Number Shows Its Working moved to Features (#trust); Home keeps one line linking each On 2026-10-30 (`UX-2026.10.30.10`) the page closes with *Now With Animated Themes* (`#themes`, `css/themes-demo.css`, `js/themes-demo.js`): a picker over three real screens, turning by itself while on screen (never with reduced motion) and for good once someone picks one. Capture: start `LIGHTNING_THEME_REVIEW=1 LIGHTNING_TODAY=2026-10-04 LIGHTNING_PRICES_OFFLINE=1 python -m lightning --sample --no-browser` (the maintainers' review switch, so the paid themes can be worn without a licence), wear the theme with `LightningTheme.set('papyrus')` and save 1440 x 900 at 1.389x.
 version-b.html      redirect to index.html (Version B is archived)
 version-c.html      redirect to index.html (the old Version C address; its design is now the home page)
 how-it-works.html   the monthly 30-minute routine: upload, adjust, analyse
@@ -85,6 +85,7 @@ css/dev-dock.css    testing panel (page version + UX test)
 js/dev-dock.js      builds the testing panel on every version
 js/theme.js         picks and remembers the theme
 assets/app/mohab/    app screenshots from the built-in sample household (python -m lightning --demo)
+assets/app/themes-2026-10-30/  Dendera, Dendera Night and Papyrus worn on Mohab's year (2000 x 1250), for the home page's Now With Animated Themes
 css/ux-test.css     shared UX test feedback rail
 js/ux-test.js       shared UX test behavior
 js/current-status.js multi-ticket app feedback form behavior
