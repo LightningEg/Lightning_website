@@ -3247,8 +3247,8 @@
       "id": "UX-2026.10.29.05",
       "name": "Features · Lightning 1.5.1",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.05.html"
     },
     {
       "id": "UX-2026.10.29.06",
@@ -3295,6 +3295,20 @@
     {
       "id": "UX-2026.10.29.12",
       "name": "Version Archive · Net worth animation starts later",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.29.12.html"
+    },
+    {
+      "id": "UX-2026.10.30.01",
+      "name": "Features · App themes",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.10.30.02",
+      "name": "Version Archive · Features app themes",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
