@@ -599,7 +599,7 @@ try{var H=document.documentElement;if(!sessionStorage.getItem('lg-geeks-boot')&&
           <p>Nothing protects an unlocked PC from malware. Freed memory is not wiped: decrypted fragments may persist in freed memory, crash dumps, the page file or the hibernation file. Wiping made encrypted reads about three times slower, so the owner chose speed. A copied database without its key file is a 256-bit problem; with the key file, an attacker can guess offline, and Argon2 slows each guess.</p>
           <p>Found a flaw? Write to <a class="in" href="mailto:geeks@lightningeg.com">geeks@lightningeg.com</a>.</p>
         </div>
-        <p>Details: <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" target="_blank" rel="noopener noreferrer">Desktop app and encrypted profiles ↗</a></p>
+        <p>Details: <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md#desktop-app-and-encrypted-profiles" target="_blank" rel="noopener noreferrer">Desktop app and encrypted profiles ↗</a></p>
       </section>
 
       <section id="principles" aria-labelledby="t-principles">
@@ -689,7 +689,7 @@ try{var H=document.documentElement;if(!sessionStorage.getItem('lg-geeks-boot')&&
 <b>packaging/</b>          <span class="d">the Windows build</span>
 <b>tools/</b>              <span class="d">market data, guideline and release helpers</span>
 <b>skills/</b>             <span class="d">checklists for bug hunts, number audits, releases</span></pre>
-        <p>The full module table is in <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md#modules" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md › Modules ↗</a>.</p>
+        <p>The full module table is in <a class="in" href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md#modules" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md › Modules ↗</a>.</p>
       </section>
 
       <section id="data" aria-labelledby="t-data">
@@ -904,13 +904,13 @@ layers = [
         <h2 id="t-docs">Read the Source of Truth</h2>
         <p>Each fact lives in one file. These are the files.</p>
         <ul class="links">
-          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" target="_blank" rel="noopener noreferrer"><b>PROJECT_OVERVIEW.md</b><span>Start here: what Lightning is, the decisions that must hold, the roadmap.</span><i aria-hidden="true">↗</i></a></li>
-          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer"><b>ARCHITECTURE.md</b><span>Modules, financial contracts, data model, UI contract, encrypted profiles.</span><i aria-hidden="true">↗</i></a></li>
-          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/GLOSSARY.md" target="_blank" rel="noopener noreferrer"><b>GLOSSARY.md</b><span>One name and one meaning for every term and figure.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/PROJECT_OVERVIEW.md" target="_blank" rel="noopener noreferrer"><b>PROJECT_OVERVIEW.md</b><span>Start here: what Lightning is, the decisions that must hold, the roadmap.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer"><b>ARCHITECTURE.md</b><span>Modules, financial contracts, data model, UI contract, encrypted profiles.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/GLOSSARY.md" target="_blank" rel="noopener noreferrer"><b>GLOSSARY.md</b><span>One name and one meaning for every term and figure.</span><i aria-hidden="true">↗</i></a></li>
           <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer"><b>AGENTS.md</b><span>Working rules: branches, tests, changelog, product rules.</span><i aria-hidden="true">↗</i></a></li>
           <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><b>CONTRIBUTING.md</b><span>The licence terms for pull requests.</span><i aria-hidden="true">↗</i></a></li>
           <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/NOW.md" target="_blank" rel="noopener noreferrer"><b>NOW.md</b><span>What is claimed, what is next, and what to read for each.</span><i aria-hidden="true">↗</i></a></li>
-          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer"><b>CHANGELOG.md</b><span>Every change, newest first.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/elfekimuhammed/Lightning/blob/main/RELEASES.md" target="_blank" rel="noopener noreferrer"><b>CHANGELOG.md</b><span>Every change, newest first.</span><i aria-hidden="true">↗</i></a></li>
         </ul>
       </section>
 
@@ -1213,7 +1213,7 @@ layers = [
   function go(id){var e=doc.getElementById(id);if(e)e.scrollIntoView({behavior:reduce?'auto':'smooth'})}
   var items=[];
   $$('.toc a').forEach(function(a){items.push({t:'Go to '+a.textContent.replace(/^\d+/,function(m){return m+' · '}),h:'section',run:function(){go(a.getAttribute('href').slice(1))}})});
-  [['PROJECT_OVERVIEW.md','docs/PROJECT_OVERVIEW.md'],['ARCHITECTURE.md','docs/ARCHITECTURE.md'],['GLOSSARY.md','docs/GLOSSARY.md'],['CONTRIBUTING.md','CONTRIBUTING.md'],['AGENTS.md','AGENTS.md']].forEach(function(d){items.push({t:'Open '+d[0],h:'github ↗',run:function(){window.open('https://github.com/elfekimuhammed/Lightning/blob/main/'+d[1],'_blank','noopener')}})});
+  [['PROJECT_OVERVIEW.md','ai/PROJECT_OVERVIEW.md'],['ARCHITECTURE.md','ai/ARCHITECTURE.md'],['GLOSSARY.md','ai/GLOSSARY.md'],['CONTRIBUTING.md','CONTRIBUTING.md'],['AGENTS.md','AGENTS.md']].forEach(function(d){items.push({t:'Open '+d[0],h:'github ↗',run:function(){window.open('https://github.com/elfekimuhammed/Lightning/blob/main/'+d[1],'_blank','noopener')}})});
   items.push({t:'Copy the clone command',h:'action',run:function(){copyText('git clone https://github.com/elfekimuhammed/Lightning.git',function(){})}});
   items.push({t:'Email geeks@lightningeg.com',h:'action',run:function(){location.href='mailto:geeks@lightningeg.com'}});
   names.forEach(function(n){items.push({t:'Palette: '+labels[n],h:'theme',run:function(){setPalette(n,true)}})});

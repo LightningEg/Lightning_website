@@ -4,7 +4,7 @@
 
 Errors (exit 1): a relative href, src or data-zoom that points at no file; a JSON-LD block that does not
 parse; a For Geeks page whose top bar or footer differs from tools/geeks_shell.py; a screenshot path or size that disagrees with assets/app/shots.json (tools/shots.py); an archive/ snapshot without noindex; a Version Archive row whose state disagrees with
-version-registry.json; a live page whose data-ux-version is not current in the registry.
+version-registry.json; a live page whose data-ux-version is not current in the registry; a page that names a different current app release than app-release.json (tools/app_release.py).
 Warnings: an indexable page whose title passes 60 characters or description 160 (README › Search), and the
 count of snapshots whose stylesheets don't resolve from archive/ (no <base href="../">: they show unstyled).
 Third-party links are not fetched."""
@@ -73,6 +73,7 @@ for page in live:
 
 # For Geeks: one top bar and one footer on its three pages (tools/geeks_shell.py)
 sys.path.insert(0, str(ROOT / "tools"))
+import app_release  # noqa: E402
 import geeks_shell  # noqa: E402
 import shots  # noqa: E402
 
@@ -81,6 +82,7 @@ for name, _, _ in geeks_shell.PAGES:
     if geeks_shell.build(text, name) != text:
         errors.append(f"{name}: the For Geeks top bar or footer is out of date (run python tools/geeks_shell.py)")
 
+errors += app_release.problems()  # every page that names the current app release agrees with app-release.json
 errors += shots.errors()  # screenshot paths and sizes agree with assets/app/shots.json
 
 for line in warnings:
