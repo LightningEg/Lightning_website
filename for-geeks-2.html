@@ -85,7 +85,7 @@
 <div class="module"><b>reporting/</b><span>Calculated views, not another source of truth</span></div>
 <div class="module"><b>database/</b><span>SQLite, migrations, backups and audit history</span></div>
 <div class="module"><b>core/</b><span>Money precision, identifiers and posting rules</span></div>
-</div><p class="terminalhelp">Illustrative entry points, not the complete directory listing. <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">Read the full architecture ↗</a></p></div></article>
+</div><p class="terminalhelp">Illustrative entry points, not the complete directory listing. <a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">Read the full architecture ↗</a></p></div></article>
 <article class="panel principles"><div class="panel-head">DESIGN_RULES <span class="ok">PASS</span></div><div class="panel-body"><ul class="rules"><li>Real money belongs in the ledger.</li><li>A plan never becomes a real transaction by itself.</li><li>Money uses Decimal, not floating-point math.</li><li>Modules use service boundaries.</li><li>Every change should have tests.</li><li>Private financial data stays out of Git.</li></ul></div></article></div>
 </section>
 <section class="section" id="terminal"><div class="section-title"><h2><span class="index">03 //</span> Try the Terminal</h2><span class="dim">INTERACTIVE // LOCAL DEMO</span></div>
@@ -96,7 +96,7 @@ Type <span class="prompt">help</span> to explore the project. No code is execute
 <p class="terminalhelp">Commands: help · about · stack · ls · architecture · contribute · links · clear. This is a guided demo, not a shell.</p>
 </section>
 <section class="section" id="contribute"><div class="section-title"><h2><span class="index">04 //</span> Make Lightning Better</h2><span class="dim">CONTRIBUTING.md</span></div>
-<div class="panel"><div class="panel-head">GET_STARTED <span class="ok">PULL REQUESTS WELCOME</span></div><div class="panel-body"><div class="steps"><div class="step"><span class="stepnum">STEP 01 / EXPLORE</span><h3>Read before editing</h3><p>Start with the <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/PROJECT_OVERVIEW.md" target="_blank" rel="noopener noreferrer">project overview</a>, <a href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">architecture</a> and <a href="https://github.com/elfekimuhammed/Lightning/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">work rules</a>.</p></div>
+<div class="panel"><div class="panel-head">GET_STARTED <span class="ok">PULL REQUESTS WELCOME</span></div><div class="panel-body"><div class="steps"><div class="step"><span class="stepnum">STEP 01 / EXPLORE</span><h3>Read before editing</h3><p>Start with the <a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/PROJECT_OVERVIEW.md" target="_blank" rel="noopener noreferrer">project overview</a>, <a href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">architecture</a> and <a href="https://github.com/elfekimuhammed/Lightning/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">work rules</a>.</p></div>
 <div class="step"><span class="stepnum">STEP 02 / BUILD</span><h3>Run the tests</h3><p>Clone the repository, work on a focused branch and keep the existing financial invariants intact.</p></div>
 <div class="step"><span class="stepnum">STEP 03 / SHARE</span><h3>Open an issue or PR</h3><p>Discuss larger changes in an issue first. Explain what changed, why, and how you verified it.</p></div></div>
 <div style="margin-top:20px" class="label">&gt; bootstrap.sh</div><div class="codebox"><code>git clone https://github.com/elfekimuhammed/Lightning.git
@@ -110,8 +110,8 @@ lint-imports</code><button type="button" class="copy" id="copy-setup" aria-label
 <section class="section" id="resources"><div class="section-title"><h2><span class="index">05 //</span> Developer Resources</h2><span class="dim">LINK_DIRECTORY</span></div>
 <div class="grid"><div class="panel half"><div class="panel-head">CODE &amp; DOCUMENTATION <span>4 FILES</span></div><div class="panel-body">
 <div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning">App source repository ↗</a><p>Code, tests and build instructions.</p></div><span class="arrow">↗</span></div>
-<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/ARCHITECTURE.md">Architecture ↗</a><p>Modules, data model and calculation contracts.</p></div><span class="arrow">↗</span></div>
-<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/docs/GLOSSARY.md">Glossary ↗</a><p>Canonical names and financial terms.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/ARCHITECTURE.md">Architecture ↗</a><p>Modules, data model and calculation contracts.</p></div><span class="arrow">↗</span></div>
+<div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/ai/GLOSSARY.md">Glossary ↗</a><p>Canonical names and financial terms.</p></div><span class="arrow">↗</span></div>
 <div class="route"><div><a target="_blank" rel="noopener noreferrer" href="https://github.com/elfekimuhammed/Lightning/blob/main/CONTRIBUTING.md">Contributing ↗</a><p>How to submit work and what it means.</p></div><span class="arrow">↗</span></div>
 </div></div>
 <div class="panel half"><div class="panel-head">GET INVOLVED <span>4 ENTRIES</span></div><div class="panel-body">
@@ -131,7 +131,7 @@ help:"Available commands:\n  about         What Lightning does\n  stack         
 about:"Lightning is a local-first personal finance app for Egypt. One ledger records real money; planning and reporting live around it.",
 stack:"Python 3.11+ / FastAPI / Jinja2 / SQLite / vanilla CSS + JS\nTests: pytest and import-linter\nDistribution: Windows desktop and Android",
 ls:"README.md  CONTRIBUTING.md  AGENTS.md  NOW.md\nlightning/  tests/  docs/  packaging/  guideline/\nThis is a curated map. See GitHub for the current tree.",
-architecture:"ui -> services/workflows -> database + core\nReal money: transaction ledger\nFuture plans: planning modules\nReports: derived from recorded data\nDetailed contracts: docs/ARCHITECTURE.md",
+architecture:"ui -> services/workflows -> database + core\nReal money: transaction ledger\nFuture plans: planning modules\nReports: derived from recorded data\nDetailed contracts: ai/ARCHITECTURE.md",
 contribute:"1. Read CONTRIBUTING.md and AGENTS.md\n2. Discuss larger work in a GitHub issue\n3. Work on a focused branch\n4. Run python -m pytest and lint-imports\n5. Submit a PR with test evidence\nNever commit real financial data or secrets.",
 links:"Source: https://github.com/elfekimuhammed/Lightning\nDocs: https://github.com/elfekimuhammed/Lightning/tree/main/docs\nIssues: https://github.com/elfekimuhammed/Lightning/issues"
 };
