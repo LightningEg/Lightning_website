@@ -3,14 +3,14 @@
     python tools/store_admin.py   # then python tools/footer.py to write the footer
 
 The console is one page with a menu and one view at a time (js/owner-dashboard.js): Overview, Top-ups, Catalogue,
-Sales, Members, Community, Money journal and Settings. Element ids are the contract with js/store-admin.js,
+Sales, Members, Sign-ups, Community, Money journal and Settings. Element ids are the contract with js/store-admin.js,
 js/admin-operations.js, js/owner-catalog.js and the tests in supabase/tests/*pages*.test.mjs; keep them.
 """
 from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261028-funnel-1"  # css/store-admin.css and every js/ file below
+VERSION = "20261031-signups-1"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -18,13 +18,14 @@ ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'activity': '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
     'requests': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/>',
     'catalogue': '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+    'signups': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/>',
     'members': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
     'social': '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     'bank': '<path d="M3 21h18"/><path d="M5 21V10"/><path d="M19 21V10"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="m2 10 10-6 10 6"/>',
     'settings': '<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/>',
 }
 MENU = [('today', 'Overview', ''), ('requests', 'Top-ups', 'receipts'), ('sales', 'Sales', ''), ('activity', 'Activity', ''), ('catalogue', 'Catalogue', ''),
-        ('members', 'Members', ''), ('social', 'Community', 'stories'), ('bank', 'Money journal', 'unmatched'),
+        ('members', 'Members', ''), ('signups', 'Sign-ups', ''), ('social', 'Community', 'stories'), ('bank', 'Money journal', 'unmatched'),
         ('settings', 'Settings', '')]
 
 
@@ -85,6 +86,9 @@ def build():
     activity = view('activity', 'Activity', 'The audit trail: every coin that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',
         '<div id="ops-activity"><p class="ops-empty">Verify your session to load activity.</p></div>')
 
+    signups = view('signups', 'Sign-ups', 'How many people made an account and what they did next. Counts only: nobody is named, and the details stay in Supabase.',
+        '<div id="ops-signups"><p class="ops-empty">Verify your session to load sign-ups.</p></div>')
+
     catalogue = view('catalogue', 'Catalogue', 'Every look on sale. A theme takes its tier’s price everywhere it is worn: both sites, the PC and the phone. Sets follow their parts at 80%.',
         '<div id="ops-catalogue"><p class="ops-empty">Verify your session to load the catalogue.</p></div>' + claims)
 
@@ -121,7 +125,7 @@ def build():
         '</div>')
 
     scripts = ''.join(f'<script src="js/{name}.js?v={VERSION}"></script>' for name in
-                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-activity', 'owner-avatars', 'owner-claims', 'owner-community', 'store-admin'))
+                      ('admin-operations', 'story-moderation', 'owner-dashboard', 'owner-catalog', 'owner-sales', 'owner-signups', 'owner-activity', 'owner-avatars', 'owner-claims', 'owner-community', 'store-admin'))
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="robots" content="noindex,nofollow"><title>Owner console · Lightning</title>'
             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/forgeeks-account.css"><link rel="stylesheet" href="css/site-account.css?v=20261025-reaudit-1">'
             f'<link rel="stylesheet" href="css/store-admin.css?v={VERSION}"><link rel="stylesheet" href="css/footer.css"><script src="js/theme.js"></script></head>'
@@ -130,7 +134,7 @@ def build():
             '<div class="oc-gate"><p id="store-access" class="oc-status" role="status">Checking account access…</p><a class="btn" id="store-signin" href="account.html?next=admin.html" hidden>Sign in with the owner account</a></div>\n'
             f'<div id="store-owner" hidden><div class="oc-gate" id="ops-mfa">{mfa}</div><p class="ops-alert" id="owner-extra" hidden></p>\n'
             f'<div class="ops-shell"><nav class="ops-nav" aria-label="Owner tools">{menu}</nav>\n'
-            f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{activity}{catalogue}{members}{social}{bank}{settings}</fieldset></div></div></main>'
+            f'<fieldset id="store-tools" class="ops-main" disabled><legend class="oc-sr">Owner tools</legend>{today}{requests}{sales}{activity}{catalogue}{members}{signups}{social}{bank}{settings}</fieldset></div></div></main>'
             '<div class="wrap"><footer></footer></div><script src="js/vendor/supabase-2.118.0.js"></script><script src="js/forgeeks-config.js"></script><script src="js/forgeeks-auth.js?v=20261028-errors-1"></script>'
             f'{scripts}<script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-looks-1" defer></script></body></html>')
     (ROOT / 'admin.html').write_text(page)
