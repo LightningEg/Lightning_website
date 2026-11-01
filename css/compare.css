@@ -1,0 +1,17 @@
+/* Comparison pages (tools/comparisons.py, plan item 8Z): a scorecard of Low, Medium and High with a line of evidence.
+   Guideline tokens only. A rating is a word plus a three-step meter; it is never coloured good or bad (A16). */
+.cmp-table-wrap{overflow-x:auto}
+.cmp-table{width:100%;border-collapse:collapse;font-size:15px}
+.cmp-table th,.cmp-table td{padding:14px 12px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top}
+.cmp-table thead th{color:var(--ink2);font-weight:700;white-space:nowrap}
+.cmp-table tbody th{font-weight:700;color:var(--ink);min-width:150px}
+.cmp-rate{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--ink);white-space:nowrap}
+.cmp-meter{display:inline-flex;gap:3px}
+.cmp-meter i{display:block;width:16px;height:6px;border-radius:99px;background:var(--track)}
+.cmp-meter i.on{background:var(--nile)}
+.cmp-note{display:block;margin-top:6px;color:var(--ink2);font-size:14px;font-weight:500;white-space:normal}
+.cmp-src{margin:14px 0 0;color:var(--muted);font-size:13px}
+.cmp-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmp-two ul{margin:0;padding-inline-start:20px;color:var(--ink2)}
+.cmp-two li{margin:6px 0}
+@media (max-width:760px){.cmp-two{grid-template-columns:1fr}.cmp-table thead{display:none}.cmp-table,.cmp-table tbody,.cmp-table tr,.cmp-table th,.cmp-table td{display:block}.cmp-table tr{padding:12px 0;border-bottom:1px solid var(--line)}.cmp-table th,.cmp-table td{border:0;padding:4px 0}.cmp-table td[data-who]::before{content:attr(data-who) ": ";color:var(--ink2);font-weight:700}}

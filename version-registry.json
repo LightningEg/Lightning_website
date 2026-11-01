@@ -3375,6 +3375,27 @@
       "page": "versions.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.01",
+      "name": "Lightning or A spreadsheet? · Honest comparison",
+      "page": "lightning-vs-spreadsheet.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.02",
+      "name": "Lightning or A traditional expense tracker? · Honest comparison",
+      "page": "lightning-vs-expense-tracker-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.03",
+      "name": "Lightning or A cloud budgeting app? · Honest comparison",
+      "page": "lightning-vs-cloud-budgeting-app.html",
+      "status": "current",
+      "archive_url": null
     }
   ],
   "app_releases": [

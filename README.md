@@ -296,6 +296,10 @@ Arabic localized counterparts do not use English UX test release IDs.
 
 Windows and Android app versions are separate from website experience IDs. The Downloads page and [Version Archive](versions.html) link to each app build independently. Keep at least the three newest app versions permanently, add a new row for every release, and never replace an older version's file or link. Published ZIPs, APKs and checksums live in the public [Lightning-downloads repository](https://github.com/elfekimuhammed/Lightning-downloads).
 
+## Comparison pages
+
+Honest comparisons with a **kind** of tool, never a named product (guideline B10, B12; owner, 2026-10-31): [lightning-vs-spreadsheet.html](lightning-vs-spreadsheet.html), [lightning-vs-expense-tracker-app.html](lightning-vs-expense-tracker-app.html) and [lightning-vs-cloud-budgeting-app.html](lightning-vs-cloud-budgeting-app.html), each with an Egyptian Arabic page in `ar/`. They are generated from one scorecard, [comparisons.json](comparisons.json): six qualities, a Low, Medium or High for Lightning and for each kind of tool, one line of evidence for each, and its source (a row of the app repository's `ai/COMPETITION.md`, a Mohab step or a test). Where another way is better the page says so, and the *Where each is stronger* lists come from the ratings, never from copy. `python tools/comparisons.py build` writes the pages, the sitemap rows and the `llms.txt` links (and, once, a UX release id and a Version Archive row for each English page); `python tools/comparisons.py` fails when a page's ratings differ from the file, a rating or its evidence is missing, or an English page names a product. **The ratings are proposed: the owner signs them off** (plan item 8Z1). A rating moves only with its evidence; change the file, rebuild, and read the diff.
+
 ## Status
 
 The website, survey, and Google Sheets receiver are connected. When changing the receiver, update its URL in both landing pages and the survey page, then verify that a submission appears in the destination Sheet.

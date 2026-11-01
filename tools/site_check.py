@@ -74,6 +74,7 @@ for page in live:
 # For Geeks: one top bar and one footer on its three pages (tools/geeks_shell.py)
 sys.path.insert(0, str(ROOT / "tools"))
 import app_release  # noqa: E402
+import comparisons  # noqa: E402
 import geeks_shell  # noqa: E402
 import shots  # noqa: E402
 
@@ -83,6 +84,7 @@ for name, _, _ in geeks_shell.PAGES:
         errors.append(f"{name}: the For Geeks top bar or footer is out of date (run python tools/geeks_shell.py)")
 
 errors += app_release.problems()  # every page that names the current app release agrees with app-release.json
+errors += comparisons.check()  # the comparison pages match comparisons.json (tools/comparisons.py)
 errors += shots.errors()  # screenshot paths and sizes agree with assets/app/shots.json
 
 for line in warnings:
