@@ -1,0 +1,38 @@
+/* Own versus hold (Home, B07 illustrated scene): one balance splits into what you hold for others, what you owe and
+   what is yours. Colours by meaning (A03): azure = held money and what is yours, neutral = someone else's, soft rose =
+   still owed. Only opacity and transform move; without the script the finished picture shows. js/own-hold.js plays it. */
+.oh{--oh-held:#C5D3D0;max-width:960px;margin:0 auto}
+:root[data-theme="dark"] .oh{--oh-held:#5E7482}
+.oh-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:32px}
+.oh-lbl{margin-bottom:10px;color:var(--ink2);font:700 15px/1.3 var(--body)}
+.oh-lbl span{display:inline-block;transition:opacity .25s}
+.oh-bar{position:relative;height:18px;margin-top:24px}
+.oh-bar i{position:absolute;top:0;bottom:0;border-radius:9px}
+.oh-bar i::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--azure);opacity:0;transition:opacity .5s ease}
+.oh-yours{inset-inline-start:0;width:calc(65% - 3px);background:var(--azure)}
+.oh-yours::before{content:"";position:absolute;inset:-5px;border-radius:14px;box-shadow:0 0 0 2px var(--azure);opacity:.4;transition:opacity .5s ease}
+.oh-held{inset-inline-start:65%;width:calc(10% - 3px);background:var(--oh-held)}
+.oh-owed{inset-inline-start:75%;width:25%;background:var(--rose)}
+.oh-key{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;color:var(--ink2);font-size:13px;font-weight:600}
+.oh-key span{display:inline-flex;align-items:center;gap:6px}
+.oh-key span::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--azure)}
+.oh-key .k-held::before{background:var(--oh-held)}
+.oh-key .k-owed::before{background:var(--rose)}
+.oh-rows{margin-top:0}
+.oh-rows .row{transition:opacity .45s ease,transform .45s ease}
+.oh .d-cap{margin-top:14px}
+/* armed: the scene waits below the fold as one 100,000 balance */
+.oh.is-armed .oh-held::after,.oh.is-armed .oh-owed::after{opacity:1}
+.oh.is-armed .oh-yours::before{opacity:0}
+.oh.is-armed :where(.oh-rows .row+.row,.oh-key span+span){opacity:0;transform:translateY(8px)}
+.oh.s1 .oh-held::after,.oh.s2 .oh-owed::after{opacity:0}
+.oh.s1 .oh-r-held,.oh.s1 .oh-key .k-held,.oh.s2 .oh-r-owed,.oh.s2 .oh-key .k-owed,.oh.s3 .oh-rows .result{opacity:1;transform:none}
+.oh.s3 .oh-yours::before{opacity:.4}
+@media (max-width:760px){
+  .oh-card{grid-template-columns:1fr;gap:22px;padding:22px}
+  .oh-bar{margin-top:18px}
+}
+/* the answer (Home section 5): its one button under the heading */
+.d-answer{text-align:center}
+/* Made for Egypt: four tiles in one row on wide screens */
+@media (min-width:1000px){.eg-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
