@@ -294,6 +294,8 @@ Every testable web experience has one visible immutable release ID, in the form 
 
 Arabic localized counterparts do not use English UX test release IDs.
 
+**Release notes on the site (2026-11-01).** [release-notes.json](release-notes.json) holds the current release's notes in plain words, English and Egyptian Arabic side by side, shortened from the app repository's `RELEASES.md` (English is the source). `python tools/app_release.py notes --write` renders them as the *What’s new* section of Downloads (`current-status.html`, `ar/current-status.html`, between `<!--whats-new-->` markers) and as the Highlights of the newest entry in the release log (between `<!--notes-->`), so the two pages never disagree; `python tools/app_release.py` (and `site_check.py`) fail when a page differs from the file or the file is for another version. After an app release: update `app-release.json`, rewrite `release-notes.json` from the new `RELEASES.md` section (a note without an Arabic line shows no Arabic until one is written), run `notes --write`, then add the release-log and version-archive rows by hand.
+
 Windows and Android app versions are separate from website experience IDs. The Downloads page and [Version Archive](versions.html) link to each app build independently. Keep at least the three newest app versions permanently, add a new row for every release, and never replace an older version's file or link. Published ZIPs, APKs and checksums live in the public [Lightning-downloads repository](https://github.com/elfekimuhammed/Lightning-downloads).
 
 ## Status
