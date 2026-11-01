@@ -118,8 +118,9 @@ await test('GitHub login, the last merge with its link, and merges this month', 
 });
 
 await test('a coin award with a paid issue is the last merge too', async () => {
-  await as('service_role', null, () => q(`select public.award_coins($1, 'contribution_award', 100, 'issue', 'LightningEg/Lightning#77', 'Merged', now() + interval '1 hour', 'primary', $2::jsonb)`,
-    [B, JSON.stringify({ repository: REPO, issue_number: 77, pr_number: 9, title: 'Paid fix', url: `https://github.com/${REPO}/pull/9`, merged_at: new Date(Date.now() + 3600e3).toISOString() })]));
+  const later = new Date(Math.max(Date.now(), Date.parse(thisMonth)) + 3600e3).toISOString(); // after every fixture, even on the 1st before noon
+  await as('service_role', null, () => q(`select public.award_coins($1, 'contribution_award', 100, 'issue', 'LightningEg/Lightning#77', 'Merged', $3::timestamptz, 'primary', $2::jsonb)`,
+    [B, JSON.stringify({ repository: REPO, issue_number: 77, pr_number: 9, title: 'Paid fix', url: `https://github.com/${REPO}/pull/9`, merged_at: later }), later]));
   const r = await mine('Bee', 'all');
   assert.deepEqual([r.last_merge_title, r.last_merge_url], ['Paid fix', `https://github.com/${REPO}/pull/9`]);
 });
