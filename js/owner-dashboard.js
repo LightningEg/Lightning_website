@@ -69,7 +69,7 @@
   if (tabs) {
     tabs.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tab]'); if (b) openTab(b.getAttribute('data-tab')); });
     tabs.addEventListener('keydown', function (e) {
-      var all = Array.prototype.slice.call(tabs.querySelectorAll('[data-tab]')), i = all.indexOf(doc.activeElement);
+      var all = Array.prototype.slice.call(tabs.querySelectorAll('[data-tab]')), i = all.indexOf(e.target.closest ? e.target.closest('[data-tab]') : null);
       if (i < 0 || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
       e.preventDefault();
       var next = all[(i + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length]; next.focus(); openTab(next.getAttribute('data-tab'));
