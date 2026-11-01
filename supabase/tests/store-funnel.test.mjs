@@ -72,8 +72,8 @@ await test('anyone can send a store page view; nobody can read the table', async
   await assert.rejects(as('authenticated', ADMIN, () => q(`select * from public.site_views`)), /permission denied/);
 });
 
-await test('only the store pages are kept, and bad input is dropped without an error', async () => {
-  for (const p of [{ pv: pv(), page: 'index' }, { pv: pv(), page: 'current-status' }, { pv: 'not-hex', page: 'marketplace' },
+await test('any main page is kept, and bad input is dropped without an error', async () => {
+  for (const p of [{ pv: 'not-hex', page: 'marketplace' }, { pv: pv(), page: 'Bad Page' }, { pv: pv(), page: '../etc' },
     { pv: pv(), page: 'marketplace', scroll: 'lots' }, 'just text', [1, 2], { pv: pv() }]) await track(p);
   const n = Number((await q(`select count(*) n from public.site_views`)).rows[0].n);
   assert.equal(n, 1, 'only the first test record exists');
