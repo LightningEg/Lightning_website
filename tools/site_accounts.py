@@ -189,7 +189,7 @@ def build_guides():
         text=text.replace('<script src="js/site-membership.js','<script src="js/forgeeks-showcase.js" defer></script><script src="js/story-card.js" defer></script><script src="js/story-strip.js" defer></script><script src="js/site-membership.js',1)
     path.write_text(text)
 
-ANALYTICS='js/analytics.js?v=20261028-store-1'
+ANALYTICS='js/analytics.js?v=20261101-traffic-1'
 def add_analytics():
     """Every main-site page counts visits (README › Analytics and consent), the community and store pages included.
     Not the owner console, For Geeks, the test page, archived versions or redirects."""

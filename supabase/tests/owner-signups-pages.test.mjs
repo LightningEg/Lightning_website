@@ -43,11 +43,12 @@ async function boot({ data = sample(), verified = true, fail = false } = {}) {
   return { w, $, qa, calls };
 }
 
-await test('Sign-ups is a console view with its own menu entry, and the dashboard knows it', async () => {
+await test('Sign-ups is a tab inside the Analytics view, and the dashboard knows it', async () => {
   const p = await boot();
   assert.ok(p.$('signups') && p.$('ops-signups'));
-  assert.ok(p.qa('.ops-nav a').some(a => a.getAttribute('data-view') === 'signups' && /Sign-ups/.test(a.textContent)));
-  assert.match(read('js/owner-dashboard.js'), /VIEWS = \[[^\]]*'signups'/);
+  assert.ok(p.$('analytics').contains(p.$('signups')), 'Sign-ups is a tab inside Analytics');
+  assert.ok(p.qa('#an-tabs [data-tab]').some(b => b.getAttribute('data-tab') === 'signups' && /Sign-ups/.test(b.textContent)));
+  assert.match(read('js/owner-dashboard.js'), /VIEWS = \[[^\]]*'analytics'/);
   assert.match(read('admin.html'), /owner-signups\.js\?v=/);
 });
 

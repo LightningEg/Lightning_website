@@ -10,8 +10,8 @@
   var $ = function (id) { return doc.getElementById(id); };
   var host = $('ops-dash');
   if (!host || !FG) return;
-  var VIEWS = ['today', 'requests', 'sales', 'activity', 'catalogue', 'members', 'signups', 'social', 'bank', 'settings'];
-  var ALIAS = { setup: 'settings', pricing: 'settings', retention: 'settings', credits: 'members' };
+  var VIEWS = ['today', 'requests', 'sales', 'activity', 'catalogue', 'members', 'analytics', 'social', 'bank', 'settings'];
+  var ALIAS = { traffic: 'analytics', signups: 'analytics', setup: 'settings', pricing: 'settings', retention: 'settings', credits: 'members' };
   var last = null, loading = false, again = false, store = {}, ready = null, seatSales = [];
 
   function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -53,6 +53,30 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('load', function () { setTimeout(function () { window.scrollTo(0, 0); }, 0); });
   }
+
+  /* Tabs inside the Analytics view: one panel at a time, arrow keys move between tabs, and an old #traffic or #signups link opens its tab. */
+  var tabs = doc.getElementById('an-tabs');
+  function openTab(key) {
+    if (!tabs) return;
+    Array.prototype.forEach.call(tabs.querySelectorAll('[data-tab]'), function (b) {
+      var on = b.getAttribute('data-tab') === key;
+      b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1;
+      var p = doc.getElementById(b.getAttribute('aria-controls')); if (p) p.hidden = !on;
+    });
+    var bar = doc.getElementById('dx-period'); if (bar) bar.hidden = key === 'traffic' || key === 'signups'; // these two have their own period buttons
+    window.dispatchEvent(new CustomEvent('lightning:owner-tab', { detail: { tab: key } }));
+  }
+  if (tabs) {
+    tabs.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tab]'); if (b) openTab(b.getAttribute('data-tab')); });
+    tabs.addEventListener('keydown', function (e) {
+      var all = Array.prototype.slice.call(tabs.querySelectorAll('[data-tab]')), i = all.indexOf(e.target.closest ? e.target.closest('[data-tab]') : null);
+      if (i < 0 || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+      e.preventDefault();
+      var next = all[(i + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length]; next.focus(); openTab(next.getAttribute('data-tab'));
+    });
+    openTab((location.hash === '#traffic' || location.hash === '#signups') ? location.hash.slice(1) : 'act');
+  }
+  window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (h === 'traffic' || h === 'signups') openTab(h); });
 
   // Segmented filters drive the plain select beside them, which js/store-admin.js listens to.
   Array.prototype.forEach.call(doc.querySelectorAll('.oc-seg'), function (group) {
