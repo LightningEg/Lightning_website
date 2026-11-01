@@ -26,7 +26,7 @@ UX_DATE = "2026.11.01"
 
 COPY = {
     "en": {
-        "title": "Lightning or {name}? An Honest Comparison · Lightning",
+        "title": "Lightning or {lname}? An Honest Comparison",
         "desc": "Lightning against {lname}, rated Low, Medium or High on six things that matter, with a line of evidence for each. Where {lname} is better, we say so.",
         "label": "Lightning against {lname}", "h1": "Lightning or <span>{name}?</span>", "fit": "9.5",
         "line": "An honest comparison in Low, Medium and High. Where {lname} is better, we say so.",
@@ -123,7 +123,7 @@ def build_page(d: dict, key: str, lang: str, ux: str | None) -> str:
     c, t = d["comparators"][key], COPY[lang]
     name, slug = c[lang], c["slug"]
     lname = name[0].lower() + name[1:] if lang == "en" else name
-    title = t["title"].format(name=name)
+    title = t["title"].format(name=name, lname=lname)
     desc = t["desc"].format(name=name, lname=lname)
     en_url, ar_url = f"{SITE}{slug}.html", f"{SITE}ar/{slug}.html"
     own = ar_url if lang == "ar" else en_url
