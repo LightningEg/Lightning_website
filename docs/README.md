@@ -5,6 +5,7 @@
 | Site structure, deployment and archive rules | [Repository README](../README.md) |
 | Payment/receipt/reconciliation operations | [Operator runbook](payment-operations.md) |
 | Membership and marketplace requirements/history | [Existing proposal](proposals/forgeeks-accounts-lightning-coins.md) |
+| LinkedIn campaign: storyline, series, post copy | [Campaign proposal](proposals/linkedin-campaign.md); slides in `assets/brand/linkedin/` |
 | Audit evidence | [Reports](../reports/README.md) |
 | Sanitized user observations | [Feedback](../feedback/README.md) |
 | Brand by surface and language | [Guidelines](../guideline/README.md) |

@@ -1,0 +1,230 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Lightning LinkedIn post 1 · Why Lightning · bilingual carousel · 1080 × 1350 (guideline B11)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Manrope:wght@500;600;700;800&family=Readex+Pro:wght@500;600;700&family=Noto+Sans+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- Post 1 of the LinkedIn series (docs/proposals/linkedin-campaign.md): why Lightning, problem first, the home page's
+     order (many places, balance is not wealth, the months ahead, money in Egypt, then the answer once).
+     Arabic on top, English below (owner's reference, 2026-11-01). No app screenshots: every exhibit is drawn from B06
+     parts in A03 colours. Mohab's figures are README › Landing pages; the 100,000 is an illustration and says so.
+     Render: node render.js (beside this file) writes slide-1.png … slide-5.png and carousel.pdf. -->
+<style>
+:root{--ink:#0D2233;--ink2:#304A5C;--muted:#566E7E;--line:#DDE9E6;--paper:#F8FCFA;--track:#E6EFEC;
+  --azure:#0B6DD6;--green:#14A874;--green-text:#097852;--rose:#E68CA8;--rose-strong:#C93D72;--neutral:#C5D3D0;--nile:#0A2442;
+  --t-azure:#EAF3FD;--t-green:#EAF8F0;--t-rose:#FCEEF3;
+  --vivid:linear-gradient(135deg,#00995C 0%,#0B6DD6 100%);--canvas:linear-gradient(160deg,#E3F6EC 0%,#E6F4F1 50%,#E1EEFB 100%);
+  --lead:linear-gradient(135deg,#E0F5E9,#DCF1F0 52%,#D7ECF7);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:Manrope,"Segoe UI",system-ui,sans-serif;
+  --ar-display:"Readex Pro","Noto Sans Arabic",system-ui,sans-serif;--ar-body:"Noto Sans Arabic","Readex Pro",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff}
+body{font-family:var(--body);color:var(--ink)}
+.s{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--canvas);padding:84px 80px 0;display:flex;flex-direction:column;break-after:page}
+.s::after{content:"";position:absolute;right:-220px;top:380px;width:620px;height:620px;border-radius:50%;background:radial-gradient(closest-side,rgba(11,109,214,.08),transparent);pointer-events:none}
+/* Arabic block, top */
+.ar{direction:rtl;text-align:right}
+.ar h2{margin:0;font:700 64px/1.2 var(--ar-display);color:var(--ink)}
+.ar h2 em{font-style:normal;background:var(--vivid);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ar p{margin:12px 0 0;color:var(--ink2);font:600 27px/1.5 var(--ar-body)}
+/* exhibit, middle */
+.ex{flex:1;display:flex;flex-direction:column;justify-content:center;padding:34px 0 30px;position:relative;z-index:1}
+/* English block, bottom */
+.en h2{margin:0;font:800 58px/1.05 var(--display);letter-spacing:-.035em;color:var(--ink)}
+.en h2 em{font-style:normal;background:var(--vivid);-webkit-background-clip:text;background-clip:text;color:transparent}
+.en p{margin:12px 0 0;color:var(--ink2);font:600 25px/1.4 var(--body);max-width:920px}
+.foot{display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding:26px 0 46px;border-top:2px solid rgba(13,34,51,.08);color:var(--ink2);font:700 22px/1 var(--body)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:40px;width:auto;display:block}
+.prog{display:flex;align-items:center;gap:18px}
+.dots{display:flex;gap:8px;align-items:center}
+.dots i{width:10px;height:10px;border-radius:5px;background:#C5D3D0}
+.dots i.on{width:40px;background:var(--vivid)}
+.src{margin:16px 0 0;display:flex;justify-content:space-between;gap:20px;color:var(--muted);font:600 19px/1.3 var(--body)}
+.src .a{direction:rtl;font-family:var(--ar-body)}
+/* bilingual label pair */
+.bi{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.bi .a{direction:rtl;font-family:var(--ar-body);font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+.unit{margin-left:6px;color:var(--muted);font:700 .42em var(--body);letter-spacing:0}
+
+/* 1 · places */
+.places{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.pl{border-radius:22px;background:var(--paper);box-shadow:0 16px 34px -24px rgba(13,34,51,.45);padding:18px 20px 20px;display:flex;flex-direction:column;gap:5px;min-height:170px}
+.pl .tag{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;font:800 15px/1 var(--body);background:var(--c,var(--azure));margin-bottom:6px}
+.pl .a{direction:rtl;text-align:right;font:700 23px/1.25 var(--ar-body);color:var(--ink)}
+.pl .e{color:var(--ink2);font:600 17px/1.2 var(--body)}
+.pl .v{margin-top:auto;font:800 31px/1 var(--display);letter-spacing:-.02em}
+.pl:nth-child(odd){transform:rotate(-1.6deg)}
+.pl:nth-child(even){transform:rotate(1.4deg) translateY(10px)}
+.pl:nth-child(4n+3){transform:rotate(-.6deg) translateY(-6px)}
+.qpill{margin:30px auto 0;display:inline-flex;align-self:center;align-items:center;gap:22px;padding:20px 32px;border-radius:999px;background:#fff;box-shadow:0 14px 30px -20px rgba(13,34,51,.45)}
+.qpill b{font:800 54px/1 var(--display);color:var(--rose-strong)}
+.qpill span{display:flex;flex-direction:column;gap:6px}
+.qpill .a{direction:rtl;text-align:right;font:700 25px/1.2 var(--ar-body)}
+.qpill .e{font:700 21px/1.2 var(--body);color:var(--ink2)}
+
+/* 2 · own versus hold */
+.oh{border-radius:30px;background:var(--lead);box-shadow:0 20px 44px -30px rgba(13,34,51,.45);padding:38px 42px}
+.oh-top{display:flex;justify-content:space-between;align-items:flex-end}
+.oh-top .k{color:var(--ink2);font:700 24px/1.3 var(--body)}
+.oh-top .k .a{display:block;direction:rtl;font:700 26px/1.3 var(--ar-body);color:var(--ink)}
+.oh-top .fig{font:800 96px/1 var(--display);letter-spacing:-.035em}
+.bar{position:relative;height:30px;margin:28px 0 8px}
+.bar i{position:absolute;top:0;bottom:0;border-radius:15px}
+.rows{margin-top:18px}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 18px;align-items:center;padding:16px 0;border-top:2px solid rgba(13,34,51,.07)}
+.row:first-child{border-top:0}
+.row .l{display:flex;align-items:center;gap:14px;color:var(--ink2);font:600 24px/1.25 var(--body)}
+.row .l i{width:18px;height:18px;border-radius:6px;background:var(--c);flex:none}
+.row .l .a{direction:rtl;font:700 24px/1.25 var(--ar-body);color:var(--ink);margin-left:auto;padding-right:20px}
+.row b{font:800 32px/1 var(--display);letter-spacing:-.02em}
+.row.res{margin-top:6px;padding:16px 20px;border:0;border-radius:16px;background:rgba(20,168,116,.13)}
+.row.res .l{color:var(--ink);font-weight:800}
+.row.res b{color:var(--green-text)}
+
+/* 3 · runway */
+.rw{border-radius:30px;background:var(--paper);box-shadow:0 20px 44px -30px rgba(13,34,51,.45);padding:30px 34px 26px;position:relative}
+.rw svg{display:block;width:100%;height:auto}
+.rw .grid line{stroke:var(--line);stroke-width:2}
+.rw text{fill:var(--muted);font:700 18px var(--body)}
+.call{position:absolute;right:34px;top:30px;padding:16px 20px;border-radius:18px;background:#fff;box-shadow:0 14px 30px -18px rgba(13,34,51,.5);border-top:5px solid var(--rose-strong)}
+.call .a{direction:rtl;text-align:right;font:700 21px/1.2 var(--ar-body)}
+.call .e{color:var(--ink2);font:700 17px/1.2 var(--body);margin-top:4px}
+.call .v{font:800 44px/1 var(--display);letter-spacing:-.02em;margin-top:8px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.chip{display:flex;justify-content:space-between;align-items:center;gap:10px;border-radius:14px;background:#fff;padding:14px 18px;border-left:7px solid var(--c);font:700 20px/1.2 var(--body);color:var(--ink2)}
+.chip .a{direction:rtl;font:700 21px/1.2 var(--ar-body);color:var(--ink)}
+
+/* 4 · Egypt */
+.eg{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.egt{border-radius:24px;background:var(--paper);box-shadow:0 16px 34px -24px rgba(13,34,51,.45);padding:22px 26px;display:flex;flex-direction:column;gap:6px;min-height:228px}
+.egt .top{display:flex;justify-content:space-between;align-items:center}
+.egt .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--c);color:#fff;font:800 20px/1 var(--body)}
+.egt .a{direction:rtl;text-align:right;font:700 28px/1.2 var(--ar-body)}
+.egt .e{text-align:right;color:var(--ink2);font:700 19px/1.2 var(--body)}
+.egt .v{margin-top:auto;font:800 42px/1 var(--display);letter-spacing:-.02em}
+.egt .how{display:flex;flex-direction:column;gap:4px;padding-top:12px;border-top:2px solid rgba(13,34,51,.07)}
+.egt .how .a{font:600 20px/1.35 var(--ar-body);color:var(--ink2)}
+.egt .how .e{text-align:left;font:600 17px/1.3 var(--body);color:var(--muted)}
+
+/* 5 · the answer */
+.ans{border-radius:34px;background:#fff;box-shadow:0 24px 50px -30px rgba(13,34,51,.5);padding:34px 40px;text-align:center}
+.ans img{height:72px;width:auto;margin:0 auto 26px;display:block}
+.ans .nw{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px;border-radius:22px;background:var(--lead)}
+.ans .nw .k{display:flex;gap:14px;align-items:baseline;font:700 22px/1.3 var(--body);color:var(--ink2)}
+.ans .nw .k .a{direction:rtl;font:700 24px/1.3 var(--ar-body);color:var(--ink)}
+.ans .nw .v{font:800 84px/1 var(--display);letter-spacing:-.035em}
+.ans .nw small{color:var(--muted);font:600 18px/1.3 var(--body)}
+.pts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.pt{border-radius:18px;background:var(--t-green);padding:16px 12px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.pt .a{direction:rtl;font:700 23px/1.25 var(--ar-body)}
+.pt .e{color:var(--ink2);font:700 18px/1.2 var(--body)}
+.go{display:flex;justify-content:center;gap:16px;margin-top:26px}
+.go>span{display:inline-flex;align-items:center;gap:12px;padding:18px 30px;border-radius:999px;font:800 25px/1 var(--body)}
+.go .dl{background:var(--vivid);color:#fff}
+.go .dl .a{direction:rtl;font:700 25px/1 var(--ar-body)}
+.go .url{background:var(--t-azure);color:var(--nile)}
+</style></head><body>
+
+<!-- 1 · The question: Mohab's money in nine places, no one number -->
+<section class="s">
+  <div class="ar"><h2>معاك كام فلوس؟<br><em>بالرقم.</em></h2><p>بنك، ودهب في البيت، وشهادة، ودولارات. وكل واحد بيوريك حتته.</p></div>
+  <div class="ex">
+    <div class="places">
+      <div class="pl" style="--c:#0B6DD6"><span class="tag">CIB</span><span class="a">حساب المرتب</span><span class="e">CIB Payroll</span><span class="v num">157,582</span></div>
+      <div class="pl" style="--c:#0A6B4E"><span class="tag">NBE</span><span class="a">شهادة الأهلي</span><span class="e">NBE certificate</span><span class="v num">100,000</span></div>
+      <div class="pl" style="--c:#B07A1A"><span class="tag">21K</span><span class="a">دهب في البيت</span><span class="e">Gold at home</span><span class="v num">110,295</span></div>
+      <div class="pl" style="--c:#0A2442"><span class="tag">THN</span><span class="a">أسهم ثاندر</span><span class="e">THNDR shares</span><span class="v num">48,996</span></div>
+      <div class="pl" style="--c:#14A874"><span class="tag">$</span><span class="a">توفير بالدولار</span><span class="e">Dollar savings</span><span class="v num">$1,000</span></div>
+      <div class="pl" style="--c:#C93D72"><span class="tag">VF</span><span class="a">فودافون كاش</span><span class="e">Vodafone Cash</span><span class="v num">2,455</span></div>
+      <div class="pl" style="--c:#304A5C"><span class="tag">EGP</span><span class="a">كاش في المحفظة</span><span class="e">Cash wallet</span><span class="v num">10,564</span></div>
+      <div class="pl" style="--c:#566E7E"><span class="tag">+2</span><span class="a">ومكانين كمان</span><span class="e">Two more places</span><span class="v num">514,211</span></div>
+    </div>
+    <div class="qpill"><span><span class="a">٩ أماكن. ولا رقم واحد.</span><span class="e">Nine places. No single number.</span></span><b>?</b></div>
+    <div class="src"><span>Mohab, our sample household, 2026-10-04</span><span class="a">مهاب، مثالنا</span></div>
+  </div>
+  <div class="en"><h2>How Much Do You Have?<br><em>In One Number.</em></h2><p>A bank, gold at home, a certificate, dollars. Each shows only its own corner.</p></div>
+  <div class="foot"><span class="brand"><img src="../../lightning-lockup.svg" alt="Lightning">· lightningeg.com</span><span class="prog"><span class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></span>1/5</span></div>
+</section>
+
+<!-- 2 · Balance is not wealth (an illustration) -->
+<section class="s">
+  <div class="ar"><h2>رصيدك<br><em>مش هو ثروتك.</em></h2><p>جزء من اللي في حسابك بتاع حد تاني، وجزء عليك أصلاً.</p></div>
+  <div class="ex">
+    <div class="oh">
+      <div class="oh-top"><span class="k"><span class="a">في حسابك في البنك</span>In your bank account</span><span class="fig num">100,000<span class="unit">EGP</span></span></div>
+      <div class="bar"><i style="left:0;width:calc(65% - 4px);background:var(--azure)"></i><i style="left:65%;width:calc(10% - 4px);background:var(--neutral)"></i><i style="left:75%;width:25%;background:var(--rose)"></i></div>
+      <div class="rows">
+        <div class="row"><span class="l" style="--c:var(--neutral)"><i></i>Your sister’s money, kept for her<span class="a">فلوس أختك، شايلها لها</span></span><b class="num">−10,000</b></div>
+        <div class="row"><span class="l" style="--c:var(--rose)"><i></i>Car instalments still to pay<span class="a">أقساط العربية اللي عليك</span></span><b class="num">−25,000</b></div>
+        <div class="row res"><span class="l" style="--c:var(--azure)"><i></i>Yours<span class="a">بتاعك فعلاً</span></span><b class="num">65,000</b></div>
+      </div>
+    </div>
+    <div class="src"><span>An illustration</span><span class="a">توضيح</span></div>
+  </div>
+  <div class="en"><h2>Your Balance<br><em>Is Not Your Wealth.</em></h2><p>Some of it is someone else’s. Some of it is already owed.</p></div>
+  <div class="foot"><span class="brand"><img src="../../lightning-lockup.svg" alt="Lightning">· lightningeg.com</span><span class="prog"><span class="dots"><i></i><i class="on"></i><i></i><i></i><i></i></span>2/5</span></div>
+</section>
+
+<!-- 3 · The months ahead: Mohab's cash runway -->
+<section class="s">
+  <div class="ar"><h2>رصيدك ميعرفش<br><em>إن الإيجار جاي.</em></h2><p>المرتب والفواتير والأقساط بيحرّكوا فلوسك قبل ما تبص تاني.</p></div>
+  <div class="ex">
+    <div class="rw">
+      <svg viewBox="0 0 800 330" aria-hidden="true">
+        <defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B6DD6" stop-opacity=".22"/><stop offset="1" stop-color="#0B6DD6" stop-opacity="0"/></linearGradient></defs>
+        <g class="grid"><line x1="20" x2="20" y1="10" y2="296"/><line x1="276" x2="276" y1="10" y2="296"/><line x1="532" x2="532" y1="10" y2="296"/><line x1="780" x2="780" y1="10" y2="296"/></g>
+        <text x="20" y="326">2026-09</text><text x="276" y="326" text-anchor="middle">2026-10</text><text x="532" y="326" text-anchor="middle">2026-11</text><text x="780" y="326" text-anchor="end">2026-12</text>
+        <path d="M20 30 C 150 45, 180 120, 276 150 S 436 262, 532 279 S 690 195, 780 165 L780 296 L20 296 Z" fill="url(#f)"/>
+        <path d="M20 30 C 150 45, 180 120, 276 150 S 436 262, 532 279 S 690 195, 780 165" fill="none" stroke="#0B6DD6" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="532" cy="279" r="20" fill="none" stroke="#C93D72" stroke-width="3"/><circle cx="532" cy="279" r="8" fill="#C93D72"/>
+        <circle cx="20" cy="30" r="9" fill="#0A2442"/>
+      </svg>
+      <div class="call"><div class="a">أقل نقطة قدام</div><div class="e">Lowest point ahead · 2026-11</div><div class="v num">101,534<span class="unit">EGP</span></div></div>
+      <div class="chips">
+        <div class="chip" style="--c:var(--green)">Salary lands<span class="a">المرتب بينزل</span></div>
+        <div class="chip" style="--c:var(--rose)">Bills leave<span class="a">الفواتير بتخرج</span></div>
+        <div class="chip" style="--c:var(--rose)">Loan instalment<span class="a">قسط القرض</span></div>
+        <div class="chip" style="--c:var(--rose)">Emergency fund<span class="a">صندوق الطوارئ</span></div>
+      </div>
+    </div>
+    <div class="src"><span>Illustrative path between two real month ends of Mohab’s plan</span><span class="a">مسار توضيحي من خطة مهاب</span></div>
+  </div>
+  <div class="en"><h2>Your Balance Doesn’t Know<br><em>the Rent Is Due.</em></h2><p>Salary, bills and instalments move your cash before you look again.</p></div>
+  <div class="foot"><span class="brand"><img src="../../lightning-lockup.svg" alt="Lightning">· lightningeg.com</span><span class="prog"><span class="dots"><i></i><i></i><i class="on"></i><i></i><i></i></span>3/5</span></div>
+</section>
+
+<!-- 4 · Money in Egypt -->
+<section class="s">
+  <div class="ar"><h2>فلوس مصر<br><em>مش في البنك بس.</em></h2><p>تطبيق الميزانية يعرف البنك والكارت. وهنا فيه دهب وشهادات ودولار وجمعية.</p></div>
+  <div class="ex">
+    <div class="eg">
+      <div class="egt" style="--c:#B07A1A"><div class="top"><span class="ic">21K</span><span><div class="a">دهب في البيت</div><div class="e">Gold at home</div></span></div><span class="v num">110,295<span class="unit">EGP</span></span><div class="how"><span class="a">بسعر الجرام حسب العيار</span><span class="e">Valued per gram of its karat</span></div></div>
+      <div class="egt" style="--c:#0A6B4E"><div class="top"><span class="ic">NBE</span><span><div class="a">شهادة الأهلي</div><div class="e">NBE 3-year certificate</div></span></div><span class="v num">100,000<span class="unit">EGP</span></span><div class="how"><span class="a">الفايدة زي ما البنك بيصرفها</span><span class="e">Interest the way the bank pays it</span></div></div>
+      <div class="egt" style="--c:#14A874"><div class="top"><span class="ic">$</span><span><div class="a">توفير بالدولار</div><div class="e">Dollar savings</div></span></div><span class="v num">1,000<span class="unit">USD</span></span><div class="how"><span class="a">بالسعر اللي اشتريت بيه</span><span class="e">51,600 EGP at 51.60, or the rate you got</span></div></div>
+      <div class="egt" style="--c:#C93D72"><div class="top"><span class="ic">٢</span><span><div class="a">الجمعية</div><div class="e">Gam’eya</div></span></div><span class="v num">2,000<span class="unit">EGP</span></span><div class="how"><span class="a">قسط الشهر، محسوب قبل المرتب</span><span class="e">This month’s turn, before payday</span></div></div>
+    </div>
+    <div class="src"><span>Mohab, our sample household, 2026-10-04</span><span class="a">مهاب، مثالنا</span></div>
+  </div>
+  <div class="en"><h2>Money in Egypt<br><em>Isn’t Only in a Bank.</em></h2><p>A typical budgeting app knows a bank and a card. Here there’s gold, certificates, dollars and a gam’eya.</p></div>
+  <div class="foot"><span class="brand"><img src="../../lightning-lockup.svg" alt="Lightning">· lightningeg.com</span><span class="prog"><span class="dots"><i></i><i></i><i></i><i class="on"></i><i></i></span>4/5</span></div>
+</section>
+
+<!-- 5 · The answer, once -->
+<section class="s">
+  <div class="ar"><h2>فلوسك كلها.<br><em>في صورة واحدة.</em></h2><p>سجل واحد مشفّر على موبايلك: اللي تملكه، واللي لغيرك، والشهور الجاية.</p></div>
+  <div class="ex">
+    <div class="ans">
+      <div class="nw"><span class="k"><span class="a">صافي ثروة مهاب</span>Mohab’s net worth</span><span class="v num">910,304<span class="unit">EGP</span></span><small>Nine places, less what he holds for family and what he owes</small></div>
+      <div class="pts">
+        <div class="pt"><span class="a">ببلاش النهارده</span><span class="e">Free today</span></div>
+        <div class="pt"><span class="a">من غير كلمة سر البنك</span><span class="e">No bank login</span></div>
+        <div class="pt"><span class="a">من غير سيرفر</span><span class="e">No server</span></div>
+      </div>
+      <div class="go"><span class="dl"><span class="a">نزّل ببلاش</span><span>·</span>Download free</span><span class="url">lightningeg.com</span></div>
+    </div>
+  </div>
+  <div class="en"><h2>All Your Money.<br><em>One Clear Picture.</em></h2><p>One encrypted ledger on your phone: what you own, what you hold for others, and the months ahead.</p></div>
+  <div class="foot"><span class="brand"><img src="../../lightning-lockup.svg" alt="Lightning">· lightningeg.com</span><span class="prog"><span class="dots"><i></i><i></i><i></i><i></i><i class="on"></i></span>5/5</span></div>
+</section>
+
+</body></html>
