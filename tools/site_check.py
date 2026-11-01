@@ -84,6 +84,7 @@ for name, _, _ in geeks_shell.PAGES:
         errors.append(f"{name}: the For Geeks top bar or footer is out of date (run python tools/geeks_shell.py)")
 
 errors += app_release.problems()  # every page that names the current app release agrees with app-release.json
+errors += app_release.notes_sync(False)  # Downloads and the release log show release-notes.json
 errors += comparisons.check()  # the comparison pages match comparisons.json (tools/comparisons.py)
 errors += shots.errors()  # screenshot paths and sizes agree with assets/app/shots.json
 
