@@ -22,13 +22,14 @@ let dataFile = process.env.ANALYTICS_DATA;
 if (!dataFile || !existsSync(dataFile)) { dataFile = '/tmp/analytics-sample.json'; execFileSync('node', [new URL('../../analytics/tests/gen-data.js', import.meta.url).pathname, dataFile]); }
 const sample = JSON.parse(readFileSync(dataFile, 'utf8')).rows;
 
-async function boot({ rows = sample, verified = true, fail = false, hash = '#analytics' } = {}) {
+async function boot({ downloads = [], rows = sample, verified = true, fail = false, hash = '#analytics' } = {}) {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://lightningeg.com/admin.html' + hash, virtualConsole: new VirtualConsole(), pretendToBeVisual: true });
   const w = dom.window, calls = [];
   w.FG = { say: e => e.message, sb: { rpc: async (name, args) => {
     calls.push({ name, args: JSON.parse(JSON.stringify(args || {})) });
     if (fail) return { data: null, error: { message: 'MFA administrator required' } };
     if (name === 'admin_page_views') { const o = args.p_offset, l = args.p_limit; return { data: { total: rows.length, live_from: '2026-10-14', rows: rows.slice(o, o + l) }, error: null }; }
+    if (name === 'admin_downloads') return { data: downloads, error: null };
     return { data: {}, error: null };
   } } };
   w.eval(read('analytics/rules.js')); w.eval(read('analytics/insights.js'));
@@ -113,6 +114,19 @@ await test('the page code writes no markup, and the old key flow is gone', async
   const js = read('js/owner-decisions.js');
   assert.doesNotMatch(js, /innerHTML|insertAdjacentHTML|script\.google\.com|readKey|ANALYTICS_READ_KEY/);
   assert.match(read('analytics/dashboard.html'), /admin\.html#analytics/);
+});
+
+
+await test('GitHub download snapshots feed the real-download figures', async () => {
+  const day = k => new Date(Date.now() - k * 864e5).toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
+  const downloads = [30, 20, 10, 5, 0].map((k, i) => ({ date: day(k), tag: 'v1.5.1', file: 'Lightning-windows.zip', platform: 'windows', count: 100 + i * 7 }));
+  const p = await boot({ downloads });
+  assert.ok(p.calls.some(c => c.name === 'admin_downloads' && c.args.p_days === 63));
+  p.$('an-tab-numbers').click();
+  assert.match(p.$('an-numbers').textContent, /Real downloads \(GitHub\)/);
+  assert.doesNotMatch(p.$('dx-tiles').textContent, /Appears after two daily GitHub snapshots/);
+  p.$('an-tab-details').click();
+  assert.match(p.$('dx-details-box').textContent, /GitHub downloads by file/);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
