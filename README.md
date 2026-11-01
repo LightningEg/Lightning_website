@@ -70,7 +70,7 @@ js/analytics.js     analytics in two tiers and the consent bar (see Analytics an
 css/consent.css     the consent bar and the two choice buttons
 privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 2026-10-13): numbered sections, one point per bullet, the article layout (css/blog.css), no hero, cards or signup band; ar/privacy.html in Arabic
 css/footer.css       the site footer (Contact Us, then brand and links): self-contained tokens, light and dark, English and Arabic
-tools/footer.py     writes the footer into every page from one source: contact details, links and words in one place (the testers' chat row links WhatsApp and Discord, owner 2026-10-15). Run `python tools/footer.py` after changing them (`--check` lists pages that are out of date). Its Explore column ends with Contribute, and the Arabic one links the Arabic Contribute page. The footer is shared site chrome, so a footer change needs no new release IDs
+tools/footer.py     writes the footer into every page from one source: contact details, links and words in one place (the community chat row links WhatsApp and Discord, owner 2026-10-15). Run `python tools/footer.py` after changing them (`--check` lists pages that are out of date). Its Explore column ends with Contribute, and the Arabic one links the Arabic Contribute page. The footer is shared site chrome, so a footer change needs no new release IDs
 tools/release.py    archives pages and gives them new release IDs before you change them (see Version identity and archive)
 tools/site_check.py checks links, JSON-LD, snapshots, the Version Archive against the registry, and title and description lengths; run it before every push
 analytics/          goatcounter_daily.py (sends GoatCounter's totals to the private receiver) insights.js and rules.js (the owner console's Analytics tabs run them in the browser) and dashboard.html (a redirect to the console). No data files: nothing analytical is committed
@@ -90,7 +90,7 @@ css/ux-test.css     shared UX test feedback rail
 js/ux-test.js       shared UX test behavior
 js/current-status.js multi-ticket app feedback form behavior
 apps-script/        Apps Script receiver patches
-assets/samples/     fictional Mohab CSV files for safe beta imports
+assets/samples/     fictional Mohab CSV files for safe sample imports
 assets/brand/       the two-leaf logo and icons (see Logo below); social-card.png is the 1200 × 630 link preview
 guideline/            [Guideline map](guideline/README.md), four surface documents, plus themes.md (how a theme is made, part by part): app.html (A, the PC app), website.html (B, Normal: this site except For Geeks), phone.html (C, the phone) and coders.html (D, Coders: the For Geeks pages); same folder as the app's guideline/
 ```
@@ -127,7 +127,7 @@ The calculator on B shows the capital that would pay what you keep each month: m
 
 ## UX test responses
 
-Every landing page includes the same scroll-aware UX feedback rail. It sends an internal release identifier rather than the visible landing-page name:
+Until 2026-11-01 every landing page included the same scroll-aware UX feedback rail (`js/ux-test.js`, no longer loaded; archived pages still show it). It sends an internal release identifier rather than the visible landing-page name:
 
 - `UX-2026.09.28.01` — `index.html` (before the hybrid)
 - `UX-2026.10.01.06` — `index.html` (hybrid)
@@ -207,7 +207,7 @@ UX responses go to the survey sheet until the Apps Script receiver routes them. 
 
 ## Downloads and app feedback
 
-[Downloads](current-status.html) is the shared downloads hub for both landing pages. It keeps beta orientation, harmless Mohab sample CSVs, release notes/download links and app feedback in one predictable place. The header and the **Testing** panel both link to it. Home on this shared page returns to the landing version a visitor most recently viewed.
+[Downloads](current-status.html) is the shared downloads hub for both landing pages. It keeps install steps, harmless Mohab sample CSVs, release notes/download links and app feedback in one predictable place. The header and the **Testing** panel both link to it. Home on this shared page returns to the landing version a visitor most recently viewed.
 
 The app feedback form accepts multiple tickets at once, with up to five screenshots per ticket and ten per submission. Testers can choose PNG, JPEG or WebP images, or paste them into a ticket description. PNG screenshots are re-encoded losslessly at their original dimensions; the smaller encoding is kept only when it actually saves space. JPEG and WebP files are sent unchanged. The browser prepares each image as soon as it is attached, then sends the images with the tickets in one `form_type=app_feedback` request. Submitting gives the form back at once: the request runs in the background (the page asks before closing while it does), and if it fails the tickets and images return to the form.
 
@@ -339,6 +339,8 @@ Both landing pages, How It Works and the brand guidelines support light and dark
 - There is one live landing page, so **Home** always goes to `index.html`. Archived versions are on [Version Archive](versions.html).
 
 ## Landing pages
+
+**Since 2026-11-01 (`UX-2026.11.01.10`) the site speaks as a finished product (owner: "we stopped being beta").** No page says beta, tester or what is still open; it says Lightning improves with every release (the signup band label is *Shape what comes next* / *شاركنا في اللي جاي*; the release log's last card is *Next Up*). Older versions are named by number alone (Lightning 1.1, 0.4.0); download URLs and form values keep their tags. The Version Archive and `archive/` keep their historical names. The home page lost the Net Worth card under the nine places (own versus hold makes that point), the developer activity line (the pulse shows people's shared stories only) and the Arabic-site line in Made for Egypt; the hero note links *Installing on Android* to Downloads › Install, which now says plainly how to install the APK. The scroll-aware UX test rail (`js/ux-test.js`) no longer loads on any page.
 
 **Since 2026-11-01 (`UX-2026.11.01.07`) the home page argues what makes Lightning different; Features shows the product.** Order: hero (unchanged; the note line says free today, no bank login, no server), your money in many places counted as one (the wow moment, unchanged), own versus hold (Your Balance Is Not Your Wealth.: the illustration above, 100,000 in the account, 10,000 your sister's, 25,000 car instalments, 65,000 yours), the runway (its line now starts with the problem: today's balance doesn't know the rent is due), made for Egypt (Built for Money in Egypt.: one line comparing with a typical budgeting app, then four of Mohab's tiles: NBE 3-year certificate 100,000, gold at home 110,295, dollar savings 1,000 USD = 51,600 at 51.60, gam'eya 2,000 before payday), the answer in one line with one button (See every feature), good questions (free today, never "indefinitely"), animated themes and the signup band. Download stays in the hero and the header only (B06: a page never shows the same action twice). The phone and PC demo and the three phone screens moved to Features (`UX-2026.11.01.08`, B01 3.37). The Arabic home mirrors it in Egyptian Arabic, and gained the themes section; its end-of-month section (تقدر تصرف كام لحد المرتب؟) and the promise left, and the sync section moved to the Arabic Features. A first attempt, five equal advantage sections, was merged and reverted on 2026-11-01 (LightningEg/Lightning_website#152, #153).
 
