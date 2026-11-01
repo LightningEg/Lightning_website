@@ -2,11 +2,16 @@
 
     python tools/app_release.py            # check: every page that names the current release agrees with app-release.json
     python tools/app_release.py sync       # show what a new release changes; add --write to apply it
+    python tools/app_release.py notes      # check that Downloads and the release log show release-notes.json; add --write to render it
 
 app-release.json is the one place the current version, date, commit and the two download files are written. After an app
 release: edit it, run `sync --write`, read the diff, then add the release-log row and the version-archive rows
 (tools/release.py). Older versions stay where history belongs (release-log.html, versions.html, archive/, app-feedback's
 build list, which gets one new option by hand).
+
+release-notes.json holds the current release's plain-language notes, English and Egyptian Arabic side by side (plan item 8Y).
+They are shown on Downloads (a "What's new" section) and as the Highlights of the newest entry in the release log, in both
+languages, between <!--notes--> markers; `notes --write` renders them, the check fails when a page differs.
 """
 from __future__ import annotations
 
@@ -75,14 +80,68 @@ def sync(write: bool) -> list[str]:
     return changes
 
 
+NOTES = ROOT / "release-notes.json"
+START, END = "<!--whats-new-->", "<!--/whats-new-->"
+COPY = {  # the Downloads section's own words
+    "en": ("What’s new", "Notes for Lightning {v}", "Plain words, from the release notes. The full list is in the release log."),
+    "ar": ("الجديد", "ملاحظات لايتنينج {v}", "بكلام بسيط، من ملاحظات الإصدار. القايمة الكاملة في سجل الإصدارات."),
+}
+
+
+def esc(text: str) -> str:
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def render_notes(lang: str) -> dict[str, str]:
+    """The three generated fragments of one language: the Downloads section, and the release log's Highlights list."""
+    data = json.loads(NOTES.read_text(encoding="utf-8"))
+    t, k = (lang + "_title"), lang
+    label, head, lead = COPY[lang]
+    cards = "".join(f'<article class="card card-support"><h3>{esc(i[t])}</h3><p>{esc(i[k])}</p></article>' for i in data["items"])
+    section = (f'{START}<section class="d-section" id="whats-new" aria-labelledby="whats-new-title"><div class="d-head"><p class="label">{label}</p>'
+               f'<h2 id="whats-new-title">{head.format(v=data["version"])}</h2><p>{lead}</p></div><div class="status-checklist">{cards}</div></section>{END}')
+    log = '<ul class="log-list">' + "".join(f'<li><div><b>{esc(i[t])}</b> {esc(i[k])}</div></li>' for i in data["items"]) + "</ul>"
+    return {"section": section, "log": log}
+
+
+def notes_sync(write: bool) -> list[str]:
+    """Pages whose generated notes differ from release-notes.json (rewritten when write)."""
+    data, out = json.loads(NOTES.read_text(encoding="utf-8")), []
+    if data["version"] != record()["version"]:
+        out.append(f"release-notes.json is for {data['version']}, the release is {record()['version']}")
+    for lang, prefix in (("en", ""), ("ar", "ar/")):
+        frag = render_notes(lang)
+        status, log = ROOT / f"{prefix}current-status.html", ROOT / f"{prefix}release-log.html"
+        text = new = status.read_text(encoding="utf-8")
+        if START in text:
+            new = re.sub(re.escape(START) + ".*?" + re.escape(END), lambda _: frag["section"], text, flags=re.S)
+        else:  # first time: after the intro note, before the install steps
+            new = re.sub(r'(</header>\n)', lambda m: m.group(1) + "\n  " + frag["section"] + "\n", text, count=1)
+        if new != text:
+            out.append(f"{status.relative_to(ROOT)}: the What’s new section differs from release-notes.json")
+            if write:
+                status.write_text(new, encoding="utf-8")
+        text = new = log.read_text(encoding="utf-8")
+        new = re.sub(r"<!--notes-->.*?<!--/notes-->", lambda _: "<!--notes-->" + frag["log"] + "<!--/notes-->", text, count=1, flags=re.S)
+        if new != text:
+            out.append(f"{log.relative_to(ROOT)}: the newest entry's highlights differ from release-notes.json")
+            if write:
+                log.write_text(new, encoding="utf-8")
+    return out
+
+
 def main() -> int:
+    if sys.argv[1:2] == ["notes"]:
+        found = notes_sync("--write" in sys.argv)
+        print(("wrote: " if "--write" in sys.argv else "") + ("\n".join(found) or "Downloads and the release log show release-notes.json"))
+        return 0 if "--write" in sys.argv or not found else 1
     if sys.argv[1:2] == ["sync"]:
         changed = sync("--write" in sys.argv)
         print(("wrote " if "--write" in sys.argv else "would change ") + (", ".join(changed) or "nothing"))
         print("By hand: app-feedback.html and ar/app-feedback.html get an option for the new build; release-log.html and versions.html get a row.")
         return 0
-    found = problems()
-    print("\n".join(found) or "the pages agree with app-release.json")
+    found = problems() + notes_sync(False)
+    print("\n".join(found) or "the pages agree with app-release.json and release-notes.json")
     return 1 if found else 0
 
 

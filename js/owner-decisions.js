@@ -46,11 +46,11 @@
     const generation = ++authGeneration;
     $('dx-status').hidden = false; $('dx-status').textContent = 'Loading…';
     try {
-      const [data] = await Promise.all([fetchRows(Math.min(period * 2, 90)), loadRegistry()]);
+      const [data, dl] = await Promise.all([fetchRows(Math.min(period * 2, 90)), FG.sb.rpc('admin_downloads', {p_days: period * 2 + 7}), loadRegistry()]);
       if (generation !== authGeneration) return;
       wide = I.build(data.rows, period * 2); cur = I.build(data.rows, period);
       [cur, wide].forEach(a => { a.meta.live_from = data.live; a.meta.truncated = data.truncated; });
-      daily = []; events = []; downloads = []; journeys = {rows: [], dropped: 0};
+      daily = []; events = []; downloads = dl && !dl.error && Array.isArray(dl.data) ? dl.data : []; journeys = {rows: [], dropped: 0};
       await prepareContext();
       if (generation !== authGeneration) return;
       $('dx-status').hidden = true; render();
@@ -284,7 +284,7 @@
       ['Page views', cv, pv, seven(s.views), hasPrev],
       ['Download presses', cp, pp, seven(s.pressed), hasPrev],
       ['Real downloads (GitHub)', realCur ? realCur.value : 0, realPrev ? realPrev.value : 0, seven(s.real), !!(realCur && realPrev),
-        realCur ? '' : real.snapshots < 2 ? 'GitHub download counts are not in the console yet.' : `Snapshots start ${dayName(real.first)}: no total from before this period to count from.`],
+        realCur ? '' : real.snapshots < 2 ? 'Appears after two daily GitHub snapshots.' : `Snapshots start ${dayName(real.first)}: no total from before this period to count from.`],
       ['Signups sent', sumDaily(curRows, 'submitted'), sumDaily(prevRows, 'submitted'), seven(s.submitted), hasPrev],
       ['Download presses per 100 page views', cv ? Math.round(cp / cv * 100) : 0, pv ? Math.round(pp / pv * 100) : 0, seven(s.views.map((v, i) => (v ? s.pressed[i] / v * 100 : 0))), hasPrev],
     ] : [['Page views', cur ? cur.views : 0, 0, [], false], ['Download presses', cur ? cur.downloaded : 0, 0, [], false]];
@@ -401,7 +401,7 @@
     const s = metricSeries(), dlMax = Math.max(1, ...s.pressed, ...s.real);
     box.append(chart('Page views', s.dates, s.views, {markers: releaseMarkers()}), chart('Signups sent', s.dates, s.submitted),
       chart('Download presses', s.dates, s.pressed, {max: dlMax, note: 'Same scale as real downloads beside it.'}),
-      chart('Real downloads (GitHub)', s.dates, s.real, {max: dlMax, cls: 'real', note: s.snapshots < 2 ? 'GitHub download counts are not in the console yet.' : 'The rise in GitHub’s count since the snapshot before; a missed day lands on the next one.'}));
+      chart('Real downloads (GitHub)', s.dates, s.real, {max: dlMax, cls: 'real', note: s.snapshots < 2 ? 'Appears after two daily GitHub snapshots.' : 'The rise in GitHub’s count since the snapshot before; a missed day lands on the next one.'}));
   }
 
   // ---- 6. channels ----

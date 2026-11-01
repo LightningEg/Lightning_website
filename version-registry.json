@@ -3317,15 +3317,15 @@
       "id": "UX-2026.10.30.03",
       "name": "Downloads · Lightning 1.5.4",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.03.html"
     },
     {
       "id": "UX-2026.10.30.04",
       "name": "Release Log · Lightning 1.5.4",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.04.html"
     },
     {
       "id": "UX-2026.10.30.05",
@@ -3372,6 +3372,27 @@
     {
       "id": "UX-2026.10.30.11",
       "name": "Version Archive · Now with animated themes",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.11.html"
+    },
+    {
+      "id": "UX-2026.11.01.01",
+      "name": "Downloads · What's new in 1.5.4",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.02",
+      "name": "Release log · Notes from one source",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.03",
+      "name": "Version Archive · Notes from one source",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
