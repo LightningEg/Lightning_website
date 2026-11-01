@@ -1,0 +1,18 @@
+{
+  "version": "1.5.4",
+  "source": "The release notes of the app repository (RELEASES.md), shortened to what a person would notice. English is the source; the Arabic beside it is written in Egyptian Arabic.",
+  "items": [
+    {"en_title": "A tidier PC, tab by tab.", "en": "Each tab opens on its answer: more transactions on the first screen, a read-only budget with an Edit plan button, and fewer sentences that explain the screen.",
+     "ar_title": "الكمبيوتر أهدى، تبويب تبويب.", "ar": "كل تبويب بيفتح على الإجابة: معاملات أكتر في أول شاشة، وميزانية للقراية بس فيها زرار تعديل الخطة، وكلام أقل بيشرح الشاشة."},
+    {"en_title": "Safety agrees with itself.", "en": "Reserves and Limits show the same emergency fund, and Loans, Planner and Zakat lead with their figure.",
+     "ar_title": "الأمان متفق مع نفسه.", "ar": "الاحتياطي والحدود بيقولوا نفس صندوق الطوارئ، والقروض والمخطط والزكاة بيبدأوا برقمهم."},
+    {"en_title": "A calmer phone.", "en": "One Needs you strip, Budget shown once, Transactions on this month, and the next payment after payday.",
+     "ar_title": "موبايل أهدى.", "ar": "شريط واحد لـ «محتاجك»، والميزانية مرة واحدة، والمعاملات على الشهر ده، والدفعة الجاية بعد القبض."},
+    {"en_title": "Fewer surprises.", "en": "A conversion far from the market rate asks once before saving; a form sent twice unlocks or saves once; nearby pairing comes first when you connect a device.",
+     "ar_title": "مفاجآت أقل.", "ar": "التحويل البعيد عن سعر السوق بيسألك مرة قبل الحفظ؛ والفورم اللي اتبعت مرتين بيفتح أو بيحفظ مرة واحدة؛ والاقتران القريب بييجي الأول لما توصّل جهاز."},
+    {"en_title": "Loan payments stay put.", "en": "Skipping a loan payment no longer drops a part payment.",
+     "ar_title": "أقساط القرض ثابتة.", "ar": "تخطّي قسط قرض مبقاش بيشيل دفعة جزئية."},
+    {"en_title": "Unlocking behaves.", "en": "Pressing Enter and then clicking no longer shows “This form expired”.",
+     "ar_title": "الفتح من غير مشاكل.", "ar": "الضغط على Enter وبعده كليك مبقاش بيطلّع «الفورم انتهت»."}
+  ]
+}
