@@ -32,10 +32,6 @@
 <link rel="stylesheet" href="css/features.css?v=20261027-explorer-1">
 <link rel="stylesheet" href="css/theme-preview.css?v=20261029-budget-1">
 <link rel="stylesheet" href="css/feature-themes.css?v=20261030-1">
-<link rel="stylesheet" href="css/sync-demo.css?v=20261021-1">
-<script src="js/sync-demo.js?v=20261014-1" defer></script>
-<link rel="stylesheet" href="css/runway.css?v=20261012-5">
-<script src="js/runway.js?v=20261015-1" defer></script>
 <link rel="stylesheet" href="css/motion.css?v=20261006-4">
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
@@ -54,7 +50,7 @@
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261027-header-1">
 </head>
-<body data-account-page="account.html" data-ux-version="UX-2026.11.01.08" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<body data-account-page="account.html" data-ux-version="UX-2026.10.30.07" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <!-- Lucide icons, drawn at 20px with a 1.75 stroke (A15) -->
   <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
@@ -119,63 +115,6 @@
       <details class="fx-group" id="private-and-safe"><summary><span class="fx-g-label">Privacy and backups</span><span class="fx-g-title">Privacy, Backups and Recovery</span><span class="fx-g-n">9</span></summary><div class="card card-support f-card"><ul class="f-list"><li><b>Windows app.</b> No Python or other software needed.</li><li><b>Profiles.</b> Named, each encrypted and opened with its own password.</li><li><b>Recovery.</b> A 12-digit recovery key and a security question reset a forgotten password.</li><li><b>Backups.</b> One is made every time the app starts, and you can back up whenever you like.</li><li><b>Restore (early preview).</b> Choose an encrypted backup from the lock screen and bring it back.</li><li><b>Data checks.</b> Compare totals across your ledger and reports.</li><li><b>Export your numbers.</b> One workbook prepared on your device; nothing is uploaded.</li><li><b>Privacy mode.</b> The eye beside Search blurs every amount on screen.</li><li><b>Start fresh.</b> A new empty profile, with the old one left exactly as it was.</li></ul></div></details>
       <details class="fx-group" id="made-to-be-easy"><summary><span class="fx-g-label">Shortcuts</span><span class="fx-g-title">Typing Shortcuts and Everyday Settings</span><span class="fx-g-n">9</span></summary><div class="card card-support f-card"><ul class="f-list"><li><b>Sums in amount fields.</b> Type 120+35*2 and it saves 190.</li><li><b>Dates.</b> Type 31/1 or 2026-01-31, or pick from a calendar.</li><li><b>English and Egyptian Arabic.</b> Switch the language in Settings; Arabic screens read right to left, with amounts and dates in their natural order.</li><li><b>Arabic digits.</b> Amounts and dates typed with Arabic-Indic digits are understood.</li><li><b>Type and pick.</b> Choose your own accounts, categories and names by typing.</li><li><b>Month picker.</b> Pick a month; never type one.</li><li><b>Answers first.</b> Up to three one-line answers under each page title.</li><li><b>Light and dark.</b> Follows your device.</li><li><b>Sample household.</b> Try everything on a sample before you enter your own.</li></ul></div></details>
     </div>
-  </section>
-
-  <!-- 3 · Phone and PC, connected: both screens, then pair, borrow, hand back, then the phone (top selling point 1) -->
-  <section class="d-section sync-demo" id="sync">
-    <div class="d-head">
-      <p class="label">Phone and PC</p>
-      <h2>One Ledger. Two Screens. Pair Once.</h2>
-      <p>Your phone holds the ledger. Your PC borrows it when you sit down, then hands it back, over your own Wi-Fi, with no account and no server.</p>
-    </div>
-    <div class="t-sync sync-stage">
-      <figure class="sync-pc"><div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Lightning · Overview on the PC</span></div><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/sync-pc.webp" data-caption="The PC while it borrows the ledger: Borrowed from Mohab’s phone, with Hand back."><img src="assets/app/mohab-year-2026-10-21/sync-pc.webp" width="2000" height="1250" loading="lazy" alt="Lightning on the PC, Overview year to date, with the line Borrowed from Mohab’s phone and a Hand back button: net worth 910,304 EGP, +311,804 this year, what you own 988,804 and what you owe 78,500."></button><div class="sync-pc-veil" aria-hidden="true"><svg class="icon"><use href="#i-lock"/></svg><span>Ready to borrow</span></div></div><figcaption class="d-cap">On the PC: <b>Borrowed from Mohab’s phone</b> · Hand back</figcaption></figure>
-      <div class="t-link sync-link" aria-hidden="true"><div class="t-wire sync-line"><i></i><i></i></div><span class="t-lock"><svg class="icon"><use href="#i-lock"/></svg></span><div class="sync-packet"><svg class="icon"><use href="#i-lock"/></svg><span>Ledger</span></div><p>Your Wi-Fi · encrypted · no server</p></div>
-      <figure class="sync-phone"><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/sync-phone.webp" data-caption="The phone while the PC borrows: Lent to Office PC, read only."><img src="assets/app/mohab-year-2026-10-21/sync-phone.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone at the same moment: Lent to Office PC, read only, above the same Overview: net worth 910,304 EGP as of 2026-10-04."><img class="sync-phone-home" src="assets/app/mohab-year-2026-10-21/phone-overview.webp" width="720" height="1520" loading="lazy" alt=""></button></div><figcaption class="d-cap">On the phone: <b>Lent to Office PC</b> · read only</figcaption></figure>
-    </div>
-    <div class="sync-controls"><p class="sync-state" role="status" aria-live="polite">The PC has the ledger. Your phone can read it.</p><button class="btn btn-secondary sync-action" type="button" hidden>Hand back to phone</button></div>
-    <p class="t-same"><span>Same ledger, same figures: <b>+311,804</b> this year on both</span><span>One edits, the other reads</span></p>
-
-    <p class="d-more"><a href="sync-phone-and-pc-without-cloud.html">Pair once, then just open it: how pairing works</a></p>
-    <div class="t-phones">
-      <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/phone-overview.webp" data-caption="Overview on the phone: Mohab’s year to date."><img src="assets/app/mohab-year-2026-10-21/phone-overview.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone, Overview: net worth 910,304 EGP as of 2026-10-04, what needs you, and the latest transactions."></button></div><figcaption class="d-cap">On the phone: Overview</figcaption></figure>
-      <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/phone-account.webp" data-caption="CIB Payroll on the phone: day by day."><img src="assets/app/mohab-year-2026-10-21/phone-account.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone, CIB Payroll: 157,582 EGP in the account, of which 150,682 is Mohab’s and 6,900 held for others, with October’s transactions grouped by day."></button></div><figcaption class="d-cap">An account, day by day</figcaption></figure>
-      <figure><div class="t-phone-shot"><button class="zoom" type="button" data-zoom="assets/app/mohab-year-2026-10-21/phone-plan.webp" data-caption="Cash planning on the phone."><img src="assets/app/mohab-year-2026-10-21/phone-plan.webp" width="720" height="1520" loading="lazy" alt="Lightning on the phone, Cash planning: 112,288 EGP safe to spend until 2026-11-01, worked out from free cash 151,701, less 6,460 due before payday, 2,000 of gam’eya instalments, 16,558 of budget until payday, 5,500 for goals and an 8,895 emergency fund top-up."></button></div><figcaption class="d-cap">Cash planning</figcaption></figure>
-    </div>
-  </section>
-
-  <!-- 3 · The next three months: safe to spend until payday (top selling point 3) -->
-  <section class="d-section" id="ahead">
-    <div class="d-head">
-      <p class="label">Safe to spend</p>
-      <h2>Watch Your Cash Before It Moves.</h2>
-      <p>Salary, bills, loan payments and your emergency fund top-up are already in the plan.</p>
-    </div>
-    <div class="rw" data-runway data-from="117111" data-to="101534">
-      <div class="rw-stick">
-        <div class="rw-card">
-          <svg class="rw-svg" viewBox="0 0 800 340" role="img" aria-label="Cash planning: free cash eases from 117,111 EGP at the end of 2026-09 to its lowest, 101,534 EGP, in 2026-11, then recovers.">
-            <defs><linearGradient id="rw-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--azure)" stop-opacity=".22"/><stop offset="1" stop-color="var(--azure)" stop-opacity="0"/></linearGradient></defs>
-            <g class="rw-grid" aria-hidden="true"><line x1="40" x2="40" y1="10" y2="300"/><line x1="293" x2="293" y1="10" y2="300"/><line x1="546" x2="546" y1="10" y2="300"/><line x1="800" x2="800" y1="10" y2="300"/></g>
-            <g aria-hidden="true"><text class="rw-month" x="40" y="332">2026-09</text><text class="rw-month" x="293" y="332" text-anchor="middle">2026-10</text><text class="rw-month" x="546" y="332" text-anchor="middle">2026-11</text><text class="rw-month" x="800" y="332" text-anchor="end">2026-12</text></g>
-            <path class="rw-ghost" d="M40 30 C 170 45, 200 120, 293 150 S 450 262, 546 279 S 700 195, 800 165"/>
-            <path class="rw-area" d="M40 30 C 170 45, 200 120, 293 150 S 450 262, 546 279 S 700 195, 800 165 L800 300 L40 300 Z"/>
-            <path class="rw-line" d="M40 30 C 170 45, 200 120, 293 150 S 450 262, 546 279 S 700 195, 800 165"/>
-            <circle class="rw-low" cx="546" cy="279" r="18"/><circle class="rw-lowdot" cx="546" cy="279" r="7"/>
-            <circle class="rw-dot" cx="40" cy="30" r="9"/>
-          </svg>
-          <div class="rw-read"><div><div class="rw-fig"><b>101,534</b><small>EGP</small></div><div class="rw-cap" data-low="Cash at its lowest month end, 2026-11" data-go="Cash heading to its lowest point">Cash at its lowest month end, 2026-11</div></div><span class="rw-safe">Safe to spend until payday</span></div>
-          <p class="rw-note">Illustrative path between two real month ends of Mohab’s plan: 117,111 EGP in 2026-09 and 101,534 EGP in 2026-11.</p>
-        </div>
-        <ul class="rw-events" aria-label="What is already in the plan">
-          <li class="in">Salary lands<span>Income in the plan</span></li>
-          <li class="out">Bills leave<span>Counted on their due dates</span></li>
-          <li class="out">Loan instalment<span>Car loan, month by month</span></li>
-          <li class="out">Emergency fund top-up<span>Set aside before spending</span></li>
-        </ul>
-      </div>
-    </div>
-    <p class="d-more">Every number shows its working. <a href="features.html#trust">See three of Mohab’s, worked out</a></p>
   </section>
 
   <!-- App themes (owner, 2026-10-30): the themes on sale, drawn in the app's own Overview -->
