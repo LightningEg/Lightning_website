@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "date": "2026-11-01",
+  "status": "proposed: the ratings wait for the owner's sign-off (plan item 8Z1)",
+  "rule": "Every rating cites one source in `evidence_source`: a row or section of the app repository's ai/COMPETITION.md, a step of tests/test_mohab_year.py, or a named test. Kinds of tool only, never a named product. A rating moves only with its evidence.",
+  "scale": ["Low", "Medium", "High"],
+  "comparators": {
+    "spreadsheet": {"slug": "lightning-vs-spreadsheet", "en": "A spreadsheet", "ar": "جدول بيانات", "en_what": "A file of rows and formulas that you build and keep yourself.", "ar_what": "ملف صفوف ومعادلات انت اللي بتبنيه وبتصونه."},
+    "tracker": {"slug": "lightning-vs-expense-tracker-app", "en": "A traditional expense tracker", "ar": "متتبّع مصاريف تقليدي", "en_what": "A phone app where you log spending by hand or from bank SMS, usually free with ads or a small one-off fee.", "ar_what": "تطبيق موبايل بتسجّل فيه مصاريفك بإيدك أو من رسايل البنك، غالباً ببلاش بإعلانات أو بسعر صغير مرة واحدة."},
+    "cloud": {"slug": "lightning-vs-cloud-budgeting-app", "en": "A cloud budgeting app", "ar": "تطبيق ميزانية سحابي", "en_what": "An app on a company's servers that links to your bank and charges a subscription.", "ar_what": "تطبيق على سيرفرات شركة بيتربط ببنكك وبياخد اشتراك."}
+  },
+  "qualities": [
+    {"id": "log", "en": "Quick to log a spend", "ar": "سرعة تسجيل المصروف",
+     "ratings": {"lightning": "Medium", "spreadsheet": "Low", "tracker": "High", "cloud": "High"},
+     "en_note": {"lightning": "Phone capture and bank SMS on Android; no voice entry and no automatic bank feed yet.", "spreadsheet": "Open the file, find the row, type it in.", "tracker": "Built for one-tap logging; the best ones read bank SMS.", "cloud": "A bank link fills most of it in for you, where your bank is supported."},
+     "ar_note": {"lightning": "تسجيل من الموبايل ورسايل البنك على أندرويد؛ لسه مفيش تسجيل بالصوت ولا ربط بنكي تلقائي.", "spreadsheet": "تفتح الملف وتدوّر على الصف وتكتب.", "tracker": "متعمل لتسجيل بضغطة؛ وأحسنه بيقرا رسايل البنك.", "cloud": "ربط البنك بيملا أغلبه لوحده، لو بنكك مدعوم."},
+     "evidence_source": "ai/COMPETITION.md › Where Lightning wins and loses (Loses: capture); The compass 1"},
+    {"id": "yours", "en": "Your data stays yours", "ar": "بياناتك تفضل بتاعتك",
+     "ratings": {"lightning": "High", "spreadsheet": "High", "tracker": "Medium", "cloud": "Low"},
+     "en_note": {"lightning": "Encrypted on your own devices; no account and no server.", "spreadsheet": "A file you own, wherever you keep it.", "tracker": "On the phone, but ads and permissions vary by app.", "cloud": "Lives on the company's servers, behind a login."},
+     "ar_note": {"lightning": "متشفّرة على أجهزتك؛ من غير حساب ولا سيرفر.", "spreadsheet": "ملف بتاعك، في أي مكان بتحفظه فيه.", "tracker": "على الموبايل، بس الإعلانات والصلاحيات بتختلف من تطبيق لتطبيق.", "cloud": "على سيرفرات الشركة، ورا تسجيل دخول."},
+     "evidence_source": "ai/COMPETITION.md › The compass 2; The field in one table (Data lives)"},
+    {"id": "wealth", "en": "Wealth depth: holdings, gold, loans, dollars", "ar": "عمق الثروة: استثمارات وذهب وقروض ودولار",
+     "ratings": {"lightning": "High", "spreadsheet": "Medium", "tracker": "Low", "cloud": "Low"},
+     "en_note": {"lightning": "Holdings and returns, physical gold, certificates, loans, money held for others and foreign cash with FX gains in one net worth.", "spreadsheet": "Anything, if you build and maintain every formula.", "tracker": "Spending and a few debts; rarely what you own.", "cloud": "Accounts and spending; investments are basic or missing."},
+     "ar_note": {"lightning": "استثمارات وعوائدها، وذهب فعلي، وشهادات، وقروض، وفلوس محوّشها لغيرك، وكاش بالعملة الأجنبية مع أرباح الفروق، في صافي ثروة واحد.", "spreadsheet": "أي حاجة، لو بنيت كل معادلة وصنتها.", "tracker": "المصاريف وكام دين؛ نادراً اللي بتملكه.", "cloud": "حسابات ومصاريف؛ الاستثمارات أساسية أو مش موجودة."},
+     "evidence_source": "ai/COMPETITION.md › Where Lightning wins and loses (Wins); tests/test_mohab_year.py (net worth step)"},
+    {"id": "egypt", "en": "Egypt and Arabic fit", "ar": "مناسب لمصر وللعربي",
+     "ratings": {"lightning": "High", "spreadsheet": "Medium", "tracker": "Medium", "cloud": "Low"},
+     "en_note": {"lightning": "Arabic with right-to-left, EGP first, Egyptian banks, certificates, gold and gam’eya.", "spreadsheet": "Arabic works; everything Egyptian is yours to set up.", "tracker": "Local ones know SMS and wallets; few go further.", "cloud": "Built for other countries; Egyptian banks and money are rarely supported."},
+     "ar_note": {"lightning": "عربي من اليمين للشمال، والجنيه الأول، وبنوك مصرية وشهادات وذهب وجمعية.", "spreadsheet": "العربي شغال؛ وكل حاجة مصرية عليك تظبطها.", "tracker": "المحلي منها بيعرف الرسايل والمحافظ؛ قليل بيروح أبعد.", "cloud": "متعمل لبلاد تانية؛ البنوك والفلوس المصرية نادراً مدعومة."},
+     "evidence_source": "ai/COMPETITION.md › The compass 3; The field in one table"},
+    {"id": "trace", "en": "Numbers you can trace", "ar": "أرقام تقدر تتبّعها",
+     "ratings": {"lightning": "High", "spreadsheet": "Medium", "tracker": "Low", "cloud": "Medium"},
+     "en_note": {"lightning": "Every figure says what it includes; a year of a sample user is checked screen against screen.", "spreadsheet": "You can see every formula, and so can a typo you never notice.", "tracker": "Totals are shown, rarely explained.", "cloud": "Bank sync can drift, and reviewers complain of numbers that do not match."},
+     "ar_note": {"lightning": "كل رقم بيقول بيشمل إيه؛ وسنة كاملة لمستخدم تجريبي متراجعة شاشة قصاد شاشة.", "spreadsheet": "تشوف كل معادلة، وبرضه غلطة كتابة ممكن ما تاخدش بالك منها.", "tracker": "بتعرض الإجماليات، ونادراً بتشرحها.", "cloud": "المزامنة ممكن تتخلخل، والمراجعات بتشتكي من أرقام مش متطابقة."},
+     "evidence_source": "ai/COMPETITION.md › The compass 5; tests/test_mohab_year.py"},
+    {"id": "start", "en": "Easy to start", "ar": "سهل تبدأ بيه",
+     "ratings": {"lightning": "Medium", "spreadsheet": "Low", "tracker": "High", "cloud": "Medium"},
+     "en_note": {"lightning": "No account, but you install it, and starting from bank statements takes a few minutes.", "spreadsheet": "A blank sheet: you design before you track.", "tracker": "Install and start typing.", "cloud": "An account and a bank connection first."},
+     "ar_note": {"lightning": "من غير حساب، بس لازم تنزّله، والبداية من كشوف البنك بتاخد كام دقيقة.", "spreadsheet": "شيت فاضي: بتصمّم قبل ما تتابع.", "tracker": "نزّله وابدأ اكتب.", "cloud": "حساب وربط بنك الأول."},
+     "evidence_source": "ai/COMPETITION.md › Where Lightning wins and loses; The compass 4"}
+  ],
+  "choose": {
+    "spreadsheet": {"en": "Choose a spreadsheet if you enjoy building your own system, your money fits in a few columns, or you need a layout nothing else offers.", "ar": "اختار جدول البيانات لو بتحب تبني نظامك بنفسك، أو فلوسك بتتحط في كام عمود، أو محتاج شكل مفيش غيره بيقدمه."},
+    "tracker": {"en": "Choose a traditional tracker if the only thing you want is the quickest way to log spending on your phone today.", "ar": "اختار المتتبّع التقليدي لو كل اللي عايزه أسرع طريقة تسجّل بيها مصروفك على الموبايل النهارده."},
+    "cloud": {"en": "Choose a cloud budgeting app if automatic bank feeds matter more to you than where your data lives, and your bank is supported.", "ar": "اختار تطبيق الميزانية السحابي لو الربط البنكي التلقائي أهم عندك من مكان بياناتك، وبنكك مدعوم."}
+  }
+}

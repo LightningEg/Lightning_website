@@ -94,3 +94,13 @@ The guides:
 - [متابعة فلوس شايلها لحد تاني](https://lightningeg.com/ar/track-money-you-hold-for-others.html)
 - [سجل التغييرات](https://lightningeg.com/ar/release-log.html)
 - [ساهم معانا](https://lightningeg.com/ar/contribute.html): ساعد في بناء لايتنينج بمهمة صغيرة على GitHub من المتصفح.
+
+## Compare
+
+- [Lightning or a spreadsheet?](https://lightningeg.com/lightning-vs-spreadsheet.html): an honest comparison with a spreadsheet, rated Low, Medium or High with evidence.
+- [Lightning or a traditional expense tracker?](https://lightningeg.com/lightning-vs-expense-tracker-app.html): an honest comparison with a traditional expense tracker, rated Low, Medium or High with evidence.
+- [Lightning or a cloud budgeting app?](https://lightningeg.com/lightning-vs-cloud-budgeting-app.html): an honest comparison with a cloud budgeting app, rated Low, Medium or High with evidence.
+
+- [لايتنينج ولا جدول بيانات؟](https://lightningeg.com/ar/lightning-vs-spreadsheet.html)
+- [لايتنينج ولا متتبّع مصاريف تقليدي؟](https://lightningeg.com/ar/lightning-vs-expense-tracker-app.html)
+- [لايتنينج ولا تطبيق ميزانية سحابي؟](https://lightningeg.com/ar/lightning-vs-cloud-budgeting-app.html)
