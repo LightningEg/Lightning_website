@@ -75,5 +75,8 @@ for (let k = 20; k >= 0; k -= 2) saveAnalyticsEvents_({ form_type: 'event', payl
 const q = (what, d) => JSON.parse(analyticsJourneys_({ key, what, days: d }, 'POST').t);
 const out = { key, counts: q('counts', 56), journeys: q('journeys', 28) };
 out.insights28 = q('insights', 28); out.insights56 = q('insights', 56);
+// The Page views tab as records, for analytics/tests/insights.test.js (the console computes the same answer from Supabase rows).
+const H = ['at', 'pv', 'consent', 'ux', 'page', 'lang', 'device', 'os', 'browser', 'ref', 'us', 'um', 'uc', 'visit', 'vno', 'vn', 'scroll', 'active', 'load', 'lcp', 'tl', 'from'];
+out.rows = PVT().slice(1).map(r => { const o = {}; H.forEach((h, i) => { o[h] = r[i]; }); o.at = new Date(o.at).toISOString(); o.tl = {}; String(o.tl0 = r[20] || '').split(' ').forEach(tok => { const i = tok.lastIndexOf(':'); if (i > 0) o.tl[tok.slice(0, i)] = +tok.slice(i + 1) || 0; }); delete o.tl0; return o; });
 require('fs').writeFileSync(process.argv[2] || 'dash-data.json', JSON.stringify(out));
 console.log('generated; views', out.insights28.views, 'wide', out.insights56.views);

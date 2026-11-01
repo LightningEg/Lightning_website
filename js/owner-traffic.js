@@ -3,7 +3,7 @@
    It counts and never names: the records hold no IP address, account or typed text, groups under 5 are folded together, and
    your own browsers are not counted (README › Analytics and consent). An arrival is a page view that did not come from another
    page of this site. Every value is set with textContent. The decision rules and the Page views sheet are still read by
-   analytics/dashboard.html until they move here (plan item 8X). */
+   the owner console › Analytics until they move here (plan item 8X). */
 (function () {
   'use strict';
   var doc = document, FG = window.FG;
@@ -135,7 +135,7 @@
     verified = !!(e.detail && e.detail.verified);
     if (verified) load(); else { host.textContent = ''; host.appendChild(el('p', 'ops-empty', 'Verify your session to load visitors.')); }
   });
-  window.addEventListener('lightning:owner-view', function (e) { if (verified && e.detail && e.detail.view === 'traffic') load(); });
+  window.addEventListener('lightning:owner-tab', function (e) { if (verified && e.detail && e.detail.tab === 'traffic') load(); });
   window.addEventListener('lightning:owner-changed', function () { var v = $('traffic'); if (v && !v.hidden) load(); });
   window.FGOwnerTraffic = { load: load };
 })();

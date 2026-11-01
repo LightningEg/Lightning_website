@@ -135,7 +135,7 @@
     verified = !!(e.detail && e.detail.verified);
     if (verified) load(); else { host.textContent = ''; host.appendChild(el('p', 'ops-empty', 'Verify your session to load sign-ups.')); }
   });
-  window.addEventListener('lightning:owner-view', function (e) { if (verified && e.detail && e.detail.view === 'signups') load(); });
+  window.addEventListener('lightning:owner-tab', function (e) { if (verified && e.detail && e.detail.tab === 'signups') load(); });
   window.addEventListener('lightning:owner-changed', function () { var v = $('signups'); if (v && !v.hidden) load(); });
   window.FGOwnerSignups = { load: load };
 })();

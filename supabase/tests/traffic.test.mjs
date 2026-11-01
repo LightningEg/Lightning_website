@@ -109,6 +109,21 @@ await test('new members per day leave administrators out, and nobody is named', 
   assert.ok(!/@example\.test|owner|member-/.test(text), 'no email or name in the readout');
 });
 
+await test('admin_page_views hands the records over a page at a time, owner only, with the timeline as an object', async () => {
+  const M = await newUser();
+  await assert.rejects(rpc(M, `select public.admin_page_views(28, 0, 10) t`), /administrator/);
+  await assert.rejects(as('anon', null, () => q(`select public.admin_page_views(28, 0, 10)`)), /permission denied/);
+  const page = async (o, l) => (await as('authenticated', ADMIN, () => q(`select public.admin_page_views(28, $1, $2) t`, [o, l]))).rows[0].t;
+  const a = await page(0, 5), b = await page(5, 5);
+  assert.equal(a.rows.length, 5); assert.ok(a.total >= 10); assert.ok(b.rows.length > 0);
+  assert.notDeepEqual(a.rows[0], b.rows[0]);
+  const one = a.rows[0];
+  assert.deepEqual(Object.keys(one).sort(), ['at', 'browser', 'consent', 'day', 'device', 'from', 'lang', 'lcp', 'os', 'page', 'ref', 'scroll', 'active', 'tl', 'us', 'ux'].sort());
+  assert.equal(typeof one.tl, 'object');
+  assert.ok(!('pv' in one), 'the random page-view id never leaves the database');
+  assert.equal((await page(0, 5000)).rows.length <= 1000, true);
+});
+
 await test('the period is capped at ninety days', async () => {
   assert.equal((await traffic(1000)).days, 90);
   assert.equal((await traffic(0)).days, 1);
