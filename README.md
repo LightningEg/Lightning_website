@@ -85,7 +85,8 @@ css/dev-dock.css    testing panel (page version + UX test)
 js/dev-dock.js      builds the testing panel on every version
 js/theme.js         picks and remembers the theme
 assets/app/mohab/    app screenshots from the built-in sample household (python -m lightning --demo)
-assets/app/themes-2026-10-30/  Dendera, Dendera Night and Papyrus worn on Mohab's year (2000 x 1250), for the home page's Now With Animated Themes
+assets/app/themes-2026-11-02/  Dendera, Dendera Night and Papyrus worn on Mohab's year (2000 x 1250), for the home page's Now With Animated Themes;
+                    recaptured after the Dendera premium pass (app IV-10F). themes-2026-10-30/ stays for archived pages
 css/ux-test.css     shared UX test feedback rail
 js/ux-test.js       shared UX test behavior
 js/current-status.js multi-ticket app feedback form behavior
