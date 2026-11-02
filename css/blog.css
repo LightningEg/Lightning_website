@@ -108,3 +108,9 @@ html .blog-body ol.viz-steps li{display:flex;align-items:center;gap:14px;margin:
 .blog-lightning a b::after{content:" \2192"}
 html[dir="rtl"] .blog-lightning a b::after{content:" \2190"}
 .blog-lightning a span{display:block;margin-top:2px;color:var(--muted);font-size:14px;line-height:1.5}
+
+/* A real app screen beside its step (guides keep the same frame as the landing pages). */
+.blog-shot{margin:26px 0}
+.blog-shot .d-frame-bar span{margin-inline-start:8px;font:600 12px/1 var(--display);color:var(--muted)}
+.blog-shot img{display:block;width:100%;height:auto}
+.blog-shot figcaption{margin-top:10px;font-size:15px;line-height:1.7;color:var(--muted)}

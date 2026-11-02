@@ -3438,6 +3438,13 @@
       "page": "versions.html",
       "status": "current",
       "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.10",
+      "name": "Guides · Personal financial plan",
+      "page": "blog-personal-financial-plan.html",
+      "status": "current",
+      "archive_url": null
     }
   ],
   "app_releases": [
