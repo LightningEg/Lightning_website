@@ -2414,8 +2414,8 @@
       "id": "UX-2026.10.19.03",
       "name": "Contribute · Help with one small task",
       "page": "contribute.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.19.03.html"
     },
     {
       "id": "UX-2026.10.19.04",
@@ -2582,8 +2582,8 @@
       "id": "UX-2026.10.21.16",
       "name": "Sync Without Cloud guide · Part of its topic",
       "page": "sync-phone-and-pc-without-cloud.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.16.html"
     },
     {
       "id": "UX-2026.10.21.18",
@@ -2757,8 +2757,8 @@
       "id": "UX-2026.10.21.42",
       "name": "Track Money Held for Others · Recaptured figures",
       "page": "track-money-you-hold-for-others.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.42.html"
     },
     {
       "id": "UX-2026.10.21.43",
@@ -2848,15 +2848,15 @@
       "id": "UX-2026.10.22.02",
       "name": "Expense Tracker Egypt · August expenses",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.02.html"
     },
     {
       "id": "UX-2026.10.22.03",
       "name": "How It Works · August expenses",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.22.03.html"
     },
     {
       "id": "UX-2026.10.22.04",
@@ -3030,8 +3030,8 @@
       "id": "UX-2026.10.25.01",
       "name": "Privacy · For Geeks accounts",
       "page": "privacy.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.25.01.html"
     },
     {
       "id": "UX-2026.10.25.02",
@@ -3331,8 +3331,8 @@
       "id": "UX-2026.10.30.05",
       "name": "App Feedback · Lightning 1.5.4",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.05.html"
     },
     {
       "id": "UX-2026.10.30.06",
@@ -3380,15 +3380,15 @@
       "id": "UX-2026.11.01.01",
       "name": "Downloads · What's new in 1.5.4",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.01.html"
     },
     {
       "id": "UX-2026.11.01.02",
       "name": "Release log · Notes from one source",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.02.html"
     },
     {
       "id": "UX-2026.11.01.03",
@@ -3422,19 +3422,110 @@
       "id": "UX-2026.11.01.07",
       "name": "Lightning · Home argues what's different",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.07.html"
     },
     {
       "id": "UX-2026.11.01.08",
       "name": "Features · Phone and PC demo",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.08.html"
     },
     {
       "id": "UX-2026.11.01.09",
       "name": "Version Archive · Home argues what's different",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.09.html"
+    },
+    {
+      "id": "UX-2026.11.01.11",
+      "name": "Lightning · Launch-ready home",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.12",
+      "name": "Features · Launch-ready words",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.13",
+      "name": "Downloads · Launch-ready words",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.14",
+      "name": "App Feedback · Launch-ready words",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.15",
+      "name": "Contribute · Launch-ready words",
+      "page": "contribute.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.16",
+      "name": "Expense Tracker Egypt · Launch-ready words",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.17",
+      "name": "How It Works · Launch-ready words",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.18",
+      "name": "Privacy · Launch-ready words",
+      "page": "privacy.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.19",
+      "name": "Sync Phone and PC · Launch-ready words",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.20",
+      "name": "Money Held for Others · Launch-ready words",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.21",
+      "name": "Version Archive · Launch-ready words",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.21.html"
+    },
+    {
+      "id": "UX-2026.11.01.22",
+      "name": "Release Log · Launch-ready words",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.23",
+      "name": "Version Archive · Launch-ready words",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

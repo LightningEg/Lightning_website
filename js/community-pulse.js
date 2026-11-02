@@ -1,5 +1,5 @@
 // Community pulse (Home): one quiet line of real activity, never money.
-// Merged pull requests come from GitHub's public API; shared stories from the community feed when it loads.
+// Shared stories from the community feed (people telling how they use Lightning); developer activity never shows here.
 // Nothing is made up: with no activity, or offline, the line stays hidden.
 (function () {
   'use strict';
@@ -11,16 +11,6 @@
   var items = [];
   var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var bdi = function (t) { return '<bdi>' + esc(t) + '</bdi>'; };
-
-  var github = fetch('https://api.github.com/repos/LightningEg/Lightning/pulls?state=closed&sort=updated&direction=desc&per_page=20', { headers: { Accept: 'application/vnd.github+json' } })
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (rows) {
-      rows.filter(function (p) { return p.merged_at && p.user && p.user.type !== 'Bot'; }).slice(0, 6).forEach(function (p) {
-        var who = '<a href="' + esc(p.user.html_url) + '" target="_blank" rel="noopener">' + bdi('@' + p.user.login) + '</a>';
-        var pr = '<a href="' + esc(p.html_url) + '" target="_blank" rel="noopener"><bdi>#' + p.number + '</bdi></a>';
-        items.push({ t: Date.parse(p.merged_at), html: ar ? who + ' دمج طلب ' + pr + ' في لايتنينج' : who + ' merged ' + pr + ' into Lightning' });
-      });
-    }).catch(function () {});
 
   var stories = new Promise(function (done) {
     var FG = window.FG;
@@ -39,7 +29,7 @@
     }).catch(function () { done(); });
   });
 
-  Promise.all([github, stories]).then(function () {
+  stories.then(function () {
     if (!items.length) return;
     items.sort(function (a, b) { return b.t - a.t; });
     var i = 0;

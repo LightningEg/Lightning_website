@@ -17,3 +17,13 @@
    wherever there are three columns; on a two-column phone the four tiles make a 2 × 2 grid */
 @media (min-width:641px){.t-stage .d-tiles .t-more{grid-column:1/-1;min-height:0}}
 .t-stage .d-tiles .t-more{--tone:var(--ink2)}
+/* The counter keeps one height while it plays (owner, 2026-11-02): its changing line stays on one row, smaller on
+   phones, and a long place name ends in an ellipsis instead of wrapping the card taller */
+.t-count .chead{min-width:0;flex:1 1 0}
+.t-count .chead p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){
+  .t-count{flex-wrap:nowrap;align-items:center}
+  .t-count .chead h3{font-size:17px}
+  .t-count .chead p{font-size:13px}
+  .t-count .lead-fig{font-size:30px;white-space:nowrap}
+}
