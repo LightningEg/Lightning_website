@@ -3345,8 +3345,8 @@
       "id": "UX-2026.10.30.07",
       "name": "Features · Version 1.5.4",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.07.html"
     },
     {
       "id": "UX-2026.10.30.08",
@@ -3366,8 +3366,8 @@
       "id": "UX-2026.10.30.10",
       "name": "Lightning · Now with animated themes",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.10.html"
     },
     {
       "id": "UX-2026.10.30.11",
@@ -3394,8 +3394,8 @@
       "id": "UX-2026.11.01.03",
       "name": "Version Archive · Notes from one source",
       "page": "versions.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.03.html"
     },
     {
       "id": "UX-2026.11.01.04",
@@ -3420,6 +3420,27 @@
     },
     {
       "id": "UX-2026.11.01.07",
+      "name": "Lightning · Home argues what's different",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.08",
+      "name": "Features · Phone and PC demo",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.09",
+      "name": "Version Archive · Home argues what's different",
+      "page": "versions.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.01.10",
       "name": "Guides · Personal financial plan",
       "page": "blog-personal-financial-plan.html",
       "status": "current",
