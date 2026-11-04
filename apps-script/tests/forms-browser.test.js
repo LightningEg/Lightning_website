@@ -5,8 +5,8 @@ const ROOT = path.resolve(__dirname, '../..');
 (async () => {
   const browser = await chromium.launch(process.env.CHROMIUM_EXECUTABLE ? { executablePath: process.env.CHROMIUM_EXECUTABLE } : {});
   try {
-    for (const url of (process.argv[2] ? [process.argv[2]] : ['index.html', 'survey.html', 'ar/survey.html', 'app-feedback.html'])) {
-      const ctx = await browser.newContext(); let reply = { ok: true }, submitted;
+    for (const url of (process.argv[2] ? [process.argv[2]] : ['index.html', 'survey.html', 'ar/survey.html', 'app-feedback.html', 'ar/app-feedback.html'])) {
+      const ctx = await browser.newContext(); let reply = { ok: true }, submitted, uploaded;
       await ctx.route('**/*', async route => {
         const u = new URL(route.request().url());
         if (u.hostname === 'script.google.com') {
@@ -15,7 +15,12 @@ const ROOT = path.resolve(__dirname, '../..');
           if (params.get('form_type') === 'event') return route.fulfill({ body: 'ok', headers: { 'access-control-allow-origin': '*' } });
           assert.equal(route.request().method(), 'POST'); assert.equal(u.search, '');
           assert.match(params.get('form_session'), /^[a-f0-9]{32}$/); assert.ok(Number(params.get('started_at')) > 0);
-          assert.equal(params.get('website'), ''); submitted = params;
+          assert.equal(params.get('website'), '');
+          if (params.get('form_type') === 'app_feedback_image') {
+            uploaded = JSON.parse(params.get('image_json'));
+            return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ok: true, token: 'a'.repeat(64) }), headers: { 'access-control-allow-origin': '*' } });
+          }
+          submitted = params;
           return route.fulfill({ contentType: 'application/json', body: JSON.stringify(reply), headers: { 'access-control-allow-origin': '*' } });
         }
         if (u.hostname !== 'lightningeg.test') return route.fulfill({ body: '' });
@@ -32,7 +37,7 @@ const ROOT = path.resolve(__dirname, '../..');
         await page.click('#finance-survey [type=submit]');
         await page.waitForFunction(() => !/Sending|بنبعت/.test(document.querySelector('#survey-status').textContent) && document.querySelector('#survey-status').textContent.length > 0);
         assert.equal(submitted.get('form_type'), 'survey'); assert.equal(submitted.get('biggest_problem'), '=1+1');
-      } else if (url === 'app-feedback.html') {
+      } else if (url.endsWith('app-feedback.html')) {
         await page.selectOption('[name=app_build]', '1.3.0-windows');
         await page.selectOption('[name=section]', 'Overview');
         await page.check('input[value=Bug]'); await page.check('input[value=Technical]');
@@ -40,15 +45,16 @@ const ROOT = path.resolve(__dirname, '../..');
         const image = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=', 'base64');
         await page.locator('[data-attachment-input]').setInputFiles({ name: 'dummy.png', mimeType: 'image/png', buffer: image });
         await page.waitForSelector('[data-state="ready"]');
+        assert.equal(uploaded.name, 'dummy.png');
+        assert.equal(uploaded.base64, image.toString('base64'));
         await page.locator('#app-feedback-form [type=submit]').scrollIntoViewIfNeeded();
         const beforeSubmit = await page.evaluate(() => window.scrollY);
         await page.click('#app-feedback-form [type=submit]');
-        await page.waitForFunction(() => /Thank you/.test(document.querySelector('.status-feedback__status').textContent));
+        await page.waitForFunction(() => /Thank you|شكر/.test(document.querySelector('.status-feedback__status').textContent));
         assert.ok(Math.abs(await page.evaluate(() => window.scrollY) - beforeSubmit) < 120, 'submitting should not jump the page');
         assert.equal(submitted.get('form_type'), 'app_feedback');
         const tickets = JSON.parse(submitted.get('tickets_json'));
-        assert.equal(tickets[0].attachments[0].name, 'dummy.png');
-        assert.equal(tickets[0].attachments[0].base64, image.toString('base64'));
+        assert.deepEqual(tickets[0].attachments[0], { token: 'a'.repeat(64) });
         reply = { ok: false, error: 'rate_limit' };
         await page.selectOption('[name=section]', 'Overview');
         await page.check('input[value=Bug]'); await page.check('input[value=Technical]');
@@ -56,9 +62,14 @@ const ROOT = path.resolve(__dirname, '../..');
         await page.locator('[data-attachment-input]').setInputFiles({ name: 'dummy.png', mimeType: 'image/png', buffer: image });
         await page.waitForSelector('[data-state="ready"]');
         await page.click('#app-feedback-form [type=submit]');
-        await page.waitForFunction(() => /could not send/.test(document.querySelector('.status-feedback__status').textContent));
+        await page.waitForFunction(() => /could not send|معرفناش نبعت/.test(document.querySelector('.status-feedback__status').textContent));
         assert.equal(await page.locator('textarea[name=description]').first().inputValue(), 'Keep this ticket on failure');
         assert.equal(await page.locator('[data-state="ready"]').count(), 1);
+        reply = { ok: false, error: 'image_expired' };
+        await page.click('#app-feedback-form [type=submit]');
+        await page.waitForSelector('[data-state="error"]');
+        assert.match(await page.locator('.status-feedback__status').textContent(), /Remove or replace|احذف الصورة/);
+        assert.equal(await page.locator('textarea[name=description]').first().inputValue(), 'Keep this ticket on failure');
       } else {
         await page.fill('#signup-email', 'test@example.invalid');
         await page.click('#email-signup [type=submit]');

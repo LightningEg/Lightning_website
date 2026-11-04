@@ -8,10 +8,17 @@ function setup() {
   const tabs = {}, props = {}, cached = new Map();
   let now = Date.now(), broken = false, locked = false;
   const cache = { get(k) { const v = cached.get(k); return v && v.expiry > now ? v.value : null; },
-    put(k, value, ttl) { cached.set(k, { value, expiry: now + ttl * 1000 }); }, remove: k => cached.delete(k) };
+    put(k, value, ttl) { cached.set(k, { value, expiry: now + ttl * 1000 }); }, remove: k => cached.delete(k),
+    putAll(values, ttl) { Object.entries(values).forEach(([k, v]) => this.put(k, v, ttl)); },
+    getAll(keys) { return Object.fromEntries(keys.map(k => [k, this.get(k)]).filter(([, v]) => v !== null)); },
+    removeAll(keys) { keys.forEach(k => this.remove(k)); } };
+  const files = [];
+  const folder = { createFile(blob) { const file = { blob, trashed: false, setDescription() {},
+    getUrl() { return `https://drive.invalid/${files.indexOf(file)}`; }, setTrashed(value) { file.trashed = value; } };
+    files.push(file); return file; } };
   const book = { getSheetByName: n => tabs[n] || null, insertSheet(n) {
     const rows = [];
-    return tabs[n] = { rows, getLastRow: () => rows.length,
+    return tabs[n] = { rows, getLastRow: () => rows.length, getLastColumn: () => rows[0].length,
       appendRow: r => rows.push(r), setFrozenRows() {},
       getRange(r, c, n, w) { return { getValues: () => rows.slice(r - 1, r - 1 + n).map(row => row.slice(c - 1, c - 1 + w)),
         setValues(values) { if (broken) throw new Error('storage failure'); values.forEach((row, i) => { rows[r - 1 + i] = row; }); } }; } };
@@ -22,8 +29,10 @@ function setup() {
     CacheService: { getScriptCache: () => cache },
     LockService: { getScriptLock: () => ({ waitLock() { assert.equal(locked, false, 'locks never nest'); locked = true; }, releaseLock() { locked = false; } }) },
     SpreadsheetApp: { getActiveSpreadsheet: () => book, openById: () => book },
+    DriveApp: { createFolder: () => ({ ...folder, getId: () => 'private-folder' }), getFolderById: () => folder },
     Utilities: { DigestAlgorithm: { SHA_256: 'sha256' }, Charset: { UTF_8: 'utf8' },
-      computeDigest: (_, text) => [...crypto.createHash('sha256').update(text).digest()] },
+      computeDigest: (_, text) => [...crypto.createHash('sha256').update(text).digest()], getUuid: () => crypto.randomUUID(),
+      base64Decode: value => [...Buffer.from(value, 'base64')], newBlob: (bytes, mime, name) => ({ bytes, mime, name }) },
     analyticsJourneys_: (data, method) => ({ getContent: () => JSON.stringify({ method, keyFromBody: data.key }) }),
     saveAnalyticsEvents_: data => ({ getContent: () => JSON.stringify({ event: data.payload }) })
   });
@@ -32,7 +41,7 @@ function setup() {
     const contents = new URLSearchParams(values).toString();
     return JSON.parse(context.doPost({ postData: { contents, type: 'application/x-www-form-urlencoded;charset=UTF-8' }, parameter: query }).getContent());
   };
-  return { context, post, tabs, props, cached, advance: ms => { now += ms; }, fail: yes => { broken = yes; } };
+  return { context, post, tabs, props, cached, files, advance: ms => { now += ms; }, fail: yes => { broken = yes; } };
 }
 const signup = (n = 1, extra = {}) => ({ form_type: 'signup', email: `person${n}@example.test`, form_session: `session_${String(n).padStart(16, '0')}`, ...extra });
 test('survey formula-shaped free text and signup email stay literal', () => {
@@ -100,4 +109,74 @@ test('feedback routes pass through literal-cell protection and confirmed respons
   assert.equal(r.post({ form_type: 'ux_test', feedback_json: JSON.stringify([{ reaction: 'liked', title: '=1+1' }]) }).ok, true);
   assert.equal(r.tabs['UX Tests'].rows[1][3], "'=1+1");
   assert.equal(r.post({ form_type: 'ux_test', feedback_json: '{}' }).ok, false);
+});
+
+test('selected image uploads temporarily; submission consumes the token once', () => {
+  const r = setup(), session = 'a'.repeat(32), image = { name: 'dummy.png', mime: 'image/png', base64: Buffer.from([137,80,78,71,13,10,26,10]).toString('base64') };
+  const staged = r.post({ form_type: 'app_feedback_image', form_session: session, upload_id: 'b'.repeat(32), image_json: JSON.stringify(image) });
+  assert.equal(staged.ok, true); assert.match(staged.token, /^[a-f0-9]{64}$/); assert.equal(r.files.length, 0);
+  const ticket = [{ section: 'Overview', type: 'Bug', area: 'Technical', description: 'example', attachments: [{ token: staged.token }] }];
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: 'c'.repeat(32), tickets_json: JSON.stringify(ticket) }).ok, false);
+  assert.equal(r.files.length, 0);
+  const duplicate = [{ ...ticket[0], attachments: [{ token: staged.token }, { token: staged.token }] }];
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(duplicate) }).ok, false);
+  assert.equal(r.files.length, 0);
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(ticket) }).ok, true);
+  assert.equal(r.files.length, 1); assert.ok(r.tabs['App Feedback'].rows[1][13].includes('https://drive.invalid/'));
+  assert.equal(Object.values(JSON.parse(r.props.APP_FEEDBACK_STAGE_USAGE)).reduce((n, slot) => n + slot.chunks, 0), 0);
+  ticket[0].description = 'different request';
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(ticket) }).ok, false);
+  assert.equal(r.files.length, 1);
+});
+
+test('staged uploads reject bots, invalid sessions and non-image content', () => {
+  const r = setup(), session = 'a'.repeat(32), id = '8'.repeat(32);
+  const image = JSON.stringify({ name: 'bad.png', mime: 'image/png', base64: Buffer.from('not a PNG').toString('base64') });
+  const data = { form_type: 'app_feedback_image', form_session: session, upload_id: id, image_json: image };
+  assert.equal(r.post({ ...data, website: 'robot' }).ok, false);
+  assert.equal(r.post({ ...data, form_session: 'invalid' }).ok, false);
+  assert.equal(r.post(data).error, 'invalid_image');
+  assert.equal(r.files.length, 0);
+  assert.equal([...r.cached.keys()].filter(key => key.startsWith('feedback-image-')).length, 0);
+});
+
+test('evicted image chunks report expiry without creating Drive files', () => {
+  const r = setup(), session = 'a'.repeat(32), image = { name: 'dummy.png', mime: 'image/png', base64: Buffer.from([137,80,78,71,13,10,26,10]).toString('base64') };
+  const staged = r.post({ form_type: 'app_feedback_image', form_session: session, upload_id: '9'.repeat(32), image_json: JSON.stringify(image) });
+  r.cached.delete('feedback-image-' + staged.token + '-0');
+  const ticket = [{ section: 'Overview', type: 'Bug', area: 'Technical', description: 'example', attachments: [{ token: staged.token }] }];
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(ticket) }).error, 'image_expired');
+  assert.equal(r.files.length, 0);
+});
+
+test('expired and over-capacity staged images fail without creating Drive files', () => {
+  const r = setup(), session = 'd'.repeat(32), image = { name: 'dummy.png', mime: 'image/png', base64: Buffer.from([137,80,78,71,13,10,26,10]).toString('base64') };
+  const staged = r.post({ form_type: 'app_feedback_image', form_session: session, upload_id: 'e'.repeat(32), image_json: JSON.stringify(image) });
+  r.advance(21601000);
+  const ticket = [{ section: 'Overview', type: 'Bug', area: 'Technical', description: 'example', attachments: [{ token: staged.token }] }];
+  assert.equal(r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(ticket) }).error, 'image_expired');
+  const hour = Math.floor((Date.now() + 21601000) / 3600000);
+  r.props.APP_FEEDBACK_STAGE_USAGE = JSON.stringify({ [hour]: { chunks: 300 } });
+  assert.equal(r.post({ form_type: 'app_feedback_image', form_session: session, upload_id: 'f'.repeat(32), image_json: JSON.stringify(image) }).error, 'upload_capacity');
+  assert.equal(r.files.length, 0);
+});
+
+test('ten selected images can be sent together and a failed write remains retryable', () => {
+  const r = setup(), session = '1'.repeat(32);
+  const bytes = Buffer.concat([Buffer.from([137,80,78,71,13,10,26,10]), Buffer.alloc(90000)]);
+  const image = { name: 'dummy.png', mime: 'image/png', base64: bytes.toString('base64') };
+  const tokens = Array.from({ length: 10 }, (_, i) => {
+    const result = r.post({ form_type: 'app_feedback_image', form_session: session,
+      upload_id: i.toString(16).padStart(32, '0'), image_json: JSON.stringify(image) });
+    assert.equal(result.ok, true); return result.token;
+  });
+  assert.equal(r.files.length, 0);
+  const tickets = [0, 1].map(i => ({ section: 'Overview', type: 'Bug', area: 'Technical', description: `ticket ${i}`,
+    attachments: tokens.slice(i * 5, i * 5 + 5).map(token => ({ token })) }));
+  const post = () => r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(tickets) });
+  r.fail(true); assert.equal(post().error, 'save_failed');
+  assert.equal(r.files.filter(file => !file.trashed).length, 0);
+  r.fail(false); assert.equal(post().ok, true);
+  assert.equal(r.files.filter(file => !file.trashed).length, 10);
+  assert.equal(r.tabs['App Feedback'].rows.length, 3);
 });
