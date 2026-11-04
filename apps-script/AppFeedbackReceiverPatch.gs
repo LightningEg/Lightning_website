@@ -148,6 +148,8 @@ function saveAppFeedback_(data) {
 
   const submittedAt = new Date();
   const validTickets = tickets.filter(ticket => ticket && ticket.section && ticket.type && ticket.area && ticket.description);
+  // Nothing to save: answer before any quota is used or any staged screenshot is consumed.
+  if (!validTickets.length) return respond({ ok: false, error: 'no_tickets' });
   let totalImages = 0;
   const staged = [];
   try {
@@ -220,7 +222,6 @@ function saveAppFeedback_(data) {
           links.join('\n')
         ].map(appFeedbackCell_);
       });
-      if (!rows.length) return respond({ ok: false, error: 'no_tickets' });
       const sheet = appFeedbackSheet_();
       sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, APP_FEEDBACK_HEADERS.length).setValues(rows);
       try {

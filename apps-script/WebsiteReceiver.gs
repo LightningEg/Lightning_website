@@ -137,7 +137,9 @@ function websiteAdmission_(data, prepared) {
   const now = Date.now(), type = data.form_type;
   const started = Number(data.started_at || 0);
   // Timing is only a cheap filter; clients can forge it. Existing clients remain supported.
-  if (started && (!Number.isFinite(started) || started > now - 750 || started < now - 24 * 3600 * 1000)) return { error: 'invalid_submission' };
+  // A wrong device clock or a tab left open for days must not be refused: only a form sent within 750 ms of opening is.
+  const age = now - started;
+  if (started && Number.isFinite(age) && age > -5 * 60 * 1000 && age < 750) return { error: 'invalid_submission' };
   const session = /^[a-zA-Z0-9_-]{16,96}$/.test(data.form_session || '') ? data.form_session : 'legacy';
   const content = String(data.tickets_json || data.feedback_json || '');
   const fingerprint = type === 'signup' ? prepared.email.toLowerCase() : type === 'app_feedback_image' ? session + ':' + String(data.upload_id || '') : JSON.stringify(prepared || {
