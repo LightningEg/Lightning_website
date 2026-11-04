@@ -3464,8 +3464,8 @@
       "id": "UX-2026.11.01.14",
       "name": "App Feedback · Launch-ready words",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.14.html"
     },
     {
       "id": "UX-2026.11.01.15",
@@ -3492,8 +3492,8 @@
       "id": "UX-2026.11.01.18",
       "name": "Privacy · Launch-ready words",
       "page": "privacy.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.18.html"
     },
     {
       "id": "UX-2026.11.01.19",
@@ -3547,6 +3547,27 @@
     {
       "id": "UX-2026.11.02.02",
       "name": "Version Archive · Animated themes recaptured",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.02.02.html"
+    },
+    {
+      "id": "UX-2026.11.04.01",
+      "name": "Lightning · Feedback screenshots",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.04.02",
+      "name": "Lightning · Feedback screenshot privacy",
+      "page": "privacy.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.04.03",
+      "name": "Version archive · Feedback screenshots",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

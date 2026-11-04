@@ -38,7 +38,7 @@ function doPost(e) {
     const data = e.parameter;
     const type = String(data.form_type || '');
     // The URL-encoded image envelope may be larger than its decoded JSON.
-    const max = type === 'app_feedback' ? 90 * 1024 * 1024 : 256 * 1024;
+    const max = type === 'app_feedback' ? 90 * 1024 * 1024 : type === 'app_feedback_image' ? 24 * 1024 * 1024 : 256 * 1024;
     if (e.postData.contents.length > max) return websiteReply_(false, 'request_too_large');
     // A query string must never carry the analytics read key. Parse POST body only.
     if (data.action === 'journeys') {
@@ -47,7 +47,10 @@ function doPost(e) {
       return analyticsJourneys_(body, 'POST');
     }
     if (type === 'event') return saveAnalyticsEvents_(data); // analytics has its own caps/key checks
-    if (!['survey', 'signup', 'app_feedback', 'ux_test'].includes(type)) return websiteReply_(false, 'unknown_form');
+    if (!['survey', 'signup', 'app_feedback', 'app_feedback_image', 'ux_test'].includes(type)) return websiteReply_(false, 'unknown_form');
+    // The supported 12 MiB of images plus metadata fits within a 20 MiB JSON envelope.
+    // Refuse larger payloads before hashing or decoding any attachment.
+    if (type === 'app_feedback' && (typeof data.tickets_json !== 'string' || data.tickets_json.length > 20 * 1024 * 1024)) return websiteReply_(false, 'invalid_submission');
     const trap = e.parameters && e.parameters.website || [data.website || ''];
     if (trap.some(value => String(value).trim())) return websiteReply_(false, 'invalid_submission');
     let prepared = null;
@@ -56,7 +59,8 @@ function doPost(e) {
     if (admission.error) return websiteReply_(false, admission.error);
     let saved = false;
     try {
-      const result = type === 'app_feedback' ? saveAppFeedback_(data)
+      const result = type === 'app_feedback_image' ? stageAppFeedbackImage_(data)
+        : type === 'app_feedback' ? saveAppFeedback_(data)
         : type === 'ux_test' ? saveUxTest_(data) : websiteSave_(type, prepared);
       saved = JSON.parse(result.getContent()).ok === true;
       if (saved) CacheService.getScriptCache().put(admission.duplicate, 'done', 600);
@@ -135,8 +139,9 @@ function websiteAdmission_(data, prepared) {
   // Timing is only a cheap filter; clients can forge it. Existing clients remain supported.
   if (started && (!Number.isFinite(started) || started > now - 750 || started < now - 24 * 3600 * 1000)) return { error: 'invalid_submission' };
   const session = /^[a-zA-Z0-9_-]{16,96}$/.test(data.form_session || '') ? data.form_session : 'legacy';
-  const fingerprint = type === 'signup' ? prepared.email.toLowerCase() : JSON.stringify(prepared || {
-    session, content: String(data.tickets_json || data.feedback_json || '').slice(0, 4096), length: String(data.tickets_json || data.feedback_json || '').length
+  const content = String(data.tickets_json || data.feedback_json || '');
+  const fingerprint = type === 'signup' ? prepared.email.toLowerCase() : type === 'app_feedback_image' ? session + ':' + String(data.upload_id || '') : JSON.stringify(prepared || {
+    session, content_hash: websiteDigest_(content), length: content.length
   });
   const duplicate = 'form-duplicate-' + websiteDigest_(type + ':' + fingerprint);
   const sessionKey = 'form-session-' + websiteDigest_(type + ':' + session);
@@ -148,7 +153,7 @@ function websiteAdmission_(data, prepared) {
     if (seen) return { error: seen === 'done' ? 'duplicate_submission' : 'in_progress' };
     const recent = JSON.parse(cache.get(sessionKey) || '{}');
     const times = Array.isArray(recent.times) ? recent.times.filter(t => t > now - 10 * 60 * 1000) : [];
-    if (times.length >= 5) return { error: 'rate_limit' };
+    if (times.length >= (type === 'app_feedback_image' ? 20 : 5)) return { error: 'rate_limit' };
     const day = new Date(now).toISOString().slice(0, 10), minute = Math.floor(now / 60000);
     let usage = JSON.parse(props.getProperty('WEBSITE_FORM_USAGE') || '{}');
     if (usage.day !== day) usage = { day, counts: {} };

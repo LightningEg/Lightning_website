@@ -25,7 +25,9 @@
       if (!response.ok) throw new Error('Submission failed');
       const result = await response.json();
       // A duplicate has already been admitted recently; do not create another row.
-      if (!result.ok && result.error !== 'duplicate_submission') throw new Error('Submission refused');
+      if (!result.ok && result.error !== 'duplicate_submission') {
+        const error = new Error('Submission refused'); error.code = result.error; throw error;
+      }
       return result;
     }
   };

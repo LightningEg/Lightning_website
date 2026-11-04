@@ -60,6 +60,14 @@ test('reject too many screenshots before decoding any image', () => {
   assert.equal(a.decodes(), 0);
   assert.equal(a.rows.length, 0);
 });
+test('reject oversized aggregate image payload before decoding any image', () => {
+  const a = receiver('AppFeedbackReceiverPatch.gs', 'saveAppFeedback_');
+  const image = { mime: 'image/png', base64: 'A'.repeat(2 * 1024 * 1024) };
+  const tickets = [0, 1].map(() => ({ ...ticket, attachments: Array(5).fill(image) }));
+  assert.equal(JSON.parse(a.call(appData(tickets)).t).error, 'invalid_submission');
+  assert.equal(a.decodes(), 0);
+  assert.equal(a.rows.length, 0);
+});
 test('daily feedback quota prevents further rows, resets on a later day', () => {
   for (const [file, name, prop, data] of [
     ['AppFeedbackReceiverPatch.gs', 'saveAppFeedback_', 'APP_FEEDBACK_USAGE', appData([ticket])],

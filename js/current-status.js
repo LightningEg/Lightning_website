@@ -11,6 +11,7 @@
   let sending = 0;
   const AR_TEXT = {"Preparing image…": "بنجهّز الصورة…", "Remove": "احذف", "A ticket can have up to five images.": "البلاغ الواحد ممكن يحتوي على ٥ صور بالكتير.", "A submission can include up to ten images in total.": "الإرسال الواحد ممكن يحتوي على ١٠ صور بالكتير.", "Choose a PNG, JPEG or WebP image.": "اختار صورة PNG أو JPEG أو WebP.", "Still preparing; you can keep filling in the form.": "لسه بنجهّز الصورة، كمّل ملا النموذج عادي.", "This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.": "الصورة أكبر من ٥ ميجا ومينفعش نصغّرها من غير ما الجودة تقل. اقتطع الجزء المهم من الصورة وجرّب تاني.", "The images in one submission must total 12 MB or less.": "مجموع الصور في الإرسال الواحد لازم يكون ١٢ ميجا أو أقل.", "This image could not be prepared. Try another image.": "معرفناش نجهّز الصورة دي. جرّب صورة تانية.", "Wait for the images to finish preparing before you submit.": "استنى لحد ما الصور تخلّص تجهيز قبل ما تبعت.", "Remove or replace the image that could not be prepared before you submit.": "احذف الصورة اللي معرفناش نجهّزها أو بدّلها قبل ما تبعت.", "Sending your ticket and images…": "بنبعت البلاغ والصور…", "Thank you — your feedback and images have been sent.": "شكرًا ليك، ملاحظاتك وصورك وصلتنا.", "We could not send that just now. Your ticket and images are still here; please try again.": "معرفناش نبعت دلوقتي. البلاغ والصور لسه قدامك، جرّب تاني.", "ready to send": "جاهزة للإرسال", "Sending in the background. You can write the next ticket; keep this page open until it says sent.": "بنبعت في الخلفية. تقدر تكتب البلاغ اللي بعده؛ سيب الصفحة مفتوحة لحد ما تقول إنه اتبعت.", "Sending your ticket…": "بنبعت البلاغ…"};
   const t = text => (AR && AR_TEXT[text]) || text;
+  AR_TEXT['Image upload is busy. Remove the image and attach it again later.'] = 'رفع الصورة مشغول دلوقتي. احذف الصورة وضيفها تاني بعد شوية.';
   const arNum = n => AR ? new Intl.NumberFormat('ar-EG').format(n) : String(n);
 
   const MAX_PER_TICKET = 5;
@@ -203,13 +204,23 @@
         if (optimized.size > MAX_ATTACHMENT_BYTES) throw new Error(t('This image is over 5 MB and cannot be made smaller without losing quality. Crop the screenshot to the relevant area, then try again.'));
         if (totalBytes() > MAX_TOTAL_BYTES) throw new Error(t('The images in one submission must total 12 MB or less.'));
         item.file = optimized;
-        item.payload = { name: optimized.name, mime: optimized.type, base64: await fileAsBase64(optimized) };
+        const image = { name: optimized.name, mime: optimized.type, base64: await fileAsBase64(optimized) };
+        if (item.cancelled) return;
+        const uploadId = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+        const result = await window.LightningForms.send(endpoint, new URLSearchParams({
+          form_type: 'app_feedback_image', upload_id: uploadId, image_json: JSON.stringify(image)
+        }), form);
+        if (!/^[a-f0-9]{64}$/.test(result.token || '')) throw new Error(t('This image could not be prepared. Try another image.'));
+        item.payload = { token: result.token };
         if (item.cancelled) return;
         item.state = 'ready';
       } catch (error) {
         if (item.cancelled) return;
         item.state = 'error';
-        item.message = error.message || t('This image could not be prepared. Try another image.');
+        item.message = ['upload_capacity', 'rate_limit', 'daily_limit'].includes(error.code)
+          ? t('Image upload is busy. Remove the image and attach it again later.')
+          : error.code || error instanceof TypeError ? t('This image could not be prepared. Try another image.')
+            : (error.message || t('This image could not be prepared. Try another image.'));
       } finally {
         clearTimeout(item.slowTimer);
         if (!item.cancelled) renderAttachments(ticket);
@@ -263,8 +274,8 @@
     if (totalBytes() > MAX_TOTAL_BYTES) { status.textContent = t('The images in one submission must total 12 MB or less.'); return; }
     const submit = form.querySelector('[type="submit"]');
     const fields = new FormData(form);
-    // Feedback ticket 88 (2026-10-14): images are prepared as they are attached, so the only wait left is the
-    // receiver writing them to Drive. Send in the background and give the form back at once; the tickets and
+    // Images are uploaded into temporary receiver cache as they are attached. Send in the background and give
+    // the form back at once; the tickets and
     // images are kept aside and come back if the request fails.
     const tickets = readTickets();
     const payload = new URLSearchParams({
@@ -288,13 +299,21 @@
       await window.LightningForms.send(endpoint, payload, form);
       attachments.forEach(item => URL.revokeObjectURL(item.previewUrl));
       status.textContent = t('Thank you — your feedback and images have been sent.');
-    } catch (_) {
+    } catch (error) {
       const fresh = [...list.children].filter(ticket => !ticket.querySelector('[name="description"]').value.trim()
         && !(ticketAttachments.get(ticket) || []).length);
       fresh.forEach(ticket => ticket.remove());
       list.prepend(...kept);
       numberTickets();
-      status.textContent = t('We could not send that just now. Your ticket and images are still here; please try again.');
+      if (error.code === 'image_expired') {
+        kept.forEach(ticket => {
+          (ticketAttachments.get(ticket) || []).forEach(item => { item.state = 'error'; item.message = t('Remove or replace the image that could not be prepared before you submit.'); });
+          renderAttachments(ticket);
+        });
+        status.textContent = t('Remove or replace the image that could not be prepared before you submit.');
+      } else {
+        status.textContent = t('We could not send that just now. Your ticket and images are still here; please try again.');
+      }
     } finally { sending -= 1; submit.disabled = false; }
   });
   window.addEventListener('beforeunload', event => { if (sending) { event.preventDefault(); event.returnValue = ''; } });
