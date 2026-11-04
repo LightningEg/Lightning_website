@@ -35,9 +35,9 @@ const APP_FEEDBACK_HEADERS = [
 ];
 
 function appFeedbackSheet_() {
-  const book = APP_FEEDBACK_SPREADSHEET_ID
-    ? SpreadsheetApp.openById(APP_FEEDBACK_SPREADSHEET_ID)
-    : SpreadsheetApp.getActiveSpreadsheet();
+  const id = APP_FEEDBACK_SPREADSHEET_ID || PropertiesService.getScriptProperties().getProperty('WEBSITE_FORMS_SPREADSHEET_ID');
+  const book = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+  if (!book) throw new Error('Feedback spreadsheet is not configured');
   let sheet = book.getSheetByName(APP_FEEDBACK_SHEET_NAME);
   if (!sheet) sheet = book.insertSheet(APP_FEEDBACK_SHEET_NAME);
   if (sheet.getLastRow() === 0) {

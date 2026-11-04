@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 function setup() {
-  const tabs = {}, props = {}, cached = new Map();
+  const tabs = {}, props = {}, cached = new Map(), openedBooks = [];
   let now = Date.now(), broken = false, locked = false;
   const cache = { get(k) { const v = cached.get(k); return v && v.expiry > now ? v.value : null; },
     put(k, value, ttl) { cached.set(k, { value, expiry: now + ttl * 1000 }); }, remove: k => cached.delete(k),
@@ -28,7 +28,7 @@ function setup() {
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => props[k] = v }) },
     CacheService: { getScriptCache: () => cache },
     LockService: { getScriptLock: () => ({ waitLock() { assert.equal(locked, false, 'locks never nest'); locked = true; }, releaseLock() { locked = false; } }) },
-    SpreadsheetApp: { getActiveSpreadsheet: () => book, openById: () => book },
+    SpreadsheetApp: { getActiveSpreadsheet: () => book, openById: id => { openedBooks.push(id); return book; } },
     DriveApp: { createFolder: () => ({ ...folder, getId: () => 'private-folder' }), getFolderById: () => folder },
     Utilities: { DigestAlgorithm: { SHA_256: 'sha256' }, Charset: { UTF_8: 'utf8' },
       computeDigest: (_, text) => [...crypto.createHash('sha256').update(text).digest()], getUuid: () => crypto.randomUUID(),
@@ -41,7 +41,7 @@ function setup() {
     const contents = new URLSearchParams(values).toString();
     return JSON.parse(context.doPost({ postData: { contents, type: 'application/x-www-form-urlencoded;charset=UTF-8' }, parameter: query }).getContent());
   };
-  return { context, post, tabs, props, cached, files, advance: ms => { now += ms; }, fail: yes => { broken = yes; } };
+  return { context, post, tabs, props, cached, files, openedBooks, advance: ms => { now += ms; }, fail: yes => { broken = yes; } };
 }
 const signup = (n = 1, extra = {}) => ({ form_type: 'signup', email: `person${n}@example.test`, form_session: `session_${String(n).padStart(16, '0')}`, ...extra });
 test('survey formula-shaped free text and signup email stay literal', () => {
@@ -109,6 +109,13 @@ test('feedback routes pass through literal-cell protection and confirmed respons
   assert.equal(r.post({ form_type: 'ux_test', feedback_json: JSON.stringify([{ reaction: 'liked', title: '=1+1' }]) }).ok, true);
   assert.equal(r.tabs['UX Tests'].rows[1][3], "'=1+1");
   assert.equal(r.post({ form_type: 'ux_test', feedback_json: '{}' }).ok, false);
+});
+
+test('standalone receiver uses the configured spreadsheet for both feedback routes', () => {
+  const r = setup(); r.props.WEBSITE_FORMS_SPREADSHEET_ID = 'configured-sheet';
+  assert.equal(r.post({ form_type: 'app_feedback', tickets_json: JSON.stringify([{ section: 'Overview', type: 'Bug', area: 'Technical', description: 'example' }]) }).ok, true);
+  assert.equal(r.post({ form_type: 'ux_test', feedback_json: JSON.stringify([{ reaction: 'liked' }]) }).ok, true);
+  assert.deepEqual(r.openedBooks, ['configured-sheet', 'configured-sheet']);
 });
 
 test('selected image uploads temporarily; submission consumes the token once', () => {

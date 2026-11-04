@@ -24,15 +24,16 @@
  *    A test row should appear in the "UX Tests" tab. Delete it afterwards.
  *
  * The "UX Tests" tab and its header row are created automatically if missing.
- * If the script is not attached to the spreadsheet (a standalone project), paste
- * the spreadsheet ID into UX_SPREADSHEET_ID below.
+ * For a standalone project, set WEBSITE_FORMS_SPREADSHEET_ID as a private Script Property.
  */
 const UX_SPREADSHEET_ID = '';
 const UX_SHEET_NAME = 'UX Tests';
 const UX_HEADERS = ['Submitted at', 'Release', 'Section ID', 'Section', 'Reaction', 'Reasons', 'Page URL', 'Session ID', 'Device'];
 
 function uxSheet_() {
-  const book = UX_SPREADSHEET_ID ? SpreadsheetApp.openById(UX_SPREADSHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+  const id = UX_SPREADSHEET_ID || PropertiesService.getScriptProperties().getProperty('WEBSITE_FORMS_SPREADSHEET_ID');
+  const book = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+  if (!book) throw new Error('Feedback spreadsheet is not configured');
   let sheet = book.getSheetByName(UX_SHEET_NAME);
   if (!sheet) sheet = book.insertSheet(UX_SHEET_NAME);
   if (sheet.getLastRow() === 0) {
