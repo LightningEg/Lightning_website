@@ -44,7 +44,7 @@ function uxSheet_() {
 }
 
 function saveUxTest_(data) {
-  const respond = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  const respond = websiteJson_;
   const response = respond({ ok: true });
 
   if (data.website || typeof data.feedback_json !== 'string' || data.feedback_json.length > 100000) return respond({ ok: false, error: 'invalid_submission' });
@@ -64,7 +64,7 @@ function saveUxTest_(data) {
       data.page_url || '',
       data.session_id || '',
       data.device || ''
-    ].map(uxCell_));
+    ].map(v => websiteCell_(v)));
   if (!rows.length) return respond({ ok: false, error: 'no_feedback' });
 
   const lock = LockService.getScriptLock();
@@ -95,10 +95,4 @@ function testUxRoute() {
     feedback_json: JSON.stringify([{ id: 'test', title: 'Routing test', reaction: 'liked', reasons: [] }])
   } });
   Logger.log(result.getContent());
-}
-
-function uxCell_(value) {
-  if (typeof value === 'number' || value instanceof Date) return value;
-  const text = String(value == null ? '' : value).slice(0, 2000);
-  return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }
