@@ -111,6 +111,17 @@ test('feedback routes pass through literal-cell protection and confirmed respons
   assert.equal(r.post({ form_type: 'ux_test', feedback_json: '{}' }).ok, false);
 });
 
+test('long distinct feedback submissions are not mistaken for duplicates', () => {
+  const r = setup(), session = 'a'.repeat(32);
+  const tickets = Array.from({ length: 6 }, (_, i) => ({ section: 'Overview', type: 'Bug', area: 'Technical',
+    description: 'x'.repeat(899) + (i === 5 ? 'A' : 'x') }));
+  const send = () => r.post({ form_type: 'app_feedback', form_session: session, tickets_json: JSON.stringify(tickets) });
+  assert.equal(send().ok, true);
+  tickets[5].description = 'x'.repeat(899) + 'B';
+  assert.equal(send().ok, true);
+  assert.equal(r.tabs['App Feedback'].rows.length, 13);
+});
+
 test('standalone receiver uses the configured spreadsheet for both feedback routes', () => {
   const r = setup(); r.props.WEBSITE_FORMS_SPREADSHEET_ID = 'configured-sheet';
   assert.equal(r.post({ form_type: 'app_feedback', tickets_json: JSON.stringify([{ section: 'Overview', type: 'Bug', area: 'Technical', description: 'example' }]) }).ok, true);

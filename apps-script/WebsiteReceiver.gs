@@ -48,6 +48,9 @@ function doPost(e) {
     }
     if (type === 'event') return saveAnalyticsEvents_(data); // analytics has its own caps/key checks
     if (!['survey', 'signup', 'app_feedback', 'app_feedback_image', 'ux_test'].includes(type)) return websiteReply_(false, 'unknown_form');
+    // The supported 12 MiB of images plus metadata fits within a 20 MiB JSON envelope.
+    // Refuse larger payloads before hashing or decoding any attachment.
+    if (type === 'app_feedback' && (typeof data.tickets_json !== 'string' || data.tickets_json.length > 20 * 1024 * 1024)) return websiteReply_(false, 'invalid_submission');
     const trap = e.parameters && e.parameters.website || [data.website || ''];
     if (trap.some(value => String(value).trim())) return websiteReply_(false, 'invalid_submission');
     let prepared = null;
@@ -136,8 +139,9 @@ function websiteAdmission_(data, prepared) {
   // Timing is only a cheap filter; clients can forge it. Existing clients remain supported.
   if (started && (!Number.isFinite(started) || started > now - 750 || started < now - 24 * 3600 * 1000)) return { error: 'invalid_submission' };
   const session = /^[a-zA-Z0-9_-]{16,96}$/.test(data.form_session || '') ? data.form_session : 'legacy';
+  const content = String(data.tickets_json || data.feedback_json || '');
   const fingerprint = type === 'signup' ? prepared.email.toLowerCase() : type === 'app_feedback_image' ? session + ':' + String(data.upload_id || '') : JSON.stringify(prepared || {
-    session, content: String(data.tickets_json || data.feedback_json || '').slice(0, 4096), length: String(data.tickets_json || data.feedback_json || '').length
+    session, content_hash: websiteDigest_(content), length: content.length
   });
   const duplicate = 'form-duplicate-' + websiteDigest_(type + ':' + fingerprint);
   const sessionKey = 'form-session-' + websiteDigest_(type + ':' + session);
