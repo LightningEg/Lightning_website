@@ -22,9 +22,11 @@ const WEBSITE_SURVEY_CHOICES = {
   early_tester: ['Yes', 'Maybe', 'No']
 };
 
+function websiteJson_(value) {
+  return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+}
 function websiteReply_(ok, error) {
-  return ContentService.createTextOutput(JSON.stringify(ok ? { ok: true } : { ok: false, error }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return websiteJson_(ok ? { ok: true } : { ok: false, error });
 }
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'journeys') return websiteReply_(false, 'method_not_allowed');
@@ -102,7 +104,10 @@ function websiteBody_(contents) {
   }
   return values;
 }
+// The one place untrusted text becomes a sheet cell: a leading apostrophe makes formula-shaped input literal.
+// Whitespace and control characters before the =, +, - or @ count too. Numbers and dates are ours and pass through.
 function websiteCell_(value, max) {
+  if (typeof value === 'number' || value instanceof Date) return value;
   const text = String(value == null ? '' : value).slice(0, max || 2000);
   return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }
@@ -137,7 +142,9 @@ function websiteAdmission_(data, prepared) {
   const now = Date.now(), type = data.form_type;
   const started = Number(data.started_at || 0);
   // Timing is only a cheap filter; clients can forge it. Existing clients remain supported.
-  if (started && (!Number.isFinite(started) || started > now - 750 || started < now - 24 * 3600 * 1000)) return { error: 'invalid_submission' };
+  // A wrong device clock or a tab left open for days must not be refused: only a form sent within 750 ms of opening is.
+  const age = now - started;
+  if (started && Number.isFinite(age) && age > -5 * 60 * 1000 && age < 750) return { error: 'invalid_submission' };
   const session = /^[a-zA-Z0-9_-]{16,96}$/.test(data.form_session || '') ? data.form_session : 'legacy';
   const content = String(data.tickets_json || data.feedback_json || '');
   const fingerprint = type === 'signup' ? prepared.email.toLowerCase() : type === 'app_feedback_image' ? session + ':' + String(data.upload_id || '') : JSON.stringify(prepared || {

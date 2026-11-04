@@ -18,7 +18,8 @@ function receiver(file, exported) {
     SpreadsheetApp: { getActiveSpreadsheet: () => ({ getSheetByName: () => rows.length ? sheet : null, insertSheet: () => sheet }) },
     Utilities: { base64Decode() { decodes++; throw new Error('decode must not be reached'); } }
   });
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', file), 'utf8'), context);
+  // The patches share websiteCell_ and websiteJson_ with the main receiver, so it loads first, as in the bundle.
+  for (const f of ['WebsiteReceiver.gs', file]) vm.runInContext(fs.readFileSync(path.join(__dirname, '..', f), 'utf8'), context);
   return { call: data => context[exported](data), rows, props, logs, decodes: () => decodes };
 }
 const ticket = { section: 'Overview', type: 'bug', area: 'app', description: 'Example', attachments: [] };
