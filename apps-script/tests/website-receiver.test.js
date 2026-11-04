@@ -198,3 +198,11 @@ test('ten selected images can be sent together and a failed write remains retrya
   assert.equal(r.files.filter(file => !file.trashed).length, 10);
   assert.equal(r.tabs['App Feedback'].rows.length, 3);
 });
+test('started_at: only an instant submission is refused; wrong clocks and old tabs are not', () => {
+  const r = setup();
+  const at = ms => signup(r.tabs && Math.floor(Math.random() * 1e6), { started_at: String(Date.now() + ms) });
+  assert.equal(r.post(at(-100)).error, 'invalid_submission');      // opened 100 ms ago
+  assert.equal(r.post(at(-2000)).ok, true);                         // normal
+  assert.equal(r.post(at(-3 * 24 * 3600 * 1000)).ok, true);         // tab open for days
+  assert.equal(r.post(at(10 * 60 * 1000)).ok, true);                // device clock 10 minutes ahead
+});
