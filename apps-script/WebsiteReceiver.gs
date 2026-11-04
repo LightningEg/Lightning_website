@@ -22,9 +22,11 @@ const WEBSITE_SURVEY_CHOICES = {
   early_tester: ['Yes', 'Maybe', 'No']
 };
 
+function websiteJson_(value) {
+  return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+}
 function websiteReply_(ok, error) {
-  return ContentService.createTextOutput(JSON.stringify(ok ? { ok: true } : { ok: false, error }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return websiteJson_(ok ? { ok: true } : { ok: false, error });
 }
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'journeys') return websiteReply_(false, 'method_not_allowed');
@@ -102,7 +104,10 @@ function websiteBody_(contents) {
   }
   return values;
 }
+// The one place untrusted text becomes a sheet cell: a leading apostrophe makes formula-shaped input literal.
+// Whitespace and control characters before the =, +, - or @ count too. Numbers and dates are ours and pass through.
 function websiteCell_(value, max) {
+  if (typeof value === 'number' || value instanceof Date) return value;
   const text = String(value == null ? '' : value).slice(0, max || 2000);
   return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }

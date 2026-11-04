@@ -93,7 +93,7 @@ function appFeedbackSafeName_(name, mime) {
 const APP_FEEDBACK_STAGE_CHUNK = 80000;
 const APP_FEEDBACK_STAGE_TTL = 21600;
 function stageAppFeedbackImage_(data) {
-  const reply = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  const reply = websiteJson_;
   if (!/^[a-f0-9]{32}$/.test(data.form_session || '') || !/^[a-f0-9]{32}$/.test(data.upload_id || '')) return reply({ ok: false, error: 'invalid_submission' });
   let image;
   try {
@@ -139,7 +139,7 @@ function appFeedbackStaged_(attachment, session, staged) {
 }
 
 function saveAppFeedback_(data) {
-  const respond = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+  const respond = websiteJson_;
   if (data.website) return respond({ ok: false, error: 'invalid_submission' });
   if (typeof data.tickets_json !== 'string' || data.tickets_json.length > 72 * 1024 * 1024) return respond({ ok: false, error: 'invalid_tickets' });
   let tickets;
@@ -220,7 +220,7 @@ function saveAppFeedback_(data) {
           String(data.reporter_name || '').slice(0, 100),
           String(data.reporter_email || '').slice(0, 254),
           links.join('\n')
-        ].map(appFeedbackCell_);
+        ].map(v => websiteCell_(v));
       });
       const sheet = appFeedbackSheet_();
       sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, APP_FEEDBACK_HEADERS.length).setValues(rows);
@@ -255,12 +255,4 @@ function testAppFeedbackRoute() {
     tickets_json: JSON.stringify([{ section: 'Import CSV', type: 'Improvement', area: 'Visual', description: 'Test row — delete after confirming the route.' }])
   } });
   Logger.log(result.getContent());
-}
-
-// A leading apostrophe makes formula-shaped untrusted input literal in Sheets.
-// Check after whitespace/control characters as well as at the start.
-function appFeedbackCell_(value) {
-  if (typeof value === 'number' || value instanceof Date) return value;
-  const text = String(value == null ? '' : value).slice(0, 2000);
-  return /^[\s\u0000-\u001f]*[=+@-]/.test(text) ? "'" + text : text;
 }
