@@ -1,18 +1,42 @@
 {
-  "version": "1.5.4",
+  "version": "2.0.3",
   "source": "The release notes of the app repository (RELEASES.md), shortened to what a person would notice. English is the source; the Arabic beside it is written in Egyptian Arabic.",
   "items": [
-    {"en_title": "A tidier PC, tab by tab.", "en": "Each tab opens on its answer: more transactions on the first screen, a read-only budget with an Edit plan button, and fewer sentences that explain the screen.",
-     "ar_title": "الكمبيوتر أهدى، تبويب تبويب.", "ar": "كل تبويب بيفتح على الإجابة: معاملات أكتر في أول شاشة، وميزانية للقراية بس فيها زرار تعديل الخطة، وكلام أقل بيشرح الشاشة."},
-    {"en_title": "Safety agrees with itself.", "en": "Reserves and Limits show the same emergency fund, and Loans, Planner and Zakat lead with their figure.",
-     "ar_title": "الأمان متفق مع نفسه.", "ar": "الاحتياطي والحدود بيقولوا نفس صندوق الطوارئ، والقروض والمخطط والزكاة بيبدأوا برقمهم."},
-    {"en_title": "A calmer phone.", "en": "One Needs you strip, Budget shown once, Transactions on this month, and the next payment after payday.",
-     "ar_title": "موبايل أهدى.", "ar": "شريط واحد لـ «محتاجك»، والميزانية مرة واحدة، والمعاملات على الشهر ده، والدفعة الجاية بعد القبض."},
-    {"en_title": "Fewer surprises.", "en": "A conversion far from the market rate asks once before saving; a form sent twice unlocks or saves once; nearby pairing comes first when you connect a device.",
-     "ar_title": "مفاجآت أقل.", "ar": "التحويل البعيد عن سعر السوق بيسألك مرة قبل الحفظ؛ والفورم اللي اتبعت مرتين بيفتح أو بيحفظ مرة واحدة؛ والاقتران القريب بييجي الأول لما توصّل جهاز."},
-    {"en_title": "Loan payments stay put.", "en": "Skipping a loan payment no longer drops a part payment.",
-     "ar_title": "أقساط القرض ثابتة.", "ar": "تخطّي قسط قرض مبقاش بيشيل دفعة جزئية."},
-    {"en_title": "Unlocking behaves.", "en": "Pressing Enter and then clicking no longer shows “This form expired”.",
-     "ar_title": "الفتح من غير مشاكل.", "ar": "الضغط على Enter وبعده كليك مبقاش بيطلّع «الفورم انتهت»."}
+    {
+      "en_title": "The phone app is now just Lightning.",
+      "en": "No more “Test” in the name or the file, and no beta. If you still have Lightning Test on your phone, move its ledger to the PC and check it there, uninstall it, then install this one and pair again.",
+      "ar_title": "تطبيق الموبايل بقى «Lightning» وبس.",
+      "ar": "مفيش «Test» في الاسم ولا في الملف، ومفيش بيتا. لو لسه عندك Lightning Test على الموبايل، انقل الدفتر للكمبيوتر وتأكد منه هناك، وشيل التطبيق القديم، وبعدين نزّل ده واعمل ربط تاني."
+    },
+    {
+      "en_title": "Bank statements, your way.",
+      "en": "Import Excel and text-based CIB statements and review the rows before they post. For an image PDF, copy a prompt that helps an AI tool turn it into a CSV.",
+      "ar_title": "كشوف البنك بطريقتك.",
+      "ar": "استورد كشوف CIB اللي Excel أو PDF نصي وراجع الصفوف قبل ما تتسجل. ولو الـPDF صورة، انسخ برومبت يساعد أداة ذكاء اصطناعي تحوله CSV."
+    },
+    {
+      "en_title": "Find anything, in Arabic or English.",
+      "en": "Search pages, names and transaction history with matching that understands Arabic and near spellings, and merge two names of one counterparty without losing history.",
+      "ar_title": "دوّر على أي حاجة، بالعربي أو بالإنجليزي.",
+      "ar": "البحث في الصفحات والأسماء وتاريخ المعاملات بيفهم العربي والكتابة القريبة، وتقدر تدمج اسمين لنفس الطرف من غير ما تخسر التاريخ."
+    },
+    {
+      "en_title": "Overview answers more.",
+      "en": "See why net worth changed, your net worth in US dollars and grams of 21K gold, and your savings rate and safe to spend on a laptop screen without scrolling.",
+      "ar_title": "النظرة العامة بتجاوب أكتر.",
+      "ar": "شوف ليه صافي ثروتك اتغير، وصافي ثروتك بالدولار وبجرامات دهب ٢١، ومعدل التوفير والمتاح للصرف على شاشة اللابتوب من غير سكرول."
+    },
+    {
+      "en_title": "Plan from where you look.",
+      "en": "Buy more from a holding, give money back to its owner, see unclaimed income on Budget, name a rule, change one category limit and compare income delays and bill changes.",
+      "ar_title": "خطط من نفس المكان.",
+      "ar": "اشتري أكتر من أصل، وارجّع فلوس لصاحبها، وشوف الدخل اللي محدش حجزه في الميزانية، وسمّي قاعدة، وغيّر حد فئة واحدة، وقارن تأخير الدخل وتغيير الفواتير."
+    },
+    {
+      "en_title": "A phone that does more.",
+      "en": "Swipe a transaction to set its category or delete it, keep Undo beside the message until you leave, and find your PC on the network more reliably.",
+      "ar_title": "موبايل بيعمل أكتر.",
+      "ar": "اسحب المعاملة على جنب تحدد فئتها أو تمسحها، والتراجع فاضل جنب الرسالة لحد ما تسيب الصفحة، ولقاء الكمبيوتر على الشبكة بقى أضمن."
+    }
   ]
 }

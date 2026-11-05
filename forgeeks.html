@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="meta">
-        <span>v1.5.4</span>
+        <span>v2.0.3</span>
         <span>python · sqlite · no frontend build</span>
         <span>code on github</span>
         <span>built in Egypt</span>
@@ -295,7 +295,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
         <li><span class="tag b">[evolving]</span><p><b>Fully working, still evolving.</b> Ordinary-PC acceptance, legacy import and in-app backup restore are still being finished. Keep your own backup of anything real, as you would with any app.</p></li>
         <li><span class="tag">[unproven]</span><p><b>Restore safety</b> is tested, not proven: the reboot drill on an ordinary Windows PC is still to do, and power-loss behaviour is unverified.</p></li>
         <li><span class="tag">[known]</span><p><b>Freed memory is not wiped.</b> Decrypted fragments may persist in freed memory, crash dumps or the page file. Nothing protects an unlocked PC from malware.</p></li>
-        <li><span class="tag">[partial]</span><p><b>Statement import</b> reads CSV in the released app (v1.5.4). Excel and CIB text-based PDF readers are built but not in that release; any other PDF still needs a CSV.</p></li>
+        <li><span class="tag">[partial]</span><p><b>Statement import</b> reads CSV, Excel and text-based CIB statements in the released app (v2.0.3). Any other PDF still needs a CSV; the app writes a prompt that helps an AI tool prepare one.</p></li>
         <li><span class="tag">[open]</span><p><b>Routes are async def</b> with synchronous database work inside. It works; it isn't right yet.</p></li>
       </ul>
     </div>
@@ -407,7 +407,7 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
     needs:function(){return ['<span class="a2">[arabic]</span>   lines left in English, figures out of order','<span class="a2">[screens]</span>  small Jinja, CSS and JS fixes · posted as they open','<span class="a2">[python]</span>   routes that are honestly sync or async','<span class="a2">[mobile]</span>   a Play-ready Android build · Python on iOS, early','<span class="a2">[testing]</span>  your own PC, your bank\'s SMS or CSV format, redacted','<span class="d">type</span> <span class="ok">contribute</span> <span class="d">for the three steps.</span>']},
     principles:function(){return ['<span class="ok">efficient</span>   163 ms to open Overview on 2,239 transactions (was 507 ms)','<span class="ok">insightful</span>  one name, one formula, one function per figure','<span class="ok">secure</span>      SQLCipher at rest · Argon2id locks · 127.0.0.1 only']},
     stack:function(){return ['python 3.11+ · fastapi · jinja2 · sqlite + sqlcipher · decimal','pytest · import-linter · pywebview + webview2 · android','<span class="d">no frontend build. one process, one file.</span>']},
-    gaps:function(){return ['<span class="a2">[evolving]</span> acceptance, legacy import, in-app restore still being finished','<span class="a2">[unproven]</span> restore safety on an ordinary Windows PC','<span class="a2">[known]</span>    freed memory is not wiped','<span class="a2">[partial]</span>  statement import: CSV only in v1.5.4']},
+    gaps:function(){return ['<span class="a2">[evolving]</span> acceptance, legacy import, in-app restore still being finished','<span class="a2">[unproven]</span> restore safety on an ordinary Windows PC','<span class="a2">[known]</span>    freed memory is not wiped','<span class="a2">[partial]</span>  statement import: CSV only in v2.0.3']},
     contribute:function(){return ['<span class="ok">1 pick it</span>    comment /take on a good first issue: a bot assigns it to you   <a class="a2" href="https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee" target="_blank" rel="noopener">open tasks</a>','<span class="ok">2 change it</span>  edit in a Codespace, an editor in your browser; commit, sync   <a class="a2" href="https://codespaces.new/LightningEg/Lightning?quickstart=1" target="_blank" rel="noopener">open one</a>','<span class="ok">3 send it</span>    open a pull request with Closes #123','<span class="d">checks run, we review, and the issue closes itself.</span> <a class="a2" href="forgeeks-guide.html">every click →</a>']},
     clone:function(){copy('git clone https://github.com/LightningEg/Lightning.git');return ['<span class="d">copied:</span> git clone https://github.com/LightningEg/Lightning.git']},
     license:function(){return ['PolyForm Noncommercial 1.0.0. Source-available, not OSI open source.','<span class="d">read, run and change it for non-commercial use. you keep the copyright in what you send; the owner may relicense it as part of Lightning, commercially too.</span>']},

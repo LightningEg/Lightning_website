@@ -1,7 +1,7 @@
 {
-  "version": "1.5.4",
-  "date": "2026-10-30",
-  "commit": "0b49426c",
-  "windows": "Lightning-v1.5.4-Windows-x64.zip",
-  "android": "Lightning-Test-1.5.4-918-0b49426c.apk"
+  "version": "2.0.3",
+  "date": "2026-11-05",
+  "commit": "75d63ae8",
+  "windows": "Lightning-v2.0.3-Windows-x64.zip",
+  "android": "Lightning-2.0.3-1022-75d63ae8.apk"
 }
