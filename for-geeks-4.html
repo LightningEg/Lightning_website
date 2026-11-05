@@ -681,7 +681,7 @@ try{var H=document.documentElement;if(!sessionStorage.getItem('lg-geeks-boot')&&
   planning/ budgeting/ <span class="d">forecast, bills, loans · plans and reserves</span>
   reporting/ ui/       <span class="d">read-only views · routes and templates</span>
   security/ runtime/   <span class="d">encryption · profiles and sessions</span>
-<b>tests/</b>              <span class="d">200+ files, including Mohab's year</span>
+<b>tests/</b>              <span class="d">200+ files, including the year</span>
 <b>docs/</b>               <span class="d">overview, architecture, glossary</span>
 <b>report/</b>             <span class="d">known bugs and improvements, one file each</span>
 <b>guideline/</b>          <span class="d">the brand and UI rules</span>
@@ -784,7 +784,7 @@ layers = [
 
         <h3><span class="n">8.3</span>The Safety Net</h3>
         <ol class="rules">
-          <li><span class="no">8.3.1</span><div><h4>Mohab's Year</h4><p>A 31-year-old salaried Cairo user lives a full year through the real screens. If a screen gets his year wrong, the feature is not done.</p><span class="by">file <code>tests/test_mohab_year.py</code></span></div></li>
+          <li><span class="no">8.3.1</span><div><h4>The sample year</h4><p>A 31-year-old salaried Cairo user lives a full year through the real screens. If a screen gets his year wrong, the feature is not done.</p><span class="by">file <code>tests/test_mohab_year.py</code></span></div></li>
           <li><span class="no">8.3.2</span><div><h4>The Figures Registry Is Tested</h4><p>Every formula may only use names from the table, every <code>function</code> it names must import, and the generated glossary must match the registry.</p><span class="by">file <code>tests/test_figures.py</code></span></div></li>
           <li><span class="no">8.3.3</span><div><h4>The Architecture Runs in pytest</h4><p>The import contracts are checked by <code>lint-imports</code> and by the test suite.</p><span class="by">file <code>tests/test_architecture.py</code></span></div></li>
           <li><span class="no">8.3.4</span><div><h4>CI Is Deliberately Light</h4><p>Pushes run on Linux only. The Windows and Android workflows are run by hand when a change needs that evidence.</p><span class="by">folder <code>.github/workflows/</code></span></div></li>
@@ -841,7 +841,7 @@ layers = [
 <span class="p">$ </span>pip install -r requirements-dev.txt
 <span class="p">$ </span>python -m pytest
 <span class="p">$ </span>lint-imports</pre>
-        <pre class="code has-cp" data-copy="python -m lightning --demo"><span class="c"># Mohab's household, rebuilt on every start → http://127.0.0.1:8766</span>
+        <pre class="code has-cp" data-copy="python -m lightning --demo"><span class="c"># The sample year, rebuilt on every start → http://127.0.0.1:8766</span>
 <span class="p">$ </span>python -m lightning --demo</pre>
         <pre class="code has-cp" data-copy="python -m lightning --profiles"><span class="c"># the encrypted-profile UI in a browser (Linux)</span>
 <span class="p">$ </span>python -m lightning --profiles</pre>
