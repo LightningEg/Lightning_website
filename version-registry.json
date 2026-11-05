@@ -3352,8 +3352,8 @@
       "id": "UX-2026.10.30.08",
       "name": "Sample Profiles · Lightning 1.5.4",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.08.html"
     },
     {
       "id": "UX-2026.10.30.09",
@@ -3450,15 +3450,15 @@
       "id": "UX-2026.11.01.12",
       "name": "Features · Launch-ready words",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.12.html"
     },
     {
       "id": "UX-2026.11.01.13",
       "name": "Downloads · Launch-ready words",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.13.html"
     },
     {
       "id": "UX-2026.11.01.14",
@@ -3520,8 +3520,8 @@
       "id": "UX-2026.11.01.22",
       "name": "Release Log · Launch-ready words",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.22.html"
     },
     {
       "id": "UX-2026.11.01.23",
@@ -3541,8 +3541,8 @@
       "id": "UX-2026.11.02.01",
       "name": "Lightning · Animated themes recaptured",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.02.01.html"
     },
     {
       "id": "UX-2026.11.02.02",
@@ -3555,8 +3555,8 @@
       "id": "UX-2026.11.04.01",
       "name": "Lightning · Feedback screenshots",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.04.01.html"
     },
     {
       "id": "UX-2026.11.04.02",
@@ -3568,6 +3568,55 @@
     {
       "id": "UX-2026.11.04.03",
       "name": "Version archive · Feedback screenshots",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.04.03.html"
+    },
+    {
+      "id": "UX-2026.11.05.01",
+      "name": "Downloads · Lightning 2.0.3",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.02",
+      "name": "Release Log · Lightning 2.0.3",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.03",
+      "name": "App Feedback · Lightning 2.0.3",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.04",
+      "name": "Lightning · Version 2.0.3",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.05",
+      "name": "Features · Version 2.0.3",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.06",
+      "name": "Sample Profiles · Lightning 2.0.3",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.05.07",
+      "name": "Version Archive · Lightning 2.0.3",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
