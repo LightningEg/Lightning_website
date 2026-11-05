@@ -94,7 +94,7 @@ await test('my posts: status, the reviewer\'s note, edit and share again with th
   assert.equal(cards.length, 3, 'an internal draft with no note is not listed');
   assert.deepEqual(cards.map(c => c.querySelector('h3').textContent), ['Needs a change', 'Waiting for review', 'Published']);
   assert.match(cards[0].textContent, /Note from the reviewer: Please clarify your excerpt\./);
-  assert.match(cards[2].textContent, /Earned 100 coins and 50 points/);
+  assert.match(cards[2].textContent, /Earned 100 Cotton and 50 points/);
   await p.click(p.button(cards[0], 'Edit and share again'));
   const f = p.$('story-form');
   assert.equal(f.elements.id.value, 'm1');

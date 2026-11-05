@@ -121,11 +121,11 @@ await test('rules: task links, states and lock notes', () => {
   assert.equal(tasksRules.issueHref('LightningEg/Lightning', 12), 'https://github.com/LightningEg/Lightning/issues/12');
   for (const [r, n] of [['LightningEg/Lightning', 0], ['LightningEg/Lightning', 1.5], ['a b/c', 1], ['javascript:x/y', 1], ['a/b/c', 1], [null, 1]]) assert.equal(tasksRules.issueHref(r, n), null, `${r} ${n}`);
   assert.deepEqual([{ mine: true }, { claimed: true }, {}].map(tasksRules.stateOf), ['yours', 'taken', 'open']);
-  assert.equal(tasksRules.coinsText(1), '1 coin');
-  assert.equal(tasksRules.coinsText(75), '75 coins');
+  assert.equal(tasksRules.coinsText(1), '1 Cotton');
+  assert.equal(tasksRules.coinsText(75), '75 Cotton');
   assert.equal(tasksRules.lockNote({ mine: false, locked_amount: 5, amount: 9 }), '');
-  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 80 }), /locked at 80 coins\.$/);
-  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 120 }), /locked at 80 coins.*now offers 120 coins/);
+  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 80 }), /locked at 80 Cotton\.$/);
+  assert.match(tasksRules.lockNote({ mine: true, locked_amount: 80, amount: 120 }), /locked at 80 Cotton.*now offers 120 Cotton/);
 });
 
 await test('rules: owner inputs are checked before anything is sent', () => {
@@ -405,11 +405,11 @@ await test('tasks: signed in lists open tasks with coins, state, criteria and a 
   assert.equal(items.length, 3);
   const first = items[0];
   assert.match(first.querySelector('h2').textContent, /^#12Round money$/);
-  assert.deepEqual([...first.querySelectorAll('.tag')].map(t => t.textContent), ['120 coins', 'yours']);
+  assert.deepEqual([...first.querySelectorAll('.tag')].map(t => t.textContent), ['120 Cotton', 'yours']);
   assert.match(first.textContent, /Whole EGP everywhere\.\nTests pass\./);
-  assert.match(first.textContent, /locked at 80 coins.*now offers 120 coins/);
-  assert.deepEqual([...items[1].querySelectorAll('.tag')].map(t => t.textContent), ['50 coins', 'taken']);
-  assert.deepEqual([...items[2].querySelectorAll('.tag')].map(t => t.textContent), ['10 coins', 'open']);
+  assert.match(first.textContent, /locked at 80 Cotton.*now offers 120 Cotton/);
+  assert.deepEqual([...items[1].querySelectorAll('.tag')].map(t => t.textContent), ['50 Cotton', 'taken']);
+  assert.deepEqual([...items[2].querySelectorAll('.tag')].map(t => t.textContent), ['10 Cotton', 'open']);
   assert.match(items[2].querySelector('h2').textContent, /Task$/, 'a task without a title still reads');
   const a = first.querySelector('a');
   assert.equal(a.href, 'https://github.com/LightningEg/Lightning/issues/12');
