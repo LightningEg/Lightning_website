@@ -10,132 +10,6 @@
       "archive_url": "archive/UX-2026.10.12.05.html"
     },
     {
-      "id": "UX-2026.10.12.04",
-      "name": "Sample Profiles · Landing system",
-      "page": "sample-profiles.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.04.html"
-    },
-    {
-      "id": "UX-2026.10.12.03",
-      "name": "Release Log · Landing system",
-      "page": "release-log.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.03.html"
-    },
-    {
-      "id": "UX-2026.10.12.02",
-      "name": "Current Status · Landing system",
-      "page": "current-status.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.02.html"
-    },
-    {
-      "id": "UX-2026.10.12.01",
-      "name": "How It Works · Landing system",
-      "page": "how-it-works.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.01.html"
-    },
-    {
-      "id": "UX-2026.10.10.14",
-      "name": "Version Archive · Unified navigation tabs",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.14.html"
-    },
-    {
-      "id": "UX-2026.10.10.13",
-      "name": "Features · Navigation matches Current Status",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.13.html"
-    },
-    {
-      "id": "UX-2026.10.10.12",
-      "name": "Lightning · Home · Navigation matches Current Status",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.12.html"
-    },
-    {
-      "id": "UX-2026.10.10.11",
-      "name": "Version Archive · Home header action style",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.11.html"
-    },
-    {
-      "id": "UX-2026.10.10.10",
-      "name": "Lightning · Home · Header action matches Current Status",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.10.html"
-    },
-    {
-      "id": "UX-2026.10.10.09",
-      "name": "Lightning · Home · Matched hero button style",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.09.html"
-    },
-    {
-      "id": "UX-2026.10.10.08",
-      "name": "Version Archive · Amr profile update",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.08.html"
-    },
-    {
-      "id": "UX-2026.10.10.07",
-      "name": "Sample Profiles · Amr's business support work",
-      "page": "sample-profiles.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.07.html"
-    },
-    {
-      "id": "UX-2026.10.10.04",
-      "name": "Sample Profiles · Abdelrahman",
-      "page": "sample-profiles.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.04.html"
-    },
-    {
-      "id": "UX-2026.10.10.05",
-      "name": "Current Status · Abdelrahman sample profile",
-      "page": "current-status.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.05.html"
-    },
-    {
-      "id": "UX-2026.10.10.06",
-      "name": "Version Archive · Abdelrahman sample profile",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.06.html"
-    },
-    {
-      "id": "UX-2026.10.10.01",
-      "name": "Sample profiles · Four Egyptian money stories",
-      "page": "sample-profiles.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.01.html"
-    },
-    {
-      "id": "UX-2026.10.10.02",
-      "name": "Current Status · Sample profile guide link",
-      "page": "current-status.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.02.html"
-    },
-    {
-      "id": "UX-2026.10.10.03",
-      "name": "Version Archive · Egyptian sample profiles",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.10.03.html"
-    },
-    {
       "id": "UX-2026.10.01.06",
       "name": "Experience A · Clear picture",
       "page": "index.html",
@@ -1333,153 +1207,6 @@
       "archive_url": "archive/UX-2026.10.08.07.html"
     },
     {
-      "id": "UX-2026.10.09.08",
-      "name": "index.html · Arabic language switch",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.08.html"
-    },
-    {
-      "id": "UX-2026.10.09.09",
-      "name": "features.html · Arabic language switch",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.09.html"
-    },
-    {
-      "id": "UX-2026.10.09.10",
-      "name": "how-it-works.html · Arabic language switch",
-      "page": "how-it-works.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.10.html"
-    },
-    {
-      "id": "UX-2026.10.09.11",
-      "name": "current-status.html · Arabic language switch",
-      "page": "current-status.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.11.html"
-    },
-    {
-      "id": "UX-2026.10.09.12",
-      "name": "guides.html · Arabic language switch",
-      "page": "guides.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.12.html"
-    },
-    {
-      "id": "UX-2026.10.09.13",
-      "name": "net-worth-tracker.html · Arabic language switch",
-      "page": "net-worth-tracker.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.13.html"
-    },
-    {
-      "id": "UX-2026.10.09.14",
-      "name": "budget-app-egypt.html · Arabic language switch",
-      "page": "budget-app-egypt.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.14.html"
-    },
-    {
-      "id": "UX-2026.10.09.15",
-      "name": "expense-tracker-egypt.html · Arabic language switch",
-      "page": "expense-tracker-egypt.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.15.html"
-    },
-    {
-      "id": "UX-2026.10.09.16",
-      "name": "investment-tracker-egypt.html · Arabic language switch",
-      "page": "investment-tracker-egypt.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.16.html"
-    },
-    {
-      "id": "UX-2026.10.09.17",
-      "name": "cash-flow-planner.html · Arabic language switch",
-      "page": "cash-flow-planner.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.17.html"
-    },
-    {
-      "id": "UX-2026.10.09.18",
-      "name": "bank-statement-budgeting.html · Arabic language switch",
-      "page": "bank-statement-budgeting.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.18.html"
-    },
-    {
-      "id": "UX-2026.10.09.19",
-      "name": "offline-personal-finance-app.html · Arabic language switch",
-      "page": "offline-personal-finance-app.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.19.html"
-    },
-    {
-      "id": "UX-2026.10.09.20",
-      "name": "release-log.html · Arabic language switch",
-      "page": "release-log.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.20.html"
-    },
-    {
-      "id": "UX-2026.10.09.21",
-      "name": "Version Archive · Arabic edition and language switches",
-      "page": "versions.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.09.21.html"
-    },
-    {
-      "id": "UX-2026.10.12.06",
-      "name": "Guides · One library",
-      "page": "guides.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.06.html"
-    },
-    {
-      "id": "UX-2026.10.12.07",
-      "name": "Guides · Why the salary runs out",
-      "page": "blog-salary-runs-out.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.07.html"
-    },
-    {
-      "id": "UX-2026.10.12.08",
-      "name": "Guides · Budget a 20,000 EGP salary",
-      "page": "blog-budget-20000-egp.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.08.html"
-    },
-    {
-      "id": "UX-2026.10.12.09",
-      "name": "Guides · Track your spending",
-      "page": "blog-track-expenses.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.09.html"
-    },
-    {
-      "id": "UX-2026.10.12.10",
-      "name": "Guides · Emergency fund",
-      "page": "blog-emergency-fund.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.10.html"
-    },
-    {
-      "id": "UX-2026.10.12.11",
-      "name": "Guides · Irregular income budget",
-      "page": "blog-irregular-income-budget.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.11.html"
-    },
-    {
-      "id": "UX-2026.10.12.12",
-      "name": "bank-statement-budgeting.html · One look, what matters first",
-      "page": "bank-statement-budgeting.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.12.html"
-    },
-    {
       "id": "UX-2026.10.12.13",
       "name": "Guides · One look, what matters first",
       "page": "blog-budget-20000-egp.html",
@@ -1515,20 +1242,6 @@
       "archive_url": "archive/UX-2026.10.12.17.html"
     },
     {
-      "id": "UX-2026.10.12.18",
-      "name": "budget-app-egypt.html · One look, what matters first",
-      "page": "budget-app-egypt.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.18.html"
-    },
-    {
-      "id": "UX-2026.10.12.19",
-      "name": "cash-flow-planner.html · One look, what matters first",
-      "page": "cash-flow-planner.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.19.html"
-    },
-    {
       "id": "UX-2026.10.12.20",
       "name": "Current Status · One look, what matters first",
       "page": "current-status.html",
@@ -1536,53 +1249,11 @@
       "archive_url": "archive/UX-2026.10.12.20.html"
     },
     {
-      "id": "UX-2026.10.12.21",
-      "name": "expense-tracker-egypt.html · One look, what matters first",
-      "page": "expense-tracker-egypt.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.21.html"
-    },
-    {
-      "id": "UX-2026.10.12.22",
-      "name": "Features · One look, what matters first",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.22.html"
-    },
-    {
-      "id": "UX-2026.10.12.23",
-      "name": "Guides · One look, what matters first",
-      "page": "guides.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.23.html"
-    },
-    {
-      "id": "UX-2026.10.12.24",
-      "name": "How It Works · One look, what matters first",
-      "page": "how-it-works.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.24.html"
-    },
-    {
-      "id": "UX-2026.10.12.25",
-      "name": "Lightning · One look, what matters first",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.25.html"
-    },
-    {
       "id": "UX-2026.10.12.26",
       "name": "investment-tracker-egypt.html · One look, what matters first",
       "page": "investment-tracker-egypt.html",
       "status": "archived",
       "archive_url": "archive/UX-2026.10.12.26.html"
-    },
-    {
-      "id": "UX-2026.10.12.27",
-      "name": "net-worth-tracker.html · One look, what matters first",
-      "page": "net-worth-tracker.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.27.html"
     },
     {
       "id": "UX-2026.10.12.28",
@@ -1606,27 +1277,6 @@
       "archive_url": "archive/UX-2026.10.12.30.html"
     },
     {
-      "id": "UX-2026.10.12.31",
-      "name": "Lightning · Top three first",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.31.html"
-    },
-    {
-      "id": "UX-2026.10.12.32",
-      "name": "Features · Top three first",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.32.html"
-    },
-    {
-      "id": "UX-2026.10.12.33",
-      "name": "How It Works · Top three first",
-      "page": "how-it-works.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.33.html"
-    },
-    {
       "id": "UX-2026.10.12.34",
       "name": "Guides · Sync your phone and PC without the cloud",
       "page": "sync-phone-and-pc-without-cloud.html",
@@ -1641,34 +1291,6 @@
       "archive_url": "archive/UX-2026.10.12.35.html"
     },
     {
-      "id": "UX-2026.10.12.36",
-      "name": "Guides · Top three first",
-      "page": "guides.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.36.html"
-    },
-    {
-      "id": "UX-2026.10.12.37",
-      "name": "Lightning · Search copy tightened",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.37.html"
-    },
-    {
-      "id": "UX-2026.10.12.38",
-      "name": "Features · Search copy tightened",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.38.html"
-    },
-    {
-      "id": "UX-2026.10.12.39",
-      "name": "Lightning · Runway",
-      "page": "index.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.12.39.html"
-    },
-    {
       "id": "UX-2026.10.13.01",
       "name": "Guides · Free expense tracker for Egypt",
       "page": "expense-tracker-egypt.html",
@@ -1681,13 +1303,6 @@
       "page": "index.html",
       "status": "archived",
       "archive_url": "archive/UX-2026.10.13.02.html"
-    },
-    {
-      "id": "UX-2026.10.13.03",
-      "name": "features.html · Free expense tracker links",
-      "page": "features.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.13.03.html"
     },
     {
       "id": "UX-2026.10.13.04",
@@ -1716,13 +1331,6 @@
       "page": "cash-flow-planner.html",
       "status": "archived",
       "archive_url": "archive/UX-2026.10.13.07.html"
-    },
-    {
-      "id": "UX-2026.10.13.08",
-      "name": "how-it-works.html · Free expense tracker links",
-      "page": "how-it-works.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.13.08.html"
     },
     {
       "id": "UX-2026.10.13.09",
@@ -1835,13 +1443,6 @@
       "page": "index.html",
       "status": "archived",
       "archive_url": "archive/UX-2026.10.15.01.html"
-    },
-    {
-      "id": "UX-2026.10.15.02",
-      "name": "Test · Wire dots and pulsing lock restored",
-      "page": "test.html",
-      "status": "archived",
-      "archive_url": "archive/UX-2026.10.15.02.html"
     },
     {
       "id": "UX-2026.10.15.03",
@@ -2575,8 +2176,8 @@
       "id": "UX-2026.10.21.15",
       "name": "Where Your Data Lives guide · Part of its topic",
       "page": "offline-personal-finance-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.15.html"
     },
     {
       "id": "UX-2026.10.21.16",
@@ -2939,29 +2540,29 @@
       "id": "UX-2026.10.23.07",
       "name": "Blog · 20,000 EGP budget · question and features",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.07.html"
     },
     {
       "id": "UX-2026.10.23.08",
       "name": "Blog · Emergency fund · question and features",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.08.html"
     },
     {
       "id": "UX-2026.10.23.09",
       "name": "Blog · Irregular income · question and features",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.09.html"
     },
     {
       "id": "UX-2026.10.23.10",
       "name": "Blog · Salary runs out · question and features",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.10.html"
     },
     {
       "id": "UX-2026.10.23.11",
@@ -3135,8 +2736,8 @@
       "id": "UX-2026.10.27.03",
       "name": "Guides · How people use Lightning",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.27.03.html"
     },
     {
       "id": "UX-2026.10.27.04",
@@ -3163,8 +2764,8 @@
       "id": "UX-2026.10.27.07",
       "name": "Your data and devices · How people use Lightning",
       "page": "your-data-and-devices.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.27.07.html"
     },
     {
       "id": "UX-2026.10.27.08",
@@ -3352,8 +2953,8 @@
       "id": "UX-2026.10.30.08",
       "name": "Sample Profiles · Lightning 1.5.4",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.30.08.html"
     },
     {
       "id": "UX-2026.10.30.09",
@@ -3401,22 +3002,22 @@
       "id": "UX-2026.11.01.04",
       "name": "Lightning or A spreadsheet? · Honest comparison",
       "page": "lightning-vs-spreadsheet.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.04.html"
     },
     {
       "id": "UX-2026.11.01.05",
       "name": "Lightning or A traditional expense tracker? · Honest comparison",
       "page": "lightning-vs-expense-tracker-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.05.html"
     },
     {
       "id": "UX-2026.11.01.06",
       "name": "Lightning or A cloud budgeting app? · Honest comparison",
       "page": "lightning-vs-cloud-budgeting-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.06.html"
     },
     {
       "id": "UX-2026.11.01.07",
@@ -3499,8 +3100,8 @@
       "id": "UX-2026.11.01.19",
       "name": "Sync Phone and PC · Launch-ready words",
       "page": "sync-phone-and-pc-without-cloud.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.19.html"
     },
     {
       "id": "UX-2026.11.01.20",
@@ -3520,8 +3121,8 @@
       "id": "UX-2026.11.01.22",
       "name": "Release Log · Launch-ready words",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.01.22.html"
     },
     {
       "id": "UX-2026.11.01.23",
@@ -3555,8 +3156,8 @@
       "id": "UX-2026.11.04.01",
       "name": "Lightning · Feedback screenshots",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.04.01.html"
     },
     {
       "id": "UX-2026.11.04.02",
@@ -3574,133 +3175,413 @@
     },
     {
       "id": "UX-2026.11.05.01",
-      "name": "Budget From Your Bank Statement CSV, No Login · Lightning · Sample name removed",
-      "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "name": "Downloads · Lightning 2.0.3",
+      "page": "current-status.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.01.html"
     },
     {
       "id": "UX-2026.11.05.02",
-      "name": "A Personal Financial Plan in Egypt, Step by Step · Lightning · Sample name removed",
-      "page": "blog-personal-financial-plan.html",
+      "name": "Release Log · Lightning 2.0.3",
+      "page": "release-log.html",
       "status": "current",
       "archive_url": null
     },
     {
       "id": "UX-2026.11.05.03",
-      "name": "Free Budget App for Egypt: Monthly Budget in EGP · Lightning · Sample name removed",
-      "page": "budget-app-egypt.html",
+      "name": "App Feedback · Lightning 2.0.3",
+      "page": "app-feedback.html",
       "status": "current",
       "archive_url": null
     },
     {
       "id": "UX-2026.11.05.04",
-      "name": "Budget Your Salary in Egypt, Step by Step · Lightning · Sample name removed",
+      "name": "Lightning · Version 2.0.3",
+      "page": "index.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.04.html"
+    },
+    {
+      "id": "UX-2026.11.05.05",
+      "name": "Features · Version 2.0.3",
+      "page": "features.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.05.html"
+    },
+    {
+      "id": "UX-2026.11.05.06",
+      "name": "Sample Profiles · Lightning 2.0.3",
+      "page": "sample-profiles.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.06.html"
+    },
+    {
+      "id": "UX-2026.11.05.07",
+      "name": "Version Archive · Lightning 2.0.3",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.07.html"
+    },
+    {
+      "id": "UX-2026.11.08.01",
+      "name": "Features · Shorter intro",
+      "page": "features.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.01.html"
+    },
+    {
+      "id": "UX-2026.11.08.02",
+      "name": "Sample Profiles · Shorter intro",
+      "page": "sample-profiles.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.02.html"
+    },
+    {
+      "id": "UX-2026.11.08.03",
+      "name": "Version Archive · Shorter intros",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.03.html"
+    },
+    {
+      "id": "UX-2026.11.08.04",
+      "name": "Salary Runs Out · With the 20,000 EGP example",
+      "page": "blog-salary-runs-out.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.04.html"
+    },
+    {
+      "id": "UX-2026.11.08.06",
+      "name": "Budget Your Salary · One card for the merged article",
+      "page": "budget-your-salary.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.06.html"
+    },
+    {
+      "id": "UX-2026.11.08.07",
+      "name": "Monthly Budget · Link to the merged article",
+      "page": "budget-app-egypt.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.07.html"
+    },
+    {
+      "id": "UX-2026.11.08.08",
+      "name": "Guides · Merged article",
+      "page": "guides.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.08.html"
+    },
+    {
+      "id": "UX-2026.11.08.09",
+      "name": "Version Archive · Merged salary articles",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.09.html"
+    },
+    {
+      "id": "UX-2026.11.08.10",
+      "name": "Bank Statement Budgeting · Filler lines removed",
+      "page": "bank-statement-budgeting.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.10.html"
+    },
+    {
+      "id": "UX-2026.11.08.11",
+      "name": "Blog · Filler lines removed",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.12",
+      "name": "Blog · Filler lines removed",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.13",
+      "name": "Guides · Filler lines removed",
+      "page": "blog-personal-financial-plan.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.13.html"
+    },
+    {
+      "id": "UX-2026.11.08.14",
+      "name": "Salary Runs Out · Filler lines removed",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.15",
+      "name": "Monthly Budget · Filler lines removed",
+      "page": "budget-app-egypt.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.15.html"
+    },
+    {
+      "id": "UX-2026.11.08.16",
+      "name": "Budget Your Salary · Filler lines removed",
+      "page": "budget-your-salary.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.16.html"
+    },
+    {
+      "id": "UX-2026.11.08.17",
+      "name": "Cash Flow Planner · Filler lines removed",
+      "page": "cash-flow-planner.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.17.html"
+    },
+    {
+      "id": "UX-2026.11.08.18",
+      "name": "Dollar Savings Tracker · Filler lines removed",
+      "page": "dollar-savings-tracker-egypt.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.18.html"
+    },
+    {
+      "id": "UX-2026.11.08.19",
+      "name": "Expense Tracker Egypt · Filler lines removed",
+      "page": "expense-tracker-egypt.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.19.html"
+    },
+    {
+      "id": "UX-2026.11.08.20",
+      "name": "Guides · Filler lines removed",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.21",
+      "name": "How It Works · Filler lines removed",
+      "page": "how-it-works.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.21.html"
+    },
+    {
+      "id": "UX-2026.11.08.22",
+      "name": "Investment Tracker · Filler lines removed",
+      "page": "investment-tracker-egypt.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.22.html"
+    },
+    {
+      "id": "UX-2026.11.08.23",
+      "name": "Know what you own · Filler lines removed",
+      "page": "know-what-you-own.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.23.html"
+    },
+    {
+      "id": "UX-2026.11.08.24",
+      "name": "Lightning or A cloud budgeting app? · Filler lines removed",
+      "page": "lightning-vs-cloud-budgeting-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.25",
+      "name": "Lightning or A traditional expense tracker? · Filler lines removed",
+      "page": "lightning-vs-expense-tracker-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.26",
+      "name": "Lightning or A spreadsheet? · Filler lines removed",
+      "page": "lightning-vs-spreadsheet.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.27",
+      "name": "Net Worth, Budget and Expense Tracker · Filler lines removed",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.27.html"
+    },
+    {
+      "id": "UX-2026.11.08.28",
+      "name": "Net Worth Tracker · Filler lines removed",
+      "page": "net-worth-tracker.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.28.html"
+    },
+    {
+      "id": "UX-2026.11.08.29",
+      "name": "Where Your Data Lives guide · Filler lines removed",
+      "page": "offline-personal-finance-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.30",
+      "name": "Sample Profiles · Filler lines removed",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.31",
+      "name": "See where your money goes · Filler lines removed",
+      "page": "see-where-your-money-goes.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.31.html"
+    },
+    {
+      "id": "UX-2026.11.08.32",
+      "name": "Sync Phone and PC · Filler lines removed",
+      "page": "sync-phone-and-pc-without-cloud.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.33",
+      "name": "Money Held for Others · Filler lines removed",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.33.html"
+    },
+    {
+      "id": "UX-2026.11.08.34",
+      "name": "Your data and devices · Filler lines removed",
+      "page": "your-data-and-devices.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.35",
+      "name": "Version Archive · Filler lines removed",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.35.html"
+    },
+    {
+      "id": "UX-2026.11.08.36",
+      "name": "Sample wording · bank statement budgeting",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.37",
+      "name": "Sample wording · blog personal financial plan",
+      "page": "blog-personal-financial-plan.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.38",
+      "name": "Sample wording · budget app egypt",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.39",
+      "name": "Sample wording · budget your salary",
       "page": "budget-your-salary.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.05",
-      "name": "Safe to Spend Before Payday: Cash Flow Planner · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.40",
+      "name": "Sample wording · cash flow planner",
       "page": "cash-flow-planner.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.06",
-      "name": "Download Lightning 1.5.4: Windows and Android · Sample name removed",
+      "id": "UX-2026.11.08.41",
+      "name": "Sample wording · current status",
       "page": "current-status.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.07",
-      "name": "Dollar Savings and US Shares Tracker for Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.42",
+      "name": "Sample wording · dollar savings tracker egypt",
       "page": "dollar-savings-tracker-egypt.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.08",
-      "name": "Free Expense Tracker for Egypt, in EGP · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.43",
+      "name": "Sample wording · expense tracker egypt",
       "page": "expense-tracker-egypt.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.09",
-      "name": "Personal Finance App Features for Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.44",
+      "name": "Sample wording · features",
       "page": "features.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.10",
-      "name": "How Lightning Works · Your Money in Thirty Minutes a Month · Sample name removed",
+      "id": "UX-2026.11.08.45",
+      "name": "Sample wording · how it works",
       "page": "how-it-works.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.11",
-      "name": "Lightning · Free Expense Tracker and Finance App for Egypt · Sample name removed",
+      "id": "UX-2026.11.08.46",
+      "name": "Sample wording · index",
       "page": "index.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.12",
-      "name": "Investment Tracker for Egypt: Gold and Shares · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.47",
+      "name": "Sample wording · investment tracker egypt",
       "page": "investment-tracker-egypt.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.13",
-      "name": "What Do I Own? Net Worth in EGP for Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.48",
+      "name": "Sample wording · know what you own",
       "page": "know-what-you-own.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.14",
-      "name": "Net Worth, Budget and Expense Tracker for Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.49",
+      "name": "Sample wording · net worth budget expense tracker",
       "page": "net-worth-budget-expense-tracker.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.15",
-      "name": "How to Calculate Your Net Worth in Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.50",
+      "name": "Sample wording · net worth tracker",
       "page": "net-worth-tracker.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.16",
-      "name": "Where Does My Money Go? Track Spending in Egypt · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.51",
+      "name": "Sample wording · see where your money goes",
       "page": "see-where-your-money-goes.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.17",
-      "name": "Test · Lightning · Sample name removed",
-      "page": "test.html",
-      "status": "current",
-      "archive_url": null
-    },
-    {
-      "id": "UX-2026.11.05.18",
-      "name": "How to Track Money You Hold for Someone Else · Lightning · Sample name removed",
+      "id": "UX-2026.11.08.52",
+      "name": "Sample wording · track money you hold for others",
       "page": "track-money-you-hold-for-others.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.05.19",
-      "name": "Version Archive · Sample name removed",
+      "id": "UX-2026.11.08.53",
+      "name": "Version Archive · Sample wording",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

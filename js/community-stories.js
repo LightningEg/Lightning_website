@@ -12,7 +12,7 @@
   const a=el('article');a.className='panel';a.append(el('h3',STATE[s.status]||s.status),el('p',s.body));
   const url=s.linkedin_url||s.reddit_url;if(url&&SAFE.test(url)){const l=el('a','Your post');l.href=url;l.target='_blank';l.rel='noopener noreferrer';a.append(l);}
   if(s.review_note)a.append(el('p','Note from the reviewer: '+s.review_note));
-  if(s.awarded_coins||s.awarded_points)a.append(el('p','Earned '+s.awarded_coins+' coins and '+s.awarded_points+' points.'));
+  if(s.awarded_coins||s.awarded_points)a.append(el('p','Earned '+s.awarded_coins+' Cotton and '+s.awarded_points+' points.'));
   const row=el('div');row.className='row';
   if(['draft','rejected','withdrawn'].includes(s.status)){
    const f=$('story-form');

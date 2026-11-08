@@ -7,7 +7,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 ## Key facts
 
 - Who it is for: salaried people in Egypt who want one clear picture of their money in EGP.
-- Platform: Windows and Android. The current release is v1.5.4: a Windows ZIP to unzip and open and a signed Android APK, installed from the Downloads page. The phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review.
+- Platform: Windows and Android. The current release is v2.0.3: a Windows ZIP to unzip and open and a signed Android APK, installed from the Downloads page. The phone holds the ledger, a paired Windows PC borrows it and hands it back over your own Wi-Fi, encrypted, with no server in between, and the phone can read bank SMS into review.
 - Price: free to download and use, and nothing is ever locked. After seven days, Lightning asks now and then for a one-time payment; you pay when it is worth it to you and own it forever.
 - Currencies and markets: each account keeps its own currency (dollars, euros, riyals and others), counted in EGP at the day's rate or a rate you type, with the gain or loss from the exchange rate shown apart. About 400 US stocks and 70 ETFs on Nasdaq, NYSE and NYSE Arca are priced automatically in dollars. Gulf and European shares can be held with prices you type.
 - Bank connection: none. Download a CSV from any bank or wallet, match its columns once, and review each row before it is saved.
@@ -22,11 +22,12 @@ Lightning is a different product from anything else called "Lightning": it is th
 - [How it works](https://lightningeg.com/how-it-works.html): a monthly routine of about 30 minutes: upload your statements (10 minutes), settle a few rows (5 minutes), then sit down with your numbers (15 minutes).
 - [Downloads](https://lightningeg.com/current-status.html): the current Windows ZIP and Android APK, a safe sample year of fictional CSV statements to learn on, and how to give feedback.
 - [Sample profiles](https://lightningeg.com/sample-profiles.html): four fictional Egyptian 2026 profiles—Amr (irregular side income), Abdelrahman (steady salary and equity investing), Menna (freelance income), and Fatma (predictable household costs and an emergency reserve)—loadable in Lightning.
+- [Community](https://lightningeg.com/community.html): build Lightning with us: ship code, send feedback or share a story, and see this month’s builders.
 - [Release log](https://lightningeg.com/release-log.html): what changed build by build.
 - [Contribute](https://lightningeg.com/contribute.html): how anyone can help build Lightning, all on GitHub in the browser with nothing to install: pick a good first issue, comment /take (a bot assigns it; /drop gives it back), change it in a Codespace and open a pull request with "Closes #" and the task number. Questions go on the issue, security problems are reported privately, and non-coders can send app feedback.
 - [For Geeks](https://lightningeg.com/forgeeks.html): for developers: where help is needed (Arabic, screens, Python backend, Android and iOS, testing on real PCs and bank formats) and the three steps to a first pull request, then who builds Lightning and why the source is public (source-available, PolyForm Noncommercial 1.0.0), the stack (Python, FastAPI, SQLite with SQLCipher, no frontend build), the test and contract counts, and what is not finished.
 - [Roadmap](https://lightningeg.com/forgeeks-roadmap.html): the milestones in order: M1 finish the backend and features and set up the open-source contribution workflow (its items carry the plan codes, like 7B; a task titled [3C] is item C of milestone 3); M2 publish on Google Play; M3 publish on the App Store (iOS, not started). Each lists what is done, in progress and next.
-- [Leaderboard](https://lightningeg.com/forgeeks-leaderboard.html): contributors ranked by Lightning Coins earned from merged tasks and accepted feedback, this month (Cairo time) and all time, and the members who chose to show a public profile with their setup and verified work. Coins are cosmetic only, never bought with money.
+- [Leaderboard](https://lightningeg.com/forgeeks-leaderboard.html): contributors ranked by Cotton earned from merged tasks and accepted feedback, this month (Cairo time) and all time, and the members who chose to show a public profile with their setup and verified work. Cotton buys cosmetics only; it never unlocks a feature.
 - [Contribute](https://lightningeg.com/forgeeks-guide.html): the one contribution page, in plain words: pick a good first issue and comment /take, change it in a Codespace (GitHub makes your fork), send a pull request; six GitHub terms, what happens after, what to do when stuck, ground rules and the licence, who does what and the merge gates for people and AI teammates, then what Lightning is, how it is built and its terms.
 
 ## Guides
@@ -55,8 +56,7 @@ The guides:
 ## Guides (English)
 
 - [Guides](https://lightningeg.com/guides.html): the map: start here, then four topics (budget your salary, see where it goes, know what you own, your data and devices), each linked to its page and to the guides under it. The four articles below sit under it.
-- [Why your salary runs out before the month ends](https://lightningeg.com/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
-- [How to split a 20,000 EGP salary in Egypt](https://lightningeg.com/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.
+- [Why your salary runs out before the month ends](https://lightningeg.com/blog-salary-runs-out.html): hidden, recurring and irregular spending, a worked 20,000 EGP split, and how to review a full month.
 - [Emergency fund in EGP](https://lightningeg.com/blog-emergency-fund.html): calculate a reserve from essential household spending.
 - [Personal financial plan in Egypt, step by step](https://lightningeg.com/blog-personal-financial-plan.html): five steps in the order Lightning follows, on real screens: log spending, see where it went, plan cash, set a budget, check net worth, then repeat monthly.
 - [How to budget when your income is irregular](https://lightningeg.com/blog-irregular-income-budget.html): plan around money received and seasonal changes.
@@ -65,8 +65,7 @@ The guides:
 
 - [Sample profiles, Arabic](https://lightningeg.com/ar/sample-profiles.html): the four sample households in Egyptian Arabic.
 - [مقالات](https://lightningeg.com/ar/guides.html): the Arabic map: four topics, each with its guides; the four articles below sit under it.
-- [ليه المرتب بيخلص قبل آخر الشهر؟](https://lightningeg.com/ar/blog-salary-runs-out.html): hidden, recurring and irregular spending, and how to review a full month.
-- [إزاي تقسّم مرتب ٢٠٬٠٠٠ جنيه؟](https://lightningeg.com/ar/blog-budget-20000-egp.html): a clearly labeled example budget, not a claim about current prices.
+- [ليه المرتب بيخلص قبل آخر الشهر؟](https://lightningeg.com/ar/blog-salary-runs-out.html): hidden, recurring and irregular spending, a worked 20,000 EGP split, and how to review a full month.
 - [صندوق الطوارئ محتاج كام؟](https://lightningeg.com/ar/blog-emergency-fund.html): calculate a reserve from essential household spending.
 - [خطة مالية شخصية في مصر: ٥ خطوات](https://lightningeg.com/ar/blog-personal-financial-plan.html): five steps in the order Lightning follows, on real screens: log spending, see where it went, plan cash, set a budget, check net worth, then repeat monthly.
 - [ميزانية الدخل غير الثابت](https://lightningeg.com/ar/blog-irregular-income-budget.html): plan around money received and seasonal changes.

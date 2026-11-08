@@ -27,9 +27,9 @@ CURRENT = ("current-status.html", "ar/current-status.html", "index.html", "ar/in
            "sample-profiles.html", "ar/sample-profiles.html", "app-feedback.html", "ar/app-feedback.html", "forgeeks.html",
            "README.md", "llms.txt")
 NOT_SYNCED = ("app-feedback.html", "ar/app-feedback.html")  # a list of builds: a new option is added by hand
-VERSION = re.compile(r"(?<![\d.A-Za-z-])v?(1\.\d+\.\d+)(?![\d.])")
+VERSION = re.compile(r"(?<![\d.A-Za-z-])v?([12]\.\d+\.\d+)(?![\d.])")
 WINDOWS = re.compile(r"Lightning-v\d+\.\d+\.\d+-Windows-x64\.zip")
-ANDROID = re.compile(r"Lightning-Test-[\w.]+-\d+-[0-9a-f]{8}\.apk")
+ANDROID = re.compile(r"Lightning-(?:Test-)?[\w.]+-\d+-[0-9a-f]{8}\.apk")
 
 
 def record() -> dict:
