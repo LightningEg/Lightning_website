@@ -1,42 +1,30 @@
 {
-  "version": "2.0.3",
+  "version": "2.1.2",
   "source": "The release notes of the app repository (RELEASES.md), shortened to what a person would notice. English is the source; the Arabic beside it is written in Egyptian Arabic.",
   "items": [
     {
-      "en_title": "The phone app is now just Lightning.",
-      "en": "No more “Test” in the name or the file, and no beta. If you still have Lightning Test on your phone, move its ledger to the PC and check it there, uninstall it, then install this one and pair again.",
-      "ar_title": "تطبيق الموبايل بقى «Lightning» وبس.",
-      "ar": "مفيش «Test» في الاسم ولا في الملف، ومفيش بيتا. لو لسه عندك Lightning Test على الموبايل، انقل الدفتر للكمبيوتر وتأكد منه هناك، وشيل التطبيق القديم، وبعدين نزّل ده واعمل ربط تاني."
+      "en_title": "Windows Updates From Settings.",
+      "en": "Download this Windows version and extract it into a new folder. Later versions can be checked, downloaded and installed from Settings. Lightning verifies update files before installation.",
+      "ar_title": "تحديثات ويندوز من الإعدادات.",
+      "ar": "نزّل نسخة ويندوز دي وفك ضغطها في فولدر جديد. بعد كده تقدر تراجع التحديثات وتنزّلها وتثبّتها من الإعدادات. Lightning بيتأكد من ملفات التحديث قبل التثبيت."
     },
     {
-      "en_title": "Bank statements, your way.",
-      "en": "Import Excel and text-based CIB statements and review the rows before they post. For an image PDF, copy a prompt that helps an AI tool turn it into a CSV.",
-      "ar_title": "كشوف البنك بطريقتك.",
-      "ar": "استورد كشوف CIB اللي Excel أو PDF نصي وراجع الصفوف قبل ما تتسجل. ولو الـPDF صورة، انسخ برومبت يساعد أداة ذكاء اصطناعي تحوله CSV."
+      "en_title": "More Ways To Import A Statement.",
+      "en": "Review Excel worksheets and more CSV formats, keep rows with the right account, and review up to 500 rows per page.",
+      "ar_title": "طرق أكتر لاستيراد كشف الحساب.",
+      "ar": "راجع شيتات Excel وصيغ CSV أكتر، وخلي كل صف مع حسابه الصح، وراجع لحد ٥٠٠ صف في الصفحة."
     },
     {
-      "en_title": "Find anything, in Arabic or English.",
-      "en": "Search pages, names and transaction history with matching that understands Arabic and near spellings, and merge two names of one counterparty without losing history.",
-      "ar_title": "دوّر على أي حاجة، بالعربي أو بالإنجليزي.",
-      "ar": "البحث في الصفحات والأسماء وتاريخ المعاملات بيفهم العربي والكتابة القريبة، وتقدر تدمج اسمين لنفس الطرف من غير ما تخسر التاريخ."
+      "en_title": "A Clearer Phone.",
+      "en": "Move between Home, Budget, Add, Activity and Money from the tab bar. See what needs you and keep daily spending figures consistent with the PC.",
+      "ar_title": "الموبايل بقى أوضح.",
+      "ar": "اتنقل بين الرئيسية والميزانية والإضافة والسجل والفلوس من الشريط اللي تحت. شوف إيه محتاجك، والمتاح للصرف في اليوم يبقى نفس الرقم على الموبايل والكمبيوتر."
     },
     {
-      "en_title": "Overview answers more.",
-      "en": "See why net worth changed, your net worth in US dollars and grams of 21K gold, and your savings rate and safe to spend on a laptop screen without scrolling.",
-      "ar_title": "النظرة العامة بتجاوب أكتر.",
-      "ar": "شوف ليه صافي ثروتك اتغير، وصافي ثروتك بالدولار وبجرامات دهب ٢١، ومعدل التوفير والمتاح للصرف على شاشة اللابتوب من غير سكرول."
-    },
-    {
-      "en_title": "Plan from where you look.",
-      "en": "Buy more from a holding, give money back to its owner, see unclaimed income on Budget, name a rule, change one category limit and compare income delays and bill changes.",
-      "ar_title": "خطط من نفس المكان.",
-      "ar": "اشتري أكتر من أصل، وارجّع فلوس لصاحبها، وشوف الدخل اللي محدش حجزه في الميزانية، وسمّي قاعدة، وغيّر حد فئة واحدة، وقارن تأخير الدخل وتغيير الفواتير."
-    },
-    {
-      "en_title": "A phone that does more.",
-      "en": "Swipe a transaction to set its category or delete it, keep Undo beside the message until you leave, and find your PC on the network more reliably.",
-      "ar_title": "موبايل بيعمل أكتر.",
-      "ar": "اسحب المعاملة على جنب تحدد فئتها أو تمسحها، والتراجع فاضل جنب الرسالة لحد ما تسيب الصفحة، ولقاء الكمبيوتر على الشبكة بقى أضمن."
+      "en_title": "Clearer Arabic.",
+      "en": "Import reviews, date ranges, counts and delete confirmations read correctly in Arabic.",
+      "ar_title": "عربي أوضح.",
+      "ar": "مراجعة الاستيراد والفترات والأعداد وتأكيد المسح بقوا أوضح بالعربي."
     }
   ]
 }
