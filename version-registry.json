@@ -3212,19 +3212,40 @@
       "id": "UX-2026.11.05.05",
       "name": "Features · Version 2.0.3",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.05.html"
     },
     {
       "id": "UX-2026.11.05.06",
       "name": "Sample Profiles · Lightning 2.0.3",
       "page": "sample-profiles.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.06.html"
     },
     {
       "id": "UX-2026.11.05.07",
       "name": "Version Archive · Lightning 2.0.3",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.07.html"
+    },
+    {
+      "id": "UX-2026.11.08.01",
+      "name": "Features · Shorter intro",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.02",
+      "name": "Sample Profiles · Shorter intro",
+      "page": "sample-profiles.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.03",
+      "name": "Version Archive · Shorter intros",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
