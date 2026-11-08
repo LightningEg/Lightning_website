@@ -2428,8 +2428,8 @@
       "id": "UX-2026.10.21.51",
       "name": "Budget App Egypt · Budget 1.4.0",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.21.51.html"
     },
     {
       "id": "UX-2026.10.21.52",
@@ -2547,8 +2547,8 @@
       "id": "UX-2026.10.23.07",
       "name": "Blog · 20,000 EGP budget · question and features",
       "page": "blog-budget-20000-egp.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.07.html"
     },
     {
       "id": "UX-2026.10.23.08",
@@ -2568,8 +2568,8 @@
       "id": "UX-2026.10.23.10",
       "name": "Blog · Salary runs out · question and features",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.23.10.html"
     },
     {
       "id": "UX-2026.10.23.11",
@@ -2743,15 +2743,15 @@
       "id": "UX-2026.10.27.03",
       "name": "Guides · How people use Lightning",
       "page": "guides.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.27.03.html"
     },
     {
       "id": "UX-2026.10.27.04",
       "name": "Budget your salary · How people use Lightning",
       "page": "budget-your-salary.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.10.27.04.html"
     },
     {
       "id": "UX-2026.10.27.05",
@@ -3246,6 +3246,41 @@
     {
       "id": "UX-2026.11.08.03",
       "name": "Version Archive · Shorter intros",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.03.html"
+    },
+    {
+      "id": "UX-2026.11.08.04",
+      "name": "Salary Runs Out · With the 20,000 EGP example",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.06",
+      "name": "Budget Your Salary · One card for the merged article",
+      "page": "budget-your-salary.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.07",
+      "name": "Monthly Budget · Link to the merged article",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.08",
+      "name": "Guides · Merged article",
+      "page": "guides.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.09",
+      "name": "Version Archive · Merged salary articles",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
