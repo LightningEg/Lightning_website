@@ -1445,13 +1445,6 @@
       "archive_url": "archive/UX-2026.10.15.01.html"
     },
     {
-      "id": "UX-2026.10.15.02",
-      "name": "Test · Wire dots and pulsing lock restored",
-      "page": "test.html",
-      "status": "current",
-      "archive_url": null
-    },
-    {
       "id": "UX-2026.10.15.03",
       "name": "Version Archive · Wire animation restored",
       "page": "versions.html",
