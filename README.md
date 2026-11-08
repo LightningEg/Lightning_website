@@ -78,7 +78,6 @@ reports/            dated audits with evidence; reports/README.md is the catalog
 css/theme.css       light/dark switch
 css/motion.css      small motion on the home page, Features, How It Works, Downloads and the guides (see Motion below)
 js/motion.js        count-up figures, the rolling calculator answer, lists arriving item by item and scroll reveal
-test.html           private test page, not indexed or linked: the same two-screen ledger handoff as Home follows the hero; its one-time animation has a Hand back control and a static reduced-motion state; the six-places wow still plays
 css/wow.css, js/wow.js the wow moment on the home page and test.html (see Motion below)
 js/vendor/          GSAP 3.15 and ScrollTrigger, hosted here; js/wow.js fetches them after the page loads
 css/dev-dock.css    testing panel (page version + UX test)
