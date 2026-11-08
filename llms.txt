@@ -12,7 +12,7 @@ Lightning is a different product from anything else called "Lightning": it is th
 - Currencies and markets: each account keeps its own currency (dollars, euros, riyals and others), counted in EGP at the day's rate or a rate you type, with the gain or loss from the exchange rate shown apart. About 400 US stocks and 70 ETFs on Nasdaq, NYSE and NYSE Arca are priced automatically in dollars. Gulf and European shares can be held with prices you type.
 - Bank connection: none. Download a CSV from any bank or wallet, match its columns once, and review each row before it is saved.
 - Privacy: money data never goes online. It stays in an encrypted profile on your phone and computer, which talk to each other only over your own Wi-Fi. The only online lookups are the latest prices of what you hold (by ticker symbol) and exchange rates. No account is needed.
-- Figures on the site come from Mohab, a fictional 31-year-old salaried user in Cairo, and match the app screens shown beside them.
+- Figures on the site come from a fictional sample year of a 31-year-old salaried user in Cairo, and match the app screens shown beside them.
 - Status: a working release for your real numbers, improved with every release; the release log shows what changed.
 
 ## What it does

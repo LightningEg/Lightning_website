@@ -3177,8 +3177,8 @@
       "id": "UX-2026.11.05.01",
       "name": "Downloads · Lightning 2.0.3",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.01.html"
     },
     {
       "id": "UX-2026.11.05.02",
@@ -3198,8 +3198,8 @@
       "id": "UX-2026.11.05.04",
       "name": "Lightning · Version 2.0.3",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.04.html"
     },
     {
       "id": "UX-2026.11.05.05",
@@ -3226,8 +3226,8 @@
       "id": "UX-2026.11.08.01",
       "name": "Features · Shorter intro",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.01.html"
     },
     {
       "id": "UX-2026.11.08.02",
@@ -3282,8 +3282,8 @@
       "id": "UX-2026.11.08.10",
       "name": "Bank Statement Budgeting · Filler lines removed",
       "page": "bank-statement-budgeting.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.10.html"
     },
     {
       "id": "UX-2026.11.08.11",
@@ -3303,8 +3303,8 @@
       "id": "UX-2026.11.08.13",
       "name": "Guides · Filler lines removed",
       "page": "blog-personal-financial-plan.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.13.html"
     },
     {
       "id": "UX-2026.11.08.14",
@@ -3317,36 +3317,36 @@
       "id": "UX-2026.11.08.15",
       "name": "Monthly Budget · Filler lines removed",
       "page": "budget-app-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.15.html"
     },
     {
       "id": "UX-2026.11.08.16",
       "name": "Budget Your Salary · Filler lines removed",
       "page": "budget-your-salary.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.16.html"
     },
     {
       "id": "UX-2026.11.08.17",
       "name": "Cash Flow Planner · Filler lines removed",
       "page": "cash-flow-planner.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.17.html"
     },
     {
       "id": "UX-2026.11.08.18",
       "name": "Dollar Savings Tracker · Filler lines removed",
       "page": "dollar-savings-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.18.html"
     },
     {
       "id": "UX-2026.11.08.19",
       "name": "Expense Tracker Egypt · Filler lines removed",
       "page": "expense-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.19.html"
     },
     {
       "id": "UX-2026.11.08.20",
@@ -3359,22 +3359,22 @@
       "id": "UX-2026.11.08.21",
       "name": "How It Works · Filler lines removed",
       "page": "how-it-works.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.21.html"
     },
     {
       "id": "UX-2026.11.08.22",
       "name": "Investment Tracker · Filler lines removed",
       "page": "investment-tracker-egypt.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.22.html"
     },
     {
       "id": "UX-2026.11.08.23",
       "name": "Know what you own · Filler lines removed",
       "page": "know-what-you-own.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.23.html"
     },
     {
       "id": "UX-2026.11.08.24",
@@ -3401,15 +3401,15 @@
       "id": "UX-2026.11.08.27",
       "name": "Net Worth, Budget and Expense Tracker · Filler lines removed",
       "page": "net-worth-budget-expense-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.27.html"
     },
     {
       "id": "UX-2026.11.08.28",
       "name": "Net Worth Tracker · Filler lines removed",
       "page": "net-worth-tracker.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.28.html"
     },
     {
       "id": "UX-2026.11.08.29",
@@ -3429,8 +3429,8 @@
       "id": "UX-2026.11.08.31",
       "name": "See where your money goes · Filler lines removed",
       "page": "see-where-your-money-goes.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.31.html"
     },
     {
       "id": "UX-2026.11.08.32",
@@ -3443,8 +3443,8 @@
       "id": "UX-2026.11.08.33",
       "name": "Money Held for Others · Filler lines removed",
       "page": "track-money-you-hold-for-others.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.33.html"
     },
     {
       "id": "UX-2026.11.08.34",
@@ -3456,6 +3456,132 @@
     {
       "id": "UX-2026.11.08.35",
       "name": "Version Archive · Filler lines removed",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.35.html"
+    },
+    {
+      "id": "UX-2026.11.08.36",
+      "name": "Sample wording · bank statement budgeting",
+      "page": "bank-statement-budgeting.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.37",
+      "name": "Sample wording · blog personal financial plan",
+      "page": "blog-personal-financial-plan.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.38",
+      "name": "Sample wording · budget app egypt",
+      "page": "budget-app-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.39",
+      "name": "Sample wording · budget your salary",
+      "page": "budget-your-salary.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.40",
+      "name": "Sample wording · cash flow planner",
+      "page": "cash-flow-planner.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.41",
+      "name": "Sample wording · current status",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.42",
+      "name": "Sample wording · dollar savings tracker egypt",
+      "page": "dollar-savings-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.43",
+      "name": "Sample wording · expense tracker egypt",
+      "page": "expense-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.44",
+      "name": "Sample wording · features",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.45",
+      "name": "Sample wording · how it works",
+      "page": "how-it-works.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.46",
+      "name": "Sample wording · index",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.47",
+      "name": "Sample wording · investment tracker egypt",
+      "page": "investment-tracker-egypt.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.48",
+      "name": "Sample wording · know what you own",
+      "page": "know-what-you-own.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.49",
+      "name": "Sample wording · net worth budget expense tracker",
+      "page": "net-worth-budget-expense-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.50",
+      "name": "Sample wording · net worth tracker",
+      "page": "net-worth-tracker.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.51",
+      "name": "Sample wording · see where your money goes",
+      "page": "see-where-your-money-goes.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.52",
+      "name": "Sample wording · track money you hold for others",
+      "page": "track-money-you-hold-for-others.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.08.53",
+      "name": "Version Archive · Sample wording",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
