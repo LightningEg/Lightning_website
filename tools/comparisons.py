@@ -30,7 +30,6 @@ COPY = {
         "desc": "Lightning against {lname}, rated Low, Medium or High on six things that matter, with a line of evidence for each. Where {lname} is better, we say so.",
         "label": "Lightning against {lname}", "h1": "Lightning or <span>{name}?</span>", "fit": "9.5",
         "line": "An honest comparison in Low, Medium and High. Where {lname} is better, we say so.",
-        "free": "Free to use. Windows and Android. No bank login.",
         "glance_l": "At a glance", "glance_h": "Six Things, Rated Honestly.", "glance_p": "{what} Each rating comes with one line of why.",
         "th": ["What matters", "Lightning", "{name}"], "who": ["Lightning", "{name}"],
         "wins_l": "Where each is stronger", "wins_h": "Neither Wins Everywhere.", "wins_p": "Read the rows above, then pick what fits how you work.",
@@ -45,7 +44,6 @@ COPY = {
         "desc": "لايتنينج قصاد {name}، بدرجات منخفض ومتوسط وعالي في ست حاجات مهمة، ومع كل درجة سطر دليل. ولو {name} أحسن في حاجة، بنقول كده.",
         "label": "لايتنينج قصاد {name}", "h1": "لايتنينج ولا <span>{name}؟</span>", "fit": "12",
         "line": "مقارنة صريحة بدرجات منخفض ومتوسط وعالي. ولو {name} أحسن في حاجة، بنقول كده.",
-        "free": "ببلاش. ويندوز وأندرويد. من غير دخول بنك.",
         "glance_l": "في لمحة", "glance_h": "ست حاجات بدرجات صريحة.", "glance_p": "{what} وكل درجة ليها سطر بيشرحها.",
         "th": ["الحاجة المهمة", "لايتنينج", "{name}"], "who": ["لايتنينج", "{name}"],
         "wins_l": "مين أقوى فين", "wins_h": "مفيش واحد أحسن في كل حاجة.", "wins_p": "اقرا الصفوف اللي فوق، وبعدين اختار اللي يناسب طريقتك.",
@@ -99,7 +97,7 @@ def main_html(d: dict, key: str, lang: str) -> str:
     hero = (f'<header class="d-hero"><p class="label">{esc(t["label"].format(lname=lname, name=name))}</p>'
             f'<h1 style="--fit:{t["fit"]}">{t["h1"].format(name=esc(lname))}</h1>'
             f'<p class="d-hero-line">{esc(t["line"].format(lname=lname, name=name))}</p>'
-            f'<div class="d-actions">{go}{see}</div><p class="c-free">{esc(t["free"])}</p></header>')
+            f'<div class="d-actions">{go}{see}</div></header>')
     table = (f'<div class="card card-support cmp-table-wrap"><table class="cmp-table"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>'
              f'<p class="cmp-src">{esc(t["src"].format(date=d["date"]))}</p>')
     wins = (f'<div class="cmp-two"><article class="card card-support"><h3>{esc(t["lw"])}</h3>{lst(stronger_l)}</article>'

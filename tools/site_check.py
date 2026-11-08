@@ -88,6 +88,18 @@ errors += app_release.notes_sync(False)  # Downloads and the release log show re
 errors += comparisons.check()  # the comparison pages match comparisons.json (tools/comparisons.py)
 errors += shots.errors()  # screenshot paths and sizes agree with assets/app/shots.json
 
+# The roadmap must not drift from the app: its "now vX" matches app-release.json, and each plan link names a file
+# that exists (checked when the app repository sits next to this one).
+roadmap = (ROOT / "forgeeks-roadmap.html").read_text(encoding="utf-8")
+current = json.loads((ROOT / "app-release.json").read_text(encoding="utf-8"))["version"]
+if f"now v{current}" not in roadmap:
+    errors.append(f"forgeeks-roadmap.html: the core item must say \"now v{current}\" (the current app release)")
+app_repo = ROOT.parent / "Lightning"
+if app_repo.is_dir():
+    for rel in sorted(set(re.findall(r"blob/main/(issues/[^\"#]+\.md)", roadmap))):
+        if not (app_repo / rel).exists():
+            errors.append(f"forgeeks-roadmap.html: plan link {rel} does not exist in the app repository")
+
 for line in warnings:
     print("warning:", line)
 for line in errors:
