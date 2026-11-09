@@ -1,5 +1,6 @@
-// Play purchases (NF-11B3): the edge function accepts a paid purchase of a theme for the profile Play recorded, acknowledges
-// it and returns a licence that verifies; it refuses a refunded, a pending, another profile's or a reused token.
+// Play purchases (NF-11B3, NF-10H1): the edge function accepts a paid purchase of a theme for any profile of the buying
+// Google account, acknowledges it and returns a licence that verifies; it refuses a refunded, voided, pending or
+// over-cap purchase.
 // No network and no live keys: Google is a fake fetch, the service account and signing keys are made here.
 //
 //   node supabase/tests/redeem-play.test.mjs
@@ -15,8 +16,8 @@ const PROFILE = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', OTHER = 'bbbbbbbb-bbbb-4
 const ENV = {GOOGLE_PLAY_SERVICE_ACCOUNT: JSON.stringify(account), PLAY_PACKAGE_NAME: 'org.lightning.app',
   STORE_SIGNING_PRIVATE_JWK: JSON.stringify(jwk), STORE_SIGNING_KEY_ID: 'test-key'};
 
-function setup({purchase = {purchaseState: 0, acknowledgementState: 0, orderId: 'GPA.1', obfuscatedExternalProfileId: PROFILE}, status = 200, env = ENV} = {}) {
-  const calls = [], used = new Map();
+function setup({purchase = {purchaseState: 0, acknowledgementState: 0, orderId: 'GPA.1', obfuscatedExternalProfileId: PROFILE}, status = 200, env = ENV, voidedTokens = [], voidedStatus = 200} = {}) {
+  const calls = [], profiles = new Map();
   const fetcher = async (url, init = {}) => {
     calls.push([init.method || 'GET', String(url)]);
     if (String(url).startsWith('https://oauth2.googleapis.com/token')) {
@@ -29,13 +30,15 @@ function setup({purchase = {purchaseState: 0, acknowledgementState: 0, orderId: 
     }
     assert.equal(init.headers.Authorization, 'Bearer ya29.test');
     if (String(url).endsWith(':acknowledge')) return new Response('{}');
+    if (String(url).includes('/purchases/voidedpurchases')) return new Response(JSON.stringify(
+      {voidedPurchases: voidedTokens.map(purchaseToken => ({purchaseToken}))}), {status: voidedStatus});
     return new Response(JSON.stringify(purchase), {status});
   };
   const rpc = async (name, args) => {
     calls.push(['rpc', name]);
-    const was = used.get(args.p_token_sha256);
-    if (was && was !== args.p_profile_id) return {data: null, error: {message: 'purchase already used by another profile'}};
-    used.set(args.p_token_sha256, args.p_profile_id);
+    const seen = profiles.get(args.p_token_sha256) || new Set();
+    if (!seen.has(args.p_profile_id) && seen.size >= 10) return {data: null, error: {message: 'this purchase already unlocks 10 profiles'}};
+    seen.add(args.p_profile_id); profiles.set(args.p_token_sha256, seen);
     assert.match(args.p_token_sha256, /^[0-9a-f]{64}$/, 'only the token hash reaches the database');
     return {data: {schema_version: 1, account_id: '00000000-0000-4000-8000-000000000009', profile_id: args.p_profile_id,
       items: [{item_id: args.p_item_id, asset_version: 1, deliveries: []}]}, error: null};
@@ -58,18 +61,22 @@ p = setup({purchase: {purchaseState: 0, acknowledgementState: 1, orderId: 'GPA.1
 assert.equal((await p.handler(request())).status, 200);
 assert.equal(p.calls.some(c => c[1].endsWith(':acknowledge')), false, 'an acknowledged purchase is not acknowledged again');
 
+// One purchase per person (case 2): another profile of the same Google account gets its own licence, no payment.
 p = setup(); assert.equal((await p.handler(request())).status, 200);
 r = await p.handler(request({profile_id: OTHER}));
-assert.equal(r.status, 409, 'Play recorded another profile');
-p = setup({purchase: {purchaseState: 0, acknowledgementState: 1, orderId: 'GPA.1', obfuscatedExternalProfileId: OTHER}});
-assert.equal((await p.handler(request({profile_id: OTHER}))).status, 200);
-r = await p.handler(request({profile_id: OTHER}));
-assert.equal(r.status, 200, 'the same profile may ask again (another device)');
-
-// A reused token: the database refuses it for a second profile even if Google's record were bypassed.
+assert.equal(r.status, 200, 'a second profile of the buyer is licensed');
+assert.equal(JSON.parse((await r.json()).payload).profile_id, OTHER);
+// Case 12: the eleventh profile is refused with the cap named.
 p = setup({purchase: {purchaseState: 0, acknowledgementState: 1, orderId: 'GPA.2'}});
-r = await p.handler(request());
-assert.equal(r.status, 409, 'a purchase with no profile recorded is refused');
+const profileN = n => `aaaaaaaa-aaaa-4aaa-8aaa-${String(n).padStart(12, '0')}`;
+for (let n = 1; n <= 10; n++) assert.equal((await p.handler(request({profile_id: profileN(n)}))).status, 200);
+r = await p.handler(request({profile_id: profileN(11)}));
+assert.equal(r.status, 409); assert.equal((await r.json()).code, 'profile_cap');
+// Case 11: a voided purchase (refund or chargeback, Voided Purchases API) mints nothing.
+p = setup({voidedTokens: ['token-abcdefghijkl']});
+r = await p.handler(request()); assert.equal(r.status, 410);
+assert.equal(p.calls.some(c => c[0] === 'rpc'), false, 'a voided purchase never reaches the database');
+p = setup({voidedStatus: 500}); assert.equal((await p.handler(request())).status, 503, 'never unlocked unchecked');
 
 p = setup({purchase: {purchaseState: 1, acknowledgementState: 1, orderId: 'GPA.3', obfuscatedExternalProfileId: PROFILE}});
 r = await p.handler(request()); assert.equal(r.status, 410); assert.equal((await r.json()).code, 'refunded');
@@ -85,4 +92,4 @@ assert.equal((await p.handler(request({profile_id: 'nope'}))).status, 400);
 assert.equal((await p.handler(request({purchase_token: 'x'.repeat(5000)}))).status, 413);
 assert.equal(p.calls.length, 0, 'nothing asked of Google for a bad request');
 p = setup({env: {...ENV, GOOGLE_PLAY_SERVICE_ACCOUNT: undefined}}); assert.equal((await p.handler(request())).status, 503);
-console.log('redeem-play: paid purchase verified, acknowledged and licensed; refunded, pending, other-profile, reused and malformed requests refused');
+console.log('redeem-play: paid purchase verified, acknowledged and licensed; every profile of the buyer licensed up to 10; refunded, voided, pending and malformed requests refused');

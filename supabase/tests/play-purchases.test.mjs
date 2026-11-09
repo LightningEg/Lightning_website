@@ -1,5 +1,5 @@
 // Play purchases (supabase/migrations/20261109150000_play_purchases.sql, app repo NF-11B3): one token licenses one app
-// profile, the same profile may ask again, another profile is refused, and only the service role may call it.
+// profile and up to 10 profiles of the same buyer (NF-10H1), and only the service role may call it.
 //
 //   PGLITE_PATH=/path/to/@electric-sql/pglite/dist/index.js node supabase/tests/play-purchases.test.mjs
 
@@ -62,8 +62,23 @@ await test('the same token and profile again is answered (another device), and k
   assert.equal(Number((await q(`select count(*) c from private.play_purchases`)).rows[0].c), 1);
 });
 
-await test('a reused token is refused for another profile', async () => {
-  await assert.rejects(redeem(T1, PB), /another profile/);
+await test('one purchase per person: another profile of the buyer is licensed, without a second payment (NF-10H1)', async () => {
+  const lic = await redeem(T1, PB);
+  assert.equal(lic.profile_id, PB);
+  assert.equal(lic.account_id, (await redeem(T1, PA)).account_id, 'the same purchase names the same account');
+  assert.equal(Number((await q(`select count(*) c from private.play_purchase_profiles where token_sha256=$1`, [T1])).rows[0].c), 2);
+  assert.equal(Number((await q(`select count(*) c from private.play_purchases`)).rows[0].c), 1, 'still one purchase');
+});
+
+await test('the eleventh profile on one purchase is refused with the cap named', async () => {
+  const p = n => `cccccccc-cccc-4ccc-8ccc-${String(n).padStart(12, '0')}`;
+  for (let n = 3; n <= 10; n++) await redeem(T1, p(n));
+  await assert.rejects(redeem(T1, p(11)), /10 profiles/);
+  assert.equal((await redeem(T1, PA)).profile_id, PA, 'a profile already on it still gets its licence');
+});
+
+await test('a token for one theme cannot mint another', async () => {
+  await assert.rejects(redeem(T1, PA, 'name-gold', JSON.stringify([{item_id: 'name-gold', asset_version: 1}])), /unsupported|invalid purchase/);
 });
 
 await test('a theme the app does not carry, or not enabled, is refused and nothing is kept', async () => {
