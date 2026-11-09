@@ -1,7 +1,8 @@
 // Google Play purchase → signed theme licence (app repo NF-11B3). The Play build buys a theme with Play Billing, then sends
 // the purchase token here. This asks Google (Play Developer API, purchases.products.get) whether the token is a paid
-// purchase of that theme for that app profile, keeps it (redeem_play_purchase: one token, one profile), acknowledges it
-// so Google does not refund it after three days, and returns the same signed licence redeem-purchase returns.
+// purchase of that theme, not refunded or voided, keeps it (redeem_play_purchase: one purchase unlocks every profile of
+// that Google account, up to 10; NF-10H1, owner 2026-11-09), acknowledges it so Google does not refund it after three
+// days, and returns the same signed licence redeem-purchase returns, naming the profile that asked.
 // Deploy with verify_jwt=false: native clients have no website account; Google's answer is the authority.
 //
 // Secrets: GOOGLE_PLAY_SERVICE_ACCOUNT (the service account JSON with access to the app in Play Console),
@@ -30,6 +31,22 @@ export async function googleAccessToken(account, fetcher, now = Date.now()) {
     body: new URLSearchParams({grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: unsigned + '.' + b64url(signature)})});
   if (!response.ok) throw new Error('google token');
   return (await response.json()).access_token;
+}
+
+/** Whether Google lists this token as voided (refunded, charged back or revoked) in its Voided Purchases API, which
+ *  keeps the last 30 days. Reads at most 5 pages; a failure throws, so a purchase is never unlocked unchecked. */
+export async function voided(pkg, token, auth, fetcher) {
+  let page = '';
+  for (let i = 0; i < 5; i++) {
+    const url = `${API}/${encodeURIComponent(pkg)}/purchases/voidedpurchases?maxResults=1000${page ? '&token=' + encodeURIComponent(page) : ''}`;
+    const response = await fetcher(url, {headers: auth});
+    if (!response.ok) throw new Error('voided purchases');
+    const body = await response.json();
+    if ((body.voidedPurchases || []).some(v => v && v.purchaseToken === token)) return true;
+    page = body.tokenPagination?.nextPageToken || '';
+    if (!page) return false;
+  }
+  return false;
 }
 
 async function sha256Hex(text) {
@@ -87,11 +104,13 @@ export function redeemPlayHandler({env, fetcher = fetch, rpc}) {
       // 0 purchased, 1 cancelled (refunded or revoked), 2 pending (not paid yet).
       if (purchase.purchaseState === 2) return reply(402, {code: 'pending', error: 'The payment is not finished yet. It unlocks when Google Play confirms it.'});
       if (purchase.purchaseState !== 0) return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
-      if (purchase.obfuscatedExternalProfileId !== body.profile_id) return reply(409, {code: 'other_profile', error: 'This purchase belongs to another profile.'});
+      // One purchase per person: any profile opened with the buying Google account may ask (its Play app reports the
+      // token owned); Play's obfuscated profile id names only the first. The cap below stops a shared token.
+      if (await voided(pkg, body.purchase_token, auth, fetcher)) return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
       const {data, error} = await rpc('redeem_play_purchase', {p_token_sha256: await sha256Hex(body.purchase_token),
         p_order_id: String(purchase.orderId || '').slice(0, 80) || 'no-order', p_item_id: body.product_id, p_profile_id: body.profile_id, p_items: items});
       if (error && /unsupported bundled item/.test(String(error.message))) return reply(422, {code: 'update_app', error: 'Update Lightning to wear this theme.'});
-      if (error && /another profile/.test(String(error.message))) return reply(409, {code: 'other_profile', error: 'This purchase belongs to another profile.'});
+      if (error && /10 profiles/.test(String(error.message))) return reply(409, {code: 'profile_cap', error: 'This purchase already unlocks 10 profiles.'});
       if (error) return reply(400, {error: 'Could not unlock this purchase.'});
       if (purchase.acknowledgementState !== 1) {
         const ack = await fetcher(`${at}:acknowledge`, {method: 'POST', headers: {...auth, 'Content-Type': 'application/json'}, body: '{}'});
