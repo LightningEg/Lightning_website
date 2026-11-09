@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261027-header-1">
 </head>
-<body data-account-page="account.html" data-ux-version="UX-2026.11.04.02" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<body data-account-page="account.html" data-ux-version="UX-2026.11.09.07" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
 <div class="d-bar">
   <div class="wrap">
     <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
@@ -55,22 +55,35 @@
   <header>
     <p class="label">Privacy</p>
     <h1>Privacy Notice</h1>
-    <p class="blog-meta">Last updated: 2026-11-04 · Version 5</p>
+    <p class="blog-meta">Last updated: 2026-11-09 · Version 6</p>
   </header>
   <div class="blog-body lc-doc">
     <h2 id="scope">1. Scope</h2>
     <ul>
-      <li>This notice covers the website lightningeg.com (the “site”), in English and Arabic.</li>
-      <li>It does not cover the Lightning app. The app has no account and no analytics, and keeps financial data only on your own devices.</li>
-      <li>The app connects to the internet only to look up prices of holdings you record.</li>
+      <li>This notice covers the website lightningeg.com (the “site”), in English and Arabic, and the Lightning app on Windows and Android, wherever you got it (section 2).</li>
     </ul>
 
-    <h2 id="essential">2. Essential Analytics</h2>
+    <h2 id="app">2. The Lightning App</h2>
+    <ul>
+      <li>The app has no account, no analytics, no ads and no trackers. Your money data stays on your own devices, in an encrypted profile; Lightning never receives it.</li>
+      <li>What the app sends, and to whom:
+        <ul>
+          <li>Prices: when you update prices, the tickers and fund names you hold go to the price sites (Yahoo Finance, TradingView, Mubasher) and Lightning’s price file on GitHub is downloaded. No amounts, no names.</li>
+          <li>Themes: when you unlock a theme, the app sends the Lightning store the unlock code or the Google Play purchase token, the theme names it carries and the profile’s random id. The store keeps which profile each purchase unlocks, never your money data.</li>
+          <li>Your devices: pairing and syncing your phone and PC go over your local network. When the devices are not on the same network, they exchange end-to-end encrypted mail through a relay Lightning runs on Cloudflare; the relay cannot read it.</li>
+          <li>Updates: the Windows app asks GitHub for the newest version. Google Play updates the Android app.</li>
+        </ul></li>
+      <li>Bank SMS (Android): if you allow it, the app reads the transaction messages your banks send, on the phone, to suggest transactions you check. It reads only senders with a name or a short code, never people’s numbers, and the messages are never sent anywhere. Texts you share into Lightning wait in the phone’s memory until the app reads them.</li>
+      <li>Recent apps (Android): the app hides your amounts from the recent-apps view unless you turn this off in Settings.</li>
+      <li>Delete: on Android, uninstalling the app (or clearing its storage in Android’s settings) deletes its profiles and everything it read from that phone. On Windows, delete the profile’s folder in Documents\Lightning. Lightning holds no copy to delete. A theme unlock record goes when you delete your website account (section 7); for a Google Play purchase, write to <a href="mailto:hello@lightningeg.com">hello@lightningeg.com</a>.</li>
+    </ul>
+
+    <h2 id="essential">3. Essential Analytics</h2>
     <ul>
       <li>Applies to every visitor, whatever you choose in the banner. Nothing is stored on your device.</li>
       <li>GoatCounter, an open-source analytics service that sets no cookies, counts page views and the events described below. It may tell page views of one session apart for a few hours, using a temporary value derived from your connection. It does not store your IP address.</li>
       <li>Lightning also keeps its own anonymous record of each page view, in a private Google Sheet, through a Google Apps Script that Lightning runs. These records are deleted after 90 days.</li>
-      <li>On every page of the main site, the same record, without the identifiers in section 3, is also kept in Lightning’s account database at Supabase, in Europe, so Lightning can see visits next to sign-ups and which looks are tried and bought. It is deleted after 90 days and never linked to an account.</li>
+      <li>On every page of the main site, the same record, without the identifiers in section 4, is also kept in Lightning’s account database at Supabase, in Europe, so Lightning can see visits next to sign-ups and which looks are tried and bought. It is deleted after 90 days and never linked to an account.</li>
       <li>A record holds: the page and its release ID; language; device type (phone, tablet or computer), operating system and browser family; the referring site and campaign tags (utm_source, utm_medium, utm_campaign); when you arrive from another page of this site, that page's name; how far down the page you scrolled; how many seconds you were active; how fast the page loaded.</li>
       <li>A record also holds a timeline of what appeared on screen or was pressed, with the second each happened: sections, buttons and links, the menu, questions opened, screenshots enlarged, the calculator used, a form started or sent, taps on things that are not buttons, and on the store which look was tried or opened and when a wallet was short.</li>
       <li>A record also holds error codes, such as a picture that failed to load, a script that crashed or the visit counter being blocked, and the name (never the contents) of a form box that the browser refused.</li>
@@ -79,20 +92,20 @@
       <li>Only Lightning reads the records and totals, behind a key. Lightning also reads GitHub’s own download count for each app file, which holds nothing about you.</li>
     </ul>
 
-    <h2 id="linked">3. Linked Visits</h2>
+    <h2 id="linked">4. Linked Visits</h2>
     <ul>
       <li>Applies only if you select Allow all. It uses your browser’s storage, which works like a cookie.</li>
       <li>Your browser creates a random visit identifier, held in session storage and deleted when the tab is closed.</li>
       <li>Your browser creates a random visitor identifier, held in local storage for 90 days, to tell first visits from return visits.</li>
-      <li>Each page sends the events listed in section 2, with these identifiers, the page, device type (phone, tablet or desktop), language, referring site and campaign tags (utm_source, utm_medium, utm_campaign).</li>
+      <li>Each page sends the events listed in section 3, with these identifiers, the page, device type (phone, tablet or desktop), language, referring site and campaign tags (utm_source, utm_medium, utm_campaign).</li>
       <li>The data is sent to a Google Apps Script run by Lightning and stored in a private Google Sheet.</li>
       <li>Records older than 90 days are deleted daily.</li>
       <li>Only totals are shown outside the sheet.</li>
     </ul>
 
-    <h2 id="not-collected">4. Not Collected</h2>
+    <h2 id="not-collected">5. Not Collected</h2>
     <ul>
-      <li>Names, email addresses or phone numbers, except in forms you submit (section 5) and in a For Geeks account you create (section 6).</li>
+      <li>Names, email addresses or phone numbers, except in forms you submit (section 6) and in a For Geeks account you create (section 7).</li>
       <li>IP addresses.</li>
       <li>Device fingerprints.</li>
       <li>Advertising or social media trackers.</li>
@@ -100,7 +113,7 @@
       <li>No data is sold or shared for advertising.</li>
     </ul>
 
-    <h2 id="forms">5. Forms</h2>
+    <h2 id="forms">6. Forms</h2>
     <ul>
       <li>The survey, email signup and feedback text are sent when you submit them. Feedback screenshots upload when selected and stay in temporary cache for up to six hours if not submitted; submitted screenshots are stored in a private Drive folder.</li>
       <li>Submissions are stored in private Google Sheets.</li>
@@ -108,7 +121,7 @@
       <li>To request deletion, use the feedback form on <a href="current-status.html">Downloads</a>.</li>
     </ul>
 
-    <h2 id="accounts">6. For Geeks Accounts</h2>
+    <h2 id="accounts">7. For Geeks Accounts</h2>
     <ul>
       <li>Applies if you create a Lightning website account, including the marketplace, community stories and For Geeks. The Lightning app, its download and the rest of the site never need an account.</li>
       <li>Accounts are stored by Supabase, in Europe, for Lightning. If you sign in with Google, Google shares your email address, name and picture with Supabase; Lightning uses only the email, to sign you in.</li>
@@ -122,7 +135,7 @@
       <li>Account data is not used for analytics or advertising and is not shared.</li>
     </ul>
 
-    <h2 id="choice">7. Your Choice</h2>
+    <h2 id="choice">8. Your Choice</h2>
     <ul>
       <li>Essential analytics apply until you choose.</li>
       <li>Your choice and your light or dark theme setting are stored in this browser’s local storage, which works like a cookie. They apply to this browser only.</li>
@@ -135,7 +148,7 @@
       <div class="lc-actions"><button type="button" class="lc-btn" data-consent="essential">Keep essential only</button><button type="button" class="lc-btn" data-consent="all">Allow all</button></div>
     </div>
 
-    <h2 id="changes">8. Changes</h2>
+    <h2 id="changes">9. Changes</h2>
     <ul>
       <li>The date above shows the last update.</li>
       <li>Earlier versions are kept in the <a href="versions.html">Version Archive</a>.</li>
