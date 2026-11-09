@@ -185,6 +185,7 @@ h1,h2,.hello,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.clo
 .bar-cmp .now i{background:var(--accent);box-shadow:0 0 12px rgba(var(--glow),.6)}
 .in .bar-cmp i{transform:scaleX(var(--w))}
 @media (max-width:900px){.cards{grid-template-columns:1fr}.card p{min-height:0}}
+@media (max-width:560px){.card{padding:24px 18px 20px}.card h3{margin-bottom:24px}.card p{margin-bottom:20px}}
 
 /* terminal */
 .proof-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:start}
@@ -260,8 +261,15 @@ h1,h2,.hello,.lede,.s-sub,.mission p,.meta,.s-num,.gaps p,.rule,.stats-note,.clo
 .steps.three{grid-template-columns:repeat(3,1fr)}
 .gaps+.steps{margin-top:56px}
 @media (max-width:640px){.gaps+.steps{margin-top:40px}}
-@media (max-width:900px){.steps,.steps.three{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.steps,.steps.three{grid-template-columns:1fr}.step{padding:20px 18px}.step>b{margin-bottom:12px}}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}.steps.three{grid-template-columns:1fr}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}.step{padding:20px 18px}.step>b{margin-bottom:12px}}
+/* pick it, change it, send it: when the three are seen, each cell's top edge fills in turn, in the order you do them (D08: bars fill when seen, 1.4s); drawn full without script or with reduced motion */
+.steps.three .step{position:relative}
+.steps.three .step::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--accent);box-shadow:0 0 10px rgba(var(--glow),.7);transform-origin:0 50%;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.steps.three .step:nth-child(2)::before{transition-delay:.6s}
+.steps.three .step:nth-child(3)::before{transition-delay:1.2s}
+.steps.three.in .step::before,.no-js .steps.three .step::before{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){.steps.three .step::before{transition:none;transform:scaleX(1)}}
 
 /* closing + footer, after the reference */
 .closing{padding:52vh 0 90px}

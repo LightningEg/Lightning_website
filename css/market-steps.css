@@ -4,3 +4,10 @@
 .mk-steps b{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--nile);color:var(--on-nile);font:800 15px/1 var(--display)}
 .mk-steps a{color:var(--ink);font-weight:700}
 @media (max-width:760px){.mk-steps{grid-template-columns:minmax(0,1fr)}}
+/* The showcase: three themes on the sample's own screens, in the page itself (css/themes-demo.css draws the stage) */
+.mk-show{margin:40px 0 8px}
+.mk-show h2{font-family:var(--display);color:var(--ink);text-align:center;font-size:clamp(26px,3.4vw,38px);line-height:1.1;letter-spacing:-.03em}
+.mk-show-line{max-width:44em;margin:12px auto 24px;text-align:center;color:var(--ink2);line-height:1.5}
+.mk-show .th-stage+.mk-show-line{margin:20px auto 0;font-weight:600;font-size:15px}
+.mk-show .th-frame{cursor:default}
+@media (max-width:760px){.mk-show{margin-top:32px}}

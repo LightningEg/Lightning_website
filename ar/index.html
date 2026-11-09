@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="../css/landing.css?v=20261027-1">
-<link rel="stylesheet" href="../css/home.css?v=20261029-1">
+<link rel="stylesheet" href="../css/home.css?v=20261109-1">
 <script src="../js/community-pulse.js?v=20261101-1" defer></script>
 <link rel="stylesheet" href="../css/motion.css?v=20261006-4">
 <script src="../js/motion.js?v=20261010-1" defer></script>
@@ -218,7 +218,24 @@
     <p class="d-answer"><a class="btn btn-primary" href="features.html">شوف كل المزايا</a></p>
   </section>
 
-  <!-- 6 · The questions Egyptians ask first -->
+  <!-- 6 · Animated themes: Dendera, Dendera Night and Papyrus on the sample’s own screens -->
+  <section class="d-section themes-demo" id="themes">
+    <div class="d-head">
+      <p class="label">ثيمات تجميلية اختيارية</p>
+      <h2>دلوقتي فيه ثيمات متحركة.</h2>
+      <p>خيط لون هادي بيجري فوق، وورق البردي بينوّر حافة دهب حوالين البطاقة الرئيسية. نفس سنة المستخدم التجريبي، بلبس جديد.</p>
+    </div>
+    <div class="th-stage" data-th data-th-on="dendera">
+      <div class="th-tabs" role="tablist" aria-label="ثيمات متحركة" hidden><button class="th-tab" type="button" role="tab" id="th-tab-dendera" aria-controls="th-panel" aria-selected="true" data-th-tab="dendera" data-bar="المصاريف، أغسطس ٢٠٢٦" tabindex="0">دندرة</button><button class="th-tab" type="button" role="tab" id="th-tab-dendera-night" aria-controls="th-panel" aria-selected="false" data-th-tab="dendera-night" data-bar="الميزانية، ٢٠٢٦-١٠" tabindex="-1">دندرة بالليل</button><button class="th-tab" type="button" role="tab" id="th-tab-papyrus" aria-controls="th-panel" aria-selected="false" data-th-tab="papyrus" data-bar="النظرة العامة، من أول السنة" tabindex="-1">بردي</button></div>
+      <figure class="th-shot">
+        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · <b data-th-bar>المصاريف، أغسطس ٢٠٢٦</b></span></div><div class="th-thread" aria-hidden="true"></div><div class="th-frames" id="th-panel" role="tabpanel"><button class="zoom th-frame is-on" type="button" data-th-frame="dendera" data-zoom="../assets/app/themes-2026-11-02/dendera-spending.webp" data-caption="دندرة: ألوان المعابد على ورق بردي قديم، وإفريز لوتس ودايرة الأبراج ورا الصفحة. مصاريف المستخدم التجريبي في أغسطس ٢٠٢٦."><img src="../assets/app/themes-2026-11-02/dendera-spending.webp" width="2000" height="1250" loading="lazy" alt="مصاريف أغسطس ٢٠٢٦ في ثيم دندرة: الفلوس الخارجة ٤٤٬٦٢١ جنيه، وأكبر دفعة ١٤٬٢٠٠ جنيه، والشهر متقسم حسب الفئة."></button><button class="zoom th-frame" type="button" data-th-frame="dendera-night" data-zoom="../assets/app/themes-2026-11-02/dendera-night-budget.webp" data-caption="دندرة بالليل: نفس الثيم للسهرة. شراء واحد بيديك الاتنين. ميزانية المستخدم التجريبي، فاضل ٣٥٬٠١٨ جنيه في الخطة."><img src="../assets/app/themes-2026-11-02/dendera-night-budget.webp" width="2000" height="1250" loading="lazy" alt="ميزانية ٢٠٢٦-١٠ في ثيم دندرة بالليل: فاضل ٣٥٬٠١٨ جنيه في الخطة، والخط بيوضّح الصرف اليومي ماشي على المعدل ولا لأ."></button><button class="zoom th-frame" type="button" data-th-frame="papyrus" data-zoom="../assets/app/themes-2026-11-02/papyrus-overview.webp" data-caption="بردي: لاكيه لازوردي بحافة دهب بتلف حوالين البطاقة الرئيسية. صافي ثروة المستخدم التجريبي ٩١٠٬٣٠٤ جنيه."><img src="../assets/app/themes-2026-11-02/papyrus-overview.webp" width="2000" height="1250" loading="lazy" alt="النظرة العامة من أول السنة في ثيم بردي: صافي الثروة ٩١٠٬٣٠٤ جنيه، زاد ٣١١٬٨٠٤ السنة دي، واللي محتاج انتباهك تحت."></button></div></div>
+        <figcaption class="d-cap th-cap" aria-live="polite"><span data-th-cap="dendera">دندرة: ألوان المعابد على ورق بردي قديم، وإفريز لوتس ودايرة الأبراج ورا الصفحة. مصاريف المستخدم التجريبي في أغسطس ٢٠٢٦.</span><span data-th-cap="dendera-night" hidden>دندرة بالليل: نفس الثيم للسهرة. شراء واحد بيديك الاتنين. ميزانية المستخدم التجريبي، فاضل ٣٥٬٠١٨ جنيه في الخطة.</span><span data-th-cap="papyrus" hidden>بردي: لاكيه لازوردي بحافة دهب بتلف حوالين البطاقة الرئيسية. صافي ثروة المستخدم التجريبي ٩١٠٬٣٠٤ جنيه.</span></figcaption>
+      </figure>
+    </div>
+    <p class="d-more">الثيمات بتغيّر شكل لايتنينج، مش اللي بيعمله. وكل المزايا المالية فاضلة ببلاش. <a href="marketplace.html">خد ثيم من الماركت</a></p>
+  </section>
+
+  <!-- 7 · The questions Egyptians ask first, answered right before the start -->
   <section class="d-section" id="faq">
     <div class="d-head">
       <p class="label">أسئلة مهمة</p>
@@ -236,23 +253,20 @@
     </div>
   </section>
 
-
-
-  <!-- 7 · Animated themes: Dendera, Dendera Night and Papyrus on the sample’s own screens -->
-  <section class="d-section themes-demo" id="themes">
+  <!-- 8 · Start: a real sequence (B06 steps), then the page's closing action (owner, 2026-11-09: the home page ends on Download) -->
+  <section class="d-section" id="start">
     <div class="d-head">
-      <p class="label">ثيمات تجميلية اختيارية</p>
-      <h2>دلوقتي فيه ثيمات متحركة.</h2>
-      <p>خيط لون هادي بيجري فوق، وورق البردي بينوّر حافة دهب حوالين البطاقة الرئيسية. نفس سنة المستخدم التجريبي، بلبس جديد.</p>
+      <p class="label">ابدأ النهارده</p>
+      <h2>تلات خطوات وتشوف الصورة كاملة.</h2>
+      <p>من غير حساب، ومن غير كلمة سر البنك.</p>
     </div>
-    <div class="th-stage" data-th data-th-on="dendera">
-      <div class="th-tabs" role="tablist" aria-label="ثيمات متحركة" hidden><button class="th-tab" type="button" role="tab" id="th-tab-dendera" aria-controls="th-panel" aria-selected="true" data-th-tab="dendera" data-bar="المصاريف، أغسطس ٢٠٢٦" tabindex="0">دندرة</button><button class="th-tab" type="button" role="tab" id="th-tab-dendera-night" aria-controls="th-panel" aria-selected="false" data-th-tab="dendera-night" data-bar="الميزانية، ٢٠٢٦-١٠" tabindex="-1">دندرة بالليل</button><button class="th-tab" type="button" role="tab" id="th-tab-papyrus" aria-controls="th-panel" aria-selected="false" data-th-tab="papyrus" data-bar="النظرة العامة، من أول السنة" tabindex="-1">بردي</button></div>
-      <figure class="th-shot">
-        <div class="d-frame"><div class="d-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>لايتنينج · <b data-th-bar>المصاريف، أغسطس ٢٠٢٦</b></span></div><div class="th-thread" aria-hidden="true"></div><div class="th-frames" id="th-panel" role="tabpanel"><button class="zoom th-frame is-on" type="button" data-th-frame="dendera" data-zoom="../assets/app/themes-2026-11-02/dendera-spending.webp" data-caption="دندرة: ألوان المعابد على ورق بردي قديم، وإفريز لوتس ودايرة الأبراج ورا الصفحة. مصاريف المستخدم التجريبي في أغسطس ٢٠٢٦."><img src="../assets/app/themes-2026-11-02/dendera-spending.webp" width="2000" height="1250" loading="lazy" alt="مصاريف أغسطس ٢٠٢٦ في ثيم دندرة: الفلوس الخارجة ٤٤٬٦٢١ جنيه، وأكبر دفعة ١٤٬٢٠٠ جنيه، والشهر متقسم حسب الفئة."></button><button class="zoom th-frame" type="button" data-th-frame="dendera-night" data-zoom="../assets/app/themes-2026-11-02/dendera-night-budget.webp" data-caption="دندرة بالليل: نفس الثيم للسهرة. شراء واحد بيديك الاتنين. ميزانية المستخدم التجريبي، فاضل ٣٥٬٠١٨ جنيه في الخطة."><img src="../assets/app/themes-2026-11-02/dendera-night-budget.webp" width="2000" height="1250" loading="lazy" alt="ميزانية ٢٠٢٦-١٠ في ثيم دندرة بالليل: فاضل ٣٥٬٠١٨ جنيه في الخطة، والخط بيوضّح الصرف اليومي ماشي على المعدل ولا لأ."></button><button class="zoom th-frame" type="button" data-th-frame="papyrus" data-zoom="../assets/app/themes-2026-11-02/papyrus-overview.webp" data-caption="بردي: لاكيه لازوردي بحافة دهب بتلف حوالين البطاقة الرئيسية. صافي ثروة المستخدم التجريبي ٩١٠٬٣٠٤ جنيه."><img src="../assets/app/themes-2026-11-02/papyrus-overview.webp" width="2000" height="1250" loading="lazy" alt="النظرة العامة من أول السنة في ثيم بردي: صافي الثروة ٩١٠٬٣٠٤ جنيه، زاد ٣١١٬٨٠٤ السنة دي، واللي محتاج انتباهك تحت."></button></div></div>
-        <figcaption class="d-cap th-cap" aria-live="polite"><span data-th-cap="dendera">دندرة: ألوان المعابد على ورق بردي قديم، وإفريز لوتس ودايرة الأبراج ورا الصفحة. مصاريف المستخدم التجريبي في أغسطس ٢٠٢٦.</span><span data-th-cap="dendera-night" hidden>دندرة بالليل: نفس الثيم للسهرة. شراء واحد بيديك الاتنين. ميزانية المستخدم التجريبي، فاضل ٣٥٬٠١٨ جنيه في الخطة.</span><span data-th-cap="papyrus" hidden>بردي: لاكيه لازوردي بحافة دهب بتلف حوالين البطاقة الرئيسية. صافي ثروة المستخدم التجريبي ٩١٠٬٣٠٤ جنيه.</span></figcaption>
-      </figure>
-    </div>
-    <p class="d-more">الثيمات بتغيّر شكل لايتنينج، مش اللي بيعمله. وكل المزايا المالية فاضلة ببلاش. <a href="../marketplace.html">خد ثيم من الماركت</a></p>
+    <ol class="c-steps">
+      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">١</span><h3>نزّل لايتنينج</h3></div><p>ببلاش لويندوز وأندرويد. على الكمبيوتر فكّ الملف وافتح لايتنينج، وعلى الموبايل افتح الملف واضغط «تثبيت».</p></li>
+      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">٢</span><h3>جرّب على السنة التجريبية</h3></div><p>سنة كاملة جاهزة جوه التطبيق، وكل شاشة مليانة. اتعلّم الخطوات عليها قبل ما تحط جنيه من فلوسك.</p></li>
+      <li class="card card-support"><div class="step-head"><span class="num" aria-hidden="true">٣</span><h3>حط فلوسك</h3></div><p>اكتب أرصدتك أو استورد كشف CSV من البنك، وراجع كل صف. ولايتنينج بيجمعها بالجنيه.</p></li>
+    </ol>
+    <p class="d-answer"><a class="btn btn-primary" href="current-status.html">نزّله ببلاش</a></p>
+    <p class="d-more">بيانات فلوسك بتفضل مشفّرة على موبايلك وكمبيوترك. <a href="how-it-works.html">شوف روتين الشهر</a></p>
   </section>
 
   <!-- Signup band (guideline 3.20, B06): the same on every Arabic page -->
