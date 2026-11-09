@@ -103,6 +103,10 @@ Owner rule: buying an app theme unlocks it for **one Lightning profile**. `20261
 - **The edge function.** `redeem-purchase` now requires `profile_id` and answers **409 `no_seat`** when every seat is used, so the app can say what to do. Redeploy it together with the migration; an app that does not send a profile id is told to update. The signed payload keeps `schema_version` 1 and adds `profile_id`.
 - **Offline and portability.** A licence is signed and checked offline against the profile id; it is still a copyable file, and a copy only works on a profile with that id. This limits sharing between people, it is not strong DRM.
 
+## Google Play purchases (app NF-11B3, 2026-11-09)
+
+The app's Play build sells themes with Google Play Billing (Play's own price; one in-app product per paid theme, product id = theme id). `functions/redeem-play` turns a purchase into the same signed licence `redeem-purchase` gives a code: it asks Google (Play Developer API `purchases.products.get`) whether the token is a paid purchase of that theme for that app profile (Play's obfuscated profile id), calls `redeem_play_purchase` (`20261109150000_play_purchases.sql`: one token licenses one profile; the same profile may ask again; only the token's SHA-256 is kept), acknowledges it, and signs. Refunded, pending and another profile's purchases are refused. Deploy with `verify_jwt=false`. Secrets: `GOOGLE_PLAY_SERVICE_ACCOUNT` (the service account JSON with Play Console access to the app: View financial data, Manage orders), `PLAY_PACKAGE_NAME=org.lightning.app`, plus the signing pair above; without them it answers 503. Tests: `supabase/tests/redeem-play.test.mjs` (handler, fake Google) and `play-purchases.test.mjs` (the function, on Postgres).
+
 ## Marketplace cart and sales tracking
 
 Apply `20261027090000_cart_and_sales_tracking.sql` after the migrations above. It adds a server-side cart so the cart follows a member between devices, an all-or-nothing checkout, and the numbers the owner needs to see what sells. Cosmetics only; every charge is still a ledger entry through the existing purchase functions.
