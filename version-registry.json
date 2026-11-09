@@ -3184,15 +3184,15 @@
       "id": "UX-2026.11.05.02",
       "name": "Release Log · Lightning 2.0.3",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.02.html"
     },
     {
       "id": "UX-2026.11.05.03",
       "name": "App Feedback · Lightning 2.0.3",
       "page": "app-feedback.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.05.03.html"
     },
     {
       "id": "UX-2026.11.05.04",
@@ -3499,8 +3499,8 @@
       "id": "UX-2026.11.08.41",
       "name": "Sample wording · current status",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.41.html"
     },
     {
       "id": "UX-2026.11.08.42",
@@ -3520,8 +3520,8 @@
       "id": "UX-2026.11.08.44",
       "name": "Sample wording · features",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.44.html"
     },
     {
       "id": "UX-2026.11.08.45",
@@ -3534,8 +3534,8 @@
       "id": "UX-2026.11.08.46",
       "name": "Sample wording · index",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.46.html"
     },
     {
       "id": "UX-2026.11.08.47",
@@ -3583,11 +3583,67 @@
       "id": "UX-2026.11.08.53",
       "name": "Version Archive · Sample wording",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.53.html"
+    },
+    {
+      "id": "UX-2026.11.09.01",
+      "name": "Home · Lightning 2.1.2",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.02",
+      "name": "Downloads · Lightning 2.1.2",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.03",
+      "name": "Features · Lightning 2.1.2",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.04",
+      "name": "App Feedback · Lightning 2.1.2",
+      "page": "app-feedback.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.05",
+      "name": "Release Log · Lightning 2.1.2",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.06",
+      "name": "Version Archive · Lightning 2.1.2",
+      "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
   ],
   "app_releases": [
+    {
+      "version": "v2.1.2",
+      "date": "2026-11-09",
+      "commit": "ea1c96c3e40f254636cfa44797af972d14dcf9b8",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v2.1.2",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-v2.1.2-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-2.1.2-1073-ea1c96c3.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/BUILD.json",
+      "update": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/UPDATE.json",
+      "update_signature": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/UPDATE.json.sig",
+      "windows_sha256": "4a48d5cb2aa5c8c51e99b866e1f925b26988449742a10340f27a15e1aaf64e06",
+      "android_sha256": "c663033ca8829d5b8867289757a0ec4c8a95713ad381702310a7ff2e37c23272"
+    },
     {
       "version": "v1.5.1",
       "date": "2026-10-29",
