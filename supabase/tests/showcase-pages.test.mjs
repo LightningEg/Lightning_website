@@ -180,7 +180,7 @@ await test('main leaderboard combines real members with the 18 feedback entries 
   }
 });
 
-await test('leaderboard: ?sample fills the table with made-up people at feedback-sized scores, unlabelled for the owner\'s look test, and never asks the server for the board', async () => {
+await test('leaderboard: ?sample displays feedback-sized scores without requesting the board', async () => {
   const p = await boot('leaderboard', { rpc: lbRpc(), search: '?sample' });
   assert.equal(p.rpcs('leaderboard').length, 0);
   assert.equal(p.$('lb-sample').hidden, true, 'owner, 2026-10-30: the look test reads as a real board');

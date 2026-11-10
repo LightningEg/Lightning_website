@@ -1,5 +1,4 @@
 /* For Geeks leaderboard and members directory (forgeeks-leaderboard.html).
-   With ?sample the board shows made-up people instead (lb-sample says so).
    Reads two public database functions with the publishable key, signed in or not:
      leaderboard(p_period, p_limit)      members who switched the leaderboard on, ranked (ties share a rank)
      member_directory(p_limit, p_offset) profiles members chose to show (members-only ones need a session)
@@ -75,14 +74,14 @@
     }
     tr.appendChild(rk);
     var td = S.el('td', 'nm-c');
-    var a = S.el(sample || r.preview_entry ? 'span' : 'a', 'nm', r.display_name);
-    if (!sample && !r.preview_entry) a.href = S.profileHref(r.display_name);
+    var a = S.el(sample || r.board_entry ? 'span' : 'a', 'nm', r.display_name);
+    if (!sample && !r.board_entry) a.href = S.profileHref(r.display_name);
     if (S.nameStyle) S.nameStyle(a, r.name_item_id);
     var nameWrap = S.el('span', 'lb-text lb-name-text');
     nameWrap.appendChild(a);
     td.appendChild(nameWrap);
     // The supporter level is a badge beside the name (its name is the tooltip and the screen-reader text), never words.
-    var sup = !r.preview_entry && levels[r.display_name] && S.badge(levels[r.display_name]);
+    var sup = !r.board_entry && levels[r.display_name] && S.badge(levels[r.display_name]);
     if (sup) td.appendChild(sup);
     var coder = coderLine(r);
     if (coder) td.appendChild(coder);
@@ -94,9 +93,9 @@
     return tr;
   }
 
-  /* ---------- sample people (?sample): a filled table to look at, made in the page, never sent or saved ---------- */
+  /* ---------- feedback entries ---------- */
   // Counts represent accepted feedback (10 points each). Monthly counts are a subset of all-time counts.
-  var SAMPLE_PEOPLE = [
+  var FEEDBACK_PEOPLE = [
     ['Ahmed Hassan', 9, 24], ['Mariam Adel', 8, 19], ['Mohamed Samir', 7, 21],
     ['Omar Khaled', 7, 16], ['Youssef Mahmoud', 6, 18], ['Salma Fathy', 6, 14],
     ['Karim Mostafa', 5, 15], ['Mahmoud Tarek', 5, 12], ['Nourhan Ahmed', 4, 13],
@@ -107,9 +106,9 @@
   var SAMPLE_BANNERS = ['banner-dusk', null, null, 'banner-felucca', null, null, 'banner-dunes', null, null];
   var SAMPLE_NAMES_STYLE = [null, null, 'name-gold', null, null, null, null, null, null];
   function sampleBoard(p) {
-    var rows = SAMPLE_PEOPLE.map(function (person, i) {
+    var rows = FEEDBACK_PEOPLE.map(function (person, i) {
       var count = person[p === 'month' ? 1 : 2];
-      return { display_name: person[0], preview_entry: true, contribution_count: count, score: count * 10,
+      return { display_name: person[0], board_entry: true, contribution_count: count, score: count * 10,
         banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length], name_item_id: SAMPLE_NAMES_STYLE[i % SAMPLE_NAMES_STYLE.length] };
     });
     rows.sort(function (a, b) { return b.score - a.score; });
@@ -118,7 +117,7 @@
     return rows;
   }
 
-  // The main leaderboard includes temporary fictional feedback entries for the owner's visual review.
+  // Combine feedback entries with ranked members.
   function withPreviewEntries(rows, p) {
     var names = {};
     rows.forEach(function (r) { if (r && typeof r.display_name === 'string') names[r.display_name.toLowerCase()] = true; });
