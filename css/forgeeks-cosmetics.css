@@ -167,16 +167,59 @@
     linear-gradient(180deg,#070b16 0%,#0b1630 55%,#0e2340 100%);
   animation:fg-flow 14s linear infinite}
 @keyframes fg-flow{to{background-position:-100% 58%,70% 60%,0 0,0 0,0 0,0 0}}
-/* drifting stars: a field of stars that turns very slowly */
-.fg-banner[data-item="banner-drift"]{
-  background:
-    radial-gradient(1.2px 1.2px at 10px 12px,rgba(255,255,255,.9),transparent) 0 0/90px 60px,
-    radial-gradient(1px 1px at 55px 40px,rgba(255,255,255,.65),transparent) 0 0/90px 60px,
-    radial-gradient(1px 1px at 30px 25px,rgba(190,210,255,.7),transparent) 0 0/130px 80px,
-    radial-gradient(80% 140% at 80% 120%,rgba(120,90,220,.45),transparent 70%),
-    linear-gradient(180deg,#04060f,#0b1027 70%,#151a3a);
-  animation:fg-stars 40s linear infinite}
-@keyframes fg-stars{to{background-position:90px 0,90px 0,-130px 0,0 0,0 0}}
+/* drifting stars (redrawn 2026-11-10: the old tiny tiles showed as a grid and shimmered as the background repainted):
+   a deep sky with a faint band of light, and stars at two depths scattered with no visible repeat. Each depth is a layer
+   moved by transform, so nothing repaints; the far stars cross their 389px tile in 240s, the near ones their 523px tile in 150s (about 3.5px a second), which reads as
+   one slow drift with depth. Each loop moves exactly one tile, so it never jumps. Still under reduced motion. */
+.fg-banner[data-item="banner-drift"]{background:
+    radial-gradient(70% 90% at 72% 115%,rgba(112,88,214,.38),transparent 70%),
+    linear-gradient(168deg,transparent 30%,rgba(170,186,255,.07) 46%,rgba(170,186,255,.11) 52%,transparent 68%),
+    linear-gradient(180deg,#03050d,#0a0f26 70%,#141a3c)}
+.fg-banner[data-item="banner-drift"]::before,.fg-banner[data-item="banner-drift"]::after{content:"";position:absolute;top:0;bottom:0;left:0;will-change:transform;pointer-events:none}
+.fg-banner[data-item="banner-drift"]::before{right:-389px;background:
+    radial-gradient(circle at 234px 74px,rgb(200 214 255/0.53) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 263px 78px,rgb(200 214 255/0.54) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 325px 81px,rgb(200 214 255/0.33) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 75px 14px,rgb(255 255 255/0.57) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 307px 53px,rgb(255 255 255/0.5) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 322px 4px,rgb(255 255 255/0.32) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 100px 33px,rgb(200 214 255/0.53) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 103px 69px,rgb(255 255 255/0.39) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 145px 55px,rgb(255 255 255/0.6) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 365px 35px,rgb(200 214 255/0.37) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 18px 11px,rgb(255 255 255/0.33) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 353px 3px,rgb(255 255 255/0.58) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 243px 51px,rgb(255 255 255/0.42) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 292px 83px,rgb(200 214 255/0.5) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 47px 42px,rgb(255 255 255/0.59) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 93px 90px,rgb(255 255 255/0.43) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 199px 17px,rgb(255 255 255/0.6) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 141px 78px,rgb(255 255 255/0.57) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 298px 15px,rgb(200 214 255/0.34) 0 0.5px,transparent 1.2px),
+    radial-gradient(circle at 135px 4px,rgb(200 214 255/0.4) 0 0.7px,transparent 1.4px),
+    radial-gradient(circle at 41px 14px,rgb(255 255 255/0.49) 0 0.6px,transparent 1.3px),
+    radial-gradient(circle at 193px 82px,rgb(200 214 255/0.59) 0 0.6px,transparent 1.3px);
+  background-size:389px 97px;animation:fg-stars-far 240s linear infinite}
+.fg-banner[data-item="banner-drift"]::after{right:-523px;background:
+    radial-gradient(circle at 141px 113px,rgb(255 244 220/0.84) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 236px 107px,rgb(255 255 255/0.87) 0 1.1px,transparent 1.8px),
+    radial-gradient(circle at 400px 115px,rgb(255 255 255/0.67) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 109px 16px,rgb(255 255 255/0.94) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 404px 35px,rgb(255 244 220/0.92) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 303px 69px,rgb(255 255 255/0.87) 0 0.9px,transparent 1.6px),
+    radial-gradient(circle at 493px 74px,rgb(255 255 255/0.83) 0 1.1px,transparent 1.8px),
+    radial-gradient(circle at 289px 30px,rgb(255 255 255/0.71) 0 1.3px,transparent 2.0px),
+    radial-gradient(circle at 73px 37px,rgb(255 255 255/0.72) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 183px 39px,rgb(255 255 255/0.82) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 464px 128px,rgb(210 224 255/0.87) 0 1.0px,transparent 1.7px),
+    radial-gradient(circle at 38px 121px,rgb(210 224 255/0.92) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 322px 126px,rgb(255 255 255/0.83) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 496px 11px,rgb(255 255 255/0.75) 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 352px 48px,rgb(255 255 255/0.79) 0 0.8px,transparent 1.5px),
+    radial-gradient(circle at 17px 82px,rgb(255 255 255/0.76) 0 1.1px,transparent 1.8px);
+  background-size:523px 131px;animation:fg-stars-near 150s linear infinite}
+@keyframes fg-stars-far{to{transform:translate3d(-389px,0,0)}}
+@keyframes fg-stars-near{to{transform:translate3d(-523px,0,0)}}
 
 /* Seasonal banners: on sale in their window, kept for ever by their owners. */
 /* cotton harvest: open bolls over an autumn field */
