@@ -64,11 +64,12 @@ body[data-main-store] .lb-list td.ct{color:var(--muted)}
 body[data-main-store] .lb-list td.sc{font-weight:800}
 body[data-main-store] .nm{font-weight:700}
 body[data-main-store] .lb-list tbody tr:not(.has-banner):hover td{background:var(--track)}
-/* The banner shows whole in a 6px tab on the leading edge and as an even soft tint behind the row, as on For Geeks: a
-   clear window in the middle read as a broken block (owner, 2026-10-30). The tint keeps every figure at 4.5:1. */
-body[data-main-store] .lb-veil{--lb-v:color-mix(in srgb,var(--white) 86%,transparent);background:linear-gradient(90deg,transparent 0 6px,var(--lb-v) 6px 100%)}
-[dir=rtl] body[data-main-store] .lb-veil,body[data-main-store][dir=rtl] .lb-veil,html[dir=rtl] body[data-main-store] .lb-veil{background:linear-gradient(270deg,transparent 0 6px,var(--lb-v) 6px 100%)}
-body[data-main-store] .lb-row.has-banner td.ct,body[data-main-store] .lb-row.has-banner td.rk{color:var(--ink)}
+/* Keep banner artwork visible; small opaque text backplates preserve contrast over any artwork. */
+body[data-main-store] .lb-veil{background:none}
+body[data-main-store] .lb-row.has-banner .lb-text,
+body[data-main-store] .lb-row.has-banner .lb-coder{background:#fff;color:#171717;border-radius:4px;box-shadow:0 0 0 3px #fff}
+body[data-main-store] .lb-row.has-banner .lb-coder{display:table}
+body[data-main-store] .lb-row.has-banner .lb-coder a{color:#171717}
 body[data-main-store] .lb-row .nm{display:inline-block;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
 body[data-main-store] .lb-sample{font:500 14px/1.5 var(--body);color:var(--muted)}
 body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
@@ -215,3 +216,5 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
 /* Story tickets: excerpt remains readable, with a cut-edge divider rather than extra instructions. */
 .story-card{position:relative;border-radius:8px}
 .story-card .story-foot{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+/* Name styles may be tuned for dark themes, so use a consistent dark foreground on the backplate. */
+body[data-main-store] .lb-row.has-banner .nm{color:#173d50!important;-webkit-text-fill-color:#173d50;background-image:none}
