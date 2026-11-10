@@ -43,7 +43,7 @@ WORDS = {
         "explore": "Explore",
         "more": "More",
         "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("contribute", "Contribute")],
-        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("forgeeks", "For Geeks"), ("account", "Account"), ("stories", "Stories"), ("leaderboard", "Leaderboard"), ("marketplace", "Marketplace")],
+        "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("terms", "Terms"), ("forgeeks", "For Geeks"), ("account", "Account"), ("stories", "Stories"), ("leaderboard", "Leaderboard"), ("marketplace", "Marketplace")],
         "mark": "Lightning",
     },
     "ar": {
@@ -59,7 +59,7 @@ WORDS = {
         "explore": "استكشف",
         "more": "كمان",
         "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات"), ("contribute", "ساهم معانا")],  # the Arabic Contribute page, not the English one
-        "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية"), ("../forgeeks", '<bdi lang="en">For Geeks</bdi> (بالإنجليزي)', ' hreflang="en" target="_blank" rel="noopener"')],
+        "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية"), ("terms", "الشروط"), ("../forgeeks", '<bdi lang="en">For Geeks</bdi> (بالإنجليزي)', ' hreflang="en" target="_blank" rel="noopener"')],
         "mark": "Lightning",
     },
 }

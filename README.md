@@ -69,6 +69,7 @@ css/how-it-works.css, css/status.css (Downloads), css/sample-profiles.css, css/r
 js/analytics.js     analytics in two tiers and the consent bar (see Analytics and consent below)
 css/consent.css     the consent bar and the two choice buttons
 privacy.html        Privacy Notice: plain and neutral like terms of use (owner, 2026-10-13): numbered sections, one point per bullet, the article layout (css/blog.css), no hero, cards or signup band; ar/privacy.html in Arabic
+terms.html          Terms of Service (2026-11-10): the same article layout and rules as the Privacy Notice (numbered sections, one point per bullet, noindex, out of the sitemap); the Play Console's Terms of Service URL. Lightning is named as a brand only; Egyptian law; site purchases final, Google Play purchases under Google's refund policy then case by case (owner); ar/terms.html in Arabic
 css/footer.css       the site footer (Contact Us, then brand and links): self-contained tokens, light and dark, English and Arabic
 tools/footer.py     writes the footer into every page from one source: contact details, links and words in one place (the community chat row links WhatsApp and Discord, owner 2026-10-15). Run `python tools/footer.py` after changing them (`--check` lists pages that are out of date). Its Explore column ends with Contribute, and the Arabic one links the Arabic Contribute page. The footer is shared site chrome, so a footer change needs no new release IDs
 tools/release.py    archives pages and gives them new release IDs before you change them (see Version identity and archive)
