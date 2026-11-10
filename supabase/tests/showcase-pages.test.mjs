@@ -170,7 +170,7 @@ await test('leaderboard: ?sample fills the table with made-up people at feedback
   assert.equal(p.rpcs('leaderboard').length, 0);
   assert.equal(p.$('lb-sample').hidden, true, 'owner, 2026-10-30: the look test reads as a real board');
   const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
-  assert.equal(rows.length, 12);
+  assert.equal(rows.length, 18);
   assert.ok(rows.every(r => Number(r.querySelector('.sc').textContent.replace(/,/g, '')) <= 100), 'feedback-sized scores');
   assert.equal(rows[0].querySelector('.lb-bg').getAttribute('data-item'), 'banner-dusk', 'each row carries its banner behind it');
   assert.ok(rows[0].classList.contains('has-banner') && rows[0].querySelector('.lb-veil'));
@@ -180,7 +180,7 @@ await test('leaderboard: ?sample fills the table with made-up people at feedback
   assert.deepEqual(scores, [...scores].sort((a, b) => b - a));
   rows.forEach((r, i) => { if (i && scores[i] === scores[i - 1]) assert.equal(r.querySelector('.rk').textContent, rows[i - 1].querySelector('.rk').textContent); });
   await p.click('tab-all');
-  assert.equal(p.doc.querySelectorAll('#lb-list .lb-row').length, 20);
+  assert.equal(p.doc.querySelectorAll('#lb-list .lb-row').length, 18);
   assert.equal(p.rpcs('leaderboard').length, 0);
 });
 
