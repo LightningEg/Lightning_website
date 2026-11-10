@@ -3688,6 +3688,20 @@
       "id": "UX-2026.11.09.15",
       "name": "Version Archive · Articles end on Download",
       "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.15.html"
+    },
+    {
+      "id": "UX-2026.11.10.01",
+      "name": "Lightning · Terms of Service",
+      "page": "terms.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.10.02",
+      "name": "Version Archive · Terms of Service",
+      "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
