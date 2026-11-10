@@ -5,7 +5,7 @@
     <loc>https://lightningeg.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/index.html" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-09</lastmod>
   </url>
   <url>
     <loc>https://lightningeg.com/features.html</loc>
@@ -388,5 +388,17 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/community.html" />
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/community.html" />
     <lastmod>2026-11-08</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/marketplace.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/marketplace.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/marketplace.html" />
+    <lastmod>2026-11-09</lastmod>
+  </url>
+  <url>
+    <loc>https://lightningeg.com/ar/marketplace.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lightningeg.com/marketplace.html" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://lightningeg.com/ar/marketplace.html" />
+    <lastmod>2026-11-09</lastmod>
   </url>
 </urlset>

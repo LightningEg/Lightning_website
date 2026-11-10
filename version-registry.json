@@ -3289,15 +3289,15 @@
       "id": "UX-2026.11.08.11",
       "name": "Blog · Filler lines removed",
       "page": "blog-emergency-fund.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.11.html"
     },
     {
       "id": "UX-2026.11.08.12",
       "name": "Blog · Filler lines removed",
       "page": "blog-irregular-income-budget.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.12.html"
     },
     {
       "id": "UX-2026.11.08.13",
@@ -3310,8 +3310,8 @@
       "id": "UX-2026.11.08.14",
       "name": "Salary Runs Out · Filler lines removed",
       "page": "blog-salary-runs-out.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.14.html"
     },
     {
       "id": "UX-2026.11.08.15",
@@ -3471,8 +3471,8 @@
       "id": "UX-2026.11.08.37",
       "name": "Sample wording · blog personal financial plan",
       "page": "blog-personal-financial-plan.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.37.html"
     },
     {
       "id": "UX-2026.11.08.38",
@@ -3590,8 +3590,8 @@
       "id": "UX-2026.11.09.01",
       "name": "Home · Lightning 2.1.2",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.01.html"
     },
     {
       "id": "UX-2026.11.09.02",
@@ -3638,6 +3638,55 @@
     {
       "id": "UX-2026.11.09.08",
       "name": "Version Archive · Privacy notice covers the app",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.08.html"
+    },
+    {
+      "id": "UX-2026.11.09.09",
+      "name": "Lightning · Start in three steps",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.10",
+      "name": "Version Archive · Home ends on Download",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.10.html"
+    },
+    {
+      "id": "UX-2026.11.09.11",
+      "name": "Article · Emergency fund · Download in the article",
+      "page": "blog-emergency-fund.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.12",
+      "name": "Article · Irregular income budget · Download in the article",
+      "page": "blog-irregular-income-budget.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.13",
+      "name": "Article · Personal financial plan · Download in the article",
+      "page": "blog-personal-financial-plan.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.14",
+      "name": "Article · Salary runs out · Download in the article",
+      "page": "blog-salary-runs-out.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.09.15",
+      "name": "Version Archive · Articles end on Download",
       "page": "versions.html",
       "status": "current",
       "archive_url": null

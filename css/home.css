@@ -157,3 +157,5 @@
 /* Net worth in one card, its working in one line (the five-row table moved off Home, 2026-10-29) */
 .c-net{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px}
 .c-net .chead{margin:0;padding:0;border:0}
+/* Start: the three steps, then the page's closing action a clear step below the cards */
+#start .d-answer{margin-top:28px}
