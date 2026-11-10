@@ -3695,12 +3695,26 @@
       "id": "UX-2026.11.10.01",
       "name": "Lightning · Terms of Service",
       "page": "terms.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.10.01.html"
     },
     {
       "id": "UX-2026.11.10.02",
       "name": "Version Archive · Terms of Service",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.10.02.html"
+    },
+    {
+      "id": "UX-2026.11.10.03",
+      "name": "Lightning · Terms: no refunds",
+      "page": "terms.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.10.04",
+      "name": "Version Archive · Terms: no refunds",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
