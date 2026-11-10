@@ -64,7 +64,8 @@
   function row(r) {
     var rank = Number(r.rank);
     var tr = S.el('tr', 'lb-row' + (rank >= 1 && rank <= 3 ? ' top' : ''));
-    var rk = S.el('td', 'rk', String(rank));
+    var rk = S.el('td', 'rk');
+    rk.appendChild(S.el('span', 'lb-text', String(rank)));
     if (S.itemId(r.banner_item_id)) {
       var bg = S.banner(r.banner_item_id);
       bg.classList.add('lb-bg');
@@ -74,18 +75,22 @@
     }
     tr.appendChild(rk);
     var td = S.el('td', 'nm-c');
-    var a = S.el(sample ? 'span' : 'a', 'nm', r.display_name);
-    if (!sample) a.href = S.profileHref(r.display_name);
+    var a = S.el(sample || r.preview_entry ? 'span' : 'a', 'nm', r.display_name);
+    if (!sample && !r.preview_entry) a.href = S.profileHref(r.display_name);
     if (S.nameStyle) S.nameStyle(a, r.name_item_id);
-    td.appendChild(a);
+    var nameWrap = S.el('span', 'lb-text lb-name-text');
+    nameWrap.appendChild(a);
+    td.appendChild(nameWrap);
     // The supporter level is a badge beside the name (its name is the tooltip and the screen-reader text), never words.
-    var sup = levels[r.display_name] && S.badge(levels[r.display_name]);
+    var sup = !r.preview_entry && levels[r.display_name] && S.badge(levels[r.display_name]);
     if (sup) td.appendChild(sup);
     var coder = coderLine(r);
     if (coder) td.appendChild(coder);
     tr.appendChild(td);
-    tr.appendChild(S.el('td', 'ct', S.num(Number(r.contribution_count) || 0)));
-    tr.appendChild(S.el('td', 'sc', S.num(r.score)));
+    var ct = S.el('td', 'ct'), sc = S.el('td', 'sc');
+    ct.appendChild(S.el('span', 'lb-text', S.num(Number(r.contribution_count) || 0)));
+    sc.appendChild(S.el('span', 'lb-text', S.num(r.score)));
+    tr.appendChild(ct); tr.appendChild(sc);
     return tr;
   }
 
@@ -104,13 +109,23 @@
   function sampleBoard(p) {
     var rows = SAMPLE_PEOPLE.map(function (person, i) {
       var count = person[p === 'month' ? 1 : 2];
-      return { display_name: person[0], contribution_count: count, score: count * 10,
+      return { display_name: person[0], preview_entry: true, contribution_count: count, score: count * 10,
         banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length], name_item_id: SAMPLE_NAMES_STYLE[i % SAMPLE_NAMES_STYLE.length] };
     });
     rows.sort(function (a, b) { return b.score - a.score; });
     // Equal scores share a rank, as on the server.
     rows.forEach(function (r, i) { r.rank = i && r.score === rows[i - 1].score ? rows[i - 1].rank : i + 1; });
     return rows;
+  }
+
+  // The main leaderboard includes temporary fictional feedback entries for the owner's visual review.
+  function withPreviewEntries(rows, p) {
+    var names = {};
+    rows.forEach(function (r) { if (r && typeof r.display_name === 'string') names[r.display_name.toLowerCase()] = true; });
+    var combined = rows.concat(sampleBoard(p).filter(function (r) { return !names[r.display_name.toLowerCase()]; }));
+    combined.sort(function (a, b) { return Number(b.score) - Number(a.score); });
+    combined.forEach(function (r, i) { r.rank = i && Number(r.score) === Number(combined[i - 1].score) ? combined[i - 1].rank : i + 1; });
+    return combined.slice(0, BOARD_LIMIT);
   }
 
   function showBoard(rows) {
@@ -142,7 +157,7 @@
     FG.sb.rpc('leaderboard', { p_period: p, p_limit: BOARD_LIMIT }).then(function (res) {
       if (mine !== boardToken) return;
       if (res.error) { boardState('The leaderboard did not load. Try again.', true); return; }
-      boardCache[p] = res.data || [];
+      boardCache[p] = doc.body.hasAttribute('data-main-store') ? withPreviewEntries(res.data || [], p) : (res.data || []);
       showBoard(boardCache[p]);
     }, function () {
       if (mine === boardToken) boardState('The leaderboard did not load. Try again.', true);

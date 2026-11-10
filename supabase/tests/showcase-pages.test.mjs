@@ -33,8 +33,9 @@ const TASKS = 'https://github.com/LightningEg/Lightning/issues?q=is%3Aissue+is%3
 // ------------------------------------------------------------ the browser harness
 // rpc(name, args) answers {data, error}; me is the signed-in member's own row (what FG.me() reads).
 async function boot(page, { rpc = () => ({ data: [], error: null }), me = { user_id: UID, display_name: 'Me', avatar_url: null },
-  search = '', signedIn = false, noLibrary = false } = {}) {
-  const dom = new JSDOM(PAGES[page].html, { runScripts: 'outside-only', url: `https://lightningeg.com/forgeeks-${page}.html${search}` });
+  search = '', signedIn = false, noLibrary = false, mainSite = false } = {}) {
+  const html = mainSite ? read('leaderboard.html').replace(/<script[\s\S]*?<\/script>/g, '') : PAGES[page].html;
+  const dom = new JSDOM(html, { runScripts: 'outside-only', url: `https://lightningeg.com/forgeeks-${page}.html${search}` });
   const w = dom.window;
   const calls = [];
   const cbs = [];
@@ -163,6 +164,20 @@ await test('leaderboard: a coder advertises their GitHub, last merge, merges thi
   const main = read('leaderboard.html');
   for (const id of ['lb-list', 'lb-body', 'lb-panel', 'tab-month']) assert.ok(main.includes('id="' + id + '"'), id);
   assert.ok(main.includes('js/forgeeks-leaderboard.js'));
+});
+
+await test('main leaderboard combines real members with the 18 feedback entries and ranks them', async () => {
+  const p = await boot('leaderboard', { rpc: lbRpc(), mainSite: true });
+  for (const tab of ['tab-month', 'tab-all']) {
+    await p.click(tab);
+    const rows = [...p.doc.querySelectorAll('#lb-list .lb-row')];
+    assert.equal(rows.length, tab === 'tab-month' ? 21 : 19);
+    assert.ok(rows.some(r => r.querySelector('.nm').textContent === 'Ada'));
+    assert.equal(rows.find(r => r.querySelector('.nm').textContent === 'Mariam Adel').querySelector('.nm').tagName, 'SPAN');
+    const scores = rows.map(r => Number(r.querySelector('.sc').textContent.replace(/,/g, '')));
+    assert.deepEqual(scores, [...scores].sort((a, b) => b - a));
+    rows.forEach((r, i) => assert.equal(Number(r.querySelector('.rk').textContent), i && scores[i] === scores[i - 1] ? Number(rows[i - 1].querySelector('.rk').textContent) : i + 1));
+  }
 });
 
 await test('leaderboard: ?sample fills the table with made-up people at feedback-sized scores, unlabelled for the owner\'s look test, and never asks the server for the board', async () => {
