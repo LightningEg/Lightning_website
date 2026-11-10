@@ -64,12 +64,18 @@ body[data-main-store] .lb-list td.ct{color:var(--muted)}
 body[data-main-store] .lb-list td.sc{font-weight:800}
 body[data-main-store] .nm{font-weight:700}
 body[data-main-store] .lb-list tbody tr:not(.has-banner):hover td{background:var(--track)}
-/* Keep banner artwork visible; small opaque text backplates preserve contrast over any artwork. */
-body[data-main-store] .lb-veil{background:none}
+/* Over a banner the row's words are white on a dark scrim, the same on every banner, light or dark (owner, 2026-11-10:
+   the white plates looked pasted on). The scrim is darkest behind the words (rank and name at the start, the figures at
+   the end) and lifts in the middle, so the art still shows where nothing is written. At its lightest under any word it is
+   62% near-black: white keeps at least 6:1 even over the palest banner. */
+body[data-main-store] .lb-veil{background:linear-gradient(90deg,rgb(8 10 22/.62) 0 36%,rgb(8 10 22/.2) 52% 64%,rgb(8 10 22/.62) 78% 100%)}
+[dir=rtl] body[data-main-store] .lb-veil,body[data-main-store][dir=rtl] .lb-veil{background:linear-gradient(270deg,rgb(8 10 22/.62) 0 36%,rgb(8 10 22/.2) 52% 64%,rgb(8 10 22/.62) 78% 100%)}
+@media(max-width:640px){body[data-main-store] .lb-veil,[dir=rtl] body[data-main-store] .lb-veil{background:rgb(8 10 22/.62)}}
+body[data-main-store] .lb-row.has-banner td,
 body[data-main-store] .lb-row.has-banner .lb-text,
-body[data-main-store] .lb-row.has-banner .lb-coder{background:#fff;color:#171717;border-radius:4px;box-shadow:0 0 0 3px #fff}
-body[data-main-store] .lb-row.has-banner .lb-coder{display:table}
-body[data-main-store] .lb-row.has-banner .lb-coder a{color:#171717}
+body[data-main-store] .lb-row.has-banner .lb-coder,
+body[data-main-store] .lb-row.has-banner .lb-coder a{color:#fff;text-shadow:0 1px 2px rgb(0 0 0/.55)}
+body[data-main-store] .lb-row.has-banner td.ct,body[data-main-store] .lb-row.has-banner .lb-coder{color:rgb(255 255 255/.86)}
 body[data-main-store] .lb-row .nm{display:inline-block;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
 body[data-main-store] .lb-sample{font:500 14px/1.5 var(--body);color:var(--muted)}
 body[data-main-store] .lb-empty .lb-empty-title{font:700 18px var(--display)}
@@ -216,5 +222,5 @@ body[data-main-store] #story-feed+.acct,body[data-main-store] #story-feed~.com-l
 /* Story tickets: excerpt remains readable, with a cut-edge divider rather than extra instructions. */
 .story-card{position:relative;border-radius:8px}
 .story-card .story-foot{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
-/* Name styles may be tuned for dark themes, so use a consistent dark foreground on the backplate. */
-body[data-main-store] .lb-row.has-banner .nm{color:#173d50!important;-webkit-text-fill-color:#173d50;background-image:none}
+/* A name style's own colours are tuned for the page, not for a banner: over a banner the name is plain white. */
+body[data-main-store] .lb-row.has-banner .nm{color:#fff!important;-webkit-text-fill-color:#fff;background-image:none}

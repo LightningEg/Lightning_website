@@ -1,4 +1,4 @@
-// Bearer-ticket exchange for native apps, no app account login required. One code claims one profile's seat. Configure verify_jwt=false
+// Bearer-ticket exchange for native apps, no app account login required. One code unlocks one profile; one purchase covers up to 10. Configure verify_jwt=false
 // for this endpoint ONLY; the UUID-strength one-time ticket is the authority. Add edge rate limits.
 import {createClient} from 'npm:@supabase/supabase-js@2.118.0';
 import {signInventory} from '../restore-purchases/license.mjs';
@@ -23,7 +23,7 @@ Deno.serve(async(req:Request)=>{
   const items=Array.isArray(body.items)&&body.items.length>=1&&body.items.length<=50&&body.items.every((i:any)=>i&&typeof i.item_id==='string'&&i.item_id.length<=60&&Number.isInteger(i.asset_version))
    ?body.items.map((i:any)=>({item_id:i.item_id,asset_version:i.asset_version})):null;
   if(typeof body.code!=='string'||body.code.length>64||(!items&&(typeof body.item_id!=='string'||body.item_id.length>60||!Number.isInteger(body.asset_version))))return reply(400,{error:'Invalid code'});
-  // The app names its profile: a code claims one profile's seat, and further devices of that profile reuse it.
+  // The app names its profile: a code unlocks that profile, and further devices of that profile reuse it.
   if(typeof body.profile_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(body.profile_id))return reply(400,{error:'Update Lightning: the app did not say which profile this is.'});
   // Validate signing configuration before spending a ticket. Ownership survives failed delivery;
   // the customer can always issue a fresh code from the same purchase.
@@ -34,7 +34,7 @@ Deno.serve(async(req:Request)=>{
    ?{p_code:body.code,p_items:items,p_profile_id:body.profile_id}
    :{p_code:body.code,p_item_id:body.item_id,p_asset_version:body.asset_version,p_profile_id:body.profile_id});
   if(error&&/unsupported bundled item/.test(String(error.message)))return reply(422,{code:'update_app',error:'Update Lightning to wear this theme.'});
-  if(error&&/every profile seat/.test(String(error.message)))return reply(409,{code:'no_seat',error:'Every profile seat for this theme is used. Add another profile on your account page: it costs a quarter of the price.'});
+  if(error&&/unlocks 10 profiles|every profile seat/.test(String(error.message)))return reply(409,{code:'no_seat',error:'This theme already unlocks 10 profiles. Write to hello@lightningeg.com to free one you no longer use.'});
   if(error)return reply(400,{error:'That code is used or expired. Get a fresh one from your account page.'});
   return reply(200,await signInventory(data,jwk,keyId));
  }catch{return reply(400,{error:'Could not activate. Get a fresh code from your account if needed.'});}

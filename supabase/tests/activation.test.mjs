@@ -95,12 +95,13 @@ await test('strong one-time code, private hashed storage, no browser redemption'
  const inv=await redeem(a.code.toLowerCase());assert.equal(inv.account_id,OWNER);assert.equal(inv.profile_id,PROFILE,'the licence names the profile');assert.deepEqual(inv.items,[{item_id:'garnet',asset_version:1,deliveries:[]}]);
  await assert.rejects(redeem(a.code),/invalid or expired/);
 });
-await test('another device of the same profile gets a fresh code without repurchase or wallet debit; another profile does not',async()=>{
+await test('another device of the same profile gets a fresh code without repurchase or wallet debit; another profile is free too',async()=>{
  const before=await wallet(OWNER);const a=await issue(OWNER),b=await issue(OWNER);
  assert.notEqual(a.code,b.code);assert.deepEqual(await redeem(a.code),await redeem(b.code));
  assert.deepEqual(await wallet(OWNER),before);
- const c=await issue(OWNER);await assert.rejects(redeem(c.code,'garnet',1,'service_role',OTHER_PROFILE),/profile seat/);
- assert.deepEqual(await redeem(c.code),await redeem((await issue(OWNER)).code),'a refused claim burned nothing: the code still works for the profile that holds the seat');
+ const c=await issue(OWNER);const other=await redeem(c.code,'garnet',1,'service_role',OTHER_PROFILE);
+ assert.equal(other.profile_id,OTHER_PROFILE,'one purchase covers every profile of the buyer (NF-10H)');
+ assert.deepEqual(await wallet(OWNER),before,'and costs nothing');
 });
 await test('old app does not spend a code; expiry and disabled bundles fail closed',async()=>{
  const a=await issue(OWNER);await assert.rejects(redeem(a.code,'garnet',2),/unsupported/);
