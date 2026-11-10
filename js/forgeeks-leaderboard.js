@@ -90,21 +90,25 @@
   }
 
   /* ---------- sample people (?sample): a filled table to look at, made in the page, never sent or saved ---------- */
-  var SAMPLE_NAMES = ['Mariam Adel', 'Youssef Hamdy', 'Nour El-Din', 'Salma Fathy', 'Omar Khaled', 'Habiba Samir', 'Karim Mostafa',
-    'Farida Nabil', 'Ziad Ashraf', 'Laila Hassan', 'Ahmed Tarek', 'Malak Sherif', 'Hassan Wael', 'Rana Magdy', 'Mostafa Said',
-    'Jana Ibrahim', 'Adham Reda', 'Yasmin Gamal', 'Seif Amr', 'Hana Lotfy', 'Marwan Ehab', 'Dina Kamal', 'Tamer Fouad', 'Aya Mahmoud'];
-  var SAMPLE_BANNERS = ['banner-dusk', 'banner-blueprint', null, 'banner-felucca', 'banner-circuit', null, 'banner-dunes', 'banner-sandwind', null];
-  var SAMPLE_NAMES_STYLE = ['name-shimmer', null, 'name-gold', null, 'name-nile', null, null, 'name-sunset', null, null];
-  // Scores as app feedback earns them: a few points a report, so the board stays small (owner, 2026-10-30).
+  // Counts represent accepted feedback (10 points each). Monthly counts are a subset of all-time counts.
+  var SAMPLE_PEOPLE = [
+    ['Ahmed Hassan', 9, 24], ['Mariam Adel', 8, 19], ['Mohamed Samir', 7, 21],
+    ['Omar Khaled', 7, 16], ['Youssef Mahmoud', 6, 18], ['Salma Fathy', 6, 14],
+    ['Karim Mostafa', 5, 15], ['Mahmoud Tarek', 5, 12], ['Nourhan Ahmed', 4, 13],
+    ['Mostafa Ibrahim', 4, 11], ['Amr Magdy', 3, 10], ['Hassan Wael', 3, 8],
+    ['Aya Mohamed', 3, 7], ['Khaled Adel', 2, 6], ['Abdelrahman Ali', 2, 5],
+    ['Seif Hamdy', 2, 4], ['Tamer Fouad', 1, 3], ['Hossam Nabil', 1, 2]
+  ];
+  var SAMPLE_BANNERS = ['banner-dusk', null, null, 'banner-felucca', null, null, 'banner-dunes', null, null];
+  var SAMPLE_NAMES_STYLE = [null, null, 'name-gold', null, null, null, null, null, null];
   function sampleBoard(p) {
-    var n = p === 'month' ? 12 : 20, rows = [], score = p === 'month' ? 85 : 240;
-    for (var i = 0; i < n; i++) {
-      var name = SAMPLE_NAMES[(i * 7 + (p === 'month' ? 3 : 0)) % SAMPLE_NAMES.length];
-      var count = Math.max(1, Math.round(score / 15));
-      rows.push({ display_name: name, contribution_count: count, score: score, banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length], name_item_id: SAMPLE_NAMES_STYLE[i % SAMPLE_NAMES_STYLE.length] });
-      score = Math.max(5, score - (i % 3 === 1 ? 0 : (p === 'month' ? 10 : 20) - (i % 2) * 5));
-    }
-    // equal scores share a rank, as the server ranks them
+    var rows = SAMPLE_PEOPLE.map(function (person, i) {
+      var count = person[p === 'month' ? 1 : 2];
+      return { display_name: person[0], contribution_count: count, score: count * 10,
+        banner_item_id: SAMPLE_BANNERS[i % SAMPLE_BANNERS.length], name_item_id: SAMPLE_NAMES_STYLE[i % SAMPLE_NAMES_STYLE.length] };
+    });
+    rows.sort(function (a, b) { return b.score - a.score; });
+    // Equal scores share a rank, as on the server.
     rows.forEach(function (r, i) { r.rank = i && r.score === rows[i - 1].score ? rows[i - 1].rank : i + 1; });
     return rows;
   }
