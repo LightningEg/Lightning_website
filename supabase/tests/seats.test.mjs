@@ -1,5 +1,6 @@
-// One purchase, one profile (supabase/migrations/20261027130000_profile_seats.sql): a theme comes with one seat, a code claims it
-// for one app profile and is burned, that profile's other devices stay free, another profile needs a seat at 25% of the price.
+// One purchase per person (20261027130000_profile_seats.sql, then 20261110120000_one_purchase_every_profile.sql, app NF-10H):
+// a code unlocks one app profile and is burned, that profile's other devices stay free, and every further profile of the
+// buyer is free too, up to 10. Extra-profile seats are no longer sold; the ones sold earlier stay as history.
 //
 //   PGLITE_PATH=/path/to/@electric-sql/pglite/dist/index.js node supabase/tests/seats.test.mjs
 
@@ -62,72 +63,56 @@ await q(`insert into public.bundled_item_versions(item_id,asset_version,enabled)
 const issue = (u, item = 'nile') => rpc(u, `select public.issue_activation_code($1,1) d`, [item]).then(r => r.d);
 const redeem = (code, profile, item = 'nile') => as('service_role', null, async () => (await q(`select public.redeem_activation_code($1,$2,1,$3) d`, [code, item, profile])).rows[0].d);
 const seats = u => rpc(u, `select public.my_theme_seats() s`).then(r => r.s);
-const buySeat = (u, expected, k = key()) => rpc(u, `select public.purchase_theme_seat('nile',$1,$2) r`, [expected, k]).then(r => r.r);
 const claims = async u => Number((await q(`select count(*) c from public.profile_claims where user_id=$1`, [u])).rows[0].c);
 const nile = await price('nile');
-const seatPrice = Math.max(1, Math.ceil(nile / 4));
 const M = await newUser('buyer'); await topUp(M, 5000);
 await rpc(M, `select * from public.purchase_item_at_price('nile',$1,$2)`, [nile, key()]);
+const profile = i => `${String(i).padStart(8, '0')}-0000-4000-8000-000000000000`;
 
-await test('the first profile takes the seat that came with the theme; its code is burned', async () => {
+await test('the first profile is unlocked by its code, which is then burned', async () => {
   const a = await issue(M);
   const lic = await redeem(a.code, PA);
   assert.equal(lic.profile_id, PA); assert.equal(lic.account_id, M);
   assert.equal(await claims(M), 1);
   await assert.rejects(redeem(a.code, PA), /invalid or expired/, 'a burned code opens nothing');
   const s = (await seats(M))[0];
-  assert.deepEqual([s.item_id, s.seats, s.used, s.next_price, s.can_buy], ['nile', 1, 1, seatPrice, true]);
+  assert.deepEqual([s.item_id, s.seats, s.used, s.next_price, s.can_buy], ['nile', 10, 1, null, false]);
 });
 
-await test('the same profile on another device uses a new code and no second seat', async () => {
+await test('the same profile on another device uses a new code and counts once', async () => {
   const lic = await redeem((await issue(M)).code, PA);
   assert.equal(lic.profile_id, PA); assert.equal(await claims(M), 1);
 });
 
-await test('another profile is refused without a seat, and the refused code is not burned', async () => {
-  const a = await issue(M);
-  await assert.rejects(redeem(a.code, PB), /every profile seat/);
-  assert.equal(await claims(M), 1);
-  assert.equal((await redeem(a.code, PA)).profile_id, PA, 'the same code still serves the profile that holds the seat');
-});
-
-await test('an extra seat costs 25% of the price (75% off), once per purchase key', async () => {
-  const before = await balance(M), k = key();
-  await assert.rejects(buySeat(M, seatPrice + 1), /price changed/);
-  const r = await buySeat(M, seatPrice, k);
-  assert.equal(r.price_paid, seatPrice); assert.equal(r.seats, 2); assert.equal(r.balance, before - seatPrice);
-  assert.equal(await balance(M), before - seatPrice);
-  assert.equal((await buySeat(M, seatPrice, k)).seats, 2, 'a retry returns the same seat');
-  assert.equal(await balance(M), before - seatPrice, 'and never charges twice');
-  assert.ok(seatPrice * 4 >= nile && seatPrice <= Math.ceil(nile * 0.25), 'a quarter, rounded up');
-});
-
-await test('with the seat bought, a second profile can claim, and a third is refused', async () => {
+await test('another profile of the buyer is unlocked at no charge', async () => {
+  const before = await balance(M);
   assert.equal((await redeem((await issue(M)).code, PB)).profile_id, PB);
-  assert.equal(await claims(M), 2);
-  await assert.rejects(redeem((await issue(M)).code, PC), /every profile seat/);
-  assert.equal((await redeem((await issue(M)).code, PB)).profile_id, PB, 'each profile keeps its own devices');
+  assert.equal((await redeem((await issue(M)).code, PC)).profile_id, PC);
+  assert.equal(await claims(M), 3); assert.equal(await balance(M), before, 'no coins move');
+  assert.equal((await seats(M))[0].used, 3);
 });
 
-await test('only the owner of the theme can add a profile, and only with enough coins', async () => {
-  const other = await newUser('nobody'); await topUp(other, 1);
-  await assert.rejects(buySeat(other, seatPrice), /only add profiles to a theme you own/);
-  const poor = await newUser('poor'); await topUp(poor, nile);
-  await rpc(poor, `select * from public.purchase_item_at_price('nile',$1,$2)`, [nile, key()]);
-  await assert.rejects(buySeat(poor, seatPrice), /insufficient coins/);
-  assert.equal((await seats(poor))[0].seats, 1);
+await test('ten profiles is the cap: the eleventh is refused and its code is not burned', async () => {
+  const rich = await newUser('rich'); await topUp(rich, nile);
+  await rpc(rich, `select * from public.purchase_item_at_price('nile',$1,$2)`, [nile, key()]);
+  for (let i = 1; i <= 10; i++) await redeem((await issue(rich)).code, profile(i));
+  assert.equal(await claims(rich), 10);
+  const a = await issue(rich);
+  await assert.rejects(redeem(a.code, profile(11)), /already unlocks 10 profiles/);
+  assert.equal((await redeem(a.code, profile(3))).profile_id, profile(3), 'the same code still serves a profile that has it');
+});
+
+await test('extra profiles are no longer sold: the old purchase refuses and spends nothing', async () => {
+  const before = await balance(M);
+  await assert.rejects(rpc(M, `select public.purchase_theme_seat('nile',25,$1)`, [key()]), /needs no purchase/);
+  assert.equal(await balance(M), before);
   await assert.rejects(as('anon', null, () => q(`select public.purchase_theme_seat('nile',1,'abcdefgh')`)), /permission denied/);
 });
 
-await test('ten profiles is the most, and a theme that is not in the app has no seats to sell', async () => {
-  const rich = await newUser('rich'); await topUp(rich, 20000);
-  await rpc(rich, `select * from public.purchase_item_at_price('nile',$1,$2)`, [nile, key()]);
-  for (let i = 0; i < 9; i++) await buySeat(rich, seatPrice);
-  assert.equal((await seats(rich))[0].can_buy, false);
-  await assert.rejects(buySeat(rich, seatPrice), /ten profiles/);
-  await rpc(rich, `select * from public.purchase_item_at_price('name-gold',$1,$2)`, [await price('name-gold'), key()]);
-  await assert.rejects(rpc(rich, `select public.purchase_theme_seat('name-gold',1,$1)`, [key()]), /not available/);
-  assert.deepEqual((await seats(rich)).map(s => s.item_id), ['nile'], 'only app themes show seats');
+await test('only app themes show their profiles', async () => {
+  const g = await newUser('gold'); await topUp(g, 5000);
+  await rpc(g, `select * from public.purchase_item_at_price('name-gold',$1,$2)`, [await price('name-gold'), key()]);
+  assert.deepEqual(await seats(g), []);
 });
 
 await test('a profile id must be a real one, and a code needs its theme version', async () => {
@@ -152,29 +137,33 @@ await test('the code names its theme: the app sends what it carries, nothing is 
   await assert.rejects(byList('zz', [{ item_id: 'nile', asset_version: 1 }]), /invalid or expired/);
 });
 
-await test('support can see a member\'s claims and free one, with a reason in the audit log', async () => {
+await test('support can see a member\'s profiles and free one, with a reason in the audit log', async () => {
   const asAdmin = fn => as('authenticated', ADMIN, fn);
+  const rich = (await q(`select id from auth.users where email like 'u%' and id in (select user_id from public.profile_claims group by user_id having count(*) = 10)`)).rows[0].id;
   await assert.rejects(rpc(M, `select public.admin_profile_claims('u101@example.test')`), /administrator/);
-  const email = (await q(`select email from auth.users where id=$1`, [M])).rows[0].email;
+  const email = (await q(`select email from auth.users where id=$1`, [rich])).rows[0].email;
   const list = (await asAdmin(() => q(`select public.admin_profile_claims($1) c`, [email]))).rows[0].c;
-  assert.equal(list.length, 2); assert.equal(list[0].name, 'Nile'); assert.equal(list[0].seats, 2);
+  assert.equal(list.length, 10); assert.equal(list[0].name, 'Nile'); assert.equal(list[0].seats, 10);
   await assert.rejects(asAdmin(() => q(`select public.admin_release_profile_claim($1,'no')`, [list[1].id])), /reason/);
   await asAdmin(() => q(`select public.admin_release_profile_claim($1,'Member lost that profile')`, [list[1].id]));
-  assert.equal(await claims(M), 1);
-  assert.equal((await redeem((await issue(M)).code, PC)).profile_id, PC, 'the freed seat can be claimed by another profile');
-  const log = (await q(`select actor, detail from public.audit_log where action='activation.claim_released' and target_id=$1`, [M])).rows[0];
+  assert.equal(await claims(rich), 9);
+  assert.equal((await redeem((await issue(rich)).code, profile(11))).profile_id, profile(11), 'the freed place can be taken by another profile');
+  const log = (await q(`select actor, detail from public.audit_log where action='activation.claim_released' and target_id=$1`, [rich])).rows[0];
   assert.equal(log.actor, ADMIN); assert.equal(log.detail.reason, 'Member lost that profile');
   await assert.rejects(asAdmin(() => q(`select public.admin_release_profile_claim(999999,'does not exist')`)), /not found/);
 });
 
-await test('seat purchases show as sales and coin movements in the owner\'s views, and in the member\'s export', async () => {
+await test('extra profiles sold earlier stay as history: sales, activity and the member\'s export', async () => {
+  const e = (await q(`select (private.post_ledger($1,'purchase',0,-25,'seat','nile','primary','Extra profile for Nile','seat:old-1',now(),null,$1)).id id`, [M])).rows[0].id;
+  await q(`insert into public.seat_purchases (user_id, item_id, price_paid, ledger_entry_id, idempotency_key) values ($1,'nile',25,$2,'old-seat-0001')`, [M, e]);
+  await q(`insert into public.theme_seats (user_id, item_id, extra) values ($1,'nile',1)`, [M]);
   const sales = (await as('authenticated', ADMIN, () => q(`select public.admin_sales(30) s`))).rows[0].s;
-  assert.ok(sales.sales.by_channel.seat.units >= 2 && sales.sales.by_channel.seat.coins >= seatPrice * 2);
+  assert.ok(sales.sales.by_channel.seat.units >= 1 && sales.sales.by_channel.seat.coins >= 25);
   const act = (await as('authenticated', ADMIN, () => q(`select public.admin_activity('sales',null,null,100,30) a`))).rows[0].a;
-  const seat = act.rows.find(r => r.ref === 'seat:nile');
-  assert.ok(seat && seat.item === 'Nile' && seat.coins === -seatPrice, 'named by its theme');
+  assert.ok(act.rows.find(r => r.ref === 'seat:nile' && r.item === 'Nile'), 'named by its theme');
   const x = (await rpc(M, `select public.export_my_data() x`)).x;
-  assert.equal(x.theme_seats[0].extra_seats, 1); assert.equal(x.profile_claims.length, 2); assert.equal(x.seat_purchases.length, 1);
+  assert.equal(x.theme_seats[0].extra_seats, 1); assert.equal(x.profile_claims.length, 3); assert.equal(x.seat_purchases.length, 1);
+  assert.equal((await seats(M))[0].seats, 10, 'a seat bought earlier does not raise the cap');
   assert.ok('bank_transfers' in x, 'the rest of the export is still there');
 });
 

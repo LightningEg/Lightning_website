@@ -111,11 +111,11 @@ await test('app themes: turned on only after a confirmation, and paused the same
 // 8S: seats and app unlocks live in App themes.
 const UNLOCKS = [{ item_id: 'nile', name: 'Nile', codes_issued: 9, codes_redeemed: 6, profiles_claimed: 4, extra_seats_sold: 2, extra_coins: 150, members_with_seats: 3 },
   { item_id: 'cotton', name: 'Cotton', codes_issued: 1, codes_redeemed: 1, profiles_claimed: 1, extra_seats_sold: 0, extra_coins: 0, members_with_seats: 1 }];
-await test('app themes: each theme shows profiles claimed, extra profiles sold (coins) and codes issued, beside its button', async () => {
+await test('app themes: each theme shows profiles claimed, extra profiles sold earlier (only while some exist) and codes issued, beside its button', async () => {
   const p = await boot({ unlocks: UNLOCKS });
   const rel = p.qa('.oc-rel-list li');
-  assert.equal(rel[0].querySelector('.oc-unlock-stats').textContent, '4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued');
-  assert.equal(rel[1].querySelector('.oc-unlock-stats').textContent, '1 profile claimed · 0 extra profiles sold (0 coins) · 1 code issued');
+  assert.equal(rel[0].querySelector('.oc-unlock-stats').textContent, '4 profiles claimed · 2 extra profiles sold earlier (150 coins) · 9 codes issued');
+  assert.equal(rel[1].querySelector('.oc-unlock-stats').textContent, '1 profile claimed · 1 code issued');
   assert.ok(p.calls.some(c => c.name === 'admin_app_unlocks'));
   assert.ok(p.button(rel[0], 'Turn on unlock'), 'the button is still beside it');
   const silent = await boot();

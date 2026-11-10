@@ -78,10 +78,12 @@
   }
 
   /* ---------- app releases ---------- */
-  // "4 profiles claimed · 2 extra profiles sold (150 coins) · 9 codes issued", from admin_app_unlocks()
+  // "4 profiles claimed · 9 codes issued", from admin_app_unlocks(); extra profiles sold before one purchase covered
+  // every profile (NF-10H, 2026-11-10) are named only while some exist, so 10H5 can credit them back
   function unlockLine(u) {
     var claimed = Number(u.profiles_claimed), extra = Number(u.extra_seats_sold), codes = Number(u.codes_issued);
-    return num(claimed) + (claimed === 1 ? ' profile' : ' profiles') + ' claimed · ' + num(extra) + (extra === 1 ? ' extra profile' : ' extra profiles') + ' sold (' + num(u.extra_coins) + ' coins) · ' +
+    return num(claimed) + (claimed === 1 ? ' profile' : ' profiles') + ' claimed · ' +
+      (extra > 0 ? num(extra) + (extra === 1 ? ' extra profile' : ' extra profiles') + ' sold earlier (' + num(u.extra_coins) + ' coins) · ' : '') +
       num(codes) + (codes === 1 ? ' code' : ' codes') + ' issued';
   }
   function releases(status) {

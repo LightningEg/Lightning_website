@@ -1,15 +1,12 @@
-// Owned, shipped app themes. A one-time code claims the theme's seat for ONE Lightning profile and is then burned; the
+// Owned, shipped app themes. A one-time code unlocks the theme for ONE Lightning profile and is then burned; the
 // app shares the unlock through the profile itself, so the profile's other devices unlock by themselves with no further
-// code. Another profile needs another seat, which the
-// owner of the theme can add for a quarter of its price (supabase/migrations/20261027130000_profile_seats.sql).
+// code. One purchase covers every profile of the buyer, up to 10, at no charge: another profile just gets its own code
+// (supabase/migrations/20261110120000_one_purchase_every_profile.sql; app NF-10H).
 (function(){
  const FG=window.FG;if(!FG)return;
+ const AR=document.documentElement.lang.startsWith('ar');
  let enabled=[],seats={},run=0,dialog;
  const make=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;return e;};
- // a price is the cotton icon and the number (the same mark as the market's prices), never the word
- const price=n=>{const e=make('span');e.className='mkt-price';e.setAttribute('aria-label',n+' Cotton');const i=make('img');i.className='coin-i';i.src='assets/brand/cotton-coin.svg';i.alt='';i.width=16;i.height=16;e.append(i,make('span',String(n)));return e;};
- const withPrice=(tag,before,n,after)=>{const e=make(tag);e.append(before,price(n));if(after)e.append(after);return e;};
- const key=()=>(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2));
  const shut=()=>{if(dialog){dialog.close();dialog.remove();dialog=null;}};
  function clear(keepDialog){if(!keepDialog)shut();document.querySelectorAll('[data-activation-extra]').forEach(b=>b.remove());}
  function open(title,...nodes){
@@ -30,37 +27,14 @@
    const close=make('button','Close');close.type='button';close.className='btn';close.onclick=shut;
    const d=open('Unlock in Lightning',
     make('p','In Lightning, open Settings, then Appearance, then Unlock a theme you bought, and paste this code while connected to the internet. It works once and expires in ten minutes.'),
-    make('p','One code unlocks the theme for one profile. Do this once: that profile’s other devices unlock by themselves, with no code. A different profile needs its own unlock, at a quarter of the price.'),
+    make('p','One code unlocks the theme for one profile. Do this once: that profile’s other devices unlock by themselves, with no code. Another profile of yours gets its own code here, free, up to 10 profiles.'),
     input,copy,close,status);
    d.addEventListener('close',()=>{input.value='';});
   }catch{button.textContent='Try getting a code again';}finally{button.disabled=false;}
  }
- // Another profile: confirm the price first, then buy once (one key per dialog, so a retry never charges twice).
- function addSeat(item,info,button){
-  const attempt=key();
-  const status=make('p');status.setAttribute('role','status');
-  const ok=withPrice('button','Add a profile for ',info.next_price);ok.type='button';ok.className='btn';
-  const cancel=make('button','Cancel');cancel.type='button';cancel.className='btn ghost';cancel.onclick=shut;
-  ok.onclick=async()=>{
-   ok.disabled=true;status.textContent='';
-   try{
-    const r=await FG.sb.rpc('purchase_theme_seat',{p_item_id:item,p_expected_price:info.next_price,p_idempotency_key:attempt});
-    if(r.error)throw r.error;
-    status.textContent='Done. '+info.name+' can now be unlocked on '+r.data.seats+' profiles.';
-    ok.hidden=true;cancel.textContent='Close';
-    await load(true); // read the seats again without closing this message
-    const market=window.LightningMarket;if(market&&market.reload)market.reload();
-   }catch(e){
-    status.textContent=/price changed/i.test(String(e&&e.message))?'The price changed. Close this and try again.':FG.say?FG.say(e):'Could not add a profile. Try again.';
-    ok.disabled=false;
-   }
-  };
-  open('Add another profile to '+info.name,
-   withPrice('p','Each purchase of '+info.name+' unlocks it for one Lightning profile, on all of that profile’s devices. For another profile you pay 25% of the price: ',info.next_price,', 75% off. It is spent now.'),
-   ok,cancel,status);
- }
  function seatNote(info){
-  const p=make('p',info.used+' of '+info.seats+(info.seats===1?' profile':' profiles')+' unlocked');
+  const n=Number(info.used)||0,cap=Number(info.seats)||10;
+  const p=make('p',AR?('اتفعّل على '+n.toLocaleString('ar-EG')+' من '+cap.toLocaleString('ar-EG')+' ملفات، من غير فلوس زيادة'):(n+' of '+cap+' profiles unlocked, at no extra cost'));
   p.dataset.seatNote='';p.className='mkt-note';return p;
  }
  function attach(){
@@ -71,10 +45,7 @@
    const extra=make('div');extra.className='mkt-extra';extra.dataset.activationExtra='';
    const button=make('button','Get app code');button.type='button';button.className='btn';button.dataset.activationCode='';button.onclick=()=>show(bundle.item_id,bundle.asset_version,button);extra.append(button);
    const info=seats[bundle.item_id];
-   if(info){
-    extra.append(seatNote(info));
-    if(info.can_buy){const add=withPrice('button','Add another profile · ',info.next_price);add.type='button';add.className='btn ghost';add.dataset.seatAdd='';add.onclick=()=>addSeat(bundle.item_id,info,add);extra.append(add);}
-   }
+   if(info)extra.append(seatNote(info));
    cell.append(extra);
   }
  }
