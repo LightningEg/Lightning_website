@@ -271,6 +271,40 @@ await test('cart_swap_for_set: signed-in members only, and one member cannot tou
   assert.deepEqual((await view(B)).lines.map(l => l.item_id), ['set-nile']);
 });
 
+// ---------------------------------------------------------------- NF-10D2: the Papyrus and Dendera sets
+await test('Papyrus and Dendera sets: each theme with its three pieces; new, they cost 1,320 and 1,280', async () => {
+  const sets = { 'set-papyrus': ['banner-papyrus-thread', 'frame-gold-foil', 'name-papyrus-gold', 'papyrus'],
+                 'set-dendera': ['banner-dendera-zodiac', 'dendera', 'frame-lotus', 'name-pigment-blue'] };
+  const N = await newUser('new-buyer');
+  for (const [set, parts] of Object.entries(sets)) {
+    const rows = (await q(`select item_id from public.set_parts where set_id=$1 order by item_id`, [set])).rows.map(r => r.item_id);
+    assert.deepEqual(rows, parts, set);
+    const listed = (await Promise.all(parts.map(price))).reduce((a, b) => a + b, 0);
+    assert.equal(await price(set), listed, 'a set lists the full price of its parts');
+    assert.equal((await q(`select private.set_price($1,$2) p`, [set, N])).rows[0].p, { 'set-papyrus': 1320, 'set-dendera': 1280 }[set]);
+  }
+});
+await test('Papyrus set: a buyer who owns Papyrus is offered the set at 80% of the three pieces', async () => {
+  const U = await newUser('owns-papyrus');
+  await q(`insert into public.inventory (user_id, item_id) values ($1,'papyrus')`, [U]);
+  await add(U, 'banner-papyrus-thread');
+  const [s] = await sugg(U);
+  assert.equal(s.set_id, 'set-papyrus');
+  const pieces = await Promise.all(['banner-papyrus-thread', 'frame-gold-foil', 'name-papyrus-gold'].map(price));
+  assert.equal(s.price, Math.ceil(pieces.reduce((a, b) => a + b, 0) * 0.8));
+  assert.equal(s.price, 520);
+  const v = await swap(U, 'set-papyrus');
+  assert.deepEqual(v.lines.map(l => [l.item_id, l.price]), [['set-papyrus', 520]]);
+});
+await test('Dendera set: owning Dendera, its pieces are offered as the set too', async () => {
+  const U = await newUser('owns-dendera');
+  await q(`insert into public.inventory (user_id, item_id) values ($1,'dendera')`, [U]);
+  await add(U, 'frame-lotus');
+  const [s] = await sugg(U);
+  assert.equal(s.set_id, 'set-dendera');
+  assert.equal(s.price, 480);
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 await db.close();
 process.exitCode = failed ? 1 : 0;
