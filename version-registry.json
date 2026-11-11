@@ -3604,8 +3604,8 @@
       "id": "UX-2026.11.09.03",
       "name": "Features · Lightning 2.1.2",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.03.html"
     },
     {
       "id": "UX-2026.11.09.04",
@@ -3715,6 +3715,20 @@
     {
       "id": "UX-2026.11.10.04",
       "name": "Version Archive · Terms: no refunds",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.10.04.html"
+    },
+    {
+      "id": "UX-2026.11.11.01",
+      "name": "Lightning · Features",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.11.02",
+      "name": "Version Archive · Features headline",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
