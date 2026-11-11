@@ -42,7 +42,7 @@ WORDS = {
         "about": "Made in Egypt.",
         "explore": "Explore",
         "more": "More",
-        "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("contribute", "Contribute")],
+        "explore_links": [("features", "Features"), ("how-it-works", "How It Works"), ("current-status", "Downloads"), ("guides", "Guides"), ("index.html#compare", "Compare"), ("contribute", "Contribute")],
         "more_links": [("release-log", "Release Log"), ("survey", "Survey"), ("privacy", "Privacy"), ("terms", "Terms"), ("forgeeks", "For Geeks"), ("account", "Account"), ("stories", "Stories"), ("leaderboard", "Leaderboard"), ("marketplace", "Marketplace")],
         "mark": "Lightning",
     },
@@ -58,7 +58,7 @@ WORDS = {
         "about": "اتعمل في مصر.",
         "explore": "استكشف",
         "more": "كمان",
-        "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات"), ("contribute", "ساهم معانا")],  # the Arabic Contribute page, not the English one
+        "explore_links": [("features", "المزايا"), ("how-it-works", "بيشتغل إزاي"), ("current-status", "التنزيل"), ("guides", "مقالات"), ("index.html#compare", "قارن"), ("contribute", "ساهم معانا")],  # the Arabic Contribute page, not the English one
         "more_links": [("release-log", "سجل التحديثات"), ("survey", "الاستبيان"), ("privacy", "الخصوصية"), ("terms", "الشروط"), ("../forgeeks", '<bdi lang="en">For Geeks</bdi> (بالإنجليزي)', ' hreflang="en" target="_blank" rel="noopener"')],
         "mark": "Lightning",
     },
@@ -92,7 +92,7 @@ def build(path: Path) -> str:
         items.append(f'<li><svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[icon]}</svg><small>{label}</small><span>{anchors}</span></li>')
     def column(title, links, name):
         # a third item adds attributes: the Arabic footer says For Geeks is English and opens it beside the Arabic page
-        anchors = "".join(f'<li><a href="{p}.html"{a[0] if a else ""}>{t}</a></li>' for p, t, *a in links)
+        anchors = "".join(f'<li><a href="{p if ".html" in p else p + ".html"}"{a[0] if a else ""}>{t}</a></li>' for p, t, *a in links)
         return f'<nav class="sf-col" aria-label="{name}"><h3>{title}</h3><ul>{anchors}</ul></nav>'
     return (
         '<footer class="sf">'
