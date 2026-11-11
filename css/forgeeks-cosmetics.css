@@ -22,8 +22,8 @@
    the banner's own height (cqh), so it composes the same in a 50px leaderboard row and a 140px profile strip: the
    horizon, the sun or the trace always sit in view instead of being cut off. Clear shapes on one dark or one light
    ground, no muddy middle greys. */
-.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"]){container-type:size}
-.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"])::before{content:"";position:absolute;inset:0}
+.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"],[data-item="banner-papyrus-thread"],[data-item="banner-dendera-zodiac"]){container-type:size}
+.fg-banner:is([data-item="banner-blueprint"],[data-item="banner-dusk"],[data-item="banner-circuit"],[data-item="banner-dunes"],[data-item="banner-felucca"],[data-item="banner-sandwind"],[data-item="banner-papyrus-thread"],[data-item="banner-dendera-zodiac"])::before{content:"";position:absolute;inset:0}
 
 /* blueprint: crisp white-blue lines on deep cobalt, one bright trace with a node, like a drawing's main line */
 .fg-banner[data-item="banner-blueprint"]{background:#0d2f6b}
@@ -92,6 +92,39 @@
   animation:fg-wind 18s linear infinite}
 @keyframes fg-wind{to{background-position:60cqw 0,60cqw 0,0 0,0 0,0 0}}
 
+/* ---- the Papyrus and Dendera sets (NF-10D2, owner 2026-11-08): each theme's own colours and its one motion ---- */
+/* gold thread: Papyrus's lapis lacquer and fine fibres, one gold thread whose light travels slowly along it */
+.fg-banner[data-item="banner-papyrus-thread"]{background:#0b1a3a}
+.fg-banner[data-item="banner-papyrus-thread"]::before{background:
+  repeating-linear-gradient(90deg,rgba(232,214,160,.07) 0 1px,transparent 1px 7px),
+  repeating-linear-gradient(0deg,rgba(232,214,160,.05) 0 1px,transparent 1px 11px),
+  radial-gradient(90% 140% at 20% 0%,#1d3a78,#0b1a3a 65%,#071126)}
+.fg-banner[data-item="banner-papyrus-thread"]::after{content:"";position:absolute;left:0;right:0;top:58%;height:max(2px,1.8cqh);transform:translateY(-50%);
+  background:
+    linear-gradient(90deg,transparent,rgba(255,246,214,.95),transparent) -40% 0/40% 100% no-repeat,
+    linear-gradient(90deg,#8a6420,#d4a537 30%,#f3d58a 50%,#d4a537 70%,#8a6420);
+  box-shadow:0 0 6px rgba(243,213,138,.35);
+  animation:fg-thread 12s linear infinite}
+@keyframes fg-thread{from{background-position:-40% 0,0 0}to{background-position:140% 0,0 0}}
+/* zodiac ceiling: Dendera's night ceiling in pigment blue, gold stars, and the zodiac ring turning once in 120 seconds */
+.fg-banner[data-item="banner-dendera-zodiac"]{background:#14275a}
+.fg-banner[data-item="banner-dendera-zodiac"]::before{background:
+  radial-gradient(circle at 12% 30%,#f1d58a 0 .9cqh,transparent 1.4cqh),
+  radial-gradient(circle at 26% 70%,#f1d58a 0 .7cqh,transparent 1.2cqh),
+  radial-gradient(circle at 40% 22%,#f1e6cc 0 .6cqh,transparent 1.1cqh),
+  radial-gradient(circle at 84% 64%,#f1d58a 0 .8cqh,transparent 1.3cqh),
+  radial-gradient(circle at 93% 24%,#f1e6cc 0 .6cqh,transparent 1.1cqh),
+  radial-gradient(circle at 74% 84%,#f1e6cc 0 .5cqh,transparent 1cqh),
+  linear-gradient(180deg,transparent 0 88%,#c99a3a 88% 90%,transparent 90%),
+  radial-gradient(120% 150% at 60% 40%,#1f3f8c,#14275a 60%,#0c1838)}
+.fg-banner[data-item="banner-dendera-zodiac"]::after{content:"";position:absolute;top:8cqh;left:calc(60% - 36cqh);width:72cqh;height:72cqh;border-radius:50%;
+  background:
+    radial-gradient(circle,#1f3f8c 0 52%,transparent 53%),
+    repeating-conic-gradient(rgba(241,213,138,.85) 0 1.5deg,transparent 1.5deg 30deg),
+    radial-gradient(circle,transparent 0 62%,rgba(241,213,138,.9) 63% 65%,transparent 66% 96%,rgba(241,213,138,.9) 97% 99%,transparent 100%);
+  animation:fg-zodiac 120s linear infinite}
+@keyframes fg-zodiac{to{transform:rotate(360deg)}}
+
 /* borealis: soft bands of teal and violet over a night sky, drifting slowly */
 .fg-banner[data-item="banner-borealis"]{
   background:
@@ -117,6 +150,13 @@
 .av[data-frame="frame-gold"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #C9A24B,0 0 0 5px rgba(120,86,10,.55)!important}
 .av[data-frame="frame-nile"]{box-shadow:0 0 0 2px var(--bg),0 0 0 5px #0A2442,0 0 0 6px #5BD3F2!important}
 .av[data-frame="frame-double"]{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--ink),0 0 0 6px var(--bg),0 0 0 7px var(--ink)!important}
+/* gold foil (Papyrus set): a gold-leaf ring whose glint brightens once in 10 seconds; lotus (Dendera set): pigment blue in an ochre rim */
+/* The running animation sets the ring itself (an animation beats a page's ordinary box-shadow rule, and !important would
+   freeze it); under reduced motion the still ring below takes over with !important like every other frame. */
+.av[data-frame="frame-gold-foil"]{animation:fg-foil 10s ease-in-out infinite}
+@keyframes fg-foil{0%,70%,100%{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #D4A537,0 0 0 5px #8A6420,0 0 6px 5px rgba(243,213,138,.25)}85%{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #F3D58A,0 0 0 5px #8A6420,0 0 10px 6px rgba(243,213,138,.55)}}
+.av[data-frame="frame-lotus"]{box-shadow:0 0 0 2px var(--bg),0 0 0 5px #1F3F8C,0 0 0 7px #C99A3A!important}
+@media (prefers-reduced-motion:reduce){.av[data-frame]{animation:none!important}.av[data-frame="frame-gold-foil"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #D4A537,0 0 0 5px #8A6420,0 0 6px 5px rgba(243,213,138,.25)!important}}
 .av[data-frame].xl{margin-inline-start:6px}
 
 /* Badges: a small mark beside the name. The words for screen readers sit in .sr. */
@@ -144,9 +184,11 @@
 .fg-badge[data-item="badge-lantern"]{color:#C26A1B}
 
 /* Name styles paint the display name itself, over any page rule for names (hence !important). Each hue is mixed 60% with the page's own text colour, so the name keeps
-   4.5:1 or better on every theme, light and dark (checked against all eight seeds). */
+   4.5:1 or better on every theme, light and dark (checked against all eight seeds; Papyrus gold and Pigment blue against all 18 themes, 2026-11-10). */
 [data-name-style="name-gold"]{color:color-mix(in srgb,#C9971C 60%,var(--ink))!important}
 [data-name-style="name-nile"]{color:color-mix(in srgb,#1E88C8 60%,var(--ink))!important}
+[data-name-style="name-papyrus-gold"]{color:color-mix(in srgb,#B8862A 60%,var(--ink))!important}
+[data-name-style="name-pigment-blue"]{color:color-mix(in srgb,#4A74D8 60%,var(--ink))!important}
 [data-name-style="name-sunset"],[data-name-style="name-shimmer"]{-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;text-decoration-color:var(--ink)}
 [data-name-style="name-sunset"]{background-image:linear-gradient(90deg,color-mix(in srgb,#E8742A 60%,var(--ink)),color-mix(in srgb,#9B4DE0 60%,var(--ink)))}
 /* shimmer: one slow light across the name every 9 s; the light is nearer the text colour, so contrast only rises */

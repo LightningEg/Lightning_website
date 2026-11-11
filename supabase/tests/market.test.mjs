@@ -69,14 +69,14 @@ const paid = (await q(`select id, type, price from public.catalog_items where no
 const buyable = (await q(`select id, type, price from public.catalog_items c where type <> 'set' and private.on_sale(c) order by type, price`)).rows;
 
 // ------------------------------------------------------------ the seed
-await test('seed: 8 paid themes on sale (5 palettes, 1 textured, 2 animated), 6 paid banners, 4 frames and 4 badges, priced in whole coins, with a note', async () => {
+await test('seed: 8 paid themes on sale (5 palettes, 1 textured, 2 animated), 6 paid banners, 6 frames (two from the Papyrus and Dendera sets) and 4 badges, priced in whole coins, with a note', async () => {
   assert.deepEqual(paid.filter(p => p.type === 'theme').map(p => p.id).sort(), ['cotton','dendera','frost','garnet','meadow','nile','paper','papyrus']);
   assert.equal(paid.filter(p => p.type === 'banner').length, 6);
-  assert.equal(paid.filter(p => p.type === 'frame').length, 4);
+  assert.equal(paid.filter(p => p.type === 'frame').length, 6);
   assert.equal(paid.filter(p => p.type === 'badge').length, 4);
-  assert.equal(paid.length, 22);
+  assert.equal(paid.length, 24);
   for (const p of paid) {
-    assert.match(p.id, p.type === 'theme' ? /^[a-z]+$/ : /^(banner|frame|badge)-[a-z]+$/, p.id);
+    assert.match(p.id, p.type === 'theme' ? /^[a-z]+$/ : /^(banner|frame|badge)-[a-z]+(-[a-z]+)?$/, p.id);
     assert.ok(p.price > 0 && Number.isInteger(p.price), p.id);
     if (p.type === 'theme') assert.ok(p.price >= 300 && p.price <= 1000, p.id);
     else assert.ok(p.price >= 60 && p.price <= 200, p.id);
@@ -270,11 +270,11 @@ await test('market_catalog: anon sees every active item, nothing owned or equipp
   // seasonal drops come and go with the date; the standing stock does not
   const rows = all.filter(r => !r.available_from);
   const core = rows.filter(r => !r.award && r.type !== 'set' && r.type !== 'name' && (r.type === 'theme' || !r.tier));
-  assert.equal(core.length, 9 + 6 + 4 + 4, 'Mono, five palettes, one textured, two animated, six banners, four frames, four badges');
+  assert.equal(core.length, 9 + 6 + 6 + 4, 'Mono, five palettes, one textured, two animated, six banners, six frames, four badges');
   assert.equal(rows.filter(r => r.award).length, 5, 'four supporter badges and Founding supporter, shown so members know how to earn them');
-  assert.equal(rows.filter(r => r.type === 'name').length, 4);
-  assert.equal(rows.filter(r => r.type === 'set').length, 3);
-  assert.equal(rows.filter(r => r.type === 'banner' && r.tier === 'motion').length, 4); // Nile at night, Drifting stars, Felucca, Sand wind
+  assert.equal(rows.filter(r => r.type === 'name').length, 6);
+  assert.equal(rows.filter(r => r.type === 'set').length, 5);
+  assert.equal(rows.filter(r => r.type === 'banner' && r.tier === 'motion').length, 6); // Nile at night, Drifting stars, Felucca, Sand wind, Gold thread, Zodiac ceiling
   assert.ok(all.every(r => r.owned === false && r.equipped === false));
   assert.deepEqual(Object.keys(rows[0]).sort(), ['asset_version', 'available_from', 'available_until', 'award', 'award_coins', 'description', 'equipped', 'id', 'is_default', 'name', 'owned', 'parts', 'price', 'set_price', 'tier', 'type']);
   const order = ['set', 'theme', 'banner', 'frame', 'name', 'badge'], types = all.map(r => order.indexOf(r.type));
