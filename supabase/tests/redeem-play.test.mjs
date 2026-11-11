@@ -37,7 +37,7 @@ function setup({purchase = {purchaseState: 0, acknowledgementState: 0, orderId: 
   const rpc = async (name, args) => {
     calls.push(['rpc', name]);
     const seen = profiles.get(args.p_token_sha256) || new Set();
-    if (!seen.has(args.p_profile_id) && seen.size >= 10) return {data: null, error: {message: 'this purchase already unlocks 10 profiles'}};
+    if (!seen.has(args.p_profile_id) && seen.size >= 5) return {data: null, error: {message: 'this purchase already unlocks 5 profiles'}};
     seen.add(args.p_profile_id); profiles.set(args.p_token_sha256, seen);
     assert.match(args.p_token_sha256, /^[0-9a-f]{64}$/, 'only the token hash reaches the database');
     return {data: {schema_version: 1, account_id: '00000000-0000-4000-8000-000000000009', profile_id: args.p_profile_id,
@@ -66,11 +66,11 @@ p = setup(); assert.equal((await p.handler(request())).status, 200);
 r = await p.handler(request({profile_id: OTHER}));
 assert.equal(r.status, 200, 'a second profile of the buyer is licensed');
 assert.equal(JSON.parse((await r.json()).payload).profile_id, OTHER);
-// Case 12: the eleventh profile is refused with the cap named.
+// Case 12: the sixth profile is refused with the cap named.
 p = setup({purchase: {purchaseState: 0, acknowledgementState: 1, orderId: 'GPA.2'}});
 const profileN = n => `aaaaaaaa-aaaa-4aaa-8aaa-${String(n).padStart(12, '0')}`;
-for (let n = 1; n <= 10; n++) assert.equal((await p.handler(request({profile_id: profileN(n)}))).status, 200);
-r = await p.handler(request({profile_id: profileN(11)}));
+for (let n = 1; n <= 5; n++) assert.equal((await p.handler(request({profile_id: profileN(n)}))).status, 200);
+r = await p.handler(request({profile_id: profileN(6)}));
 assert.equal(r.status, 409); assert.equal((await r.json()).code, 'profile_cap');
 // Case 11: a voided purchase (refund or chargeback, Voided Purchases API) mints nothing.
 p = setup({voidedTokens: ['token-abcdefghijkl']});
@@ -92,4 +92,4 @@ assert.equal((await p.handler(request({profile_id: 'nope'}))).status, 400);
 assert.equal((await p.handler(request({purchase_token: 'x'.repeat(5000)}))).status, 413);
 assert.equal(p.calls.length, 0, 'nothing asked of Google for a bad request');
 p = setup({env: {...ENV, GOOGLE_PLAY_SERVICE_ACCOUNT: undefined}}); assert.equal((await p.handler(request())).status, 503);
-console.log('redeem-play: paid purchase verified, acknowledged and licensed; every profile of the buyer licensed up to 10; refunded, voided, pending and malformed requests refused');
+console.log('redeem-play: paid purchase verified, acknowledged and licensed; every profile of the buyer licensed up to 5; refunded, voided, pending and malformed requests refused');

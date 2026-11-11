@@ -1,6 +1,6 @@
 // Owned, shipped app themes. A one-time code unlocks the theme for ONE Lightning profile and is then burned; the
 // app shares the unlock through the profile itself, so the profile's other devices unlock by themselves with no further
-// code. One purchase covers every profile of the buyer, up to 10, at no charge: another profile just gets its own code
+// code. One purchase covers every profile of the buyer, up to 5, at no charge: another profile just gets its own code
 // (supabase/migrations/20261110120000_one_purchase_every_profile.sql; app NF-10H).
 (function(){
  const FG=window.FG;if(!FG)return;
@@ -27,13 +27,13 @@
    const close=make('button','Close');close.type='button';close.className='btn';close.onclick=shut;
    const d=open('Unlock in Lightning',
     make('p','In Lightning, open Settings, then Appearance, then Unlock a theme you bought, and paste this code while connected to the internet. It works once and expires in ten minutes.'),
-    make('p','One code unlocks the theme for one profile. Do this once: that profile’s other devices unlock by themselves, with no code. Another profile of yours gets its own code here, free, up to 10 profiles.'),
+    make('p','One code unlocks the theme for one profile. Do this once: that profile’s other devices unlock by themselves, with no code. Another profile of yours gets its own code here, free, up to 5 profiles.'),
     input,copy,close,status);
    d.addEventListener('close',()=>{input.value='';});
   }catch{button.textContent='Try getting a code again';}finally{button.disabled=false;}
  }
  function seatNote(info){
-  const n=Number(info.used)||0,cap=Number(info.seats)||10;
+  const n=Number(info.used)||0,cap=Number(info.seats)||5;
   const p=make('p',AR?('اتفعّل على '+n.toLocaleString('ar-EG')+' من '+cap.toLocaleString('ar-EG')+' ملفات، من غير فلوس زيادة'):(n+' of '+cap+' profiles unlocked, at no extra cost'));
   p.dataset.seatNote='';p.className='mkt-note';return p;
  }

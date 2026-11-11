@@ -1,4 +1,4 @@
-// Bearer-ticket exchange for native apps, no app account login required. One code unlocks one profile; one purchase covers up to 10. Configure verify_jwt=false
+// Bearer-ticket exchange for native apps, no app account login required. One code unlocks one profile; one purchase covers up to 5. Configure verify_jwt=false
 // for this endpoint ONLY; the UUID-strength one-time ticket is the authority. Add edge rate limits.
 import {createClient} from 'npm:@supabase/supabase-js@2.118.0';
 import {signInventory} from '../restore-purchases/license.mjs';
@@ -34,7 +34,7 @@ Deno.serve(async(req:Request)=>{
    ?{p_code:body.code,p_items:items,p_profile_id:body.profile_id}
    :{p_code:body.code,p_item_id:body.item_id,p_asset_version:body.asset_version,p_profile_id:body.profile_id});
   if(error&&/unsupported bundled item/.test(String(error.message)))return reply(422,{code:'update_app',error:'Update Lightning to wear this theme.'});
-  if(error&&/unlocks 10 profiles|every profile seat/.test(String(error.message)))return reply(409,{code:'no_seat',error:'This theme already unlocks 10 profiles. Write to hello@lightningeg.com to free one you no longer use.'});
+  if(error&&/unlocks \d+ profiles|every profile seat/.test(String(error.message)))return reply(409,{code:'no_seat',error:'This theme already unlocks 5 profiles. Write to hello@lightningeg.com to free one you no longer use.'});
   if(error)return reply(400,{error:'That code is used or expired. Get a fresh one from your account page.'});
   return reply(200,await signInventory(data,jwk,keyId));
  }catch{return reply(400,{error:'Could not activate. Get a fresh code from your account if needed.'});}

@@ -1,7 +1,7 @@
 // Google Play purchase → signed theme licence (app repo NF-11B3). The Play build buys a theme with Play Billing, then sends
 // the purchase token here. This asks Google (Play Developer API, purchases.products.get) whether the token is a paid
 // purchase of that theme, not refunded or voided, keeps it (redeem_play_purchase: one purchase unlocks every profile of
-// that Google account, up to 10; NF-10H1, owner 2026-11-09), acknowledges it so Google does not refund it after three
+// that Google account, up to 5; NF-10H1, owner 2026-11-09, cap 2026-11-11), acknowledges it so Google does not refund it after three
 // days, and returns the same signed licence redeem-purchase returns, naming the profile that asked.
 // Deploy with verify_jwt=false: native clients have no website account; Google's answer is the authority.
 //
@@ -110,7 +110,7 @@ export function redeemPlayHandler({env, fetcher = fetch, rpc}) {
       const {data, error} = await rpc('redeem_play_purchase', {p_token_sha256: await sha256Hex(body.purchase_token),
         p_order_id: String(purchase.orderId || '').slice(0, 80) || 'no-order', p_item_id: body.product_id, p_profile_id: body.profile_id, p_items: items});
       if (error && /unsupported bundled item/.test(String(error.message))) return reply(422, {code: 'update_app', error: 'Update Lightning to wear this theme.'});
-      if (error && /10 profiles/.test(String(error.message))) return reply(409, {code: 'profile_cap', error: 'This purchase already unlocks 10 profiles.'});
+      if (error && /unlocks \d+ profiles/.test(String(error.message))) return reply(409, {code: 'profile_cap', error: 'This purchase already unlocks 5 profiles.'});
       if (error) return reply(400, {error: 'Could not unlock this purchase.'});
       if (purchase.acknowledgementState !== 1) {
         const ack = await fetcher(`${at}:acknowledge`, {method: 'POST', headers: {...auth, 'Content-Type': 'application/json'}, body: '{}'});
