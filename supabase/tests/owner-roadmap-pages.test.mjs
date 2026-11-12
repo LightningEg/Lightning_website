@@ -118,24 +118,44 @@ await test('issue titles are text, never markup', async () => {
   assert.ok(again.$('ops-roadmap').textContent.includes('<img src=x'));
 });
 
-await test('Copy prompt puts a complete instruction for that one issue on the clipboard', async () => {
+await test('every issue row has a Copy prompt button, and the wording fits the issue\'s state', async () => {
   const p = await boot();
-  let copied = null;
-  Object.defineProperty(p.w.navigator, 'clipboard', { value: { writeText: async t => { copied = t; } }, configurable: true });
-  const ready = expected.filter(r => r.state === 'ready' && r.when === 'launch');
+  const copies = [];
+  Object.defineProperty(p.w.navigator, 'clipboard', { value: { writeText: async t => { copies.push(t); } }, configurable: true });
+  const leaves = expected.filter(r => !['group'].includes(r.state));
   const buttons = p.q('#ops-roadmap button').filter(b => b.textContent === 'Copy prompt');
-  assert.equal(buttons.length, Math.min(12, ready.length), 'one button on each ready row');
-  buttons[0].click();
-  await tick(20);
-  const n = ready[0].n;
-  assert.match(copied, new RegExp('^Take issue #' + n + ' in LightningEg/Lightning: '));
-  assert.ok(copied.includes('https://github.com/LightningEg/Lightning/issues/' + n));
-  for (const must of ['AGENTS.md', 'python tools/board.py', 'Closes #' + n, 'draft pull request', 'who/feature', 'Release-note', 'Done (PR links), Left, Next'])
-    assert.ok(copied.includes(must), 'the prompt says: ' + must);
-  assert.equal(buttons[0].textContent, 'Copied');
-  const withArea = p.w.FGOwnerRoadmap.prompt({ n: 7, title: '[X-1] t', areas: ['lightning/ui', 'tests/x'] });
-  assert.match(withArea, /Stay inside its Area: lightning\/ui, tests\/x\./);
-  assert.ok(!/Area/.test(p.w.FGOwnerRoadmap.prompt({ n: 7, title: 't', areas: [] })));
+  assert.equal(buttons.length, leaves.length, 'one button per open issue, parents apart, none twice');
+  const rows = p.q('#ops-roadmap tbody tr');
+  const prompts = {};
+  for (const tr of rows) {
+    const btn = [...tr.querySelectorAll('button')].find(b => b.textContent === 'Copy prompt');
+    const m = btn && /#(\d+)/.exec(tr.querySelector('a').textContent);
+    if (!btn) continue;
+    btn.click(); await tick(5);
+    prompts[m[1]] = copies[copies.length - 1];
+  }
+  const by = state => expected.find(r => r.state === state && prompts[r.n]);
+  const ready = by('ready'), running = by('running'), blocked = by('blocked'), person = by('person');
+  assert.match(prompts[ready.n], /Take this issue/); assert.ok(prompts[ready.n].includes('Closes #' + ready.n));
+  assert.match(prompts[running.n], /Do not open a second pull request/); assert.ok(!prompts[running.n].includes('Closes #'));
+  assert.match(prompts[blocked.n], /lists this as blocked because of: /); assert.match(prompts[blocked.n], /do not start/);
+  assert.match(prompts[person.n], /needs me/); assert.match(prompts[person.n], /\(Recommended\)/);
+  for (const t of Object.values(prompts)) for (const must of ['AGENTS.md', 'https://github.com/LightningEg/Lightning/issues/']) assert.ok(t.includes(must));
+  const w = p.w.FGOwnerRoadmap;
+  assert.match(w.prompt({ n: 7, title: '[X-1] t', areas: ['lightning/ui', 'tests/x'] }), /Stay inside its Area: lightning\/ui, tests\/x\./);
+  assert.ok(!/Area/.test(w.prompt({ n: 7, title: 't', areas: [] })));
+  assert.match(w.prompt({ n: 7, title: 't', state: 'stale', prs: [{ n: 9, branch: 'claude/x' }], areas: [] }), /no activity for 48 hours/);
+  assert.match(w.prompt({ n: 7, title: 't', state: 'group', areas: [] }), /parent item/);
+});
+
+await test('ready issues that are not for launch sit in a fold, each with a copy button', async () => {
+  const p = await boot();
+  const fold = p.q('#ops-roadmap details.oc-fold')[0];
+  assert.ok(fold, 'a fold');
+  const later = expected.filter(r => r.when !== 'launch' && r.state === 'ready');
+  assert.match(fold.querySelector('summary').textContent, new RegExp('Ready, but not for launch: ' + later.length + ' issues'));
+  assert.equal(fold.querySelectorAll('tbody tr').length, later.length);
+  assert.equal([...fold.querySelectorAll('button')].filter(b => b.textContent === 'Copy prompt').length, later.length);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

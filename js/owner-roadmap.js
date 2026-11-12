@@ -93,13 +93,34 @@
   /* The words to paste into an AI chat to make it take one issue. They follow the repository's own rules (AGENTS.md:
      check the board, claim by a draft pull request, own branch, hand off on the issue), so the chat needs nothing else. */
   function prompt(i) {
+    var head = ['Issue #' + i.n + ' in ' + REPO + ': ' + i.title, WEB + '/issues/' + i.n, ''];
     var area = i.areas && i.areas.length ? ' Stay inside its Area: ' + i.areas.join(', ') + '.' : '';
-    return ['Take issue #' + i.n + ' in ' + REPO + ': ' + i.title, WEB + '/issues/' + i.n, '',
-      'Read AGENTS.md first. Run `python tools/board.py` and start only if #' + i.n + ' is still listed as ready (not running, blocked or held, no assignee). ' +
+    var close = 'Tell me only results, decisions and real risks.';
+    var p = (i.prs || [])[0], state = i.state || 'ready';
+    if (state === 'running' || state === 'stale') {
+      return head.concat(['Someone is already on this' + (p ? ': pull request #' + p.n + ' (branch ' + (p.branch || '?') + ')' : ' (it has an assignee)') + '. Do not open a second pull request.' +
+        (state === 'stale' ? ' It has had no activity for 48 hours, so it may be abandoned.' : ''),
+        'Read AGENTS.md, then read the pull request: its checks, review comments and what is left. Report where it stands. ' +
+        (state === 'stale' ? 'If it is clearly abandoned, say so and what picking it up would take; do not take it over without my answer. ' : 'Continue it only if I say so. ') + close]).join('\n');
+    }
+    if (state === 'blocked' || state === 'held') {
+      return head.concat(['The board lists this as ' + state + (i.why && i.why.length ? ' because of: ' + i.why.join('; ') : '') + '.',
+        'Read AGENTS.md. Run `python tools/board.py` and check whether that has cleared. If it has, take the issue the usual way: a draft pull request that says `Closes #' + i.n + '`, your own branch named who/feature.' + area +
+        ' If it has not, do not start; tell me what is still in the way and the quickest way to clear it. ' + close]).join('\n');
+    }
+    if (state === 'person') {
+      return head.concat(['This one needs me, not an AI to build it (can: ' + (i.can || 'owner') + '). Read AGENTS.md and the issue with its Read: line.',
+        'Tell me what I must decide or check, why it matters, and what I need to do it. For a decision, ask me with a pick-list of 2 to 4 distinct options, each with its trade-off and your recommendation first, marked (Recommended). ' +
+        'Do the safe part meanwhile, and record my answer where the next AI will read it. ' + close]).join('\n');
+    }
+    if (state === 'group') {
+      return head.concat(['This is a parent item; its steps are sub-issues. Read AGENTS.md and the issue, run `python tools/board.py`, and tell me which step is ready to take next and what each remaining step waits on. ' + close]).join('\n');
+    }
+    return head.concat(['Take this issue. Read AGENTS.md first. Run `python tools/board.py` and start only if #' + i.n + ' is still listed as ready (not running, blocked or held, no assignee). ' +
       'Claim it by opening a draft pull request that says `Closes #' + i.n + '`, on your own branch named who/feature. ' +
       'Read the issue and the Read: line in it, and follow its done-when.' + area,
       'Small finished steps, tests for what you changed, commits ending with the Release-note and Detail trailers and naming the item code in the subject. ' +
-      'When done, leave one comment on the issue: Done (PR links), Left, Next. Tell me only results, decisions and real risks.'].join('\n');
+      'When done, leave one comment on the issue: Done (PR links), Left, Next. ' + close]).join('\n');
   }
 
   /* ---------- GitHub's answer into the board's input ---------- */
@@ -174,7 +195,7 @@
     }
     function copyButton(i) {
       var b = el('button', 'btn ghost', 'Copy prompt'); b.type = 'button';
-      b.setAttribute('aria-label', 'Copy a prompt for an AI chat to take issue #' + i.n);
+      b.setAttribute('aria-label', 'Copy a prompt for an AI chat about issue #' + i.n);
       b.addEventListener('click', function () {
         copyText(prompt(i)).then(function () { b.textContent = 'Copied'; }, function () { b.textContent = 'Copy failed'; })
           .then(function () { setTimeout(function () { b.textContent = 'Copy prompt'; }, 1800); });
@@ -220,31 +241,33 @@
         kpi('Blocked or held', stuck.length, num(stuck.filter(function (i) { return i.when === 'launch'; }).length) + ' of them for launch')]));
 
       host.appendChild(block('Needs you', 'a choice or a check only you can make',
-        table(['Issue', 'When'], person.map(function (i) { return [issue(i), i.when]; }), 'Nothing is waiting on you.')));
+        table(['Issue', 'When', ''], person.map(function (i) { return [issue(i), i.when, copyButton(i)]; }), 'Nothing is waiting on you.')));
 
       host.appendChild(block('Running now', 'an open pull request says Closes it',
-        table(['Issue', 'Pull request', 'Last activity'], running.map(function (i) {
+        table(['Issue', 'Pull request', 'Last activity', ''], running.map(function (i) {
           var p = i.prs[0];
           return [issue(i), p ? add(el('span'), [link('#' + p.n, WEB + '/pull/' + p.n), el('small', 'ops-sub', (p.draft ? ' draft · ' : ' ') + (p.branch || ''))]) : (i.assignees.join(', ') || 'assigned'),
-            p ? ago(p.updated) + (i.state === 'stale' ? ' · stale' : '') : ''];
+            p ? ago(p.updated) + (i.state === 'stale' ? ' · stale' : '') : '', copyButton(i)];
         }), 'Nothing is running.')));
 
-      host.appendChild(block('Ready next', 'launch work free to start, the most unblocking first. Copy prompt gives an AI chat everything it needs to take one', add(el('div'), [
-        table(['Issue', 'Who', ''], ready.slice(0, 12).map(function (i) {
+      host.appendChild(block('Ready next', 'launch work free to start, the most unblocking first. Copy prompt gives an AI chat everything it needs',
+        table(['Issue', 'Who', ''], ready.map(function (i) {
           return [issue(i), i.can + (next.indexOf(i) >= 0 ? ' · next' : ''), copyButton(i)];
-        }), 'Nothing is ready.'),
-        ready.length > 12 ? el('p', 'ops-fine', 'and ' + num(ready.length - 12) + ' more launch issues ready. The board on GitHub lists the rest.') : null])));
+        }), 'Nothing is ready.')));
 
       host.appendChild(block('Blocked or held', 'waiting on another issue, a pull request or the same files',
-        table(['Issue', 'Waiting on'], stuck.map(function (i) { return [issue(i), i.why.join('; ')]; }), 'Nothing is blocked.')));
+        table(['Issue', 'Waiting on', ''], stuck.map(function (i) { return [issue(i), i.why.join('; '), copyButton(i)]; }), 'Nothing is blocked.')));
 
       var shipped = data.merged.slice(0, 8);
       host.appendChild(block('Shipped lately', 'the last merged pull requests',
         table(['Pull request', 'Merged'], shipped.map(function (p) { return [link('#' + p.n + ' ' + p.title.replace(/^(\[[^\]]+\]\s*)+/, ''), WEB + '/pull/' + p.n), ago(p.merged)]; }), 'Nothing merged yet.')));
 
-      var later = leaves.filter(function (i) { return i.when !== 'launch'; });
-      var cnt = function (w) { return later.filter(function (i) { return i.when === w; }).length; };
-      host.appendChild(el('p', 'ops-fine', 'Not for launch: ' + num(cnt('after-launch')) + ' after launch, ' + num(cnt('someday')) + ' someday, ' + num(cnt('unsorted')) + ' not sorted yet. States follow tools/board.py in the app repository. To start work, tell Claude go.'));
+      var later = leaves.filter(function (i) { return i.when !== 'launch' && i.state === 'ready'; }); // the rest are listed above
+      var more = el('details', 'oc-fold');
+      more.appendChild(el('summary', null, 'Ready, but not for launch: ' + num(later.length) + ' issues'));
+      more.appendChild(table(['Issue', 'When', 'Who', ''], later.map(function (i) { return [issue(i), i.when, i.can, copyButton(i)]; }), 'Nothing here.'));
+      host.appendChild(more);
+      host.appendChild(el('p', 'ops-fine', 'States follow tools/board.py in the app repository. Copy prompt words each prompt for the issue\u2019s state: take it, check on it, check whether it is unblocked, or brief you.'));
       shown = now;
     }
 
