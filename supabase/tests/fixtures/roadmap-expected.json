@@ -1,0 +1,551 @@
+[
+ {
+  "n": 544,
+  "state": "group",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 582,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 544
+ },
+ {
+  "n": 583,
+  "state": "blocked",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#582"
+  ],
+  "parent": 544
+ },
+ {
+  "n": 585,
+  "state": "blocked",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#583"
+  ],
+  "parent": 544
+ },
+ {
+  "n": 592,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 548
+ },
+ {
+  "n": 594,
+  "state": "blocked",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#592"
+  ],
+  "parent": 548
+ },
+ {
+  "n": 425,
+  "state": "ready",
+  "when": "launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": 552
+ },
+ {
+  "n": 426,
+  "state": "ready",
+  "when": "launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": 552
+ },
+ {
+  "n": 427,
+  "state": "ready",
+  "when": "launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": 552
+ },
+ {
+  "n": 428,
+  "state": "ready",
+  "when": "launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": 552
+ },
+ {
+  "n": 543,
+  "state": "group",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 546,
+  "state": "group",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 547,
+  "state": "group",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#544"
+  ],
+  "parent": null
+ },
+ {
+  "n": 548,
+  "state": "group",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 549,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 550,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 552,
+  "state": "group",
+  "when": "launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 553,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 579,
+  "state": "person",
+  "when": "launch",
+  "can": "human",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 584,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 544
+ },
+ {
+  "n": 586,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 543
+ },
+ {
+  "n": 587,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 543
+ },
+ {
+  "n": 588,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 543
+ },
+ {
+  "n": 589,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 543
+ },
+ {
+  "n": 590,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 546
+ },
+ {
+  "n": 591,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 546
+ },
+ {
+  "n": 593,
+  "state": "ready",
+  "when": "launch",
+  "can": "opus",
+  "why": [],
+  "parent": 548
+ },
+ {
+  "n": 595,
+  "state": "blocked",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#594"
+  ],
+  "parent": 548
+ },
+ {
+  "n": 596,
+  "state": "blocked",
+  "when": "launch",
+  "can": "opus",
+  "why": [
+   "#585",
+   "#544"
+  ],
+  "parent": 547
+ },
+ {
+  "n": 545,
+  "state": "ready",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 404,
+  "state": "held",
+  "when": "after-launch",
+  "can": "sonnet",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": 562
+ },
+ {
+  "n": 405,
+  "state": "held",
+  "when": "after-launch",
+  "can": "sonnet",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": 562
+ },
+ {
+  "n": 406,
+  "state": "held",
+  "when": "after-launch",
+  "can": "sonnet",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": 562
+ },
+ {
+  "n": 407,
+  "state": "held",
+  "when": "after-launch",
+  "can": "sonnet",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": 562
+ },
+ {
+  "n": 554,
+  "state": "blocked",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [
+   "owner (repository Actions allowlist update) and native runtime acceptance"
+  ],
+  "parent": null
+ },
+ {
+  "n": 555,
+  "state": "blocked",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [
+   "#545"
+  ],
+  "parent": null
+ },
+ {
+  "n": 556,
+  "state": "running",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 557,
+  "state": "running",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 558,
+  "state": "ready",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 560,
+  "state": "ready",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 561,
+  "state": "held",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": null
+ },
+ {
+  "n": 562,
+  "state": "group",
+  "when": "after-launch",
+  "can": "sonnet",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 563,
+  "state": "person",
+  "when": "after-launch",
+  "can": "owner",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 564,
+  "state": "blocked",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [
+   "#544"
+  ],
+  "parent": null
+ },
+ {
+  "n": 565,
+  "state": "ready",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 566,
+  "state": "held",
+  "when": "after-launch",
+  "can": "opus",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": null
+ },
+ {
+  "n": 431,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": 572
+ },
+ {
+  "n": 528,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": 569
+ },
+ {
+  "n": 529,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": 569
+ },
+ {
+  "n": 568,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 569,
+  "state": "group",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 570,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 571,
+  "state": "blocked",
+  "when": "someday",
+  "can": "sonnet",
+  "why": [
+   "a test from a home connection (human)"
+  ],
+  "parent": null
+ },
+ {
+  "n": 572,
+  "state": "group",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 573,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 574,
+  "state": "blocked",
+  "when": "someday",
+  "can": "opus",
+  "why": [
+   "a data source that allows redistribution (owner)"
+  ],
+  "parent": null
+ },
+ {
+  "n": 575,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 576,
+  "state": "ready",
+  "when": "someday",
+  "can": "opus",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 577,
+  "state": "held",
+  "when": "someday",
+  "can": "opus",
+  "why": [
+   "same area as #556"
+  ],
+  "parent": null
+ },
+ {
+  "n": 435,
+  "state": "ready",
+  "when": "unsorted",
+  "can": "any-ai",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 436,
+  "state": "ready",
+  "when": "unsorted",
+  "can": "any-ai",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 525,
+  "state": "ready",
+  "when": "unsorted",
+  "can": "any-ai",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 526,
+  "state": "ready",
+  "when": "unsorted",
+  "can": "any-ai",
+  "why": [],
+  "parent": null
+ },
+ {
+  "n": 527,
+  "state": "ready",
+  "when": "unsorted",
+  "can": "any-ai",
+  "why": [],
+  "parent": null
+ }
+]
