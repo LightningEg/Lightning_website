@@ -90,6 +90,18 @@
     return out;
   }
 
+  /* The words to paste into an AI chat to make it take one issue. They follow the repository's own rules (AGENTS.md:
+     check the board, claim by a draft pull request, own branch, hand off on the issue), so the chat needs nothing else. */
+  function prompt(i) {
+    var area = i.areas && i.areas.length ? ' Stay inside its Area: ' + i.areas.join(', ') + '.' : '';
+    return ['Take issue #' + i.n + ' in ' + REPO + ': ' + i.title, WEB + '/issues/' + i.n, '',
+      'Read AGENTS.md first. Run `python tools/board.py` and start only if #' + i.n + ' is still listed as ready (not running, blocked or held, no assignee). ' +
+      'Claim it by opening a draft pull request that says `Closes #' + i.n + '`, on your own branch named who/feature. ' +
+      'Read the issue and the Read: line in it, and follow its done-when.' + area,
+      'Small finished steps, tests for what you changed, commits ending with the Release-note and Detail trailers and naming the item code in the subject. ' +
+      'When done, leave one comment on the issue: Done (PR links), Left, Next. Tell me only results, decisions and real risks.'].join('\n');
+  }
+
   /* ---------- GitHub's answer into the board's input ---------- */
   function normalize(rawIssues, rawOpen, rawClosed, blockers, now) {
     var issues = rawIssues.filter(function (i) { return !i.pull_request; });
@@ -140,7 +152,7 @@
   /* ---------- the page ---------- */
   var host = doc.getElementById('ops-roadmap');
   if (host) start();
-  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize };
+  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt };
 
   function start() {
     var verified = false, loading = false, shown = null, FG = window.FG || {};
@@ -152,6 +164,22 @@
     function ago(ts) {
       var m = Math.max(0, Math.round((Date.now() - new Date(ts).getTime()) / 60000));
       return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' days ago';
+    }
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+      return new Promise(function (ok, no) {
+        var t = el('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0'; doc.body.appendChild(t); t.select();
+        try { doc.execCommand('copy') ? ok() : no(new Error('copy refused')); } catch (e) { no(e); } finally { doc.body.removeChild(t); }
+      });
+    }
+    function copyButton(i) {
+      var b = el('button', 'btn ghost', 'Copy prompt'); b.type = 'button';
+      b.setAttribute('aria-label', 'Copy a prompt for an AI chat to take issue #' + i.n);
+      b.addEventListener('click', function () {
+        copyText(prompt(i)).then(function () { b.textContent = 'Copied'; }, function () { b.textContent = 'Copy failed'; })
+          .then(function () { setTimeout(function () { b.textContent = 'Copy prompt'; }, 1800); });
+      });
+      return b;
     }
     function kpi(labelText, value, sub) {
       return add(el('article', 'ops-kpi'), [el('span', 'ops-kpi-l', labelText), el('strong', null, num(value)), sub ? el('p', 'ops-sub', sub) : null]);
@@ -201,9 +229,9 @@
             p ? ago(p.updated) + (i.state === 'stale' ? ' · stale' : '') : ''];
         }), 'Nothing is running.')));
 
-      host.appendChild(block('Ready next', 'launch work free to start, the most unblocking first', add(el('div'), [
+      host.appendChild(block('Ready next', 'launch work free to start, the most unblocking first. Copy prompt gives an AI chat everything it needs to take one', add(el('div'), [
         table(['Issue', 'Who', ''], ready.slice(0, 12).map(function (i) {
-          return [issue(i), i.can, next.indexOf(i) >= 0 ? 'starts on go' : ''];
+          return [issue(i), i.can + (next.indexOf(i) >= 0 ? ' · next' : ''), copyButton(i)];
         }), 'Nothing is ready.'),
         ready.length > 12 ? el('p', 'ops-fine', 'and ' + num(ready.length - 12) + ' more launch issues ready. The board on GitHub lists the rest.') : null])));
 
@@ -241,6 +269,6 @@
     window.addEventListener('lightning:owner-view', function (e) { if (verified && e.detail && e.detail.view === 'roadmap') load(); });
     // Left open on a second screen it keeps itself current.
     setInterval(function () { if (verified && open() && !doc.hidden) load(); }, KEEP);
-    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, load: load };
+    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, load: load };
   }
 })();

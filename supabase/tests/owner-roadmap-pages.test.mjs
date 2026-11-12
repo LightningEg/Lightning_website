@@ -118,5 +118,25 @@ await test('issue titles are text, never markup', async () => {
   assert.ok(again.$('ops-roadmap').textContent.includes('<img src=x'));
 });
 
+await test('Copy prompt puts a complete instruction for that one issue on the clipboard', async () => {
+  const p = await boot();
+  let copied = null;
+  Object.defineProperty(p.w.navigator, 'clipboard', { value: { writeText: async t => { copied = t; } }, configurable: true });
+  const ready = expected.filter(r => r.state === 'ready' && r.when === 'launch');
+  const buttons = p.q('#ops-roadmap button').filter(b => b.textContent === 'Copy prompt');
+  assert.equal(buttons.length, Math.min(12, ready.length), 'one button on each ready row');
+  buttons[0].click();
+  await tick(20);
+  const n = ready[0].n;
+  assert.match(copied, new RegExp('^Take issue #' + n + ' in LightningEg/Lightning: '));
+  assert.ok(copied.includes('https://github.com/LightningEg/Lightning/issues/' + n));
+  for (const must of ['AGENTS.md', 'python tools/board.py', 'Closes #' + n, 'draft pull request', 'who/feature', 'Release-note', 'Done (PR links), Left, Next'])
+    assert.ok(copied.includes(must), 'the prompt says: ' + must);
+  assert.equal(buttons[0].textContent, 'Copied');
+  const withArea = p.w.FGOwnerRoadmap.prompt({ n: 7, title: '[X-1] t', areas: ['lightning/ui', 'tests/x'] });
+  assert.match(withArea, /Stay inside its Area: lightning\/ui, tests\/x\./);
+  assert.ok(!/Area/.test(p.w.FGOwnerRoadmap.prompt({ n: 7, title: 't', areas: [] })));
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
