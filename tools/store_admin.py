@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261112-roadmap-4"  # css/store-admin.css and every js/ file below
+VERSION = "20261113-roadmap-5"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -85,7 +85,7 @@ def build():
     sales = view('sales', 'Sales', 'What sold, how it was bought, and the carts that were filled but never checked out. Coins, not EGP: the Overview counts revenue from top-ups.',
         '<div id="ops-sales"><p class="ops-empty">Verify your session to load sales.</p></div>')
 
-    roadmap = view('roadmap', 'Roadmap', 'What needs you, what is being built, what is ready next and what shipped, read live from the app\u2019s GitHub board each time you open this. Nothing here changes anything.',
+    roadmap = view('roadmap', 'Roadmap', 'Every open issue as Ready, Blocked or Parked, read live from the app\u2019s GitHub board. Move an issue between lists, or add one, here.',
         '<div id="ops-roadmap"><p class="ops-empty">Verify your session to load the roadmap.</p></div>')
 
     activity = view('activity', 'Activity', 'The audit trail: every coin that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',

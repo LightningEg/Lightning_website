@@ -3,7 +3,8 @@
    The repository is public, so the browser reads GitHub's public API directly: no key, no copy in Supabase, nothing to
    keep in step. The state of each issue is worked out here by the same rules as tools/board.py in the app repository
    (supabase/tests/owner-roadmap-pages.test.mjs checks the two agree on a real snapshot of the board). Nothing here
-   changes anything on GitHub. Every value is set with textContent. The answer is kept for 5 minutes (GitHub allows an
+   changes anything on GitHub except through the owner's two buttons (move to Ready, Blocked or Parked; Add issue), which go through the
+   roadmap-write edge function (verified owner only). Every value is set with textContent. The answer is kept for 5 minutes (GitHub allows an
    address 60 reads an hour; one load takes about a dozen) and Refresh asks again. */
 (function () {
   'use strict';
@@ -80,11 +81,19 @@
     return rows.sort(function (a, b) { return (ORDER[a.when] == null ? 3 : ORDER[a.when]) - (ORDER[b.when] == null ? 3 : ORDER[b.when]) || b.blocking - a.blocking || a.n - b.n; });
   }
 
+  /* The three lists (tools/board.py, bucket): a status:ready|blocked|parked label set by the owner wins; otherwise worked out. */
+  function bucket(i) {
+    var chosen = label(i.labels, 'status');
+    if (chosen === 'ready' || chosen === 'blocked' || chosen === 'parked') return chosen;
+    if (i.when !== 'launch') return 'parked';
+    return i.state === 'blocked' || i.state === 'held' ? 'blocked' : 'ready';
+  }
+
   /* What the AIs would start on "go": launch work that is ready, the most unblocking first, never two in one area. */
   function pick(rows, cap) {
     var room = cap - rows.filter(function (i) { return i.state === 'running' && PEOPLE.indexOf(i.can) < 0; }).length, out = [];
     rows.forEach(function (i) {
-      if (out.length >= room || i.state !== 'ready' || i.when !== 'launch') return;
+      if (out.length >= room || i.state !== 'ready' || i.when !== 'launch' || bucket(i) !== 'ready') return;
       if (!out.some(function (c) { return overlap(i.areas, c.areas); })) out.push(i);
     });
     return out;
@@ -173,7 +182,7 @@
   /* ---------- the page ---------- */
   var host = doc.getElementById('ops-roadmap');
   if (host) start();
-  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt };
+  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket };
 
   function start() {
     var verified = false, loading = false, shown = null, FG = window.FG || {};
@@ -223,52 +232,70 @@
       return add(el('section', 'ops-block'), [add(el('div', 'ops-card-h'), [el('h3', null, title), note ? el('span', 'ops-fine', note) : null]), node]);
     }
 
+    var LISTS = [['ready', 'Ready', 'free to take: copy the prompt into an AI chat'], ['blocked', 'Blocked', 'waiting on another issue, a pull request, the same files, or you'],
+      ['parked', 'Parked', 'not for now: waits for your pick']];
+    function say(msg, bad) { var n = doc.getElementById('ops-roadmap-say'); if (n) { n.textContent = msg; n.className = 'ops-fine' + (bad ? ' ops-bad' : ''); } }
+    function write(body) {
+      return Promise.resolve((window.FG || FG).sb.functions.invoke('roadmap-write', { body: body })).then(function (r) {
+        if (r.error) {
+          var ctx = r.error.context && r.error.context.json ? r.error.context.json().catch(function () { return null; }) : Promise.resolve(null);
+          return ctx.then(function (j) { throw new Error((j && j.error) || 'The change did not go through.'); });
+        }
+        return r.data;
+      });
+    }
+    function mover(i) {
+      var sel = el('select', 'ops-select'), cur = bucket(i);
+      sel.setAttribute('aria-label', 'Move issue #' + i.n + ' to another list');
+      LISTS.forEach(function (l) { var o = el('option', null, l[1]); o.value = l[0]; if (l[0] === cur) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', function () {
+        sel.disabled = true; say('Moving #' + i.n + '…');
+        write({ action: 'set_status', issue: i.n, status: sel.value }).then(function () {
+          say('Moved #' + i.n + ' to ' + sel.value + '.');
+          shown.issues.forEach(function (x) { if (x.n === i.n) x.labels = x.labels.filter(function (y) { return y.indexOf('status:') !== 0; }).concat('status:' + sel.value); });
+          remember(shown); render(shown);
+        }, function (e) { say(e.message, true); sel.value = cur; sel.disabled = false; });
+      });
+      return sel;
+    }
+    function addForm() {
+      var f = el('form', 'oc-form'), t = el('input'), d = el('textarea'), w = el('select'), s2 = el('select'), go = el('button', 'btn', 'Add issue');
+      t.type = 'text'; t.required = true; t.maxLength = 200; t.placeholder = 'What needs doing, in one line'; t.setAttribute('aria-label', 'Issue title');
+      d.rows = 4; d.maxLength = 8000; d.placeholder = 'Details, the goal and how you will know it is done (optional)'; d.setAttribute('aria-label', 'Issue details');
+      [['launch', 'For launch'], ['after-launch', 'After launch'], ['someday', 'Someday']].forEach(function (o) { var x = el('option', null, o[1]); x.value = o[0]; w.appendChild(x); });
+      LISTS.forEach(function (l) { var x = el('option', null, l[1]); x.value = l[0]; s2.appendChild(x); });
+      w.setAttribute('aria-label', 'When'); s2.setAttribute('aria-label', 'List'); go.type = 'submit';
+      f.addEventListener('submit', function (e) {
+        e.preventDefault(); go.disabled = true; say('Filing the issue…');
+        write({ action: 'create_issue', title: t.value, body: d.value, when: w.value, status: s2.value }).then(function (r) {
+          say('Filed #' + r.issue + '.'); t.value = ''; d.value = ''; go.disabled = false; load(true);
+        }, function (err) { say(err.message, true); go.disabled = false; });
+      });
+      var box = el('details', 'oc-fold'); box.appendChild(el('summary', null, 'Add an issue'));
+      box.appendChild(add(f, [t, d, add(el('div', 'oc-toolbar'), [w, s2, go])]));
+      return box;
+    }
+
     function render(data) {
-      var rows = derive(data), now = new Date(data.now).getTime();
-      var leaves = rows.filter(function (i) { return i.state !== 'group'; });
-      var launch = leaves.filter(function (i) { return i.when === 'launch'; });
-      var by = function (s, all) { return (all ? leaves : launch).filter(function (i) { return s.indexOf(i.state) >= 0; }); };
-      var person = by(['person'], true), running = by(['running', 'stale'], true), ready = by(['ready']), stuck = by(['blocked', 'held'], true);
-      var next = pick(rows, 2);
+      shown = data;
+      var rows = derive(data), leaves = rows.filter(function (i) { return i.state !== 'group'; });
+      var next = pick(rows, 2).map(function (i) { return i.n; });
       host.textContent = '';
       var refresh = el('button', 'btn ghost', 'Refresh'); refresh.type = 'button'; refresh.addEventListener('click', function () { load(true); });
-      host.appendChild(add(el('div', 'oc-toolbar'), [el('p', 'ops-fine', 'Read from GitHub ' + ago(data.now) + ' · ' + num(launch.length) + ' launch issues open, ' + num(leaves.length) + ' in all'), refresh]));
-
-      host.appendChild(add(el('div', 'ops-kpis'), [
-        kpi('Needs you', person.length, person.length ? 'a choice or a check only you can make' : 'nothing is waiting on you'),
-        kpi('Running now', running.length, running.length ? 'pull requests being built' : 'no one is building'),
-        kpi('Ready to start', ready.length, next.length ? 'next on go: ' + next.map(function (i) { return '#' + i.n; }).join(', ') : ready.length ? 'two builds already running, so none starts yet' : 'nothing is free to start'),
-        kpi('Blocked or held', stuck.length, num(stuck.filter(function (i) { return i.when === 'launch'; }).length) + ' of them for launch')]));
-
-      host.appendChild(block('Needs you', 'a choice or a check only you can make',
-        table(['Issue', 'When', ''], person.map(function (i) { return [issue(i), i.when, copyButton(i)]; }), 'Nothing is waiting on you.')));
-
-      host.appendChild(block('Running now', 'an open pull request says Closes it',
-        table(['Issue', 'Pull request', 'Last activity', ''], running.map(function (i) {
-          var p = i.prs[0];
-          return [issue(i), p ? add(el('span'), [link('#' + p.n, WEB + '/pull/' + p.n), el('small', 'ops-sub', (p.draft ? ' draft · ' : ' ') + (p.branch || ''))]) : (i.assignees.join(', ') || 'assigned'),
-            p ? ago(p.updated) + (i.state === 'stale' ? ' · stale' : '') : '', copyButton(i)];
-        }), 'Nothing is running.')));
-
-      host.appendChild(block('Ready next', 'launch work free to start, the most unblocking first. Copy prompt gives an AI chat everything it needs',
-        table(['Issue', 'Who', ''], ready.map(function (i) {
-          return [issue(i), i.can + (next.indexOf(i) >= 0 ? ' · next' : ''), copyButton(i)];
-        }), 'Nothing is ready.')));
-
-      host.appendChild(block('Blocked or held', 'waiting on another issue, a pull request or the same files',
-        table(['Issue', 'Waiting on', ''], stuck.map(function (i) { return [issue(i), i.why.join('; '), copyButton(i)]; }), 'Nothing is blocked.')));
-
-      var shipped = data.merged.slice(0, 8);
-      host.appendChild(block('Shipped lately', 'the last merged pull requests',
-        table(['Pull request', 'Merged'], shipped.map(function (p) { return [link('#' + p.n + ' ' + p.title.replace(/^(\[[^\]]+\]\s*)+/, ''), WEB + '/pull/' + p.n), ago(p.merged)]; }), 'Nothing merged yet.')));
-
-      var later = leaves.filter(function (i) { return i.when !== 'launch' && i.state === 'ready'; }); // the rest are listed above
-      var more = el('details', 'oc-fold');
-      more.appendChild(el('summary', null, 'Ready, but not for launch: ' + num(later.length) + ' issues'));
-      more.appendChild(table(['Issue', 'When', 'Who', ''], later.map(function (i) { return [issue(i), i.when, i.can, copyButton(i)]; }), 'Nothing here.'));
-      host.appendChild(more);
-      host.appendChild(el('p', 'ops-fine', 'States follow tools/board.py in the app repository. Copy prompt words each prompt for the issue\u2019s state: take it, check on it, check whether it is unblocked, or brief you.'));
-      shown = now;
+      host.appendChild(add(el('div', 'oc-toolbar'), [el('p', 'ops-fine', 'Read from GitHub ' + ago(data.now) + ' · ' + num(leaves.length) + ' open issues'), refresh]));
+      host.appendChild(el('p', 'ops-fine', ''));
+      host.lastChild.id = 'ops-roadmap-say';
+      host.appendChild(addForm());
+      LISTS.forEach(function (l) {
+        var mine = leaves.filter(function (i) { return bucket(i) === l[0]; });
+        host.appendChild(block(l[1] + ' (' + num(mine.length) + ')', l[2],
+          table(['Issue', 'Who', 'Move to', ''], mine.map(function (i) {
+            var p = i.prs[0], note = i.can + (next.indexOf(i.n) >= 0 ? ' · next' : '') + (p ? ' · PR #' + p.n + (i.state === 'stale' ? ' stale' : '') : '') +
+              (l[0] === 'blocked' && i.why.length ? ' · waiting on ' + i.why.join('; ') : '') + (l[0] === 'parked' ? ' · ' + i.when : '');
+            return [issue(i), note, mover(i), copyButton(i)];
+          }), 'Nothing here.')));
+      });
+      host.appendChild(el('p', 'ops-fine', 'Lists follow tools/board.py in the app repository; Move to sets a status label on the issue that wins over the worked-out list. Copy prompt words each prompt for the issue\u2019s state.'));
     }
 
     function fail(e) {
@@ -292,6 +319,6 @@
     window.addEventListener('lightning:owner-view', function (e) { if (verified && e.detail && e.detail.view === 'roadmap') load(); });
     // Left open on a second screen it keeps itself current.
     setInterval(function () { if (verified && open() && !doc.hidden) load(); }, KEEP);
-    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, load: load };
+    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket, load: load };
   }
 })();
