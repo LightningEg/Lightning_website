@@ -55,7 +55,7 @@ export function roadmapWriteHandler({createClient, url, anonKey, token, fetch: g
         const order = Array.isArray(body.order) ? body.order.map(Number) : [];
         if (!order.length || order.length > 400 || order.some(n => !Number.isInteger(n) || n < 1 || n > 1e6) || new Set(order).size !== order.length) return reply(400, {error: 'Send each issue number once, at most 400'});
         const text = 'The owner\'s order, first is first. Written by the owner console\'s Roadmap view (drag to reorder); `python tools/board.py` follows it. Do not edit by hand.\n\n' + order.map((n, k) => (k + 1) + '. #' + n).join('\n') + '\n';
-        const list = await call('/issues?state=open&per_page=100', 'GET');
+        const list = await call('/issues?state=open&sort=updated&direction=desc&per_page=100', 'GET');
         if (!list.ok) return reply(502, {error: 'GitHub answered ' + list.status});
         const holder = (await list.json()).find(i => !i.pull_request && String(i.title).startsWith('[PRIORITY]'));
         const saved = holder ? await call('/issues/' + holder.number, 'PATCH', {body: text}) : await call('/issues', 'POST', {title: '[PRIORITY] Order', body: text});
