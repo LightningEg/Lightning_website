@@ -54,7 +54,7 @@ def problems() -> list[str]:
         if name.endswith("current-status.html"):
             for pattern, wanted in ((WINDOWS, data["windows"]), (ANDROID, data["android"])):
                 wrong = {m for m in pattern.findall(text) if m != wanted}
-                if wrong or not pattern.search(text):
+                if wrong or (pattern is WINDOWS and not pattern.search(text)):  # Android installs from Google Play: no APK link on the page
                     out.append(f"{name}: download file {sorted(wrong) or 'missing'}, the release has {wanted}")
     return out
 

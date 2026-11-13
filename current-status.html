@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/landing.css?v=20261027-1">
 <link rel="stylesheet" href="css/home.css?v=20261012-2">
-<link rel="stylesheet" href="css/status.css?v=20261026-1">
+<link rel="stylesheet" href="css/status.css?v=20261113-1">
 <link rel="stylesheet" href="css/motion.css?v=20261006-4">
 <script src="js/motion.js?v=20261006-4" defer></script>
 <link rel="stylesheet" href="css/theme.css?v=20260930-1">
@@ -46,7 +46,7 @@
 <link rel="stylesheet" href="css/footer.css?v=20261015-1">
 <link rel="stylesheet" href="css/site-account.css?v=20261027-header-1">
 </head>
-<body data-account-page="account.html" data-ux-version="UX-2026.11.13.01" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
+<body data-account-page="account.html" data-ux-version="UX-2026.11.13.06" data-ux-endpoint="https://script.google.com/macros/s/AKfycbzzlE-9gmeXb-D0DZMp6gg3dxNo-9ZBhgJED-y_ca26xevvtNnDb8Vqk6vs6Y_Aei0d/exec">
 <div class="d-bar">
   <div class="wrap">
     <a class="d-lockup" href="index.html" data-home-link><img src="assets/brand/lightning-mark.svg?v=20261003-1" alt="">Lightning</a>
@@ -74,7 +74,7 @@
     <p class="d-hero-line">Lightning 2.1.2 for Windows and Android. Install both, and your phone and PC share one ledger.</p>
     <div class="d-actions" data-platform-first>
       <a class="btn btn-primary" data-platform="windows" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-v2.1.2-Windows-x64.zip">Download for Windows</a>
-      <a class="btn btn-primary" data-platform="android" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-2.1.2-1073-ea1c96c3.apk">Download for Android</a>
+      <a class="btn btn-primary" data-platform="android" href="#android">Get Android on Google Play</a>
     </div>
     <script>/* An Android phone sees its own download first (8W). */(()=>{if(!/android/i.test(navigator.userAgent))return;document.querySelectorAll("[data-platform-first]").forEach(b=>{const a=b.querySelector('[data-platform="android"]');if(a)b.prepend(a);});})();</script>
     <p class="c-free status-note" role="note"><b>Ready for your real numbers.</b> We improve Lightning with every release; the <a href="release-log.html">release log</a> shows what changed.</p>
@@ -87,21 +87,27 @@
     <div class="d-head"><p class="label">Install</p><h2 id="install-title">Three Steps, and You’re In.</h2><p>No account, and no bank password.</p></div>
     <div class="status-checklist">
       <article class="card card-support"><span class="tile" aria-hidden="true">1</span><h3>On your PC</h3><p>Unzip the file into a new folder and open Lightning.exe inside it. Nothing to install, but Windows needs Microsoft Edge WebView2.</p></article>
-      <article class="card card-support"><span class="tile" aria-hidden="true">2</span><h3>On your phone</h3><p>Open the downloaded file. Android asks once to let your browser install apps: allow it, then tap Install. Download it only from this page.</p></article>
+      <article class="card card-support"><span class="tile" aria-hidden="true">2</span><h3>On your phone</h3><p>Become a tester, then install from Google Play. The steps are just below.</p></article>
       <article class="card card-support"><span class="tile" aria-hidden="true">3</span><h3>Pair the two</h3><p>Open both apps on the same Wi-Fi. The phone keeps the ledger and the PC borrows it, encrypted and with no server.</p></article>
     </div>
   </section>
 
+  <section class="d-section" id="android" aria-labelledby="android-title">
+    <div class="d-head"><p class="label">Android</p><h2 id="android-title">Get Lightning on Android in Two Steps.</h2><p>Lightning for Android is in a Google Play test. Join it once, then install and update from Google Play like any other app.</p></div>
+    <div class="status-checklist">
+      <article class="card card-support"><span class="tile" aria-hidden="true">1</span><h3>Become a tester</h3><p>On your phone, signed in to Google Play, open the test page and tap <b>Become a tester</b>. Or send us the email you use on Google Play, at feedback@lightningeg.com, and we add you.</p><p class="d-actions"><a class="btn btn-primary" href="https://play.google.com/apps/testing/com.lightningeg" rel="noopener">Become a tester</a><a class="btn btn-secondary" href="mailto:feedback@lightningeg.com?subject=Lightning%20Android%20test">Email us instead</a></p></article>
+      <article class="card card-support"><span class="tile" aria-hidden="true">2</span><h3>Download on Google Play</h3><p>Once you are a tester, open Lightning on Google Play and tap <b>Install</b>. It updates itself from there.</p><p class="d-actions"><a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.lightningeg" rel="noopener">Download on Google Play</a></p></article>
+    </div>
+  </section>
+
   <section class="d-section status-downloads" id="downloads" aria-labelledby="downloads-title">
-    <div class="d-head"><p class="label">Release downloads</p><h2 id="downloads-title">Choose Your Lightning Version.</h2><p>Lightning 2.1.2 is the current Windows and Android release. Windows needs Microsoft Edge WebView2; Android downloads directly as an APK with no ZIP to extract. Older builds are in the <a class="status-inline-link" href="versions.html">version archive</a>.</p></div>
-    <aside class="status-apk-warning" role="note" aria-label="Android test on Google Play"><strong>Test Lightning on Google Play</strong><p>Lightning for Android is in a private test on Google Play. It installs and updates from Google Play, with no file to download. Places are limited: send us the email you use on Google Play through the <a href="app-feedback.html">feedback form</a> and we add you to the list. Then open the link below on your phone, tap Become a tester, and install.</p><p><a class="btn btn-primary" href="https://play.google.com/apps/internaltest/4698497370117194894" rel="noopener">Join the Google Play test</a></p><p>The Google Play version is a separate app from the APK below. It does not update the APK and does not share its data, so pick one for your phone.</p></aside>
-    <aside class="status-apk-warning" role="note" aria-label="Android APK installation note"><strong>Installing on Android</strong><p>Lightning is on its way to Google Play. Until it is there, it installs straight from this page. Open the downloaded file, allow your browser to install apps when Android asks, then tap Install. Android shows a one-time notice for any app from outside Google Play. Download Lightning only from this page.</p><p>If the download does not start, or Chrome says the file might be harmful, open this page in Chrome itself, not inside another app. Tap Download for Android, then tap Keep, or Download anyway. If it still fails, tell us your phone model and the exact message on the <a href="app-feedback.html">feedback form</a>.</p><p>If you are upgrading from Lightning 1.3.0 or earlier, keep an independent backup before uninstalling it and installing this version; it cannot update the old installation in place.</p></aside>
+    <div class="d-head"><p class="label">Release downloads</p><h2 id="downloads-title">Choose Your Lightning Version.</h2><p>Lightning 2.1.2 is the current Windows and Android release. Windows needs Microsoft Edge WebView2; Android installs from Google Play, with no file to download. Older builds are in the <a class="status-inline-link" href="versions.html">version archive</a>.</p></div>
     <div class="status-table-wrap" role="region" aria-label="Release build availability" tabindex="0">
       <table class="status-table">
         <thead><tr><th>Release</th><th>Platform</th><th>Status</th><th>Download</th><th>Release log</th></tr></thead>
         <tbody>
           <tr><th scope="row"><b>Lightning 2.1.2</b><small>Current public release</small></th><td>Windows x64 · ZIP archive<br><small><a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/SHA256SUMS">SHA-256 checksums</a> · <a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/BUILD.json">Build record</a></small></td><td><span class="status-badge">Available now</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-v2.1.2-Windows-x64.zip" target="_blank" rel="noreferrer">Download for Windows</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">Read the log</a></td></tr>
-          <tr><th scope="row"><b>Lightning 2.1.2</b><small>Paired build</small></th><td>Android arm64 · APK<br><small>Lightning · shared checksums and build record above</small></td><td><span class="status-badge">Available now</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-2.1.2-1073-ea1c96c3.apk" target="_blank" rel="noreferrer">Download for Android</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">Read the log</a></td></tr>
+          <tr><th scope="row"><b>Lightning 2.1.2</b><small>Paired build</small></th><td>Android · Google Play test<br><small>Become a tester first, then install from Google Play</small></td><td><span class="status-badge">Available now</span></td><td><a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=com.lightningeg" target="_blank" rel="noreferrer">Download on Google Play</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">Read the log</a></td></tr>
           </tbody>
       </table>
     </div>
