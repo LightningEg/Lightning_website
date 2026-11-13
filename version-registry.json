@@ -3380,22 +3380,22 @@
       "id": "UX-2026.11.08.24",
       "name": "Lightning or A cloud budgeting app? · Filler lines removed",
       "page": "lightning-vs-cloud-budgeting-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.24.html"
     },
     {
       "id": "UX-2026.11.08.25",
       "name": "Lightning or A traditional expense tracker? · Filler lines removed",
       "page": "lightning-vs-expense-tracker-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.25.html"
     },
     {
       "id": "UX-2026.11.08.26",
       "name": "Lightning or A spreadsheet? · Filler lines removed",
       "page": "lightning-vs-spreadsheet.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.08.26.html"
     },
     {
       "id": "UX-2026.11.08.27",
@@ -3646,8 +3646,8 @@
       "id": "UX-2026.11.09.09",
       "name": "Lightning · Start in three steps",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.09.html"
     },
     {
       "id": "UX-2026.11.09.10",
@@ -3735,13 +3735,55 @@
     },
     {
       "id": "UX-2026.11.11.03",
+      "name": "Lightning · Home",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.11.04",
+      "name": "Lightning or a spreadsheet?",
+      "page": "lightning-vs-spreadsheet.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.11.05",
+      "name": "Lightning or an expense tracker?",
+      "page": "lightning-vs-expense-tracker-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.11.06",
+      "name": "Lightning or a cloud budgeting app?",
+      "page": "lightning-vs-cloud-budgeting-app.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.11.07",
+      "name": "Version Archive · Comparisons linked",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.11.07.html"
+    },
+    {
+      "id": "UX-2026.11.11.08",
+      "name": "Lightning or An AI assistant? · Honest comparison",
+      "page": "lightning-vs-ai-assistant.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.13.01",
       "name": "Downloads · One theme, five profiles",
       "page": "current-status.html",
       "status": "current",
       "archive_url": null
     },
     {
-      "id": "UX-2026.11.11.04",
+      "id": "UX-2026.11.13.02",
       "name": "Version Archive · One theme, five profiles",
       "page": "versions.html",
       "status": "current",

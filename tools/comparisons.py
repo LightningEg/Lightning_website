@@ -22,7 +22,7 @@ TEMPLATE = "net-worth-tracker.html"
 CSS = '<link rel="stylesheet" href="{up}css/compare.css?v=20261101-1">'
 RATE = {"Low": 1, "Medium": 2, "High": 3}
 AR_RATE = {"Low": "منخفض", "Medium": "متوسط", "High": "عالي"}
-UX_DATE = "2026.11.01"
+UX_DATE = "2026.11.11"
 
 COPY = {
     "en": {

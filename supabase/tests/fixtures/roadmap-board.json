@@ -1,0 +1,1154 @@
+{
+ "issues": [
+  {
+   "n": 596,
+   "title": "[BT-2AI4] The PC can always send its copy to a fresh phone",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    585
+   ],
+   "blocking": 0
+  },
+  {
+   "n": 595,
+   "title": "[IT-2A4] Restore screens and docs",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    594
+   ],
+   "blocking": 0
+  },
+  {
+   "n": 594,
+   "title": "[IT-2A3] Explicit deterministic repair",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    592
+   ],
+   "blocking": 1
+  },
+  {
+   "n": 593,
+   "title": "[IT-2A2] Windows marker publication",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 592,
+   "title": "[IT-2A1] Durable intent and source-copy manifest",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 1
+  },
+  {
+   "n": 591,
+   "title": "[NF-10C3] Fix the app's own green on dark cards",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 590,
+   "title": "[NF-10C2] Royal Obsidian & Gold needs a website version",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 589,
+   "title": "[IT-1E9] Triage the open dependency alerts",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 588,
+   "title": "[IT-1E8] Inspect the published Windows ZIP and Android APK",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 587,
+   "title": "[IT-1E7] Scan every repository's full history for secrets",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 586,
+   "title": "[IT-1E4] Check the live website receivers against formula injection and key leaks",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 585,
+   "title": "[NF-4A4] J5 Trust and recovery gates",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    583
+   ],
+   "blocking": 1
+  },
+  {
+   "n": 584,
+   "title": "[NF-4A3] J4 Internet channel",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 583,
+   "title": "[NF-4A2] J6c-e validation: areas, home automation, upgrades and backups",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    582
+   ],
+   "blocking": 1
+  },
+  {
+   "n": 582,
+   "title": "[NF-4A1] Consolidate the local implementation on the integration branch",
+   "body": "Can: opus\nBlocked by: none",
+   "labels": [],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 1
+  },
+  {
+   "n": 579,
+   "title": "[LAUNCH] Launch checklist: every step that needs a real device, a real account or a person",
+   "body": "Blocked by: the builds in #544, #546, #547, #549\nArea: none (evidence only)",
+   "labels": [
+    "when:launch",
+    "state:waiting",
+    "can:human"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 577,
+   "title": "[NF-9D] Hijri dates, and the silver nisab for zakat",
+   "body": "Blocked by: none\nArea: lightning/zakat.py, lightning/ui, lightning/core, tests",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 576,
+   "title": "[IV-8AD] A guideline rule for an Arabic page that links to an English page: the label says so and it opens in a new tab",
+   "body": "Blocked by: none\nArea: guideline, tests",
+   "labels": [
+    "can:opus",
+    "state:ready",
+    "pillar:reach",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 575,
+   "title": "[IV-8AC] For Geeks gets two motion moments that are true: a posting that must balance, and a row that becomes ciphertext",
+   "body": "Blocked by: none\nArea: website repository, guideline",
+   "labels": [
+    "can:opus",
+    "state:ready",
+    "pillar:reach",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 574,
+   "title": "[NF-6B] Listed shares in Europe and the GCC: verify live boards and find a source that allows redistribution",
+   "body": "Blocked by: a data source that allows redistribution (owner)\nArea: see item file",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:waiting",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 573,
+   "title": "[NF-6A] Market data: price packs, collected in the cloud",
+   "body": "Blocked by: none\nArea: lightning/assets",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 572,
+   "title": "[IT-6F] London's board returns few UK shares, and Dubai, Abu Dhabi and Bahrain have no month-end history source",
+   "body": "Blocked by: none\nArea: lightning/market, lightning/assets, tests",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [
+    431
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 571,
+   "title": "[IT-6D] Gold prices: test the source from home; silver waits for holdings",
+   "body": "Blocked by: a test from a home connection (human)\nArea: see item file",
+   "labels": [
+    "pillar:own",
+    "state:waiting",
+    "can:sonnet",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 570,
+   "title": "[NF-12M] Property as an investment: its own kind, gain from what you paid, instalments, rent and costs",
+   "body": "Blocked by: none\nArea: see item file",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 569,
+   "title": "[NF-12G] Money lent to others and costs split with others: who owes you what, counted honestly in what you own",
+   "body": "Blocked by: none\nArea: lightning/people_money.py, lightning/accounts, tests",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [
+    528,
+    529
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 568,
+   "title": "[IV-12J] Certificates read as certificates: their own holding page, payouts as the bank pays them",
+   "body": "Blocked by: none\nArea: lightning/ui, tests",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "state:ready",
+    "when:someday"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 566,
+   "title": "[NF-7AR] An Upcoming tab shows the month's payments on a calendar, with payday and the day cash runs short",
+   "body": "Blocked by: none\nArea: lightning/planning, tests",
+   "labels": [
+    "pillar:plan",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 565,
+   "title": "[NF-7AK] Bank messages beyond CIB and NBE in Arabic: English card messages, wallets, other currencies",
+   "body": "Blocked by: none\nArea: lightning/egypt_bank_sms_formats.json, tests",
+   "labels": [
+    "pillar:capture",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 564,
+   "title": "[NF-4B] Multiple devices: implementation plan (phases A to F)",
+   "body": "Blocked by: #544 (NF-4A)\nArea: lightning/sync, lightning/runtime, android",
+   "labels": [
+    "pillar:everywhere",
+    "can:opus",
+    "when:after-launch",
+    "state:waiting"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    544
+   ],
+   "blocking": 0
+  },
+  {
+   "n": 563,
+   "title": "[OW-3AI] Additional broker and institution logos still needed",
+   "body": "Blocked by: none\nArea: lightning/accounts, tools",
+   "labels": [
+    "pillar:feel",
+    "state:ready",
+    "when:after-launch",
+    "can:owner"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 562,
+   "title": "[IT-3BI] Arabic search and sorting in the register, one week start, one clock",
+   "body": "Blocked by: none\nArea: lightning/transactions, lightning/ui, lightning/core, tests",
+   "labels": [
+    "pillar:everywhere",
+    "state:ready",
+    "when:after-launch",
+    "can:sonnet"
+   ],
+   "assignees": [],
+   "children": [
+    404,
+    405,
+    406,
+    407
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 561,
+   "title": "[NF-12AB] Every headline figure explains itself in place: one gesture and one label",
+   "body": "Blocked by: none\nArea: lightning/core, lightning/ui, tests",
+   "labels": [
+    "pillar:understand",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 560,
+   "title": "[IV-3AM] PC declutter, tab by tab: the answer above the fold at 1366 x 768",
+   "body": "Blocked by: none\nArea: lightning/ui",
+   "labels": [
+    "pillar:feel",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 558,
+   "title": "[IV-12Y] One page skeleton on the PC, kept by a test",
+   "body": "Blocked by: none\nArea: lightning/ui, tests",
+   "labels": [
+    "pillar:feel",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 557,
+   "title": "[IV-12Q] The unfinished pages of Budget and Cash planning get the page pattern",
+   "body": "Blocked by: none\nArea: lightning/ui",
+   "labels": [
+    "pillar:plan",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 556,
+   "title": "[IT-12AE] A screen cannot work out money: derived figures move to their owners, with a ratchet test",
+   "body": "Blocked by: none\nArea: lightning/ui, lightning/planning, lightning/core, tests",
+   "labels": [
+    "pillar:build",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 555,
+   "title": "[NF-10B] Supporter perks still waiting on the app or the owner: app themes for sale, names on About",
+   "body": "Blocked by: #545 (NF-10A claiming)\nArea: see item file",
+   "labels": [
+    "pillar:feel",
+    "can:opus",
+    "when:after-launch",
+    "state:waiting"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [
+    545
+   ],
+   "blocking": 0
+  },
+  {
+   "n": 554,
+   "title": "[IT-1H] Refresh packaged dependencies with matching native wheels and lockfiles",
+   "body": "Blocked by: owner (repository Actions allowlist update) and native runtime acceptance\nArea: tools, guideline",
+   "labels": [
+    "pillar:build",
+    "can:opus",
+    "when:after-launch",
+    "state:waiting"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 553,
+   "title": "[IV-3BK] Human dates on screens and \u062c.\u0645 in Arabic, as the owner decided on 2026-11-08",
+   "body": "Blocked by: none\nArea: lightning/ui, guideline, tests",
+   "labels": [
+    "pillar:understand",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 552,
+   "title": "[IV-3BH] One name per thing and no accounting jargon",
+   "body": "Blocked by: none\nArea: lightning/ui, ai, tests, tools",
+   "labels": [
+    "pillar:feel",
+    "when:launch",
+    "state:ready",
+    "can:sonnet"
+   ],
+   "assignees": [],
+   "children": [
+    425,
+    426,
+    427,
+    428
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 550,
+   "title": "[NF-10H] One purchase per person: a theme bought on Google Play or the website unlocks every profile of that buyer",
+   "body": "Blocked by: PR #535 (prices, cap, step 10H6); #546 for the owner steps at launch\nArea: lightning/ui, lightning/security",
+   "labels": [
+    "pillar:own",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 549,
+   "title": "[IT-2C] Ordinary-PC acceptance: recovery and faults, legacy import, native file pickers, unresolved-evidence repair",
+   "body": "Blocked by: none\nArea: tests, tools, ai",
+   "labels": [
+    "pillar:protect",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 548,
+   "title": "[IT-2A] Restore safety: durable intent, source-copy manifest, Windows marker publication, deterministic repair",
+   "body": "Blocked by: none\nArea: lightning/runtime, tests",
+   "labels": [
+    "pillar:protect",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [
+    592,
+    593,
+    594,
+    595
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 547,
+   "title": "[BT-2AI] Phone data must survive every app update and reinstall",
+   "body": "Blocked by: #544 (step 4A4)\nArea: lightning/runtime, lightning/ui, tests",
+   "labels": [
+    "pillar:protect",
+    "can:opus",
+    "when:launch",
+    "state:waiting"
+   ],
+   "assignees": [],
+   "children": [
+    596
+   ],
+   "blocked_by": [
+    544
+   ],
+   "blocking": 0
+  },
+  {
+   "n": 546,
+   "title": "[NF-10C] Theme materials, selling themes, owner console - what only the owner can do now",
+   "body": "Blocked by: none\nArea: tools, guideline, lightning/ui, lightning/security",
+   "labels": [
+    "pillar:feel",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [
+    590,
+    591
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 545,
+   "title": "[NF-10A] Cosmetic parts, account-wide claiming and native acceptance",
+   "body": "Blocked by: none\nArea: lightning/ui, lightning/security",
+   "labels": [
+    "pillar:feel",
+    "can:opus",
+    "state:ready",
+    "when:after-launch"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 1
+  },
+  {
+   "n": 544,
+   "title": "[NF-4A] Edit journal: edit anywhere, one home confirms",
+   "body": "Blocked by: none\nArea: lightning/sync, lightning/runtime, lightning/ui",
+   "labels": [
+    "pillar:everywhere",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [
+    582,
+    583,
+    584,
+    585
+   ],
+   "blocked_by": [],
+   "blocking": 2
+  },
+  {
+   "n": 543,
+   "title": "[IT-1E] Audit public repositories for personal data and security exposure",
+   "body": "Blocked by: none\nArea: tools",
+   "labels": [
+    "pillar:build",
+    "can:opus",
+    "when:launch",
+    "state:ready"
+   ],
+   "assignees": [],
+   "children": [
+    586,
+    587,
+    588,
+    589
+   ],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 529,
+   "title": "[NF-12G6] Lend, paid back and forgive on the person's page (PC)",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:own",
+    "kind:new-feature"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 528,
+   "title": "[NF-12G3] A cost split with others: the service",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:own",
+    "kind:new-feature"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 527,
+   "title": "[IV-3H7] Loans: an optional rate and the cost of the loan",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 526,
+   "title": "[IV-3H6] Zakat: optionally take off the next 12 months' loan instalments",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 525,
+   "title": "[IV-3H5] A missed-salary row in Needs you, and its reminder",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 436,
+   "title": "[IV-3H10] Triage the ids no step names",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 435,
+   "title": "[IV-3H4] A month-end prices reminder",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 431,
+   "title": "[IT-6F2] Dubai, Abu Dhabi and Bahrain month-ends from Yahoo, by venue",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:own",
+    "kind:improvement-technical"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 428,
+   "title": "[IV-3BH7] Headings never show a code",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 427,
+   "title": "[IV-3BH6] Built-in categories in sentence case",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 426,
+   "title": "[IV-3BH5] One spelling per word",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 425,
+   "title": "[IV-3BH1] A test that keeps jargon off the screen",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "pillar:feel",
+    "kind:improvement-visual"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 407,
+   "title": "[IT-3BI4] One clock",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "kind:improvement-technical",
+    "pillar:everywhere"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 406,
+   "title": "[IT-3BI3] One week start",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "kind:improvement-technical",
+    "pillar:everywhere"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 405,
+   "title": "[IT-3BI2] Names sort the Arabic way",
+   "body": "",
+   "labels": [
+    "good first issue",
+    "coins:200",
+    "kind:improvement-technical",
+    "pillar:everywhere"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  },
+  {
+   "n": 404,
+   "title": "[IT-3BI1] The Transactions search finds Arabic however it is spelled",
+   "body": "",
+   "labels": [
+    "coins:500",
+    "kind:improvement-technical",
+    "pillar:everywhere"
+   ],
+   "assignees": [],
+   "children": [],
+   "blocked_by": [],
+   "blocking": 0
+  }
+ ],
+ "prs": [
+  {
+   "n": 605,
+   "title": "[IT-12AE] 12AE4: derived figures move to their owners; the UI arithmetic ratchet reaches zero",
+   "body": "Closes #556",
+   "branch": "claude/it-12ae4-figures-to-owners",
+   "draft": false,
+   "updated": "2026-11-12T06:44:28Z"
+  },
+  {
+   "n": 603,
+   "title": "[IV-12Q] The unfinished pages of Budget and Cash planning get the page pattern",
+   "body": "Closes #557",
+   "branch": "claude/budget-cash-page-pattern",
+   "draft": false,
+   "updated": "2026-11-12T05:14:20Z"
+  },
+  {
+   "n": 602,
+   "title": "[NF-7AK][NF-7AR] Dollar card purchases settled by the pound debit; save upcoming payments to your calendar",
+   "body": "",
+   "branch": "ccr-641fba5d-eo1ip9",
+   "draft": false,
+   "updated": "2026-11-11T22:43:36Z"
+  },
+  {
+   "n": 600,
+   "title": "[IV-12Y] One page header on every PC tab; unpark the PC layout items (3AM, 12Z, 12Q, 12AB, 12AE)",
+   "body": "",
+   "branch": "claude/nifty-fermat-me5ees",
+   "draft": false,
+   "updated": "2026-11-11T22:55:43Z"
+  }
+ ],
+ "merged": [
+  {
+   "n": 606,
+   "title": "[IT-1N] Board: a whole folder such as lightning/ui no longer holds other issues back",
+   "merged": "2026-11-12T05:46:52Z"
+  },
+  {
+   "n": 601,
+   "title": "[IT-1N] No page in the repo lists open work: INDEX, STATUS and the pillar pages point at the board",
+   "merged": "2026-11-12T05:23:30Z"
+  },
+  {
+   "n": 604,
+   "title": "[IV-12Z] The answer on one screen: Overview ends on Your position, Holdings within 2.5 screens",
+   "merged": "2026-11-11T23:39:26Z"
+  },
+  {
+   "n": 541,
+   "title": "[IV-12K][IV-12L] Add investment on the phone, certificate door, gold bars in the table",
+   "merged": "2026-11-11T22:57:24Z"
+  },
+  {
+   "n": 535,
+   "title": "[NF-10H] Theme prices for Google Play, a cap of 5 profiles, and the plan to link Play to the website (10H6)",
+   "merged": "2026-11-11T22:44:00Z"
+  },
+  {
+   "n": 598,
+   "title": "[IV-3BF1] Keep keyboard focus visible in High Contrast",
+   "merged": "2026-11-11T22:41:49Z"
+  },
+  {
+   "n": 599,
+   "title": "[NF-8AB] Competition: AI assistants section; close the item",
+   "merged": "2026-11-11T22:38:36Z"
+  },
+  {
+   "n": 580,
+   "title": "[IT-1N][NF-7AQ][NF-10H][IT-1E] Dispatch skill, and the owner steps finished today",
+   "merged": "2026-11-11T22:28:58Z"
+  },
+  {
+   "n": 597,
+   "title": "[IV-3BF] Finish PC polish",
+   "merged": "2026-11-11T22:01:39Z"
+  },
+  {
+   "n": 530,
+   "title": "[IV-8F] Close the item: Home and Features show the app",
+   "merged": "2026-11-11T22:01:32Z"
+  },
+  {
+   "n": 581,
+   "title": "[IV-3BC] Finish English and Arabic count agreement",
+   "merged": "2026-11-11T21:12:05Z"
+  },
+  {
+   "n": 539,
+   "title": "[IT-1E] 1E6: prove the committed encrypted fixture is the demo household",
+   "merged": "2026-11-11T20:11:52Z"
+  },
+  {
+   "n": 542,
+   "title": "IV-3BD: errors speak plainly everywhere (3BD1-3BD5)",
+   "merged": "2026-11-11T19:54:48Z"
+  },
+  {
+   "n": 537,
+   "title": "[NF-11B] Play bundle check: refuse a native library that cannot load on 16 KB pages",
+   "merged": "2026-11-11T18:46:58Z"
+  },
+  {
+   "n": 536,
+   "title": "[IT-1N] Plan: findings go to an inbox, a parked status, and caps of 3 building and 20 open",
+   "merged": "2026-11-11T18:26:18Z"
+  },
+  {
+   "n": 533,
+   "title": "[IV-3AY][NF-3AU][NF-11B] O7 phone: own CSS, slot stacks, review cards with duplicates, plan list, Money; reminders with the app closed",
+   "merged": "2026-11-11T18:03:12Z"
+  },
+  {
+   "n": 532,
+   "title": "[NF-7AO] [NF-7AQ5] [NF-7AK4] Import and search: sure SMS save themselves, Search answers accounts and tags",
+   "merged": "2026-11-11T17:32:13Z"
+  },
+  {
+   "n": 534,
+   "title": "[IT-1U] PR checks: retry the browser install when Ubuntu's mirror is unreachable",
+   "merged": "2026-11-11T17:14:58Z"
+  },
+  {
+   "n": 524,
+   "title": "[IV-3AN] Close the phone visual plan: overtaken by 3AY",
+   "merged": "2026-11-11T13:32:17Z"
+  },
+  {
+   "n": 508,
+   "title": "[BT-12AC] [BT-12AD] [IV-12AA] [IV-12P] [NF-2AJ] O1: figures must add up",
+   "merged": "2026-11-11T12:57:12Z"
+  },
+  {
+   "n": 507,
+   "title": "[IV-7AJ, NF-7AM, NF-7AP, IV-7AL, IV-12V, IV-12W] S4 Quick capture",
+   "merged": "2026-11-11T12:27:45Z"
+  },
+  {
+   "n": 523,
+   "title": "[IT-9O] Close: async routes left as is (encrypted profiles are thread-bound)",
+   "merged": "2026-11-11T11:14:14Z"
+  },
+  {
+   "n": 522,
+   "title": "[NF-7AR] Upcoming: the month's payments on a calendar, Next 7 days on the Overview, two weeks on the phone",
+   "merged": "2026-11-11T10:51:13Z"
+  },
+  {
+   "n": 505,
+   "title": "[S2 Speed] IT-1Y, IT-9L, IT-9M, IT-9N, IT-9F: every page asked once, fewer queries, smaller CSS",
+   "merged": "2026-11-11T10:26:07Z"
+  },
+  {
+   "n": 503,
+   "title": "[NF-12R] [NF-12S] [IV-12T] Budget: fill from your average, run-out warning, explain links",
+   "merged": "2026-11-11T09:53:19Z"
+  },
+  {
+   "n": 521,
+   "title": "[IV-3AY15][IV-3AY16][IV-3AY17] O7 Phone: every phone page is the phone's own; owner picks for 3AY8-10",
+   "merged": "2026-11-11T09:20:48Z"
+  },
+  {
+   "n": 520,
+   "title": "[IT-12AE1, IT-12AE2, NF-12AB2-4] PC and phone compared on one household; every headline figure opens How it adds up",
+   "merged": "2026-11-11T08:49:43Z"
+  },
+  {
+   "n": 519,
+   "title": "[IV-12Z2, IV-12Z3] Cash planning says each thing once; Spending and Cash planning open on their answer",
+   "merged": "2026-11-11T08:31:28Z"
+  },
+  {
+   "n": 518,
+   "title": "[IV-12Y4, IV-12Y5, IV-12Z4] Every PC tab states its answer; Ask an AI has one page; a quiet Investments month is one line",
+   "merged": "2026-11-11T07:55:06Z"
+  },
+  {
+   "n": 516,
+   "title": "[IV-3AY14][IV-3AY18][NF-3AU2] O7 Phone: To do's See all, last phone routes leave the PC, closed-app reminder schedule",
+   "merged": "2026-11-11T02:42:38Z"
+  },
+  {
+   "n": 514,
+   "title": "[IV-3BK][IT-6F][IT-9K] O9 Structure and data: human dates and \u062c.\u0645, London and Gulf boards, route split",
+   "merged": "2026-11-11T02:09:27Z"
+  },
+  {
+   "n": 517,
+   "title": "[NF-7AB2-6][NF-7AN][NF-7AK1][NF-7AK2][NF-7AQ1-4] Import review finished, save now sort later, more bank messages, Search answers",
+   "merged": "2026-11-11T01:29:20Z"
+  },
+  {
+   "n": 515,
+   "title": "[NF-10D] [NF-10H3] O8 Store and themes: Papyrus and Dendera sets; account-wide seats done",
+   "merged": "2026-11-11T00:52:14Z"
+  },
+  {
+   "n": 511,
+   "title": "[IV-12Y, IV-12Z, NF-12AB, IT-12AE] O6 guards: one page skeleton test, an arithmetic ratchet, the owner's picks",
+   "merged": "2026-11-11T00:34:14Z"
+  },
+  {
+   "n": 512,
+   "title": "[IT-2C] Ordinary-PC acceptance: legacy import, restore from anywhere, go back after a blocked restore",
+   "merged": "2026-11-10T20:19:23Z"
+  },
+  {
+   "n": 513,
+   "title": "[NF-7AB1] Import review opens on its questions, rows one click away",
+   "merged": "2026-11-10T20:13:03Z"
+  },
+  {
+   "n": 510,
+   "title": "[BT-12H][IV-12N][IV-12X][IV-12K][IV-12L] S6 Investments UX",
+   "merged": "2026-11-10T19:32:47Z"
+  }
+ ],
+ "now": "2026-11-12T06:55:26.309180+00:00"
+}
