@@ -1,38 +1,26 @@
 {
-  "about": "Which folder under assets/app/ holds each screen the live pages show. Edit here, then: python tools/shots.py apply. See tools/shots.py.",
-  "folders": {
-    "en": "mohab-year-2026-10-21",
-    "ar": "ar-2026-10-21"
+ "about": "Which folder under assets/app/ holds each screen the live pages show. Edit here, then: python tools/shots.py apply. See tools/shots.py.",
+ "folders": {
+  "en": "mohab-year-2026-11-14",
+  "ar": "ar-2026-11-14"
+ },
+ "shots": {
+  "sync-pc": {
+   "en": "mohab-year-2026-10-21",
+   "ar": "ar-2026-10-21"
   },
-  "shots": {
-    "budget": {
-      "en": "mohab-year-2026-10-21-v14",
-      "ar": "ar-2026-10-21-v14"
-    },
-    "b-budget": {
-      "en": "mohab-year-2026-10-21-v14",
-      "ar": "ar-2026-10-21-v14"
-    },
-    "a-expenses": {
-      "en": "mohab-year-2026-10-22",
-      "ar": "ar-2026-10-22"
-    },
-    "b-expenses": {
-      "en": "mohab-year-2026-10-22",
-      "ar": "ar-2026-10-22"
-    },
-    "dendera-spending": {
-      "en": "themes-2026-11-02",
-      "ar": "themes-2026-11-02"
-    },
-    "dendera-night-budget": {
-      "en": "themes-2026-11-02",
-      "ar": "themes-2026-11-02"
-    },
-    "papyrus-overview": {
-      "en": "themes-2026-11-02",
-      "ar": "themes-2026-11-02"
-    }
+  "dendera-spending": {
+   "en": "themes-2026-11-02",
+   "ar": "themes-2026-11-02"
   },
-  "pages": {}
+  "dendera-night-budget": {
+   "en": "themes-2026-11-02",
+   "ar": "themes-2026-11-02"
+  },
+  "papyrus-overview": {
+   "en": "themes-2026-11-02",
+   "ar": "themes-2026-11-02"
+  }
+ },
+ "pages": {}
 }
