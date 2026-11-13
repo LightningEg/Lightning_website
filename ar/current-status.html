@@ -30,7 +30,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="../css/landing.css?v=20261027-1">
 <link rel="stylesheet" href="../css/home.css?v=20261012-2">
-<link rel="stylesheet" href="../css/status.css?v=20261026-1">
+<link rel="stylesheet" href="../css/status.css?v=20261113-1">
 <link rel="stylesheet" href="../css/motion.css?v=20261006-4">
 <script src="../js/motion.js?v=20261010-1" defer></script>
 <link rel="stylesheet" href="../css/theme.css?v=20261010-1">
@@ -73,7 +73,7 @@
     <p class="d-hero-line">الإصدار 2.1.2 لويندوز وأندرويد. نزّل النسختين عشان موبايلك وكمبيوترك يشتغلوا على سجل واحد.</p>
     <div class="d-actions" data-platform-first>
       <a class="btn btn-primary" data-platform="windows" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-v2.1.2-Windows-x64.zip">نزّل لويندوز</a>
-      <a class="btn btn-primary" data-platform="android" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-2.1.2-1073-ea1c96c3.apk">نزّل لأندرويد</a>
+      <a class="btn btn-primary" data-platform="android" href="#android">جيب أندرويد من جوجل بلاي</a>
     </div>
     <script>/* An Android phone sees its own download first (8W). */(()=>{if(!/android/i.test(navigator.userAgent))return;document.querySelectorAll("[data-platform-first]").forEach(b=>{const a=b.querySelector('[data-platform="android"]');if(a)b.prepend(a);});})();</script>
     <p class="c-free status-note" role="note"><b>جاهز لأرقامك الحقيقية.</b> وإحنا بنحسّن لايتنينج مع كل إصدار، و<a href="release-log.html">سجل التحديثات</a> بيقولك إيه اللي اتغيّر.</p>
@@ -92,16 +92,22 @@
   </section>
 
   <!-- The builds, with checksums and the archive -->
+  <section class="d-section" id="android" aria-labelledby="android-title">
+    <div class="d-head"><p class="label">أندرويد</p><h2 id="android-title">جيب لايتنينج على أندرويد في خطوتين.</h2><p>لايتنينج للأندرويد في اختبار على جوجل بلاي. انضم مرة واحدة، وبعدين ثبّته وحدّثه من جوجل بلاي زي أي تطبيق.</p></div>
+    <div class="status-checklist">
+      <article class="card card-support"><span class="tile" aria-hidden="true">1</span><h3>كن مختبِرًا</h3><p>على تليفونك، وانت داخل بحساب جوجل بلاي، افتح صفحة الاختبار واضغط <b>كن مختبِرًا</b>. أو ابعتلنا الإيميل اللي بتستخدمه على جوجل بلاي على feedback@lightningeg.com وإحنا هنضيفك.</p><p class="d-actions"><a class="btn btn-primary" href="https://play.google.com/apps/testing/com.lightningeg" rel="noopener">كن مختبِرًا</a><a class="btn btn-secondary" href="mailto:feedback@lightningeg.com?subject=Lightning%20Android%20test">ابعتلنا إيميل بدل كده</a></p></article>
+      <article class="card card-support"><span class="tile" aria-hidden="true">2</span><h3>نزّل من جوجل بلاي</h3><p>أول ما تبقى مختبِر، افتح لايتنينج على جوجل بلاي واضغط <b>تثبيت</b>. وبعدها بيتحدّث لوحده.</p><p class="d-actions"><a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.lightningeg" rel="noopener">نزّل من جوجل بلاي</a></p></article>
+    </div>
+  </section>
+
   <section class="d-section status-downloads" id="downloads" aria-labelledby="downloads-title">
     <div class="d-head"><p class="label">النسخة الحالية</p><h2 id="downloads-title">نسخة واحدة. للجهازين.</h2><p>ويندوز وأندرويد من نفس الكود، ومعمولين يشتغلوا مع بعض. والنسخ الأقدم في <a class="status-inline-link" href="../versions.html">أرشيف النسخ</a>.</p></div>
-    <aside class="status-apk-warning" role="note" aria-label="اختبار على جوجل بلاي"><strong>جرّب لايتنينج على جوجل بلاي</strong><p>لايتنينج للأندرويد في اختبار خاص على جوجل بلاي. بيتثبّت وبيتحدّث من جوجل بلاي من غير ملف تنزّله. الأماكن محدودة: ابعتلنا الإيميل اللي بتستخدمه على جوجل بلاي من <a href="app-feedback.html">نموذج الملاحظات</a> وهنضيفك للقايمة. وبعدين افتح الرابط اللي تحت على تليفونك، واضغط «كن مختبِرًا»، وثبّت التطبيق.</p><p><a class="btn btn-primary" href="https://play.google.com/apps/internaltest/4698497370117194894" rel="noopener">انضم لاختبار جوجل بلاي</a></p><p>نسخة جوجل بلاي تطبيق منفصل عن ملف الـAPK اللي تحت. مش بتحدّثه ومش بتشارك بياناته، فاختار واحدة لتليفونك.</p></aside>
-    <aside class="status-apk-warning" role="note" aria-label="ملاحظة عن تثبيت ملف الأندرويد"><strong>التثبيت على أندرويد</strong><p>لايتنينج في الطريق لجوجل بلاي. لحد ما يوصل هناك، بيتثبّت من الصفحة دي مباشرة. افتح الملف اللي نزّلته، واسمح للمتصفح يثبّت تطبيقات لما أندرويد يطلب، وبعدين اضغط تثبيت. أندرويد بيعرض تنبيه مرة واحدة لأي تطبيق من برّه جوجل بلاي. نزّل لايتنينج من الصفحة دي بس.</p><p>لو التنزيل ما بدأش، أو كروم قال إن الملف ممكن يضر، افتح الصفحة دي في كروم نفسه مش جوّه تطبيق تاني. اضغط تنزيل للأندرويد، وبعدين اضغط احتفظ، أو نزّل على أي حال. لو لسه مش راضي، قولنا موديل موبايلك والرسالة بالظبط في <a href="app-feedback.html">نموذج الملاحظات</a>.</p></aside>
     <div class="status-table-wrap" role="region" aria-label="النسخ المتاحة للتنزيل" tabindex="0">
       <table class="status-table">
         <thead><tr><th>النسخة</th><th>الجهاز</th><th>الحالة</th><th>التنزيل</th><th>سجل التحديثات</th></tr></thead>
         <tbody>
           <tr><th scope="row"><b>لايتنينج 2.1.2</b><small>أحدث نسخة</small></th><td>ويندوز x64 · ملف ZIP<br><small><a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/SHA256SUMS">بصمات SHA-256</a> · <a href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/BUILD.json">سجل البناء</a></small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-v2.1.2-Windows-x64.zip" target="_blank" rel="noreferrer">نزّل لويندوز</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">اللي اتغيّر</a></td></tr>
-          <tr><th scope="row"><b>لايتنينج 2.1.2</b><small>نفس الإصدار</small></th><td>أندرويد arm64 · ملف APK<br><small>نفس الإصدار ونفس سجل البناء</small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://github.com/LightningEg/Lightning-downloads/releases/download/v2.1.2/Lightning-2.1.2-1073-ea1c96c3.apk" target="_blank" rel="noreferrer">نزّل لأندرويد</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">اللي اتغيّر</a></td></tr>
+          <tr><th scope="row"><b>لايتنينج 2.1.2</b><small>نفس الإصدار</small></th><td>أندرويد · اختبار جوجل بلاي<br><small>كن مختبِرًا الأول، وبعدين ثبّت من جوجل بلاي</small></td><td><span class="status-badge">متاحة دلوقتي</span></td><td><a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=com.lightningeg" target="_blank" rel="noreferrer">نزّل من جوجل بلاي</a></td><td><a class="btn btn-secondary btn-sm" href="release-log.html#v2.1.2">اللي اتغيّر</a></td></tr>
           </tbody>
       </table>
     </div>
