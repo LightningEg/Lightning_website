@@ -57,6 +57,9 @@
 .status-checklist .tile{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--nile);color:var(--on-nile);font:800 18px/1 var(--display)}
 .status-checklist h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
 .status-checklist p{color:var(--ink2);font-size:16px;line-height:1.5}
+#android .status-checklist{grid-template-columns:repeat(2,minmax(0,1fr))}
+#android .d-actions{margin-top:auto;justify-content:flex-start}
+@media (max-width:760px){#android .status-checklist{grid-template-columns:1fr}}
 
 
 @media (prefers-reduced-motion:reduce){.status-sample,.status-profile-link,.status-sample:hover,.status-profile-link:hover{transition:none;transform:none}}
