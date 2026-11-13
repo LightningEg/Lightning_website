@@ -1,4 +1,5 @@
-// Owner-only writes to the app repository's issues. Two actions: set_status (ready|blocked|parked) and create_issue.
+// Owner-only writes to the app repository's issues. Three actions: set_status (ready|blocked|parked), create_issue and
+// set_order (the owner's priority order: one open issue titled "[PRIORITY] Order" lists #n per line, first is first).
 const REPO = 'LightningEg/Lightning', API = 'https://api.github.com/repos/' + REPO;
 const STATUS = ['ready', 'blocked', 'parked'], WHEN = ['launch', 'after-launch', 'someday'];
 export function roadmapWriteHandler({createClient, url, anonKey, token, fetch: gh, allowedOrigins = ['https://lightningeg.com', 'https://www.lightningeg.com']}) {
@@ -49,6 +50,16 @@ export function roadmapWriteHandler({createClient, url, anonKey, token, fetch: g
         if (!made.ok) return reply(502, {error: 'GitHub answered ' + made.status});
         const issue = await made.json();
         return reply(200, {issue: issue.number, url: issue.html_url});
+      }
+      if (body.action === 'set_order') {
+        const order = Array.isArray(body.order) ? body.order.map(Number) : [];
+        if (!order.length || order.length > 400 || order.some(n => !Number.isInteger(n) || n < 1 || n > 1e6) || new Set(order).size !== order.length) return reply(400, {error: 'Send each issue number once, at most 400'});
+        const text = 'The owner\'s order, first is first. Written by the owner console\'s Roadmap view (drag to reorder); `python tools/board.py` follows it. Do not edit by hand.\n\n' + order.map((n, k) => (k + 1) + '. #' + n).join('\n') + '\n';
+        const list = await call('/issues?state=open&per_page=100', 'GET');
+        if (!list.ok) return reply(502, {error: 'GitHub answered ' + list.status});
+        const holder = (await list.json()).find(i => !i.pull_request && String(i.title).startsWith('[PRIORITY]'));
+        const saved = holder ? await call('/issues/' + holder.number, 'PATCH', {body: text}) : await call('/issues', 'POST', {title: '[PRIORITY] Order', body: text});
+        return saved.ok ? reply(200, {count: order.length}) : reply(502, {error: 'GitHub answered ' + saved.status});
       }
       return reply(400, {error: 'Unknown action'});
     } catch { return reply(503, {error: 'The roadmap change did not complete. Try again.'}); }
