@@ -3744,22 +3744,22 @@
       "id": "UX-2026.11.11.04",
       "name": "Lightning or a spreadsheet?",
       "page": "lightning-vs-spreadsheet.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.11.04.html"
     },
     {
       "id": "UX-2026.11.11.05",
       "name": "Lightning or an expense tracker?",
       "page": "lightning-vs-expense-tracker-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.11.05.html"
     },
     {
       "id": "UX-2026.11.11.06",
       "name": "Lightning or a cloud budgeting app?",
       "page": "lightning-vs-cloud-budgeting-app.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.11.06.html"
     },
     {
       "id": "UX-2026.11.11.07",
@@ -3772,8 +3772,8 @@
       "id": "UX-2026.11.11.08",
       "name": "Lightning or An AI assistant? · Honest comparison",
       "page": "lightning-vs-ai-assistant.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.11.08.html"
     },
     {
       "id": "UX-2026.11.13.01",
@@ -3849,8 +3849,8 @@
       "id": "UX-2026.11.14.09",
       "name": "Lightning · New phone design screens",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.09.html"
     },
     {
       "id": "UX-2026.11.14.10",
@@ -3890,6 +3890,20 @@
     {
       "id": "UX-2026.11.14.15",
       "name": "Version Archive · New phone design screens",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.15.html"
+    },
+    {
+      "id": "UX-2026.11.14.16",
+      "name": "Lightning · One comparison table",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.14.17",
+      "name": "Version Archive · One comparison table",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
