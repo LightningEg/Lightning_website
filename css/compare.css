@@ -15,3 +15,10 @@
 .cmp-two ul{margin:0;padding-inline-start:20px;color:var(--ink2)}
 .cmp-two li{margin:6px 0}
 @media (max-width:760px){.cmp-two{grid-template-columns:1fr}.cmp-table thead{display:none}.cmp-table,.cmp-table tbody,.cmp-table tr,.cmp-table th,.cmp-table td{display:block}.cmp-table tr{padding:12px 0;border-bottom:1px solid var(--line)}.cmp-table th,.cmp-table td{border:0;padding:4px 0}.cmp-table td[data-who]::before{content:attr(data-who) ": ";color:var(--ink2);font-weight:700}}
+/* One table on the home page (tools/comparisons.py): Lightning plus four kinds of tool. */
+.cmp-all{min-width:980px;font-size:14px}
+.cmp-all th,.cmp-all td{min-width:150px}
+.cmp-all tbody th{min-width:130px}
+.cmp-all .cmp-us{background:var(--wash,rgba(0,0,0,.03))}
+.cmp-all .cmp-pick th,.cmp-all .cmp-pick td{border-bottom:0}
+@media (max-width:760px){.cmp-all{min-width:0}.cmp-all th,.cmp-all td{min-width:0}.cmp-all .cmp-us{background:none}.cmp-all td[data-who]{padding:6px 0}}
