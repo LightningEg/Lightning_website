@@ -73,15 +73,56 @@ await test('GitHub\'s own answer becomes the same board (parents from parent_iss
   assert.deepEqual(JSON.parse(JSON.stringify(got.map(r => [r.n, r.state]))), expected.map(r => [r.n, r.state]));
 });
 
-await test('the view shows what needs you, what runs, what is ready and what shipped', async () => {
+await test('the view has three lists: ready, blocked and parked, and every open issue is in exactly one', async () => {
   const p = await boot();
   const text = p.$('ops-roadmap').textContent;
-  assert.equal(p.q('#ops-roadmap .ops-kpi').length, 4);
-  assert.match(p.q('#ops-roadmap .ops-kpi')[0].textContent, /Needs you/);
-  assert.match(text, /Running now/); assert.match(text, /Ready next/); assert.match(text, /Blocked or held/); assert.match(text, /Shipped lately/);
-  const running = expected.filter(r => r.state === 'running').map(r => '#' + r.n);
-  for (const n of running) assert.ok(text.includes(n), n + ' is shown as running');
+  const heads = p.q('#ops-roadmap .ops-block h3').map(h => h.textContent.replace(/ \(\d+\)/, ''));
+  assert.deepEqual(heads, ['Ready', 'Blocked', 'Parked']);
+  assert.ok(!heads.some(h => /Running|Shipped|Needs you/.test(h)), 'no status sections');
+  const leaves = expected.filter(r => r.state !== 'group');
+  assert.equal(p.q('#ops-roadmap .ops-block tbody tr').length, leaves.length);
+  const rows = p.w.FGOwnerRoadmap.derive(JSON.parse(JSON.stringify(board)));
+  for (const r of rows.filter(r => r.state !== 'group')) {
+    const section = p.q('#ops-roadmap .ops-block').find(b => b.textContent.includes('#' + r.n + ' '));
+    assert.ok(section.querySelector('h3').textContent.startsWith({ ready: 'Ready', blocked: 'Blocked', parked: 'Parked' }[p.w.FGOwnerRoadmap.bucket(r)]), '#' + r.n);
+  }
   assert.ok(p.q('#ops-roadmap a').every(a => a.href.startsWith('https://github.com/LightningEg/Lightning/') && a.rel === 'noopener'));
+});
+
+await test('a status label set by the owner wins over the worked-out list', async () => {
+  const p = await boot(), b = p.w.FGOwnerRoadmap.bucket;
+  assert.equal(b({ labels: ['status:parked'], when: 'launch', state: 'ready' }), 'parked');
+  assert.equal(b({ labels: ['status:ready'], when: 'someday', state: 'blocked' }), 'ready');
+  assert.equal(b({ labels: [], when: 'unsorted', state: 'ready' }), 'parked');
+  assert.equal(b({ labels: [], when: 'launch', state: 'held' }), 'blocked');
+  assert.equal(b({ labels: [], when: 'launch', state: 'running' }), 'ready');
+});
+
+await test('moving an issue and adding one go through roadmap-write, and the page follows', async () => {
+  const p = await boot(), sent = [];
+  p.w.FG = { sb: { functions: { invoke: async (name, o) => { sent.push(JSON.parse(JSON.stringify([name, o.body]))); return { data: { issue: 900 }, error: null }; } } } };
+  const target = expected.find(r => r.state === 'ready' && r.when === 'launch');
+  const row = p.q('#ops-roadmap tbody tr').find(tr => tr.querySelector('a').textContent.startsWith('#' + target.n + ' '));
+  const sel = row.querySelector('select'); sel.value = 'parked'; sel.dispatchEvent(new p.w.Event('change'));
+  await tick(30);
+  assert.deepEqual(sent[0], ['roadmap-write', { action: 'set_status', issue: target.n, status: 'parked' }]);
+  const parked = p.q('#ops-roadmap .ops-block').find(b => b.querySelector('h3').textContent.startsWith('Parked'));
+  assert.ok(parked.textContent.includes('#' + target.n + ' '), 'it moved to Parked on screen');
+  const form = p.q('#ops-roadmap form')[0];
+  form.querySelector('input').value = 'A new thing'; form.querySelector('textarea').value = 'Why';
+  form.dispatchEvent(new p.w.Event('submit', { cancelable: true }));
+  await tick(30);
+  assert.deepEqual(sent[1][1], { action: 'create_issue', title: 'A new thing', body: 'Why', when: 'launch', status: 'ready' });
+});
+
+await test('a refused change is shown and the list stays as it was', async () => {
+  const p = await boot();
+  p.w.FG = { sb: { functions: { invoke: async () => ({ data: null, error: { context: { json: async () => ({ error: 'Only the verified owner can change the roadmap' }) } } }) } } };
+  const target = expected.find(r => r.state === 'ready' && r.when === 'launch');
+  const sel = p.q('#ops-roadmap tbody tr').find(tr => tr.querySelector('a').textContent.startsWith('#' + target.n + ' ')).querySelector('select');
+  sel.value = 'blocked'; sel.dispatchEvent(new p.w.Event('change'));
+  await tick(30);
+  assert.match(p.$('ops-roadmap-say').textContent, /Only the verified owner/);
 });
 
 await test('one load is a handful of reads, and a second open within five minutes reads nothing', async () => {
@@ -91,7 +132,7 @@ await test('one load is a handful of reads, and a second open within five minute
   const stored = JSON.parse(p.w.sessionStorage.getItem('lightning-owner-roadmap-v1'));
   const again = await boot({ stored });
   assert.equal(again.calls.length, 0);
-  assert.match(again.$('ops-roadmap').textContent, /Running now/);
+  assert.match(again.$('ops-roadmap').textContent, /Ready \(/);
 });
 
 await test('Refresh asks GitHub again', async () => {
@@ -146,16 +187,6 @@ await test('every issue row has a Copy prompt button, and the wording fits the i
   assert.ok(!/Area/.test(w.prompt({ n: 7, title: 't', areas: [] })));
   assert.match(w.prompt({ n: 7, title: 't', state: 'stale', prs: [{ n: 9, branch: 'claude/x' }], areas: [] }), /no activity for 48 hours/);
   assert.match(w.prompt({ n: 7, title: 't', state: 'group', areas: [] }), /parent item/);
-});
-
-await test('ready issues that are not for launch sit in a fold, each with a copy button', async () => {
-  const p = await boot();
-  const fold = p.q('#ops-roadmap details.oc-fold')[0];
-  assert.ok(fold, 'a fold');
-  const later = expected.filter(r => r.when !== 'launch' && r.state === 'ready');
-  assert.match(fold.querySelector('summary').textContent, new RegExp('Ready, but not for launch: ' + later.length + ' issues'));
-  assert.equal(fold.querySelectorAll('tbody tr').length, later.length);
-  assert.equal([...fold.querySelectorAll('button')].filter(b => b.textContent === 'Copy prompt').length, later.length);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
