@@ -3779,8 +3779,8 @@
       "id": "UX-2026.11.13.01",
       "name": "Downloads · One theme, five profiles",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.13.01.html"
     },
     {
       "id": "UX-2026.11.13.02",
@@ -3898,12 +3898,33 @@
       "id": "UX-2026.11.14.16",
       "name": "Lightning · One comparison table",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.16.html"
     },
     {
       "id": "UX-2026.11.14.17",
       "name": "Version Archive · One comparison table",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.17.html"
+    },
+    {
+      "id": "UX-2026.11.14.18",
+      "name": "Lightning · Android from Google Play",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.14.19",
+      "name": "Downloads · Android from Google Play",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.14.20",
+      "name": "Version Archive · Android from Google Play",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
