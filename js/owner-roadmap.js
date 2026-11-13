@@ -3,7 +3,7 @@
    The repository is public, so the browser reads GitHub's public API directly: no key, no copy in Supabase, nothing to
    keep in step. The state of each issue is worked out here by the same rules as tools/board.py in the app repository
    (supabase/tests/owner-roadmap-pages.test.mjs checks the two agree on a real snapshot of the board). Nothing here
-   changes anything on GitHub except through the owner's two buttons (move to Ready, Blocked or Parked; Add issue), which go through the
+   changes anything on GitHub except through the owner's controls (Move to Ready, Blocked or Parked; Add issue; drag to order), which go through the
    roadmap-write edge function (verified owner only). Every value is set with textContent. The answer is kept for 5 minutes (GitHub allows an
    address 60 reads an hour; one load takes about a dozen) and Refresh asks again. */
 (function () {
@@ -38,9 +38,21 @@
   }
   function hours(ts, now) { return (now - new Date(ts).getTime()) / 36e5; }
 
+  /* The owner's order (tools/board.py, priority): the open issue titled "[PRIORITY] ..." lists #n per line, first is first.
+     data.order (set after a drag, before GitHub is read again) wins over it. */
+  function priority(data) {
+    var holder = null, order = [];
+    data.issues.forEach(function (i) { if (!holder && String(i.title).indexOf('[PRIORITY]') === 0) holder = i; });
+    if (data.order) return { order: data.order, holder: holder && holder.n };
+    if (holder) String(holder.body || '').split('\n').forEach(function (line) {
+      var m = /#(\d+)/.exec(line); if (m && order.indexOf(Number(m[1])) < 0) order.push(Number(m[1]));
+    });
+    return { order: order, holder: holder && holder.n };
+  }
+
   function derive(data) {
-    var byN = {}, parent = {}, openPrs = {}, linked = {}, now = new Date(data.now).getTime();
-    data.issues.forEach(function (i) { byN[i.n] = JSON.parse(JSON.stringify(i)); i.children.forEach(function (k) { parent[k] = i.n; }); });
+    var byN = {}, parent = {}, openPrs = {}, linked = {}, now = new Date(data.now).getTime(), pr = priority(data);
+    data.issues.forEach(function (i) { if (i.n === pr.holder) return; byN[i.n] = JSON.parse(JSON.stringify(i)); i.children.forEach(function (k) { parent[k] = i.n; }); });
     data.prs.forEach(function (p) {
       openPrs[p.n] = p;
       var seen = {}, m; CLOSES.lastIndex = 0;
@@ -78,7 +90,12 @@
       var clash = busy.filter(function (b) { return overlap(i.areas, b.areas); }).map(function (b) { return b.n; });
       if (clash.length) { i.state = 'held'; i.why = clash.map(function (c) { return 'same area as #' + c; }); }
     });
-    return rows.sort(function (a, b) { return (ORDER[a.when] == null ? 3 : ORDER[a.when]) - (ORDER[b.when] == null ? 3 : ORDER[b.when]) || b.blocking - a.blocking || a.n - b.n; });
+    rows.forEach(function (i) { var k = pr.order.indexOf(i.n); i.rank = k < 0 ? null : k; });
+    return rows.sort(function (a, b) {
+      if ((a.rank === null) !== (b.rank === null)) return a.rank === null ? 1 : -1;
+      if (a.rank !== null && a.rank !== b.rank) return a.rank - b.rank;
+      return (ORDER[a.when] == null ? 3 : ORDER[a.when]) - (ORDER[b.when] == null ? 3 : ORDER[b.when]) || b.blocking - a.blocking || a.n - b.n;
+    });
   }
 
   /* The three lists (tools/board.py, bucket): a status:ready|blocked|parked label set by the owner wins; otherwise worked out. */
@@ -182,7 +199,7 @@
   /* ---------- the page ---------- */
   var host = doc.getElementById('ops-roadmap');
   if (host) start();
-  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket };
+  else if (typeof window !== 'undefined') window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket, priority: priority };
 
   function start() {
     var verified = false, loading = false, shown = null, FG = window.FG || {};
@@ -258,6 +275,40 @@
       });
       return sel;
     }
+    var dragging = null;
+    function reorder(bucketName, from, to) {
+      var rows = derive(shown).filter(function (i) { return i.state !== 'group'; });
+      var mine = rows.filter(function (i) { return bucket(i) === bucketName; });
+      if (from === to || from < 0 || to < 0 || from >= mine.length || to >= mine.length) return;
+      var arr = mine.slice(); arr.splice(to, 0, arr.splice(from, 1)[0]);
+      var slots = [], all = rows.map(function (i) { return i.n; });
+      rows.forEach(function (i, k) { if (bucket(i) === bucketName) slots.push(k); });
+      slots.forEach(function (idx, k) { all[idx] = arr[k].n; });
+      say('Saving the new order…');
+      write({ action: 'set_order', order: all }).then(function () {
+        shown.order = all; remember(shown); render(shown); say('Order saved: #' + all[0] + ' is first.');
+      }, function (e) { say(e.message, true); });
+    }
+    function grip(i, name, k, count) {
+      var box = el('span', 'oc-grip'), h = el('span', 'oc-grip-h', '\u283f'), up = el('button', 'btn ghost', '\u25b2'), dn = el('button', 'btn ghost', '\u25bc');
+      h.setAttribute('aria-hidden', 'true'); h.title = 'Drag to reorder';
+      [[up, 'Move #' + i.n + ' up', k - 1, k === 0], [dn, 'Move #' + i.n + ' down', k + 1, k === count - 1]].forEach(function (b) {
+        b[0].type = 'button'; b[0].setAttribute('aria-label', b[1]); b[0].disabled = b[3];
+        b[0].addEventListener('click', function () { reorder(name, k, b[2]); });
+      });
+      return add(box, [h, up, dn]);
+    }
+    function dragRows(host2, name) {
+      var trs = [].slice.call(host2.querySelectorAll('tbody tr'));
+      trs.forEach(function (tr, k) {
+        tr.draggable = true; tr.setAttribute('data-k', k);
+        tr.addEventListener('dragstart', function (e) { dragging = { name: name, k: k }; tr.classList.add('oc-dragging'); if (e.dataTransfer) { try { e.dataTransfer.setData('text/plain', String(k)); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* optional */ } } });
+        tr.addEventListener('dragend', function () { dragging = null; tr.classList.remove('oc-dragging'); });
+        tr.addEventListener('dragover', function (e) { if (dragging && dragging.name === name) { e.preventDefault(); tr.classList.add('oc-dragover'); } });
+        tr.addEventListener('dragleave', function () { tr.classList.remove('oc-dragover'); });
+        tr.addEventListener('drop', function (e) { e.preventDefault(); tr.classList.remove('oc-dragover'); if (dragging && dragging.name === name) { var d = dragging; dragging = null; reorder(name, d.k, k); } });
+      });
+    }
     function addForm() {
       var f = el('form', 'oc-form'), t = el('input'), d = el('textarea'), w = el('select'), s2 = el('select'), go = el('button', 'btn', 'Add issue');
       t.type = 'text'; t.required = true; t.maxLength = 200; t.placeholder = 'What needs doing, in one line'; t.setAttribute('aria-label', 'Issue title');
@@ -289,13 +340,14 @@
       LISTS.forEach(function (l) {
         var mine = leaves.filter(function (i) { return bucket(i) === l[0]; });
         host.appendChild(block(l[1] + ' (' + num(mine.length) + ')', l[2],
-          table(['Issue', 'Who', 'Move to', ''], mine.map(function (i) {
+          table(['Order', 'Issue', 'Who', 'Move to', ''], mine.map(function (i, k) {
             var p = i.prs[0], note = i.can + (next.indexOf(i.n) >= 0 ? ' · next' : '') + (p ? ' · PR #' + p.n + (i.state === 'stale' ? ' stale' : '') : '') +
               (l[0] === 'blocked' && i.why.length ? ' · waiting on ' + i.why.join('; ') : '') + (l[0] === 'parked' ? ' · ' + i.when : '');
-            return [issue(i), note, mover(i), copyButton(i)];
+            return [grip(i, l[0], k, mine.length), issue(i), note, mover(i), copyButton(i)];
           }), 'Nothing here.')));
+        dragRows(host.lastChild, l[0]);
       });
-      host.appendChild(el('p', 'ops-fine', 'Lists follow tools/board.py in the app repository; Move to sets a status label on the issue that wins over the worked-out list. Copy prompt words each prompt for the issue\u2019s state.'));
+      host.appendChild(el('p', 'ops-fine', 'Drag a row (or use the arrows) to set the order: first is first, and the AIs start on the top ready issue. Lists follow tools/board.py in the app repository; Move to sets a status label on the issue that wins over the worked-out list. Copy prompt words each prompt for the issue\u2019s state.'));
     }
 
     function fail(e) {
@@ -319,6 +371,6 @@
     window.addEventListener('lightning:owner-view', function (e) { if (verified && e.detail && e.detail.view === 'roadmap') load(); });
     // Left open on a second screen it keeps itself current.
     setInterval(function () { if (verified && open() && !doc.hidden) load(); }, KEEP);
-    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket, load: load };
+    window.FGOwnerRoadmap = { derive: derive, pick: pick, normalize: normalize, prompt: prompt, bucket: bucket, priority: priority, load: load };
   }
 })();

@@ -189,5 +189,40 @@ await test('every issue row has a Copy prompt button, and the wording fits the i
   assert.match(w.prompt({ n: 7, title: 't', state: 'group', areas: [] }), /parent item/);
 });
 
+await test('the owner\'s order puts ranked issues first, and the priority issue is never a row', async () => {
+  const p = await boot(), w = p.w.FGOwnerRoadmap;
+  const data = JSON.parse(JSON.stringify(board));
+  const ids = data.issues.filter(i => !i.children.length).map(i => i.n);
+  const [a, b, c] = [ids[ids.length - 1], ids[0], ids[5]];
+  data.issues.push({ n: 9999, title: '[PRIORITY] Order', body: `x\n1. #${a}\n2. #${b}\n3. #${a}\n4. #${c}`, labels: [], assignees: [], children: [], blocked_by: [], blocking: 0 });
+  const rows = JSON.parse(JSON.stringify(w.derive(data)));
+  assert.ok(!rows.some(r => r.n === 9999));
+  assert.deepEqual(rows.slice(0, 3).map(r => r.n), [a, b, c], 'first is first');
+  assert.equal(rows[0].rank, 0);
+});
+
+await test('dragging a row, or its arrow, saves the whole order through roadmap-write and the page follows', async () => {
+  const p = await boot(), sent = [];
+  p.w.FG = { sb: { functions: { invoke: async (name, o) => { sent.push(JSON.parse(JSON.stringify(o.body))); return { data: { count: 1 }, error: null }; } } } };
+  const ready = () => p.q('#ops-roadmap .ops-block').find(b => b.querySelector('h3').textContent.startsWith('Ready'));
+  const names = () => [...ready().querySelectorAll('tbody tr')].map(tr => /#(\d+)/.exec(tr.querySelector('td:nth-child(2) a').textContent)[1]);
+  const before = names();
+  assert.ok(before.length >= 3);
+  const trs = [...ready().querySelectorAll('tbody tr')];
+  assert.ok(trs.every(tr => tr.draggable), 'every row can be dragged');
+  trs[0].dispatchEvent(new p.w.Event('dragstart', { bubbles: true }));
+  trs[2].dispatchEvent(new p.w.Event('drop', { bubbles: true, cancelable: true }));
+  await tick(30);
+  const o = sent.find(x => x.action === 'set_order');
+  assert.ok(o, 'a set_order call');
+  assert.equal(o.order.length, new Set(o.order).size, 'each issue once');
+  const after = names();
+  assert.deepEqual(after, [before[1], before[2], before[0], ...before.slice(3)], 'the first row moved to third');
+  const down = ready().querySelectorAll('tbody tr')[0].querySelectorAll('.oc-grip button')[1];
+  down.click(); await tick(30);
+  assert.deepEqual(names().slice(0, 2), [after[1], after[0]], 'the arrow moves it one place');
+  assert.equal(ready().querySelectorAll('tbody tr')[0].querySelectorAll('.oc-grip button')[0].disabled, true, 'the first row has no up arrow');
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
