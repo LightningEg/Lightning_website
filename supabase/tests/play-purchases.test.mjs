@@ -1,5 +1,5 @@
 // Play purchases (supabase/migrations/20261109150000_play_purchases.sql, app repo NF-11B3): one token licenses one app
-// profile and up to 10 profiles of the same buyer (NF-10H1), and only the service role may call it.
+// profile and up to 5 profiles of the same buyer (NF-10H1), and only the service role may call it.
 //
 //   PGLITE_PATH=/path/to/@electric-sql/pglite/dist/index.js node supabase/tests/play-purchases.test.mjs
 
@@ -70,10 +70,10 @@ await test('one purchase per person: another profile of the buyer is licensed, w
   assert.equal(Number((await q(`select count(*) c from private.play_purchases`)).rows[0].c), 1, 'still one purchase');
 });
 
-await test('the eleventh profile on one purchase is refused with the cap named', async () => {
+await test('the sixth profile on one purchase is refused with the cap named', async () => {
   const p = n => `cccccccc-cccc-4ccc-8ccc-${String(n).padStart(12, '0')}`;
-  for (let n = 3; n <= 10; n++) await redeem(T1, p(n));
-  await assert.rejects(redeem(T1, p(11)), /10 profiles/);
+  for (let n = 3; n <= 5; n++) await redeem(T1, p(n));
+  await assert.rejects(redeem(T1, p(6)), /unlocks 5 profiles/);
   assert.equal((await redeem(T1, PA)).profile_id, PA, 'a profile already on it still gets its licence');
 });
 
