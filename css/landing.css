@@ -65,6 +65,7 @@ button,input{font:inherit}
 
 /* ---------- buttons (A10.1): 44 on the page, 36 in a card. Sentence case, no arrows ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 22px;border:1px solid transparent;border-radius:999px;font:700 15px/1 var(--body);text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .2s,border-color .2s,filter .2s}
+.btn-ico{width:18px;height:18px;flex:none}
 .btn-vivid{background:var(--vivid);color:#fff}
 .btn-vivid:hover{filter:brightness(1.06)}
 .btn-primary{background:var(--nile);color:var(--on-nile)}

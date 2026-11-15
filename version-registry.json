@@ -3919,12 +3919,26 @@
       "id": "UX-2026.11.14.19",
       "name": "Downloads · Android from Google Play",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.19.html"
     },
     {
       "id": "UX-2026.11.14.20",
       "name": "Version Archive · Android from Google Play",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.20.html"
+    },
+    {
+      "id": "UX-2026.11.15.01",
+      "name": "Lightning · Downloads",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.15.02",
+      "name": "Version Archive · Google Play logo",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
