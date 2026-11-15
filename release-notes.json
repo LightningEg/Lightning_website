@@ -1,30 +1,42 @@
 {
-  "version": "2.1.2",
+  "version": "2.3.2",
   "source": "The release notes of the app repository (RELEASES.md), shortened to what a person would notice. English is the source; the Arabic beside it is written in Egyptian Arabic.",
   "items": [
     {
-      "en_title": "Windows Updates From Settings.",
-      "en": "Download this Windows version and extract it into a new folder. Later versions can be checked, downloaded and installed from Settings. Lightning verifies update files before installation.",
-      "ar_title": "تحديثات ويندوز من الإعدادات.",
-      "ar": "نزّل نسخة ويندوز دي وفك ضغطها في فولدر جديد. بعد كده تقدر تراجع التحديثات وتنزّلها وتثبّتها من الإعدادات. Lightning بيتأكد من ملفات التحديث قبل التثبيت."
+      "en_title": "Safe To Spend You Can Trust.",
+      "en": "Refilling your emergency fund or a goal no longer lowers Safe to spend, a side income before payday adds to it, and you can leave one big purchase out of your budget averages.",
+      "ar_title": "المتاح للصرف تقدر تعتمد عليه.",
+      "ar": "تعبئة صندوق الطوارئ أو هدف مبقتش بتقلل المتاح للصرف، ودخل جانبي قبل الراتب بيزوّده، وتقدر تسيب مشترى كبير برّه متوسطات الميزانية."
     },
     {
-      "en_title": "More Ways To Import A Statement.",
-      "en": "Review Excel worksheets and more CSV formats, keep rows with the right account, and review up to 500 rows per page.",
-      "ar_title": "طرق أكتر لاستيراد كشف الحساب.",
-      "ar": "راجع شيتات Excel وصيغ CSV أكتر، وخلي كل صف مع حسابه الصح، وراجع لحد ٥٠٠ صف في الصفحة."
+      "en_title": "Plan Ahead On The Budget.",
+      "en": "See next month as it will start, move budget for this month only or for your usual plan, and get a warning when your salary is about to fall.",
+      "ar_title": "خطط للميزانية قدّام.",
+      "ar": "شوف الشهر الجاي زي ما هيبدأ، وانقل جزء من الميزانية للشهر ده بس أو للخطة العادية، وتلاقي تنبيه لو مرتبك هيقل."
     },
     {
-      "en_title": "A Clearer Phone.",
-      "en": "Move between Home, Budget, Add, Activity and Money from the tab bar. See what needs you and keep daily spending figures consistent with the PC.",
-      "ar_title": "الموبايل بقى أوضح.",
-      "ar": "اتنقل بين الرئيسية والميزانية والإضافة والسجل والفلوس من الشريط اللي تحت. شوف إيه محتاجك، والمتاح للصرف في اليوم يبقى نفس الرقم على الموبايل والكمبيوتر."
+      "en_title": "Refunds Return To The Right Purchase.",
+      "en": "A refund can name the purchase it returns, so averages count it in the month you spent, and a refund no longer shows a 7,000% savings rate.",
+      "ar_title": "المرتجع بيرجع للمشترى الصح.",
+      "ar": "المرتجع تقدر تحدد المشترى اللي بيرجعه، فالمتوسطات بتحسبه في الشهر اللي صرفت فيه، ومعدل الادخار مبقاش يظهر ٧٠٠٠٪ بسبب مرتجع."
     },
     {
-      "en_title": "Clearer Arabic.",
-      "en": "Import reviews, date ranges, counts and delete confirmations read correctly in Arabic.",
-      "ar_title": "عربي أوضح.",
-      "ar": "مراجعة الاستيراد والفترات والأعداد وتأكيد المسح بقوا أوضح بالعربي."
+      "en_title": "Target Allocation By Risk.",
+      "en": "Set your target by low, medium and high risk, and move any holding to the level you want, so a money market fund counts toward your low-risk share.",
+      "ar_title": "التوزيع المستهدف حسب المخاطرة.",
+      "ar": "حدد هدفك بمخاطرة قليلة ومتوسطة وعالية، وانقل أي أصل للمستوى اللي تحبه، فصندوق سوق النقد يتحسب ضمن نسبة المخاطرة القليلة."
+    },
+    {
+      "en_title": "Investments Counted Right.",
+      "en": "Sales by cash received remove the right number of units, foreign purchase returns match the holding value, and investment forms show the currency you are entering.",
+      "ar_title": "الاستثمارات بتتحسب صح.",
+      "ar": "البيع بالمبلغ المستلم بيشيل عدد الوحدات الصح، ومرتجع شراء الأجنبي بيطابق قيمة الأصل، ونماذج الاستثمار بتوضح العملة اللي بتدخلها."
+    },
+    {
+      "en_title": "A New Phone.",
+      "en": "The phone has a new card design on every screen and a Plan tab with what is due before payday, and saving on a PC page keeps you where you are.",
+      "ar_title": "موبايل جديد.",
+      "ar": "الموبايل بقى فيه تصميم كروت جديد في كل شاشة وتاب للخطة فيه المستحق قبل الراتب، والحفظ في صفحات الكمبيوتر بيسيبك مكانك من غير ما الصفحة تتحمل تاني."
     }
   ]
 }
