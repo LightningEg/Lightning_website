@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "comparisons.json"
 SITE = "https://lightningeg.com/"
-CSS = '<link rel="stylesheet" href="{up}css/compare.css?v=20261113-1">'
+CSS = '<link rel="stylesheet" href="{up}css/compare.css?v=20261115-1">'
 RATE = {"Low": 1, "Medium": 2, "High": 3}
 AR_RATE = {"Low": "منخفض", "Medium": "متوسط", "High": "عالي"}
 HOME = {"en": ROOT / "index.html", "ar": ROOT / "ar" / "index.html"}
@@ -27,14 +27,14 @@ SECTION = re.compile(r'(<section class="d-section" id="compare">).*?(</section>)
 COPY = {
     "en": {
         "label": "Compare", "h": "How Does It Compare?",
-        "p": "One table, rated Low, Medium or High, with a line of why. Where another way is better, we say so.",
+        "p": "Rated Low, Medium or High.",
         "th": "What matters", "who": "Lightning", "best": "Pick it when",
         "src": "Ratings are our honest view as of {date}, checked against the sources named in the comparison file. Tell us if one is wrong.",
         "mine": "Lightning is the pick when you want your money kept on your own devices, with Egyptian banks, gold, loans and dollars in one traceable net worth. Quick one-tap logging and bank feeds are where others lead today.",
     },
     "ar": {
         "label": "قارن", "h": "بيقارن بإيه؟",
-        "p": "جدول واحد بدرجات منخفض ومتوسط وعالي، وسطر بيشرح كل درجة. ولو طريقة تانية أحسن في حاجة، بنقول كده.",
+        "p": "بدرجات منخفض ومتوسط وعالي.",
         "th": "الحاجة المهمة", "who": "لايتنينج", "best": "اختاره لو",
         "src": "الدرجات دي رأينا الصريح لحد {date}، ومراجعة على المصادر المكتوبة في ملف المقارنة. قولنا لو درجة غلط.",
         "mine": "لايتنينج هو الاختيار لو عايز فلوسك تفضل على أجهزتك، ومعاها البنوك المصرية والدهب والقروض والدولار في صافي ثروة واحد تقدر تتتبعه. التسجيل السريع بلمسة والربط البنكي لسه غيرنا بيسبق فيهم.",
@@ -53,8 +53,7 @@ def esc(t: str) -> str:
 def rate_html(r: str, lang: str) -> str:
     on = RATE[r]
     word = r if lang == "en" else AR_RATE[r]
-    meter = "".join(f'<i class="{"on" if n < on else ""}"></i>' for n in range(3))
-    return f'<span class="cmp-rate" data-rating="{r}">{word}<span class="cmp-meter" aria-hidden="true">{meter}</span></span>'
+    return f'<span class="cmp-rate" data-rating="{r}">{word}</span>'
 
 
 def section_html(d: dict, lang: str) -> str:
@@ -67,13 +66,9 @@ def section_html(d: dict, lang: str) -> str:
         for k in ["lightning", *cols]:
             who = t["who"] if k == "lightning" else d["comparators"][k][lang]
             cls = ' class="cmp-us"' if k == "lightning" else ""
-            cells += f'<td{cls} data-who="{esc(who)}" data-col="{k}">{rate_html(q["ratings"][k], lang)}<span class="cmp-note">{esc(q[lang + "_note"][k])}</span></td>'
+            cells += f'<td{cls} data-who="{esc(who)}" data-col="{k}">{rate_html(q["ratings"][k], lang)}</td>'
         rows += f'<tr data-quality="{q["id"]}"><th scope="row">{esc(q[lang])}</th>{cells}</tr>'
-    best = f'<td class="cmp-us" data-who="{esc(t["who"])}"><span class="cmp-note">{esc(t["mine"])}</span></td>' + "".join(
-        f'<td data-who="{esc(d["comparators"][k][lang])}"><span class="cmp-note">{esc(d["choose"][k][lang])}</span></td>' for k in cols)
-    rows += f'<tr class="cmp-pick"><th scope="row">{esc(t["best"])}</th>{best}</tr>'
-    table = (f'<div class="card card-support cmp-table-wrap"><table class="cmp-table cmp-all"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>'
-             f'<p class="cmp-src">{esc(t["src"].format(date=d["date"]))}</p>')
+    table = (f'<div class="card card-support cmp-table-wrap"><table class="cmp-table cmp-all"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>')
     return (f'<section class="d-section" id="compare">\n    <div class="d-head"><p class="label">{t["label"]}</p><h2>{t["h"]}</h2><p>{esc(t["p"])}</p></div>\n'
             f'    {table}\n  </section>')
 
