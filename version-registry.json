@@ -3618,8 +3618,8 @@
       "id": "UX-2026.11.09.05",
       "name": "Release Log · Lightning 2.1.2",
       "page": "release-log.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.09.05.html"
     },
     {
       "id": "UX-2026.11.09.06",
@@ -3842,8 +3842,8 @@
       "id": "UX-2026.11.14.08",
       "name": "Personal Finance App Features for Egypt · New phone design screens",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.08.html"
     },
     {
       "id": "UX-2026.11.14.09",
@@ -3912,25 +3912,74 @@
       "id": "UX-2026.11.14.18",
       "name": "Lightning · Android from Google Play",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.18.html"
     },
     {
       "id": "UX-2026.11.14.19",
       "name": "Downloads · Android from Google Play",
       "page": "current-status.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.19.html"
     },
     {
       "id": "UX-2026.11.14.20",
       "name": "Version Archive · Android from Google Play",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.14.20.html"
+    },
+    {
+      "id": "UX-2026.11.20.01",
+      "name": "Home · Pick a question, see PC and phone",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.20.02",
+      "name": "Features · PC and phone beside each question",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.20.03",
+      "name": "Downloads · Lightning 2.3.2",
+      "page": "current-status.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.20.04",
+      "name": "Release Log · Lightning 2.3.2",
+      "page": "release-log.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.20.05",
+      "name": "Version Archive · Lightning 2.3.2",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
     }
   ],
   "app_releases": [
+    {
+      "version": "v2.3.2",
+      "date": "2026-11-15",
+      "commit": "6aa976803a121eb15aa734842a41bd01f0fbf7e7",
+      "release_url": "https://github.com/LightningEg/Lightning-downloads/releases/tag/v2.3.2",
+      "windows": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/Lightning-v2.3.2-Windows-x64.zip",
+      "android": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/Lightning-2.3.2-1224-6aa97680.apk",
+      "checksums": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/SHA256SUMS",
+      "build": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/BUILD.json",
+      "update": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/UPDATE.json",
+      "update_signature": "https://github.com/LightningEg/Lightning-downloads/releases/download/v2.3.2/UPDATE.json.sig",
+      "windows_sha256": "d76928ec266195a8f8624baf8f2e56e3bc35317a0402fe19cf233a43db69fda2",
+      "android_sha256": "f9d16609e3120d65f687fe71bf3fc6086299160efcfe0c651ea12ba357b22d82"
+    },
     {
       "version": "v2.1.2",
       "date": "2026-11-09",
