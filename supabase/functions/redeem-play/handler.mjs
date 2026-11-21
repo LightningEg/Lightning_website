@@ -2,7 +2,8 @@
 // the purchase token here. This asks Google (Play Developer API, purchases.products.get) whether the token is a paid
 // purchase of that theme, not refunded or voided, keeps it (redeem_play_purchase: one purchase unlocks every profile of
 // that Google account, up to 5; NF-10H1, owner 2026-11-09, cap 2026-11-11), acknowledges it so Google does not refund it after three
-// days, and returns the same signed licence redeem-purchase returns, naming the profile that asked.
+// days, and returns the same signed licence redeem-purchase returns, naming the profile that asked. A refunded or voided
+// purchase is recorded (void_play_purchase) so it leaves any website account it reached through a linked profile (NF-10H6).
 // Deploy with verify_jwt=false: native clients have no website account; Google's answer is the authority.
 //
 // Secrets: GOOGLE_PLAY_SERVICE_ACCOUNT (the service account JSON with access to the app in Play Console),
@@ -103,14 +104,22 @@ export function redeemPlayHandler({env, fetcher = fetch, rpc}) {
       const purchase = await google.json();
       // 0 purchased, 1 cancelled (refunded or revoked), 2 pending (not paid yet).
       if (purchase.purchaseState === 2) return reply(402, {code: 'pending', error: 'The payment is not finished yet. It unlocks when Google Play confirms it.'});
-      if (purchase.purchaseState !== 0) return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
+      const tokenHash = await sha256Hex(body.purchase_token);
+      // A refund or void mints nothing and takes the theme back out of any website account it reached (NF-10H6);
+      // licences already issued stay. A failure to record it still refuses the purchase.
+      const refused = async () => {
+        try { await rpc('void_play_purchase', {p_token_sha256: tokenHash}); } catch { /* recorded on the next try */ }
+        return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
+      };
+      if (purchase.purchaseState !== 0) return refused();
       // One purchase per person: any profile opened with the buying Google account may ask (its Play app reports the
       // token owned); Play's obfuscated profile id names only the first. The cap below stops a shared token.
-      if (await voided(pkg, body.purchase_token, auth, fetcher)) return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
-      const {data, error} = await rpc('redeem_play_purchase', {p_token_sha256: await sha256Hex(body.purchase_token),
+      if (await voided(pkg, body.purchase_token, auth, fetcher)) return refused();
+      const {data, error} = await rpc('redeem_play_purchase', {p_token_sha256: tokenHash,
         p_order_id: String(purchase.orderId || '').slice(0, 80) || 'no-order', p_item_id: body.product_id, p_profile_id: body.profile_id, p_items: items});
       if (error && /unsupported bundled item/.test(String(error.message))) return reply(422, {code: 'update_app', error: 'Update Lightning to wear this theme.'});
       if (error && /unlocks \d+ profiles/.test(String(error.message))) return reply(409, {code: 'profile_cap', error: 'This purchase already unlocks 5 profiles.'});
+      if (error && /was refunded/.test(String(error.message))) return reply(410, {code: 'refunded', error: 'This purchase was refunded or cancelled.'});
       if (error) return reply(400, {error: 'Could not unlock this purchase.'});
       if (purchase.acknowledgementState !== 1) {
         const ack = await fetcher(`${at}:acknowledge`, {method: 'POST', headers: {...auth, 'Content-Type': 'application/json'}, body: '{}'});

@@ -36,6 +36,7 @@ function setup({purchase = {purchaseState: 0, acknowledgementState: 0, orderId: 
   };
   const rpc = async (name, args) => {
     calls.push(['rpc', name]);
+    if (name === 'void_play_purchase') { assert.match(args.p_token_sha256, /^[0-9a-f]{64}$/); return {data: null, error: null}; }
     const seen = profiles.get(args.p_token_sha256) || new Set();
     if (!seen.has(args.p_profile_id) && seen.size >= 5) return {data: null, error: {message: 'this purchase already unlocks 5 profiles'}};
     seen.add(args.p_profile_id); profiles.set(args.p_token_sha256, seen);
@@ -75,12 +76,12 @@ assert.equal(r.status, 409); assert.equal((await r.json()).code, 'profile_cap');
 // Case 11: a voided purchase (refund or chargeback, Voided Purchases API) mints nothing.
 p = setup({voidedTokens: ['token-abcdefghijkl']});
 r = await p.handler(request()); assert.equal(r.status, 410);
-assert.equal(p.calls.some(c => c[0] === 'rpc'), false, 'a voided purchase never reaches the database');
+assert.deepEqual(p.calls.filter(c => c[0] === 'rpc').map(c => c[1]), ['void_play_purchase'], 'a voided purchase is only recorded as void (NF-10H6)');
 p = setup({voidedStatus: 500}); assert.equal((await p.handler(request())).status, 503, 'never unlocked unchecked');
 
 p = setup({purchase: {purchaseState: 1, acknowledgementState: 1, orderId: 'GPA.3', obfuscatedExternalProfileId: PROFILE}});
 r = await p.handler(request()); assert.equal(r.status, 410); assert.equal((await r.json()).code, 'refunded');
-assert.equal(p.calls.some(c => c[0] === 'rpc'), false, 'a refunded purchase never reaches the database');
+assert.deepEqual(p.calls.filter(c => c[0] === 'rpc').map(c => c[1]), ['void_play_purchase'], 'a refunded purchase is only recorded as void');
 p = setup({purchase: {purchaseState: 2, orderId: 'GPA.4', obfuscatedExternalProfileId: PROFILE}});
 assert.equal((await p.handler(request())).status, 402);
 p = setup({status: 404}); assert.equal((await p.handler(request())).status, 400, 'a made-up token');
