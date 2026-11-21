@@ -3933,15 +3933,15 @@
       "id": "UX-2026.11.20.01",
       "name": "Home · Pick a question, see PC and phone",
       "page": "index.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.20.01.html"
     },
     {
       "id": "UX-2026.11.20.02",
       "name": "Features · PC and phone beside each question",
       "page": "features.html",
-      "status": "current",
-      "archive_url": null
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.20.02.html"
     },
     {
       "id": "UX-2026.11.20.03",
@@ -4051,6 +4051,27 @@
     {
       "id": "UX-2026.11.20.18",
       "name": "Version Archive · Recapture 2.3.2",
+      "page": "versions.html",
+      "status": "archived",
+      "archive_url": "archive/UX-2026.11.20.18.html"
+    },
+    {
+      "id": "UX-2026.11.21.01",
+      "name": "Home · Cleaner question explorer",
+      "page": "index.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.21.02",
+      "name": "Features · Cleaner question explorer",
+      "page": "features.html",
+      "status": "current",
+      "archive_url": null
+    },
+    {
+      "id": "UX-2026.11.21.03",
+      "name": "Version Archive · Cleaner explorer",
       "page": "versions.html",
       "status": "current",
       "archive_url": null
