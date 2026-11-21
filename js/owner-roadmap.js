@@ -3,7 +3,7 @@
    The repository is public, so the browser reads GitHub's public API directly: no key, no copy in Supabase, nothing to
    keep in step. The state of each issue is worked out here by the same rules as tools/board.py in the app repository
    (supabase/tests/owner-roadmap-pages.test.mjs checks the two agree on a real snapshot of the board). Nothing here
-   changes anything on GitHub except through the owner's controls (Move to Ready, Blocked or Parked; Add issue; drag to order), which go through the
+   changes anything on GitHub except through the owner's controls (Move to Ready, Blocked or Parked; Add issue; type a position), which go through the
    roadmap-write edge function (verified owner only). Every value is set with textContent. The answer is kept for 5 minutes (GitHub allows an
    address 60 reads an hour; one load takes about a dozen) and Refresh asks again. */
 (function () {
@@ -39,7 +39,7 @@
   function hours(ts, now) { return (now - new Date(ts).getTime()) / 36e5; }
 
   /* The owner's order (tools/board.py, priority): the open issue titled "[PRIORITY] ..." lists #n per line, first is first.
-     data.order (set after a drag, before GitHub is read again) wins over it. */
+     data.order (set after a move, before GitHub is read again) wins over it. */
   function priority(data) {
     var holder = null, order = [];
     data.issues.forEach(function (i) { if (!holder && String(i.title).indexOf('[PRIORITY]') === 0) holder = i; });
@@ -275,39 +275,38 @@
       });
       return sel;
     }
-    var dragging = null;
-    function reorder(bucketName, from, to) {
+    /* Order (owner, 2026-11-21): each row carries its position as a number; type another and press Enter (or leave the
+       box) and the issue jumps there. Positions count within the list or group shown; the saved order is the whole board's. */
+    function reorder(group, from, to) {
       var rows = derive(shown).filter(function (i) { return i.state !== 'group'; });
-      var mine = rows.filter(function (i) { return bucket(i) === bucketName; });
-      if (from === to || from < 0 || to < 0 || from >= mine.length || to >= mine.length) return;
+      var mine = rows.filter(function (i) { return group.indexOf(i.n) >= 0; });
+      to = Math.max(0, Math.min(mine.length - 1, to));
+      if (from === to || from < 0 || from >= mine.length) return;
       var arr = mine.slice(); arr.splice(to, 0, arr.splice(from, 1)[0]);
       var slots = [], all = rows.map(function (i) { return i.n; });
-      rows.forEach(function (i, k) { if (bucket(i) === bucketName) slots.push(k); });
+      rows.forEach(function (i, k) { if (group.indexOf(i.n) >= 0) slots.push(k); });
       slots.forEach(function (idx, k) { all[idx] = arr[k].n; });
       say('Saving the new order…');
       write({ action: 'set_order', order: all }).then(function () {
-        shown.order = all; remember(shown); render(shown); say('Order saved: #' + all[0] + ' is first.');
-      }, function (e) { say(e.message, true); });
+        shown.order = all; remember(shown); render(shown); say('#' + arr[to].n + ' is now number ' + (to + 1) + '.');
+      }, function (e) { say(e.message, true); render(shown); });
     }
-    function grip(i, name, k, count) {
-      var box = el('span', 'oc-grip'), h = el('span', 'oc-grip-h', '\u283f'), up = el('button', 'btn ghost', '\u25b2'), dn = el('button', 'btn ghost', '\u25bc');
-      h.setAttribute('aria-hidden', 'true'); h.title = 'Drag to reorder';
-      [[up, 'Move #' + i.n + ' up', k - 1, k === 0], [dn, 'Move #' + i.n + ' down', k + 1, k === count - 1]].forEach(function (b) {
-        b[0].type = 'button'; b[0].setAttribute('aria-label', b[1]); b[0].disabled = b[3];
-        b[0].addEventListener('click', function () { reorder(name, k, b[2]); });
+    function position(i, group, k) {
+      var box = el('input', 'oc-pos'), done = false;
+      box.type = 'text'; box.inputMode = 'numeric'; box.value = String(k + 1); box.setAttribute('value', String(k + 1)); box.size = 3; box.maxLength = 4;
+      box.setAttribute('aria-label', 'Position of issue #' + i.n + ', 1 to ' + group.length + '. Type a number and press Enter to move it');
+      function go() {
+        if (done) return;
+        var want = parseInt(box.value, 10);
+        if (!want || want === k + 1) { box.value = String(k + 1); return; }
+        done = true; box.disabled = true; reorder(group, k, want - 1);
+      }
+      box.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); go(); }
+        else if (e.key === 'Escape') { box.value = String(k + 1); box.blur(); }
       });
-      return add(box, [h, up, dn]);
-    }
-    function dragRows(host2, name) {
-      var trs = [].slice.call(host2.querySelectorAll('tbody tr'));
-      trs.forEach(function (tr, k) {
-        tr.draggable = true; tr.setAttribute('data-k', k);
-        tr.addEventListener('dragstart', function (e) { dragging = { name: name, k: k }; tr.classList.add('oc-dragging'); if (e.dataTransfer) { try { e.dataTransfer.setData('text/plain', String(k)); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* optional */ } } });
-        tr.addEventListener('dragend', function () { dragging = null; tr.classList.remove('oc-dragging'); });
-        tr.addEventListener('dragover', function (e) { if (dragging && dragging.name === name) { e.preventDefault(); tr.classList.add('oc-dragover'); } });
-        tr.addEventListener('dragleave', function () { tr.classList.remove('oc-dragover'); });
-        tr.addEventListener('drop', function (e) { e.preventDefault(); tr.classList.remove('oc-dragover'); if (dragging && dragging.name === name) { var d = dragging; dragging = null; reorder(name, d.k, k); } });
-      });
+      box.addEventListener('change', go);
+      return box;
     }
     function addForm() {
       var f = el('form', 'oc-form'), t = el('input'), d = el('textarea'), w = el('select'), s2 = el('select'), go = el('button', 'btn', 'Add issue');
@@ -327,10 +326,33 @@
       return box;
     }
 
+    var WHEN = [['launch', 'For launch'], ['after-launch', 'After launch'], ['someday', 'Someday'], ['unsorted', 'Not sorted yet']];
+    var titles = {};  // parent issue titles, so a step says which item it belongs to
+    function rowsFor(list, mine, next) {
+      var group = mine.map(function (i) { return i.n; });
+      return table(['#', 'Issue', 'Who and why', 'Move to', ''], mine.map(function (i, k) {
+        var p = i.prs[0], note = i.can + (next.indexOf(i.n) >= 0 ? ' · next' : '') + (p ? ' · PR #' + p.n + (i.state === 'stale' ? ' stale' : '') : '') +
+          (list === 'blocked' && i.why.length ? ' · waiting on ' + i.why.join('; ') : '');
+        var title = issue(i), up = i.parent != null && titles[i.parent];
+        if (up) title = add(el('span'), [title, el('small', 'ops-fine oc-part', 'Step of #' + i.parent + ' ' + up)]);
+        return [position(i, group, k), title, note, mover(i), copyButton(i)];
+      }), 'Nothing here.');
+    }
+    function fold(tag, title, count, note, open, node) {
+      var box = el('details', tag === 'h3' ? 'ops-block oc-list' : 'oc-sublist'), sum = el('summary');
+      if (open) box.open = true;
+      add(sum, [el(tag, null, title + ' (' + num(count) + ')'), note ? el('span', 'ops-fine', note) : null]);
+      return add(box, [sum, node]);
+    }
+
     function render(data) {
       shown = data;
+      titles = {};
+      data.issues.forEach(function (x) { if (x.children && x.children.length) titles[x.n] = String(x.title).replace(/^(\[[^\]]+\]\s*)+/, ''); });
       var rows = derive(data), leaves = rows.filter(function (i) { return i.state !== 'group'; });
       var next = pick(rows, 2).map(function (i) { return i.n; });
+      var opened = {};
+      [].slice.call(host.querySelectorAll('details[data-key]')).forEach(function (d) { opened[d.getAttribute('data-key')] = d.open; });
       host.textContent = '';
       var refresh = el('button', 'btn ghost', 'Refresh'); refresh.type = 'button'; refresh.addEventListener('click', function () { load(true); });
       host.appendChild(add(el('div', 'oc-toolbar'), [el('p', 'ops-fine', 'Read from GitHub ' + ago(data.now) + ' · ' + num(leaves.length) + ' open issues'), refresh]));
@@ -338,16 +360,24 @@
       host.lastChild.id = 'ops-roadmap-say';
       host.appendChild(addForm());
       LISTS.forEach(function (l) {
-        var mine = leaves.filter(function (i) { return bucket(i) === l[0]; });
-        host.appendChild(block(l[1] + ' (' + num(mine.length) + ')', l[2],
-          table(['Order', 'Issue', 'Who', 'Move to', ''], mine.map(function (i, k) {
-            var p = i.prs[0], note = i.can + (next.indexOf(i.n) >= 0 ? ' · next' : '') + (p ? ' · PR #' + p.n + (i.state === 'stale' ? ' stale' : '') : '') +
-              (l[0] === 'blocked' && i.why.length ? ' · waiting on ' + i.why.join('; ') : '') + (l[0] === 'parked' ? ' · ' + i.when : '');
-            return [grip(i, l[0], k, mine.length), issue(i), note, mover(i), copyButton(i)];
-          }), 'Nothing here.')));
-        dragRows(host.lastChild, l[0]);
+        var mine = leaves.filter(function (i) { return bucket(i) === l[0]; }), node;
+        if (l[0] === 'parked') {
+          // Parked is long and waits for the owner's pick: one fold per "when", each numbered on its own.
+          node = el('div', 'oc-sublists');
+          WHEN.forEach(function (w) {
+            var part = mine.filter(function (i) { return (ORDER[i.when] == null ? 'unsorted' : i.when) === w[0]; });
+            if (!part.length) return;
+            var sub = fold('h4', w[1], part.length, '', !!opened['parked-' + w[0]], rowsFor('parked', part, next));
+            sub.setAttribute('data-key', 'parked-' + w[0]);
+            node.appendChild(sub);
+          });
+          if (!node.childNodes.length) node = el('p', 'ops-empty', 'Nothing here.');
+        } else node = rowsFor(l[0], mine, next);
+        var key = 'list-' + l[0], box = fold('h3', l[1], mine.length, l[2], key in opened ? opened[key] : l[0] === 'ready', node);
+        box.setAttribute('data-key', key);
+        host.appendChild(box);
       });
-      host.appendChild(el('p', 'ops-fine', 'Drag a row (or use the arrows) to set the order: first is first, and the AIs start on the top ready issue. Lists follow tools/board.py in the app repository; Move to sets a status label on the issue that wins over the worked-out list. Copy prompt words each prompt for the issue\u2019s state.'));
+      host.appendChild(el('p', 'ops-fine', 'Type a number in # and press Enter to move an issue to that position: 1 is first, and the AIs start on the top ready issue. Lists follow tools/board.py in the app repository; Move to sets a status label on the issue that wins over the worked-out list. Copy prompt words each prompt for the issue\u2019s state.'));
     }
 
     function fail(e) {

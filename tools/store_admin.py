@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "20261113-roadmap-6"  # css/store-admin.css and every js/ file below
+VERSION = "20261121-roadmap-7"  # css/store-admin.css and every js/ file below
 
 ICON = {  # Lucide (A15), stroked by css/store-admin.css
     'today': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
@@ -64,7 +64,7 @@ def build():
 
     # Free a profile lives in Catalogue > App themes (js/owner-catalog.js moves this form into that panel): one home for seats.
     claims = ('<form class="oc-lookup" id="admin-claims-form" hidden><h4>Free a profile</h4>'
-              '<p class="ops-fine">Each purchase of an app theme unlocks it for one Lightning profile. Look a member up by email to see which profiles hold a theme, and free a seat for someone who lost a device or profile.</p>'
+              '<p class="ops-fine">Each purchase of an app theme unlocks it for up to 5 of the buyer\u2019s Lightning profiles, at no extra cost. Look a member up by email to see which profiles hold a theme, and free a seat for someone who lost a device or profile.</p>'
               '<div class="fields two"><label>Account email<input name="email" type="email" required></label>'
               '<label>Reason to free a seat<input name="reason" minlength="5" maxlength="300"></label></div>'
               '<button class="btn ghost" type="submit">Show profiles</button><div id="admin-claims-list"></div><p id="admin-claims-status" class="oc-status" role="status"></p></form>')
@@ -85,7 +85,7 @@ def build():
     sales = view('sales', 'Sales', 'What sold, how it was bought, and the carts that were filled but never checked out. Coins, not EGP: the Overview counts revenue from top-ups.',
         '<div id="ops-sales"><p class="ops-empty">Verify your session to load sales.</p></div>')
 
-    roadmap = view('roadmap', 'Roadmap', 'Every open issue as Ready, Blocked or Parked, read live from the app\u2019s GitHub board. Move an issue between lists, or add one, here.',
+    roadmap = view('roadmap', 'Roadmap', 'Every open issue as Ready, Blocked or Parked, read live from the app\u2019s GitHub board. Type a number to set an issue\u2019s place, move it between lists, or add one.',
         '<div id="ops-roadmap"><p class="ops-empty">Verify your session to load the roadmap.</p></div>')
 
     activity = view('activity', 'Activity', 'The audit trail: every coin that moved, every score change, every sale and everything you did by hand, newest first. It reads the permanent records, so it cannot disagree with them.',
