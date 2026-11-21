@@ -193,6 +193,13 @@
             <div class="row"><button class="btn" type="submit">save details</button><span class="acct-status" id="status-private" role="status"></span></div>
           </form>
 
+          <div class="panel" id="link-app">
+            <h2>lightning app</h2>
+            <p class="why">Bought a theme on Google Play? Link your profile once and the theme shows here as <b>Owned</b>: this site wears it, and <b>Get app code</b> unlocks it for your other profiles, up to 5 in all. In Lightning on your PC, open <b>Settings › Appearance › Unlock a theme you bought</b>, press <b>Add this profile to your website account</b> and paste the code. It works once and expires in ten minutes.</p>
+            <div class="row" style="margin-top:0"><button class="btn ghost" id="link-app-code" type="button"><span class="k">$</span> link the app</button><span class="acct-status" id="status-link" role="status"></span></div>
+            <div class="fields" id="link-app-box" hidden><div class="f"><label for="link-app-value">your link code</label><input id="link-app-value" type="text" readonly dir="ltr" spellcheck="false" autocomplete="off"></div></div>
+          </div>
+
           <div class="panel" id="your-data">
             <h2>your data</h2>
             <p class="why">Download your account records as a JSON file. This export is not an app unlock license. Deleting your account removes its online wallet, purchase inventory, profile and private details; restoration from that account will no longer be available. Contact support before deleting an account with purchases. Cotton history stays without your name so totals stay correct.</p>
@@ -217,6 +224,7 @@
 <script src="js/forgeeks-account.js?v=20261030-github-oauth-1"></script>
 <script src="js/forgeeks-account-rewards.js"></script>
 <script src="js/forgeeks-account-data.js?v=20261025-reaudit-1"></script>
+<script src="js/link-app.js?v=20261121-link-1"></script>
 <script src="js/site-banner.js"></script>
 <script src="js/site-words.js"></script><script src="js/nav-menu.js"></script><script src="js/site-membership.js?v=20261027-plants-1" defer></script>
 </body></html>
