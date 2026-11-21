@@ -201,27 +201,44 @@ await test('the owner\'s order puts ranked issues first, and the priority issue 
   assert.equal(rows[0].rank, 0);
 });
 
-await test('dragging a row, or its arrow, saves the whole order through roadmap-write and the page follows', async () => {
+await test('typing a position moves the issue there and saves the whole order; nothing is dragged', async () => {
   const p = await boot(), sent = [];
   p.w.FG = { sb: { functions: { invoke: async (name, o) => { sent.push(JSON.parse(JSON.stringify(o.body))); return { data: { count: 1 }, error: null }; } } } };
   const ready = () => p.q('#ops-roadmap .ops-block').find(b => b.querySelector('h3').textContent.startsWith('Ready'));
   const names = () => [...ready().querySelectorAll('tbody tr')].map(tr => /#(\d+)/.exec(tr.querySelector('td:nth-child(2) a').textContent)[1]);
+  const box = k => ready().querySelectorAll('tbody tr')[k].querySelector('input.oc-pos');
+  const type = async (k, value, key = 'Enter') => { box(k).value = value; box(k).dispatchEvent(new p.w.KeyboardEvent('keydown', { key, bubbles: true })); await tick(30); };
   const before = names();
   assert.ok(before.length >= 3);
-  const trs = [...ready().querySelectorAll('tbody tr')];
-  assert.ok(trs.every(tr => tr.draggable), 'every row can be dragged');
-  trs[0].dispatchEvent(new p.w.Event('dragstart', { bubbles: true }));
-  trs[2].dispatchEvent(new p.w.Event('drop', { bubbles: true, cancelable: true }));
-  await tick(30);
+  assert.deepEqual([...ready().querySelectorAll('input.oc-pos')].map(i => i.value), before.map((_, k) => String(k + 1)), 'each row shows its number');
+  assert.ok(!p.q('#ops-roadmap tr').some(tr => tr.draggable), 'no row is dragged');
+  await type(before.length - 1, '1');
   const o = sent.find(x => x.action === 'set_order');
   assert.ok(o, 'a set_order call');
   assert.equal(o.order.length, new Set(o.order).size, 'each issue once');
   const after = names();
-  assert.deepEqual(after, [before[1], before[2], before[0], ...before.slice(3)], 'the first row moved to third');
-  const down = ready().querySelectorAll('tbody tr')[0].querySelectorAll('.oc-grip button')[1];
-  down.click(); await tick(30);
-  assert.deepEqual(names().slice(0, 2), [after[1], after[0]], 'the arrow moves it one place');
-  assert.equal(ready().querySelectorAll('tbody tr')[0].querySelectorAll('.oc-grip button')[0].disabled, true, 'the first row has no up arrow');
+  assert.deepEqual(after, [before[before.length - 1], ...before.slice(0, -1)], 'the last row jumped to first');
+  await type(0, '99');
+  assert.deepEqual(names(), [...after.slice(1), after[0]], 'a number past the end means last');
+  const calls = sent.length;
+  await type(1, 'x'); await type(1, '2');
+  assert.equal(sent.length, calls, 'a non-number or the same place saves nothing');
+  assert.equal(box(1).value, '2', 'and the box shows its place again');
+});
+
+await test('Ready is open; Blocked and Parked fold, and Parked is split by when', async () => {
+  const p = await boot();
+  const lists = p.q('#ops-roadmap details.ops-block');
+  assert.deepEqual(lists.map(d => d.open), [true, false, false]);
+  const parked = lists[2], rows = p.w.FGOwnerRoadmap.derive(JSON.parse(JSON.stringify(board))).filter(r => r.state !== 'group' && p.w.FGOwnerRoadmap.bucket(r) === 'parked');
+  const subs = [...parked.querySelectorAll('details.oc-sublist h4')].map(h => h.textContent.replace(/ \(\d+\)/, ''));
+  const order = ['For launch', 'After launch', 'Someday', 'Not sorted yet'];
+  assert.ok(subs.length >= 1 && subs.every(s => order.includes(s)), subs.join());
+  assert.deepEqual(subs, order.filter(s => subs.includes(s)), 'in order of when');
+  assert.equal(parked.querySelectorAll('tbody tr').length, rows.length, 'every parked issue once');
+  for (const sub of parked.querySelectorAll('details.oc-sublist')) {
+    assert.deepEqual([...sub.querySelectorAll('input.oc-pos')].map(i => i.value), [...sub.querySelectorAll('tbody tr')].map((_, k) => String(k + 1)), 'numbered within its group');
+  }
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
