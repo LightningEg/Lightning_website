@@ -1,30 +1,30 @@
 {
-  "version": "2.1.2",
+  "version": "2.3.2",
   "source": "The release notes of the app repository (RELEASES.md), shortened to what a person would notice. English is the source; the Arabic beside it is written in Egyptian Arabic.",
   "items": [
     {
-      "en_title": "Windows Updates From Settings.",
-      "en": "Download this Windows version and extract it into a new folder. Later versions can be checked, downloaded and installed from Settings. Lightning verifies update files before installation.",
-      "ar_title": "تحديثات ويندوز من الإعدادات.",
-      "ar": "نزّل نسخة ويندوز دي وفك ضغطها في فولدر جديد. بعد كده تقدر تراجع التحديثات وتنزّلها وتثبّتها من الإعدادات. Lightning بيتأكد من ملفات التحديث قبل التثبيت."
+      "en_title": "A New Phone, With a Plan Tab.",
+      "en": "Every phone screen has a new card design, and a Plan tab shows what is due before payday: your bills, loans and what you set aside.",
+      "ar_title": "تليفون بشكل جديد وتبويب الخطة.",
+      "ar": "كل شاشة في التليفون بتصميم كروت جديد، وتبويب الخطة بيوريك المطلوب قبل يوم القبض: فواتيرك وقروضك واللي حاططه على جنب."
     },
     {
-      "en_title": "More Ways To Import A Statement.",
-      "en": "Review Excel worksheets and more CSV formats, keep rows with the right account, and review up to 500 rows per page.",
-      "ar_title": "طرق أكتر لاستيراد كشف الحساب.",
-      "ar": "راجع شيتات Excel وصيغ CSV أكتر، وخلي كل صف مع حسابه الصح، وراجع لحد ٥٠٠ صف في الصفحة."
+      "en_title": "A Big Purchase Won’t Skew Your Budget.",
+      "en": "Leave one purchase, with its refunds, out of budget averages. Budget also shows next month as it will start, before the month begins.",
+      "ar_title": "مشتريات كبيرة مش هتبوّظ ميزانيتك.",
+      "ar": "استبعد مشتريات واحدة، مع مرتجعاتها، من متوسطات الميزانية. والميزانية كمان بتوريك الشهر الجاي زي ما هيبدأ، قبل ما الشهر يبدأ."
     },
     {
-      "en_title": "A Clearer Phone.",
-      "en": "Move between Home, Budget, Add, Activity and Money from the tab bar. See what needs you and keep daily spending figures consistent with the PC.",
-      "ar_title": "الموبايل بقى أوضح.",
-      "ar": "اتنقل بين الرئيسية والميزانية والإضافة والسجل والفلوس من الشريط اللي تحت. شوف إيه محتاجك، والمتاح للصرف في اليوم يبقى نفس الرقم على الموبايل والكمبيوتر."
+      "en_title": "A More Honest Safe to Spend.",
+      "en": "Refilling the emergency fund by what the plan asks no longer lowers it, a side income before your salary adds to it, and you can count a fund you can sell in days as free cash.",
+      "ar_title": "المتاح للصرف أدق.",
+      "ar": "تعبئة صندوق الطوارئ بالمبلغ اللي الخطة طلبته مبقتش بتقلله، ودخل جانبي قبل المرتب بيزوّده، وتقدر تحسب صندوق تبيعه في كام يوم ضمن الكاش الحر."
     },
     {
-      "en_title": "Clearer Arabic.",
-      "en": "Import reviews, date ranges, counts and delete confirmations read correctly in Arabic.",
-      "ar_title": "عربي أوضح.",
-      "ar": "مراجعة الاستيراد والفترات والأعداد وتأكيد المسح بقوا أوضح بالعربي."
+      "en_title": "Targets by Risk Level.",
+      "en": "Set your target mix as low, medium and high risk, and move any holding to the level you want. A money market fund can count toward your low-risk share.",
+      "ar_title": "أهدافك حسب مستوى المخاطرة.",
+      "ar": "حدد توزيعك المستهدف: مخاطرة قليلة ومتوسطة وعالية، وانقل أي أصل للمستوى اللي عايزه. صندوق سوق النقد ممكن يتحسب ضمن نصيبك قليل المخاطرة."
     }
   ]
 }

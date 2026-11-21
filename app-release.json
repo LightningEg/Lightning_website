@@ -1,7 +1,7 @@
 {
-  "version": "2.1.2",
-  "date": "2026-11-09",
-  "commit": "ea1c96c3",
-  "windows": "Lightning-v2.1.2-Windows-x64.zip",
-  "android": "Lightning-2.1.2-1073-ea1c96c3.apk"
+  "version": "2.3.2",
+  "date": "2026-11-15",
+  "commit": "6aa97680",
+  "windows": "Lightning-v2.3.2-Windows-x64.zip",
+  "android": "Lightning-2.3.2-1224-6aa97680.apk"
 }

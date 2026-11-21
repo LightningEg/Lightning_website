@@ -1,8 +1,8 @@
 {
  "about": "Which folder under assets/app/ holds each screen the live pages show. Edit here, then: python tools/shots.py apply. See tools/shots.py.",
  "folders": {
-  "en": "mohab-year-2026-11-14",
-  "ar": "ar-2026-11-14"
+  "en": "mohab-year-2026-11-20",
+  "ar": "ar-2026-11-20"
  },
  "shots": {
   "sync-pc": {
@@ -10,16 +10,20 @@
    "ar": "ar-2026-10-21"
   },
   "dendera-spending": {
-   "en": "themes-2026-11-02",
-   "ar": "themes-2026-11-02"
+   "en": "themes-2026-11-20",
+   "ar": "themes-2026-11-20"
   },
   "dendera-night-budget": {
-   "en": "themes-2026-11-02",
-   "ar": "themes-2026-11-02"
+   "en": "themes-2026-11-20",
+   "ar": "themes-2026-11-20"
   },
   "papyrus-overview": {
-   "en": "themes-2026-11-02",
-   "ar": "themes-2026-11-02"
+   "en": "themes-2026-11-20",
+   "ar": "themes-2026-11-20"
+  },
+  "sync-phone": {
+   "en": "mohab-year-2026-11-14",
+   "ar": "ar-2026-11-14"
   }
  },
  "pages": {}
