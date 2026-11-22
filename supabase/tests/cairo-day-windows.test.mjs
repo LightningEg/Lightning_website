@@ -14,7 +14,9 @@ async function test(name, fn) {
   try { await fn(); passed++; console.log('ok   ' + name); }
   catch (e) { failed++; console.log('FAIL ' + name + '\n     ' + String(e.stack || e).split('\n').slice(0, 3).join('\n     ')); }
 }
-const formula = name => new RegExp(`${name} timestamptz := (.+);`).exec(sql)[1];
+// The new window expressions are the replacement strings in the migration ('' is a quote inside the SQL literal).
+const replaced = [...sql.matchAll(/'(\(date_trunc\(''day''.+?at time zone ''Africa\/Cairo'')'\);/g)].map(m => m[1].replaceAll("''", "'"));
+const formula = name => replaced[name === 't0' ? 0 : 1];
 // The daily series each function draws: from the window's start, a row per Cairo day up to now.
 async function days(start, at) {
   const s = start.replaceAll('now()', `'${at}'::timestamptz`).replace('make_interval(days => d - 1)', "interval '29 days'");
@@ -41,12 +43,26 @@ await test('the old formula lost a day in the hour after Cairo midnight (why thi
   assert.equal((await days(old, '2026-11-21T23:30:00Z')).n, 30);
 });
 
-await test('both functions are replaced, guarded and granted as before', async () => {
-  assert.match(sql, /create or replace function public\.admin_sales\(p_days integer default 30\)/);
-  assert.match(sql, /create or replace function public\.admin_dashboard\(\)/);
-  assert.equal((sql.match(/perform private\.require_mfa_admin\(\);/g) || []).length, 2);
-  assert.equal((sql.match(/security definer set search_path = ''/g) || []).length, 2);
-  assert.match(sql, /revoke all on function public\.admin_sales\(integer\), public\.admin_dashboard\(\) from public, anon;/);
+await test('the live definitions are edited in place, and the migration stops if they changed', async () => {
+  // Load every migration on a stub database: the edit finds its line, and the functions keep their guard and grants.
+  const pg = new mod.PGlite(), { readdirSync } = await import('node:fs');
+  await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;
+    create schema auth; create table auth.users (id uuid primary key default gen_random_uuid(), email text, created_at timestamptz default now(), last_sign_in_at timestamptz);
+    create table auth.identities (id uuid primary key default gen_random_uuid(), user_id uuid not null references auth.users (id) on delete cascade, provider text not null, provider_id text not null, identity_data jsonb not null default '{}', created_at timestamptz not null default now(), unique (provider, provider_id));
+    create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+    grant usage on schema auth to anon, authenticated, service_role; grant execute on function auth.uid() to anon, authenticated, service_role;`);
+  for (const f of readdirSync(new URL('../migrations/', import.meta.url)).sort()) await pg.exec(readFileSync(new URL('../migrations/' + f, import.meta.url), 'utf8'));
+  for (const fn of ['public.admin_sales(integer)', 'public.admin_dashboard()']) {
+    const def = (await pg.query(`select pg_get_functiondef($1::regprocedure) d`, [fn])).rows[0].d;
+    assert.match(def, /\(date_trunc\('day', now\(\) at time zone 'Africa\/Cairo'\) - (make_interval\(days => d - 1\)|interval '29 days')\) at time zone 'Africa\/Cairo'/, fn);
+    assert.match(def, /require_mfa_admin/, fn);
+    assert.match(def, /SECURITY DEFINER/, fn);
+    const priv = (await pg.query(`select has_function_privilege('anon', $1, 'execute') a, has_function_privilege('authenticated', $1, 'execute') u`, [fn])).rows[0];
+    assert.deepEqual([priv.a, priv.u], [false, true], fn);
+  }
+  const dash = (await pg.query(`select pg_get_functiondef('public.admin_dashboard()'::regprocedure) d`)).rows[0].d;
+  assert.match(dash, /details_submitted_at/, 'the InstaPay edit to admin_dashboard is kept');
+  await assert.rejects(pg.exec(sql), /admin_sales changed/, 'run twice, it refuses instead of editing blind');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
