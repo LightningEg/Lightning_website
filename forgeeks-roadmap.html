@@ -88,8 +88,8 @@
         </div>
       </div>
       <nav class="track" aria-label="Milestones">
-        <a class="now" href="#core"><b>M1 · now</b><span>Finish the core, open the workflow</span><small>backend, features, contributors</small></a>
-        <a href="#play"><b>M2 · next</b><span>Publish on Google Play</span><small>android, closed test, release</small></a>
+        <a href="#core"><b>M1 · ongoing</b><span>Finish the core, open the workflow</span><small>backend, features, contributors</small></a>
+        <a class="now" href="#play"><b>M2 · now</b><span>Publish on Google Play</span><small>closed test now, public 1 December</small></a>
         <a href="#ios"><b>M3 · later</b><span>Publish on the App Store</span><small>iOS, TestFlight, release</small></a>
       </nav>
     </div>
@@ -98,11 +98,11 @@
   <section class="s" id="core" aria-labelledby="t-core">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>M1</b> / now</div>
+        <div class="s-num"><b>M1</b> / ongoing</div>
         <div>
           <h2 id="t-core">Finish the core. <span class="hi">Open the workflow.</span></h2>
           <p class="s-sub">Two tracks at the same time: make the backend complete and the features whole, and set up how people outside the team can build with us. The detailed plan behind it has nine numbered milestones: a task titled <span class="mono accent">[3C]</span> is item C of milestone 3, and the codes on the items below point into it.</p>
-          <div class="ms-meter"><i style="--p:0.550"></i><span>11 of 20 done · 7 in progress, counted from the items below · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/INDEX.md" rel="noopener" target="_blank">the whole plan: issues/INDEX.md ↗</a></span></div>
+          <div class="ms-meter"><i style="--p:0.650"></i><span>13 of 20 done · 5 in progress, counted from the items below · <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/INDEX.md" rel="noopener" target="_blank">the whole plan: issues/INDEX.md ↗</a></span></div>
         </div>
       </div>
         <div class="stack-filter reveal" role="group" aria-label="Filter by stack"><span>filter by stack</span><button type="button" data-stack="all" aria-pressed="true">all</button><button type="button" data-stack="python" aria-pressed="false">Python</button><button type="button" data-stack="web" aria-pressed="false">Web · Jinja · CSS</button><button type="button" data-stack="desktop" aria-pressed="false">Windows desktop</button><button type="button" data-stack="android" aria-pressed="false">Android · Chaquopy</button><button type="button" data-stack="ios" aria-pressed="false">iOS</button></div>
@@ -115,9 +115,9 @@
           <li class="is-done"><span class="st done">[done]</span><p><b>Phone and PC, paired</b>Encrypted profiles on both, paired directly with no cloud. Bank SMS for CIB and NBE, review-only.</p></li>
           <li data-stack="python"><span class="st now">[now]</span><p><b>Edit anywhere, one home confirms</b>Edit on the phone or the PC; the home device confirms each change. Pairing already finds nearby devices and checks a six-digit number.<span class="meta"><span class="code">plan 4A, 4B</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/4-edit-journal-and-devices/NF-4A-edit-journal.md" rel="noopener" target="_blank">read the plan ↗</a></span></p></li>
           <li data-stack="python web" class="is-done"><span class="st done">[done]</span><p><b>Investments, import and search</b>Brokerages across exchanges and currencies, cost per purchase with bonus shares and splits, PDF and Excel statements, currencies that match across banks, search that knows where you are, and shared prices published again. Done in the code, so their plans left the repository; the Release log says which release carries each.</p></li>
-          <li data-stack="desktop"><span class="st now">[now]</span><p><b>Ordinary-PC acceptance</b>Recovery and fault drills on an ordinary Windows PC, including the reboot drill and power-loss evidence.<span class="meta"><span class="code">plan 2C</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/2-safe-for-real-money/IT-2C-ordinary-pc-acceptance.md" rel="noopener" target="_blank">read the plan ↗</a></span></p></li>
-          <li data-stack="python desktop"><span class="st now">[now]</span><p><b>Legacy import and in-app restore</b>Bring old data in, and restore a backup from inside the app, both proven end to end.<span class="meta"><span class="code">plan 2A, 2C2</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/2-safe-for-real-money/IT-2A-restore-safety.md" rel="noopener" target="_blank">read the plan ↗</a></span></p></li>
-          <li data-stack="python"><span class="st next">[next]</span><p><b>A trusted price source for Europe and the Gulf</b>Licensed or live-verified prices for European and GCC shares. The adapters exist; the source does not yet.<span class="meta"><span class="code">plan 6B</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/6-market-data/NF-6B-europe-and-gcc-shares.md" rel="noopener" target="_blank">read the plan ↗</a></span></p></li>
+          <li data-stack="desktop" class="is-done"><span class="st done">[done]</span><p><b>Ordinary-PC acceptance</b>Recovery and fault handling are built and tested. The drills on a real PC (reboot, power loss) were waived by the owner, not run: any tester can still run one and post the result on the launch checklist.<span class="meta"><span class="code">plan 2C</span> <a class="accent" href="https://github.com/LightningEg/Lightning/pull/741" rel="noopener" target="_blank">pull request ↗</a></span></p></li>
+          <li data-stack="python desktop" class="is-done"><span class="st done">[done]</span><p><b>Legacy import and in-app restore</b>Bring old data in, and restore a backup from inside the app; a restore that holds the profile offers Repair, and moves and discards survive a crash on Windows.<span class="meta"><span class="code">plan 2A, 2C2</span> <a class="accent" href="https://github.com/LightningEg/Lightning/pull/741" rel="noopener" target="_blank">pull request ↗</a></span></p></li>
+          <li data-stack="python"><span class="st later">[later]</span><p><b>A trusted price source for Europe and the Gulf</b>Licensed or live-verified prices for European and GCC shares. The adapters exist; the source does not yet. Parked until after the Play launch.<span class="meta"><span class="code">plan 6B</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/6-market-data/NF-6B-europe-and-gcc-shares.md" rel="noopener" target="_blank">read the plan ↗</a></span></p></li>
           <li data-stack="python"><span class="st next">[next]</span><p><b>Honest async</b>Routes are async def with synchronous database work inside. Make them one or the other.</p></li>
           <li data-stack="desktop" class="is-done"><span class="st done">[done]</span><p><b>Windows in-app updates</b>Settings checks for, downloads and installs a new version: it verifies the signature, swaps folders, keeps the old one for rollback and never touches profiles. v2.1.2 is the first updater release, installed by hand; later versions update from inside the app.<span class="meta"><span class="code">plan 9B</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/RELEASES.md" rel="noopener" target="_blank">release notes ↗</a></span></p></li>
                     </ul>
@@ -127,7 +127,7 @@
           <ul class="items">
           <li class="is-done"><span class="st done">[done]</span><p><b>Public source, plain terms</b>Every line on GitHub. Contribution terms in CONTRIBUTING.md: you keep your copyright.</p></li>
           <li class="is-done"><span class="st done">[done]</span><p><b>Rules a newcomer can follow</b>AGENTS.md, one plan in issues/ with a code for every item, and an architecture that tests enforce, not reviewers.</p></li>
-          <li><span class="st now">[now]</span><p><b>A public roadmap</b>This page. Kept in step with NOW.md and the plan in issues/.</p></li>
+          <li><span class="st now">[now]</span><p><b>A public roadmap</b>This page. Kept in step with the plan, which lives in GitHub issues: one issue is one pull request of work.</p></li>
           <li><span class="st now">[now]</span><p><b>Issue templates</b>Bug or improvement, and Good first issue, are live. Bank SMS format next, with redacted samples only.</p></li>
           <li><span class="st now">[now]</span><p><b>Good first issues</b>Small and self-contained, with the file to open named. Comment /take and a bot assigns it to you.</p></li>
           <li class="is-done"><span class="st done">[done]</span><p><b>CI on every pull request</b>Tests, dependency review and CodeQL run on each PR; the template asks what changed and how you checked it.</p></li>
@@ -144,23 +144,24 @@
   <section class="s" id="play" aria-labelledby="t-play">
     <div class="wrap">
       <div class="s-head reveal">
-        <div class="s-num"><b>M2</b> / next</div>
+        <div class="s-num"><b>M2</b> / now</div>
         <div>
           <h2 id="t-play">Publish on <span class="hi">Google Play.</span></h2>
-          <p class="s-sub">The Android app already runs from the same code. This milestone makes it a store app.</p>
-          <div class="ms-meter"><i style="--p:0.143"></i><span>1 of 7 done · 1 in progress</span></div>
+          <p class="s-sub">The store build is finished and Lightning is in a closed test on Google Play. The public release is planned for 1 December, after the test and Play's review. The answers we give Google, each from the code that proves it, are in <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/docs/google-play.md" rel="noopener" target="_blank">docs/google-play.md ↗</a></p>
+          <div class="ms-meter"><i style="--p:0.750"></i><span>6 of 8 done · 1 in progress</span></div>
         </div>
       </div>
         <div class="lane reveal">
           <h3>play store<span>android first, it's what most of Egypt carries</span></h3>
           <ul class="items">
-          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>An Android app from the same code</b>Python runs on the phone through Chaquopy. A signed arm64 APK is out to testers.</p></li>
-          <li data-stack="android"><span class="st now">[now]</span><p><b>The SMS permission declaration</b>Google Play asks why the app reads SMS. Ours: bank messages, suggested as transactions, always confirmed by you.</p></li>
-          <li data-stack="android"><span class="st next">[next]</span><p><b>A Play-ready build</b>An Android App Bundle with Play App Signing, 16 KB page support, and the target API level Play requires.</p></li>
-          <li data-stack="android"><span class="st next">[next]</span><p><b>Data safety, told plainly</b>No account, no cloud, data stays on the device. The form and the privacy policy say the same thing.</p></li>
-          <li data-stack="android"><span class="st next">[next]</span><p><b>A store listing in two languages</b>English and Egyptian Arabic, with real screens from the sample year.</p></li>
-          <li data-stack="android"><span class="st next">[next]</span><p><b>A closed test</b>Testers from the WhatsApp and Discord groups on Play's closed track before anything goes public.</p></li>
-          <li data-stack="android"><span class="st later">[later]</span><p><b>Public release</b>Then updates arrive through Google Play, like any other app.</p></li>
+          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>An Android app from the same code</b>Python runs on the phone through Chaquopy, with the same encrypted profiles and the same screens as the PC.</p></li>
+          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>A Play-ready build</b>A release App Bundle for Play App Signing, targeting API 36 with predictive Back. The build refuses any native library that would not load on a phone with 16 KB memory pages.<span class="meta"><span class="code">plan 11B</span> <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/issues/11-phone-ux/r29-google-play-readiness/report.md" rel="noopener" target="_blank">read the audit ↗</a></span></p></li>
+          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>Bank SMS, declared</b>READ_SMS only, under SMS-based money management. The query leaves out every sender that is a phone number, so a person's message never reaches the app; the disclosure comes before the ask, and paste or Share works without it.</p></li>
+          <li data-stack="android python" class="is-done"><span class="st done">[done]</span><p><b>Themes through Google Play Billing</b>The Play build sells themes with Play and shows no other way to pay. One purchase unlocks up to five profiles of the same Google account, and can reach the website account too.</p></li>
+          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>Data safety, told plainly</b>The privacy notice covers the app; the Data safety form, the content rating and the reviewers' route through the sample year all say the same thing.</p></li>
+          <li data-stack="android" class="is-done"><span class="st done">[done]</span><p><b>A store listing in two languages</b>English and Egyptian Arabic, with eight phone slides made from the sample year.</p></li>
+          <li data-stack="android"><span class="st now">[now]</span><p><b>A closed test</b>Testers on Play's closed track for 14 days, as Google asks of a new app. Want in? <a class="accent" href="current-status.html#android">Become a tester</a> from Downloads.</p></li>
+          <li data-stack="android"><span class="st next">[next]</span><p><b>Public release, planned for 1 December</b>Theme prices set in the Console, Play's review, then Lightning is on Google Play and updates arrive like any other app's.</p></li>
           </ul>
         </div>
     </div>
