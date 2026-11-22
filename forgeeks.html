@@ -27,6 +27,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('lightning-geeks-theme');if(/^(mono|paper|meadow|nile|ocean|tokyo|dracula|rose|synthwave|phosphor|amber|solarized|moss|garnet|frost|papyrus|cotton|dendera)$/.test(t))document.documentElement.dataset.theme=t;}catch(_){}</script>
   <link rel="stylesheet" href="css/forgeeks.css?v=20261109-geeks-seo-1">
+  <link rel="stylesheet" href="css/forgeeks-moments.css?v=20261122-moments-1">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://lightningeg.com/forgeeks.html#page", "url": "https://lightningeg.com/forgeeks.html", "name": "Help build a local-first finance app in Python · Lightning", "description": "Lightning is a local-first money app for Egypt in Python, FastAPI and SQLite, with its code on GitHub. Pick a good first issue and send your first pull request.", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "@id": "https://lightningeg.com/#website", "url": "https://lightningeg.com/", "name": "Lightning"}, "breadcrumb": {"@id": "https://lightningeg.com/forgeeks.html#crumbs"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Lightning", "item": "https://lightningeg.com/"}, {"@type": "ListItem", "position": 2, "name": "For Geeks", "item": "https://lightningeg.com/forgeeks.html"}], "@id": "https://lightningeg.com/forgeeks.html#crumbs"}, {"@type": "SoftwareSourceCode", "@id": "https://lightningeg.com/forgeeks.html#code", "name": "Lightning", "description": "Lightning is a free, local-first money app for salaried people in Egypt. The code is public, so every claim here comes with the file or command that proves it. Pick one small task and build it with us, in your browser.", "codeRepository": "https://github.com/LightningEg/Lightning", "programmingLanguage": ["Python", "JavaScript"], "runtimePlatform": "Python 3.11+", "license": "https://github.com/LightningEg/Lightning/blob/main/LICENSE", "author": {"@id": "https://lightningeg.com/#organization"}, "targetProduct": {"@id": "https://lightningeg.com/#app"}}]}</script>
 </head>
 <body class="no-js">
@@ -202,6 +203,12 @@
           <h3>secure <span>03</span></h3>
           <div class="big"><span data-count="256">256</span><small>-bit</small></div>
           <p>SQLCipher encryption at rest, with the key held under <b>Argon2id</b> locks. The app serves on <b>127.0.0.1</b> only, and needs no account.</p>
+          <div class="cipher" id="cipher" dir="ltr">
+            <div class="c-k"><span class="k">PRAGMA</span> key = <span class="s2">"x'…'"</span></div>
+            <div class="c-row">2026-10-04 groceries -450.00</div>
+            <div class="c-disk" id="cipher-disk" aria-hidden="true">9f3a c41e 07b2 d85c 6e19 a4f0 3b7d 52c8 e906 1fa3 bc47 08d2 7e5b</div>
+            <div class="c-note">// on disk: the page that holds the row. bytes illustrative, new each run</div>
+          </div>
           <div class="proof"><a href="https://github.com/LightningEg/Lightning/blob/main/lightning/security/keys.py" rel="noopener" target="_blank">lightning/security/keys.py ↗</a><br>tests/test_desktop_crypto.py · found a flaw? geeks@lightningeg.com</div>
         </article>
       </div>
@@ -279,6 +286,19 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 <span class="k">if</span> internal_total != ZERO:
     <span class="k">raise</span> ValidationError(<span class="s2">"Internal movements must net to zero"</span>)</pre>
           <p class="stats-note">// trimmed from <a class="accent" href="https://github.com/LightningEg/Lightning/blob/main/lightning/core/ledger.py" rel="noopener" target="_blank">lightning/core/ledger.py ↗</a></p>
+          <figure class="balance" id="balance" dir="ltr" aria-label="Two postings through validate_posting: a 450 EGP transfer whose two internal lines net to zero is posted; a one-sided line nets to -450.00 and is refused.">
+            <figcaption class="b-head"><span>validate_posting(lines)</span><span>transfer · 450 EGP</span></figcaption>
+            <div class="b-post" data-post="ok" aria-hidden="true">
+              <div class="b-row"><span>INTERNAL</span><span>cib current</span><b>-450.00</b></div>
+              <div class="b-row"><span>INTERNAL</span><span>cash wallet</span><b>+450.00</b></div>
+              <div class="b-net"><span>internal_total</span><b>0.00</b><em class="b-ok">posted ✓</em></div>
+            </div>
+            <div class="b-post" data-post="no" aria-hidden="true">
+              <div class="b-row"><span>INTERNAL</span><span>cib current</span><b>-450.00</b></div>
+              <div class="b-net"><span>internal_total</span><b>-450.00</b><em class="b-no">[refused]</em></div>
+              <p class="b-err">ValidationError: Internal movements must net to zero (they net to -450.00).</p>
+            </div>
+          </figure>
         </div>
       </div>
     </div>
@@ -484,5 +504,6 @@ amount_e6 = <span class="s2">450_000_000</span>   <span class="c"># 450 EGP</spa
 
 })();
 </script>
+<script src="js/forgeeks-moments.js?v=20261122-moments-1"></script>
 </body>
 </html>
