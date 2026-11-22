@@ -1,0 +1,37 @@
+/* For Geeks: the two true motion moments (guideline D07 .balance, .cipher; D08). Tokens only.
+   Without script or with reduced motion both ends are drawn: js/forgeeks-moments.js adds .armed, then .s1… as it plays. */
+
+/* a posting that must balance: beside the trimmed lightning/core/ledger.py */
+.balance{margin:18px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--well) var(--veil),transparent);font:400 12.5px/1.75 var(--mono);color:var(--dim);direction:ltr;text-align:left}
+.b-head{display:flex;justify-content:space-between;gap:12px;margin:0 0 10px;color:var(--ink)}
+.b-head span+span{color:var(--dim)}
+.b-post+.b-post{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line-strong)}
+.b-row,.b-net{display:grid;grid-template-columns:9ch 1fr auto;gap:12px;align-items:baseline}
+.b-row b,.b-net b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.b-net{grid-template-columns:9ch 1fr auto auto;margin-top:4px;border-top:1px solid var(--line);padding-top:4px}
+.b-net span{grid-column:1/3}
+.b-net em{font-style:normal;min-width:10ch;text-align:right}
+.b-ok{color:var(--accent)}
+.b-no{color:var(--accent2)}
+.b-err{margin:6px 0 0;color:var(--accent2);white-space:normal;overflow-wrap:anywhere}
+
+/* a row becomes ciphertext: on the secure card */
+.cipher{margin:-8px 0 22px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--well) var(--veil),transparent);font:400 12px/1.7 var(--mono);color:var(--dim);direction:ltr;text-align:left}
+.cipher .k{color:var(--accent)}.cipher .s2{color:var(--accent2)}
+.c-row{color:var(--ink)}
+.c-disk{color:var(--accent2);min-height:3.4em;overflow-wrap:anywhere}
+.c-note{margin-top:6px;border-top:1px dashed var(--line-strong);padding-top:6px;font-size:11.5px}
+
+/* the play: hidden only once armed, revealed step by step (D08 easing, opacity and a 6px rise only) */
+.balance.armed .b-row,.balance.armed .b-net,.balance.armed .b-err,.balance.armed .b-net em{opacity:0;transform:translateY(6px);transition:opacity .45s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1)}
+.balance.armed .b-net em{transform:none}
+.balance.s1 [data-post=ok] .b-row:nth-child(1),
+.balance.s1 [data-post=ok] .b-net,
+.balance.s2 [data-post=ok] .b-row:nth-child(2),
+.balance.s3 [data-post=ok] .b-net em,
+.balance.s4 [data-post=no] .b-row,
+.balance.s4 [data-post=no] .b-net,
+.balance.s5 [data-post=no] .b-net em,
+.balance.s5 .b-err{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.balance .b-row,.balance .b-net,.balance .b-err,.balance .b-net em{opacity:1!important;transform:none!important;transition:none!important}}
+@media (max-width:560px){.balance{padding:14px}.b-row,.b-net{grid-template-columns:8ch 1fr auto;gap:8px}.b-net{grid-template-columns:8ch 1fr auto}.b-net em{grid-column:1/-1;text-align:left}.b-head{flex-direction:column;gap:0}}
